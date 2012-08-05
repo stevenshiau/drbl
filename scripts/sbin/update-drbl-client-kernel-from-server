@@ -1,0 +1,135 @@
+#!/bin/bash
+# Author: Steven Shiau <steven _at_ nchc org tw> 
+# license: GPL
+# Description: update the kernel of DRBL clients from server's kernel
+# RC: 0: succeed 1: fail 2:fail (can not find the common_root/lib/modules
+
+# Load DRBL setting and functions
+DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/opt/drbl/}"
+. $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
+
+#
+usage() {
+  echo "Update the DRBL client's kernel from server..."
+  echo "Usage: $0 [-u|--update] [-v|--verbose]"
+  echo "-u, --update:   Update only (do not overwrite newer files)"
+  echo "-v, --verbose:  Prints out verbose information"
+  echo 
+  echo "Ex:"
+  echo "$0 -u -v"
+}
+
+#
+check_if_root
+
+# default settings
+RSYNC_OPT_EXTRA=""
+depmod_stderr="/dev/null"
+
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -f|--force)
+		shift; FORCE_UPDATE="yes"
+                ;;
+    -u|--update)
+		shift; RSYNC_OPT_EXTRA="$RSYNC_OPT_EXTRA -u"
+                ;;
+    -v|--verbose)
+	        verbose="on"
+		RSYNC_OPT_EXTRA="$RSYNC_OPT_EXTRA -v"
+		shift ;;
+    -*)		echo "${0}: ${1}: invalid option" >&2
+		usage >& 2
+		exit 2 ;;
+    *)		break ;;
+  esac
+done
+
+#
+if [ "$verbose" = "on" ]; then
+  # The default output for depmod is surpressed, now turn it on
+  depmod_stderr="/dev/stderr"
+fi
+
+# copy the modules for clients, to $drbl_common_root/lib/modules
+DRBL_KVER="$(cat $pxecfg_pd/kernel_version_in_initrd.txt 2>/dev/null)"
+KARCH_CLIENT="$(cat $pxecfg_pd/client_kernel_arch.txt 2>/dev/null)"
+if [ -n "$DRBL_KVER" ]; then
+  echo "The DRBL client uses $KARCH_CLIENT kernel with version $DRBL_KVER..."
+else
+  echo "Warning! Unable to find the kernel version information for DRBL clients!"
+  echo "Are you sure you already run \"drblsrv -i\" ?"
+  echo "Press \"Enter\" to continue..."
+  read
+fi
+
+[ -z "$KARCH_CLIENT" ] && echo "Unable to find the DRBL client's arch info!!! Did you run \"drblsrv -i\" ? Program terminated!!!" && exit 1
+
+#
+echo "Trying to update the $drbl_common_root/lib/modules/$DRBL_KVER from server's /lib/modules/... This might take several minutes..."
+
+# check if $drbl_common_root/lib/modules/ exists
+if [ ! -d $drbl_common_root/lib/modules/ ]; then
+   [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+   echo "Warning!!! Directory $drbl_common_root/lib/modules/ does NOT exists!!! Did you already install the necessary packages for DRBL ? Skip copying modules!"
+   [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+   exit 2
+fi
+
+#
+if [ -n "$DRBL_KVER" ]; then
+  # found the kernel version info of clients, process the specific version
+  # check the kernel arch of server and client, if matches, copy them.
+  if [ "$FORCE_UPDATE" != "yes" ]; then
+    KARCH_SERVER="$(drbl-check-kernel-cpu-arch $DRBL_KVER)"
+    [ -z "$KARCH_SERVER" ] && echo "\"$KARCH_CLIENT\" $DRBL_KVER kernel in this DRBL server is not found, so skip this." && exit 1
+  fi
+
+  # do it...
+  if [ "$FORCE_UPDATE" = "yes" -o "$KARCH_CLIENT" = "best_optimization" -o "$KARCH_SERVER" = "$KARCH_CLIENT" ]; then
+    # TODO... if force, the KARCH_SERVER maybe "nothing".
+    echo "Found kernel modules in /lib/modules/$DRBL_KVER and its arch \"$KARCH_SERVER\" matches client's \"$KARCH_CLIENT\"..."
+    # no matter directory $drbl_kernel_mod_path/lib/modules/$DRBL_KVER 
+    # exits or not,  (note! Here we do NOT use rsync --delete! So this 
+    # will supply more files at most, not delete some.)
+    # we copy it to DRBL clients' common root directory, i.e. we force to
+    # update the kernel modules when run mknic-nbi
+    # (a) for modules
+
+    if [ -d "/lib/modules/$DRBL_KVER" -a -f "/lib/modules/$DRBL_KVER/modules.dep" ] ; then 
+     # check if -f "/lib/modules/\$DRBL_KVER/modules.dep is important.
+     # this will avoid copying an empty kernel modules tree. just a better check.
+     # this will happen if we compiled a module and install it, when we 
+     # remove the kernel by rpm -e ..., the /lib/modules/kernel-xxx will still exist.
+      echo "Syncing /lib/modules/$DRBL_KVER to client's common root..."
+      rsync -a $RSYNC_OPT_EXTRA /lib/modules/$DRBL_KVER $drbl_common_root/lib/modules/
+    fi
+    if ls /boot/*-$DRBL_KVER* >/dev/null 2>&1; then
+      # (b) for kernel, i.e. vmlinuz and initrd...
+      echo "Syncing /boot/*-$DRBL_KVER* to client's common root..."
+      rsync -a $RSYNC_OPT_EXTRA /boot/*-$DRBL_KVER* $drbl_common_root/boot
+    fi
+    #
+    echo "Generating the $drbl_common_root/lib/modules/$DRBL_KVER/modules.dep"
+    depmod -ae -b $drbl_common_root/ -F $drbl_common_root/boot/System.map-$DRBL_KVER -r $DRBL_KVER 2> $depmod_stderr
+  else
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+    echo "The kernel $DRBL_KVER installed in this DRBL server is for \"$KARCH_SERVER\", while the DRBL client wants kernel with \"$KARCH_CLIENT\"! Skip this!"
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+  fi
+else
+  # if we can not find the tag, copy them all, this only works in Redhat,
+  # might be NOT work in Mandrake
+  # (a) for modules
+  rsync -a $RSYNC_OPT_EXTRA /lib/modules/2.[46].[0-9]* $drbl_common_root/lib/modules/
+  # (b) for kernel, i.e. vmlinuz and initrd...
+  rsync -a $RSYNC_OPT_EXTRA /boot/*-2.[46].[0-9]* $drbl_common_root/boot
+fi
+
+# Update firmwares
+if [ -d "/lib/firmware" ]; then
+  echo "Syncing /lib/firmware/ to client's common root..."
+  rsync -a $RSYNC_OPT_EXTRA /lib/firmware $drbl_common_root/lib/
+fi
+
+exit 0

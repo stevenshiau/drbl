@@ -1,0 +1,564 @@
+#!/bin/bash
+# Steven Shiau <steven _at_ nchc org tw>
+# License: GPL
+# Description: To set the login mode for DRBL clients
+
+# Load DRBL setting and functions
+DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/opt/drbl/}"
+
+. $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
+
+#
+PWD_NO_0_1_MSG="Note!!! To avoid confusion, these random password does NOT contain digit 0 (zero) and digit 1 (one)!!!"
+
+#
+usage() {
+  echo "Switch the login mode for DRBL clients."
+  echo "Usage: $0 [Options]"
+  echo "Options:"
+  language_help_prompt_by_idx_no
+  echo "-a, --auto:   auto login for clients"
+  echo "-g, --no-gen-ssi do NOT generate DRBL SSI template tarball."
+  echo "-h, --host IP_ADDRESS:  set login mode ony for the host with IP_ADDRESS instead of all DRBL clients"
+  echo "-n, --normal: normal login for clients"
+  echo "-t, --timed:  timed login within time TIMED_LOGIN_TIME (sec)"
+  echo "-p, --password_opt: the password option for auto and timed login."
+  echo "-u, --no_nis_update:  do NOT run NIS update"
+  echo "-v, --verbose:  verbose mode."
+  echo "PASSWORD_OPT:"
+  echo "If one digit, it's the length of randomly created password."
+  echo "If more than one character, it's the password (i.e. if you enter \"drblclient\", then the password is \"drblclient\")."
+  echo "If blank, it will be randomly generated with some (say:8) characters."
+}
+
+#
+check_if_root
+
+# Get the $GDM_CFG/$KDM_CFG filename
+get_gdm_kdm_conf_filename
+
+#
+set_gdm_auto_login() {
+  # To config these two parameters:
+  # AutomaticLoginEnable=false/true
+  # AutomaticLogin=
+  local inode="$1"
+  local iauto_login_id="$2"
+  if [ ! -f "$inode/$GDM_CFG" ]; then
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING 
+    echo "GDM config in $inode NOT found, assume it's DRBL SSI mode!"  
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+    return 1
+  fi
+  # disable other types login (timed login) if exists
+  perl -p -i -e "s/^[[:space:]]*#*[[:space:]]*TimedLoginEnable=.*/TimedLoginEnable=false/" $inode/$GDM_CFG
+  perl -p -i -e "s/^[[:space:]]*#*[[:space:]]*TimedLogin=.*/TimedLogin=/" $inode/$GDM_CFG
+  perl -p -i -e "s/^[[:space:]]*#*[[:space:]]*TimedLoginDelay=.*/TimedLoginDelay=/" $inode/$GDM_CFG
+
+  # enable autologin
+  lines="$(get_block_line_in_gdm_kdm daemon $inode/$GDM_CFG)"
+  begin_line=$(echo $lines | awk -F" " '{print $1}')
+  end_line=$(echo $lines | awk -F" " '{print $2}')
+  chk_cmd="if ($begin_line..$end_line) {print}"
+  if [ -n "$(perl -n -e "$chk_cmd" $inode/$GDM_CFG | grep -i "^AutomaticLoginEnable=")" ]; then
+    sub_cmd="if ($begin_line..$end_line) {s/^AutomaticLoginEnable=.*/AutomaticLoginEnable=true/}"
+    perl -pi -e "$sub_cmd" $inode/$GDM_CFG
+  else
+    # insert 1 blank line
+    sub_cmd="if ($((end_line))..$((end_line))) {s/^(.*)$/\$1\n/gi}"
+    perl -pi -e "$sub_cmd" $inode/$GDM_CFG
+    # replace the one we want in the added blank line
+    sub_cmd="if ($((end_line+1))..$((end_line+1))) {s/^$/AutomaticLoginEnable=true/gi}"
+    perl -pi -e "$sub_cmd" $inode/$GDM_CFG
+  fi
+  # put the autologin id
+  lines="$(get_block_line_in_gdm_kdm daemon $inode/$GDM_CFG)"
+  begin_line=$(echo $lines | awk -F" " '{print $1}')
+  end_line=$(echo $lines | awk -F" " '{print $2}')
+  chk_cmd="if ($begin_line..$end_line) {print}"
+  if [ -n "$(perl -n -e "$chk_cmd" $inode/$GDM_CFG | grep -i "^AutomaticLogin=")" ]; then
+    sub_cmd="if ($begin_line..$end_line) {s/^AutomaticLogin=.*/AutomaticLogin=$iauto_login_id/}"
+    perl -pi -e "$sub_cmd" $inode/$GDM_CFG
+  else
+    # insert 1 blank line
+    sub_cmd="if ($((end_line))..$((end_line))) {s/^(.*)$/\$1\n/gi}"
+    perl -pi -e "$sub_cmd" $inode/$GDM_CFG
+    # replace the one we want in the added blank line
+    sub_cmd="if ($((end_line+1))..$((end_line+1))) {s/^$/AutomaticLogin=$iauto_login_id/gi}"
+    perl -pi -e "$sub_cmd" $inode/$GDM_CFG
+  fi
+}
+
+set_gdm_timed_login() {
+  local inode="$1"
+  local iauto_login_id="$2"
+  local tlogin_time="$3"
+  if [ ! -f $inode/$GDM_CFG ]; then
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING 
+    echo "$inode/$GDM_CFG is NOT found!!! Assume it's DRBL SSI mode!"  
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+    return 1
+  fi
+  # set the timed login time
+  [ -z "$tlogin_time" ] && tlogin_time="$TIMED_GDM_TIME_DEFAULT"
+  # disable other types login (auto login) if they exists
+  perl -p -i -e "s/^[[:space:]]*#*[[:space:]]*AutomaticLoginEnable=.*/AutomaticLoginEnable=false/" $inode/$GDM_CFG
+  perl -p -i -e "s/^[[:space:]]*#*[[:space:]]*AutomaticLogin=.*/AutomaticLogin=/" $inode/$GDM_CFG
+
+  # enable timed login
+  lines="$(get_block_line_in_gdm_kdm daemon $inode/$GDM_CFG)"
+  begin_line=$(echo $lines | awk -F" " '{print $1}')
+  end_line=$(echo $lines | awk -F" " '{print $2}')
+  chk_cmd="if ($begin_line..$end_line) {print}"
+  if [ -n "$(perl -n -e "$chk_cmd" $inode/$GDM_CFG | grep -i "^TimedLoginEnable=")" ]; then
+    sub_cmd="if ($begin_line..$end_line) {s/^TimedLoginEnable=.*/TimedLoginEnable=true/}"
+    perl -pi -e "$sub_cmd" $inode/$GDM_CFG
+  else
+    # insert 1 blank line
+    sub_cmd="if ($((end_line))..$((end_line))) {s/^(.*)$/\$1\n/gi}"
+    perl -pi -e "$sub_cmd" $inode/$GDM_CFG
+    # replace the one we want in the added blank line
+    sub_cmd="if ($((end_line+1))..$((end_line+1))) {s/^$/TimedLoginEnable=true/gi}"
+    perl -pi -e "$sub_cmd" $inode/$GDM_CFG
+  fi
+  # put the timedlogin delay time
+  lines="$(get_block_line_in_gdm_kdm daemon $inode/$GDM_CFG)"
+  begin_line=$(echo $lines | awk -F" " '{print $1}')
+  end_line=$(echo $lines | awk -F" " '{print $2}')
+  chk_cmd="if ($begin_line..$end_line) {print}"
+  if [ -n "$(perl -n -e "$chk_cmd" $inode/$GDM_CFG | grep -i "^TimedLoginDelay=")" ]; then
+    sub_cmd="if ($begin_line..$end_line) {s/^TimedLoginDelay=.*/TimedLoginDelay=$tlogin_time/}"
+    perl -pi -e "$sub_cmd" $inode/$GDM_CFG
+  else
+    # insert 1 blank line
+    sub_cmd="if ($((end_line))..$((end_line))) {s/^(.*)$/\$1\n/gi}"
+    perl -pi -e "$sub_cmd" $inode/$GDM_CFG
+    # replace the one we want in the added blank line
+    sub_cmd="if ($((end_line+1))..$((end_line+1))) {s/^$/TimedLoginDelay=$tlogin_time/gi}"
+    perl -pi -e "$sub_cmd" $inode/$GDM_CFG
+  fi
+  # put the timedlogin id
+  lines="$(get_block_line_in_gdm_kdm daemon $inode/$GDM_CFG)"
+  begin_line=$(echo $lines | awk -F" " '{print $1}')
+  end_line=$(echo $lines | awk -F" " '{print $2}')
+  chk_cmd="if ($begin_line..$end_line) {print}"
+  if [ -n "$(perl -n -e "$chk_cmd" $inode/$GDM_CFG | grep -i "^TimedLogin=")" ]; then
+    sub_cmd="if ($begin_line..$end_line) {s/^TimedLogin=.*/TimedLogin=$iauto_login_id/}"
+    perl -pi -e "$sub_cmd" $inode/$GDM_CFG
+  else
+    # insert 1 blank line
+    sub_cmd="if ($((end_line))..$((end_line))) {s/^(.*)$/\$1\n/gi}"
+    perl -pi -e "$sub_cmd" $inode/$GDM_CFG
+    # replace the one we want in the added blank line
+    sub_cmd="if ($((end_line+1))..$((end_line+1))) {s/^$/TimedLogin=$iauto_login_id/gi}"
+    perl -pi -e "$sub_cmd" $inode/$GDM_CFG
+  fi
+}
+
+set_gdm_normal_login() {
+    local inode="$1"
+    if [ ! -f $inode/$GDM_CFG ]; then
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING 
+      echo "$inode/$GDM_CFG is NOT found!!! Assume it's DRBL SSI mode!"  
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+      return 1
+    fi
+    # disable auto and timed login, then it will be normal login since this is the default setting.
+    perl -p -i -e "s/^[[:space:]]*#*[[:space:]]*AutomaticLoginEnable=.*/AutomaticLoginEnable=false/" $inode/$GDM_CFG
+    perl -p -i -e "s/^[[:space:]]*#*[[:space:]]*AutomaticLogin=.*/AutomaticLogin=/" $inode/$GDM_CFG
+    perl -p -i -e "s/^[[:space:]]*#*[[:space:]]*TimedLoginEnable=.*/TimedLoginEnable=false/" $inode/$GDM_CFG
+    perl -p -i -e "s/^[[:space:]]*#*[[:space:]]*TimedLogin=.*/TimedLogin=/" $inode/$GDM_CFG
+    perl -p -i -e "s/^[[:space:]]*#*[[:space:]]*TimedLoginDelay=.*/TimedLoginDelay=/" $inode/$GDM_CFG
+}
+#
+set_lightdm_auto_login() {
+  # To config these two parameters:
+  # autologin-user=<YOUR USER>
+  # autologin-user-timeout=0
+  local inode="$1"
+  local iauto_login_id="$2"
+  if [ ! -f "$inode/$LIGHTDM_CFG" ]; then
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING 
+    echo "LightDM config in $inode NOT found, assume it's DRBL SSI mode!"  
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+    return 1
+  fi
+  # disable other types login (timed login) if exists
+  perl -p -i -e "s/^[[:space:]]*#*[[:space:]]*autologin-user-timeout=.*/autologin-user-timeout=0/" $inode/$LIGHTDM_CFG
+
+  # put the autologin id
+  lines="$(get_block_line_in_gdm_kdm SeatDefaults $inode/$LIGHTDM_CFG)"
+  begin_line=$(echo $lines | awk -F" " '{print $1}')
+  end_line=$(echo $lines | awk -F" " '{print $2}')
+  chk_cmd="if ($begin_line..$end_line) {print}"
+  if [ -n "$(perl -n -e "$chk_cmd" $inode/$LIGHTDM_CFG | grep -i "^autologin-user=")" ]; then
+    sub_cmd="if ($begin_line..$end_line) {s/^autologin-user=.*/autologin-user=$iauto_login_id/}"
+    perl -pi -e "$sub_cmd" $inode/$LIGHTDM_CFG
+  else
+    # insert 1 blank line
+    sub_cmd="if ($((end_line))..$((end_line))) {s/^(.*)$/\$1\n/gi}"
+    perl -pi -e "$sub_cmd" $inode/$LIGHTDM_CFG
+    # replace the one we want in the added blank line
+    sub_cmd="if ($((end_line+1))..$((end_line+1))) {s/^$/autologin-user=$iauto_login_id/gi}"
+    perl -pi -e "$sub_cmd" $inode/$LIGHTDM_CFG
+  fi
+}
+#
+set_lightdm_timed_login() {
+  # //NOTE// Due to a bug, this /autologin-user-timeout=* actually won't work on Ubuntu 11.10 and 12.04.
+  # Ref: https://bugs.launchpad.net/ubuntu/+source/lightdm/+bug/902852
+  local inode="$1"
+  local iauto_login_id="$2"
+  local tlogin_time="$3"
+  if [ ! -f $inode/$LIGHTDM_CFG ]; then
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING 
+    echo "$inode/$LIGHTDM_CFG is NOT found!!! Assume it's DRBL SSI mode!"  
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+    return 1
+  fi
+  # set the timed login time
+  [ -z "$tlogin_time" ] && tlogin_time="$TIMED_LIGHTDM_TIME_DEFAULT"
+
+  # put the timedlogin delay time
+  lines="$(get_block_line_in_gdm_kdm SeatDefaults $inode/$LIGHTDM_CFG)"
+  begin_line=$(echo $lines | awk -F" " '{print $1}')
+  end_line=$(echo $lines | awk -F" " '{print $2}')
+  chk_cmd="if ($begin_line..$end_line) {print}"
+  if [ -n "$(perl -n -e "$chk_cmd" $inode/$LIGHTDM_CFG | grep -i "^autologin-user-timeout=")" ]; then
+    sub_cmd="if ($begin_line..$end_line) {s/^autologin-user-timeout=.*/autologin-user-timeout=$tlogin_time/}"
+    perl -pi -e "$sub_cmd" $inode/$LIGHTDM_CFG
+  else
+    # insert 1 blank line
+    sub_cmd="if ($((end_line))..$((end_line))) {s/^(.*)$/\$1\n/gi}"
+    perl -pi -e "$sub_cmd" $inode/$LIGHTDM_CFG
+    # replace the one we want in the added blank line
+    sub_cmd="if ($((end_line+1))..$((end_line+1))) {s/^$/autologin-user-timeout=$tlogin_time/gi}"
+    perl -pi -e "$sub_cmd" $inode/$LIGHTDM_CFG
+  fi
+  # put the timedlogin id
+  lines="$(get_block_line_in_gdm_kdm SeatDefaults $inode/$LIGHTDM_CFG)"
+  begin_line=$(echo $lines | awk -F" " '{print $1}')
+  end_line=$(echo $lines | awk -F" " '{print $2}')
+  chk_cmd="if ($begin_line..$end_line) {print}"
+  if [ -n "$(perl -n -e "$chk_cmd" $inode/$LIGHTDM_CFG | grep -i "^autologin-user=")" ]; then
+    sub_cmd="if ($begin_line..$end_line) {s/^autologin-user=.*/autologin-user=$iauto_login_id/}"
+    perl -pi -e "$sub_cmd" $inode/$LIGHTDM_CFG
+  else
+    # insert 1 blank line
+    sub_cmd="if ($((end_line))..$((end_line))) {s/^(.*)$/\$1\n/gi}"
+    perl -pi -e "$sub_cmd" $inode/$LIGHTDM_CFG
+    # replace the one we want in the added blank line
+    sub_cmd="if ($((end_line+1))..$((end_line+1))) {s/^$/autologin-user=$iauto_login_id/gi}"
+    perl -pi -e "$sub_cmd" $inode/$LIGHTDM_CFG
+  fi
+}
+set_lightdm_normal_login() {
+    local inode="$1"
+    if [ ! -f $inode/$LIGHTDM_CFG ]; then
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING 
+      echo "$inode/$LIGHTDM_CFG is NOT found!!! Assume it's DRBL SSI mode!"  
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+      return 1
+    fi
+    # disable auto and timed login, then it will be normal login since this is the default setting.
+    perl -p -i -e "s/^[[:space:]]*#*[[:space:]]*autologin-user=.*/#autologin-user=/" $inode/$LIGHTDM_CFG
+    perl -p -i -e "s/^[[:space:]]*#*[[:space:]]*autologin-user-timeout=.*/#autologin-user-timeout=/" $inode/$LIGHTDM_CFG
+}
+
+set_kdm_auto_login() {
+    local inode="$1"
+    if [ ! -f "$inode/$KDM_CFG" ]; then
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING 
+      echo "KDM config in $inode NOT found!!! Assume it's DRBL SSI mode!"  
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+      return 1
+    fi
+    perl -p -i -e "s/^[[:space:]]*#*[[:space:]]*AutoLoginEnable=.*/AutoLoginEnable=true/" $inode/$KDM_CFG
+    perl -p -i -e "s/^[[:space:]]*#*[[:space:]]*AutoLoginUser=.*/AutoLoginUser=$auto_login_id/" $inode/$KDM_CFG
+}
+
+#
+create_autologin_account() {
+    # $create_account, $auto_login_id and $echo_no_digit_0_1 are global variables
+    local ihost="$1"
+    local shell_opt
+    get_autologin_account $ihost
+    # auto_login_id is got from get_autologin_account
+    [ -z "$auto_login_id" ] && echo "Unable to get $ip client's hostname! Skip this one!" && return 1
+    if ! grep -q -E "^$auto_login_id:" /etc/passwd ; then
+      # account $auto_login_id does not exists, create it.
+      create_account=1
+      # If /bin/bash is found, we try to se /bin/bash as default shell.
+      shell_opt=""
+      [ -e /bin/bash ] && shell_opt="-s /bin/bash"
+      echo -n "Creating account $auto_login_id... "
+      useradd -m $auto_login_id $shell_opt
+    fi
+
+    # set password when accounts are created (at that time the passwords are empty) or when password_opt is assigned
+    if [ "$create_account" = "1" -o -n "$password_opt" ]; then
+      # clean the old file
+      clean_old_auto_login_id_passwd_file $AUTO_LOGIN_ID_PASSWD $auto_login_id
+      # set the passwd
+      set_client_autologin_passwd=1
+      case "$password_opt" in
+       [0-9]|"")
+          echo -n "The password_opt is set as \"$password_opt\". " 
+          # echo the message $PWD_NO_0_1_MSG in the file $AUTO_LOGIN_ID_PASSWD
+          # if it does not exist.
+          if [ -z "`grep $PWD_NO_0_1_MSG  $AUTO_LOGIN_ID_PASSWD 2>/dev/null`" ]; then
+            [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING 
+            echo $PWD_NO_0_1_MSG | tee -a $AUTO_LOGIN_ID_PASSWD
+            [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+          fi
+          echo_no_digit_0_1=1
+          # get one digit, so it must be the length of password
+          # or it's empty, we set it as $password_opt_default
+          if [ -z "$password_opt" ]; then
+            echo -n "You did NOT set the length of password, set it as $PASSWD_LENGTH_DEFAULT. " 
+            password_opt="$PASSWD_LENGTH_DEFAULT"
+          fi
+          echo -n "Generating random password from password length $password_opt... " 
+		  make_random_password $password_opt
+		  passwd_now=$random_password
+          echo "$auto_login_id:$passwd_now" | chpasswd
+          ;;
+       *)
+          echo -n "Set password from input..." 
+          passwd_now="$password_opt"
+          echo "$auto_login_id:$passwd_now" | chpasswd
+      esac  
+      echo "$auto_login_id $passwd_now" >> $AUTO_LOGIN_ID_PASSWD
+    fi
+}
+
+#
+clean_old_auto_login_id_passwd_file() {
+    local local_autologin_id_pwd_file="$1"
+    local local_auto_login_id="$2"
+    [ -z "$local_auto_login_id" ] && echo "Unable to get auto login id! Skip this one!" && return 1
+    # rename the old file, local_auto_login_id is a tag so that we will rename it just onece, not for every accounts.
+    if [ -f "$local_autologin_id_pwd_file" ]; then
+      if grep -q -E "\<$local_auto_login_id\>" $local_autologin_id_pwd_file; then
+     	[ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING 
+	echo "An existing file \"$local_autologin_id_pwd_file\" is found. Rename it as \"$local_autologin_id_pwd_file.drblsave\""
+        [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+	mv -f $local_autologin_id_pwd_file ${local_autologin_id_pwd_file}.drblsave
+      fi
+    fi
+}
+
+#
+output_result_and_update_yp() {
+  # $create_account, $no_nis_update and $set_client_autologin_passwd are global variables
+  if [ "$set_client_autologin_passwd" = "1" ]; then
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING 
+    echo $msg_created_autologin_ID_passwd_file
+    #echo $PWD_NO_0_1_MSG | tee -a $AUTO_LOGIN_ID_PASSWD
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+    # update the NIS
+    [ "$no_nis_update" != "on" ] && make -C /var/yp
+  fi
+}
+     
+# main
+# set the flag for create account and echo prompt
+# $create_account, $auto_login_id, $no_nis_update, $set_client_autologin_passwd and $echo_no_digit_0_1 are global variables
+create_account=0
+echo_no_digit_0_1=0
+set_client_autologin_passwd=0
+
+# If clonezilla box or drbl-ssi mode
+[ -f /etc/drbl/drbl_deploy.conf ] && . /etc/drbl/drbl_deploy.conf
+if [ "$clonezilla_mode" = "clonezilla_box_mode" -o "$drbl_mode" = "drbl_ssi_mode" ]; then
+  gen_ssi="yes"
+else
+  gen_ssi="no"
+fi
+     
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -n|--normal)
+		shift; login_dm_mode="normal_login"
+                ;;
+    -a|--auto)
+		shift; login_dm_mode="auto_login"
+                ;;
+    -t|--timed)
+		shift; login_dm_mode="timed_login"
+                if [ -z "$(echo $1 |grep ^-.)" ]; then
+                  # skip the -xx option, in case 
+		  timed_login_time="$1"
+		  shift
+                fi
+                ;;
+    -l|--language)
+		shift
+                if [ -z "$(echo $1 |grep ^-.)" ]; then
+                  # skip the -xx option, in case 
+		  specified_lang="$1"
+		  shift
+                fi
+		;;
+    -h|--host)
+		shift
+                if [ -z "$(echo $1 |grep ^-.)" ]; then
+                  # skip the -xx option, in case 
+		  specified_host="$1"
+		  shift
+                fi
+		;;
+    -g|--no-gen-ssi)
+		gen_ssi="no"
+                shift;;
+    -v|--verbose)
+		shift; verbose="on"
+                ;;
+    -u|--no_nis_update)
+		shift; no_nis_update="on"
+                ;;
+    -p|--password_opt)
+		shift
+                if [ -z "$(echo $1 |grep ^-.)" ]; then
+                  # skip the -xx option, in case 
+		  password_opt="$1"
+		  shift
+                fi
+		;;
+    -*)		echo "${0}: ${1}: invalid option" >&2
+		usage >& 2
+		exit 2 ;;
+    *)		break ;;
+  esac
+done
+
+#
+ask_and_load_lang_set $specified_lang
+
+# check if the mode is set or net 
+[ -z "$login_dm_mode" ] && usage && exit 1
+
+#
+if [ -n "$specified_host" ]; then
+ [ ! -d "$drblroot/$specified_host" ] && echo "Can NOT find DRBL client $specified_host (i.e. no $drblroot/$specified_host)! Assume it's DRBL SSI client."
+ [ -n "$verbose" ] && echo "specified_host: $specified_host"
+fi
+
+# set the login option for GDM
+ [ -n "$verbose" ] && echo -n "The GDM login option: $login_dm_mode..."
+
+# set the host to be processed
+# host_list is the IP address of client, like 192.168.1.1...
+host_list=""
+if [ -n "$specified_host" ]; then
+   # set the host path
+   host_list=$drblroot/$specified_host
+else
+   # withoud specified_host, it must be all clients, append each one to $host_list
+   for ihost in `get-client-ip-list`; do
+     host_list="$host_list $drblroot/$ihost"
+   done
+fi
+
+RC=""
+preferred="$(drbl-check-dm)"
+RC=$?
+
+[ $RC -eq 0 ] && echo "Display manager:\"$preferred\"..."
+
+#
+case "$preferred" in
+   gdm*)
+    for ihost in $host_list; do
+     echo -n "Setting node `basename $ihost` as $login_dm_mode... "
+     case "$login_dm_mode" in
+       "auto_login"|"timed_login")
+	  # create auto login account if necessary
+	  create_autologin_account $ihost
+	  # set the mode for $AUTO_LOGIN_ID_PASSWD as root access only
+	  [ -f "$AUTO_LOGIN_ID_PASSWD" ] && chmod 600 $AUTO_LOGIN_ID_PASSWD
+     	  case "$login_dm_mode" in
+     	    "auto_login")
+     	       set_gdm_auto_login $ihost $auto_login_id
+     	       ;;
+     	    "timed_login")
+     	       set_gdm_timed_login $ihost $auto_login_id $timed_login_time
+     	       ;;
+     	  esac
+     	  echo "done!"
+          ;;
+       "normal_login")
+     	  set_gdm_normal_login $ihost
+     	  echo "done!"
+          ;;
+     esac
+    done
+    # output result and update yp
+    output_result_and_update_yp
+    ;;
+  kdm|mdkkdm)
+    # No timed_login for KDE... only auto_login or nornam_login
+    [ "$login_dm_mode" = "timed_login" ] && echo "No timed login for KDE... only auto login or normal login, so set it as auto login..."
+    for ihost in $host_list; do
+      echo -n "Setting node `basename $ihost` as $login_dm_mode... "
+      case "$login_dm_mode" in
+        "auto_login"|"timed_login")
+          # create auto login account if necessary
+          create_autologin_account $ihost
+          # set the mode for $AUTO_LOGIN_ID_PASSWD as root access only
+          [ -f "$AUTO_LOGIN_ID_PASSWD" ] && chmod 600 $AUTO_LOGIN_ID_PASSWD
+          set_kdm_auto_login $ihost
+          echo "done!"
+          ;;
+        "normal_login")
+          [ -f "$ihost/$SYSCONF_PATH/autologin" ] && rm -f $ihost/$SYSCONF_PATH/autologin
+          echo "done!"
+          ;;
+      esac
+    done
+    # output result and update yp
+    output_result_and_update_yp
+    ;;
+  lightdm)
+    for ihost in $host_list; do
+     echo -n "Setting node `basename $ihost` as $login_dm_mode... "
+     case "$login_dm_mode" in
+       "auto_login"|"timed_login")
+	  # create auto login account if necessary
+	  create_autologin_account $ihost
+	  # set the mode for $AUTO_LOGIN_ID_PASSWD as root access only
+	  [ -f "$AUTO_LOGIN_ID_PASSWD" ] && chmod 600 $AUTO_LOGIN_ID_PASSWD
+     	  case "$login_dm_mode" in
+     	    "auto_login")
+     	       set_lightdm_auto_login $ihost $auto_login_id
+     	       ;;
+     	    "timed_login")
+     	       set_lightdm_timed_login $ihost $auto_login_id $timed_login_time
+     	       ;;
+     	  esac
+     	  echo "done!"
+          ;;
+       "normal_login")
+     	  set_lightdm_normal_login $ihost
+     	  echo "done!"
+          ;;
+     esac
+    done
+    # output result and update yp
+    output_result_and_update_yp
+    ;;
+  *)
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+    echo "Unknown display manager! This display manager \"$preferred\" is not supported by `basename $0`."
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+    echo "$msg_program_stop"
+    exit 1
+    ;;
+esac
+
+#
+if [ "$gen_ssi" = "yes" ]; then
+  echo "-------------------------------------------------------"
+  echo "Since some config files are modified in template client, creating template tarball for DRBL SSI..."
+  drbl-gen-ssi-files
+fi

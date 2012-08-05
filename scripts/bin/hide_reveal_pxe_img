@@ -1,0 +1,47 @@
+#!/bin/bash
+# Author: Steven Shiau <steven _at_ nchc org tw>
+# License: GPL
+# Description: Hide or reveal the menus in PXE Linux config file.
+# Load DRBL setting and functions
+DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/opt/drbl/}"
+
+. $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
+
+# functions
+prog="$(basename $0)"
+USAGE() {
+  echo "Usage:"
+  echo "$prog LABEL [hide|reveal] PXE_CONF_FILE"
+  echo "Ex: To hide the label drbl in /tftpboot/nbi_img/pxelinux.cfg/default, run:"
+  echo "    $prog drbl hide /tftpboot/nbi_img/pxelinux.cfg/default"
+}
+
+lab="$1"
+ACT="$2"
+PXE_CONF="$3"
+for i in lab ACT PXE_CONF; do
+  eval arg=\$$i
+  [ -z "$arg" ] && USAGE && exit 1
+done
+if [ ! -f "$PXE_CONF" ]; then
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+  echo "file $PXE_CONF not found!"
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+  exit 1
+fi
+check_img_in_pxe_cfg $lab $PXE_CONF
+# turn off MENU DEFAULT & turn on MENU HIDE for the specified image
+lines="$(get_pxecfg_image_block $lab $PXE_CONF)"
+begin_line="$(LC_ALL=C echo $lines | awk -F" " '{print $1}')"
+end_line="$(LC_ALL=C echo $lines | awk -F" " '{print $2}')"
+case "$ACT" in
+  "hide")
+    [ -n "$VERBOSE" ] && echo "Hide $lab in $PXE_CONF... "
+    sub_act_cmd="if ($begin_line..$end_line) {s/^(#|[[:space:]])*MENU HIDE.*/  MENU HIDE/i}"
+    ;;
+  "reveal")
+    [ -n "$VERBOSE" ] && echo "Reveal $lab in $PXE_CONF... "
+    sub_act_cmd="if ($begin_line..$end_line) {s/^(#|[[:space:]])*MENU HIDE.*/  # MENU HIDE/i}"
+    ;;
+esac
+LC_ALL=C perl -pi -e "$sub_act_cmd" $PXE_CONF

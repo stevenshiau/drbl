@@ -1,0 +1,12 @@
+DRBL (Diskless Remote Boot in Linux) authors:
+Steven Shiau (steven _at_ nchc org tw)
+Blake, Kuo-Lien Huang Huang  (klhaung _at_ gmail com)
+H. T. Wang (c00wht00 _at_ nchc org tw)
+Ceasar Sun (ceasar _at_ nchc org tw)
+Jazz Wang (jazz _at_ nchc org tw)
+Thomas Tsai (thomas _at_ nchc org tw)
+
+NCHC Free Software Labs, Taiwan.
+http://free.nchc.org.tw
+
+Some files included in DRBL package are from other open source or free software projects. They have separate authors. The name of author is put in the content of the file itself or the same directory. Those include files from syslinux (H. Peter Anvin), memtest (Samuel DEMEULEMEESTER) and more.

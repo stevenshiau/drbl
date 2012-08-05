@@ -1,0 +1,168 @@
+#!/bin/bash
+# Author: Steven Shiau <steven _at_ nchc org tw>
+# License: GPL 
+# Description: DRBL utitilty to add users to group plugdev, audio... devices
+# Ref: http://drbl.sourceforge.net/faq/index.php#path=./2_System&entry=05_usb_sound.faq
+
+# Load DRBL setting and functions
+DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/opt/drbl/}"
+. $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
+
+# Some default setting for Debian
+# dialout:x:20
+# cdrom:x:24:
+# floppy:x:25:
+# audio:x:29:
+# video:x:44:
+# plugdev:x:46:
+
+prog="$(basename $0)"
+usage() {
+  echo "Enable or disable audio, plugdev permission... to all users."
+  echo "Usage: $0 [Options]"
+  echo "Options:"
+  language_help_prompt_by_idx_no
+  echo "-g, --group [GROUP1, GROUP2...]: Assign the GROUP1, GROUP2... to be process"
+  echo "-e, --enable        Enable GROUP open to all users"
+  echo "-d, --disable       Disable GROUP open to all users"
+  echo "-n, --no-update-yp  Do NOT update YP/NIS"
+  echo "-r, --no-restart-prompt  Do not show the prompt to restart X"
+  echo "-v, --verbose       Prints out verbose information"
+  echo 
+  echo "Ex:"
+  echo "$0 -g \"$desktop_user_group_debian\" -e"
+}
+
+# functions
+enable_group() {
+  local tune_group="$1"
+  if [ -z "$tune_group" ]; then
+    echo "No assigned tune group! Skip this!"
+    return 3
+  fi
+  # For new device group, better to use
+  # "find /usr /sbin /bin -group $tune_group -print" to show the related programs.
+  if [ -z "$(grep -E "^$tune_group:" /etc/group)" ]; then
+    echo "Group $tune_group does NOT exist! Skip open $tune_group!"
+    return 1
+  fi
+  common_users="$(drbl-get-common-username 2>/dev/null)"
+  for iuser in $common_users; do
+    if [ "$iuser" != "nobody" -a -z "$(groups $iuser | grep $tune_group)" ]; then
+      adduser $iuser $tune_group >/dev/null
+    fi
+  done
+  grp_list="$(grep -E "^$tune_group:.*" /etc/group)"
+  for ihost in $drbl_common_root/ $drblroot/* /; do
+    if [ -f $ihost/etc/group ]; then
+      perl -p -i -e "s/^$tune_group:.*/$grp_list/g" $ihost/etc/group
+    fi
+  done
+} # end of enable_group
+
+disable_group() {
+  local tune_group="$1"
+  if [ -z "$tune_group" ]; then
+    echo "No assigned tune group! Skip this!"
+    return 3
+  fi
+  if [ -z "$(grep "^$tune_group:" /etc/group)" ]; then
+    echo "Group $tune_group does NOT exist! Skip open $tune_group!"
+    return 1
+  fi
+  for ihost in $drbl_common_root/ $drblroot/* /; do
+    if [ -f $ihost/etc/group ]; then
+      # TO modify, make them sync
+      perl -p -i -e "s/^($tune_group:.*:.*:).*/\$1/g" $ihost/etc/group
+    fi
+  done
+} # end of disable_group
+
+#
+check_if_root
+
+#
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -e|--enable) shift; MODE="enable" ;;
+    -d|--disable) shift; MODE="disable" ;;
+    -g|--group)
+		shift;
+                if [ -z "$(echo $1 |grep ^-.)" ]; then
+                  # skip the -xx option, in case 
+	          GRPS="$1"
+		  shift
+                fi
+		;;
+    -l|--language)
+		shift;
+                if [ -z "$(echo $1 |grep ^-.)" ]; then
+                  # skip the -xx option, in case 
+		  specified_lang="$1"
+		  shift
+                fi
+		;;
+    -n|--no-update-yp:) shift; YP_UPDATE="no" ;;
+    -r|--no-restart-prompt) shift; RESTART_PROMPT="no" ;;
+    -v|--verbose) shift; VERBOSE="on" ;;
+    -*)		echo "${0}: ${1}: invalid option" >&2
+		usage >& 2
+		exit 2 ;;
+    *)		break ;;
+  esac
+done
+
+#
+if [ ! -e /etc/debian_version ]; then
+   echo "This is not Debian Linux! This program only works in Debian Linux!!! Program terminated!"
+   exit 1
+fi
+#
+ask_and_load_lang_set $specified_lang
+
+[ -z "$GRPS" -o -z "$MODE" ] && usage && exit 1
+
+echo "$msg_delimiter_star_line"
+# Part 1: For audio device: dsp mixer
+case "$MODE" in
+  enable)
+     echo -n "Adding normal users to group \"$GRPS\"..."
+     for igrp in $GRPS; do
+       echo -n "."
+       enable_group $igrp
+     done
+     echo " done!"
+     ;;
+  disable)
+     echo -n "Removing normal users from group \"$GRPS\"..."
+     for igrp in $GRPS; do
+       echo -n "."
+       disable_group $igrp
+     done
+     echo " done!"
+     ;;
+esac
+
+# update YP
+if [ "$YP_UPDATE" != "no" ]; then
+  echo "$msg_delimiter_star_line"
+  echo "Updating the YP/NIS for group..."
+  make -C /var/yp &>/dev/null
+fi
+
+# restart prompt
+if [ "$RESTART_PROMPT" != "no" ]; then
+  if [ "$MODE" = "enable" ]; then
+    echo "$msg_delimiter_star_line"
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+    echo "$msg_restart_prompt_for_dev"
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+  fi
+fi
+
+[ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+if [ "$MODE" = "enable" ]; then 
+  echo "$msg_run_update_dev_again:"
+  echo "$prog -g \"$GRPS\" -e"
+fi
+[ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL

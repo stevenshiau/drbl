@@ -1,0 +1,440 @@
+#!/bin/bash
+# Author: Steven Shiau <steven _at_ nchc org tw>
+# License: GPL
+# Description: To set the server so that client can run gdm/kdm remotely.
+
+# Load DRBL setting and functions
+DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/opt/drbl/}"
+
+. $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
+
+#
+check_if_root
+
+# Get the $GDM_CFG/$KDM_CFG filename
+get_gdm_kdm_conf_filename
+if [ -z "$GDM_CFG" -a -z "$KDM_CFG" ]; then
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+  echo "The GDM or KDM config file is NOT found! Skip setting the DM! Maybe you will not be able to make this DRBL server as thin client server!"
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+  exit 1
+fi
+
+#
+SERVER_INIT="5"
+
+#
+usage() {
+  echo "Description:"
+  echo "Switch the DRBL clients to thin or powerful mode."
+  echo "Usage: `basename $0` [-p|--powerful] [-t|--thin]"
+  echo "-p, --powerful  Powerful client"
+  echo "-t, --thin      Thin client"
+  echo "-h, --hosts     IP_LIST  Instead of all DRBL clients, assign the clients by IP address, like: -h \"192.168.0.1 192.168.0.2\" NOTE!!! You must put \" \" before and after the IP_LIST!"
+  echo "-g, --no-gen-ssi Do NOT generate DRBL SSI template tarball."
+  language_help_prompt_by_idx_no
+  language_help_prompt_by_idx_name
+}
+# option
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -p|--powerful)
+		shift; xdmcp_mode="off"
+                ;;
+    -t|--thin)
+		shift; xdmcp_mode="on"
+                ;;
+    -h|--hosts)
+		shift;
+	        LIST_HOST="on"
+                if [ -z "$(echo $1 |grep ^-.)" ]; then
+                  # skip the -xx option, in case 
+		  IP_LIST="$1"
+                fi
+		shift ;;
+    -g|--no-gen-ssi)
+		gen_ssi="no"
+                shift;;
+    -l|--language)
+		shift;
+                if [ -z "$(echo $1 |grep ^-.)" ]; then
+                  # skip the -xx option, in case 
+	          language_opt="$1"
+                fi
+		shift ;;
+    -ln)
+		shift;
+                if [ -z "$(echo $1 |grep ^-.)" ]; then
+                  # skip the -xx option, in case 
+	          language_opt="$1"
+                fi
+		shift ;;
+    -*)		echo "${0}: ${1}: invalid option" >&2
+		usage >& 2
+		exit 2 ;;
+    *)		break ;;
+  esac
+done
+
+[ -z "$xdmcp_mode" ] && usage && exit 1
+
+#
+ask_and_load_lang_set $language_opt
+
+# function
+clean_all_client_drblthincli_cfg() {
+     # clean the drblthincli 
+     find $drblroot/*/$SYSCONF_PATH/ -name drblthincli -exec rm -f {} \;
+}
+
+#
+set_gdm_remote_access() {
+  action=$1
+  case "$action" in
+   "on")
+     # make sure inittab in the clients is runlevel 5, only in RH-like
+     [ ! -f /etc/debian_version ] && switch_clients_init 5 $IP_LIST
+
+     # for server
+     if [ -e "$GDM_CFG" ]; then
+       # Set DisallowTCP=false in $GDM_CFG
+       lines="$(get_block_line_in_gdm_kdm xdmcp $GDM_CFG)"
+       begin_line=$(echo $lines | awk -F" " '{print $1}')
+       end_line=$(echo $lines | awk -F" " '{print $2}')
+       chk_cmd="if ($begin_line..$end_line) {print}"
+       if [ -n "$(perl -n -e "$chk_cmd" $GDM_CFG | grep -iE "^DisallowTCP=")" ]; then
+         sub_cmd="if ($begin_line..$end_line) {s/^DisallowTCP=.*/DisallowTCP=false/}"
+         perl -pi -e "$sub_cmd" $GDM_CFG
+       else
+         # insert 1 blank line
+         sub_cmd="if ($((end_line))..$((end_line))) {s/^(.*)$/\$1\n/gi}"
+         perl -pi -e "$sub_cmd" $GDM_CFG
+         # replace the one we want in the added blank line
+         sub_cmd="if ($((end_line+1))..$((end_line+1))) {s/^$/DisallowTCP=false/gi}"
+         perl -pi -e "$sub_cmd" $GDM_CFG
+       fi
+     fi
+     if [ -e "$FAC_GDM_CFG" ]; then
+       # Debian Etch does not have $FAC_GDM_CFG 
+       perl -p -i -e "s/^[[:space:]]*#*DisallowTCP=.*/DisallowTCP=false/" $FAC_GDM_CFG
+     fi
+     #
+     lines=$(get_block_line_in_gdm_kdm xdmcp $GDM_CFG)
+     begin_line=$(echo $lines | awk -F" " '{print $1}')
+     end_line=$(echo $lines | awk -F" " '{print $2}')
+     chk_cmd="if ($begin_line..$end_line) {print}"
+     # If we found the xdmcp in gdm.conf is "Enable=false", enable it.
+     # If the xdmcp setting is already on, we should not restart gdm if in graphic mode (runlevel 5 or dm is running)
+     # but If the xdmcp setting is already on, we should start gdm if in text mode (runlevel 3 or dm is NOT running)
+     if [ -e /etc/debian_version ]; then
+       # Debian
+       default_dm="$(drbl-check-dm)"
+       pid_run="$(cat /var/run/${default_dm}.pid 2>/dev/null)"
+       if [ -n "$(ps --pid $pid_run | grep $default_dm 2>/dev/null)" ]; then
+         srv_mode=graphic
+       else
+         srv_mode=text
+       fi
+     else
+       # RH-like or SUSE
+       RL=$(runlevel  | awk -F" " '{print $2}')
+       if [ "$RL" = "5" ]; then
+         srv_mode=graphic
+       else
+         srv_mode=text
+       fi
+     fi
+     if [ -n "$(perl -n -e "$chk_cmd" $GDM_CFG | grep -iE "^Enable=false")" ]; then
+       echo "$msg_turn_on_gdm_remote_access"
+       sub_cmd="if ($begin_line..$end_line) {s/^Enable=.*/Enable=true/}"
+       perl -pi -e "$sub_cmd" $GDM_CFG
+       
+       # Ask user to restart gdm if necessary
+       [ ! -f /etc/debian_version ] && perl -p -i -e "s/^id:[1-5]:initdefault:/id:$SERVER_INIT:initdefault:/g" /etc/inittab
+       if [ "$srv_mode" = "graphic" ]; then
+	 # alread in graphic mode, assume gdm is running.
+         [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+         echo "$msg_logout_X_for_thin_client_gdm"
+         /usr/sbin/gdm-safe-restart
+         [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+       else
+	 # not in graphic mode, start gdm now
+         [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+         echo "$msg_restart_graphic_mode_later"
+         [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+       fi
+     elif [ -n "$(perl -n -e "$chk_cmd" $GDM_CFG | grep -iE "^Enable=true")" ]; then
+       echo "$msg_gdm_remote_access_is_already_on"
+       # If the xdmcp setting is already on, we should start gdm if in runlevel 3
+       if [ "$srv_mode" = "text" ]; then
+         [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+         echo "$msg_restart_graphic_mode_later"
+         [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+       fi
+     else
+       # Empty, such as default custom.conf, we should insert Enable=true in $GDM_CFG
+       lines="$(get_block_line_in_gdm_kdm xdmcp $GDM_CFG)"
+       begin_line=$(echo $lines | awk -F" " '{print $1}')
+       end_line=$(echo $lines | awk -F" " '{print $2}')
+       chk_cmd="if ($begin_line..$end_line) {print}"
+       if [ -n "$(perl -n -e "$chk_cmd" $GDM_CFG | grep -iE "^Enable=")" ]; then
+         sub_cmd="if ($begin_line..$end_line) {s/^Enable=.*/Enable=true/}"
+         perl -pi -e "$sub_cmd" $GDM_CFG
+       else
+         # insert 1 blank line
+         sub_cmd="if ($((end_line))..$((end_line))) {s/^(.*)$/\$1\n/gi}"
+         perl -pi -e "$sub_cmd" $GDM_CFG
+         # replace the one we want in the added blank line
+         sub_cmd="if ($((end_line+1))..$((end_line+1))) {s/^$/Enable=true/gi}"
+         perl -pi -e "$sub_cmd" $GDM_CFG
+       fi
+     fi
+
+     # make the tag for client
+     echo "$msg_set_thin_client_mode_for_clients"
+     for ihost in $drblroot/*; do
+       # skip those IP not listed in the $IP_LIST
+       if [ "$LIST_HOST" = "on" ]; then
+         [ -z "$(echo $IP_LIST | grep -E "\<${ihost##/*/}\>")" ] && continue
+       fi
+       echo "Set system config DRBL_THIN_CLIENT=on for client ${ihost##/*/}"
+       echo "DRBL_THIN_CLIENT=on" > $ihost/$SYSCONF_PATH/drblthincli
+     done
+     echo "$msg_done !"
+     ;;
+
+   "off")
+     if [ -e "$GDM_CFG" ]; then
+       # Set DisallowTCP=true in $GDM_CFG
+       lines="$(get_block_line_in_gdm_kdm xdmcp $GDM_CFG)"
+       begin_line=$(echo $lines | awk -F" " '{print $1}')
+       end_line=$(echo $lines | awk -F" " '{print $2}')
+       chk_cmd="if ($begin_line..$end_line) {print}"
+       if [ -n "$(perl -n -e "$chk_cmd" $GDM_CFG | grep -iE "^DisallowTCP=")" ]; then
+         sub_cmd="if ($begin_line..$end_line) {s/^DisallowTCP=.*/DisallowTCP=true/}"
+         perl -pi -e "$sub_cmd" $GDM_CFG
+       else
+         # insert 1 blank line
+         sub_cmd="if ($((end_line))..$((end_line))) {s/^(.*)$/\$1\n/gi}"
+         perl -pi -e "$sub_cmd" $GDM_CFG
+         # replace the one we want in the added blank line
+         sub_cmd="if ($((end_line+1))..$((end_line+1))) {s/^$/DisallowTCP=true/gi}"
+         perl -pi -e "$sub_cmd" $GDM_CFG
+       fi
+     fi
+     if [ -e "$FAC_GDM_CFG" ]; then
+       # Debian Etch does not have $FAC_GDM_CFG 
+       perl -p -i -e "s/^[[:space:]]*#*DisallowTCP=.*/DisallowTCP=true/" $FAC_GDM_CFG
+     fi
+     lines=$(get_block_line_in_gdm_kdm xdmcp $GDM_CFG)
+     begin_line=$(echo $lines | awk -F" " '{print $1}')
+     end_line=$(echo $lines | awk -F" " '{print $2}')
+     chk_cmd="if ($begin_line..$end_line) {print}"
+     # If we found the xdmcp in gdm.conf is "Enable=true", disable it.
+     # If the xdmcp is already off, we should not restart gdm
+     if [ -n "$(perl -n -e "$chk_cmd" $GDM_CFG | grep -iE "^Enable=true")" ]; then
+       echo "$msg_turn_on_gdm_remote_access"
+       sub_cmd="if ($begin_line..$end_line) {s/^Enable=.*/Enable=false/}"
+       perl -pi -e "$sub_cmd" $GDM_CFG
+       
+       # Ask user to restart gdm if necessary
+       [ ! -f /etc/debian_version ] && perl -p -i -e "s/^id:[1-5]:initdefault:/id:$SERVER_INIT:initdefault:/g" /etc/inittab
+       if [ "$srv_mode" = "graphic" ]; then
+	 # alread in graphic mode, assume gdm is running.
+         [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+         echo "$msg_logout_X_for_thin_client_gdm"
+         /usr/sbin/gdm-safe-restart
+         [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+       else
+	 # not in graphic mode, start gdm now
+         [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+         echo "$msg_restart_graphic_mode_later"
+         [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+       fi
+     elif [ -n "$(perl -n -e "$chk_cmd" $GDM_CFG | grep -iE "^Enable=false")" ]; then
+       echo "$msg_gdm_remote_access_is_already_off"
+     else
+       # Empty, such as default custom.conf, we should insert Enable=false in $GDM_CFG
+       lines="$(get_block_line_in_gdm_kdm xdmcp $GDM_CFG)"
+       begin_line=$(echo $lines | awk -F" " '{print $1}')
+       end_line=$(echo $lines | awk -F" " '{print $2}')
+       chk_cmd="if ($begin_line..$end_line) {print}"
+       if [ -n "$(perl -n -e "$chk_cmd" $GDM_CFG | grep -iE "^Enable=")" ]; then
+         sub_cmd="if ($begin_line..$end_line) {s/^Enable=.*/Enable=false/}"
+         perl -pi -e "$sub_cmd" $GDM_CFG
+       else
+         # insert 1 blank line
+         sub_cmd="if ($((end_line))..$((end_line))) {s/^(.*)$/\$1\n/gi}"
+         perl -pi -e "$sub_cmd" $GDM_CFG
+         # replace the one we want in the added blank line
+         sub_cmd="if ($((end_line+1))..$((end_line+1))) {s/^$/Enable=false/gi}"
+         perl -pi -e "$sub_cmd" $GDM_CFG
+       fi
+     fi
+
+     # make a tag for not using thin client
+     echo "$msg_disable_thin_client_mode_for_clients"
+     for ihost in $drblroot/*; do
+       # skip those IP not listed in the $IP_LIST
+       if [ "$LIST_HOST" = "on" ]; then
+         [ -z "$(echo $IP_LIST | grep -E "\<${ihost##/*/}\>")" ] && continue
+       fi
+
+       if [ -d "$$ihost/$SYSCONF_PATH" ]; then
+         echo "Set system config DRBL_THIN_CLIENT=off for client ${ihost##/*/}"
+         echo "DRBL_THIN_CLIENT=off" > $ihost/$SYSCONF_PATH/drblthincli
+       fi
+     done
+     echo "$msg_done !"
+     ;;
+  esac
+}
+
+set_kdm_remote_access() {
+  # no $FAC_GDM_CFG file for KDM
+  # and it seems no DisallowTCP in KDM_CFG, anyway, just set it if available
+  action=$1
+  case "$action" in
+   "on")
+     # make sure inittab in the clients is runlevel 5, only in RH-like
+     [ ! -f /etc/debian_version ] && switch_clients_init 5 $IP_LIST
+
+     # for server
+     perl -p -i -e "s/^[[:space:]]*#*DisallowTCP=.*/DisallowTCP=false/" $KDM_CFG
+     lines=$(get_block_line_in_gdm_kdm xdmcp $KDM_CFG)
+     begin_line=$(echo $lines | awk -F" " '{print $1}')
+     end_line=$(echo $lines | awk -F" " '{print $2}')
+     chk_cmd="if ($begin_line..$end_line) {print}"
+     # If we found the xdmcp in kdmrc is "Enable=false", enable it.
+     # If the xdmcp setting is already on, we should not restart kdm if in graphic mode (runlevel 5 or dm is running)
+     # but If the xdmcp setting is already on, we should start kdm if in text mode (runlevel 3 or dm is NOT running)
+     if [ -e /etc/debian_version ]; then
+       # Debian
+       default_dm="$(drbl-check-dm)"
+       pid_run="$(cat /var/run/${default_dm}.pid 2>/dev/null)"
+       if [ -n "$(ps --pid $pid_run | grep $default_dm 2>/dev/null)" ]; then
+         srv_mode=graphic
+       else
+         srv_mode=text
+       fi
+     else
+       # RH-like
+       RL=$(runlevel  | awk -F" " '{print $2}')
+       if [ "$RL" = "5" ]; then
+         srv_mode=graphic
+       else
+         srv_mode=text
+       fi
+     fi
+     if [ -n "$(perl -n -e "$chk_cmd" $KDM_CFG | grep "^Enable=false")" ]; then
+       echo "$msg_turn_on_kdm_remote_access"
+       sub_cmd="if ($begin_line..$end_line) {s/^Enable=.*/Enable=true/}"
+       perl -pi -e "$sub_cmd" $KDM_CFG
+       
+       # Ask user to restart kdm if necessary
+       [ ! -f /etc/debian_version ] && perl -p -i -e "s/^id:[1-5]:initdefault:/id:$SERVER_INIT:initdefault:/g" /etc/inittab
+       if [ "$srv_mode" = "graphic" ]; then
+	 # alread in graphic mode, assume kdm is running.
+         [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+         echo "$msg_restart_X_for_thin_client_kdm"
+         [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+       else
+	 # not in graphic mode, start gdm now
+         [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+         echo "$msg_restart_graphic_mode_later"
+         [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+       fi
+     else
+       echo "$msg_kdm_remote_access_is_already_on"
+       if [ "$srv_mode" = "text" ]; then
+         [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+         echo "$msg_restart_graphic_mode_later"
+         [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+       fi
+     fi
+
+     # make the tag for client
+     echo "$msg_set_thin_client_mode_for_clients"
+     for ihost in $drblroot/*; do
+       # skip those IP not listed in the $IP_LIST
+       if [ "$LIST_HOST" = "on" ]; then
+         [ -z "$(echo $IP_LIST | grep -E "\<${ihost##/*/}\>")" ] && continue
+       fi
+
+       echo "Set system config DRBL_THIN_CLIENT=on for client ${ihost##/*/}"
+       echo "DRBL_THIN_CLIENT=on" > $ihost/$SYSCONF_PATH/drblthincli
+     done
+     echo "$msg_done !"
+     ;;
+
+   "off")
+     perl -p -i -e "s/^[[:space:]]*#*DisallowTCP=.*/DisallowTCP=true/" $KDM_CFG
+     lines=$(get_block_line_in_gdm_kdm xdmcp $KDM_CFG)
+     begin_line=$(echo $lines | awk -F" " '{print $1}')
+     end_line=$(echo $lines | awk -F" " '{print $2}')
+     chk_cmd="if ($begin_line..$end_line) {print}"
+     # If we found the xdmcp in gdm.conf is "Enable=true", disable it.
+     # If the xdmcp is already off, we should not restart gdm
+     if [ -n "$(perl -n -e "$chk_cmd" $KDM_CFG | grep "^Enable=true")" ]; then
+       echo "$msg_turn_off_kdm_remote_access"
+       sub_cmd="if ($begin_line..$end_line) {s/^Enable=.*/Enable=false/}"
+       perl -pi -e "$sub_cmd" $KDM_CFG
+       
+       # Ask user to restart kdm if necessary
+       [ ! -f /etc/debian_version ] && perl -p -i -e "s/^id:[1-5]:initdefault:/id:$SERVER_INIT:initdefault:/g" /etc/inittab
+       [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+       echo "$msg_logout_X_for_modified_kdm_config_work"
+       [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+     else
+       echo "$msg_kdm_remote_access_is_already_off"
+     fi
+
+     # make a tag for not using thin client
+     echo "$msg_disable_thin_client_mode_for_clients"
+     for ihost in $drblroot/*; do
+       # skip those IP not listed in the $IP_LIST
+       if [ "$LIST_HOST" = "on" ]; then
+         [ -z "$(echo $IP_LIST | grep -E "\<${ihost##/*/}\>")" ] && continue
+       fi
+
+       echo "Set system config DRBL_THIN_CLIENT=off for client ${ihost##/*/}"
+       echo "DRBL_THIN_CLIENT=off" > $ihost/$SYSCONF_PATH/drblthincli
+     done
+     echo "$msg_done !"
+     ;;
+  esac
+}
+
+RC=""
+preferred="$(drbl-check-dm)"
+if [ "$preferred" = "gdm" -a -z "$GDM_CFG" ]; then
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+  echo "The GDM config file is NOT found! Skip setting the DM! Maybe you will not be able to make this DRBL server as thin client server!"
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+  exit 1
+fi
+if [ "$preferred" = "kdm" -a -z "$KDM_CFG" ]; then
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+  echo "The KDM config file is NOT found! Skip setting the DM! Maybe you will not be able to make this DRBL server as thin client server!"
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+  exit 1
+fi
+
+RC=$?
+[ $RC -eq 0 ] && echo "$msg_dm_in_DRBL_server \"$preferred\""
+
+#
+case "$preferred" in
+   gdm)
+       set_gdm_remote_access $xdmcp_mode
+       ;;
+   kdm|mdkkdm)
+       set_kdm_remote_access $xdmcp_mode
+       ;;
+esac
+#
+if [ "$gen_ssi" != "no" ]; then
+  echo "-------------------------------------------------------"
+  echo "Since some config files are modified in template client, creating template tarball for DRBL SSI..."
+  drbl-gen-ssi-files
+fi

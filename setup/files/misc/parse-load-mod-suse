@@ -1,0 +1,71 @@
+#!/bin/bash
+# Steven Shiau <steven@nchc.org.tw>
+# License: GPL
+
+# Description: hwscan can not load the chip module (like piix)... So here we 
+#              use the results scanned from hwscan, then load them.
+# Ref: http://lists.suse.com/archive/suse-linux-e/2005-Aug/0782.html
+
+# For SuSE
+### BEGIN INIT INFO
+# Provides:          parse-load-mod-suse
+# Required-Start:    hwscan boot.coldplug
+# Should-Start:      
+# Required-Stop:
+# Default-Start:     B
+# Default-Stop:
+# Description:       Load all the modules scanned by hwscan.
+### END INIT INFO
+
+parse_and_load_modules() {
+  MOD_MAP=/lib/modules/`uname -r`/modules.pcimap
+  pcitable_hwdata="/usr/lib/mkpxeinitrd-net/initrd-skel/etc/pcitable"
+  mod_list=""
+  echo -n "Mapping the modules from the results of hwscan and lspci if available..."
+  # Part 1: use the hwscan results
+  for ihw in /var/lib/hardware/unique-keys/*; do
+    echo -n "."
+    if [ -e "$ihw" ]; then
+      MOD_TMP="$(mktemp /tmp/mod.XXXXXX)"
+      grep -E "(^VendorID=|^DeviceID=|^SubVendorID=|^SubDeviceID=)" $ihw > $MOD_TMP
+      . $MOD_TMP
+      map_mod="$(grep "0x0000${VendorID} 0x0000${DeviceID}" $MOD_MAP | sort | uniq | cut -d" " -f1)"
+      for im in $map_mod; do
+        [ -z "$(echo "$mod_list" | grep $im 2>/dev/null)" ] && mod_list="$mod_list $im"
+      done
+      [ -f "$MOD_TMP" ] && rm -f $MOD_TMP
+    fi
+  done
+  echo "done!"
+  # Part 2: since only PCI devices are in modules.pcimap, for SCSI or others, we
+  # need to use other method. Borrow the hwdata from RedHat.
+  if [ -x /usr/lib/mkpxeinitrd-net/initrd-skel/sbin/scan_pci ]; then
+    mod2_list="$(/usr/lib/mkpxeinitrd-net/initrd-skel/sbin/scan_pci /usr/lib/mkpxeinitrd-net/initrd-skel/etc)"
+    mod_list="$mod_list $mod2_list"
+  fi
+  [ -n "$mod_list" ] && echo "The modules to be loaded: $mod_list"
+  for imod in $mod_list; do
+    imod_aform="$(echo $imod | sed -e "s/-/_/g")"
+    if [ -z "$(lsmod | grep "^$imod_aform")" ]; then
+      echo -n "Loading $imod..."
+      modprobe $imod
+      echo "done!"
+    else
+      echo "$imod is already loaded, skip this!"
+    fi
+  done
+}
+
+case "$1" in
+    start)
+        parse_and_load_modules
+        ;;
+    stop)
+        # do nothing.
+        true
+	;;
+    *)
+	echo "Usage: $0 start" >&2
+	exit 1
+	;;
+esac

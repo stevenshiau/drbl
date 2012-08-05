@@ -1,0 +1,251 @@
+#!/bin/bash
+# Author: Steven Shiau <steven _at_ nchc org tw>
+# License: GPL
+#
+# set the iptables NAT
+# clean the old tables
+
+#
+DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/opt/drbl/}"
+. $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
+
+
+# Borrow some codes from /etc/init.d/iptables in RedHat.
+IPTABLES=iptables
+IPV=${IPTABLES%tables} # ip for ipv4 | ip6 for ipv6
+PROC_IPTABLES_NAMES=/proc/net/${IPV}_tables_names
+NAT_RULES_FOR_RH=$SYSCONF_PATH/iptables
+NAT_RULES_FOR_DEBIAN=$SYSCONF_PATH/drbl-nat.up.rules
+NAT_RULES_FOR_SUSE=$SYSCONF_PATH/SuSEfirewall2
+
+#
+flush_n_delete() {
+    # Flush firewall rules and delete chains.
+    [ -e "$PROC_IPTABLES_NAMES" ] || return 1
+
+    # Check if firewall is configured (has tables)
+    tables=`cat $PROC_IPTABLES_NAMES 2>/dev/null`
+    [ -z "$tables" ] && return 1
+
+    echo -n $"Flushing firewall rules: "
+    ret=0
+    # For all tables
+    for i in $tables; do
+        # Flush firewall rules.
+	$IPTABLES -t $i -F;
+	let ret+=$?;
+
+        # Delete firewall chains.
+	$IPTABLES -t $i -X;
+	let ret+=$?;
+
+	# Set counter to zero.
+	$IPTABLES -t $i -Z;
+	let ret+=$?;
+    done
+
+    [ $ret -eq 0 ] && echo "success" || echo "failure"
+}
+
+# save rules
+save_rules() {
+    # Save the rules.
+    if [ -e /etc/debian_version ]; then
+      # Debian
+      # We have to save our rules.
+      iptables-save > $NAT_RULES_FOR_DEBIAN
+      chmod 600 $NAT_RULES_FOR_DEBIAN
+    elif [ -e /etc/SuSE-release ]; then
+      # SuSE
+      # we already set that in /etc/sysconfig/SuSEfirewall2, so it not necessary
+      continue
+    else
+      # RH-like, we use its service
+      /etc/init.d/iptables save
+    fi
+}
+
+# set not to unload iptables module
+set_not_unload_iptables_module_RH() {
+    if [ ! -f $SYSCONF_PATH/iptables-config ]; then
+      echo 'IPTABLES_MODULES_UNLOAD="no"' > $SYSCONF_PATH/iptables-config
+    else
+      if grep -E -q "^[#\s]*IPTABLES_MODULES_UNLOAD=.*" $SYSCONF_PATH/iptables-config; then
+         perl -p -i -e "s/^[#\s]*IPTABLES_MODULES_UNLOAD=.*/IPTABLES_MODULES_UNLOAD=\"no\"/" $SYSCONF_PATH/iptables-config 
+      else
+         echo 'IPTABLES_MODULES_UNLOAD="no"' >> $SYSCONF_PATH/iptables-config
+      fi
+    fi
+}
+
+do_stop_iptables() {
+    echo "Now stop the NAT service..."
+    if [ -e /etc/debian_version ]; then
+      # Debian
+      # We have to use the code borrowed from RH.
+      flush_n_delete
+    elif [ -e /etc/SuSE-release ]; then
+      # SuSE
+      # TODO, can it (the cleaned one) save back to system in SuSE ? 
+      # Now this seems to do nothing.
+      /etc/init.d/SuSEfirewall2_setup stop
+    else
+      # RH-like
+      /etc/init.d/iptables stop
+    fi
+}
+#
+check_if_root
+
+# main
+usage() {
+  echo "To generate or clean NAT setting for DRBL clients to access"
+  echo "Usage: $0 [Options] {generate|clean|regenerate|stop|status}"
+  echo "Options:"
+  echo "-a, --all-subnet:   Make all subnet can access to this NAT server."
+  echo "-v, --verbose:  Verbose mode."
+  echo "Example: To generate NAT setting for DRBL clients to access"
+  echo "$0 generate"
+}
+
+# default setting
+all_subnet="no"
+
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -a|--all-subnet)
+		all_subnet="yes"
+                shift;;
+    -v|--verbose)
+		shift; verbose="on"
+                ;;
+    -*)		echo "${0}: ${1}: invalid option" >&2
+		usage >& 2
+		exit 2 ;;
+    *)		break ;;
+  esac
+done
+switch=$1
+
+#
+[ -z "$switch" ] && usage && exit 1
+
+#
+case "$switch" in
+   generate)
+      echo "Now generate the firewall rules for NAT service..."
+
+      if [ -f /etc/SuSE-release ]; then
+        # SuSE
+        # SuSE has its own wrapper program, we use that.
+        [ -f $SYSCONF_PATH/SuSEfirewall2 ] && cp -f $SYSCONF_PATH/SuSEfirewall2 $SYSCONF_PATH/SuSEfirewall2.drblsave
+        client_ip_nets=""
+        if [ "$all_subnet" = "yes" ]; then
+	  # Exporting whole subnet to clients
+          subnet_list="$(get-client-ip-list | awk -F"." '{print $1"."$2"."$3}' | sort | uniq )"
+          for subnet in $subnet_list; do
+            client_ip_nets="$client_ip_nets ${subnet}.0/24"
+          done
+        else
+	  # line by line
+          for ip in `get-client-ip-list`; do
+            client_ip_nets="$client_ip_nets $ip/32"
+          done
+        fi
+        DEV_INT="$(grep "^interface=" /etc/drbl/drblpush.conf | sed -e "s/interface=//g")"
+        # use echo to convert them into one line instead of many lines.
+        DEV_INT="$(echo $DEV_INT)"
+        # TODO, eth0 ? auto ? or other variable ?
+        perl -pi -e "s/^FW_DEV_EXT=.*/FW_DEV_EXT=auto/g" $SYSCONF_PATH/SuSEfirewall2
+        perl -pi -e "s/^FW_DEV_INT=.*/FW_DEV_INT=\"$DEV_INT\"/g" $SYSCONF_PATH/SuSEfirewall2
+        perl -pi -e "s/^FW_ROUTE=.*/FW_ROUTE=\"yes\"/g" $SYSCONF_PATH/SuSEfirewall2
+        perl -pi -e "s/^FW_MASQUERADE=.*/FW_MASQUERADE=\"yes\"/g" $SYSCONF_PATH/SuSEfirewall2
+        perl -pi -e "s|^FW_MASQ_NETS=.*|FW_MASQ_NETS=\"$client_ip_nets\"|g" $SYSCONF_PATH/SuSEfirewall2
+	# at least we have to turn on ssh so that dcs can send commands
+        perl -pi -e "s|^FW_SERVICES_EXT_TCP=.*|FW_SERVICES_EXT_TCP=\"ssh\"|g" $SYSCONF_PATH/SuSEfirewall2
+      else
+        # RH-like & Debian
+        # backup the orig files for RH-like distribution if necessary
+        # Since it may not only consist of NAT, but also other rules.
+        # For Debian's $NAT_RULES_FOR_DEBIAN, we are sure it only for NAT. We will overwrite it.
+        if [ -f $SYSCONF_PATH/iptables ]; then 
+          [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+          echo "Warning! $SYSCONF_PATH/iptables is renamed as iptables.drblsave!"
+          echo "Your firewall rules is overwritten!!! We set the NAT for clients to access this DRBL server!"
+          [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+          mv -f $SYSCONF_PATH/iptables $SYSCONF_PATH/iptables.drblsave
+        fi
+        
+        echo "Stop the NAT service first..."
+        if [ -e /etc/debian_version ]; then
+          # Debian
+          # We have to use the code borrowed from RH.
+          flush_n_delete
+        else
+          # RH-like, we use its service
+          /etc/init.d/iptables stop
+        fi
+        
+        iptables -P FORWARD ACCEPT
+        iptables -P INPUT ACCEPT
+	iptables -P OUTPUT ACCEPT
+        
+        if [ "$all_subnet" = "yes" ]; then
+	  # Exporting whole subnet to clients
+          subnet_list="$(get-client-ip-list | awk -F"." '{print $1"."$2"."$3}' | sort | uniq )"
+          for subnet in $subnet_list; do
+            iptables -t nat -A POSTROUTING -s ${subnet}.0/24 -j MASQUERADE
+          done
+        else
+	  # line by line
+          for ip in `get-client-ip-list`; do
+            iptables -t nat -A POSTROUTING -s $ip/32 -j MASQUERADE
+          done
+        fi
+        
+        # Save the rules.
+        save_rules
+        
+        # Some bug in kernel 2.6.9, so we do not want to remove the module before 
+        # restart the iptables
+        # Only for RH-like.
+        if [ ! -f /etc/debian_version ]; then
+           set_not_unload_iptables_module_RH
+        fi
+      fi
+
+      turn_on_ipv4_forward
+      ;;
+
+    stop)
+      do_stop_iptables
+      ;;
+
+    clean)
+      do_stop_iptables
+      # Save the empty rules to system.
+      save_rules
+      ;;
+
+    regenerate)
+      $0 clean
+      $0 genereate
+      ;;
+
+    status)
+      if [ -e /etc/debian_version ]; then
+	# Debian
+        cat $NAT_RULES_FOR_DEBIAN
+      elif [ -e /etc/SuSE-release ]; then
+        # SuSE
+        cat $NAT_RULES_FOR_SUSE
+      else
+        # RH-like
+        cat $NAT_RULES_FOR_RH
+      fi
+      ;;
+     *)
+      usage
+      exit 1
+      ;;
+esac

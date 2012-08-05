@@ -1,0 +1,207 @@
+#!/bin/bash
+# Steven Shiau <steven@nchc.org.tw>
+# License: GPL
+# Script to setup DRBL server for the impatient.
+
+# Source function library.
+[ -e /etc/rc.d/init.d/functions ] && . /etc/rc.d/init.d/functions
+
+#
+DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/opt/drbl/}"
+
+. $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
+
+# Settings
+accept_one_nic="no"
+run_4impatient=""
+limit_pxe_drbl_client="no"
+
+#
+# usage
+USAGE() {
+  echo "Usage:"
+  echo "$0 [Option]"
+  echo "Option:"
+  echo "-a, --unstable [y/n]:   Use packages in unstable branch or not (Only works for RH-like distribution)."
+  echo "-b, --batch:            Run $0 in batch mode (non-attended mode)."
+  echo "-e, --accept-one-nic    Accept to run DRBL service in only one network card. ///NOTE/// This might mess up your network environment especially if there is an exi sting DHCP service in your network environment."
+  echo "-c, --live-client-branch [0|1|2|3] Assign the Clonezilla live release branch to be used, 0 is stable branch (Debian-based), 1 is testing branch (Debian-based), 2 is alternative stable branch (Ubuntu-based), 3 is alternative testing branch (Ubuntu-based). This option should be used when -z|--clonezilla-mode = 3"
+  echo "-p, --port-client-no  NO  The client number NO in each NIC port."
+  echo "-k, --client-archi [0/1/2]: Set the client's CPU arch, 0 for i386, 1 for i586, 2 for same level with DRBL server (for x86-64, use 2). This option is for the DRBL client is NFS based, i.e. all files are NFS mounted from server. It's different from the option '-u', which is only for clonezilla mode."
+  echo "-r, --drbl-mode [0|1|2] Assign DRBL mode (0: Full DRBL mode, 1: DRBL SSI mode, 2: Do NOT provide diskless Linux service to clients). Default value is 0.".
+  echo "-t, --testing [y/n]:    Use packages in testing branch or not (Only works for RH-like distribution)."
+  echo "-u, --live-client-cpu-mode [0|1|2]  Assign the CPU mode for client when doing Clonezilla job with Clonezilla live (0: i486, 1: i686, 2: amd64). This option should be used with -z|--clonezilla-mode = 3".
+  echo "-x, --limit-pxe-drbl-client  Force the DHCP service managed by DRBL will only allow PXE or DRBL clients to lease IP address. By default all the clients can lease IP address. //NOTE// If you want to use Clonezilla live as the OS of clients when running Clonezilla job, do _NOT_ use this option. Otherwise your client won't be able to mount the root file system."
+  echo "-z, --clonezilla-mode [0|1|2|3] Assign Clonezilla mode (0: Full DRBL mode, 1: Clonezilla box mode, 2: Do NOT provide clonezilla service to clients, 3: Use Clonezilla live as the OS of clients). Default value is 0."
+  echo
+  echo "Example:"
+  echo "  To create a Clonezilla server, using i686 Clonezilla live as the OS of clients, each network card will provide Clonezilla service to 40 clients:"
+  echo "  $0 -p 40 -r 1 -z 3 -u 1"
+} # end of USAGE
+#
+do_detail_mode_prompt() {
+  echo "$msg_delimiter_star_line"
+  echo "$msg_run_step_by_step: "
+  echo "(a):\"$DRBL_SCRIPT_PATH/sbin/drblsrv -i\" "
+  echo "(b):\"$DRBL_SCRIPT_PATH/sbin/drblpush -i\" "
+} # end of do_detail_mode_prompt
+#
+do_imp_mode_prompt() {
+  if [ -z "$run_4impatient" ]; then
+    echo "$msg_delimiter_star_line"
+    echo "$msg_run_drbl4imp"
+    echo -n "$msg_press_enter_to_continue"
+    read 
+  fi
+  [ -n "$verbose" ] && echo "Running drblsrv -i $client_archi_ans_opt $testing_opt $unstable_opt"
+  yes "" | drblsrv -i $client_archi_ans_opt $testing_opt $unstable_opt
+  RC=$?
+  if [ $RC -gt 0 ]; then
+     [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+   echo "Someting went wrong with drblsrv! Program terminted!!!"
+     [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+   exit 1
+  fi
+  [ -n "$verbose" ] && echo "Running drblpush -i --not-add-start-drbl-srvi $accept_one_nic_opt $port_client_no_opt $drbl_mode_opt $clonezilla_mode_opt $live_client_branch_opt $live_client_cpu_mode_opt"
+  yes "" | drblpush -i --not-add-start-drbl-srvi $accept_one_nic_opt $port_client_no_opt $drbl_mode_opt $clonezilla_mode_opt $live_client_branch_opt $live_client_cpu_mode_opt
+  if [ "$limit_pxe_drbl_client" = "yes" ]; then
+    # modify dhcpd.conf, provide IP address to PXE/Etherboot/DRBL client only
+    echo "Modifying dhcpd.conf, now only PXE/Etherboot/DRBL client can lease IP address from this server..."
+    perl -pi -e 's/^([[:space:]]*)#[[:space:]]*(allow members of "DRBL-Client";)/$1$2/g' $DHCPDCONF_DIR/dhcpd.conf
+  else
+    echo "Modifying dhcpd.conf, now ANY client, not only PXE/Etherboot/DRBL client, can lease IP address from this server..."
+    perl -pi -e 's/^([[:space:]]*)#*[[:space:]]*(allow members of "DRBL-Client";)/$1#$2/g' $DHCPDCONF_DIR/dhcpd.conf
+  fi
+  echo "Start all DRBL related services by running 'drbl-all-service start'..."
+  drbl-all-service start
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+  echo "$msg_all_set_you_can_turn_on_clients"
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+} # end of do_imp_mode_prompt
+
+#
+check_if_root
+
+# main
+while [ $# -gt 0 ]; do
+  case "$1" in
+   -a|--unstable)
+       shift
+       if [ -z "$(echo $1 |grep ^-.)" ]; then
+         # skip the -xx option, in case 
+         drbl_unstable_answer="$1"
+         shift
+       fi
+       [ -z "$drbl_unstable_answer" ] && USAGE && exit 1
+       ;;
+   -l|--language)
+       shift
+       if [ -z "$(echo $1 |grep ^-.)" ]; then
+         # skip the -xx option, in case 
+         specified_lang="$1"
+         shift
+       fi
+       [ -z "$specified_lang" ] && USAGE && exit 1
+       ;;
+   -b|--batch)
+       shift; run_4impatient="yes" ;;
+   -c|--live-client-branch)
+       shift
+       if [ -z "$(echo $1 |grep ^-.)" ]; then
+         # skip the -xx option, in case 
+         live_client_branch="$1"
+         shift
+       fi
+       [ -z "$live_client_branch" ] && USAGE && exit 1
+       ;;
+   -e|--accept-one-nic)
+       shift; accept_one_nic="yes" ;;
+   -x|--limit-pxe-drbl-client)
+       shift; limit_pxe_drbl_client="yes" ;;
+   -k|--client-archi)
+       shift
+       if [ -z "$(echo $1 |grep ^-.)" ]; then
+         # skip the -xx option, in case 
+         client_archi_ans="$1"
+         shift
+       fi
+       [ -z "$client_archi_ans" ] && USAGE && exit 1
+       ;;
+   -t|--testing)
+       shift
+       if [ -z "$(echo $1 |grep ^-.)" ]; then
+         # skip the -xx option, in case 
+         drbl_test_answer="$1"
+         shift
+       fi
+       [ -z "$drbl_test_answer" ] && USAGE && exit 1
+       ;;
+   -r|--drbl-mode)
+       shift
+       if [ -z "$(echo $1 |grep ^-.)" ]; then
+         # skip the -xx option, in case 
+         drbl_mode="$1"
+         shift
+       fi
+       [ -z "$drbl_mode" ] && USAGE && exit 1
+       ;;
+   -p|--port-client-no)
+       shift
+       if [ -z "$(echo $1 |grep ^-.)" ]; then
+         # skip the -xx option, in case 
+         assign_port_client_no="$1"
+         shift
+       fi
+        [ -z "$assign_port_client_no" ] && USAGE && exit 1
+       ;;
+   -u|--live-client-cpu-mode)
+       shift
+       if [ -z "$(echo $1 |grep ^-.)" ]; then
+         # skip the -xx option, in case 
+         live_client_cpu_mode="$1"
+         shift
+       fi
+       [ -z "$live_client_cpu_mode" ] && USAGE && exit 1
+       ;;
+   -z|--clonezilla-mode)
+       shift
+       if [ -z "$(echo $1 |grep ^-.)" ]; then
+         # skip the -xx option, in case 
+         clonezilla_mode="$1"
+         shift
+       fi
+       [ -z "$clonezilla_mode" ] && USAGE && exit 1
+       ;;
+   -v|--verbose) shift; verbose="on" ;;
+   *)
+       USAGE
+       exit 1
+  esac
+done
+
+#
+ask_and_load_lang_set $specified_lang
+
+# Put the options if assigned.
+[ -n "$assign_port_client_no" ] && port_client_no_opt="-p $assign_port_client_no"
+[ -n "$drbl_test_answer" ] && testing_opt="-t $drbl_test_answer"
+[ -n "$drbl_unstable_answer" ] && unstable_opt="-a $drbl_unstable_answer"
+[ -n "$drbl_mode" ] && drbl_mode_opt="-r $drbl_mode"
+[ -n "$clonezilla_mode" ] && clonezilla_mode_opt="-z $clonezilla_mode"
+[ -n "$client_archi_ans" ] && client_archi_ans_opt="-k $client_archi_ans"
+[ -n "$accept_one_nic" ] && accept_one_nic_opt="--accept-one-nic"
+[ -n "$live_client_cpu_mode" ] && live_client_cpu_mode_opt="-u $live_client_cpu_mode"
+[ -n "$live_client_branch" ] && live_client_branch_opt="-t $live_client_branch"
+
+#
+if [ -z "$run_4impatient" ]; then
+  echo "$msg_delimiter_star_line"
+  echo "$msg_are_you_sure_run_impatient"
+  echo -n "[Y/n] "
+  read run_4impatient
+fi
+
+case "$run_4impatient" in
+  n|N|[nN][oO]) do_detail_mode_prompt ;;
+             *) do_imp_mode_prompt ;;
+esac

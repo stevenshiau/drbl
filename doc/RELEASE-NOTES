@@ -1,0 +1,372 @@
+DRBL (Diskless Remote Boot in Linux) Release Notes
+Copyright (c) 2002-2012 National Center for High-Performance Computing, Taiwan
+----------------------------------------------------------------------
+-1.10.90-1drbl
+- Ubuntu 11.10 support was added in this release.
+- CentOS 6 (6.1 and 6.2) support was added in this release.
+- Network installation for Fedora has been updated to 16 in drbl.conf.
+- Language files were updated. Thanks to Zhiqiang Zhang, Alex Ibáñez López, Jean Francois Nifenecker, Akira YOSHIYAMA, Gianfranco Gentili, Michael Vinzenz, Alex Ibáñez López, Zhiqiang Zhang, Michael Vinzenz, and Juan Ramón Martínez.
+
+-1.9.6-14
+- Ubuntu 10.04 support was added in this release.
+- drbl4imp was improved with options "-r|--drbl-mode, -x|--limit-pxe-drbl-client, -u|--live_client_cpu_mode.
+- In this release, drblsrv won't touch the file ntp.conf on DRBL server.
+- New upstream syslinux 3.86.
+- New upstream memtest86+ 4.10.
+- Program drbl-SL.sh was improved to allow using nfsroot as an option.
+- An option to allow using Clonezilla live as the running OS of clients when doing clonezilla job was added in drblpush. //NOTE// This feature is still in testing.
+- For readonly dir, "async and no_subtree_check" are used in /etc/exports (drbl-nfs-exports).
+- On the diskless client side, "soft" was added for readonly mounting, and "hard,intr" was added for readwrite mounting.
+- Program deb-preconf-drbl now is working for tftpd-hpa version >= 5.0.
+- Bug fixed: mounted-varrun on Ubuntu 10.04 should be started in drbl-client-boot.conf so /var/run/utmp will be started.
+- Bug fixed: Random password not working when running "drbl-useradd -s".
+
+-1.9.5-49
+ - Package name "grub" was removed in drbl.conf since it's nearly installed and it will make grub-pc to be removed on Ubuntu 9.10.
+ - Gtk mode netinstall for Debian Squeeze is no more, so drbl-netinstall was modified to adopt this.
+
+-1.9.5-42
+ - This release supports Mandriva 2010.0, Fedora 12, Ubuntu 9.10, OpenSuSE 11.2.
+ - Language files were updated. Thanks to Juan Ramon Martinez, Alex Ibanez Lopez ,Jean-Francois Nifenecker, Gianfranco Gentili, Annie Wei, Akira YOSHIYAMA and Zhiqiang Zhang.
+ - New upstream syslinux 3.84.
+ - Force to use sulogin instead of recovery-menu in Ubuntu 9.04 client, otherwise the error messages of Clonezilla will be overwritten.
+ - Bug fixed: kdm config was not found correctly in OpenSuSE 11.x. Thanks to Tsung-Lung Li for this bug report.
+ - Bug fixed: The condition to check the required size and generate the SSI template tarball were fixed. It's should be none-full-drbl-mode "-a" none-full-clonezilla-mode, not none-full-drbl-mode "-o" none-full-clonezilla-mode.
+ - Bug fixed: drblsrv broken on SuSE 11.1 x86_64.
+
+-1.9.4-67
+ - New upstream memtest86+ 4.00.
+ - An option (-w|--include-wireless-modules) was added in mknic-nbi. By default now we won't include wireless modules.
+ - Language files were updated. Thanks to Juan Ramon Martinez, Alex Ibanez Lopez ,Jean-Francois Nifenecker, Gianfranco Gentili, Annie Wei, Akira YOSHIYAMA and Zhiqiang Zhang.
+ - Debian 5.0.1, 5.0.2, 5.0.3 are supported.
+ - CentOS 5.3 is supported
+ - Packages tofrodos, dos2unix, unix2dos, dmsetup, dmraid, kpartx and device-mappe were listed in the query packages for DRBL in drbl.conf.
+ - The patched rc-sysinit.conf for Ubuntu 9.10's upstart was added. Should be ready for Ubuntu 9.10.
+ - Services hal and dbus in clients now are not S20 for Debian-based system. It will be started earlier. This might fix some problem that keyboard and mouse are not working in DRBL client.
+ - By default "-r" option is on for clonezilla.
+ - Package hfsprogs is listed for Clonezilla live and Clonezilla SE.
+
+-1.9.4-46
+ - Fedora 11 is supporetd.
+ - makeboot.sh was improved to allow USB device /dev/ub[a-z]. Thanks to the patch from tv.debian _at googlemail com.
+- Package names genisoimage and mkisofs are put in the variable PKG_TO_QUERY in drbl.conf. This will avoid the mkisofs problem in Ubuntu 9.04.
+- The variable name sanboot_img_dir was changed to be sanboot_img_dump_dir in drbl.conf. aoe_shelf_max and aoe_slot_max were changed to be 15 instead of 20. drbl-aoe-img-dump was changed correspondingly.
+- drbl-aoe-serv now supports an option "-d" to allow more images in one more directories.
+- Language files were updated. Thanks to those who have contributed.
+- Bug fixed: drbl-live-conf-X and Forcevideo-drbl-live failed to respect environmental variable LANG.
+- File files/DBN/DBN5.0.2/firstboot.DBN5.0.2.drbl was added.
+- In drbl-SL.sh, we do not put ip=frommedia because the /etc/resolv.conf got in live-initramfs won't exist after initramfs is done.        
+- Daemons pcscd and cpuspeed were added in the checklists for DRBL client's daemons.
+- New upstream syslinux 3.82.
+- drbl-SL.sh was improved to work with Clonezilla live, GParted live, Puppylinux 4.1.2. The support for PLD, INSERT, PUD and GeeXbox were removed.
+
+-1.9.4-26
+ - Mandriva 2009.1, Ubuntu 5.0.1 and Ubuntu 9.04 are supported in this release.
+ - Language files were upudated. Thanks to Alex Ibanez Lopez ,Jean-Francois Nifenecker, Gianfranco Gentili, Annie Wei, Akira YOSHIYAMA, and Zhiqiang Zhang.
+ - New upstream syslinux 3.80.
+ - New program isohybrid was included.
+ - Option "-q2" (partclone > partimage > dd) is the default option.
+ - Package lzma was listed in the list in drbl.conf, and option -z4 can be selected in dcs now.
+ - Bug fixed: For Debian lenny, Ubuntu 8.10 or later, we should not allow network to be down when halting. Otherwise wake-on-LAN won't work.
+ - Some improvements about Clonezilla were added.
+
+-1.9.2-43
+ - Language files were updated. Thanks to Gianfranco Gentili, Juan Ramon Martinez, Alex Ibanez Lopez, Jean-Francois Nifenecker, Zhiqiang Zhang, Gianfranco Gentili, and Annie Wei.
+ - Another warning about -z3 (lzop) was added in dcs/ocs-sr menu.
+ - Merged the revised language file en_US. Thanks to Dylan Pack <sarpulhu _at_ gmail com>.
+ - Debian 5.0 is supported. firstboot.DBN5.0.drbl was added.
+ - drbl-aoe-serv was improved to give error message if no NIC was found.
+ - Patched rc-default for Ubuntu 9.04 was added.
+ - New upstream syslinux 3.73.
+ - Bug fixed: "get-all-nic-ip -c" failed to identify if NICs are "eth0 eth0:1", e.g.
+ - Bug fixed: "edd=on" parsing failed when running "drblsrv -i" first time.
+ - Bug fixed: ntfsclone was not able to run on amd64 Debian Lenny due to /emul was not copied to /tftpboot/node_root. Thanks to Olivier Korn (https://sourceforge.net/tracker2/?func=detail&atid=671650&aid=2693933&group_id=115473) and Jose Luis (https://sourceforge.net/forum/message.php?msg_id=6873691).
+
+ - About Clonezilla:
+   - The parameters of drbl-ocs "-j2" and "-j3" were merged to be a single parameter -j2. Thanks to Orgad Shaneh for this idea.
+   - The prompt to use space key to mark the selections was added for most of the checklist type of dialog.
+   - Now "-g auto" option will run grub-install only when the grub config partition is on the restored partitions list.
+   - ocs-live-dev will use tar instead of zip when recovery file is larger than 2 GB. Thanks to Frank (frank28 _at_ users sourceforge net) for this bug report.
+   - An option -e2 (to use the CHS from EDD when running sfdisk) was added. This will reduce the possibility of cloned MS windows boot failure. Thanks to Orgad Shaneh for this idea.
+   - live-initramfs was patched to work on network booting with 2 or more NICs exist in the client.
+   - Udev data instead of lshw is used to get the serial no of harddrive. It's faster.
+
+-1.9.2-19
+ - Support Ubuntu 8.10 and Mandriva 2009.0.
+ - Default to use Fedora 10 netinstall in drbl.conf.
+ - New upstream memtest86+ 2.10.
+ - drbl-netinstall was updated to provide an option to run generate-pxe-menu.
+ - Default to let client use same arch kernel with server for Ubuntu.
+ - Two options were added for Clonezilla: generate/check MD5SUMS and SHA1SUMS.
+ - Bug fixed: The function to parse /proc/cmdline for ocs_* was improved. It failed on Ubuntu 8.10. Thanks to Orgad Shaneh for reporting this bug.
+ - Bug fixed: /etc/event.d/rc-default of clients should be patched on Ubuntu 8.10. Thanks to cer85, AsGF2MX and Jonathan Krishnanantham.
+ - Bug fixed: Not only CentOS 5, but also CentOS 5.* only i686 kernel are available, no i586 one.
+
+-1.9.1-34
+ - pigz will be installed when running drblsrv. This will allow us to compress the image in parallel. Remember to use i586 or i686 kernel for your DRBL clients.
+
+-1.9.1-26
+  - One NIC server is supported now. Both alias IP address or no alias IP address for the sigle NIC will work.
+  - drblpush now can work with ethernet port with private IP address class B and netmask 16. It was only for netmask 24.
+  - Public IP address clients are supported now.
+  - New upstream syslinux 3.71.
+  - drbl-live-boinc was updated.
+  - rc.sysinit and halt for CentOS 5.2 were added.
+  - firstboot.SUSE11.0.drbl was added. opensuse-11.0.repo and opensuse-updates-11.0.repo were added.
+  - French languages was updated. Thanks to Jean-Francois Nifenecker.
+  - Japanese languages was updated. Thanks to Annie Wei.
+  - SAN (AoE) booting is supported now. For more info, check http://drbl.sourceforge.net/one4all/drbl-sanboot.php. ///NOTE/// This is still under testing.
+  - A new program drbl-syslinux-netinstall was added to create netinstall zip for USB flash drive.
+
+  - About Clonezilla SE:
+    - The volume size of clonezilla image can be assigned when running dcs to save an image.
+    - Broadcast mode for Clonezilla was added in dcs.
+    - "-r" option of clonezilla was turned off by default, since this might cause some problems if an unknown partition exists. Thanks to Thomas Moler.
+
+- 1.9.0-35
+  - French languages was added. Thanks to Jean-Francois Nifenecker.
+  - Japanese languages was added. Thanks to Akira Yoshiyama.
+  - Ready for Mandriva 2008.1. Fedora 9.
+  - An example for Xen client was added in generate-pxe-menu.
+  - New upstream syslinux 3.63.
+  - whiptail instead of dialog is used if detected.
+  - An option -P|--udhcpc-port was add for mknic-nbi.
+  
+  - About Clonezilla:
+    - Default to turn on TUI output for partclone.
+    - The function to restore image to different disk/partition name was added.
+    - ///NOTE/// Parameters of ocs-onthefly were modified to be the same with ocs-sr, i.e. -k (was -n)/-k1/-k2, and -r (was -e).
+    - xfs and jfs growing functions were added in resize_part.
+    - Packages xfsdump and lscpi were added.
+    - A package davfs2 was added so that webdav device can be mounted as Clonezilla image repository manually. Will add this function in prep-ocsroot in the future.
+    - Some codes about mounting iSCSI dev were added in prep-ocsroot, however, not ready.
+    - Hard disk serial number will be shown in the info when saving image.
+    - Turn on -r by default when restoring.
+    - Now it's possible to clone small disk to larger disk proportionally (-k1 option) with filesystem matchs partition size.
+    - Some other minor bugs fixed and improvements.
+  
+  About Bugs fixed:
+  - Bug fixed: ocs-onthefly failed to clone disk hda to disk hdb remotely.
+  - Bug fixed: ocs-onthefly should not automatically create swap partition.
+  - Bug fixed: "-e" option was broken. Thanks to Orgad Shaneh for this bug report.
+  - Bug fixed: ocs-functions was not able to list the size of cciss disk size.
+  - Bug fixed: ocs-onthefly failed to clone 2nd and the rest of LV remotely, due to the file descriptor problem.
+  - Bug fixed: When swap partitions number > 2, and in /dev/[hs]d10 or more, restorartion failed. Thanks to frankiehung for reporting this bug.
+  
+  Some files name were changed. If you are hacking DRBL/Cloneizlla, be aware of these changes:
+  - Exe files of partclone were renamed as partclone.$FS.
+  - File kbdconf-bterm was renamed as ocs-kbdconf-bterm.
+  - File resize_part was renamed as ocs-resize-part.
+  - File makeboot.sh was renamed as ocs-makeboot.
+  - File get_part_info was renamed as ocs-get-part-info.
+  - File ocs was renamed as clonezilla since ocs will conflict with other package.
+  - Files lvm2-start.sh and lvm2-stop.sh were moved from package drbl and renamed as ocs-lvm2-start and ocs-lvm2-stop, respectively.
+  - File socket.pl was moved from package drbl here and renamed as ocs-socket.
+  - File drbl-chnthn was renamed as ocs-chnthn.
+  - File drbl-chnthn-functions was renamed as ocs-chnthn-functions.
+
+- 1.8.2-63
+  - Bug fixed: Public IP address setup in init.drbl was broken due to grep without -w.
+  - Turn off the following netinstall in drbl.conf: redhat, debian sarge, mandriva 2007, fedora 7, ubuntu feisty and opensuse 10.2.
+  - About Clonezilla:
+  - By default we turn on batch mode for resize_part in ocs-functions.
+  - Bug fixed: When swap partitions number > 2, and in /dev/[hs]d10 or more, restorartion failed. Thanks to frankiehung for reporting this bug.
+  - Bug fixed: swappt-*.info was not converted by cnvt-ocs-dev.
+  - Bug fixed: cciss and multiple disks clone was broken. https://sourceforge.net/forum/message.php?msg_id=4861197. Thanks to Francisco Gonzalez and Rob Wynne for reporting this bug.
+  - Bug fixed: sda10, sda11... were not mapped for the partition /dev/cciss/c0d0p10... Thanks to Bob Dingman for this bug report.
+
+- 1.8.2-51
+  - New upstream syslinux 3.62.
+  - New upstream memtest86+ 2.01.
+  - New PXE boot background. More info is shown in pxelinux boot menu.
+  - FreeBSD and OpenBSD net install are supported in drbl-netinstall.
+  - Some minor bugs fixed.
+
+- 1.8.2-38
+  - New upstream syslinux 3.61.
+  - New upstream memtest86+ 2.00.
+  - Ready for Debian Lenny and Ubuntu 8.04 alpha4.
+  - client-extra-service, client-ip-hostname, client-append-fstab in /opt/drbl/conf were renamed with .example appended. This will avoid they are removed when upgrading drbl. Thanks to Dave Haakenhout <Dave.Haakenhout _at_ nccw nl>. ///Note/// If the existing version you have is older than 1.8.2-36, remember to backup those files first. This function will only works for drbl 1.8.2-36 to upgrade newer.
+  - dcs now can accept MODE2 as netinstall, Ex: "dcs -nl netinstall netinstall-CentOS-4.6-i386". Thanks to Barny Sanchez for this idea.
+  - url_site in drbl.conf was changed to something like debian_url_site so that we can assign different repositories for different distributions.
+  - linux-ubuntu-modules for Ubuntu >= 7.10 will be installed by default in drblsrv.
+  - netinstall setting for centos now is 4.6/5.1.
+  - Bug fixed: find-url-in-yum-set was updated to cover some format of fedora repo (like "baseurl = http://..., the extra space before and after =).
+  - Bug fixed: If client machines are selected, in some cases they were parsed incorrectly.
+  - Some minor bugs were fixed.
+  - About Clonezilla:
+    - New param in drbl-functions: -q1 (--force-to-use-dd) was added. Therefore now we can force to use dd to save any filesystem. Thanks to Justin Fitzhugh.
+    - An experimental option -q2 for clonezilla was added (Priority: ntfsclone, partclone > partimage > dd).
+    - GPT (GUID Partition Table) is supported
+    - Package partclone was added so HFS+, reiserfs4 are supported by using partclone (check -q2 when you save an image if you want to use this). Therefore this release in Clonezilla live can be used to save and restore an Intel-based Mac OS. It's tested successfully to save and restore a Mac mini with Mac OS leopard + Ubuntu 7.04 installed. 
+    - create-ubuntu-live and create-ubuntu-live now use live helper instead of live package.
+    - A helper file ocs-rm-win-swap-hib was added to clean swap and hibernation files in M$ windows system before saving. Thanks to Kristof Vansant for this idea.
+    - Clonezilla version number is shown in the boot menu. Thanks to evilmrb for this idea.
+    - Bug fixed: If clonezilla image is on Samba disk, LVM restoration will fail. Thanks to Gerald HERMANT <ghermant _at_ astrel fr> for reporting this bugs.
+    - Bug fixed: Custom LiveCD failed in some case. (https://sourceforge.net/forum/message.php?msg_id=4706371) Thanks to ser_kan and micahboggs.
+    - Bug fixed: LVM device file was not converted by cnvt-ocs-dev.
+    - Bug fixed: large number of disks and partitions will be listed and can be scrolled down. Thanks to simon (selisha) for reporting this bug. 
+    - Bug fixed: wget should be in PKG_FROM_DBN_MINIMAL_NEED in drbl.conf. Thanks to vascoman for reporting this bug.
+
+- 1.8.1-49
+  - By default, -z1 (gzip), instead of -z3 (lzop), is set for clonezilla when saving a image. Thanks to Mark Binner, tw.chi.ming _at gmail com, and ripper-cz for their experience. 
+  - New mechanism, the language files are renamed to match the locale setting so that it's possible for other developer to create local version. The filename was en, tw.BIG5, tw.UTF-8, now they are en_US, zh_TW.BIG5, zh_TW.UTF-8.  Will try to use gettext in the future.
+  - New upstream syslinux 3.53.
+  - Ready for Mandriva 2008.0.
+  - Ready for Fedora 8.
+  - Ready for Ubuntu 7.10.
+
+- 1.8.0-15
+  - New mechanism: A mechanism to lease IP address to PXE, Etherboot or DRBL client only. This os only for range statement in dhcpd.conf, i.e. not providing static IP address to clients. It's using vendor-class-identifier mechanism. The host statement is not affected by this new introduced mechanism. By default this mechanism is not on, if you need that, uncomment 'allow members of "DRBL-Client";' in your dhcpd.conf.
+  - Simplify the selection in dcs, ocs and all the dialog menus. i.e. if not multiple choices, just select and press enter, no more pressing space key to mark the selection.
+  - netinstall packages are removed from repository, since now drbl-netinstall will download those images from mirror site directly.
+  - No more asking language index by default in the drbl-related commands. It will use the environment variable "LANG". If you still want to choose the language, use something like "/opt/drbl/sbin/dcs -l ask".
+  - Set HALT_REBOOT_OPT="" instead of HALT_REBOOT_OPT="-f -n" in drbl-ocs.conf, since  if it's not a normal soft-shutdown, wake-on-LAN (WOL) might fail. Thanks to Dave Haakenhout for reporting this bug. If you do not care about WOL and you are impatient, you can set it as "-f -n " in drbl-ocs.conf.
+  - new upstream syslinux 3.51.
+  - add a mechanism to use nosharecache option for nfs in init.drbl. This will fix the bug https://bugzilla.redhat.com/bugzilla/show_bug.cgi?id=251655.
+  - Ready for Fedora 8 test2.
+  - Ready for Ubuntu 7.10 beta.
+  - Bug fixed: in Fedora 7, service ConsoleKit is necessary for client.
+  - Some other bugs fixed.
+  - About Clonezilla:
+    - From 2.2.1-5, the cciss device (including Compaq's SMART Array Controllers) is supported.
+    - mkswap-uuid is extracted from clonezilla, it is a standalone package. Now clonezilla is written by script language only.
+    - Some samples scripts are in /opt/drbl/samples/, which are used with -o0. For example, create-2P-pt-sf. You can put it in /opt/drbl/share/ocs/prerun/ and used with -o0 -k -r, then it can auto create 2 partitions, the size of 1st partition is total disk size - 3 GB, the 2nd partition is swap with 3 GB.
+
+- 1.7.11-22
+  - Ready for Mandriva 2007.1, Ubuntu 7.04, CentOS 4.5.
+  - Ready for CentOS 5.0. However, due to only i686 kernel is available in CentOS repository, some clients (like Via CPU) won't be able to run as DRBL client.
+  - Bug fixed: in AMD64 Etch, the kernel name is no more amd64-k8, only amd64. Thanks to flossy (flossymike) for reporting this.
+  - Ready for PuppyLinux 2.16 and DSL 3.3 in drbl-SL.sh.
+  - Ready for Fedora 7. From Fedora 7, drblsrv will not change the fedora repository settings (fedora.repo, fedora-updates.repo) in /etc/yum.repos.d/. If you want to change the repository, you have to edit them before running drblsrv.
+  - Some bugs fixed in Clonezilla box mode.
+  
+- 1.7.9-60
+  - New image format for Clonezilla (version 2). Clonezilla will automatically convert the image format in version 1 to version 2, if you want to do that manually, use /opt/drbl/sbin/cv-ocsimg-v1-to-v2.
+  - New function: Multiplt disks save/restore in clonezilla.
+  - New function: Clonezilla live programs added. With that, you can create a live CD or USB flash drive with clonezilla, Therefore you can clone single machine by Clonezilla live without a server.
+  - New function: A function to dump partition raw data is added in clonezilla, therefore you can use Clonezilla to save and restore unknown filesystem, such as filesystem in BSD. However, it's not efficient as partimage or ntfsclone, so it might take very long time to save and restore.
+  - New function: If multicast packets are blocked by your managed network switch, you can choose to use broadcast in clonezilla.
+  - Improve DRBL-based pxeboot Clonezilla: (1) Use an unchanged service ocs-run in client, read ocs_opt parametes from bootparam, now it will change the mode faster in Clonezilla server when you run dcs -> clonezilla start. (2) When client finishes clone, the PXE boot menu is available in its next boot.
+  - New function: The script in the direcoty /opt/drbl/share/drbl/prerun and /opt/drbl/share/drbl/postrun will be run in the beginning and end of "drblpush -i", respectively.
+  - drbl-SL.sh now supports DSL, PuppyLinux, INSERT, PLD, Debian-live, GeeXbox and PUD-Linux, You can use drbl-SL.sh to make them boot from PXE/Etherboot instead of CD.
+  - Make the menu of dcs more compact and resonable. Besides, dialog, Xdialog, whiptail, gdialog and kdialog are supported in dcs with -d[0-4].
+  - OpenSuSE 10.2 is supported.
+  - Bug fixed: (1) The bug about serial console for client (2) The partitions are not shown in the batch prompt when doing restore-partitions of clonezilla in dcs (drbl-client-switch). (3) Failes to find LVM device.
+
+- 1.7.9-22
+  - New function: with clonezilla 2.0.1-10, a file /opt/drbl/sbin/ocs-iso is added to put clonezilla image into debian-live iso. Therefore we can restore clonezilla image by debian live CD/DVD. DRBL server is not alway necessary for restoring image now.
+
+- 1.7.9-11
+  - Since now the clonezilla and drbl labels are separated in PXELINUX menu, no more program turn-drbl-ssi-mode. It is replaced by tune-clientdir-opt.
+
+- 1.7.9-9
+  - Label clonezilla is decoupled with DRBL in the PXE Linux menu, so we can choose to use clonezilla or drbl in PXE menu now. NOTE! /opt/drbl/sbin/generate-pxe-menu has to be run again so that the PXE linux menu template is updated if you just upgrade it without reinstalling everything.
+
+- 1.7.8-23
+  - With DRBL 1.7.8-23 and clonezilla 2.0.0-1, now clonezilla supports multiple harddrives. From version 2.0, the clonezilla image format is different from that in clonzilla 1.x. Now we use something like hda-mbr, hda-pt.sf, hda-chs.sf (was mbr, pt.sf, and chs.sf). The image data (hda1, hda1.ntfs-img...) remains the same format with that in clonezilla 1.x. The clonezilla 1.x format will be converted to 2.x format when 2.x clonezilla is run.
+
+- 1.7.8-7
+  - Support OpenSuSE 10.2
+  - For kernel 2.6.15 or later, client will use initramfs instead of initrd. If you prefer to use ext2 or cramfs, you can use "/opt/drbl/sbin/mknic-nbi -t ext2" or similar to do that.
+  - etherboot package is renamed as drbl-etherboot to avoid confusion, and all the files are located in /opt/drbl-etherboot/ instead of /tftpboot/etherboot-$version/.
+  - In DRBL SSI or Clonezilla box mode, if files are put in /tftpboot/node_root/drbl_ssi/clients/$IP/, it will be copied to DRBL client when client boots. By doing this, we can assign some special setting for DRBL SSI client. Check /tftpboot/node_root/drbl_ssi/clients/00_README for more details.
+
+- 1.7.7-8
+  - New command /opt/drbl/sbin/drbl-SL.sh, this command allows us to turn the DRBL server as Damn Small Linux (DSL), PuppyLinux, INSERT and PLD to diskless server. To use that, for example, download dsl-3.0.1.iso then run "/opt/drbl/sbin/drbl-SL.sh -i dsl-3.0.1.iso". For more info, run "/opt/drbl/sbin/drbl-SL.sh -h".
+  - A setdefault function is added in dcs -> switch-pxe-menu, now we can switch any revealed menu (including those small linux, DSL, PuppyLinux) as client's default boot menu.
+  - Now we can assign DRBL client hostname in /opt/drbl/conf/client-ip-hostname before running drblpush -i.
+  - Bug fixed: some case in Clonezilla, save and restore loop forever. Thanks to Dave Haakenhout <Dave.Haakenhout _at_ nccw nl>. This is done by reporting lowecase MAC address in get_mac so that the created PXE config file in the server is lowercase.
+  - For better security, /tftpboot/nodes mode is 700 now.
+  - For root account, we will NOT copy authorized_keys, since the root in the client should not share the same authorized_keys with that in server.
+
+- 1.7.6-20
+  - We remove network or network-up service in client to avoid the ifcfg-eth0 with dhcp and onboot=yes re-generated by kudzu to take effect in FC6.
+
+- 1.7.6-15
+  - add add/del option for drbl-all-service, now we can add or delete DRBL-related services in the server.
+
+- 1.7.6-9
+  - Increase the rsize and wsize to 65536 (was 8192) for NFS client parameters (init.drbl, gen_client_files.sh and udhcpc-post). If you want to change this size to 8192, you can run "/opt/drbl/sbin/drbl-nfs-conf -s 8192".
+
+- 1.7.6-5
+  - now we can assing clonezilla image dir (default is /home/partimag) when running drblpush.
+
+- 1.7.6-1
+  - now user can assign some directories in /opt/drbl/conf/drbl.conf so that client will NFS mount it automatically.
+
+- 1.7.5-1
+  - This version works in Ubuntu 6.10 (Edgy) Beta and Manriva 2007 RC2.
+
+- 1.7.4-5
+  - Use vesamenu.c32 for pxelinux, now we can put the background image for PXE menu. If your client fails to use that, normally it will fall back to text mode. If not, modify /tftpboot/nbi_img/pxelinux.cfg/default, change "default vesamenu.c32" to "default menu.c32". It will use the old text PXE menu.
+
+- 1.7.3-1
+  - Add drblsrv-offline (only works for kernel 2.6 (udev)) and install-kernel-for-client. Now we can install the necessary packages by any means then run "drblsrv-offline" to configure the server. Check /opt/drbl/doc/examples/drblsrv-offline*.txt to see how to use it. For paramaters of drblsrv-offline, use "drblsrv-offline --help" to get them. Note! You still have to run "/opt/drbl/sbin/drblpush -i" after drblsrv-offline.
+- 1.7.2-4
+  - Thanks to Chris Macaulay <macaulayca _at_ hotmail com> for providing the method and program so that now with clonezilla 1.4.3-5, if you have ntfs-3g or ntfsmount in the server, you can change the hostname of M$ windows image after clone. Therefore just one reboot, no more reboot twice for clone M$ windows system. To install ntfs-3g, check http://www.linux-ntfs.org. For binary program about ntfs-3g in Ubuntu dapper, check this url: http://www.ubuntuforums.org/showthread.php?t=217009
+  - The default hostname prefix of clone M$ Windows can be changed in /opt/drbl/conf/drbl-ocs.conf or when running dcs.
+
+- 1.7.1-15
+  - with clonezilla 1.4.2-1, by default we directly use dd to dump partition table in target harddisk from saved image file "mbr".
+
+- 1.6.6-14
+  - default to use ntfsclone when saving NTFS image in dcs.
+  - when ntfsclone is chosen, and if lzop is available, -z3 (lzo) is the default in dcs.
+
+- 1.6.6-1
+  - ready for Ubuntu Dapper
+
+- 1.6.5-1
+  - ready for OpenSuSE 10.1
+
+- 1.6.4-1
+  -  remove the save and restore hda1 menu in dcs.
+  -  Clonezilla 1.4.0 now supports LVM 2.
+
+- 1.6.3-16
+  -  ready for AMD64 Ubuntu breezy, Debian Sarge.
+
+- 1.6.3-1
+  -  ready for Fedora Core 5.
+
+- 1.6.2-14
+  -  New mode:DRBL Single System Image (SSI). The necessary configurations
+     of client will be dynamically created when it boot. This will
+     reduce the disk space of server. Every client won't save any its own
+     specific system configuration to server. However, user's configuration
+     and data will be saved to server. When you need more clients, just edit
+     dhcpd.conf then run "/opt/drbl/sbin/drbl-3n-conf generate", the necessary
+     files will be created for clients. In this model, every network card in
+     server with private IP can provide at most 253 DRBL clients (Network 
+     bandwith is another limitation).
+  -  New mode:Clonezilla box, this is an extened model for DRBL SSI, especially when using in clonezlla. By using the RAM space, the network loading will be lower. In this model, every network card in server with private IP can provide at most 253 Clonezilla clients (Network bandwith is another limitation).
+  -  Set the DRBL client to be wake-on-LAN ready when client software shutdowns.
+  -  Ready for CentOS 4.3
+  -  Ready for Debian testing (Etch)
+
+- 1.5.6
+  Use the new package name for netinstall.
+
+- 1.5.0
+  - Program works in SuSE 9.3, check 
+    http://drbl.nchc.org.tw//redhat/desktop/download/testing/RPMS/install_notes_for_SuSE.txt
+    for more details.
+
+- 1.4.0
+  - Program works in Debian Sarge and Woody, check
+  http://drbl.nchc.org.tw//redhat/desktop/download/testing/RPMS/install_notes_Debian.txt
+    for more details.
+
+- 1.3.11-8
+  - Now only urpmi works in Mandrake 9.2/10.0/10.1, Mandriva 2005. No more apt.
+
+- 1.3.10
+Upgrade Notes
+   - From version 1.3.10, "drbl-setup" is merged with drbl-script, drbl-gdm, and renamed as name "drbl"
+   - Clonezilla now requires drbl instead of drbl-setup and drbl-script, so before upgrade or install package "drbl", remove clonezilla by
+     rpm -e --nodeps clonezilla
+     Then run "/opt/drbl/setup/drblsrv -i" and "/opt/drbl/setup/drblpush -i" to setup DRBL environment.
+
+Known Issues
+   - See /opt/drbl/doc/Known_issues.txt for more details.

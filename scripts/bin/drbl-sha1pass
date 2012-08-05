@@ -1,0 +1,51 @@
+#!/usr/bin/perl
+# This script is from http://www.kernel.org/pub/linux/utils/boot/syslinux/syslinux-4.05.tar.gz
+# Applied the patch in Ubuntu 12.04 so that Digest::SHA instead of Digest::SHA1 is used. For newer perl (>= 5.9), Digest::SHA is builtin.
+# Ref: http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=594273
+# License: GPL
+
+use bytes;
+use MIME::Base64;
+# Test if using Digest::SHA or Digest::SHA1 (perl <= 5.9)
+if (eval {require Digest::SHA;}) {
+  # printf "Use Digest::SHA;\n";
+  $sha1_mod="SHA";
+} else {
+  # printf "Use Digest::SHA1;\n";
+  use Digest::SHA1;
+  $sha1_mod="SHA1";
+}
+
+sub random_bytes($) {
+    my($n) = @_;
+    my($v, $i);
+
+    if ( open(RANDOM, '<', '/dev/random') ||
+	 open(RANDOM, '<', '/dev/urandom') ) {
+	read(RANDOM, $v, $n);
+    } else {
+	# No real RNG available...
+	srand($$ ^ time);
+	$v = '';
+	for ( $i = 0 ; $i < $n ; $i++ ) {
+	    $v .= ord(int(rand() * 256));
+	}
+    }
+
+    return $v;
+}
+
+
+($pass, $salt) = @ARGV;
+
+unless (defined($salt)) {
+    $salt = MIME::Base64::encode(random_bytes(6), '');
+}
+
+if ( "$sha1_mod" eq "SHA" ) {
+  $pass = Digest::SHA::sha1_base64($salt, $pass);
+}else{
+  $pass = Digest::SHA1::sha1_base64($salt, $pass);
+}
+
+print '$4$', $salt, '$', $pass, "\$\n";

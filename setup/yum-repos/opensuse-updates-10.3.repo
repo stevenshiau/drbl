@@ -1,0 +1,5 @@
+[updates]
+name=OpenSuSE $releasever updates packages
+baseurl=http://ftp.twaren.net/Linux/OpenSuSE/update/$releasever/
+enabled=1
+gpgcheck=1

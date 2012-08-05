@@ -1,0 +1,15 @@
+#!/bin/bash
+# Steven Shiau <steven@nchc.org.tw>
+# License: GPL
+# This works in kernel 2.4, it's ok in kernel 2.6 with proc filesystem.
+for i in /proc/ide/hd*; do
+  if [ -e "$i" ]; then
+    media=`cat $i/media` 
+    [ "$media" = "cdrom" ] && cdrom=`basename $i`
+  fi
+done
+if grep -q "$cdrom=ide-scsi" /proc/cmdline; then
+  # make sure it simulated SCSI
+  [ -e "/proc/scsi/ide-scsi/0" ] && cdrom="scd0"
+fi
+[ -n "$cdrom" ] && echo "$cdrom"

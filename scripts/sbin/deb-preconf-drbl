@@ -1,0 +1,181 @@
+#!/bin/bash
+# Author: Steven Shiau <steven _at_ nchc org tw>
+# License: GPL
+# Description: Generate some deb configs before install it so the user won't be
+#              asked to input. We will configure them in drblpush. So some 
+#              preconfig data are just temp.
+
+# dhcp3-server isc-dhcp-server tftpd-hpa nfs-kernel-server nis
+
+DEBCONF=/var/cache/debconf/config.dat
+DEFAULT_NIS=/etc/default/nis
+[ ! -f "$DEBCONF" ] && mkdir -p "$(dirname $DEBCONF)"
+
+# dhcp3-server:
+if [ -z "$(LC_ALL=C grep -E "^Name: dhcp3-server/config_warn" $DEBCONF)" ]; then
+  cat << EOF >> $DEBCONF
+Name: dhcp3-server/config_warn
+Template: dhcp3-server/config_warn
+Value: 
+Owners: dhcp3-server
+Flags: seen
+
+EOF
+fi
+
+if [ -z "$(LC_ALL=C grep -E "^Name: dhcp3-server/interfaces" $DEBCONF)" ]; then
+  cat << EOF >> $DEBCONF
+Name: dhcp3-server/interfaces
+Template: dhcp3-server/interfaces
+Value: eth1
+Owners: dhcp3-server
+Flags: seen
+
+EOF
+fi
+
+if [ -z "$(LC_ALL=C grep -E "^Name: dhcp3-server/new_auth_behavior" $DEBCONF)" ]; then
+  cat << EOF >> $DEBCONF
+Name: dhcp3-server/new_auth_behavior
+Template: dhcp3-server/new_auth_behavior
+Value: 
+Owners: dhcp3-server
+Flags: seen
+
+EOF
+fi
+
+# isc-dhcp-server:
+if [ -z "$(LC_ALL=C grep -E "^Name: isc-dhcp-server/config_warn" $DEBCONF)" ]; then
+  cat << EOF >> $DEBCONF
+Name: isc-dhcp-server/config_warn
+Template: isc-dhcp-server/config_warn
+Owners: isc-dhcp-server
+
+EOF
+fi
+
+if [ -z "$(LC_ALL=C grep -E "^Name: isc-dhcp-server/interfaces" $DEBCONF)" ]; then
+  cat << EOF >> $DEBCONF
+Name: isc-dhcp-server/interfaces
+Template: isc-dhcp-server/interfaces
+Value: eth1
+Owners: isc-dhcp-server
+
+EOF
+fi
+
+# tftpd-hpa
+# For tftpd-hpa version < 5.0
+if [ -z "$(LC_ALL=C grep -E "^Name: tftpd-hpa/use_inetd" $DEBCONF)" ]; then
+  cat << EOF >> $DEBCONF
+Name: tftpd-hpa/use_inetd
+Template: tftpd-hpa/use_inetd
+Value: false
+Owners: tftpd-hpa
+Flags: seen
+
+EOF
+fi
+
+# For tftpd-hpa version >= 5.0
+if [ -z "$(LC_ALL=C grep -E "^Name: tftpd-hpa/address" $DEBCONF)" ]; then
+  cat << EOF >> $DEBCONF
+Name: tftpd-hpa/address
+Template: tftpd-hpa/address
+Value: 0.0.0.0:69
+Owners: tftpd-hpa
+
+EOF
+fi
+if [ -z "$(LC_ALL=C grep -E "^Name: tftpd-hpa/directory" $DEBCONF)" ]; then
+  cat << EOF >> $DEBCONF
+Name: tftpd-hpa/directory
+Template: tftpd-hpa/directory
+Value: /tftpboot/nbi_img
+Owners: tftpd-hpa
+Flags: seen
+
+EOF
+fi
+if [ -z "$(LC_ALL=C grep -E "^Name: tftpd-hpa/options" $DEBCONF)" ]; then
+  cat << EOF >> $DEBCONF
+Name: tftpd-hpa/options
+Template: tftpd-hpa/options
+Value: --secure
+Owners: tftpd-hpa
+
+EOF
+fi
+if [ -z "$(LC_ALL=C grep -E "^Name: tftpd-hpa/username" $DEBCONF)" ]; then
+  cat << EOF >> $DEBCONF
+Name: tftpd-hpa/username
+Template: tftpd-hpa/username
+Value: tftp
+Owners: tftpd-hpa
+
+EOF
+fi
+
+# nis
+if [ -z "$(LC_ALL=C grep -E "^Name: nis/domain" $DEBCONF)" ]; then
+  cat << EOF >> $DEBCONF
+Name: nis/domain
+Template: nis/domain
+Value: localdomain
+Owners: nis
+Flags: seen
+
+EOF
+fi
+
+if [ -z "$(LC_ALL=C grep -E "^Name: nis/not-yet-configured" $DEBCONF)" ]; then
+  cat << EOF >> $DEBCONF
+Name: nis/not-yet-configured
+Template: nis/not-yet-configured
+Owners: nis
+Flags: seen
+
+EOF
+fi
+
+[ -f /etc/default/nis ] && rm -f /etc/default/nis
+cat << EOF >> $DEFAULT_NIS
+#
+# /etc/defaults/nis	Configuration settings for the NIS daemons.
+#
+
+# Are we a NIS server and if so what kind (values: false, slave, master)
+NISSERVER=false
+
+# Are we a NIS client (i.e. start ypbind?)
+NISCLIENT=false
+
+# Location of the master NIS password file (for yppasswdd).
+# If you change this make sure it matches with /var/yp/Makefile.
+YPPWDDIR=/etc
+
+# Do we allow the user to use ypchsh and/or ypchfn ? The YPCHANGEOK
+# fields are passed with -e to yppasswdd, see it's manpage.
+# Possible values: "chsh", "chfn", "chsh,chfn"
+YPCHANGEOK=chsh
+
+# NIS master server.  If this is configured on a slave server then ypinit
+# will be run each time NIS is started.
+NISMASTER=
+
+# Additional options to be given to ypserv when it is started.
+YPSERVARGS=
+
+# Additional options to be given to ypbind when it is started.  
+YPBINDARGS=
+
+# Additional options to be given to yppasswdd when it is started.  Note
+# that if -p is set then the YPPWDDIR above should be empty.
+YPPASSWDDARGS=
+
+# Additional options to be given to ypxfrd when it is started. 
+YPXFRDARGS=
+EOF
+
+echo "localdomain" > /etc/defaultdomain

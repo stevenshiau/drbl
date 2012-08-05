@@ -1,0 +1,384 @@
+#!/bin/bash
+# Author: Steven Shiau <steven _at_ nchc org tw> 
+# license: GPL
+# Description: this program will create the NBI image for PXE and etherboot
+#              client.
+
+# Load DRBL setting and functions
+DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/opt/drbl/}"
+
+. $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
+
+# Settings
+NETDEV_MOD="/usr/lib/mkpxeinitrd-net/initrd-skel/etc/modules"
+NETINITRD_CFG="/usr/lib/mkpxeinitrd-net/initrd-skel/etc/linuxrc.conf"
+NETDEV_CFG="/usr/lib/mkpxeinitrd-net/initrd-skel/etc/netdev.conf"
+
+# Default settings
+# The retry max times for udhcp in one ethernet port
+iretry_max_default="5"
+# Does linuxrc check the server name ?
+check_server_name_default="yes"
+# The default dhcp server name
+dhcp_server_name_default="drbl"
+# The default pause time after NIC is up.
+sleep_time_after_NIC_up_default="0"
+# The flag to include kernel wireless modules
+include_wireless_mod="no"
+# The flag to include all the firmwares in the created PXE initramfs.
+copy_all_firmwares="no"
+# The time out to wait for NIC to be linked. Unit: 0.1 secs
+link_detect_timeout_default="70"
+# Flag to use /run in initramfs.
+use_run_in_initrd="yes"
+# Flag to use /dev/pts in initramfs.
+use_dev_pts_in_initrd="yes"
+
+# 
+usage() {
+  echo "Update the kernel modules for DRBL clients then create PXE boot image."
+  echo "Usage: $0 [Options]"
+  echo "Options:"
+  echo "-a, --all: create PXE boot image for all supported NIC (deprecated! Now this is default option, and you do not have to specify that.)"
+  echo "-k, --kernel KERNEL_VER: specify the KERNEL_VER which you want to create PXE boot image for all supported NIC, If you do not specify any KERNEL_VER, it will try to find the latest DRBL kernel"
+  echo "-s, --smp: force to find SMP kernel when creating NIC images"
+  echo "-i, --archi ARCH: assign the kernel CPU arch of DRBL clients, ARCH could be i386/i586/i686/x86_64"
+  echo "-c, --check-server-name [Y/n]: let client to check DHCP server name is drbl or not when it got IP address from some DHCP server."
+  echo "-d, --dhcp-server-name SRVNAME: Force to use the DHCP server name SRVNAME in network initrd."
+  echo "-r, --retry-max #:  The retry max times # for udhcp in one ethernet port"
+  echo "-m, --modules NET_MOD: assign the network device modules to be loaded in DRBL client initrd. NET_MOD is like 'tg3 bcm4400 bcm5700'. (Note! If more than one arguments, you must put \" \" or ' ' before and after the arguments.)"
+  echo "-n, --netdev NET_DEV: assign the priority of network device to request IP address from server in DRBL client, NET_DEV is like 'eth1' (just request from eth1) or 'eth1 eth0' (request from eth1, then eth0) (Note! If more than one arguments, you must put \" \" or ' ' before and after the arguments.)"
+  echo "-nu, --no-usb-modules: Do NOT include USB keyboard related modules in the network initrd."
+  echo "-p, --pause #:  Pause # secs after network card if up"
+  echo "-P, --udhcpc-port #:  Port # for udhcpc to request. Normally you do not have to assign this unless you want to use a special port. If you use this option with etherboot client with 'ALTERNATE_DHCP_PORTS_1067_1068', here you should assign it as 1068."
+  echo "-t, --initfs-type [ext2|cramfs|initramfs]: Assign the filesystem type for initialized RAM disk or initialized RAM filesystem"
+  echo "--no-modules: Force not to update the kernel modules from server to clients"
+  echo "-w, --include-wireless-modules  Include the kernel wireless modules in created initrd."
+  echo "-if, --include-all-firmwares  Include all the firmwares from /lib/firmware/ to the created PXE initramfs."
+  echo "-nf, --no-all-firmwares  Not to include all the firmwares from /lib/firmware/ to the created PXE initramfs. This is default."
+  echo "-o, --link-detect-timeout #:  The timeout time (Unit: 0.1 secs) to wait for network card to be linked."
+  echo "-v, --verbose    Prints out verbose information"
+  echo 
+  echo "Ex:"
+  echo "$0 -k 2.4.20-30.9"
+}
+#
+get_pxe_ramdisk_size() {
+  local initrd_tmp ratio
+  ratio="1.1"  # The ratio to make $PXE_RAMDISK_SIZE size safer
+  # PXE_RAMDISK_SIZE is global variable
+  initrd_tmp="$(mktemp /tmp/initrd_tmp.XXXXXX)"
+  zcat $pxecfg_pd/initrd-pxe.img > $initrd_tmp
+  PXE_RAMDISK_SIZE="$(LC_ALL=C echo "scale=0; $(LANG=C stat -c "%s" $initrd_tmp) * $ratio / 1024 / 1" | bc -l)"
+  [ -z "$PXE_RAMDISK_SIZE" ] && PXE_RAMDISK_SIZE="$PXE_RAMDISK_SIZE_DEF"
+  [ -e "$initrd_tmp" ] && rm -f $initrd_tmp
+}
+
+#
+check_if_root
+
+# initial setting
+SMP_OPTION=""
+NIC="all"
+use_usb_keyboard_modules="yes"
+#
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -v|--verbose)
+		shift; VERBOSE="-v"
+                ;;
+    -s|--smp)
+		shift; SMP_OPTION="-smp"
+                ;;
+    -a|--all)
+                # This is deprecated option, we already force to set NIC=all.
+		# Try to remove this option in the future.
+		shift; true
+                ;;
+    -i|--archi)
+		shift; 
+                # skip the -xx option, in case 
+		[ -z "$(echo $1 |grep ^-.)" ] && CLIENT_ARCH="$1"
+		shift;;
+    --no-modules)
+		shift; CP_MODULES="no"
+                ;;
+    -k|--kernel)
+		shift; 
+                # skip the -xx option, in case 
+		[ -z "$(echo $1 |grep ^-.)" ] && selected_kernel="$1"
+		shift;;
+    -n|--netdev)
+		shift; 
+                # skip the -xx option, in case 
+		[ -z "$(echo $1 |grep ^-.)" ] && net_dev="$1"
+		shift;;
+    -m|--modules)
+		shift; 
+                # skip the -xx option, in case 
+		[ -z "$(echo $1 |grep ^-.)" ] && net_modules="$1"
+		shift;;
+    -c|--check-server-name)
+		shift; 
+                # skip the -xx option, in case 
+		[ -z "$(echo $1 |grep ^-.)" ] && check_server_name="$1"
+		shift;;
+    -d|--dhcp-server-name)
+		shift; 
+                # skip the -xx option, in case 
+		[ -z "$(echo $1 |grep ^-.)" ] && dhcp_server_name="$1"
+		shift;;
+    -r|--retry-max)
+		shift; 
+                # skip the -xx option, in case 
+		[ -z "$(echo $1 |grep ^-.)" ] && iretry_max="$1"
+		shift;;
+    -nu|--no-usb-modules) use_usb_keyboard_modules="no"; shift;;
+    -w|--include-wireless-modules) include_wireless_modules="yes"; shift;;
+    -nf|--no-all-firmwares) copy_all_firmwares="no"; shift;;
+    -if|--include-all-firmwares) copy_all_firmwares="yes"; shift;;
+    -p|--pause)
+		shift; 
+                # skip the -xx option, in case 
+		[ -z "$(echo $1 |grep ^-.)" ] && sleep_time_after_NIC_up="$1"
+		shift;;
+    -P|--udhcpc-port)
+		shift; 
+                # skip the -xx option, in case 
+		[ -z "$(echo $1 |grep ^-.)" ] && udhcpc_port="$1"
+		shift;;
+    -t|--initfs-type)
+		shift
+		[ -z "$(echo $1 |grep ^-.)" ] && initfs_type="$1"
+		shift ;;
+    -o|--link-detect-timeout)
+		shift
+		[ -z "$(echo $1 |grep ^-.)" ] && link_detect_timeout="$1"
+		shift ;;
+    -*)		echo "${0}: ${1}: invalid option" >&2
+		usage >& 2
+		exit 2 ;;
+    *)		break ;;
+  esac
+done
+
+[ -z "$NIC" ] && usage && exit
+# parse the parameter for etc/linuxrc.conf in mkpxeinitrd-net
+[ -z "$iretry_max" ] && iretry_max="$iretry_max_default"
+[ -z "$check_server_name" ] && check_server_name="$check_server_name_default"
+[ -z "$dhcp_server_name" ] && dhcp_server_name="$dhcp_server_name_default"
+[ -z "$sleep_time_after_NIC_up" ] && sleep_time_after_NIC_up="$sleep_time_after_NIC_up_default"
+[ -z "$link_detect_timeout" ] && link_detect_timeout="$link_detect_timeout_default"
+
+# Format the variable in case inputed variable is not we want.
+case "$check_server_name" in
+  n|N|[nN][oO])
+    check_server_name="no"
+    ;;
+  *)
+    check_server_name="yes"
+    ;;
+esac
+case "$iretry_max" in
+  [0-9]*)
+    iretry_max="$iretry_max"
+    ;;
+  *)
+    iretry_max="$iretry_max_default"
+    ;;
+esac
+case "$sleep_time_after_NIC_up" in
+  [0-9]*)
+    sleep_time_after_NIC_up_no="$sleep_time_after_NIC_up"
+    ;;
+  *)
+    sleep_time_after_NIC_up_no="$sleep_time_after_NIC_up_default"
+    ;;
+esac
+case "$use_usb_keyboard_modules" in
+  yes)
+    usb_kb_opt=""
+    ;;
+  no)
+    usb_kb_opt="--no-usb-modules"
+    ;;
+esac
+
+# create some directories if they do not exist
+[ ! -d $drbl_common_root/lib/modules ] && mkdir -p $drbl_common_root/lib/modules
+[ ! -d $drbl_common_root/tmp/boot ] && mkdir -p $drbl_common_root/tmp/boot
+( 
+  cd $drbl_common_root
+  [ -L boot ] && rm -f boot
+  ln -fs tmp/boot boot
+)
+
+# If /run is a mountpoint on server, same as client's initrd.
+if ! mountpoint /run &>/dev/null; then
+  use_run_in_initrd="no"
+fi
+# If /dev/pts is a mountpoint on server, same as client's initrd.
+#if ! mountpoint /dev/pts &>/dev/null; then
+#  use_dev_pts_in_initrd="no"
+#fi
+# Let use_dev_pts_in_initrd be the same with use_run_in_initrd, i.e. only when /run is created in initrd, we carete /dev/pts, too.
+use_dev_pts_in_initrd="$use_run_in_initrd"
+
+# Change the setting in $NETINITRD_CFG
+echo "Will client check DHCP server name is \"$dhcp_server_name\" or not: $check_server_name"
+echo "The maximum times to try to get IP address for a client: $iretry_max"
+echo "The pause time after network card is up: $sleep_time_after_NIC_up"
+echo "The timeout to wait for network card linked (Unit: 0.1 secs): $link_detect_timeout"
+perl -p -i -e "s/^check_server_name=.*/check_server_name=\"$check_server_name\"/g" $NETINITRD_CFG
+perl -p -i -e "s/^dhcp_server_name=.*/dhcp_server_name=\"$dhcp_server_name\"/g" $NETINITRD_CFG
+perl -p -i -e "s/^iretry_max=.*/iretry_max=\"$iretry_max\"/g" $NETINITRD_CFG
+perl -p -i -e "s/^sleep_time_after_NIC_up=.*/sleep_time_after_NIC_up=\"$sleep_time_after_NIC_up\"/g" $NETINITRD_CFG
+perl -p -i -e "s/^link_detect_timeout=.*/link_detect_timeout=\"$link_detect_timeout\"/g" $NETINITRD_CFG
+perl -p -i -e "s/^use_run_in_initrd=.*/use_run_in_initrd=\"$use_run_in_initrd\"/g" $NETINITRD_CFG
+perl -p -i -e "s/^use_dev_pts_in_initrd=.*/use_dev_pts_in_initrd=\"$use_dev_pts_in_initrd\"/g" $NETINITRD_CFG
+if [ -n "$udhcpc_port" ]; then
+  echo "The port for udhcpc to request is: $udhcpc_port"
+  perl -p -i -e "s/^udhcpc_port=.*/udhcpc_port=\"$udhcpc_port\"/g" $NETINITRD_CFG
+else
+  echo "Setting port for udhcpc request to default..."
+  perl -p -i -e "s/^udhcpc_port=.*/udhcpc_port=\"\"/g" $NETINITRD_CFG
+fi
+
+if [ -n "$net_modules" ]; then
+  echo "The extra network device module assigned: $net_modules"
+  # Clean all in $NETDEV_MOD, make it as initial one.
+  perl -p -i -e "s/^[[:space:]]*[^#]+.*//g" $NETDEV_MOD
+  for imod in $net_modules; do
+     echo $imod >> $NETDEV_MOD
+  done
+fi
+
+if [ -n "$net_dev" ]; then
+  echo "The priority of network card for client to request IP address is: $net_dev"
+  perl -p -i -e "s/^[[:space:]]*netdevices=.*/netdevices=\"$net_dev\"/g" $NETDEV_CFG
+fi
+
+# If we do not specifie kernel, try to find in 
+# (1) /lib/modules (by rpm ...) - old way
+# (2) /tftpboot/lib/modules (by finding directory)
+if [ -z "$selected_kernel" ]; then
+   echo "Searching the latest installed kernel for DRBL client... This might take several minutes..."
+   kernel_mod_list=$(find $drbl_common_root/lib/modules/ -maxdepth 1 -mindepth 1 -name "[0-9].[0-9]*" -type d -print | sort -g | tail -n 1)
+   if [ -n "$kernel_mod_list" ]; then
+      # the kernel in drbl_common_root is found, 
+      # use method (2) (/tftpboot/lib/modules)
+      echo "Trying to find the kernel in $drbl_common_root "
+      drbl_kernel="$(basename $kernel_mod_list)"
+   else
+      # the kernel in drbl_common_root is NOT found, 
+      # use method (1) (/lib/modules)
+      latest_drbl_kernel="$(rpm -qa | grep -E "kernel${SMP_OPTION}[#-]2\.[0-9]+\.[0-9]+" | grep -v "test" | pkg-ver-latest)"
+      [ -z "$latest_drbl_kernel" ] && echo "Unable to find kernel for client!!! Program terminated!!!" && exit 1
+
+      rpm -q --qf '%{filenames}\n' $latest_drbl_kernel &> /dev/null && boot_kernel="$(rpm -q --qf '%{filenames}\n' $latest_drbl_kernel)"
+      drbl_kernel="$(echo $boot_kernel |cut -d"-" -f2-)"
+   fi
+else
+   # specify the kernel, so we have to check if the kernel exist or not.
+   # By checking the kernel modules, we will know that!
+   # (Here we assume the kernel modules will be created, not all buildin)
+   # the kernel will exist in 
+   # (1) /lib/modules - old way
+   # (2) /tftpboot/lib/modules
+   [ ! -d "$drbl_common_root/lib/modules/$selected_kernel" -a ! -d "/lib/modules/$selected_kernel" ] && echo "Can NOT find the kernel \"$selected_kernel\" you specified! Program terminated!" && exit 1
+   drbl_kernel="$selected_kernel"
+   # if we can find the modules in the common_root, use it first.
+   # the drbl_kernel_mod_path is the leading path.
+   if [ -d "$drbl_common_root/lib/modules/$selected_kernel" ]; then
+      drbl_kernel_mod_path="$drbl_common_root/"
+   else
+      drbl_kernel_mod_path=""
+   fi
+   echo "Using the kernel modules from $drbl_kernel_mod_path/lib/modules..."
+
+fi
+
+# 
+echo "The selected kernel for DRBL clients is: $drbl_kernel"
+#
+if [ -z "$initfs_type" -a -n "$(echo $drbl_kernel | grep -E "^(2\.6\.1[5-9]+|2\.6\.[2-9][0-9]|3\.)" )" ]; then
+  # default to use initramfs for kernel 2.6.15 or later.
+  echo "Kernel 2.6 or 3 was found, so default to use initramfs."
+  initfs_type="initramfs"
+fi
+
+if [ -n "$initfs_type" ]; then
+  # put the option for mkpxeinitrd-net
+  initfs_opt="-t $initfs_type"
+fi
+
+if [ "$include_wireless_modules" = "yes" ]; then
+  wireless_mod_option="-w"
+else
+  wireless_mod_option=""
+fi
+if [ "$copy_all_firmwares" = "yes" ]; then
+  # By default we include all of them in the created initramfs.	 
+  inc_all_firmwares_opt="-if"
+else
+  inc_all_firmwares_opt="-nf"
+fi
+
+# prepare the directories for DRBL clients
+[ ! -d /tftpboot ] && mkdir /tftpboot
+[ ! -d /tftpboot/nbi_img ] && mkdir -p /tftpboot/nbi_img
+[ ! -d /tftpboot/node_root ] && mkdir -p /tftpboot/node_root
+[ ! -d /tftpboot/nodes ] && mkdir -p /tftpboot/nodes
+
+#
+echo "$drbl_kernel" > $pxecfg_pd/kernel_version_in_initrd.txt
+[ -n "$CLIENT_ARCH" ] && echo "$CLIENT_ARCH" > $pxecfg_pd/client_kernel_arch.txt
+
+if [ "$CP_MODULES" != "no" ]; then
+  update-drbl-client-kernel-from-server
+fi
+
+# create the initrd and kernel for clients.
+KARCH_CLIENT="$(cat $pxecfg_pd/client_kernel_arch.txt 2>/dev/null)"
+KARCH_EXISTING_KERNEL="$(drbl-check-kernel-cpu-arch --drbl-client $drbl_kernel)"
+if [ -z "$KARCH_EXISTING_KERNEL" ]; then 
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+  echo "The requested kernel \"$KARCH_CLIENT\" $drbl_kernel kernel files are NOT found in  $drbl_common_root/lib/modules/s and $drbl_common_root/boot in the server! The necessary modules in the network initrd can NOT be created!"
+  echo "Client will NOT remote boot correctly!"
+  echo "Program terminated!"
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+  exit 1
+fi
+
+if [ "$KARCH_CLIENT" = "best_optimization" -o "$KARCH_EXISTING_KERNEL" = "$KARCH_CLIENT" ]; then
+  echo "Creating the network boot initrd for PXE clients by: mkpxeinitrd-net -k $drbl_kernel $initfs_opt $usb_kb_opt $wireless_mod_option $inc_all_firmwares_opt $VERBOSE"
+  mkpxeinitrd-net -k $drbl_kernel $initfs_opt $usb_kb_opt $wireless_mod_option $inc_all_firmwares_opt $VERBOSE 
+  rc=$?
+  if [ "$rc" -eq 0 ]; then
+    case "$initfs_type" in
+     initramfs|INITRAMFS) 
+       echo "Initramfs, remove ramdisk_size/ramdisk_block in $PXE_CONF_DEF if exists..."
+       del_param_in_pxelinux_cfg_drbl_related_block $PXE_CONF_DEF "ramdisk_size=.*"
+       del_param_in_pxelinux_cfg_drbl_related_block $PXE_CONF_DEF "ramdisk_blocksize=.*"
+       ;;
+     *) 
+       get_pxe_ramdisk_size  # Get the variable PXE_RAMDISK_SIZE
+       echo "Initrd, assign ramdisk_size ($PXE_RAMDISK_SIZE) and ramdisk_block ($PXE_RAMDISK_BLOCKSIZE) in $PXE_CONF_DEF."
+       add_param_in_pxelinux_cfg_drbl_related_block $PXE_CONF_DEF "ramdisk_size=$PXE_RAMDISK_SIZE"
+       add_param_in_pxelinux_cfg_drbl_related_block $PXE_CONF_DEF "ramdisk_blocksize=$PXE_RAMDISK_BLOCKSIZE"
+       ;;
+     *) usage
+	exit 2;;
+    esac
+  fi
+else
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+  echo "The requested kernel \"$KARCH_CLIENT\" $drbl_kernel kernel files are NOT found in  $drbl_common_root/lib/modules/s and $drbl_common_root/boot in the server! The necessary modules in the network initrd can NOT be created!"
+  echo "Client will NOT remote boot correctly!"
+  echo "Program terminated!"
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+  exit 1
+fi
+
+echo "Finished!"
+exit 0

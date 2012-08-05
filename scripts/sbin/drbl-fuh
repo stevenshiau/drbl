@@ -1,0 +1,199 @@
+#!/bin/bash
+# Author: Blake, Kuo-Lien Huang
+# License: GPL
+# Description: put/get the file to/from all DRBL clients, 
+# file utility for host(fuh)
+#
+# Modified by Steven Shiau <steven@nchc.org.tw> to be used in DRBL for RedHat
+
+# Load DRBL setting and functions
+DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/opt/drbl/}"
+
+. $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
+
+#
+run_cmd="`basename $0`"
+
+# to backword compatible
+case "$run_cmd" in 
+   "drbl-cp-host"|"drbl-host-cp")
+	   run_cmd="drbl-fuh-put"
+	   ;;
+   "drbl-rm-host"|"drbl-host-rm")
+	   run_cmd="drbl-fuh-rm"
+	   ;;
+   "drbl-get-host"|"drbl-host-get")
+	   run_cmd="drbl-fuh-get"
+	   ;;
+esac
+
+usage() {
+  echo "NAME    Put(default)/get/remove files to/from DRBL clients."
+  echo
+  echo "DESCRIPTION"
+  echo "drbl-cp-host (or drbl-host-cp) for putting files, drbl-get-host (or drbl-host-get) for collecting files, drbl-rm-host (or drbl-host-rm) for removing files."
+  echo
+  echo "Usage: `basename $0` [-d|--directory DIR ] [-v|--verbose] source target"
+  echo "-d, --directory=DIR: process the DIR relative to client root directory"
+  echo "-v, --verbose    prints out verbose information"
+  echo "\"target\" can be a file or a directory, it it's file, it's new filename for source to be copied. If it's a directory, the source will be copied into that directory."
+  echo
+  echo "Example:"
+  echo "/opt/drbl/sbin/drbl-cp-host ./XF86_DEFAULT /etc"
+  echo "will copy XF86_DEFAULT into client's /etc directory"
+  echo
+  echo "drbl-cp-host -d local source_files new_file.txt" 
+  echo "will copy source_files into client's /local directory as file name new_file.txt"
+  echo
+  echo "drbl-rm-host -d local target.txt" 
+  echo "will remove target.txt from client's /local directory"
+  echo
+  echo "drbl-get-host -d local target.txt" 
+  echo "will get target.txt from client's /local directory"
+  echo
+  echo "drbl-get-host -d local \"*.txt\"" 
+  echo "will get *.txt from client's /local directory"
+  echo "NOTE!!! You must put \" \" before and after the star wildcard * filename!"
+}
+
+#
+if [ "$run_cmd" = "drbl-fuh" ]; then
+  echo "use drbl-cp-host (or drbl-host-cp) for putting files, drbl-get-host (or drbl-host-get) for collecting files, drbl-rm-host (or drbl-host-rm) for removing files."
+  exit 1
+fi
+
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -d|--directory)
+		shift; sub_dir="$1"
+		shift;;
+    -v|--verbose)
+		VERBOSE="on"
+		shift;;
+    -*)		echo "${0}: ${1}: invalid option" >&2
+		usage >& 2
+		exit 2 ;;
+    *)		break ;;
+  esac
+done
+
+# get the source and target
+source_file=$1
+target_file=$2
+
+# check if source_file is dir or file, if dir, append /
+[ -d "$source_file" ] && source_file=$source_file"/"
+
+# check parameter
+if [ $# -le 0 ]; then
+  usage
+  exit 1
+fi
+case "$run_cmd" in
+    "drbl-fuh-put")
+                  mode="put"
+                  ;;
+    "drbl-fuh-get")
+                  mode="get"
+                  ;;
+    "drbl-fuh-rm")
+                  mode="rm"
+                  ;;
+    *)
+                  echo "Unknown mode! Did you change the filename ?"
+                  echo "Program terminated!"
+                  exit 1
+                  ;;
+esac
+
+# set the default values if empty
+[ -z "$mode" ] && mode="put"
+[ -z "$source_file" ] && echo "No source! Program terminated!" && exit 1
+[ -z "$target_file" ] && target_file="$source_file"
+
+#
+if [ -n "$VERBOSE" ]; then
+   echo "mode=$mode"
+   echo "source_file=$source_file"
+   echo "target_file=$target_file"
+fi
+
+# main
+unalias ls 2>/dev/null
+nodes_list=$(ls $drblroot)
+
+#
+if [ "$mode" = "rm" ]; then
+  echo "Warning! This will delete $source_file in each DRBL client!!! Are you sure ?"
+  echo "[y/N]"
+  read rm_confirm
+  case "$rm_confirm" in
+      y|[yY][eE][sS])
+       if [ -n "$sub_dir" ]; then
+         echo "Do you want to remove the directory \"$sub_dir\" for each host in $drblroot ?"
+         echo "[y/N]"
+         read rm_dir_confirm
+         case "$rm_dir_confirm" in
+             y|[yY][eE][sS])
+                           rm_dir_confirm="yes"
+                           ;;
+             *) 
+                           rm_dir_confirm="no"
+                           ;;
+         esac 
+       fi
+       ;;
+  esac    
+fi
+
+# store the LC_ALL
+LC_ALL_org=$LC_ALL
+export LC_ALL=C
+
+# main
+for inode in $nodes_list; do
+  CLIENT_DIR="$drblroot/$inode"
+  case "$mode" in
+    "rm")
+      case "$rm_confirm" in
+      y|[yY][eE][sS])
+        # just in case, we separate the rm -rf $sub_dir into two steps
+        rm -rfv $CLIENT_DIR/$sub_dir/$source_file
+        if [ "$rm_dir_confirm" = "yes" ]; then
+           rmdir -v $CLIENT_DIR/$sub_dir/
+        fi
+        ;;
+      *)
+        echo "abort!"
+        exit
+      esac
+      ;;
+    "get")
+      for ifile in $CLIENT_DIR/$sub_dir/$source_file; do
+        [ -f "$ifile" ] && cp -av $ifile ${inode}_"$(basename ${ifile})"
+      done
+      ;;
+    "put")
+      [ ! -e "$source_file" ] && echo "$source_file does not exist!" && exit 1
+      if [ -z "$(echo "$target_file" | grep -Ew "^/etc")" -a \
+           -z "$(echo "$target_file" | grep -Ew "^/root")" -a \
+           -z "$(echo "$target_file" | grep -Ew "^/var")" ]; then
+	echo "You should use drblpush to deploy the files, not this program. This program `basename $0` will only copy files to DRBL client's /etc, /root, or /var!".
+      else
+        [ -n "$sub_dir" ] && mkdir -p $CLIENT_DIR/$sub_dir
+        cp -av $source_file $CLIENT_DIR/$sub_dir/$target_file
+      fi
+      ;;
+    *)
+      usage
+      ;;
+  esac
+done
+
+#
+echo "-------------------------------------------------------"
+echo "Since some config files are modified in template client, creating template tarball for DRBL SSI..."
+drbl-gen-ssi-files
+
+# restore the LC_ALL
+export LC_ALL=$LC_ALL_org

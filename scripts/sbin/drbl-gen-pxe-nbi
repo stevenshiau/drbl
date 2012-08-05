@@ -1,0 +1,92 @@
+#!/bin/bash
+# Author: Steven Shiau <steven _at_ nchc org tw>
+# License: GPL 
+# Description: DRBL utitilty to create the Network Boot Image (NBI) files for PXELINUX clients. 
+# NOTE! THIS COMMAND IS USUALLY CALLED BY DRBLSRV SINCE IT RUNS mknic-nbi WITH --no-modules.
+# If you already finished drblush, it's better to run "mknic-nbi" directly.
+
+# Load DRBL setting and functions
+if [ ! -f "/opt/drbl/sbin/drbl-conf-functions" ]; then
+  echo "Unable to find /opt/drbl/sbin/drbl-conf-functions! Program terminated!" 
+  exit 1
+fi
+. /opt/drbl/sbin/drbl-conf-functions
+
+USAGE() {
+   echo "Usage: $0 [OPTION]"
+   echo "OPTION"
+   language_help_prompt_by_idx_no
+   echo "-k, --client-kernel-ver KERNEL_VER: specify the KERNEL_VER which you want to create PXE boot image for all supported NIC, If you do not specify any KERNEL_VER, it will try to find the latest DRBL kernel"
+   echo "-s, --smp: force to find SMP kernel when creating NIC images"
+}
+
+# Parse command-line options
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -l|--language)
+	shift
+        if [ -z "$(echo $1 |grep ^-.)" ]; then
+          # skip the -xx option, in case 
+	  specified_lang="$1"
+	  shift
+        fi
+	;;
+    -k|--client-kernel-ver)
+	shift
+        if [ -z "$(echo $1 |grep ^-.)" ]; then
+          # skip the -xx option, in case 
+	  client_kernel_ver="$1"
+	  shift
+        fi
+	;;
+    -s|--smp)
+        shift; SMP_OPTION="-smp"
+        ;;
+    -*) echo "${0}: ${1}: invalid option" >&2
+        USAGE >& 2
+        exit 2 ;;
+    *)  break ;;
+  esac
+done
+
+#
+check_if_root
+
+#
+ask_and_load_lang_set $specified_lang
+
+# make the nbi/pxe files
+# 1st, clean the old nbi/pxe files
+if [ "$(ls -alF $pxecfg_pd/boot* 2> /dev/null)" != "" ]; then
+   echo "$msg_delimiter_star_line"
+   echo "$msg_remove_old_nbi"
+   rm -f $pxecfg_pd/boot*
+fi
+
+echo "$msg_delimiter_star_line"
+echo "$msg_create_nbi_files"
+# put and create the kernel and initrd for DRBL clients, this will be done by
+# mknic-nbi
+[ -n "$client_kernel_ver" ] && echo "$msg_latest_kernel_for_clients $client_kernel_ver"
+
+# check if mknic-nbi is installed or not.
+if ! type mknic-nbi &>/dev/null; then
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+  echo "$msg_no_drbl_script"
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+  exit 1
+fi
+# create the NBI and PXE image for DRBL clients
+# modules will be copied when user runs drblpush
+[ -n "$client_kernel_ver" ] && kernel_opt="--kernel $client_kernel_ver"
+case "$SMP_OPTION" in
+   "-smp")
+     echo "Running mknic-nbi $kernel_opt --all --smp --no-modules"
+     mknic-nbi $kernel_opt --all --smp --no-modules
+     ;;
+   *)
+     echo "Running mknic-nbi $kernel_opt --all --no-modules"
+     mknic-nbi $kernel_opt --all --no-modules
+     ;;
+esac
+echo "$msg_Done!"

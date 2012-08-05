@@ -1,0 +1,204 @@
+#!/bin/bash
+# Author: Steven Shiau <steven _at_ nchc org tw>
+# License: GPL 
+# Description: DRBL utitilty to create files for PXELINUX clients.
+# Load DRBL setting and functions
+DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/opt/drbl/}"
+
+. $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
+
+USAGE() {
+   echo "Usage: $0 [OPTION]"
+   echo "OPTION"
+   language_help_prompt_by_idx_no
+   echo "-o, --console-output OPT: Set the console output parameters."
+   echo "-i, --pxe-serial-output OPT:  Set the PXE menu to work with serial console output."
+}
+
+# Parse command-line options
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -l|--language)
+	shift
+        if [ -z "$(echo $1 |grep ^-.)" ]; then
+          # skip the -xx option, in case 
+	  specified_lang="$1"
+	  shift
+        fi
+	[ -z "$specified_lang" ] && USAGE && exit 1
+	;;
+    -o|--console-output)
+	shift
+        if [ -z "$(echo $1 |grep ^-.)" ]; then
+          # skip the -xx option, in case 
+          CONSOLE_OUTPUT="$1"
+	  shift
+        fi
+	[ -z "$CONSOLE_OUTPUT" ] && USAGE && exit 1
+	;;
+    -i|--pxe-serial-output)
+	shift
+        if [ -z "$(echo $1 |grep ^-.)" ]; then
+          # skip the -xx option, in case 
+          PXE_SERIAL_OUTPUT="$1"
+	  shift
+        fi
+	[ -z "$PXE_SERIAL_OUTPUT" ] && USAGE && exit 1
+	;;
+    -*)     echo "${0}: ${1}: invalid option" >&2
+            USAGE >& 2
+            exit 2 ;;
+    *)      break ;;
+  esac
+done
+
+#
+check_if_root
+
+#
+ask_and_load_lang_set $specified_lang
+
+echo "Copying pxelinux.0, gpxelinux.0, menu.c32, vesamenu.c32, chain.c32, mboot.c32, sanboot.c32 and memdisk to $pxecfg_pd..."
+
+[ ! -d $pxecfg_pd/pxelinux.cfg ] && mkdir -p $pxecfg_pd/pxelinux.cfg
+
+# make a version tag in $pxecfg_pd
+pxelinux_src_path="$(dirname $pxelinux_file)"
+cp -af $pxelinux_src_path/VERSION $pxecfg_pd/PXELINUX_VERSION
+
+# These files (pxelinux.0, gpxelinux.0, menu.c32, vesamenu.c32, chain.c32, memdisk...) are very important.
+# Hence we process here separately.
+
+# pxelinux.0
+if [ -f $pxelinux_file ]; then
+   cp -af $pxelinux_file $pxecfg_pd
+else
+   [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+   echo "$msg_Warning! $pxelinux_file $msg_NOT_found!!! $msg_PXE_NOT_work"
+   echo "$msg_press_enter_to_continue"
+   [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+   read
+fi
+# gpxelinux.0
+if [ -f $gpxelinux_file ]; then
+   cp -af $gpxelinux_file $pxecfg_pd
+else
+   [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+   echo "$msg_Warning! $gpxelinux_file $msg_NOT_found!!! $msg_PXE_NOT_work"
+   echo "$msg_press_enter_to_continue"
+   [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+   read
+fi
+# for simple menu
+if [ -f $pxelinux_simple_menu ]; then
+   cp -af $pxelinux_simple_menu $pxecfg_pd
+else
+   [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+   echo "$msg_Warning! $pxelinux_simple_menu $msg_NOT_found!!! $msg_PXE_NOT_work"
+   echo "$msg_press_enter_to_continue"
+   [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+   read
+fi
+# for simple vesamenu
+if [ -f $pxelinux_simple_vesamenu ]; then
+   cp -af $pxelinux_simple_vesamenu $pxecfg_pd
+else
+   [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+   echo "$msg_Warning! $pxelinux_simple_vesamenu $msg_NOT_found!!! $msg_PXE_NOT_work"
+   echo "$msg_press_enter_to_continue"
+   [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+   read
+fi
+# for chain loader
+if [ -f $pxelinux_chain_file ]; then
+   cp -af $pxelinux_chain_file $pxecfg_pd
+else
+   [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+   echo "$msg_Warning! $pxelinux_chain_file $msg_NOT_found!!! $msg_PXE_NOT_work"
+   echo "$msg_press_enter_to_continue"
+   [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+   read
+fi
+# the background img in pxelinux
+if [ -f $pxelinux_bg_img ]; then
+   cp -af $pxelinux_bg_img $pxecfg_pd
+else
+   [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+   echo "$msg_Warning! $pxelinux_bg_img $msg_NOT_found!!! $msg_PXE_NOT_work"
+   echo "$msg_press_enter_to_continue"
+   [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+   read
+fi
+# memdisk
+if [ -f $pxelinux_memdisk_file ]; then
+   cp -af $pxelinux_memdisk_file $pxecfg_pd
+else
+   [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+   echo "$msg_Warning! $pxelinux_memdisk_file $msg_NOT_found!!! $msg_PXE_NOT_work"
+   echo "$msg_press_enter_to_continue"
+   [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+   read
+fi
+
+# mboot.c32, sanboot.c32
+[ -f "$pxelinux_mboot_file" ] && cp -af $pxelinux_mboot_file $pxecfg_pd
+[ -f "$pxelinux_sanboot_file" ] && cp -af $pxelinux_sanboot_file $pxecfg_pd
+
+# memtest86+
+# make a version tag in $pxecfg_pd
+echo "Copying memtest86+ to $pxecfg_pd..."
+memtest86_src_path="$(dirname $memtest86_file)"
+cp -af $memtest86_src_path/VERSION $pxecfg_pd/MEMTEST86+_VERSION
+
+if [ -f "$memtest86_file" ]; then
+   cp -af $memtest86_file $pxecfg_pd
+else
+   [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+   echo "$msg_Warning! $memtest86_file $msg_NOT_found!!!"
+   echo "$msg_press_enter_to_continue"
+   [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+   read
+fi
+
+# For etherboot PXE image (Especially necessary for sis900 NIC)
+# clean the old ones
+rm -f $pxecfg_pd/eb-*-etherboot-pci.zpxe $pxecfg_pd/sis900.zpxe
+# get the all-in-one etherboot zpxe and sis900 zpxe filename, we use sort and head to choose only one.
+etherboot_pxe="$($query_pkglist_cmd drbl-etherboot 2>/dev/null | grep -E "eb-.*-etherboot-pci.zpxe$")"
+sis900_pxe="$($query_pkglist_cmd drbl-etherboot 2>/dev/null | grep -E "sis900.zpxe$")"
+[ -e "$etherboot_pxe" ] && cp -af $etherboot_pxe $pxecfg_pd/
+[ -e "$sis900_pxe" ] && cp -af $sis900_pxe $pxecfg_pd/
+
+# create the freedos image, which a clean one.
+# if user wants to insert files, use 
+# the script /opt/drbl/sbin/insert-file-fdos.sh
+# [ -f kernel.sys ] && rm -f kernel.sys
+if [ -f "$fdos_img_src" ]; then
+   # 2005/4/4 since etherboot 5.4.0 is released, no more NBI.
+   # img_mt=`mktemp -d fdos_img.XXXXXX`
+   # mount -t vfat -o loop $fdos_img_src $img_mt
+   # cp -f $img_mt/kernel.sys .
+   # umount $img_mt
+   # mknbi-fdos --output=/tftpboot/nbi_img/$fdos_nbi_output kernel.sys $fdos_img_src
+   echo "Copying FreeDOS files to $pxecfg_pd/... "
+   cp -f $fdos_img_src $pxecfg_pd/$fdos_img_output
+   # [ -d "$img_mt" ] && rm -rf $img_mt
+   # clean the unnecessary file
+   # [ -f kernel.sys ] && rm -f kernel.sys
+else
+   [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+   echo "$msg_Warning! $fdos_img_src $msg_NOT_found!!! $msg_FreeDOS_NOT_work"
+   echo "$msg_press_enter_to_continue"
+   [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+fi
+
+# create the pxelinux default
+if [ -n "$CONSOLE_OUTPUT" ]; then
+ console_opt1="--console"
+ console_opt2="$CONSOLE_OUTPUT"
+fi
+if [ -n "$PXE_SERIAL_OUTPUT" ]; then
+ pxe_serial_opt1="--serial"
+ pxe_serial_opt2="$PXE_SERIAL_OUTPUT"
+fi
+generate-pxe-menu $console_opt1 "$console_opt2" $pxe_serial_opt1 "$pxe_serial_opt2"

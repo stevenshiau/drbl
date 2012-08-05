@@ -1,0 +1,52 @@
+#!/bin/bash
+# Author: Steven Shiau <steven _at_ nchc org tw>
+# License: GPL
+# This program is aimed to be used in Clonezilla live (based on Debian Live), not in DRBL/Clonezilla environment.
+
+#
+DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/opt/drbl/}"
+
+. $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
+. $DRBL_SCRIPT_PATH/conf/drbl-ocs.conf
+. $DRBL_SCRIPT_PATH/sbin/ocs-functions
+
+# Loading settings 
+[ -e /etc/ocs/ocs-live.conf ] && . /etc/ocs/ocs-live.conf
+
+USAGE() {
+    echo "Usage:"
+    echo "To choose langguage in Clonezilla live"
+    echo "$ocs RESULT_FILE"
+}
+
+output_file="$1"
+[ -z "$output_file" ] && USAGE && exit 1
+#
+export LANG=en_US.UTF-8
+
+TMP="$(mktemp /tmp/lang.XXXXXX)"
+ASK_LANG=1
+while [ "$ASK_LANG" -ne 0 ]; do
+  $DIA --default-item "en_US.UTF-8" --nocancel --backtitle "Free Software Labs, NCHC, Taiwan" --title  \
+  "Choose language" --menu "Which language do you prefer:" \
+  0 0 0 \
+  de_DE.UTF-8 "German | Deutsch" \
+  en_US.UTF-8 "English" \
+  es_ES.UTF-8 "Spanish | Español" \
+  fr_FR.UTF-8 "French | Français" \
+  it_IT.UTF-8 "Italian | Italiano" \
+  ja_JP.UTF-8 "Japanese | 日本語" \
+  pt_BR.UTF-8 "Brazilian Portuguese | Português do Brasil" \
+  ru_RU.UTF-8 "Russian | Русский" \
+  zh_CN.UTF-8 "Chinese (Simplified) | 简体中文" \
+  zh_TW.UTF-8 "Chinese (Traditional) | 正體中文 - 臺灣" \
+  2> $TMP
+  lang="$(cat $TMP)"
+  if [ -z "$lang" ]; then
+    ASK_LANG=1
+  else
+    ASK_LANG=0
+  fi
+done
+[ -f "$TMP" ] && rm -f $TMP
+echo "$lang" > $output_file

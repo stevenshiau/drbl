@@ -1,0 +1,147 @@
+#!/bin/bash
+# The script is borrowed from 
+#============================================================================
+# http://staff.washington.edu/corey/tools.html
+# Author: Corey Satten, corey @ cac.washington.edu, 06/26/03, release 1.8
+#============================================================================
+# Modified by Steven Shiau <steven _at_ nchc org tw> 12/12/04
+# We use this one to find the last version rpms in our apt repository.
+# Because we might have a lot of drbl-setup rpms...
+# drbl-script-1.0-45drbl.i386.rpm
+# drbl-script-1.1-19drbl.i386.rpm
+# drbl-script-1.1-1drbl.i386.rpm    
+# drbl-setup-1.2-7drbl.i386.rpm
+# we just want to list the last one drbl-setup-1.2-7drbl.i386.rpm
+#============================================================================
+# 2006/6/24 Steven Shiau modified it to use lftp for http instead of lynx, since
+# 1. For some apache2, "lynx -dump" will get the html format instead of plain text
+# 2. lynx does not support http_proxy and ftp_proxy.
+# Now this program is based on list_available_rpm.
+
+# load setting
+. /opt/drbl/sbin/drbl-conf-functions
+
+#
+usage () {
+  echo "Usage: `basename $0` [path]"
+  echo "Example:"
+  echo "`basename $0` /mirror/apt/RPMS.drbl-test"
+  echo "`basename $0` http://opensource.nchc.org.tw/fedora/apt/fedora/linux/2/i386/RPMS.drbl"
+}
+
+# Try to help people figure out if/when this file has DOS line terminators
+# Chances are the initial #!/bin/sh will fail with a cryptic "not found" msg
+# If someone tries to debug it by feeding it to sh manually, this should help:
+NL=
+case "$NL" in '');; *)                                                    #
+    echo "ERROR: $0 was improperly saved with CR-LF newlines." 1>&2       #
+    echo "Please try again after restoring Unix-style (LF) newlines" 1>&2 #
+    exit 1 ;;                                                             #
+esac                                                                      #
+
+SRC=$1
+[ -z "$SRC" ] && echo "You must provide the URL or PATH!" && usage && exit 1
+
+case "$SRC" in */);; *) SRC=$SRC/;; esac	# URL must end in slash
+
+NEWER='
+    # Function newer:
+    # Return 1 if second arg is "newer" than the first arg, else return 0.
+    #
+    # Because extra dotted fields before a hyphen are more significant
+    # than those after a hyphen, first split on hyphens, then loop over
+    # dotted fields passing the hard alphanumerics to function "compare"
+    # for further splitting and comparing.
+    #
+    # eg.  older bind-utils-8.2.2_P5-9     and  older gzip-1.2.4-14
+    #      newer bind-utils-8.2.2_P7-0.6.2 and  newer gzip-1.2.4a-2
+    #
+    #      older apmd-3.0beta9-3           and  older rmt-0.4b4-11 
+    #      newer apmd-3.0final-2           and  newer rmt-0.4b19-5.6x
+
+    function newer(a, b,    na1, nb1, na, nb, minn, i, j) {
+	if ('"${DEBUG-0}"') \
+	  printf("newer called with %s %s\n", a, b)>"/dev/stderr"
+	if ('"${EFLAG-0}"') return a!=b
+	if (O) {na=a; a=b; b=na}
+	na1 = split(a, A1, /-/)
+	nb1 = split(b, B1, /-/)
+	if (na1 != nb1) {
+	  printf "unsure about %s and %s\n", a, b > "/dev/stderr"
+	  return 1 }
+	for (j=1; j<=na1; ++j) {
+	  na = split(A1[j], A, /\./)
+	  nb = split(B1[j], B, /\./)
+	  minn = na < nb ? na : nb
+	  for (i=1; i<=minn; ++i) {
+	    if ('"${DEBUG-0}"') \
+	      printf(" newer%d comparing %s %s\n", i, A[i], B[i])>"/dev/stderr"
+	    if ((A[i] B[i]) ~ /^[0-9]+$/) {
+	      if (A[i]+0 < B[i]+0) return 1
+	      if (A[i]+0 > B[i]+0) return 0 }
+	    else if (A[i] "" != B[i] "") return compare(A[i], B[i])
+	    }
+	  if (nb > na) return 1
+	  if (nb < na) return 0
+	  }
+	return 0
+	}
+
+    # Function compare (called only by function newer):
+    # Return 1 if second arg is "newer" than the first arg, else return 0.
+    #
+    # This is harder than it looks: consider "v9" vs "v10a", etc.
+    # split out and compare alternating fields of numeric and non-numeric
+
+    function compare (a, b,    xa, xb) {
+	if ('"${DEBUG-0}"') \
+	  printf(" compare called with %s %s\n", a, b) >"/dev/stderr"
+	while (length(a) && length(b)) {
+	  if (a ~ /^[0-9]/) {
+	    match(a, /^[0-9]+/)
+	    xa = substr(a, 1, RLENGTH); a = substr(a, RLENGTH+1) }
+	  else {
+	    match(a, /^[^0-9]+/)
+	    xa = substr(a, 1, RLENGTH); a = substr(a, RLENGTH+1) }
+	  if (b ~ /^[0-9]/) {
+	    match(b, /^[0-9]+/)
+	    xb = substr(b, 1, RLENGTH); b = substr(b, RLENGTH+1) }
+	  else {
+	    match(b, /^[^0-9]+/)
+	    xb = substr(b, 1, RLENGTH); b = substr(b, RLENGTH+1) }
+	  if ('"${DEBUG-0}"') \
+	    printf("  compare2 %s %s <%s> <%s>\n", xa, xb, a, b)>"/dev/stderr"
+	  if ( (xa xb) ~ /^[0-9]+$/) {
+	    if (xa+0 < xb+0) return 1
+	    if (xa+0 > xb+0) return 0 }
+	  else {
+	    if (xa "" < xb "") return 1
+	    if (xa "" > xb "") return 0 }
+	  }
+	if (length(b)) return 1
+	else return 0
+	}
+    '
+
+#-------------------------------------------------------------------------------
+list_available_rpm $SRC |
+#-------------------------------------------------------------------------------
+#
+# Find all installed packages with patches
+#
+(
+  case "${EFLAG}${OFLAG}${UFLAG}" in
+    '') 
+        # Note! Here we'd better ot use gawk, not awk (mawk which exists in Debian)
+        gawk "$NEWER"'	# omit all but newest of multiple available patches
+  		{ L0=R0; L1=R1; L2=R2
+		  R0=$0
+		  R1=$0; sub(/\.[^.]+\.rpm$/,"",R1) 	# pkg name+version
+		  R2=$0; sub(/-[^-]+-[^-]+$/, "",R2) 	# pkg name-version
+		  if ((R2 == L2) && newer(R1, L1)) {R0=L0; R1=L1}
+		  if ((R2 != L2) && L0) {print L0}
+		}
+	END	{ print R0 }';;
+     *) cat -;;
+  esac
+) 

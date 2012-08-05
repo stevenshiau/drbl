@@ -1,0 +1,22 @@
+#!/bin/bash
+# Author: Steven Shiau <steven _at_ nchc org tw>
+# License: GPL
+
+# Append a default search path.
+PATH="$PATH:/sbin:/usr/sbin:/bin:/usr/bin:/usr/X11R6/bin"
+export PATH
+# Exclude some devices, like lo, sit0... It's regular expression.
+exluding_dev="(lo|sit[0-9]+)"
+export LC_ALL=C
+if [ -d /sys/class/net/ ]; then
+  # kernel support sysfs, so get the NIC devices from /sys
+  NETDEVICES="$(unalias ls &>/dev/null; ls /sys/class/net/ | grep -v -E "$exluding_dev")"
+elif [ -f /proc/net/dev ]; then
+  # kernel do not support sysfs, so get the NIC devices from /proc
+  NETDEVICES="$(cat /proc/net/dev | grep "^.*:" | cut -d: -f1 | grep -v -E "$exluding_dev")"
+else
+  exit 1
+fi
+
+echo "$NETDEVICES"
+exit 0

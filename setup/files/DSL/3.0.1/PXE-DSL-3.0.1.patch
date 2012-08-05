@@ -1,0 +1,28 @@
+--- linuxrc.DSL-3.0.1.orig	2006-11-10 16:53:29.000000000 +0800
++++ linuxrc.DSL-3.0.1.drbl	2006-11-13 18:34:22.000000000 +0800
+@@ -351,6 +351,8 @@
+ test -n "$FOUND_SCSI" -a -z "$NOSCSI" && DEVICES="$DEVICES /dev/sd?[1-9] /dev/sd?[1-9][0-9]"
+ DEVICES="$DEVICES /dev/hd?[1-9] /dev/hd?[1-9][0-9]"
+ case "$CMDLINE" in *fromhd=/dev/*) DEVICES="$fromhd"; ;; esac
++# Unset all devices if booted from initrd
++case "$CMDLINE" in *frominitrd*) DEVICES=""; ;; esac
+ for i in $DEVICES
+ do
+ echo -n "${CRE}${BLUE}Looking for CDROM in: ${MAGENTA}$i${NORMAL}   "
+@@ -366,6 +368,16 @@
+ fi
+ done
+ 
++# Look for KNOPPIX directory without mounting anything
++case "$CMDLINE" in *frominitrd*)
++if test -f /cdrom/$KNOPPIX_DIR/$KNOPPIX_NAME
++then
++echo -n "${CRE} ${GREEN}Accessing DSL image at ${MAGENTA}/cdrom/${KNOPPIX_DIR}/${KNOPPIX_NAME}${GREEN} on initrd...${NORMAL}" ;
++FOUND_KNOPPIX="initrd" ;
++fi
++;;
++esac
++
+ # Harddisk-installed script part version has been removed
+ # (KNOPPIX can be booted directly from HD now).
+ 

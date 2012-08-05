@@ -1,0 +1,212 @@
+#!/bin/bash
+# Author: Blake, Kuo-Lien Huang
+# License: GPL
+# Description:
+#   * creat and delete accounts for DRBL, actually it for NIS (YP).
+#
+# Modified by Steven Shiau <steven@nchc.org.tw> to used in DRBL for Redhat
+
+# Load DRBL setting and functions
+DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/opt/drbl/}"
+. $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
+
+#
+USAGE() {
+  echo "Usage: "
+  echo "Option 1:"
+  echo "$0 [-s|--single] <username> <groupname>"
+  echo "  generate a single user <username> with group <groupname>"
+  echo "Option 2:"
+  echo "$0 [-r|--range] <prefix> <start> <end> <groupname> [<passwd_opt>]"
+  echo "  generate a range of users from <prefix><start> to <prefix><end> with group <groupname>,"
+  echo "  passwd_opt:"
+  echo "  If one digit, it's the length of randomly created password."
+  echo "  If blank, it will be randomly generated with some (say:8) characters."
+  echo "  Other setting is the password itself."
+  echo "Option 3:"
+  echo "$0 [-f|--file] <filename>"
+  echo "  generate users that are listed in <filename>."
+  echo "  the username/password pairs are listed in $useradd_gen"
+  echo 
+  echo "  the format of the file <filename>: PREFIX START END GROUPNAME PASSWD_OPT"
+  echo "  passwd_opt:"
+  echo "  If one digit, it's the length of randomly created password."
+  echo "  If blank, it will be randomly generated with some (say:8) characters."
+  echo "  Other setting is the password itself."
+  echo "  for example: "
+  echo "  # account for student"
+  echo "  s		89101	89129  g3c9   8"
+  echo "  # account for teacher"
+  echo "  tckps	01	99   teacher  drblnice"
+  echo "Option 4:"
+  echo "$0 [-l|--list] <filename>"
+  echo "  generate users that are listed in <filename>."
+  echo "  the username/password pairs are listed in $useradd_gen"
+  echo 
+  echo "  the format of the file <filename>: ID GROUPNAME PASSWD_OPT"
+  echo "  passwd_opt:"
+  echo "  If one digit, it's the length of randomly created password."
+  echo "  If blank, it will be randomly generated with some (say:8) characters."
+  echo "  Other setting is the password itself."
+  echo "  for example: "
+  echo "  # account for student001"
+  echo "  student001 g3c9 8"
+  echo "  # account for student002"
+  echo "  student002 g3c9 drblnice"
+}
+
+
+# 
+check_if_root
+
+# Parse command-line options
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -s|--single)
+		format="single"
+		shift; username=$1
+		shift; groupname=$1
+		shift;;
+    -r|--range)
+		format="range"
+		shift; prefix=$1
+		shift; start=$1
+		shift; end=$1
+		shift; groupname=$1
+		shift
+                if [ -z "$(echo $1 |grep ^-.)" ]; then
+                  # skip the -xx option, in case 
+                  passwd_opt=$1
+                fi
+		shift ;;
+    -f|--file)  
+		format="file"
+		shift; filename=$1
+		shift ;;
+    -l|--list)  
+		format="list"
+		shift; filename=$1
+		shift ;;
+    -*)		echo "${0}: ${1}: invalid option" >&2
+		USAGE
+		exit 2 ;;
+    *)		break ;;
+  esac
+done
+
+# check if groupname is not valid one
+if `echo "$groupname" | grep -q "^[0-9]"`; then
+   echo "groupname can NOT begin with digits (0-9)!"
+   echo "The one you specified is \"$groupname\""
+   echo "Program terminated"
+   exit 1
+fi 
+
+#
+case "$format" in
+  single)
+        [ -z "$username" ] && echo "No username! Program terminated!" && exit 1
+        [ -z "$groupname" ] && echo "No groupname! Program terminated!" && exit 1
+        ;;
+  range)
+        [ -z "$prefix" ] && echo "No prefix! Program terminated!" && exit 1
+        [ -z "$start" ] && echo "No start! Program terminated!" && exit 1
+        [ -z "$end" ] && echo "No end! Program terminated!" && exit 1
+        [ -z "$groupname" ] && echo "No groupname! Program terminated!" && exit 1
+        ;;
+  file)
+        [ -z "$filename" ] && echo "No filename! Program terminated!" && exit 1
+        ;;
+  list)
+        [ -z "$filename" ] && echo "No filename! Program terminated!" && exit 1
+        ;;
+  *)
+        USAGE
+        exit 1
+        ;;
+         
+esac
+
+# check the necessary files
+file_to_be_checked="$useradd_range_exec_file $userdel_range_exec_file $useradd_file_exec_file $userdel_file_exec_file $useradd_list_exec_file $userdel_list_exec_file" 
+
+for ifile in $file_to_be_checked; do 
+  if ! type "$ifile" &>/dev/null; then
+    echo "No $ifile file!"
+    exit 1
+  fi
+done
+
+#
+useradd_gen_tmp="$(mktemp /tmp/useradd.XXXXXX)"
+
+# file to store the username and password, clean it first.
+[ -f "$useradd_gen" ] && rm -f $useradd_gen
+
+# add/delete single user
+case "$format" in
+   single)
+      # add single users
+      echo "Password of $username ? (It will not be echoed in the screen. If you want to use random password, just press Enter)"
+      read -s passwd_single1
+      if [ -z "$passwd_single1" ]; then
+        make_random_password
+        passwd_single1=$random_password
+      else
+        echo "Retype password of $username: (It will not be echoed in the screen)"
+        read -s passwd_single2
+        while [ "$passwd_single1" != "$passwd_single2" ]; do
+          echo "Sorry, passwords do not match"
+          echo "Password of $username ? (It will not be echoed in the screen. If you want to use random password, just press Enter)"
+          read -s passwd_single1
+          echo "Retype password of $username: (It will not be echoed in the screen)"
+          read -s passwd_single2
+        done
+      fi
+      echo "The password of $username is \"$passwd_single1\"" >> $useradd_gen_tmp
+      run_cmd="/usr/sbin/groupadd $groupname; /usr/sbin/useradd -m $username -g $groupname; echo \"$username:$passwd_single1\" | /usr/sbin/chpasswd"
+      ;;
+
+   range)
+      # add a range of users
+      run_cmd="$useradd_range_exec_file $prefix $start $end $groupname $passwd_opt"
+      ;;
+
+   file)
+      # add users which are listed in file
+      run_cmd="$useradd_file_exec_file $filename"
+      ;;
+   list)
+      # add users which are listed line by line in file
+      run_cmd="$useradd_list_exec_file $filename"
+      ;;
+
+esac
+
+echo "Creating..."
+eval "$run_cmd | tee -a $useradd_gen_tmp"
+
+# filter those we do not want... just output the password and username
+grep "The password of" $useradd_gen_tmp > $useradd_gen
+chmod 600 $useradd_gen
+chown root.root $useradd_gen
+
+#
+if [ -e /etc/debian_version ]; then
+  tune-debian-dev-group-perm -g "$desktop_user_group_debian" -e -r
+fi
+#
+echo "Now update the NIS data in /var/yp ..."
+make -C /var/yp/
+echo
+#
+[ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+echo "***********************************************************"
+echo "The username/password pairs are listed in \"$useradd_gen\"."
+echo "***********************************************************"
+[ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+
+[ -f "$useradd_gen_tmp" ]  && rm -f $useradd_gen_tmp
+
+echo "Done."
+exit 0

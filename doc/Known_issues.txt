@@ -1,0 +1,131 @@
+Known issues:
+1. SIS900 network card (Note: SIS191 has same problem, however, since Etherboot/gPXE does not support SIS191, this workaround won't work for SIS191):
+   sis900 client does NOT work with pxelinux >=3.07 simple menu, it will hang like this:
+   http://drbl.sf.net/screenshot/?in_path=/00_DRBL#xxx-sis900-client-hang.jpg
+   you WON'T see this:
+   http://drbl.sf.net/screenshot/?in_path=/00_DRBL#syslinux_drbl.jpg
+   The client will hang before this.
+   It's reported to:
+   http://syslinux.zytor.com/archives/2005-April/005030.html
+
+   There *IS* a workaround (Thanks to Alexander Heinz for providing that in syslinux mailing list):
+   1. Install DRBL version 1.5.8-1 or newer one, finish all the setup.
+   2. Find your SIS900 Clients' MAC vendor prefix, for example, if their MAC addresses are AA:BB:CC:DD:XX:YY, the MAC vendor prefix is AA:BB:CC.
+   3. Modify the file /etc/dhcpd.conf (RH-like) or /etc/dhcp3/dhcpd.conf (Debian based):
+   ---------------------------------------------------------
+#if substring (option vendor-class-identifier, 0, 3) = "PXE" {
+#     # **************************************************************
+#     # ***MODIFY*** the MAC vendor prefix of client network card here.
+#     # **************************************************************
+#     # For annoying sis900 network card, maybe it's 00:07:95, 00:0C:6E...
+#     if substring (hardware, 1, 3) = 00:0C:6E {
+#         # eb-5.4.3-etherboot-pci.zpxe is a all-in-one pxe image, works for most NIC.
+#         # sis900.zpxe is specially for sis900 NIC.
+#         # Try either one.
+#         #filename = "eb-5.4.3-etherboot-pci.zpxe";
+#         filename = "sis900.zpxe";
+#     }
+#}
+   ---------------------------------------------------------
+   uncomment the "if block", and change the MAC vendor prefix to yours. In this example, we use AA:BB:CC like this:
+   ---------------------------------------------------------
+if substring (option vendor-class-identifier, 0, 3) = "PXE" {
+     # **************************************************************
+     # ***MODIFY*** the MAC vendor prefix of client network card here.
+     # **************************************************************
+     # For annoying sis900 network card, maybe it's 00:07:95, 00:0C:6E...
+     if substring (hardware, 1, 3) = AA:BB:CC {
+         # eb-5.4.3-etherboot-pci.zpxe is a all-in-one pxe image, works for most NIC.
+         # sis900.zpxe is specially for sis900 NIC.
+         # Try either one.
+         #filename = "eb-5.4.3-etherboot-pci.zpxe";
+         filename = "sis900.zpxe";
+     }
+}
+   ---------------------------------------------------------
+   4. restart dhcpd service, like "/etc/init.d/dhcpd restart" (RH-like) or "/etc/init.d/dhcp3-server restart".
+
+   5. Start your annoying sis900 box! It should work now.
+
+2. Clonezilla, from version 1.4.0, is ABLE to save and restore LVM 2 partitions.
+   However, LVM 1 is not supported yet.
+
+3. Some distribution does not install perl-Digest-SHA1. If rpm complains perl-Digest-SHA1 is required, you have to install perl-Digest-SHA1 first. For FC1, install it like:
+   rpm -Uvh http://opensource.nchc.org.tw/fedora/linux/core/1/i386/os/Fedora/RPMS/perl-Digest-SHA1-2.01-15.i386.rpm
+
+4. OpenSuSE 10.0
+   Kernel 2.6.13-15-default in the DRBL server has some BIG problems with NFS lockd. It will cause client won't run OpenOffice.org, rpm, clonezilla and other programs successfully.
+   Errors are like:
+   a. OpenOffice.org
+   -----
+   Unable to start it or save file
+   -----
+   b. rpm:
+   -----
+   linux102:~ # rpm -q drbl
+   error: cannot get shared lock on /var/lib/rpm/Packages
+   error: cannot open Packages index using db3 - Operation not permitted (1)
+   error: cannot open Packages database in /var/lib/rpm
+   package drbl is not installed
+   -----
+   c. clonezilla/partimage:
+   -----
+   imagefile locked
+   The following imagefile is locked.
+   Do you want to wait and retry or change image filename ?
+   File: /mnt/test.000                                     
+   To change the filename, please enter a full path        
+   (location + filename) without volume number at the end, 
+   and press "Change"                 
+   -----
+
+   Solution:
+   1. Use different kernel in the server, 
+      a. the update kernel
+         rpm -ivh ftp://ftp.twaren.net/Linux/SuSE/i386/update/10.0/rpm/i586/kernel-default-2.6.13-15.7.i586.rpm
+      or 
+      b. 2.6.11.4-20a-default from SuSE 9.3 is also tested ok.
+      Then reboot the server.
+   2. Check the bugzilla
+      https://bugzilla.novell.com/show_bug.cgi?id=128784
+      for more details.
+
+5. Ubuntu Breezy
+   The dhcp3-server 3.0.2-1ubuntu6 in Breezy has a problem with "range" option
+   in dhcpd.conf, i.e. when client request IP address 2nd time before its IP
+   address expires, it will get the different IP address from that gotten in the 1st time. 
+   One of the solution:
+   Use the dhcp3-server (dhcp3-server_3.0.3-6ubuntu4) from Dapper. 
+
+6. Fedora Core 5
+   The lftp 3.4.2-5 came with Fedora Core 5 has a bug¡Awhich will cause some problem when it try to browse some URLs. Sometimes it will NOT find kernel rpm for clients when you run drblsrv -i. It is recommended to upgrade the whole system, or at least you upgrade lftp. I386 lftp can be got here:
+   http://free.nchc.org.tw/fedora/linux/core/updates/5/i386/lftp-3.4.7-2.FC5.i386.rpm
+   You can run this command directly to upgrade:
+   yum install lftp
+   or 
+   rpm -Uvh http://free.nchc.org.tw/fedora/linux/core/updates/5/i386/lftp-3.4.7-2.FC5.i386.rpm
+
+7. Fedora 7
+   After an upgrade in Fedora 7, nfs-utils is 1.1.0 and kernel is 2.6.22-1, you will encounter error meeages in DRBL client like:
+   mount.nfs: /etc is already mounted or busy
+   "Starting rpcbind: rpcbind: error while loading shared libraries: libtirpc.so.1: cannot open shared object file: No such file or directory [FAILED]"
+   The solution is not to use kernel 2.6.22 for DRBL client:
+   1. wget http://os.nchc.org.tw/fedora/linux/releases/7/Fedora/i386/os/Fedora/kernel-2.6.21-1.3194.fc7.i586.rpm
+   2. run
+   /opt/drbl/sbin/drblsrv-offline -k kernel-2.6.21-1.3194.fc7.i586.rpm
+   3. reboot the client.
+   It should work.
+
+8. Mandriva 2008.1
+   Mode of udp-receiver and udp-sender in /usr/sbin/ (udpcast-0.0-0.20071228.1mdv2008.1) are wrong:
+   -rw-r--r-- 1 root root 47K 2008-02-06 04:37 udp-receiver
+   -rw-r--r-- 1 root root 51K 2008-02-06 04:37 udp-sender
+   Remember to change the mode before you use clonezilla server edition (chmod
+   755 /usr/sbin/udp-*).
+
+   Ref: https://qa.mandriva.com/show_bug.cgi?id=40247
+
+   
+
+Updated on Apr/20/2008.
+Steven Shiau.

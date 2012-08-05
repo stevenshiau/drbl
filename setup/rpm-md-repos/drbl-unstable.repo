@@ -1,0 +1,9 @@
+[drbl-unstable]
+name=DRBL unstable packages
+enabled=0
+autorefresh=0
+baseurl=http://free.nchc.org.tw/drbl-core/i386/RPMS.drbl-unstable
+type=rpm-md
+gpgcheck=1
+gpgkey=http://drbl.nchc.org.tw/GPG-KEY-DRBL
+keeppackages=0

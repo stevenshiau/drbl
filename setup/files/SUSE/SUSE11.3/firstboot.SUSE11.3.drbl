@@ -1,0 +1,59 @@
+#!/bin/bash
+#
+# firstboot:         Starts the firstboot X config
+### BEGIN INIT INFO
+# Provides:          firstboot
+# Required-Start:    nfs
+# Should-Start:      kbd haldaemon
+# Required-Stop:
+# Default-Start:     5
+# Default-Stop:
+# Description:       Config X
+### END INIT INFO
+#
+# chkconfig: 5 29 95
+#
+# description:       Configure the X config.
+#                    If /etc/reconfigSys exists, run the reconfiguration
+#		     program and remove /etc/reconfigSys when done.
+#                    Also will run if 'reconfig' is on the kernel cmdline.
+#
+# Modified by Steven Shiau <steven _at_ nchc org tw> to use in 
+# DRBL for SuSE 2005/7/31
+# 
+
+# load the display setting
+. /etc/sysconfig/displaymanager
+default_dm="$DISPLAYMANAGER"
+# if default_dm is unset, exit
+[ -z "$default_dm" ] && echo "Default DM is unset! Skip firstboot!" && exit 0
+
+case "$1" in
+ restart)
+	[ -f /etc/X11/xorg.conf ]  && rm -f /etc/X11/xorg.conf
+	$0 start
+	;;
+ start)
+        if ! type sax2 &>/dev/null; then
+            echo "Sax2 not found! Skip configuring X config."
+	    exit 3
+	fi
+        if grep -i reconfig /proc/cmdline >/dev/null || [ -f /etc/reconfigSys ]; then
+	    echo "Running system reconfiguration tool"
+            sax2
+	    rm -f /etc/reconfigSys
+	    exit 0
+	fi
+
+	runlevel=$(set -- $(runlevel); eval "echo \$$#" )
+	# DRBL, no matter runlevel 5 in /etc/inittab or now in runlevel 5
+	if grep -q "^id:5:initdefault:" /etc/inittab || [ "x$runlevel" = x5 ]; then
+	    if [ ! -f /etc/X11/xorg.conf ] ; then
+		echo "X is not configured.  Running configure program..."
+                sax2
+		echo "X is now configured."
+	    fi
+	fi
+	exit 0
+	;;
+esac

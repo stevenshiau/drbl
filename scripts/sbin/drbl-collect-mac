@@ -1,0 +1,246 @@
+#!/bin/bash
+# Author: Blake, Kuo-Lien Huang
+# License: GPL
+# Description:
+#   * get the MAC address connected to DRBL server, and seperate them to
+#     different files, according the no. of NICs.
+#   * 2003/08/12
+#       ask user if he would like to detect MAC address on all NICs
+#
+# Modified by Steven Shiau <steven@nchc.org.tw> to used in DRBL for Redhat
+# output files are:  macadr-$ethx.txt
+
+# Load DRBL setting and functions
+DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/opt/drbl/}"
+
+. $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
+
+#
+usage() {
+  echo "Collect the MAC addresses of DRBL."
+  echo "Usage: $0 [OPTION] request_ethernet_port_list..."
+  echo "OPTION:"
+  language_help_prompt_by_idx_no
+  echo "-v, --verbose:  verbose mode."
+  echo "-n, --no-service-prompt: do not show service restart messages."
+  echo "Ex: $0 eth1 eth2"
+}
+
+#
+server_to_stop_now_debian="$DHCP_SRV_NAME tftpd-hpa"
+server_to_stop_now_rh="dhcpd xinetd"
+server_to_stop_now_suse="dhcpd xinetd"
+#
+check_if_root
+
+# default settings:
+service_restart_prompt="yes"
+
+# main
+# Parse command-line options
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -l|--language)
+	shift
+        if [ -z "$(echo $1 |grep ^-.)" ]; then
+          # skip the -xx option, in case 
+	  specified_lang="$1"
+	  shift
+        fi
+	;;
+    -n|--no-service-prompt)
+        service_restart_prompt="no"
+	shift;;
+    -v|--verbose)
+        shift
+        VERBOSE=y ;;
+    -q|--quiet) shift ; quiet=-q ;;
+    --help)     shift ; do_help=y ;;
+    --)         shift ; break ;;
+    *)          break ;;
+  esac
+done
+
+#
+eth_port="$*"
+request_eth_port="$eth_port"
+echo "request_eth_port:$request_eth_port"
+if [ -z "$request_eth_port" ]; then
+    usage
+    exit 2
+fi
+
+#
+ask_and_load_lang_set $specified_lang
+
+# stop inetd, dhcp
+#echo "Now stop the service dhcp and xinetd if they are running!"
+if [ -e /etc/debian_version ]; then
+  # Debian
+  for serv_st in $server_to_stop_now_debian; do 
+      echo "Stopping $serv_st ..."
+      RETVAL=0
+      /etc/init.d/$serv_st stop
+      RETVAL=$?
+      if [ "$RETVAL" -gt 0 ]; then
+           echo "XXXXXXX        XXXXXXX       XXXXXXX"
+           echo "Failed to stop service $serv_st !!!"
+           exit $RETVAL
+      fi
+  done
+elif [ -e /etc/SuSE-release ]; then
+  # SuSE
+  for serv_st in $server_to_stop_now_suse; do 
+      # service is running
+      echo "Stopping $serv_st ..."
+      RETVAL=0
+      /etc/init.d/$serv_st stop
+      RETVAL=$?
+      if [ "$RETVAL" -gt 0 ]; then
+           echo "XXXXXXX        XXXXXXX       XXXXXXX"
+           echo "Failed to stop service $serv_st !!!"
+           exit $RETVAL
+      fi
+  done
+else
+  # RH-like
+  for serv_st in $server_to_stop_now_rh; do 
+    if [ -f /var/lock/subsys/$serv_st ] ; then
+      # service is running
+      echo "Stopping $serv_st ..."
+      RETVAL=0
+      /etc/init.d/$serv_st stop
+      RETVAL=$?
+      if [ "$RETVAL" -gt 0 ]; then
+           echo "XXXXXXX        XXXXXXX       XXXXXXX"
+           echo "Failed to stop service $serv_st !!!"
+           exit $RETVAL
+      fi
+    fi 
+  done
+fi
+
+# Clean the old files macadr-ethx.txt
+if [ "$(ls macadr-eth*.txt 2> /dev/null)" != "" ]; then
+  echo "deleting old macadr-eth*.txt file..."
+  rm -f macadr-eth*.txt
+fi
+
+drblmac=$(mktemp -d /tmp/drbl_nic.XXXXXX) || exit 1
+## function: mac_collect_status
+mac_collect_status() {
+  [ -f $drblmac/setup-drbl-auto.all ] && rm -f $drblmac/setup-drbl-auto.all
+  for eth in $request_eth_port; do
+      cat $drblmac/setup-drbl-auto.$eth >> $drblmac/setup-drbl-auto.all
+  done
+  num=$(perl -ane 'print "\U$F[0]\n"' $drblmac/setup-drbl-auto.all | sort | uniq | wc | awk '{print $1}')
+  echo "======================================="
+  #perl -ane 'print "\U$F[0]\n"' $drblmac/setup-drbl-auto.all | sort | uniq
+  # uniq without sort
+  perl -ane 'print "\U$F[0]\n"' $drblmac/setup-drbl-auto.all | perl -ne 'print unless $lines{$_}++'
+  echo "Total: $num"
+  echo "======================================="
+}
+
+## function: stop
+stop() {
+  killall /usr/sbin/tcpdump
+}
+
+## main
+for eth in $request_eth_port; do
+    #/usr/sbin/tcpdump -qte -i $eth > $drblmac/setup-drbl-auto.$eth 2> /dev/null &
+    /usr/sbin/tcpdump -teln -i $eth broadcast and port bootpc > $drblmac/setup-drbl-auto.$eth 2> /dev/null &
+done
+
+##
+echo "$msg_delimiter_star_line"
+echo "$msg_start_detect_MAC_addresse"
+echo "$msg_enter_1_or_press_enter_to_view"
+echo "$msg_enter_2_or_press_q_to_quit"
+while read CMD; do
+  case "$CMD" in
+  2|[q]|[Q])
+    break
+    ;;
+  *)
+    mac_collect_status
+    echo "$msg_enter_1_or_press_enter_to_view"
+    echo "$msg_enter_2_or_press_q_to_quit"
+  esac
+done
+
+## analyze the mac address 
+for eth in $request_eth_port; do
+    #perl -ane 'print "\U$F[0]\n"' $drblmac/setup-drbl-auto.$eth | sort | uniq > $drblmac/macadr-auto-$eth
+    #uniq without sort
+    perl -ane 'print "\U$F[0]\n"' $drblmac/setup-drbl-auto.$eth | perl -ne 'print unless $lines{$_}++' > $drblmac/macadr-auto-$eth
+done
+
+ethmatch=""
+for eth in $request_eth_port; do
+  if [ -f $drblmac/macadr-auto-$eth ]; then
+     for ethx in $request_eth_port; do
+       if [ "$ethx" = "$eth" ]; then
+         ethmatch="$eth=$eth $ethmatch"
+       elif [ -f $drblmac/macadr-auto-$ethx ]; then
+         #echo "diff $drblmac/macadr-auto-$eth $drblmac/macadr-auto-$ethx"
+         #read ANS
+         if [ -z "$(diff $drblmac/macadr-auto-$eth $drblmac/macadr-auto-$ethx)" ]; then
+           [ -f $drblmac/macadr-auto-$ethx ] && rm -f $drblmac/macadr-auto-$ethx
+           ethmatch="$eth=$ethx $ethmatch"  
+         fi
+       fi
+     done
+     
+  fi
+done
+
+collect_flist=
+for eth in $request_eth_port; do
+  if [ ! -f macadr-$eth.txt ]; then
+    touch macadr-$eth.txt
+  fi
+  collect_flist="$collect_flist macadr-$eth.txt"
+done
+
+for ethmac in `ls $drblmac/macadr-auto-*`; do
+  eth=${ethmac/$drblmac\/macadr-auto-/}
+  run=1
+  while [ $run -eq 1 ]; do
+    for match in $ethmatch; do
+      if [ "$macadr" = "" ]; then
+        if ! read macadr ; then 
+          run=0
+          break
+        fi
+      fi
+      if [ -n "$(echo "$match" | grep -e "^$eth=")" ]; then
+        ethx=${match/$eth=/} 
+	# We only use lowercase MAC address, since pxelinux file name uses lowercase.
+        echo "$macadr" | tr '[A-Z]' '[a-z]' >> macadr-$ethx.txt
+        if ! read macadr ; then 
+          run=0
+          break
+        fi
+      fi 
+    done
+  done < $ethmac
+done
+
+# 
+for imac in ./macadr-*.txt; do
+  dos2unix $imac 2> /dev/null
+done
+
+# clean the tmp directory
+[ -d "$drblmac" -a -n "$(echo $drblmac | grep "drbl_nic")" ] && rm -rf $drblmac
+
+echo "$msg_delimiter_star_line"
+# message for re-start dhcpd, xinetd
+if [ "$service_restart_prompt" = "yes" ]; then
+  echo "$msg_dhcpd_tftpd_stopped_need_restart_if_you_need_them"
+fi
+[ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+echo "$msg_the_collected_MAC_addr_from [$request_eth_port] $msg_are_saved_in_files_separately:$collect_flist."
+[ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL

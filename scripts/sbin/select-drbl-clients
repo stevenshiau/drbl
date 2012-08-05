@@ -1,0 +1,365 @@
+#!/bin/bash
+# Author: Steven Shiau <steven _at_ nchc org tw>
+# License: GPL
+# Description: To select the DRBL clients and show the results (IP or MAC)
+
+# Load DRBL setting and functions
+DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/opt/drbl/}"
+
+. $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
+
+MAX_DIALOG_HEIGHT="10"
+
+#
+ask_by_MAC_or_IP() {
+  # Note!!! We must use common tmp file (ANS_TMP) to pass the result, 
+  # we can NOT
+  # just echo result in the end of this function. Otherwise in newer
+  # dialog (FC3), the script will wait for the end of function, then it 
+  # shows the result. 
+  # There is nothing in the screen when function is called if we just 
+  # use echo the result to stdout.
+  ANS_TMP=$1
+  local TMP=`mktemp /tmp/drbl-tmp.XXXXXX`
+  local mac_list_opt1 mac_list_opt2 mac_list_opt3 mac_grp_opt1 mac_grp_opt2 mac_grp_opt3 M ip_addr_list_opt
+  trap "[ -f "$TMP" ] && rm -f $TMP" HUP INT QUIT TERM EXIT
+  # if hardware is set in dhcpd.conf, then we can choose hosts via MAC
+  # example:  "hardware ethernet  00:02:e3:53:34:6e;
+  if grep -q -i "^[[:space:]]*hardware ethernet .*;" $DHCPDCONF_DIR/dhcpd.conf; then
+    mac_list_opt1="by_MAC_addr_list"
+    mac_list_opt2="$(rep_whspc_w_udrsc "$msg_set_by_MAC_address_list")"
+    if [ -n "$(LC_ALL=C ls $drbl_syscfg/client-MAC-group-* $drbl_syscfg/MAC-grp-* 2>/dev/null)" ]; then
+     mac_grp_opt1="by_MAC_addr_grp"
+     mac_grp_opt2="$(rep_whspc_w_udrsc "$msg_set_by_MAC_address_grp")"
+    fi
+  fi
+  if [ -n "$(LC_ALL=C ls $drbl_syscfg/client-IP-group-* $drbl_syscfg/IP-grp-* 2>/dev/null)" ]; then
+    ip_grp_opt1="by_IP_addr_grp"
+    ip_grp_opt2="$(rep_whspc_w_udrsc "$msg_set_by_IP_address_grp")"
+  fi
+  $DIA --backtitle "$msg_nchc_free_software_labs" --title "$msg_drbl_title" \
+  --menu "$msg_specify_hosts,$msg_hint_assign_IP_group,$msg_hint_assign_MAC_group,\n$msg_choose_mode:" 0 0 0 \
+  $mac_list_opt1 $mac_list_opt2 \
+  $mac_grp_opt1 $mac_grp_opt2 \
+  "by_IP_addr_list" "$msg_set_by_IP_address_list" \
+  $ip_grp_opt1 $ip_grp_opt2 \
+  2> $TMP
+  retval=$?
+  [ $retval -eq 1 ] && exit 1
+  M="$(cat $TMP)"
+  case "$M" in
+    "by_MAC_addr_list") 
+       # HOST_MAC_TABLE is not created by drblpush, we have to create it.
+       gen_HOST_MAC_TABLE
+       select_hosts_by_MAC $ANS_TMP
+       ;;
+    "by_MAC_addr_grp") 
+       # HOST_MAC_TABLE is not created by drblpush, we have to create it.
+       gen_HOST_MAC_TABLE
+       select_hosts_by_MAC_GRP $ANS_TMP
+       ;;
+    "by_IP_addr_list")
+       select_hosts_by_IP $ANS_TMP
+       ;;
+    "by_IP_addr_grp")
+       select_hosts_by_IP_GRP $ANS_TMP
+       ;;
+  esac 
+  [ -f "$TMP" ] && rm -f $TMP
+  return 0
+}
+#
+select_hosts_by_IP() {
+  # Note!!! We must use common tmp file (ANS_TMP) to pass the result, 
+  # we can NOT
+  # just echo result in the end of this function. Otherwise in newer
+  # dialog (FC3), the script will wait for the end of function, then it 
+  # shows the result. 
+  # There is nothing in the screen when function is called if we just 
+  # use echo the result to stdout.
+  ANS_TMP=$1
+  local TMP=`mktemp /tmp/ocs.XXXXXX`
+  trap "[ -f "$TMP" ] && rm -f $TMP" HUP INT QUIT TERM EXIT
+  local numhosts=0
+  local IP_list host_grp hostinfo igrp list_height
+  # list the nodes
+  awk -F" " '!/^#/ {print $1, $2, "off"}' $IP_HOST_TABLE >> $TMP
+  IP_list="$(cat $TMP)"
+
+  numhosts="$(echo $IP_list | grep -o off | wc -w)"
+  #numhosts=$((numhosts+3))
+  if [ $numhosts -gt 0 ]; then
+    if [ $numhosts -lt $MAX_DIALOG_HEIGHT ]; then
+      list_height=$numhosts
+    else
+      list_height=$MAX_DIALOG_HEIGHT
+    fi
+    $DIA \
+      --separate-output \
+      --backtitle "$msg_nchc_free_software_labs" \
+      --title "$msg_drbl_title" \
+      --checklist "$msg_specify_hosts ($msg_press_space_to_mark_selection):" 20 70 \
+      $list_height $IP_list 2> $TMP
+    retval=$?
+    [ $retval -eq 1 ] && exit 1
+    # Convert the selected group to IP lists
+    if grep -qE "(client-IP-group|IP-grp)" $TMP; then
+      selected_grp="$(grep -Eo "(client-IP-group-.*|IP-grp-.*)" $TMP)"
+      for i in $selected_grp; do
+        LC_ALL=C perl -p -i -e "s/$i//g" $TMP
+	cat $drbl_syscfg/$i >> $TMP
+      done
+    fi
+    target_hosts="$(cat $TMP)"
+  else
+    echo "No hosts in $drblroot!!!... Abort!"
+    exit 1
+  fi
+  echo $target_hosts > $ANS_TMP
+  [ -f "$TMP" ] && rm -f $TMP
+  return 0
+} # end of select_hosts_by_IP
+#
+select_hosts_by_IP_GRP() {
+  # Note!!! We must use common tmp file (ANS_TMP) to pass the result, 
+  # we can NOT
+  # just echo result in the end of this function. Otherwise in newer
+  # dialog (FC3), the script will wait for the end of function, then it 
+  # shows the result. 
+  # There is nothing in the screen when function is called if we just 
+  # use echo the result to stdout.
+  ANS_TMP=$1
+  local TMP=`mktemp /tmp/ocs.XXXXXX`
+  trap "[ -f "$TMP" ] && rm -f $TMP" HUP INT QUIT TERM EXIT
+  local hostlist=""
+  local numhosts=0
+  local IP_list host_grp hostinfo igrp list_height numlist
+  # Part I: list the IP group
+  numlist=0
+  for igrp in $drbl_syscfg/client-IP-group-* $drbl_syscfg/IP-grp-*; do
+    [ ! -e "$igrp" ] && continue
+    host_grp="$(basename $igrp)"
+    hostinfo="$(head -n 2 $igrp)"
+    hostinfo="$(echo $hostinfo | tr " " "_")..."
+    hostlist="$hostlist $host_grp $hostinfo off"
+    numlist="$((numlist+1))"
+  done
+  echo $hostlist > $TMP
+
+  IP_list="$(cat $TMP)"
+  if [ $numlist -gt 0 ]; then
+    if [ $numlist -lt $MAX_DIALOG_HEIGHT ]; then
+      list_height=$numlist
+    else
+      list_height=$MAX_DIALOG_HEIGHT
+    fi
+    $DIA \
+      --separate-output \
+      --backtitle "$msg_nchc_free_software_labs" \
+      --title "$msg_drbl_title" \
+      --checklist "$msg_specify_hosts ($msg_press_space_to_mark_selection):" 20 70 \
+      $list_height $IP_list 2> $TMP
+    retval=$?
+    [ $retval -eq 1 ] && exit 1
+    # Convert the selected group to IP lists
+    if grep -qE "(client-IP-group|IP-grp)" $TMP; then
+      selected_grp="$(grep -Eo "(client-IP-group-.*|IP-grp-.*)" $TMP)"
+      for i in $selected_grp; do
+        perl -p -i -e "s/$i//g" $TMP
+	cat $drbl_syscfg/$i >> $TMP
+      done
+    fi
+    target_hosts="$(cat $TMP)"
+  else
+    echo "No hosts in $drblroot!!!... Abort!"
+    exit 1
+  fi
+  echo $target_hosts > $ANS_TMP
+  [ -f "$TMP" ] && rm -f $TMP
+  return 0
+} # select_hosts_by_IP_GRP
+
+gen_HOST_MAC_TABLE() {
+  # host fc3-101 {
+  #     hardware ethernet  00:02:e3:53:34:60;
+  #     fixed-address 192.168.232.1;
+  # }
+  # clean the IP-MAC table
+  [ ! -f $HOST_MAC_TABLE ] && rm -f $HOST_MAC_TABLE
+  # To get the hostname - IP table.
+  parse_dhcpd_conf $HOST_MAC_TABLE
+}
+#
+select_hosts_by_MAC() {
+  # Note!!! We must use common tmp file (ANS_TMP) to pass the result, 
+  # we can NOT
+  # just echo result in the end of this function. Otherwise in newer
+  # dialog (FC3), the script will wait for the end of function, then it 
+  # shows the result. 
+  # There is nothing in the screen when function is called if we just 
+  # use echo the result to stdout.
+  local TMP=`mktemp /tmp/drbl-mac-tmp.XXXXXX`
+  local MAC_list host_grp hostinfo igrp list_height
+  trap "[ -f "$TMP" ] && rm -f $TMP" HUP INT QUIT TERM EXIT
+  # list the nodes
+  awk -F" " '!/^#/ {print $3, $1"("$2")", "off"}' $HOST_MAC_TABLE >> $TMP
+  MAC_list="$(cat $TMP)"
+
+  numhosts=$(echo $MAC_list | grep -o off | wc -w)
+  if [ $numhosts -gt 0 ]; then
+    if [ $numhosts -lt $MAX_DIALOG_HEIGHT ]; then
+      list_height=$numhosts
+    else
+      list_height=$MAX_DIALOG_HEIGHT
+    fi
+    $DIA \
+      --separate-output \
+      --backtitle "$msg_nchc_free_software_labs" \
+      --title "$msg_drbl_title" \
+      --checklist "$msg_specify_hosts ($msg_press_space_to_mark_selection):" 20 70\
+      $list_height $MAC_list 2> $TMP
+    retval=$?
+    [ $retval -eq 1 ] && exit 1
+    # Convert the selected group to MAC lists
+    if grep -qE "(client-MAC-group|MAC-grp)" $TMP; then
+      selected_grp="$(grep -Eo "(client-MAC-group-.*|MAC-grp-.*)" $TMP)"
+      for i in $selected_grp; do
+        perl -p -i -e "s/$i//g" $TMP
+	cat $drbl_syscfg/$i >> $TMP
+      done
+    fi
+    target_hosts=$(cat $TMP)
+  else
+    echo "No MAC address in dhcpd.conf! Abort! "
+    exit 1
+  fi
+
+  echo $target_hosts > $ANS_TMP
+  [ -f "$TMP" ] && rm -f $TMP
+  return 0
+} # end of select_hosts_by_MAC
+#
+select_hosts_by_MAC_GRP() {
+  # Note!!! We must use common tmp file (ANS_TMP) to pass the result, 
+  # we can NOT
+  # just echo result in the end of this function. Otherwise in newer
+  # dialog (FC3), the script will wait for the end of function, then it 
+  # shows the result. 
+  # There is nothing in the screen when function is called if we just 
+  # use echo the result to stdout.
+  local TMP=`mktemp /tmp/drbl-mac-tmp.XXXXXX`
+  local MAC_list host_grp hostinfo igrp list_height hostlist
+  trap "[ -f "$TMP" ] && rm -f $TMP" HUP INT QUIT TERM EXIT
+  hostlist=""
+  numlist=0
+  # list the IP group
+  for igrp in $drbl_syscfg/client-MAC-group-* $drbl_syscfg/MAC-grp-*; do
+    [ ! -e "$igrp" ] && continue
+    host_grp="$(basename $igrp)"
+    hostinfo="$(head -n 2 $igrp)"
+    hostinfo="$(echo $hostinfo | tr " " "_")..."
+    hostlist="$hostlist $host_grp $hostinfo off"
+    numlist="$((numlist+1))"
+  done
+  echo $hostlist > $TMP
+  MAC_list="$(cat $TMP)"
+  if [ $numlist -gt 0 ]; then
+    if [ $numlist -lt $MAX_DIALOG_HEIGHT ]; then
+      list_height=$numlist
+    else
+      list_height=$MAX_DIALOG_HEIGHT
+    fi
+    $DIA \
+      --separate-output \
+      --backtitle "$msg_nchc_free_software_labs" \
+      --title "$msg_drbl_title" \
+      --checklist "$msg_specify_hosts ($msg_press_space_to_mark_selection):" 20 70\
+      $list_height $MAC_list 2> $TMP
+    retval=$?
+    [ $retval -eq 1 ] && exit 1
+    # Convert the selected group to MAC lists
+    if grep -qE "(client-MAC-group|MAC-grp)" $TMP; then
+      selected_grp="$(grep -Eo "(client-MAC-group-.*|MAC-grp-.*)" $TMP)"
+      for i in $selected_grp; do
+        perl -p -i -e "s/$i//g" $TMP
+	cat $drbl_syscfg/$i >> $TMP
+      done
+    fi
+    target_hosts=$(cat $TMP)
+  else
+    echo "No MAC address in dhcpd.conf! Abort! "
+    exit 1
+  fi
+
+  echo $target_hosts > $ANS_TMP
+  [ -f "$TMP" ] && rm -f $TMP
+  return 0
+} # end of select_hosts_by_MAC_GRP
+
+usage() {
+  echo "Description:"
+  echo "Select DRBL clients by IP or MAC address"
+  echo "Usage: `basename $0` [Options] RESULT_FILE"
+  echo "Options:"
+  language_help_prompt_by_idx_no
+  language_help_prompt_by_idx_name
+  dialog_like_prog_help_prompt
+  echo "RESULT_FILE     The file to store the selected hosts"
+}
+
+# option
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -l|--language)
+		shift;
+                if [ -z "$(echo $1 |grep ^-.)" ]; then
+                  # skip the -xx option, in case 
+	          language_opt="$1"
+                fi
+		shift ;;
+    -d0|--dialog)  
+	    DIA="dialog" 
+	    shift;;
+    -d1|--Xdialog)  
+	    DIA="Xdialog" 
+	    shift;;
+    -d2|--whiptail)  
+	    DIA="whiptail" 
+	    shift;;
+    -d3|--gdialog)  
+	    DIA="gdialog" 
+	    shift;;
+    -d4|--kdialog)  
+	    DIA="kdialog" 
+	    shift;;
+    -*)		echo "${0}: ${1}: invalid option" >&2
+		usage >& 2
+		exit 2 ;;
+    *)		break ;;
+  esac
+done
+
+#
+HOST_FILE=$1
+[ -z "$HOST_FILE" ] && echo "You must specify the target file!!! Program terminated!!!" && exit 1
+
+#
+ask_and_load_lang_set $language_opt
+
+# check DIA
+check_DIA_set_ESC $DIA
+
+# Note!!! We must use common tmp file (ANS_TMP) to pass the result, 
+# we can NOT
+# just echo result in the end of this function. Otherwise in newer
+# dialog (FC3), the script will wait for the end of function, then it 
+# shows the result. 
+# There is nothing in the screen when function is called if we just 
+# use echo the result to stdout.
+ANS_TMP=`mktemp /tmp/mac_ip_ans.XXXXXX`
+trap "[ -f "$ANS_TMP" ] && rm -f $ANS_TMP" HUP INT QUIT TERM EXIT
+ask_by_MAC_or_IP $ANS_TMP
+target_hosts="$(cat $ANS_TMP)"
+echo $target_hosts > $HOST_FILE
+[ -f "$ANS_TMP" ] && rm -f $ANS_TMP
+exit 0

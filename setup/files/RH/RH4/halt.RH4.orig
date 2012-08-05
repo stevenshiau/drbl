@@ -1,0 +1,237 @@
+#!/bin/bash
+#
+# halt          This file is executed by init when it goes into runlevel
+#               0 (halt) or runlevel 6 (reboot). It kills all processes,
+#               unmounts file systems and then either halts or reboots.
+#
+# Author:       Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
+#               Modified for RHS Linux by Damien Neil
+#
+
+NOLOCALE=1
+. /etc/init.d/functions
+
+runcmd() {
+   echo -n "$1 "
+   shift
+   if [ "$BOOTUP" = "color" ]; then
+      $* && echo_success || echo_failure
+   else
+      $*
+   fi
+   echo
+}
+
+halt_get_remaining() {
+	awk '$2 ~ /^\/$|^\/proc|^\/sys|^\/dev/{next}
+	     $3 == "tmpfs" || $3 == "proc" {print $2 ; next}
+	     /(^#|loopfs|autofs|devfs|^none|^\/dev\/ram|^\/dev\/root)/ {next}
+	     {print $2}' /proc/mounts
+}
+
+# See how we were called.
+case "$0" in
+   *halt)
+	message=$"Halting system..."
+	command="/sbin/halt"
+	;;
+   *reboot)
+	message=$"Please stand by while rebooting the system..."
+	command="/sbin/reboot"
+	;;
+   *)
+	echo $"$0: call me as 'halt' or 'reboot' please!"
+	exit 1
+	;;
+esac
+case "$1" in
+   *start)
+   	;;
+   *)
+	echo $"Usage: $0 {start}"
+	exit 1
+	;;
+esac
+
+# Kill all processes.
+[ "${BASH+bash}" = bash ] && enable kill
+
+runcmd $"Sending all processes the TERM signal..." /sbin/killall5 -15
+sleep 5
+runcmd $"Sending all processes the KILL signal..."  /sbin/killall5 -9
+
+# Write to wtmp file before unmounting /var
+/sbin/halt -w
+
+# Save mixer settings, here for lack of a better place.
+grep -q "\(alsa\)" /proc/devices
+if [ $? = 0 -a -x /usr/sbin/alsactl ]; then
+   runcmd $"Saving mixer settings" alsactl store
+fi
+
+# Save random seed
+touch /var/lib/random-seed
+chmod 600 /var/lib/random-seed
+runcmd $"Saving random seed: " dd if=/dev/urandom of=/var/lib/random-seed count=1 bs=512 2>/dev/null
+
+# Sync the system clock.
+ARC=0
+SRM=0
+UTC=0
+
+if [ -f /etc/sysconfig/clock ]; then
+   . /etc/sysconfig/clock
+
+   # convert old style clock config to new values
+   if [ "${CLOCKMODE}" = "GMT" ]; then
+      UTC=true
+   elif [ "${CLOCKMODE}" = "ARC" ]; then
+      ARC=true
+   fi
+fi
+
+CLOCKDEF=""
+CLOCKFLAGS="$CLOCKFLAGS --systohc"
+
+case "$UTC" in
+   yes|true)
+	CLOCKFLAGS="$CLOCKFLAGS -u";
+	CLOCKDEF="$CLOCKDEF (utc)";
+	;;
+   no|false)
+	CLOCKFLAGS="$CLOCKFLAGS --localtime";
+	CLOCKDEF="$CLOCKDEF (localtime)";
+	;;
+esac
+
+case "$ARC" in
+   yes|true)
+	CLOCKFLAGS="$CLOCKFLAGS -A";
+	CLOCKDEF="$CLOCKDEF (arc)";
+	;;
+esac
+case "$SRM" in
+   yes|true)
+	CLOCKFLAGS="$CLOCKFLAGS -S";
+	CLOCKDEF="$CLOCKDEF (srm)";
+	;;
+esac
+
+runcmd $"Syncing hardware clock to system time" /sbin/hwclock $CLOCKFLAGS
+
+# Turn off swap, then unmount file systems.
+[ -f /proc/swaps ] && SWAPS=`awk '! /^Filename/ { print $1 }' /proc/swaps`
+[ -n "$SWAPS" ] && runcmd $"Turning off swap: " swapoff $SWAPS
+
+[ -x /sbin/quotaoff ] && runcmd $"Turning off quotas: " /sbin/quotaoff -aug
+
+# Unmount file systems, killing processes if we have to.
+# Unmount loopback stuff first
+remaining=`awk '!/^#/ && $1 ~ /^\/dev\/loop/ && $2 != "/" {print $2}' /proc/mounts`
+devremaining=`awk '!/^#/ && $1 ~ /^\/dev\/loop/ && $2 != "/" {print $1}' /proc/mounts`
+[ -n "$remaining" ] && {
+	sig=
+	retry=3
+	while [ -n "$remaining" -a "$retry" -gt 0 ]
+	do
+		if [ "$retry" -lt 3 ]; then
+			runcmd $"Unmounting loopback filesystems (retry):" umount $remaining
+		else
+			runcmd $"Unmounting loopback filesystems: " umount $remaining
+		fi
+		for dev in $devremaining ; do
+			losetup $dev > /dev/null 2>&1 && \
+				runcmd $"Detaching loopback device $dev: " losetup -d $dev
+		done
+		remaining=`awk '!/^#/ && $1 ~ /^\/dev\/loop/ && $2 != "/" {print $2}' /proc/mounts`
+		devremaining=`awk '!/^#/ && $1 ~ /^\/dev\/loop/ && $2 != "/" {print $1}' /proc/mounts`
+		[ -z "$remaining" ] && break
+		/sbin/fuser -k -m $sig $remaining >/dev/null
+		sleep 5
+		retry=$(($retry -1))
+		sig=-9
+	done
+}
+
+# Unmount RPC pipe file systems
+sig=
+retry=3
+remaining=`awk '!/^#/ && $3 ~ /^rpc_pipefs$/ || $3 ~ /^rpc_svc_gss_pipefs$/ {print $2}' /proc/mounts`
+
+while [ -n "$remaining" -a "$retry" -gt 0 ]
+do
+	if [ "$retry" -lt 3 ]; then
+		runcmd $"Unmounting pipe file systems (retry): "  umount -f $remaining
+	else
+		runcmd $"Unmounting pipe file systems: "  umount -f $remaining
+	fi
+	sleep 2
+	remaining=`awk '!/^#/ && $3 ~ /^rpc_pipefs$/ || $3 ~ /^rpc_svc_gss_pipefs$/ {print $2}' /proc/mounts`
+	[ -z "$remaining" ] && break
+	/sbin/fuser -k -m $sig $remaining >/dev/null
+	sleep 5
+	retry=$(($retry-1))
+	sig=-9
+done
+
+sig=
+retry=3
+remaining=`halt_get_remaining | sort -r`
+
+while [ -n "$remaining" -a "$retry" -gt 0 ]
+do
+	if [ "$retry" -lt 3 ]; then
+		LANG=C runcmd $"Unmounting file systems (retry): "  umount -f $remaining
+	else
+		LANG=C runcmd $"Unmounting file systems: "  umount -f $remaining
+	fi
+	sleep 2
+	remaining=`halt_get_remaining | sort -r`
+	[ -z "$remaining" ] && break
+	/sbin/fuser -k -m $sig $remaining >/dev/null
+	sleep 5
+	retry=$(($retry-1))
+	sig=-9
+done
+[ -f /proc/bus/usb/devices ] && umount /proc/bus/usb
+
+# remove the crash indicator flag
+rm -f /.autofsck
+
+# Try all file systems other than root and RAM disks, one last time.
+mount |  awk '!/( \/ |^\/dev\/root|^\/dev\/ram| \/proc )/ { print $3 }' | \
+  while read line; do
+    umount -f $line
+done
+
+# Remount read only anything that's left mounted.
+# echo $"Remounting remaining filesystems readonly"
+mount | awk '{ print $3 }' | while read line; do
+    mount -n -o ro,remount $line
+done
+
+# Now halt or reboot.
+echo $"$message"
+if [ -f /fastboot ]; then
+ echo $"On the next boot fsck will be skipped."
+elif [ -f /forcefsck ]; then
+ echo $"On the next boot fsck will be forced."
+fi
+
+if [ "$command" = /sbin/halt -a -r /etc/ups/upsmon.conf -a -f /etc/killpower -a -f /etc/sysconfig/ups ] ; then
+	. /etc/sysconfig/ups
+	if [ "$SERVER" = "yes" -a "$MODEL" = "upsdrvctl" ] ; then
+		/sbin/upsdrvctl shutdown
+	elif [ "$SERVER" = "yes" -a "$MODEL" != "NONE" -a -n "$MODEL" -a -n "$DEVICE" ] ; then
+		$MODEL $OPTIONS_HALT -k $DEVICE
+	fi
+fi
+
+if [ -x /sbin/halt.local ]; then
+   /sbin/halt.local
+fi
+
+HALTARGS="-i -d"
+[ -f /poweroff -o ! -f /halt ] && HALTARGS="$HALTARGS -p"
+
+exec $command $HALTARGS

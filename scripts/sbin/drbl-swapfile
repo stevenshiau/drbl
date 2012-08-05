@@ -1,0 +1,63 @@
+#!/bin/bash
+# Author: Blake, Kuo-Lien Huang
+# License: GPL
+# Description: put/get the file to/from all DRBL clients, 
+# file utility for host(fuh)
+#
+# Modified by Steven Shiau <steven@nchc.org.tw> to be used in DRBL for RedHat
+
+# Load DRBL setting and functions
+if [ ! -f "/opt/drbl/sbin/drbl-conf-functions" ]; then
+  echo "Unable to find /opt/drbl/sbin/drbl-conf-functions! Program terminated!" 
+  exit 1
+fi
+. /opt/drbl/sbin/drbl-conf-functions
+
+#
+usage() {
+  echo "Start or stop the swapfile service in the DRBL client (This will make client to turn on/off the swap file when client boots)."
+  echo "Usage: $0 -s swapfile_size [start|stop]"
+  echo "-s, --size=SIZE: the maximum swap file SIZE (in MB)"
+}
+
+#
+check_if_root
+
+#
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -s|--size)
+		shift; maxswapsize="$1"
+		shift;;
+    -*)		echo "${0}: ${1}: invalid option" >&2
+		usage >& 2
+		exit 2 ;;
+    *)		break ;;
+  esac
+done
+
+# if maxswapsize is NOT specified, set the default value
+[ -z "$maxswapsize" ] && maxswapsize=maxswapsize_default
+#
+switch=$1
+case "$switch" in
+    start)
+           echo "Set the max swapfile size for each client as $maxswapsize MB."
+           for ihost in $drblroot/*; do
+	     echo "maxswapsize=$maxswapsize" > \
+	     $ihost/$SYSCONF_PATH/mkswapfile
+	   done
+           drbl-client-service mkswapfile on
+         ;;
+     stop)
+           for ihost in $drblroot/*; do
+	     [ -f "$ihost/$SYSCONF_PATH/mkswapfile" ] && \
+	     rm -f $ihost/$SYSCONF_PATH/mkswapfile
+	   done
+           drbl-client-service mkswapfile off
+         ;;
+        *)
+	 usage
+	 exit 1
+esac
+# Note, since drbl-client-service will run drbl-gen-ssi-files, so we do not have to run it here.

@@ -1,0 +1,37 @@
+#!/bin/bash
+# Author: Steven Shiau <steven _at_ nchc org tw>
+# License: GPL
+# Description: Get the common users name (not system related users name)
+
+export LC_ALL=C
+uid_tmp="$(mktemp /tmp/uid_tmp.XXXXXX)"
+# We can get the minum UID of YP from /var/yp/Makefile
+grep -E "^MINUID=" /var/yp/Makefile 2>/dev/null > $uid_tmp
+. $uid_tmp
+[ -f $uid_tmp ] && rm -f $uid_tmp
+
+# If we can not find minum UID of YP from /var/yp/Makefile, we use specific rules.
+if [ -z "$MINUID" ]; then
+  if [ -e /etc/debian_version ]; then
+    # For Debian, the common users uid start from 1000
+    MINUID="1000"
+  elif [ -e /etc/SuSE-release ]; then
+    # SuSE
+    # the common users uid start from 1000
+    MINUID="1000"
+  else
+    # For RH-like, the common users uid start from 500
+    MINUID="500"
+  fi
+fi
+
+users="$(awk -F":" "\$3 >= $MINUID {print \$1}" /etc/passwd)"
+
+# Remove account "nobody" from the list if it exists, we need nobody as local account. Since some services are started with nobody, and it is started before nis/yp is started.
+users="$(echo $users | sed -e "s/nobody//g")"
+
+# if not found, return 1
+[ -z "$users" ] && exit 1
+
+echo $users
+exit 0

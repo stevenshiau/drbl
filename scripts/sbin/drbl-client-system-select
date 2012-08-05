@@ -1,0 +1,145 @@
+#!/bin/bash
+# Steven Shiau <steven@nchc.org.tw>
+# License: GPL
+# Description: To set the clients show prompt for boot system or not
+
+# Load DRBL setting and functions
+if [ ! -f "/opt/drbl/sbin/drbl-conf-functions" ]; then
+  echo "Unable to find /opt/drbl/sbin/drbl-conf-functions! Program terminated!" 
+  exit 1
+fi
+. /opt/drbl/sbin/drbl-conf-functions
+
+#
+check_if_root
+
+#
+usage() {
+    echo "Usage:"
+    echo "To set the clients show prompt for boot system or not:"
+    echo "`basename $0` [OPTION] [on|off]"
+    echo " Options:"
+    echo " -t, --time     the time to show prompt for boot system (unit: 1/10 sec) "
+    echo " -e, --enable-thin-client enable the thin client option in PXE boot menu"
+    echo " -d, --disable-thin-client disable the thin client option in PXE boot menu"
+    echo "-h, --hosts   IP_LIST  Instead of all DRBL clients, assign the clients by IP address, like: -h \"192.168.0.1 192.168.0.2\" NOTE!!! You must put \" \" before and after the IP_LIST!"
+    echo " -v, --verbose  prints out verbose information"
+}
+
+# Parse command-line options
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -t|--time)
+            shift;
+            if [ -z "$(echo $1 |grep ^-.)" ]; then
+              # skip the -xx option, in case 
+	      timeout="$1"
+            fi
+            shift ;;
+    -e|--enable-thin-client)
+		shift; thinclient="on"
+                ;;
+    -d|--disable-thin-client)
+		shift; thinclient="off"
+                ;;
+    -h|--hosts)
+		shift;
+	        LIST_HOST="on"
+                if [ -z "$(echo $1 |grep ^-.)" ]; then
+                  # skip the -xx option, in case 
+		  IP_LIST="$1"
+                fi
+		shift ;;
+    -v|--verbose)
+		shift; VERBOSE="on"
+                ;;
+    -*)     echo "${0}: ${1}: invalid option" >&2
+            usage >& 2
+            exit 2 ;;
+    *)      break ;;
+  esac
+done
+
+# get the switch
+switch=$1
+[ -z "$switch" ] && usage && exit 0
+
+#
+if [ -n "$IP_LIST" ]; then
+  # copy the skeleton file
+  PXE_CONF="$PXELINUX_DIR/default_skeleton"
+  cp -f $PXELINUX_DIR/default $PXE_CONF
+else
+  PXE_CONF="$PXELINUX_DIR/default"
+  # Clean all the previous saved config file.
+  # These files maybe look like: 01-MAC address, something like C0A8XXXX (only for 192.168.x), default_skeleton
+  echo -n "Clean all the previous saved config file if they exist..."
+  for ifile in $PXELINUX_DIR/*; do
+    [ "$ifile" != "$PXE_CONF" -a -f "$ifile" ] && rm -f $ifile
+  done
+  echo "done!"
+fi
+
+#
+case "$switch" in
+    on)
+       echo -n "Turn on the boot prompt for PXE client..."
+       [ -z "$timeout" ] && timeout=$DEFAULT_PXE_TIMEOUT
+       timeout_sub="s/^timeout.*/timeout $timeout/"
+       [ -n "$VERBOSE" ] && echo "mode = $switch"
+       [ -n "$VERBOSE" ] && echo "timeout = $timeout"
+       perl -pi -e "$timeout_sub" $PXE_CONF
+
+       # force prompt to always be 0, we need this for simple menu
+       perl -pi -e 's/^(#|[[:space:]])*prompt.*/prompt 0/i' $PXE_CONF
+
+       # reveal some menus
+       for i in $IMG_SHOW_IN_MENU; do
+         [ -n "$VERBOSE" ] && echo "Reveal image $i"
+         hide_reveal_pxe_img $i reveal $PXE_CONF
+       done
+       echo "done!"
+       ;;
+
+    off)
+       echo -n "Turn off the boot prompt for PXE client..."
+       # we just prompt 0.5 sec for that image... the only one image
+       timeout=5
+       timeout_sub="s/^timeout.*/timeout $timeout/"
+       [ -n "$VERBOSE" ] && echo "mode = $switch"
+       [ -n "$VERBOSE" ] && echo "timeout = $timeout"
+       perl -pi -e "$timeout_sub" $PXE_CONF
+       perl -pi -e 's/^prompt.*/prompt 0/' $PXE_CONF
+
+       # hide some menus, but at least we will reveal one "drbl", otherwise
+       # client will have problem "boot: EL entries found in configuration file!"
+       for i in $IMG_SHOW_IN_MENU; do
+         if [ "$i" != "drbl" ]; then
+           [ -n "$VERBOSE" ] && echo "Hide image $i"
+           hide_reveal_pxe_img $i hide $PXE_CONF
+         else
+           [ -n "$VERBOSE" ] && echo "Reveal image $i"
+           hide_reveal_pxe_img $i reveal $PXE_CONF
+         fi
+       done
+
+       echo "done!"
+       ;;
+esac
+
+case "$thinclient" in
+	"on")
+	    echo -n "Turn on the thin client option in PXE menu..."
+            hide_reveal_pxe_img drbl-terminal reveal $PXE_CONF
+	    echo "done!"
+
+	    ;;
+	"off")
+	    echo -n "Turn off the thin client option in PXE boot menu..."
+            hide_reveal_pxe_img drbl-terminal hide $PXE_CONF
+	    echo "done!"
+	    ;;
+esac
+
+# specify the nodes if assigned by user
+[ "$LIST_HOST" = "on" ] && set_specific_host_pxe_conf $IP_LIST

@@ -1,0 +1,106 @@
+#!/bin/bash
+# Author: Steven Shiau <steven _at_ nchc org tw>
+# License: GPL
+# Description: This program is used to start boinc service in DRBL live environment.
+
+#
+DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/opt/drbl/}"
+
+. $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
+
+# config file
+BOINC_CONF=/etc/drbl/boinc-url-authkey.conf
+
+#
+if [ ! -e "$BOINC_CONF" ]; then
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+  echo "BOINC url and authrized key file $BOINC_CONF was not found!"
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+  echo "Program terminated!"
+  exit 1
+fi
+
+#
+ask_and_load_lang_set
+
+# config network first:
+config_drbl_live_network
+
+#
+echo "$msg_delimiter_star_line"
+echo "Now adding BOINC project(s)..."
+echo "Do you want client to run BOINC computation 'always' ? If not, the mode is 'auto' (Do work only when allowed by preferences)"
+echo -n "[Y/n] "
+read run_mode
+case "$run_mode" in 
+   n|N|[nN][oO]) run_boinc_mode="auto" ;;
+   *)		 run_boinc_mode="always" ;;
+esac
+
+while read url auth; do
+  [ -n "$(echo $url | grep -E "^#")" ] && continue  # skip the comment lines
+  if [ -n "$url" -a -n "$auth" ]; then
+     echo "Attaching project $url..."
+     boinc_cmd --project_attach $url $auth
+     if [ "$run_boinc_mode" = "always" ]; then
+        boinc_cmd --set_run_mode always
+        boinc_cmd --set_network_mode always
+     fi
+  fi
+done < $BOINC_CONF
+
+#  TODO: If hostname is changed now, the application in the running X won't work.
+# echo "$msg_delimiter_star_line"
+# echo "Hostname for this machine ?"
+# hostname_def="DRBL$(LC_ALL=C date +%m%d)"
+# echo -n "[$hostname_def] "
+# read HN
+# 
+# [ -z "$HN" ] && HN="$hostname_def"
+# hostname $HN
+# echo "$HN" > /etc/hostname
+# perl -pi -e "s|^127.0.1.1 .*|127.0.1.1 $HN|g" /etc/hosts
+
+# 
+echo "$msg_delimiter_star_line"
+echo "Text or graphical mode for DRBL clients ?"
+echo "0: text mode"
+echo "1: graphical mode"
+echo -n "[1] "
+read mode
+
+case "$mode" in
+  0) mode=text;;
+  *) mode=graphical;;
+esac
+
+#
+drbl-live.sh --skip-pause-in-the-end start
+
+# Set all of clients as text mode
+if [ "$mode" = "text" ]; then
+  echo "Changing clients to text mode..."	 
+  drbl-client-switch -nl remote-linux-txt
+fi
+
+# Turn on boinc-client service
+drbl-client-service boinc-client on
+
+#
+[ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+echo "$msg_all_set_you_can_turn_on_clients"
+[ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+echo -n $msg_press_enter_to_continue
+# This is a weird problem about tftpd-hpa when it is restared in 'drbl-all-service start' in the above. It's:
+# -------
+# /etc/init.d/tftpd-hpa restart
+# echo -n "press key... "
+# read
+# -------
+# and we always get such an error when running it:
+# -------
+# Restarting HPA's tftpd: in.tftpd.
+# press key... ./td: line 4: read: read error: 0: Resource temporarily unavailable
+# -------
+# Therefore we use < /dev/stdin to avoid tihs.
+read dummy_var < /dev/stdin

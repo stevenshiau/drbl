@@ -1,0 +1,116 @@
+#!/bin/bash
+# Author: Steven Shiau <steven _at_ nchc org tw>
+# License: GPL
+# Description: Find the url in rpm-md repository setting (quite similar to yum repository setting). This script is specially for OpenSuSE 11.1 using zypper repository output from command "zypper lr -e myrepo.repo".
+# This script is modified from find-url-in-yum-set which is for Fedora.
+# parameter: rpm_md_repo_set repo releasever 
+# if the setting in "rpm_md_repo_set" is like:
+# baseurl=http://download.opensuse.org/distribution/11.1/repo/oss/
+
+# Ex: find-url-in-rpm-md-set myrepo.repo repo-oss 11.1
+# The result is like:
+# http://download.opensuse.org distribution
+
+rpm_md_repo_set="$1"
+repo_name="$2"
+releasever="$3"
+
+[ -f "$rpm_md_repo_set" ] || exit 1
+[ -n "$repo_name" ] || exit 1
+[ -n "$releasever" ] || exit 1
+
+get_repo_block() {
+     local CFG_FILE=$1
+     local block="$2"
+     [ -f "$CFG_FILE" ] || exit 1
+     # By using
+     # grep -n "^\[.*\]" myrepo.repo |grep -A1 "\[base\]"                 
+     # We can get the results like:
+     # 175:[base]
+     # 210:[update]
+     # so we know we can replace the one between line no. 175 and 210
+     between_lines=$(grep -ni "^\[.*\]" $CFG_FILE | grep -i -A1 "\[$block\]" | cut -d":" -f1)
+     begin_line=$(echo $between_lines | awk -F" " '{print $1}')
+     end_line=$(echo $between_lines | awk -F" " '{print $2}')
+     # if end_line is nothing, it must be the last block, i.e. we can not find the next [.*]
+     if [ -z "$end_line" ]; then
+       end_line=$(wc -l $CFG_FILE | awk -F" " '{print $1}')
+     else
+       # if not nothing, backword one line
+       end_line=$(($end_line - 1))
+     fi
+     echo "$begin_line $end_line"
+}
+
+#
+convert_url_os_path() {
+  local url="$1"
+  [ -n "$url" ] || exit 1
+  # For FC:
+  # baseurl=http://free.nchc.org.tw//fedora/linux/core//$releasever/$basearch/os
+  # we want to get:
+  # url_os=http://free.nchc.org.tw/
+  # os_ayo_path=fedora/linux/core/
+  # For OpenSuSE 10.0
+  # baseurl=http://free.nchc.org.tw/opensuse/opensuse/distribution/SL-$releasever-OSS/inst-source/suse/
+  # we want to get:
+  # url_os=http://free.nchc.org.tw
+  # os_ayo_path=opensuse/opensuse/distribution
+
+  # Note! Maybe in *.repo, releasever is shown as "$releasever", "4" or "10.0"
+  # Case 1: releasever is shown as "$releasever"
+  url_os_coreroot="$(echo $baseurl | sed -r -e 's@/(SL-|)*\$releasever(-OSS|)*/.*@@g')"
+  # Case 2: releasever is shown as "10.0". This is really a special case for OpenSuSE 10.0 and 10.1 only. 
+  # Ex: http://opensource.nchc.org.tw/opensuse/distribution/SL-10.0-OSS/
+  # or  http://opensource.nchc.org.tw/opensuse/distribution/SL-10.1/
+  # From OpenSuSE 10.2 or later, it's clean as: http://opensource.nchc.org.tw/opensuse/distribution/10.2/
+  if [ -n "$(echo $url_os_coreroot | grep "SL-")" ]; then
+    url_os_coreroot="$(echo $url_os_coreroot | sed -r -e "s@/(SL-|)*$releasever(-OSS|)*/.*@@g")"
+  fi
+  # Case 3: releasever is shown as "8", for example.
+  # baseurl=http://free.nchc.org.tw/fedora/linux/releases/8/Everything/i386/os/
+  url_os_coreroot="$(echo $url_os_coreroot | sed -r -e "s@/$releasever/.*@@g")"
+
+  #
+  os_ayo_path="$(echo $url_os_coreroot | sed -re "s|(http\|ftp\|file)://[^/]*/||g")"
+  url_os="$(echo $url_os_coreroot | sed -re "s|$os_ayo_path||g")"
+  # remove the last / in $url_os
+  url_os="$(echo $url_os | sed -re "s|/$||g")"
+  echo $url_os $os_ayo_path
+} # end of convert_url_os_path
+
+# for rpm md setting
+# For OpenSuSE 11.1, the block is [repo-oss] or [repo-update].
+# Ex.
+# [repo-oss]
+# name=openSUSE-11.1-Oss
+# enabled=1
+# autorefresh=1
+# baseurl=http://ftp.twaren.net/Linux/OpenSuSE/distribution/11.1/repo/oss/
+# path=/
+# type=yast2
+# priority=100
+# keeppackages=0
+
+# [repo-update]
+# name=openSUSE-11.1-Update
+# enabled=1
+# autorefresh=1
+# baseurl=http://download.opensuse.org/update/11.1/
+# path=/
+# type=rpm-md
+# priority=20
+# keeppackages=0
+
+for ipart in $repo_name; do
+  lines="$(get_repo_block $rpm_md_repo_set $ipart)"
+  begin_line=$(echo $lines | awk -F" " '{print $1}')
+  end_line=$(echo $lines | awk -F" " '{print $2}')
+  [ -n "$begin_line" -a -n "$end_line" ] && break
+done
+
+[ -z "$begin_line" -a -z "$end_line" ] && exit 1
+
+chk_cmd="if ($begin_line..$end_line) {print}"
+baseurl="$(perl -n -e "$chk_cmd" $rpm_md_repo_set | grep -Ei "^[[:space:]]*baseurl[[:space:]]*=[[:space:]]*" | sed -re "s/^[[:space:]]*baseurl[[:space:]]*=[[:space:]]*//gi")"
+convert_url_os_path $baseurl

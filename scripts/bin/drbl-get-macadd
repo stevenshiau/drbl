@@ -1,0 +1,25 @@
+#!/bin/bash
+# Author: Steven Shiau <steven _at_ nchc org tw>
+# License: GPL
+# Description: Get the MAC address of network card interface
+
+# load setting
+. /opt/drbl/sbin/drbl-conf-functions
+
+ethx=$1
+export LC_ALL=C
+
+Usage() {
+  echo "Get the MAC address of network card interface" 
+  echo "Usage:"
+  echo "$(basename $0) INTERFACE"
+  echo "Ex: $(basename $0) eth0"
+}
+
+[ -z "$ethx" ] && Usage && exit 1
+if ! ifconfig -a 2>/dev/null | grep -i -q "\<$ethx\>"; then
+   exit 1
+fi
+# Ex: eth0      Link encap:Ethernet  HWaddr 00:0C:29:81:A0:D5
+ifconfig $ethx | grep $ethx | grep "HWaddr" | sed -e 's/^.*HWaddr \([0-9a-zA-Z\:]\+\).*$/\1/' | tr '[A-Z]' '[a-z]'
+exit 0

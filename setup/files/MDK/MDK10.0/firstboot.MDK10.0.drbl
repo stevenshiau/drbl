@@ -1,0 +1,77 @@
+#!/bin/bash
+#
+# firstboot:         Starts the firstboot druid if it hasn't been run before
+#
+# chkconfig: 5 29 95
+#
+# description:       Firstboot is a druid style program that runs on the first time \
+#                    a machine is booted after install.  It checks for the existence \
+#                    of an /etc/sysconfig/firstboot file.  If it doesn't find the file, \
+#                    then the firstboot program needs to run.  If it finds the file, \
+#                    firstboot will not be run.
+#                    If /etc/reconfigSys exists, run the reconfiguration
+#		     program and remove /etc/reconfigSys when done.
+#
+#                    Also will run if 'reconfig' is on the kernel cmdline.
+#
+# Modified by Steven Shiau <steven@nchc.org.tw> to use in 
+# DRBL for Mandrake 9.2 2004/3/4
+# 
+# Ref: Redhat kudzu
+# This is an interactive program, we need the current locale
+
+unset LC_MESSAGES
+[ -f /etc/sysconfig/i18n ] && . /etc/sysconfig/i18n
+export LANG
+
+[ -z "${CONSOLETYPE:-}" ] && CONSOLETYPE="`/sbin/consoletype`"
+
+if [ "$CONSOLETYPE" != "pty" ]; then
+	case "${LANG:-}" in
+		ja_JP*|ko_KR*|zh_CN*|zh_TW*)
+			export LANG=en_US
+			;;
+		*)
+			export LANG
+			;;
+	esac
+fi
+
+FILENAME=/etc/sysconfig/firstboot
+
+[ -z "$HOME" ] && export HOME=/
+
+case "$1" in
+ start)
+        if grep -i reconfig /proc/cmdline >/dev/null || [ -f /etc/reconfigSys ]; then
+
+	    echo -n $"Running system reconfiguration tool"
+	    #/usr/sbin/firstboot --reconfig
+	    # DRBL for Mandrake, use XFdrake comes from Mandrake drakxtools
+	    # Thanks to pixel@mandrakesoft.com, he provided this method
+            chvt 7
+	    TERM=linux XFdrake --noauto < /dev/tty7 > /dev/tty7
+	    rm -f /etc/reconfigSys
+	    exit 0
+	fi
+
+	runlevel=$(set -- $(runlevel); eval "echo \$$#" )
+	#DRBL, no matter set runlevel 5 in /etc/inittab or now in runlevel 5
+	#if grep -q "^id:5:initdefault:" /etc/inittab && [ "x$runlevel" = x5 ]; then
+	if grep -q "^id:5:initdefault:" /etc/inittab || [ "x$runlevel" = x5 ]; then
+	    if [ ! -f /etc/X11/XF86Config-4 ] ; then
+		echo -n $"X is not configured.  Running XFdrake"
+		# DRBL
+		#/usr/bin/redhat-config-xfree86
+	        # Thanks to pixel@mandrakesoft.com, he provided this method
+                chvt 7
+	        TERM=linux XFdrake --noauto < /dev/tty7 > /dev/tty7
+		echo -n $"X is now configured.  Starting Setup Agent"
+	    fi
+	fi
+
+        # DRBL
+	#/usr/sbin/firstboot
+	exit 0
+	;;
+esac

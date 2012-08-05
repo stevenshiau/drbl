@@ -1,0 +1,58 @@
+#!/bin/bash
+# Author: Steven Shiau <steven _at_ nchc org tw>
+# License: GPL
+# This program is used to replace the command "dpkg-reconfigure console-data" because console-data is in the process of being obsoleted by console-setup. For more info, check:
+# http://bugs.debian.org/570223
+
+#
+DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/opt/drbl/}"
+
+. $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
+. $DRBL_SCRIPT_PATH/conf/drbl-ocs.conf
+. $DRBL_SCRIPT_PATH/sbin/ocs-functions
+
+# Loading settings 
+[ -e /etc/ocs/ocs-live.conf ] && . /etc/ocs/ocs-live.conf
+
+# Setting. In the future, we will swtich to keyboard_configuration. However, remember to make sure Ubuntu has it, too.
+preferred_configure="console_data"
+
+#
+run_config_from_keyboard_configuration() {
+  ask_and_load_lang_set
+  TMP="$(mktemp /tmp/keymap_mode.XXXXXX)"
+  ASK_KEYMAP=1
+  while [ "$ASK_KEYMAP" -ne 0 ]; do
+    $DIA --nocancel --backtitle "$msg_nchc_free_software_labs" --title  \
+    "$msg_keyboard_configuration" --menu "$msg_change_keyboard_layout?" \
+    0 0 0 \
+    Keep "$msg_keep_the_default_US_keymap" \
+    Change "$msg_change_keyboard_layout" \
+    2> $TMP
+    keymap_mode="$(cat $TMP)"
+    if [ -z "$keymap_mode" ]; then
+      ASK_KEYMAP=1
+    else
+      ASK_KEYMAP=0
+    fi
+  done
+  [ -f "$TMP" ] && rm -f $TMP
+  
+  #
+  if [ "$keymap_mode" = "Change" ]; then
+    dpkg-reconfigure keyboard-configuration
+    rc=$?
+    [ "$rc" -eq 0 ] && setupcon
+  fi
+} # end of run_config_from_keyboard_configuration
+
+#
+run_config_from_console_data() {
+  dpkg-reconfigure console-data
+} # end of run_config_from_console_data
+
+#
+case $preferred_configure in
+  "console_data") run_config_from_console_data ;;
+  "keyboard_configuration") run_config_from_keyboard_configuration ;;
+esac

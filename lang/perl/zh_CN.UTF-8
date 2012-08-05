@@ -1,0 +1,257 @@
+#!/usr/bin/perl -T
+# Written by Liang Qi <cavendish.qi@gmail.com> to use in DRBL, 5 Nov. 2008
+# License: GPL
+
+%delimiter =
+   (
+   dash_line => '------------------------------------------------------',
+   star_line => '******************************************************',
+   exclamation_line => "!!!!!!!!!!!!!!!!!!!!!!!!!",
+   warning_line => "!!!!!!!!!!!!!!!!!!!!!! 警告 !!!!!!!!!!!!!!!!!!!!!!!",
+   );
+
+%lang_text =
+   (  
+   Say        => '回答',
+   or         => '或者',
+   seconds    => '秒',
+   WARNING    => '警告',
+   Accept     => '接受',
+   as         => '因为',
+   login      => '登入',
+   clear      => '清除',
+   of         => '的',
+   logout     => '登出',
+   page       => '页',
+   move       => '移动',
+   date       => '日期',
+   size       => '大小',
+   type       => '类型',
+   filename   => '文件名',
+   encoding   => '编码',
+   download   => '下载',
+   cancel     => '取消',
+   continue   => '继续',
+   for        => '为了',
+   save       => '储存',
+   add        => '增加',
+   delete     => '删除',
+   uninstall  => '卸载',
+   done       => '完成',
+   finish     => '执行完毕',
+   space      => '空白',
+   );
+
+
+%lang_word =
+   (
+   please_enter => "请输入",
+   to_deploy_them => "来部署他们",
+   root_passwd => "管理员的密码",
+   initial_digit => "数字开头",
+   unable_to_find_the => "无法找到",
+   program_stop => "程序停止",
+   );
+
+
+%lang_deploy =
+   (
+   interactive_mode_prompt => '这是一个交互模式，在设置DRBL环境的过程中，您必须提供相关资料',
+   domain_unset_prompt => '域名(DOMAIN)未设置，请输入域名(DOMAIN)：',
+   domain_prompt => '请输入域名(DNS domain)，例如drbl.sf.net：',
+   nisdomain_unset_prompt => 'NIS域为设置，请输入NIS域名：',
+   nisdomain_prompt => '请输入NIS/YP域名：',
+   not_allowed_domainname => '是不被允许的域名，请重新输入！',
+   not_allowed_nisdomainname => '是不被允许的NIS域名，请重新输入！',
+   set_domain_as => '您设定的域名(DOMAIN)是',
+   enter_client_hostname_prefix => "请输入客户端主机名称的前缀：\n这个前缀是用来自动生成客户端主机名称的，如果您有部分或者全部机器不使用这个自动产生的主机名称，您想自己指定用户主机名称，现在可以按Ctrl-C退出这个程序，编辑$DRBL_SCRIPT_PATH/conf/client-ip-hostname后，再执行这个程序。",
+   not_allowed_hostname => '是不被允许的客户端计算机的主机名称，请重新输入！',
+   set_client_hostname_prefix => '您设定的客户端计算机的主机名称的前缀是',
+   no_NIC_setup => '找不到可以设置给客户端计算机使用的网卡，可能没有插网卡或者网卡有问题！',
+   configured_nic => '在您的系统上找到已经设置好的以太网卡有：',
+   we_can_NOT_continue => '我们无法继续下去...',
+   but_not_private_IP_or_configured => '但不是私有IP，为设置好，或是没有被启用！',
+   enter_public_IP_for_the_client => "输入这台客户端计算机的公开IP(public IP)",
+   its_IP_in_DRBL_is => "这台电脑在DRBL环境中的IP是",
+   wrong_entered_IP => "您输入的IP地址有误，请重新输入！",
+   enter_gateway_for_client => "请输入给这台客户端计算机使用的网关(Gateway)",
+   enter_netmask_for_client => "请输入给这台客户端计算机使用的网络掩码(NetMask)",
+   wrong_entered_netmask => "您输入的网络掩码(NetMask)有误，请重新输入！",
+   set_client_public_IP_as => "客户端计算机的公开IP与其他网络参数设置为：",
+   we_will_skip => '我们将略去',
+   #
+   for_internet_access_prompt => '哪个网卡是这台服务器用来连接到互联网的，而不是给DRBL环境使用的？',
+   drbl_website_prompt => '详情请参考网址http://drbl.nchc.org.tw/redhat或是http://drbl.sf.net/redhat。',
+   ethernet_port_for_internet => '互联网使用的以太网卡是：',
+   ethernet_port_for_DRBL => 'DRBL环境使用的以太网卡是：',
+   only_1_IP_for_eth0 => 'eth0只设置了一个IP地址，因此DRBL环境将不会使用eth0来连接客户端计算机！',
+   no_DRBL_port => '找不到任何设置好的网卡供 DRBL 环境使用！',
+   saved_mac_address_files_in_etc => "这些文件被报存在目录$drbl_syscfg中。",
+   collect_MAC_prompt => 
+          "现在我们可以收集客户端计算机网卡的MAC地址(MAC Address)！\n".
+          "通过这个收集的步骤可以帮助您的DRBL环境让客户端计算机每次开机都可以取得相同的IP，\n".
+          "如果您没有客户端计算机网卡的MAC地址存档时，您现在就应该做！\n".
+          "如果您已经有客户端计算机网卡的MAC地址存档时，您也可以把那些MAC地址排序分组后，一行一行地填在文件中(文件的数量就是您DRBL分流网卡的个数)，那么，这个步骤您就可以略过。\n".
+          "这个步骤就是帮您侦测MAC地址，然后保存到文件中，省去您抄录MAC地址的时间以及可能的抄写错误\n".
+	  "客户端计算机的网卡MAC地址将会按照您客户端计算机的开机顺序被记录下来。\n".
+	  "所收集到底网卡MAC地址将会依照客户端计算机连到DRBL服务器的网卡来给文件名，保存下来的文件名如macadr-eth1.txt、macadr-eth2.txt... 您可以在$drbl_syscfg/目录下找到这些文件。\n".
+	  "请先将客户端计算机设置为网络开机(etherboot或是PXE)，并依照您想要排列的顺序开机！\n". 
+          "您是否要收集客户端计算机的网卡MAC地址？",
+   ok_let_do_it => '开始进行...',
+   you_are_not_root => '您不是系统管理员',
+   ok_let_continue => '继续...',
+   fix_eth_IP_prompt => "您是否要让DRBL服务器的DHCP服务每次都分配相同的IP给客户端计算机(要使用这个选项，您必须已经收集好客户端计算机的网卡MAC地址(如前述的步骤)并且保存在文件中)，这是针对连接到DRBL服务器网卡的",
+   MAC_file_prompt => "请输入记录网卡MAC地址的文件名，这是针对连接到DRBL服务器网卡的",
+   #
+   range_prompt => "继续...客户端计算机会采用非固定IP！",
+   client_number_connected_to_eth => "有多少台DRBL客户端计算机(也就是给学生使用的电脑)连接到DRBL服务器网卡",
+   enter_the_no => "请输入数字",
+   the_value_you_set => "这个域的客户端计算机中，起始的IP地址4组数字中，最后一组数字的最后一个为",
+   set_the_IP_connected_to_eth => "我们将设置这些客户端计算机的IP为，这是针对连接到DRBL服务器网卡的",
+   do_you_want_to_continue => "您是否要继续？",
+   reenter_or_accept => "请重新输入，或是其他字母接受这个设置并且继续执行！",
+   filename_you_set => "您设置的文件名是",
+   by_MAC_file => "依据设置的网卡MAC地址记录文件，这些客户端的IP，连接到网卡",
+   let_restart_it_again => "重做一次！",
+   layout_for_DRBL => "您的DRBL环境配置：",
+   swap_prompt =>
+              "如果您的客户端计算机有硬盘，其中有交换分区(swap partition)或者是可写的文件系统，您是否要使用该交换分区或者在上面生成一个交换文件来作虚拟内存，\n".
+              "以便客户端的计算机可以使用需要更多内存的程序？(这个步骤不会损坏硬盘中原有的资料)",
+   try_to_create_swap =>
+                "确定要在客户端计算机硬盘中生成一个交换文件！",
+   max_swap_size =>
+                "交换文件要使用多少硬盘空间(Megabytes)？\n".
+                "我们会试着按照您指定的交换文件的大小进行配置，但是如果可写的空间如果不够的话，我们只会使用可用空间的60%。",
+   mode_for_client_init =>
+              "客户端开机后要进入哪一种模式？\n".
+              "\"1\" 图形模式(默认)，\n".
+              "\"2\" 文字模式。",
+   client_text_mode => "客户端开机后为文字模式。",
+   client_graphic_mode => "客户端开机后为图形模式。",
+   login_mode_for_client =>
+                  "客户端开机进入图形模式后，您可以选择登入的种类：\n".
+                  "(0)一般登入、(1)自动登入、(2)限时登入",
+   auto_login =>  "客户端开机后自动登入。",
+   created_account_for_auto_login =>
+                      "帐号将会被生成，以便自动登入使用。\n".
+		      "自动登入的帐号名称与该客户端计算机的名称相同。\n".
+                      "所生成的帐号和密码将会被列在这个文件中",
+   time_for_countdown => "自动登入倒数几秒？",
+   timed_login_prompt => "如果您在指定秒数内未登入，客户端计算机将会自动登入：",
+   normal_login_prompt => "客户端计算机开机后，使用者必须输入帐号和密码才能使用",
+   keep_client_setting_question => "您是否要保留以前DRBL客户端计算机的设置？",
+   remove_client_setting => "如果原来DRBL客户端计算机的设置存在的话，将会被清除。",
+   keep_client_setting => "如果原来DRBL客户端计算机的设置存在的话，将会予以保留。",
+   set_client_root_passwd => "基于安全考虑，您是否要为客户端计算机设置管理员密码(默认为复制DRBL服务器的管理员密码给客户端计算机管理员使用)？ ",
+   whats_client_root_passwd => "客户端的管理员密码是(您输入的字符不会在屏幕上显示出来)？",
+   set_client_pxelinux_passwd => "基于安全考虑，您是否要为客户端计算机设置开机密码？",
+   whats_client_pxelinux_passwd => "客户端的开机密码是(您输入的字符不会在屏幕上显示出来)？",
+   retype_root_passwd => "请再次输入新的密码(您输入的字符不会在屏幕上显示出来)？。",
+   sorry_passwd_not_match => "抱歉，两次输入的密码不一致",
+   sorry_passwd_can_not_empty => "抱歉，密码不能为空",
+   set_client_alias_IP =>
+      "使用别名方式，每台客户端计算机可以拥有2个IP，\n".
+      "其中一个为私有IP，用来连接到DRBL服务器，另一个公开IP使用来直接通过网卡连接到互联网使用！\n".
+      "您是否要为每台客户端计算机设置公开IP？",
+   searching_installed_drbl_packages => "正在搜索DRBL服务器中已经安装的相关程序...这可能需要几分钟...",
+   no_drbl_server_package_found =>
+	      "没有发现任何DRBL相关的程序！！！\n". 
+	      "您应该先执行另外一个程序(drblsrv -i)来设置DRBL服务器！！！否则这个DRBL系统是无法使用的！！！\n".
+	      "您确定要继续执行？\n".
+              "(\"yes\"或是\"y\" 执行这个步骤，其他字母来略去这个步骤！)",
+   but_you_will_see_errors => "但是您将会看到一堆错误信息...！！！",
+   smart_decision => "明智的选择，程序结束！\n",
+   finished_searching_installed_drbl_packages => "完成寻找DRBL服务器所需的相关程序。",
+   note_for_keep_client_setting => "【注意】您选择保留客户端计算机的原有设置，执行完这个程序后，客户端计算机可能会有一些不正常的现象，不过您只需要将那些客户端计算机重启即可！",
+   press_enter_to_continue => "按\"Enter\"键来继续... ",
+   no_deploy_prompt =>
+	      "所有的设置文件已经在当前工作目录下生成了，\n".
+	      "但是并没有部署到系统中！ \n".
+	      "如果您要部署它们，就不要使用这个选项\"-n\"或者\"--no_deploy\"",
+   ready_to_deploy =>
+	      "现在准备部署这些文件到系统中！\n".
+	      "您要继续执行么？",
+   overwrite_firewall_rule => "警告！如果您继续执行，您的防火墙规则将会被改写！",
+   backup_firewall_rule => "原来的规则将会被备份为iptables.drblsave于系统的设置目录中(/etc/sysconfig或者/etc/default)。",
+   oh_quit_now => "结束程序，终止执行！",
+   #
+   accept_or_enter => "(\"Y\" 接受这个设置，或者其他任何字母来依次输入...)",
+   failed_to_open_file => "无法打开文件",
+   #
+   analyzing_rpm_info => "正在分析rpm程序的信息...这可能需要几分钟...",
+   no_drbl_server_package => "没有安装任何DRBL相关程序！！！",
+   apt_pkg_not_installed =>  "没有安装\"apt\"程序！！！", 
+   we_are_now_ready_to => "现在准备",
+   the_files_for_DRBL_server => "DRBL服务器所需的文件！",
+   say_yes_to_continue_other_to_quit => "回答\"yes\"或者\"y\"来执行这个步骤，或者其他任何字母来略去这个步骤！",
+   say_no_to_quit_other_to_continue => "回答\"no\"或者\"n\"来结束程序，或者其他任何字母来继续！",
+   syncing_flush => "现在将内存中的资料写入硬盘中...", 
+   install_and_upgrade => "安装与升级",
+   IP_start_prompt => "这个域的客户端计算机中，起始的IP的4组数字中，最后一组数字的起始值是(也就是IP a.b.c.d的d的起始值)？这是针对连接到DRBL服务器网卡的",
+   client_no_in_MAC_file => "这个文件中客户端的计算机数量是",
+   not_initial_value => "您输入的值不正确，它不能当作这个域的第一个起始数字，请重新输入！！！",
+   can_not_be_the_last_IP => "不能当作IP地址的最后一组数字！！！",
+   can_not_be_the_first_IP => "不能当作IP地址的第一组数字！！！",
+   set_client_system_select => "您是否要在客户端计算机开机的时候允许用户选择自己所要的操作系统？",
+   use_graphic_pxelinux_menu => "您是否要在客户端计算机开机的时候使用图形背景的菜单？",
+   note_for_use_graphic_pxelinux_menu => "注意！如果您的客户端使用图形背景无法正常开机，您可以使用\"$DRBL_SCRIPT_PATH/sbin/switch-pxe-bg-mode -m text\"来切换成文字模式的背景。",
+   whats_client_system_boot_timeout => "客户端计算机开机，出现提示符时需要等待多少个0.1秒？",
+   sorry_timeout_must_be_number => "倒数的时间必须是数字(例如70)！！！",
+   unable_to_get_ethx_IP => "无法取得IP地址！！！\ 您必须设置一个固定的C类私有IP地址(例如192.168.1.1)。请注意，这个IP地址不能是浮动的(例如由DHCP服务器自动分配的)！这个错误存在于网卡：",
+   program_stop => "程序停止！！！",
+   open_thin_client_option => 
+        "您是否要让DRBL客户端可以选择使用终端机(Terminal)模式？也就是说，您要让客户端计算机执行DRBL服务器的远程显示(remote display) (这会大部分使用服务器的资源)，请在此回答\"Y\"。\n".
+        "请注意！\n".
+	"0. 如果开启这个模式，客户端的环境是非常有限的，例如客户端无法直接使用USB、CD、声音、打印机等。\n".
+	"1. 如果您的DRBL服务器不够强，您最好在此回答\"no\"。\n".
+	"2. 如果您在此回答\"yes\"，我们会开启XDMCP让用户来连接，\n".
+	"开启XDMCP永远不会是一个安全的作法，一个可行的方式是另外设置/etc/hosts.allow以及/etc/hosts.deny来让您的客户端计算机连接，但是还不是最安全的。\n".
+	"在防火墙中设置网卡177的规则是一个最安全的作法。\n".
+	"您可以阅读XDMCP的相关手册来了解相关细节。\n".
+	"请您自己根据您的需要来设置这些规则。\n".
+	"3. 如果这里回答\"yes\"，待会儿您可能必须要重新启动X视窗的桌面环境管理程序(gdm/kdm)，在关闭所有的应用程序之前请记得保存您的资料！\n".
+	"您是否要开放终端机(Terminal)模式给客户端选用？",
+   server_kernel_nfsd_support => "DRBL服务器目前使用的内核支持",
+   change_kernel_notes => "【注意】如果您改变DRBL服务器目前使用的内核版本，并且不确认那个内核是否支持基于UDP或者TCP的NFS，您最好重新执行\"drblpush -i\"以免客户端计算机开不了机！",
+   hint_for_answer => "提示！当有yes/no选项的时候，默认的值是大写的字母。例如(y/N)，默认值是\"N\"，当您按\"Enter\"的时候，程序使用的值就是\"N\"。如果您不确认选择哪个好的时候，直接按\"Enter\"键是一个保险的方式。",
+   hint_for_detect_MAC => "如果您要让DRBL服务器的DHCP服务每次都发相同的IP给客户端计算机，您必须已经收集好客户端计算机的网卡MAC地址(如前述的步骤)并且报存在文件中",
+   illegal_char_in_MAC => "这个MAC地址文件中含有不合法的字符",
+   fix_wrong_MAC_file => "请检查并且修改这个MAC地址文件。",
+   unable_to_find_public_IP => "没有找到这台服务器的公开IP地址，",
+   available_eth_ports => "这台服务器有的以太网卡",
+   is_not_in_the_lists => "不在目前可用的列表中",
+   enter_it_again => "请重新输入",
+   the_eth_port_you_choose_for_wan => "您所选择连接到广域网的以太网卡是",
+   set_DBN_client_audio_plugdev_etc_open_to_all => "您是否要让所有使用者在客户端可以使用声音、光驱、软驱、视频和移动设备(例如USB闪盘)等装置？如果回答yes，我们将会把所有使用者加到这台服务器与客户端的这些设备群组中。",
+   use_random_password => "您是否要让程序使用随机数生成客户端自动登入的密码？",
+   enter_password_for_autologin_accounts => "输入客户端自动登入帐号的密码。",
+   whats_client_autologin_passwd => "客户端自动登入帐号的密码是什么(您输入的字符不会在屏幕上显示出来)？",
+   retype_autologin_passwd => "再次输入密码(您输入的字符不会在屏幕上显示出来)。",
+   clonezilla_box_mode_for_client => "您是否只要使用再生龙模式？如果是的话，一些DRBL的模式将会被关闭，您会有一个简单快捷的模式来使用再生龙。请注意！在这个模式中，客户端计算机的系统设置不会保存到服务器中。所有开机后的设置只会使用一次，然后关机后就会消失。",
+   clonezilla_box_mode_is_set => "只要单独使用再生龙模式，简单快捷的模式将会被使用！",
+   full_clonezilla_mode_is_set => "您选择了完全模式(Full clonezilla mode)！",
+   clonezilla_box_mode_not_set => "不要单独使用再生龙模式，其他的DRBL模式将可以使用！",
+   no_clonezilla_in_system => "系统中将不实用再生龙！",
+   class_c_IP_for_multicast_clonezilla => "如果您要在再生龙中使用多播(multicast)，您一定要使用C类的私有IP地址(192.168.*.*)！要不然多播效果会非常的差！",
+   drbl_ssi_mode_for_client => "您是否要使用DRBL单一系统映像文件模式(DRBL SSI, single system image)？如果是的话，DRBL服务器的负载和所需要的硬盘空间会少一些。但是请注意！在这个模式中，(1)客户端计算机的内存建议至少要256MB以上，(2)客户端计算机的系统设置并不会保存到服务器中。所有开机后的系统设置只会使用一次，关机后就会消失。此外，如果您修改过任何范本机器的设置文件(也就是位于$drblroot下的设置文件)，您要再执行$DRBL_SCRIPT_PATH/sbin/drbl-gen-ssi-files来生成新的tarball范本文件于$drbl_common_root/drbl_ssi/中，(3)如果您要针对某些客户端设置一些特别的文件，可以参考$drbl_common_root/drbl_ssi/clients/00_README。",
+   which_drbl_mode_for_client => "本系统中，有3种模式可以提供无盘的Linux服务给客户端使用：\n[0] 完全DRBL模式(Full DRBL mode)，每个客户端都有自己的/etc和/var(基于NFS)。\n[1] 单一系统映像文件模式(DRBL SSI, single system image)，每个客户端都使用tmpfs(以内存来当虚拟磁盘)的/etc和/var。此模式中，Clonezilla服务器的负载和所需的硬盘空间会少一些。但是请注意！这个模式中，(a)客户端计算机的内存建议至少要256MB以上，(b)客户端计算机的系统设置并不会保存到服务器中。所有开机后的系统设置只会使用一次，关机后就会消失。此外，如果您修改过任何范本机器的设置文件(也就是位于$drblroot下的设置文件)，您要再执行$DRBL_SCRIPT_PATH/sbin/drbl-gen-ssi-files来生成新的tarball范本文件于$drbl_common_root/drbl_ssi/中，(c)如果您要针对某些客户端设置一些特别的文件，可以参考$drbl_common_root/drbl_ssi/clients/00_README。\n[2] 不要提供无盘Linux服务给客户端使用。\n您要选择哪一个模式？",
+   drbl_ssi_mode_is_set => "要使用企鹅龙单一系统映像文件模式，较为简单快捷的模式将会被使用！",
+   full_drbl_mode_is_set => "使用完全DRBL模式。",
+   no_drbl_mode_in_system => "不要提供无盘Linux服务给客户端使用。",
+   where_is_ocs_img_repo_dir => "使用再生龙的时候，您要把映像文件报存在这台机器的哪个目录中(请使用绝对路径，并且不要指定在/mnt/、/media/或者/tmp/下)？",
+   not_allowed_ocs_img_repo_dir => "是不能用来当作保存clonezilla映像文件的目录，请再输入一次",
+   drbl_server_as_NAT_server => "您是否要让DRBL服务器也能提供NAT服务(也就是一般俗称的IP共享功能)？如果不要的话，DRBL客户端计算机将无法连接到互联网。",
+   drbl_server_is_NOT_NAT_server => "这台DRB服务器未提供NAT服务(也就是一般俗称的IP共享功能)，DRBL客户端计算机将无法连接到互联网。",
+   both_drbl_clonezilla_are_none => "由于企鹅龙drbl与再生龙clonezilla模式都被指定为不使用，因此系统只有提供一些基本功能，例如netinstall(如果已经安装了相关的程序的话)与drbl-SL.sh！",
+   only_one_network_card_in_system => "///警告/// 在这台机器上只有找到一个设置好的网卡，我们不建议您这样做。因为这台DRBL服务器将会提供DHCP服务，只有一个网卡可能会扰乱您现有的网络环境，特别是您一竟有一个现存的DHCP服务和这个网卡通过网络交换机连接在一起。建议您至少使用两个网卡来避免这个问题。",
+   are_you_sure_you_want_to_continue => "您确认要继续执行？" ,
+   # Tag on 2010/12/13
+   # which_clonezilla_mode_for_client => "本系统中，Clonezilla再生龙有3个模式可以选择：\n[0] 完全模式(Full clonezilla mode)，每个客户端都有自己的/etc和/var(基于NFS)。\n[1] 再生龙盒模式(Clonezilla box mode)，每个客户端都使用tmpfs(以内存来当虚拟磁盘)的/etc和/var。此模式中，Clonezilla服务器的负载和所需的硬盘空间会少一些。但是请注意！这个模式中，客户端计算机的系统设置文件并不会报存在服务器中。所有开机后的系统设置只会使用一次，然后关机后就会消失！\n[2] 我不要使用再生龙。\n您要选择哪一个模式？",
+   which_clonezilla_mode_for_client => "本系统中，Clonezilla再生龙有4个模式可以选择：\n[0] 完全模式(Full clonezilla mode)，每个客户端都有自己的/etc和/var(基于NFS)。\n[1] \n[1] 再生龙盒模式(Clonezilla box mode)，每个客户端都使用tmpfs(以内存来当虚拟磁盘)的/etc和/var。此模式中，Clonezilla服务器的负载和所需的硬盘空间会少一些。但是请注意！这个模式中，客户端计算机的系统设置文件并不会报存在服务器中。所有开机后的系统设置只会使用一次，然后关机后就会消失！\n[2] 我不要使用再生龙。\n[3] 使用Clonezilla live当作用户端做clonezilla工作时的操作系统（测试中）。\n您要选择哪一个模式？",
+   clonezilla_live_mode_is_set => "使用Clonezilla live当作用户端执行Clonezilla工作的操作系统。",
+   which_clonezilla_live_branch => "使用哪个分支的Clonezilla live？\n[0]: 稳定版(Debian-based)\n[1]: 测试版(Debian-based)\n[2]: 稳定替代版(Ubuntu-based)\n[3]: 测试替代版(Ubuntu-based)\n若不确认，选[2]: 稳定替代版",
+   which_live_client_cpu_mode => "当使用Clonezilla live来执行Clonezilla的工作时，用户端的CPU架构要选用哪一种？\n[0]: i486\n[1]: i686\n[2]: amd64\n若不确认，请选用i486",
+   live_client_branch_set=> "Clonezilla live分支选定为",
+   live_client_cpu_arch_is_set => "用户端执行Clonezilla的工作时，选用的CPU架构是",
+   mark_the_end_of_lang =>"."
+   );

@@ -1,0 +1,46 @@
+#!/bin/bash
+# Author: Steven Shiau <steven _at_ nchc org tw>
+# License: GPL
+
+# Load DRBL setting and functions
+DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/opt/drbl/}"
+
+. $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
+. $DRBL_SCRIPT_PATH/conf/drbl-ocs.conf
+. $DRBL_SCRIPT_PATH/sbin/ocs-functions
+
+# Load ocs_lang if it exists
+[ -e /etc/ocs/ocs-live.conf ] && . /etc/ocs/ocs-live.conf
+
+#
+config_X() {
+  local action
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+  echo "$msg_later_enter_X_in_drbl_live"
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+  echo "$msg_run_forcevideo_drbl_live_prompt"
+  echo "$msg_failing_start_X_in_drbl_live_prompt"
+  echo "------------------------------------------"
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+  echo "$msg_which_mode_do_you_prefer"
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+  echo "(0) $msg_continue_to_start_X_for_drbl_live"
+  echo "(1) $msg_run_forcevideo_to_config_X_manually"
+  echo "(2) $msg_enter_cmd_prompt_to_config_X"
+  echo -n "[0] "
+  read action
+  case "$action" in
+    1) Forcevideo-drbl-live --skip-start-x # This process is still in rc*.d, skip start x
+       ;;
+    2) echo "$msg_enter_another_shell_hint_wo_netcfg_prompt"
+       /bin/bash;;
+    *) true;
+  esac
+} # end of config_X
+#
+
+#
+ask_and_load_lang_set
+
+#
+config_X

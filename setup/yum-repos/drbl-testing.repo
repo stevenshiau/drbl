@@ -1,0 +1,8 @@
+[drbl-testing]
+name=DRBL testing packages
+# baseurl=http://free.nchc.org.tw/drbl-core/$ARCH/RPMS.drbl-testing
+mirrorlist=http://free.nchc.org.tw/drbl-core/drbl-testing-mirror-list
+enabled=0
+gpgcheck=1
+# gpgkey=file:///opt/drbl/pki/rpm-gpg/RPM-GPG-KEY-DRBL
+gpgkey=http://drbl.nchc.org.tw/GPG-KEY-DRBL

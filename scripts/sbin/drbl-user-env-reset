@@ -1,0 +1,164 @@
+#!/bin/bash
+# Author: Blake, Kuo-Lien Huang
+# License: GPL
+# Description: reset use's home directory as initial status.
+#
+# Modified by Steven Shiau <steven@nchc.org.tw> to be used in DRBL for RedHat
+
+# Load DRBL setting and functions
+if [ ! -f "/opt/drbl/sbin/drbl-conf-functions" ]; then
+  echo "Unable to find /opt/drbl/sbin/drbl-conf-functions! Program terminated!" 
+  exit 1
+fi
+. /opt/drbl/sbin/drbl-conf-functions
+
+#
+check_if_root
+
+#
+run_cmd="`basename $0`"
+
+#
+usage() {
+  echo "Reset the files in user's home directory."
+  echo "Usage: $run_cmd [OPTION]"
+  echo "Options:"
+  language_help_prompt_by_idx_no
+  echo "-g, --group GROUP:  set the GROUP to be processed." 
+  echo "-a, --all:  process all user except root." 
+  echo "-u, --auto-login: process auto-login accounts." 
+  echo "-v, --verbose    prints out verbose information"
+  echo "If no group or user is assigned, only auto-login account will be reset"
+  echo "Ex:"
+  echo "$run_cmd -g students"
+}
+
+#
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -l|--language)
+	shift; specified_lang="$1"
+	shift;;
+    -g|--group)
+	shift
+        if [ -z "$(echo $1 |grep ^-.)" ]; then
+          # skip the -xx option, in case 
+	  chosen_group="$1"
+	  shift
+        fi
+	;;
+    -a|--all)
+	shift; chosen_group="all"
+        ;;
+    -u|--auto-login)
+	shift; chosen_group="auto_login"
+        ;;
+    -v|--verbose)
+	shift; VERBOSE="on"
+        ;;
+    -*)	echo "${0}: ${1}: invalid option" >&2
+	usage >& 2
+	exit 2 ;;
+    *)	break ;;
+  esac
+done
+
+ask_and_load_lang_set $specified_lang
+
+# check if group exists
+if [ -n "$chosen_group" -a "$chosen_group" != "all" -a "$chosen_group" != "auto_login" -a -z "`grep \"^$chosen_group:\" /etc/group 2>/dev/null`" ]; then
+    echo "group $chosen_group does NOT exist!!!"
+    exit 1
+fi
+
+# the default one for chosen_group is auto_login
+[ -z "$chosen_group" ] && chosen_group="auto_login"
+
+#
+if [ -n "$VERBOSE" ]; then
+   echo "chosen_group=$chosen_group"
+fi
+
+# main
+account_list=
+case "$chosen_group" in
+  all)
+    echo "Process all users..."
+    #
+    IFS_org=$IFS
+    IFS=':'
+    while read uname x uid gid x x x; do
+      # nfs user create a user called "nfsnobody", skip it.
+      if [ "$uid" -ge "$UID_BEGIN_DEFAULT" -a "$uname" != "nfsnobody" ]; then
+         account_list="$account_list $uname"
+      fi
+    done </etc/passwd
+    IFS=$IFS_org
+    ;;
+  auto_login)
+    echo "You did NOT specify group or all users, so process \"auto-login\" users only..."
+    echo -n "Finding the auto login accounts..."
+    # get the autologin account
+    for ihost in `get-client-ip-list`; do
+      iaccount="`get_existing_autologin_account $drblroot/$ihost`"
+      account_list="$account_list $iaccount"
+      echo -n "."
+    done
+    echo " done!"
+    ;;
+  *)
+    echo "Process the users in the chosen group \"$chosen_group\"... "
+    # process the chosen group
+    account_list=$(grep "^$chosen_group:" /etc/group | awk -F':' '{print $4}' | sed -e "s/,/ /g")
+    ;;
+esac
+
+# remove the leading space if it exists
+account_list=`echo $account_list | sed -e "s/^ //g"`
+# check the account list
+if [ -z "$account_list" ]; then
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+  echo "No any account you assigned exists! Program terminated!"
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+  exit 1
+fi
+
+[ -n "$VERBOSE" ] && echo "account_list=$account_list"
+
+[ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+echo "$msg_warning_home_dir_will_be_deleted!!!"
+echo "$msg_these_accounts_are:"
+[ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+echo "$account_list" 
+[ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+echo "$msg_are_u_sure_u_want_to_continue"
+[ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+echo -n "[y/N] "
+read reset_account_confirm
+case "$reset_account_confirm" in
+  Y|y|[yY][eE][sS])
+    echo "$msg_ok_let_do_it!"
+    ;;
+  *)
+    echo "$msg_do_not_reset_autologin_home_dir! $msg_program_stop!"
+    exit 0
+esac
+
+# store the LC_ALL
+LC_ALL_org=$LC_ALL
+export LC_ALL=C
+
+# main
+for id in $account_list; do
+  USER_HOME_DIR="$(grep "^$id:" /etc/passwd | awk -F':' '{print $6}')"
+  [ -z "$USER_HOME_DIR" -o ! -d "$USER_HOME_DIR" ] && continue
+  login_group="$(id -n -g $id)"
+  echo -n "Reseting account $id's home directory $USER_HOME_DIR... "
+  [ -n "$verbose" ] && rsync_opt_verbose="--progress"
+  rsync -a --delete $rsync_opt_verbose /etc/skel/ $USER_HOME_DIR/
+  chown -R $id.$login_group /etc/skel/ $USER_HOME_DIR/
+  echo "done!"
+done
+
+# restore the LC_ALL
+export LC_ALL=$LC_ALL_org

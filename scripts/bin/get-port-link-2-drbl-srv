@@ -1,0 +1,24 @@
+#!/bin/bash
+# Author: Steven Shiau <steven _at_ nchc org tw>
+# License: GPL
+# This script is used in DRBL client to show the IP Address connected to DRBL server. It can be used for more than one NIC or alias IP addresses.
+
+. /opt/drbl/sbin/drbl-conf-functions
+# load setting
+
+if [ -f /etc/diskless-image/config ]; then
+   # Load config file
+   . /etc/diskless-image/config
+else
+   exit 1
+fi
+   
+PORT_LISTS="$(get-nic-devs)"
+
+IP_link_2_srv="$(get-ip-link-2-drbl-srv)"
+for i in $PORT_LISTS; do
+  ip="$(drbl-get-ipadd $i)"
+  if [ "$ip" = "$IP_link_2_srv" ]; then
+    echo "$i"
+  fi
+done

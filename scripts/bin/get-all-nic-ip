@@ -1,0 +1,137 @@
+#!/bin/bash
+# Author: Steven Shiau <steven _at_ nchc org tw>
+# License: GPL
+
+# Load DRBL setting and functions
+DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/opt/drbl/}"
+
+. $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
+
+# alias level
+#ip_alias_list="0 1 2 3 4 5"
+
+usage() {
+    echo "Usage:"
+    echo "To get the up network devices or IP address:"
+    echo "`basename $0` [OPTION]"
+    echo " Options:"
+    echo " -c, --drbl-client-eth-port: Show the eth ports connected to DRBL clients (Used in DRBL server)"
+    echo " -b, --drbl-client-ip: Show the IP addresses connected to DRBL clients (Used in DRBL server)"
+    echo " -d, --all-net-dev:  Show only the up network devices, including alias IP address device."
+    echo " -p, --public-ip-port:  Show only the public IP address ethernet port."
+    echo " -t, --private-ip-port: Show only the private IP address ethernet port."
+    echo " -a, --public-ip-address:  Show only the public IP address."
+    echo " -r, --private-ip-address: Show only the public IP address."
+    echo " -i, --all-ip-address:  Show all the IP addresses."
+    echo " -u, --uplink-eth-port:     Show the uplink eth port (Used in DRBL server)"
+    echo " -v, --verbose           prints out verbose information"
+}
+#
+get_uplink_and_client_eth_port() {
+  uplink_eth_port="$(LC_ALL=C route -n | awk '/^0.0.0.0/ {print $8}' | sort | head -n 1)"
+  # //NOTE// what if ${NETDEV[@]:0} is "eth0 eth0:1", then 
+  # cat "eth0 eth0:1" | sed -e "s/eth0//g" 
+  # will give eth_ports_for_drbl_clients=":1". WRONG!
+  # //WRONG// eth_ports_for_drbl_clients="$(echo ${NETDEV[@]:0} | sed -e "s/$uplink_eth_port//g")"
+  eth_ports_for_drbl_clients=
+  for i in ${NETDEV[@]:0}; do
+    # Exclude $uplink_eth_port
+    [ "$i" = "$uplink_eth_port" ] && continue
+    eth_ports_for_drbl_clients="$eth_ports_for_drbl_clients $i" 
+  done
+  if [ -z "$eth_ports_for_drbl_clients" ]; then
+    # If by the above method eth_ports_for_drbl_clients is nothing, then the server must be with only 1 NIC.
+    eth_ports_for_drbl_clients="$uplink_eth_port"
+  fi
+} # end of get_uplink_and_client_eth_port
+
+show_mode=""
+# Parse command-line options
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -a|--public-ip-address) shift; show_mode="public_ip_address" ;;
+    -d|--all-net-dev) shift; show_mode="all_net_dev" ;;
+    -i|--all-ip-address) shift; show_mode="all_ip_address" ;;
+    -p|--public-ip-port) shift; show_mode="public_ip_eth_port" ;;
+    -r|--private-ip-address) shift; show_mode="private_ip_address" ;;
+    -t|--private-ip-port) shift; show_mode="private_ip_eth_port" ;;
+    -u|--uplink-eth-port) shift; show_mode="uplink_eth_port" ;;
+    -c|--drbl-client-eth-port) shift; show_mode="drbl_client_eth_port" ;;
+    -b|--drbl-client-ip) shift; show_mode="drbl_client_ip" ;;
+    -v|--verbose) shift; VERBOSE="on" ;;
+    -*)     echo "${0}: ${1}: invalid option" >&2
+            usage >& 2
+            exit 2 ;;
+    *)      break ;;
+  esac
+done
+
+#NDVS="$(get-nic-devs)"
+# For physical NIC, the format is like:
+# eth0      Link encap:Ethernet  HWaddr 00:11:aa:bb:cc:dd  
+# For ppp0 NIC, it's like:
+# ppp0 Link encap:Point-to-Point Protocol
+# Ref: http://sourceforge.net/projects/drbl/forums/forum/394008/topic/3855959
+NDVS="$(LC_ALL=C ifconfig -a | grep -iE '(HWaddr|encap:Point-to-Point Protocol)'| awk -F' ' '{print $1}')"
+i=0
+for idev in $NDVS; do
+  # physical network device IP
+  IP="$(LC_ALL=C drbl-get-ipadd $idev)"
+  if [ -n "$IP" ]; then
+    i=$((i+1))
+    NETDEV[$i]="$idev"
+    IPADDRS[$i]="$IP"
+  fi
+  # try alias IP
+  #for id in $ip_alias_list; do
+  #  IP="$(drbl-get-ipadd $idev:$id)"
+  #  if [ -n "$IP" ]; then
+  #    i=$((i+1))
+  #    NETDEV[$i]="$idev:$id"
+  #    IPADDRS[$i]="$IP"
+  #  fi
+  #done
+done
+imax=$i
+
+# found the public IP and ethx
+i=0
+public_IP_port=
+public_IP_addr=
+private_IP_port=
+private_IP_addr=
+while [ $i -le $imax ]; do
+  i=$((i+1))
+  if [ -n "$(echo ${IPADDRS[$i]} | grep -vE "^(192.168\..*|172\.(1[6-9]|2[0-9]|3[01])\..*|10\..*)")" ]; then
+    public_IP_port="$public_IP_port ${NETDEV[$i]}"
+    public_IP_addr="$public_IP_addr ${IPADDRS[$i]}"
+  else
+    private_IP_port="$private_IP_port ${NETDEV[$i]}"
+    private_IP_addr="$private_IP_addr ${IPADDRS[$i]}"
+  fi
+done
+
+# Find the uplink ethernet port. This is only useful in DRBL server
+case "$show_mode" in
+  uplink_eth_port|drbl_client_eth_port) get_uplink_and_client_eth_port ;;
+  drbl_client_ip)
+     get_uplink_and_client_eth_port
+     drbl_client_ip=""
+     for idev in $eth_ports_for_drbl_clients; do
+      IP="$(LC_ALL=C drbl-get-ipadd $idev)"
+      [ -n "$IP" ] && drbl_client_ip="$drbl_client_ip $IP"
+     done
+   ;;
+esac
+
+case "$show_mode" in
+  all_ip_address) echo ${IPADDRS[@]:0} ;;
+  all_net_dev) echo ${NETDEV[@]:0}  ;;
+  public_ip_address) echo $public_IP_addr ;;
+  public_ip_eth_port) echo $public_IP_port ;;
+  private_ip_address) echo $private_IP_addr ;;
+  private_ip_eth_port) echo $private_IP_port ;;
+  uplink_eth_port) echo $uplink_eth_port ;;
+  drbl_client_eth_port) echo $eth_ports_for_drbl_clients ;;
+  drbl_client_ip)  echo $drbl_client_ip ;;
+esac

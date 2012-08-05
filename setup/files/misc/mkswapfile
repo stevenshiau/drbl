@@ -1,0 +1,201 @@
+#!/bin/bash
+# mkswapfile    This shell script takes care of starting and stopping
+#               the mkswapfile.
+#
+# chkconfig: 2345 35 65
+# description: mkswapfile is a script to create swap file for DRBL client. This service must after netfs
+#
+# Author: Blake, Kuo-Lien Huang
+# License: GPL
+# Description: 
+#  start|stop mkswapfile in drbl client.
+#
+# For SuSE insserv
+### BEGIN INIT INFO
+# Provides: mkswapfile
+# Required-Start: $network $portmap $remote_fs
+# Required-Stop: $network $portmap $remote_fs
+# X-UnitedLinux-Should-Start: 
+# X-UnitedLinux-Should-Stop:
+# Default-Start: 2 3 4 5
+# Default-Stop: 0 1 6
+# Description: Start the swapfile
+### END INIT INFO
+
+# Modified by Steven Shiau <steven _at_ nchc org tw> to use it in DRBL
+# This file is borrowed from Knoppix (http://www.knoppix.org).
+
+# Setting
+SWAP_FILE=drbl.swap
+
+# Source function library.
+[ -f /etc/rc.d/init.d/functions ] && . /etc/rc.d/init.d/functions
+
+# For SuSE
+[ -e /etc/rc.status ] && . /etc/rc.status
+
+# Load DRBL setting and functions
+DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/opt/drbl/}"
+. $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
+
+# Source mkswapfile configuration.
+# It contains the maxswapsize (MB)
+# like: maxswapsize=512
+[ ! -f $SYSCONF_PATH/mkswapfile ] && exit 1
+. $SYSCONF_PATH/mkswapfile
+[ -z "$maxswapsize" ] && exit 1
+
+newswapfile() {
+  total_swap_size=0
+  # Maximum swap file size
+  maxswapsize=$1
+  # Find exist swap partitions
+  for p in `fdisk -l | grep "Linux swap" | cut -d" " -f1`; do
+    echo "Using the existing swap partition in $p"
+    swapon $p &
+    exist_swap_size=`cat /proc/swaps | grep $p | awk -F" " '{print $3}'`
+    exist_swap_size_in_MB=`expr $exist_swap_size / 1000`
+    echo "$p with size $exist_swap_size_in_MB (MB)."
+    total_swap_size=`expr $exist_swap_size_in_MB + $total_swap_size`
+    [ $total_swap_size -ge $maxswapsize ] && return 0
+  done
+
+  # Create swap files in exist partitions
+  avail_part="$(LC_ALL=C fdisk -l 2>/dev/null | grep "^\/dev\/" | awk '{ if($2=="*" && $6!="f" && $6!="0" && $6!="5") print $1; if($2!="*" && $5!="f" && $5!="0" && $5!="5") print $1; }')"
+  for p in $avail_part; do
+    part_fs="$(LC_ALL=C ocs-get-part-info $p type filesystem)"
+    rc=$?
+    [ "$rc" -gt 0 ] && continue 
+    case "$part_fs" in *[Ss][Ww][Aa][Pp]*|*extended*) continue ;; esac
+    # If NTFS, skip it since it's readonly if mounting via kernel. If the future maybe we will use ntfs-3g.
+    if [ -n "$(echo "$part_fs" | grep -iE "ntfs")" ]; then
+      echo "Skip creating swap file in NTFS partition $p..."
+      continue   
+    fi
+    # Initial value
+    Swap_2_create=0
+    SwapSize_Need=0
+    exist_size_in_MB=0
+    #
+    SwapSize_Need=`expr $maxswapsize - $total_swap_size`
+    d="/tmp/${p##*/}"
+    f="$d/$SWAP_FILE"
+    mkdir -p $d
+    # Mount the partition, check the size, create the swap file
+    if mount $p $d; then
+      if [ -f "$f" ]; then
+         exist_size_in_bytes="$(stat -c "%s" $f)"
+         exist_size_in_MB="$(echo "scale=0; $exist_size_in_bytes /1024/1024" |bc -l)"
+         echo "exist_size_in_MB = $exist_size_in_MB"
+      fi
+      ## check the partition size, use 60% for swap 
+      AVAIL=$(df --block-size=1M $d | awk '/^\/dev\//{print $4}')
+      AVAIL=`expr $AVAIL + $exist_size_in_MB`
+      AVAIL=$(echo "scale=0; $AVAIL * 3 / 5 " |bc -l)
+      if [ "$SwapSize_Need" -gt "$AVAIL" ]; then
+	 Swap_2_create=$AVAIL
+      else
+	 Swap_2_create=$SwapSize_Need
+      fi
+      # when the swap file if not exist, or the existing swapfile size
+      # is not matched, create it.
+      if [ ! -f "$f" -o "$exist_size_in_MB" -ne "$Swap_2_create" ]; then
+         echo "Creating a swap file $f with size $Swap_2_create MB..."
+         dd if=/dev/zero of="$f" bs=1M count="$Swap_2_create"
+         retv=$?
+         if [ "$retv" -eq 0 ]; then
+           [ -e "$f" ] && chmod 600 $f 2>/dev/null
+         else
+           # maybe the partition filesystem is ntfs, which is normally ro.
+           echo "The swap file $f can NOT be created!"
+         fi
+      else
+	 echo "Found an existing swap file with size $exist_size_in_MB MB (It makes the total swap file size is $maxswapsize MB), use that!" 
+      fi
+      # force to format the file as swapfile no matter it is or not.
+      [ -e "$f" ] && mkswap -v1 "$f" && swapon -v "$f" &
+    fi
+
+    # check if the total_swap_size is greater than $maxswapsize
+    total_swap_size=`expr $Swap_2_create + $total_swap_size`
+    [ "$total_swap_size" -ge "$maxswapsize" ] && return 0
+  done
+  if [ "$total_swap_size" -eq 0 ]; then
+    echo "No writable partition is available. Skip creating swap file!"
+  fi
+}
+
+rmswapfile() {
+  for p in `fdisk -l | grep "^\/dev\/" | awk '{ if($2=="*" && $6!="f" && $6!="0") print $1; if($2!="*" && $5!="f" && $5!="0") print $1; }'`
+  do
+    d="/tmp/${p##*/}"
+    f="$d/$SWAP_FILE"
+    if [ -f "$f" ]; then
+      /sbin/swapoff -v "$f"
+      # do not remove, so that next time we can use, this should be better,
+      # otherwise client has to spend some time to dd again.
+      #rm -f $f
+    fi
+    if [ "$(mount | grep "$d")" != "" ]; then
+      umount $d
+    fi
+    swapoff -a
+  done
+}
+
+###
+case "$1" in
+  "start")
+    #echo "Creating swap file (Upto $maxswapsize Mb) if the harddisk is available... This may take few minitues."
+    if [ -e /etc/debian_version ]; then
+      # Debian
+      echo -n "Starting mkswapfile services... "
+      start-stop-daemon --start --quiet \
+      --pidfile /var/run/mkswapfile.pid --exec $0 -- newswapfile $maxswapsize
+    elif [ -e /etc/SuSE-release ]; then
+      # SuSE
+      echo -n "Starting mkswapfile services... "
+      newswapfile $maxswapsize
+      rc_status -v
+    else
+      # RH-like
+      action $"Starting mkswapfile services: " $0 newswapfile $maxswapsize
+      RETVAL=$?
+      [ "$RETVAL" = 0 ] && touch /var/lock/subsys/mkswapfile
+    fi
+    ;;
+  "stop")
+    #echo "Removing swap file... This may take few minitues."
+    if [ -e /etc/debian_version ]; then
+      # Debian
+      echo -n "Stopping mkswapfile services... "
+      $0 rmswapfile
+      echo "done!"
+    elif [ -e /etc/SuSE-release ]; then
+      # SuSE
+      echo -n "Stopping mkswapfile services... "
+      rmswapfile $maxswapsize
+      rc_status -v
+    else
+      # RH-like
+      action $"Stopping mkswapfile services: " $0 rmswapfile
+      RETVAL=$?
+      [ "$RETVAL" = 0 ] && rm -f /var/lock/subsys/mkswapfile
+    fi
+    ;;
+  "newswapfile")
+    newswapfile $maxswapsize
+    ;;
+  "rmswapfile")
+    rmswapfile
+    ;;
+  restart)
+    $0 stop
+    $0 start
+    ;;
+  *)
+    echo $"Usage: $0 {start|stop|restart}"
+    exit 1
+esac
+
+exit 0

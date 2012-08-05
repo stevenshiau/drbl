@@ -1,0 +1,21 @@
+# Author: Steven Shiau <steven _at_ nchc org tw>
+# License: GPL
+# Run DRBL conf and functions
+
+# Setting
+# Source function library.
+[ -f /etc/rc.d/init.d/functions ] && . /etc/rc.d/init.d/functions
+
+# Source DRBL setting
+if [ ! -f "/opt/drbl/conf/drbl.conf" ]; then
+  echo "Can NOT find /opt/drbl/conf/drbl.conf! Program terminated!" 
+  exit 1
+fi
+. /opt/drbl/conf/drbl.conf
+
+# check if drbl-functions exists
+if [ ! -f "$DRBL_SCRIPT_PATH/sbin/drbl-functions" ]; then
+  echo "Can NOT find $DRBL_SCRIPT_PATH/sbin/drbl-functions! Program terminated!" 
+  exit 1
+fi
+. $DRBL_SCRIPT_PATH/sbin/drbl-functions

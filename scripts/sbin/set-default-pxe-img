@@ -1,0 +1,92 @@
+#!/bin/bash
+# Author: Steven Shiau <steven _at_ nchc org tw>
+# License: GPL
+# Description: set the default pxe image for simple menu format.
+
+# Load DRBL setting and functions
+DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/opt/drbl/}"
+
+. $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
+
+#
+PXE_CONF_DEF="$PXELINUX_DIR/default"
+
+#
+USAGE() {
+    echo "Usage:"
+    echo "To set the default PXE client menu:"
+    echo "`basename $0` [OPTION]"
+    echo " Options:"
+    echo " -i, --image IMG   Set IMG as the default one"
+    echo " -c, --config CONF Use the CONF file instead of default one ($PXE_CONF_DEF)"
+    echo " -l, --label LABEL Assign the menu LABEL description"  
+    echo " -n, --no-simple-menu Turn off simple menu"
+    echo " -s, --simple-menu Turn on simple menu"
+    echo " -v, --verbose     Show verbose messages"
+    echo " -h, --help        Display this help and exit"
+}
+
+SIMPLE_MENU=""
+# Parse command-line options
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -i|--image)  
+            shift;
+            # skip the -xx option, in case 
+	    if [ -z "$(echo $1 |grep ^-.)" ]; then
+	      IMG="$1"
+	      shift
+            fi
+            ;;
+    -c|--config)  
+            shift;
+            # skip the -xx option, in case 
+	    if [ -z "$(echo $1 |grep ^-.)" ]; then
+              PXE_CONF="$1" 
+	      shift
+            fi
+            ;;
+    -n|--no-simple-menu)  
+            SIMPLE_MENU="off" 
+	    shift;;
+    -s|--simple-menu)  
+            SIMPLE_MENU="on" 
+	    shift;;
+    -h|--help)  
+            USAGE >& 2
+            exit 2 ;;
+    -l|--label)  
+            shift;
+            # skip the -xx option, in case 
+	    if [ -z "$(echo $1 |grep ^-.)" ]; then
+	      MENU_LABEL="$1" 
+	      shift
+            fi
+            ;;
+    -v|--verbose)  
+            VERBOSE="on"
+	    shift;;
+    -*)     echo "${0}: ${1}: invalid option" >&2
+            USAGE >& 2
+            exit 2 ;;
+    *)      break ;;
+  esac
+done
+
+[ -z "$PXE_CONF" ] && PXE_CONF=$PXE_CONF_DEF
+if [ -z "$IMG" ]; then
+   [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+   echo "You must specify the image name! Program terminated!!!"
+   [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+   USAGE
+   exit 1
+fi
+
+sub_default_pxe_img $IMG $PXE_CONF "$MENU_LABEL"
+
+# process simple menu
+if [ "$SIMPLE_MENU" = "off" ]; then 
+  perl -pi -e "s/^default .*/default $IMG/g" $PXE_CONF
+elif [ "$SIMPLE_MENU" = "on" ]; then
+  perl -pi -e "s/^default .*/default vesamenu.c32/g" $PXE_CONF
+fi

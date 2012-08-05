@@ -1,0 +1,52 @@
+<account>
+    <master_url>http://www.worldcommunitygrid.org/</master_url>
+    <authenticator>7294d1ee005bf25b0c46f27330c54326</authenticator>
+    <project_name>World Community Grid</project_name>
+<project_preferences>
+    <resource_share>100.0</resource_share>
+    <project_specific>
+        <color_scheme>Tahiti Sunset</color_scheme>
+    </project_specific>
+    <allow_non_preferred_projects>1</allow_non_preferred_projects>
+    <apps_selected>
+        <app_id>8</app_id>
+    </apps_selected>
+</project_preferences>
+<gui_urls>
+   <gui_url>
+      <name>Global Statistics</name>
+      <description>Summary statistics for World Community Grid</description>
+      <url>http://www.worldcommunitygrid.org/stat/viewGlobal.do</url>
+   </gui_url>
+   <gui_url>
+      <name>My Grid</name>
+      <description>Your statistics and settings</description>
+      <url>http://www.worldcommunitygrid.org/ms/viewMyMemberPage.do</url>
+   </gui_url>
+   <gui_url>
+      <name>Results Status</name>
+      <description>View the status of your assigned work</description>
+      <url>http://www.worldcommunitygrid.org/ms/viewBoincResults.do</url>
+   </gui_url>
+   <gui_url>
+      <name>Device Profiles</name>
+      <description>Update your device settings</description>
+      <url>http://www.worldcommunitygrid.org/ms/device/viewProfiles.do</url>
+   </gui_url>
+   <gui_url>
+      <name>Research</name>
+      <description>Learn about the projects hosted at World Community Grid</description>
+      <url>http://www.worldcommunitygrid.org/projects_showcase/viewResearch.do</url>
+   </gui_url>
+   <gui_url>
+      <name>Forums</name>
+      <description>Visit the World Community Grid forums</description>
+      <url>http://www.worldcommunitygrid.org/forumLogin.do</url>
+   </gui_url>
+   <gui_url>
+      <name>Help</name>
+      <description>Search for help in our help system</description>
+      <url>http://www.worldcommunitygrid.org/help/viewHelp.do</url>
+   </gui_url>
+</gui_urls>
+</account>

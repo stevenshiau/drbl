@@ -1,0 +1,189 @@
+#!/bin/bash
+# Written by Steven Shiau <steven@nchc.org.tw> to use in DRBL for RedHat
+# License: GPL
+
+# Load DRBL setting and functions
+DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/opt/drbl/}"
+
+. $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
+
+USAGE() {
+     echo "Usage: $0 Options SERVICE_NAME {on|off|reset|add|del|list}"
+     echo " Options:"
+     echo " -h, --host IP_ADDRESS:  set only for the host with IP_ADDRESS instead of all DRBL clients"
+     echo " -g, --no-gen-ssi Do NOT generate DRBL SSI template tarball."
+     echo " Example: use the following to turn on the DRBL clients' kudzu"
+     echo " $0 kudzu on"
+}
+
+# main
+check_if_root
+
+# 
+unalias ls 2>/dev/null
+
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -h|--host)
+		shift; specified_host="$1"
+		shift
+                ;;
+    -g|--no-gen-ssi)
+		gen_ssi="no"
+                shift;;
+    -*)		echo "${0}: ${1}: invalid option" >&2
+		USAGE >& 2
+		exit 2 ;;
+    *)		break ;;
+  esac
+done
+
+service=$1
+switch=$2
+
+[ -z "$service" ] && USAGE && exit 1
+[ -z "$switch" ] && USAGE && exit 1
+
+#
+if [ -n "$specified_host" ]; then
+ [ ! -d "$drblroot/$specified_host" ] && echo "Can NOT find DRBL client $specified_host (i.e. no $drblroot/$specified_host)! Program terminated!" && exit 1
+ [ -n "$verbose" ] && echo "specified_host: $specified_host"
+fi
+
+# set the host to be processed
+# host_list is the IP address of client, like 192.168.1.1...
+host_list=""
+if [ -n "$specified_host" ]; then
+   # set the host path
+   host_list=$drblroot/$specified_host
+else
+   # withoud specified_host, it must be all clients, append each one to $host_list
+   for ihost in $drblroot/*; do
+     host_list="$host_list $ihost"
+   done
+fi
+
+#
+for ihost in $host_list; do
+  case "$switch" in
+  on)
+     echo "Turning on the service \"$service\" for DRBL client `basename $ihost`..."
+     if [ -e /etc/debian_version ]; then
+       # Debian-like
+       get_debian_ubuntu_init_serv_control_prog
+       # prepare the update-rc.d env, perl is necessary for update-rc.d
+       prepare_update_rc_d_env $ihost
+       if [ "$dbn_ubn_serv_control_prog" = "use-insserv" ]; then
+         # Use insserv
+         chroot $ihost/ insserv $service &> /dev/null
+       else
+         # Use update-rc.d
+         chroot $ihost/ /usr/sbin/update-rc.d $service defaults &> /dev/null
+       fi
+       #clean_update_rc_d_env $ihost
+     elif [ -e /etc/SuSE-release ]; then
+       # SuSE
+       create_insserv_env $ihost
+       chroot $ihost/ /sbin/insserv -f $service
+     else
+       # RH-like
+       create_chkconfig_env $ihost
+       chroot $ihost/ /sbin/chkconfig $service on
+       #clean_chkconfig_env $ihost
+       echo "done!"
+     fi
+     ;;
+  off)
+     echo "Turning off the service \"$service\" for DRBL client `basename $ihost`..."
+     if [ -e /etc/debian_version ]; then
+       # Debian-like
+       get_debian_ubuntu_init_serv_control_prog
+       # prepare the update-rc.d env, perl is necessary for update-rc.d
+       prepare_update_rc_d_env $ihost
+       if [ "$dbn_ubn_serv_control_prog" = "use-insserv" ]; then
+         # Use insserv
+         chroot $ihost/ insserv -r $service &> /dev/null
+       else
+         # Use update-rc.d
+         chroot $ihost/ /usr/sbin/update-rc.d -f $service remove &> /dev/null
+       fi
+       #clean_update_rc_d_env $ihost
+     elif [ -e /etc/SuSE-release ]; then
+       # SuSE
+       create_insserv_env $ihost
+       chroot $ihost/ /sbin/insserv -f -r $service
+     else
+       create_chkconfig_env $ihost
+       chroot $ihost/ /sbin/chkconfig $service off
+       #clean_chkconfig_env $ihost
+       echo "done!"
+     fi
+     ;;
+  reset)
+     echo "Resetting the service \"$service\" for DRBL client `basename $ihost`..."
+     if [ -e /etc/debian_version ]; then
+       echo "Reset service in DRBL clients is not supported! Sorry!"
+     elif [ -e /etc/SuSE-release ]; then
+       # SuSE
+       echo "Reset service in DRBL clients is not supported! Sorry!"
+     else
+       create_chkconfig_env $ihost
+       chroot $ihost/ /sbin/chkconfig $service reset
+       #clean_chkconfig_env $ihost
+       echo "done!"
+     fi
+     ;;
+  add)
+     echo "Adding the service \"$service\" for DRBL client `basename $ihost`..."
+     if [ -e /etc/debian_version ]; then
+       echo "Add service for DRBL clients in not supported! Sorry!"
+     elif [ -e /etc/SuSE-release ]; then
+       # SuSE
+       echo "Add service for DRBL clients in not supported! Sorry!"
+     else
+       create_chkconfig_env $ihost
+       chroot $ihost/ /sbin/chkconfig --add $service
+       #clean_chkconfig_env $ihost
+       echo "done!"
+     fi
+     ;;
+  del)
+     echo "Deleting the service \"$service\" for DRBL client `basename $ihost`..."
+     if [ -e /etc/debian_version ]; then
+       echo "Reset service in DRBL clients is not supported! Sorry!"
+     elif [ -e /etc/SuSE-release ]; then
+       # SuSE
+       echo "Reset service in DRBL clients is not supported! Sorry!"
+     else
+       create_chkconfig_env $ihost
+       chroot $ihost/ /sbin/chkconfig --del $service
+       #clean_chkconfig_env $ihost
+       echo "done!"
+     fi
+     ;;
+  list)
+     echo "Listing the service \"$service\" for DRBL client `basename $ihost`..."
+     if [ -e /etc/debian_version ]; then
+       echo "Reset service in DRBL clients is not supported! Sorry!"
+     elif [ -e /etc/SuSE-release ]; then
+       # SuSE
+       echo "Reset service in DRBL clients is not supported! Sorry!"
+     else
+       create_chkconfig_env $ihost
+       chroot $ihost/ /sbin/chkconfig --list $service
+       #clean_chkconfig_env $ihost
+       echo "done!"
+     fi
+     ;;
+  *)
+     USAGE
+     exit 1
+  esac
+done
+
+#
+if [ "$gen_ssi" != "no" ]; then
+  echo "-------------------------------------------------------"
+  echo "Since some config files are modified in template client, creating template tarball for DRBL SSI..."
+  drbl-gen-ssi-files
+fi

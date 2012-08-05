@@ -1,0 +1,20 @@
+#!/bin/bash
+# Author: Steven Shiau <steven _at_ nchc org tw>
+# License: GPL
+#
+# generate the NFS exports or clean the old one.
+
+# Load DRBL setting and functions
+if [ ! -f "/opt/drbl/sbin/drbl-conf-functions" ]; then
+  echo "Unable to find /opt/drbl/sbin/drbl-conf-functions! Program terminated!" 
+  exit 1
+fi
+. /opt/drbl/sbin/drbl-conf-functions
+
+# calculate the number of the NFS daemon 
+total_client_no="$(get-client-ip-list | wc -l)"
+[ -z "$total_client_no" ] && exit 1
+nfsd_no="$(echo "scale=0; $NFSD_RATIO * $total_client_no / 1" | bc -l)"
+[ "$nfsd_no" -ge $NFSD_MAX ] && nfsd_no=$NFSD_MAX
+
+echo "$nfsd_no"

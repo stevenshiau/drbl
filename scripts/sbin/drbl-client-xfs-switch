@@ -1,0 +1,119 @@
+#!/bin/bash
+# Written by Steven Shiau <steven@nchc.org.tw> to use in DRBL for RedHat
+# License: GPL
+#
+# set the iptables NAT
+# clean the old tables
+
+# Load DRBL setting and functions
+DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/opt/drbl/}"
+. $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
+
+#
+check_if_root
+
+# main
+USAGE="Usage: $0 {local|remote}"
+switch=$1
+
+#
+if [ $# -ne 1 ]; then
+  echo "$USAGE"
+  echo "Example: use the following to use remote xfs service for clients"
+  echo "$0 remote"
+  exit 1
+fi
+#
+case "$switch" in
+   "remote")
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+      echo "Setting the remote xfs for clients..."
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+      # Change the xfs setting in server
+      # set the client_no first, minimum 10.
+      client_no=$(unalias ls 2> /dev/null; ls -d $drblroot/* 2>/dev/null |wc -w|sed -e "s/ //g")
+       # / 1 to make the result as integer.
+      client_no=$(echo "scale=0; $client_no * $XFS_RATIO / 1" |bc -l)
+      [ $client_no -lt 10 ] && client_no=10
+      perl -p -i -e "s/^[[:space:]]*[#]*[[:space:]]*client-limit[[:space:]]*=.*/client-limit = $client_no/" /etc/X11/fs/config
+      # enable the xfs service with tcp
+      perl -p -i -e "s/^.*no-listen = tcp.*/#no-listen = tcp/" /etc/X11/fs/config
+      # restart xfs
+      /etc/init.d/xfs restart
+
+      # change the XF86Config file in client, for MDK it's XF86Config-4, 
+      for ihost in $drblroot/*; do
+         # try to get the font server
+	 IP=$(basename $ihost)
+         font_server=$(grep -e "$drblroot/$IP/etc" $drblroot/$IP/etc/fstab | awk -F":" '{print $1}')
+	 [ -z "$font_server" ] && echo "Failed to find the font server...Program terminated!" && exit 1
+	 #
+	 echo -n "Setting the remote font server in XF86Config for client $IP..."
+         if [ -f $ihost/etc/X11/XF86Config ]; then
+             # backup first
+	     echo "Editing XF86Config..."
+             cp -f $ihost/etc/X11/XF86Config $ihost/etc/X11/XF86Config.drblsave
+             perl -p -i -e "s/^[[:space:]]*[^#]*[[:space:]]*FontPath[[:space:]]+\".*\".*/\tFontPath     \"tcp\/$font_server:$fs_port\"/" $ihost/etc/X11/XF86Config
+             # del the xfs service to clients
+             drbl-client-service -h $IP xfs del
+             # stop the xfs service in clients
+             drbl-doit -h $IP "/etc/init.d/xfs stop"
+         fi
+         if [ -f $ihost/etc/X11/XF86Config-4 ]; then
+             # backup first
+             cp -f $ihost/etc/X11/XF86Config-4 $ihost/etc/X11/XF86Config-4.drblsave
+             perl -p -i -e "s/^[[:space:]]*[^#]*[[:space:]]*FontPath[[:space:]]+\".*\".*/\tFontPath     \"tcp\/$font_server:$fs_port\"/" $ihost/etc/X11/XF86Config-4
+             # del the xfs service to clients
+             drbl-client-service -h $IP xfs del
+             # stop the xfs service in clients
+             drbl-doit -h $IP "/etc/init.d/xfs stop"
+         fi
+         if [ -f $ihost/etc/X11/XF86Config -a -f $ihost/etc/X11/XF86Config-4 ]; then
+             # we need xfs, otherwise firstboot will fail to detect successfully, because no xfs service running locally
+             # so keep the xfs service to client
+             drbl-client-service -h $IP xfs add
+         fi
+      done
+      #
+      echo "done!"
+      ;;
+    "local")
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+      echo "Setting the local xfs for clients..."
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+      # Change the xfs setting in server, Default font server comes with client-limt = 10
+      client_no=10
+      perl -p -i -e "s/^[[:space:]]*[#]*[[:space:]]*client-limit[[:space:]]*=.*/client-limit = $client_no/" /etc/X11/fs/config
+      perl -p -i -e "s/^.*no-listen = tcp.*/no-listen = tcp/" /etc/X11/fs/config
+      # restart xfs
+      /etc/init.d/xfs restart
+
+      # add the xfs service to clients
+      drbl-client-service xfs add
+      # change the XF86Config file in client, for MDK it's XF86Config-4, 
+      # backup first
+      for ihost in $drblroot/*; do
+	 IP=$(basename $ihost)
+	 echo -n "Setting the local font server in XF86Config for client $IP..."
+         if [ -f $ihost/etc/X11/XF86Config ]; then
+             cp -f $ihost/etc/X11/XF86Config $ihost/etc/X11/XF86Config.drblsave
+             perl -p -i -e "s/^[[:space:]]*[^#]*[[:space:]]*FontPath[[:space:]]+\".*\".*/\tFontPath     \"unix\/:$fs_port\"/" $ihost/etc/X11/XF86Config
+         fi
+         if [ -f $ihost/etc/X11/XF86Config-4 ]; then
+             cp -f $ihost/etc/X11/XF86Config-4 $ihost/etc/X11/XF86Config-4.drblsave
+             perl -p -i -e "s/^[[:space:]]*[^#]*[[:space:]]*FontPath[[:space:]]+\".*\".*/\tFontPath     \"unix\/:$fs_port\"/" $ihost/etc/X11/XF86Config-4
+         fi
+      done
+      #
+      drbl-doit "/etc/init.d/xfs restart"
+
+      echo "done!"
+
+      ;;
+    *)
+      echo "$USAGE"
+esac
+#
+echo "-------------------------------------------------------"
+echo "Since some config files are modified in template client, creating template tarball for DRBL SSI..."
+drbl-gen-ssi-files

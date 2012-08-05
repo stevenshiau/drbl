@@ -1,0 +1,240 @@
+#!/bin/bash
+# Author: Steven Shiau <steven _at_ nchc org tw>
+# License: GPL 
+
+# Load the setting
+DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/opt/drbl/}"
+
+. $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
+#
+check_if_root
+
+# functions
+USAGE() {
+  echo "Usage: $0 [Option] [on|off]"
+  echo "Options:"
+  language_help_prompt_by_idx_no
+  echo "-n, --no-check-clients    Do NOT check if clients' directories exist in $drblroot."
+  echo "-c, --no-create-ssi-template  Do NOT create DRBL single system image template again. Default is to create SSI template when on."
+  echo "-d, --drbl-mode [0|1|2]  Assign DRBL mode (0: Full DRBL mode, 1: DRBL SSI mode, 2: Do NOT provide diskless Linux service to clients)."
+  echo "-t, --template HOST  Use HOST as the template to create etc and var tarballs. If not assigned, $0 will find the first client one in dir $drblroot."
+  echo "-x, --exclude-X-config    When creating template, exclude X config."
+  echo "-s, --no-stop-ocs    do NOT stop ocs. (It's better to stop OCS so that the unnecessary services in rc1.d will be removed!)."
+  echo "-z, --clonezilla-mode  [0|1|2|3]  Assign Clonezilla mode (0: Full DRBL mode, 1: Clonezilla box mode, 2: Do NOT provide clonezilla service to clients, 3: Use Clonezilla live as the OS of clients)"
+  echo "-h, --help           Display this help and exit"
+  echo "Example:"
+  echo "To turn on the DRBL SSI mode, run:"
+  echo "$0 -d 1"
+  echo "To turn on the DRBL SSI mode and Clonezilla box mode, run:"
+  echo "$0 -d 1 -z 1"
+}
+# 
+set_clonezilla_mode() {
+  local mode=$1
+  echo -n "Setting clonezilla_mode=\"$mode\" in /etc/drbl/drbl_deploy.conf and /etc/drbl/drblpush.conf... "
+  perl -pi -e "s/^[[:space:]]*clonezilla_mode=.*/clonezilla_mode=\"$mode\"/g" /etc/drbl/drbl_deploy.conf
+  perl -pi -e "s/^[[:space:]]*clonezilla_mode=.*/clonezilla_mode=$mode/g" /etc/drbl/drblpush.conf
+  echo "done!"
+}
+#
+set_drbl_mode() {
+  local mode=$1
+  echo -n "Setting drbl_mode=\"$mode\" in /etc/drbl/drbl_deploy.conf and /etc/drbl/drblpush.conf... "
+  perl -pi -e "s/^[[:space:]]*drbl_mode=.*/drbl_mode=\"$mode\"/g" /etc/drbl/drbl_deploy.conf
+  perl -pi -e "s/^[[:space:]]*drbl_mode=.*/drbl_mode=$mode/g" /etc/drbl/drblpush.conf
+  echo "done!"
+}
+turn_on_clientdir_opt() {
+  local label="$1"
+  [ -z "$label" ] && echo "No label assigned in turn_on_clientdir_opt!" && exit 1
+  PXE_CONF="$PXELINUX_DIR/default"
+  lines=$(get_pxecfg_image_block $label $PXE_CONF)
+  begin_line=$(echo $lines | awk -F" " '{print $1}')
+  end_line=$(echo $lines | awk -F" " '{print $2}')
+  tag_found="$(head -n $end_line $PXE_CONF | tail -n $(($end_line-$begin_line)) | grep -Ei "^[[:space:]]*append[[:space:]]*.*clientdir=node_root")"
+  if [ -z "$tag_found" ]; then
+    sub_menu_label_cmd="if ($begin_line..$end_line) {s/(^[[:space:]]*append[[:space:]]+.*)/\$1 clientdir=node_root/gi}"
+    perl -pi -e "$sub_menu_label_cmd" $PXE_CONF
+  fi
+}
+
+turn_off_clientdir_opt() {
+  local label="$1"
+  [ -z "$label" ] && echo "No label assigned in turn_off_clientdir_opt!" && exit 1
+  PXE_CONF="$PXELINUX_DIR/default"
+  lines=$(get_pxecfg_image_block $label $PXE_CONF)
+  begin_line=$(echo $lines | awk -F" " '{print $1}')
+  end_line=$(echo $lines | awk -F" " '{print $2}')
+  sub_menu_label_cmd="if ($begin_line..$end_line) {s/(^[[:space:]]*append[[:space:]]+.*)[[:space:]]+clientdir=node_root(.*)/\$1\$2/gi}"
+  perl -pi -e "$sub_menu_label_cmd" $PXE_CONF
+}
+
+#
+create_drbl_ssi_clonezilla_box_template() {
+  # if template is not assigned, find one.
+  if [ -z "$template" ]; then
+    for ih in $drblroot/*; do
+      # use the 1st one drbl client we found as template
+      if [ -d "$ih" ]; then
+        template="$(basename $ih)"
+        break
+      fi
+    done
+  fi
+  echo "Creating template tarball for DRBL SSI and Clonezilla box..."
+  [ "$exclude_template_X_conf" = "yes" ] && gen_ssi_extra_opt="-x"
+  [ "$stop_ocs" = "no" ] && gen_ssi_extra_opt="$gen_ssi_extra_opt --no-stop-ocs"
+  drbl-gen-ssi-files -t $template $gen_ssi_extra_opt
+}
+
+#
+check_full_drbl_mode_clients() {
+  client_ip_lists="$(LC_ALL=C get-client-ip-list)"
+  for ih in $client_ip_lists; do
+    if [ ! -d $drblroot/$ih/etc ]; then
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+      echo "$drblroot/$ih does NOT exist!!! You have to run \"drblpush -i\" again and choose to use Full DRBL or Full Clonezilla mode. We can NOT turn on Full DRBL or Full Clonezilla mode!"
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+      echo "Program terminated!!!"
+      exit 1
+    fi
+  done
+}
+
+# default setting
+template=""
+check_clients_files="yes"
+create_ssi_template="yes"
+stop_ocs="yes"
+
+# Parse command-line options
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -l|--language)
+	shift
+        if [ -z "$(echo $1 |grep ^-.)" ]; then
+          # skip the -xx option, in case 
+	  specified_lang="$1"
+	  shift
+        fi
+	;;
+    -s|--no-stop-ocs)
+	    stop_ocs="no"
+	    shift;;
+    -n|--no-check-clients)
+	    check_clients_files="no"
+	    shift;;
+    -c|--no-create-ssi-template)
+	    create_ssi_template="no"
+	    shift;;
+    -x|--exclude-X-config)
+	    exclude_template_X_conf="yes"
+	    shift;;
+    -t|--template)
+ 	    shift
+            if [ -z "$(echo $1 |grep ^-.)" ]; then
+              # skip the -xx option, in case 
+	      template="$1"
+	      shift
+            fi
+	    ;;
+    -d|--drbl-mode)
+ 	    shift
+            if [ -z "$(echo $1 |grep ^-.)" ]; then
+              # skip the -xx option, in case 
+	      drbl_mode="$1"
+	      shift
+            fi
+	    [ -z "$drbl_mode" ] && USAGE && exit 1
+	    ;;
+    -z|--clonezilla-box-mode)
+ 	    shift
+            if [ -z "$(echo $1 |grep ^-.)" ]; then
+              # skip the -xx option, in case 
+	      clonezilla_mode="$1"
+	      shift
+            fi
+	    [ -z "$clonezilla_mode" ] && USAGE && exit 1
+	    ;;
+    -h|--help)  
+            USAGE >& 2
+            exit 2 ;;
+    -*)     echo "${0}: ${1}: invalid option" >&2
+            USAGE >& 2
+            exit 2 ;;
+    *)      break ;;
+  esac
+done
+
+#
+ask_and_load_lang_set $specified_lang
+
+case "$drbl_mode" in
+  0) # full drbl mode
+    [ "$check_clients_files" = "yes" ] && check_full_drbl_mode_clients
+    echo "Full DRBL mode. Remove clientdir opt for label drbl in pxelinux config... "
+    hide_reveal_pxe_img drbl reveal $pxecfg_pd/pxelinux.cfg/default
+    turn_off_clientdir_opt drbl
+    set_drbl_mode full_drbl_mode
+    ;;
+  1) # drbl ssi mode
+    echo "DRBL SSI mode. Set clientdir opt for label drbl in pxelinux config... "
+    hide_reveal_pxe_img drbl reveal $pxecfg_pd/pxelinux.cfg/default
+    turn_on_clientdir_opt drbl
+    set_drbl_mode drbl_ssi_mode
+    ;;
+  2) # none
+    echo "DRBL service is set as unavailable. Set clientdir opt for label drbl in pxelinux config... "
+    create_ssi_template="no"
+    hide_reveal_pxe_img drbl hide $pxecfg_pd/pxelinux.cfg/default
+    turn_on_clientdir_opt drbl
+    set_drbl_mode none
+    ;;
+esac
+
+case "$clonezilla_mode" in
+  0) # full clonezilla mode
+    [ "$check_clients_files" = "yes" ] && check_full_drbl_mode_clients
+    echo "Full clonezilla mode. Remove clientdir opt for label clonezilla in pxelinux config... "
+    turn_off_clientdir_opt clonezilla
+    # TODO: how do we know to use it's as full_clonezilla_mode or none ?
+    set_clonezilla_mode full_clonezilla_mode
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+    echo "$msg_run_dcs_clonezilla_start_to_show_pxemenu"
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+    ;;
+  1) # clonezilla box mode
+    echo "Clonezilla box mode. Set clientdir opt for label clonezilla in pxelinux config... "
+    turn_on_clientdir_opt clonezilla
+    set_clonezilla_mode clonezilla_box_mode
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+    echo "$msg_run_dcs_clonezilla_start_to_show_pxemenu"
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+    ;;
+  2) # none
+    echo "Clonezilla service is set as unavailable. Set clientdir opt for label clonezilla in pxelinux config... "
+    create_ssi_template="no"
+    hide_reveal_pxe_img clonezilla hide $pxecfg_pd/pxelinux.cfg/default
+    turn_on_clientdir_opt clonezilla
+    set_clonezilla_mode none
+    ;;
+  3) # clonezilla-live mode
+    echo "Use Clonezilla live as the OS of clients. Set clientdir opt for label clonezilla in pxelinux config... "
+    create_ssi_template="no"
+    turn_on_clientdir_opt clonezilla
+    set_clonezilla_mode clonezilla_live_mode
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+    echo "$msg_run_dcs_clonezilla_start_to_show_pxemenu"
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+    ;;
+esac
+
+#
+if  [ "$create_ssi_template" = "yes" ]; then
+  if [ -n "$(echo "$drbl_mode" | grep -Ew "(1|2)")" -o \
+       -n "$(echo "$clonezilla_mode" | grep -Ew "(1|2)")" ]; then
+       create_drbl_ssi_clonezilla_box_template
+  fi
+fi
+
+exit 0

@@ -1,0 +1,36 @@
+#!/usr/bin/perl
+#
+## Originally by Ben H. Originally by neeko.
+## Ref: http://www.thenetworkadministrator.com/hack/IPAddresses.htm
+## Modified by Steven Shiau <steven _at_ nchc org tw>.
+## Usage: drbl-gethostip host/ip
+##
+use Socket;                       # for gethostbyname()
+use Math::BigInt;                 # so it fits..
+my $host, @ip;            # get some vars started.
+
+if ( $#ARGV < 0 ) {
+  print "Usage: $0 host \n";
+  exit 1;
+}
+
+$name = $ARGV[0];
+@host = gethostbyname( $name );    # get the ip, if a hostname is used
+$foo = $host[4];
+# This parses the result of the gethostbyname into numbers
+for $n (1..4) {
+  $ip[$n] = ord( substr( $foo , ($n-1) , 1 ) );
+}
+my $check = $ip[1] + $ip[2] + $ip[3] + $ip[4];
+if ( $check == 0) {
+  print "$name: Unknown host\n";
+  exit 1
+}
+
+for $n (1..4) {
+  $ip[$n] = uc(sprintf("%02x", $ip[$n]));
+}
+
+print ($ip[1],$ip[2],$ip[3],$ip[4]);
+print "\n";
+exit 0;

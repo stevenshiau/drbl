@@ -1,0 +1,195 @@
+#!/bin/bash
+# Author: Blake, Kuo-Lien Huang
+# License: GPL
+# Description:
+#   * creat accounts with prefix and specific range
+#
+# Modified by Steven Shiau <steven@nchc.org.tw> to used in DRBL for Redhat
+
+# Load DRBL setting and functions
+if [ ! -f "/opt/drbl/sbin/drbl-conf-functions" ]; then
+  echo "Unable to find /opt/drbl/sbin/drbl-conf-functions! Program terminated!" 
+  exit 1
+fi
+. /opt/drbl/sbin/drbl-conf-functions
+
+#
+ACCOUNT_FILE_TMP=`mktemp /tmp/account_tmp.XXXXXX`
+
+#
+check_if_root
+
+#
+run_cmd="`basename $0`"
+
+if [ -n "$(basename $0 | grep -E "useradd")" ]; then
+  mode="useradd"
+elif [ -n "$(basename $0 | grep -E "userdel")" ]; then
+  mode="userdel"
+else
+  echo "Unknown mode!"
+  exit 1
+fi
+
+if [ $# -ne 3 -a $# -ne 4 -a $# -ne 5 ]; then
+  echo "Usage:"
+  echo "To add accounts:"
+  echo "drbl-useradd-range name_prefix start_no end_no groupname password_opt"
+  echo "password_opt:"
+  echo "If one digit, it's the length of randomly created password."
+  echo "If blank, it will be randomly generated with 8 characters."
+  echo "Other setting is the password itself."
+  echo "Ex: drbl-useradd-range student 2 5 g3c2 8"
+  echo "or"
+  echo "drbl-useradd-range student 2 5 g3c2 drblnice"
+  echo 
+  echo "To delete accounts:"
+  echo "drbl-userdel-range name_prefix start_no end_no <groupname>"
+  echo "Ex: drbl-userdel-range student 2 5 g3c2"
+  echo "or"
+  echo "drbl-userdel-range student 2 5"
+  exit 1
+fi
+
+name_prefix=$1
+start_no=$2
+end_no=$3
+groupname=$4
+password_opt=$5
+
+# check if groupname is not valid one
+if `echo "$groupname" | grep -q "^[0-9]"`; then
+   echo "groupname can NOT begin with digits (0-9)!"
+   echo "The one you specified is \"$groupname\""
+   echo "Program terminated"
+   exit 1
+fi 
+
+ask_and_load_lang_set
+
+#
+i=$start_no
+student=$name_prefix
+nnum=`echo -n "$end_no" | wc -c`
+while [ $i -le $end_no ] ; do
+  label="$i"
+  n=`echo -n "$label" | wc -c`
+  while [ $n -lt $nnum ]; do
+    label="0$label"
+    n=`echo -n "$label" | wc -c`
+  done
+  # output the results to temp file
+  echo "$student$label $groupname $password_opt" >> $ACCOUNT_FILE_TMP
+  i=`expr $i + 1`
+done
+
+# useradd mode
+if [ "$mode" = "useradd" ]; then
+  while read id groupname password_opt; do
+    if ! grep -q "^$groupname:" /etc/group; then
+      echo -n "Creating group $groupname..."
+      /usr/sbin/groupadd "$groupname"
+      echo "done!"
+    fi
+    if ! grep -q "^$id:" /etc/passwd; then
+      echo -n "Creating account $id..."
+      /usr/sbin/useradd -m -G "$groupname" "$id"
+      echo "done!"
+    else
+      echo "Account $id exists! Skip!"
+    fi
+  
+    case "$password_opt" in
+     [0-9]|"")
+        # get one digit, so it must be the length of password
+        # or it's empty, we set it as $password_opt_default
+        if [ -z "$password_opt" ]; then
+          echo "You did NOT set the length of password, set it as $PASSWD_LENGTH_DEFAULT." 
+          password_opt="$PASSWD_LENGTH_DEFAULT"
+        fi
+        echo "Randomly set password from password length..." 
+	make_random_password $password_opt
+	random_pw=$random_password
+        echo "The password of $id is \"$random_pw\""
+        echo "$id:$random_pw" | /usr/sbin/chpasswd
+        ;;
+     *)
+        echo "Set password from input..." 
+        echo "The password of $id is \"$password_opt\""
+        echo "$id:$password_opt" | /usr/sbin/chpasswd
+    esac  
+    echo "finished creating account for $id"
+  done < $ACCOUNT_FILE_TMP
+fi
+
+# useradd mode
+if [ "$mode" = "userdel" ]; then
+   user_2_be_removed="$(awk -F" " '{print $1}' $ACCOUNT_FILE_TMP)"
+   user_2_be_removed="$(echo $user_2_be_removed)"  # Make it in one line
+   echo "User(s) to be removed:"
+   echo "$msg_delimiter_star_line"
+   [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+   echo "$user_2_be_removed"
+   [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+   echo "$msg_delimiter_star_line"
+   echo -n "Do you also want to clean user's home directory [y/N] ? "
+   read clean_home
+   case "$clean_home" in
+      y|Y|[yY][eE][sS]) 
+         echo "Warning! The user's home directory will be deleted! Are you sure ?"
+         echo -n "[y/N] "
+         read clean_home_confirm
+         case "$clean_home_confirm" in
+            y|Y) 
+               RM_HOME_OPT="-r"
+               ;;
+            *)
+               RM_HOME_OPT=""
+         esac
+         ;;
+      *)
+         RM_HOME_OPT=""
+   esac
+   echo -n "Do you also want to clean group [Y/n] ? "
+   read clean_group
+   case "$clean_group" in
+      n|N|[nN][oO]) 
+         RM_GROUP_OPT=""
+         ;;
+      *)
+         RM_GROUP_OPT="yes"
+   esac
+   while read id groupname password_opt; do 
+    if [ "$RM_GROUP_OPT" = "yes" ]; then
+      if [ -n "$groupname" ]; then
+        if grep -q "^$groupname:" /etc/group; then
+          echo -n "Deleting group $groupname..."
+          /usr/sbin/groupdel $groupname
+          echo "done!"
+        else
+          [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+          echo "Can NOT find group $groupname!!!"
+          [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+        fi
+      fi
+    fi
+    
+    if grep -q "^$id:" /etc/passwd; then
+      echo -n "Deleting account $id..."
+      /usr/sbin/userdel $RM_HOME_OPT $id
+      echo "done!"
+    else
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+      echo "Can NOT find account $id!!!"
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+    fi
+   done < $ACCOUNT_FILE_TMP
+
+fi
+# clean the temp file
+[ -f "$ACCOUNT_FILE_TMP" ] && rm -f $ACCOUNT_FILE_TMP
+
+#
+echo "now update the yp data in /var/yp ..."
+make -C /var/yp
+echo "done!" 

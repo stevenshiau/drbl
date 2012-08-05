@@ -1,0 +1,58 @@
+#!/bin/bash
+# Author: Steven Shiau <steven _at_ nchc org tw>
+# License: GPL
+#
+# To arm wake on LAN for NIC in DRBL client.
+#
+# chkconfig: 2345 99 99
+# description: To arm wake on LAN for NIC in DRBL client before it poweroffs.
+# Author: Steven Shiau <steven _at_ nchc org tw>
+# License: GPL
+#
+# For SuSE insserv
+### BEGIN INIT INFO
+# Provides: arm-wol
+# Required-Start:
+# Required-Stop:
+# X-UnitedLinux-Should-Start: 
+# X-UnitedLinux-Should-Stop:
+# Default-Start: 2 3 4 5
+# Default-Stop: 0 1 6
+# Description: To arm wake on LAN for NIC in DRBL client before it poweroffs.
+### END INIT INFO
+
+# Append a default search path.
+PATH="$PATH:/sbin:/usr/sbin:/bin:/usr/bin:/usr/X11R6/bin"
+export PATH
+
+#
+if [ ! "$UID" = "0" ]; then
+  echo
+  echo "[$LOGNAME] You need to run this script \"`basename $0`\" as root."
+  echo
+  exit 1
+fi
+
+# Exclude some devices, like lo, sit0, vmnet... It's regular expression.
+exluding_dev="(lo|sit[0-9]+|vmnet)"
+export LC_ALL=C
+if [ -d /sys/class/net/ ]; then
+  # kernel support sysfs, so get the NIC devices from /sys
+  NETDEVICES="$(unalias ls &>/dev/null; ls /sys/class/net/ | grep -v -E "$exluding_dev")"
+elif [ -f /proc/net/dev ]; then
+  # kernel do not support sysfs, so get the NIC devices from /proc
+  NETDEVICES="$(cat /proc/net/dev | grep "^.*:" | cut -d: -f1 | grep -v -E "$exluding_dev")"
+else
+  echo "Network interface card is not found in /sys/class/net/ or /proc/net/dev!"
+  echo "Program terminated!"
+  exit 1
+fi
+echo -n "Trying to arm the wake on LAN for "
+RETVAL=0
+for nic in $NETDEVICES; do
+  echo -n "$nic... "
+  ethtool -s $nic wol g &> /dev/null
+  RETVAL="$((RETVAL+$?))"
+done
+echo "done!"
+exit $RETVAL

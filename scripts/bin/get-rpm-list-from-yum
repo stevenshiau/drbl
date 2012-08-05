@@ -1,0 +1,68 @@
+#!/bin/bash
+# Author: Steven Shiau <steven _at_ nchc org tw>
+# License: GPL 
+
+# Load DRBL setting and functions
+DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/opt/drbl/}"
+. $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
+
+#
+USAGE() {
+  echo "Usage: $0 [Option] URL"
+  echo "Option:"
+  echo "-n|--without-path   Show the results WITHOUT relative path"
+  echo "Ex:"
+  echo "$0 -n http://free.nchc.org.tw/fedora/linux/releases/10/Fedora/i386/os/" 
+  echo "$0 -n ftp://free.nchc.org.tw/dists/fedora/linux/releases/10/Fedora/i386/os/" 
+  echo "$0 -n http://free.nchc.org.tw/fedora/linux/core/5/i386/os" 
+  echo "$0 http://free.nchc.org.tw/fedora/linux/core/updates/5/i386"
+}
+
+# default settings
+show_path="yes"
+# Parse command-line options
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -n|--without-path)
+	shift
+	show_path="no"
+	;;
+    -*) echo "${0}: ${1}: invalid option" >&2
+        USAGE >& 2
+        exit 2 ;;
+    *)  break ;;
+  esac
+done
+url=$1
+[ -z "$url" ] && exit 1
+# NOTE! Do not put extra / in the end of url, otherwise
+# http://opensource.nchc.org.tw/fedora/linux/core/updates/3/i386//../repodata
+# is equal to
+# http://opensource.nchc.org.tw/fedora/linux/core/updates/3/i386/repodata/
+
+# strip the last /
+url="$(echo $url | sed -e "s|/$||g")"
+file_xml="primary.xml.gz"
+flst_tmp="$(mktemp -d /tmp/yum_xml.XXXXXX)"
+(
+  for id in . .. ../../; do
+   cd "$flst_tmp"
+    lftpget $url/$id/repodata/$file_xml 2>/dev/null
+    RC=$?
+    [ "$RC" -eq 0 ] && break
+  done
+)
+if [ "$show_path" = "yes" ]; then
+  filter_prog="cat"
+else
+  filter_prog="xargs basename"
+fi
+if [ -f "$flst_tmp/$file_xml" ]; then
+  # For Fedora, Ex (new line):
+  #   <location href="Fedora/RPMS/selinux-policy-2.2.23-15.noarch.rpm"/>
+  # For CentOS (messed up):
+  # ... losetup(8)), creating volume groups (kind of virtual disks) from one or more physical volumes and creating one or more logical volumes (kind of logical partitions) in volume groups.</description><packager>Johnny Hughes & lt;johnny@centos.org&gt;</packager><url>http://sources.redhat.com/lvm2</url><time fil e="1141877182" build="1141871322"/><size package="837792" installed="1762701" archive ="1776280"/><location href="CentOS/RPMS/lvm2-2.02.01-1.3.RHEL4.i386.rpm"/>
+  # Hence we have to use "grep -o"
+  zgrep -o "<location href=\".*rpm\"/>" $flst_tmp/$file_xml | sed -e "s|^[[:space:]]*<location href=\"||g" -e "s|\"/>||g" | $filter_prog
+fi
+[ -d "$flst_tmp" -a -n "$(echo $flst_tmp | grep "yum_xml")" ] && rm -rf $flst_tmp

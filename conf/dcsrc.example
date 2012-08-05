@@ -1,0 +1,9 @@
+# This file is for dcs (drbl-client-switch) user setting. Copy this file to your home directory and rename it as .dcsrc if you want to use it.
+
+# 3 language options are available:
+# [0]: English, [1]: Traditional Chinese (Big5) - Taiwan, [2] Traditional Chinese (UTF-8, Unicode) - Taiwan"
+specified_lang="0"
+
+# Set all clients' mode, then LIST_HOST=off"
+# To assign the clients, set LIST_HOST="on"
+LIST_HOST="off" 

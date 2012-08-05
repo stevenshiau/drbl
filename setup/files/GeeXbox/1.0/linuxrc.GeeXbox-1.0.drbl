@@ -1,0 +1,165 @@
+#!/bin/sh
+# Modified by Steven Shiau <steven _at_ nchc org tw>
+
+busybox mount -t ramfs none /ramfs
+IFS='
+'
+for i in `busybox find /`; do
+  if busybox test -d $i; then
+    busybox mkdir -p /ramfs$i
+  else
+    busybox ln -s /initrd$i /ramfs$i
+  fi
+done
+
+busybox mkdir /ramfs/initrd
+busybox pivot_root /ramfs /ramfs/initrd
+busybox mkdir -p /proc /sys /usr/bin /usr/sbin
+busybox mount -t proc none /proc
+busybox mount -t sysfs none /sys
+busybox --install -s
+
+echo geexbox > /proc/sys/kernel/hostname
+echo 0 > /proc/sys/dev/cdrom/autoclose
+echo 0 > /proc/sys/dev/cdrom/lock
+
+export PATH=/bin:/sbin:/usr/bin:/usr/sbin
+
+progress() {
+  if test -f /proc/splash; then
+    echo "show $1" > /proc/splash
+  fi
+  echo "### $2 ###"
+}
+
+progress 8000 "setting up ramfs tree"
+mkdir -p /dev
+mkdir -p /mnt
+mkdir -p /tmp
+mkdir -p /var/run
+mkdir -p /var/log
+mkdir -p /var/lock
+
+echo -n "" > /etc/mtab
+echo -n "" > /etc/fstab
+echo -n "" > /etc/mnts
+
+echo > /proc/sys/kernel/hotplug
+udevd --daemon
+udevstart
+
+grep -q installator /proc/cmdline && INSTALLATOR=yes
+grep -q debugging /proc/cmdline && DEBUG=yes
+BOOT=`sed 's/.*boot=\([^\ ]*\).*/\1/' /proc/cmdline`
+
+# DRBL modify start
+if test "$BOOT" = frominitrd; then
+  GEEXBOX=/
+fi
+# DRBL modify end
+
+if test "$BOOT" = nfs; then
+  progress 11000 "getting nfs tree"
+  NFS=`sed 's/.*nfsroot=\([^\ ]*\).*/\1/' /proc/cmdline`
+  GEEXBOX=/nfs
+  mkdir -p $GEEXBOX
+  udhcpc -q -H geexbox -n && mount -t nfs -o ro,nolock,nfsvers=2 $NFS $GEEXBOX
+  if [ ! -f "$GEEXBOX/bin.tar.lzma" ]; then
+    umount $GEEXBOX
+    rmdir $GEEXBOX
+    GEEXBOX=
+  fi
+fi
+
+progress 12000 "searching cdrom drives"
+if [ "$BOOT" = cdrom ]; then
+  for i in 0 1 2 3 4; do
+    for DEV in `grep '^/dev/cdrom' /etc/mnts | cut -f1`; do
+      CDROM=`grep "^$DEV	" /etc/mnts | cut -f2-`
+      if [ -d "$CDROM/GEEXBOX" ]; then
+        GEEXBOX="$CDROM/GEEXBOX"
+        ln -s "$DEV" /dev/cdrom
+        break
+      fi
+    done
+    [ -n "$GEEXBOX" ] && break
+    sleep 1
+  done
+fi
+[ ! -e /dev/cdrom -a -b /dev/cdrom1 ] && ln -s /dev/cdrom1 /dev/cdrom
+
+# DRBL modify start
+if [ "$BOOT" != cdrom -a "$BOOT" != nfs -a -z "$BOOT" ]; then
+# DRBL modify end
+  if [ "$INSTALLATOR" != yes ]; then
+    progress 17000 "boot device detection"
+    for i in 0 1 2 3 4 5 6 7 8 9; do
+      [ -z "$BOOTDISK" ] && BOOTDISK=`cd /dev; ls -l $BOOT | sed 's/.* \([^ ]*\)$/\1/'`
+      [ -n "$BOOTDISK" ] && grep -q "^/dev/$BOOTDISK " /proc/mounts && break
+      sleep 1
+    done
+    for DEV in `grep '^/dev/disk' /etc/mnts | cut -f1`; do
+      DIR=`grep "^$DEV	" /etc/mnts | cut -f2-`
+      if [ -d "$DIR/GEEXBOX" ]; then
+        GEEXBOX="$DIR/GEEXBOX"
+        [ "/dev/$BOOTDISK" = "$DEV" ] && break
+      fi
+    done
+  fi
+fi
+
+if [ -n "$GEEXBOX" ]; then
+  # DRBL modify start
+  if [ "$BOOT" != "frominitrd" ]; then
+    progress 25000 "copying system into ram"
+    cp -a "$GEEXBOX/sbin" /
+    progress 27000 "copying system into ram"
+    cp -a "$GEEXBOX/etc" /
+    progress 29000 "copying system into ram"
+    cp -a "$GEEXBOX/usr" /
+    progress 30500 "copying system into ram"
+    cp -a "$GEEXBOX/var" /
+    progress 42000 "copying system into ram"
+    cp -a "$GEEXBOX/codecs" /
+    progress 45000 "copying system into ram"
+    cp -a "$GEEXBOX/firmwares" /
+  fi
+  # DRBL modify end
+  progress 45500 "copying system into ram"
+  tar xaf "$GEEXBOX/bin.tar.lzma" -C /
+  progress 46000 "copying system into ram"
+  INIT=/sbin/init
+else
+  INIT=/sbin/nosystem
+  progress 65535 "cleaning ram disk"
+fi
+
+if test "$BOOT" = nfs; then
+  if test "$INSTALLATOR" = yes; then
+    export NFS="$GEEXBOX"
+  elif test -n "$GEEXBOX"; then
+    umount "$GEEXBOX"
+  fi
+fi
+
+if test "$BOOT" = cdrom; then
+  export CDROM="${GEEXBOX%/GEEXBOX}"
+fi
+
+RUNLEVEL="geexbox"
+if test "$INSTALLATOR" = yes; then
+  RUNLEVEL="install"
+elif test "$DEBUG" = yes; then
+  RUNLEVEL="debug"
+fi
+
+if test "$DEBUG" = yes; then
+  /sbin/console </dev/tty2 >/dev/tty2 2>&1 &
+fi
+/bin/sh $INIT $RUNLEVEL </dev/tty1 >/dev/tty1 2>&1
+
+if test "$INSTALLATOR" = yes -o $? = 64; then
+  reboot
+else
+  poweroff
+fi

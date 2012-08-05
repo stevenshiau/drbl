@@ -1,0 +1,224 @@
+#!/bin/bash
+# Author: Steven Shiau <steven _at_ nchc org tw>
+# License: GPL
+# Description: Program to start service for AoE images on DRBL server.
+
+DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/opt/drbl/}"
+
+. $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
+. $DRBL_SCRIPT_PATH/conf/drbl-ocs.conf
+. $DRBL_SCRIPT_PATH/sbin/ocs-functions
+
+#
+prog="$(basename $0)"
+#
+USAGE() {
+   echo "Usage: $prog [OPTION] {start|stop|restart|status}"
+   echo "-d, --img-dir DIR  Scan the AoE image directory DIR when starting"
+   echo "Ex:" 
+   echo "To start AoE service for images in default image dir $sanboot_img_dump_dir:"
+   echo "  $prog start"
+   echo "To start AoE service for images in /work/img/:"
+   echo "  $prog -d /work/img/ start"
+   echo "To start AoE service for images in /work/img1/ and /work/img2/:"
+   echo "  $prog -d \"/work/img1/ /work/img2/\" start"
+   echo "To stop AoE service:"
+   echo "  $prog stop"
+}
+#
+start() {
+  if ! type vblade &>/dev/null; then
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+    echo "vblade not found!"
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+    echo "$msg_program_stop!!"
+  fi
+  sys_eth_ports="$(LC_ALL=C get-all-nic-ip --drbl-client-eth-port)"
+  IP_MAC_TMP="$(mktemp /tmp/ip_mac_tmp.XXXXXX)"
+  trap "[ -f "$IP_MAC_TMP" ] && rm -f $IP_MAC_TMP" HUP INT QUIT TERM EXIT
+  parse_dhcpd_conf $IP_MAC_TMP
+  # The output of parse_dhcpd_confi is like:
+  # hostname  IP ADD       MAC ADD
+  # debian101 192.168.61.1 00:02:e3:53:34:30
+  # debian102 192.168.61.2 00:02:e3:54:73:39
+
+  # image name is like: sanboot.aoe-0-0-for-00-50-56-02-01-02
+  echo "The AoE image dir: $aoe_img_dir"
+  for img_dir in $aoe_img_dir; do
+    for i in $img_dir/*.aoe-*; do
+     if [ ! -e "$i" ]; then
+        echo "$i is not a normal file. Skip this."
+        continue
+     fi
+     # If the filename is not the format, skip it
+     if [ -z "$(basename $i | grep -E "for-([[:alnum:]]+-){5}[[:alnum:]]+$")" ]; then
+        echo "$i is not in DRBL AoE image file name format. Skip this."
+        continue
+     fi
+     [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+     echo "AoE image found: $i"
+     [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+     shelf_no="$(echo $i | grep -Eo "aoe-[[:digit:]]+-[[:digit:]]+-for-.*" | awk -F'-' '{print $2}')"
+     slot_no="$(echo $i | grep -Eo "aoe-[[:digit:]]+-[[:digit:]]+-for-.*" | awk -F'-' '{print $3}')"
+     mac_address_dash="$(echo $i | grep -Eo "aoe-[[:digit:]]+-[[:digit:]]+-for-.*" | sed -e 's/^aoe-.*-for-//g')"
+     mac_address_normal="$(echo $mac_address_dash | sed -e 's/-/:/g')"
+     mac_name_cfg_for_pxe="01-${mac_address_dash}"
+     echo "Checking if vblade service for aoe:e${shelf_no}.${slot_no} is running..."
+     ps_status="$(ps -ef | grep -Ew "vblade[[:space:]]+${shelf_no}[[:space:]]+${slot_no}" | grep -v "grep")"
+     if [ -n "$ps_status" ]; then
+       echo "vblade service for aoe.e${shelf_no}.${slot_no} is running. Skip this one"
+       continue
+     fi
+     # Find the right eth port instead of running on all. This can be done by parsing the dhcpd.conf if MAC addresses are used in dhcpd.conf.
+     client_ip="$(grep -iEw "$mac_address_normal" $IP_MAC_TMP | awk -F' ' '{print $2}')"
+     if [ -n "$client_ip" ]; then 
+        # We can find the IP address from dhcpd.conf
+        # The output of "ip route get 192.168.205.10" is like:
+        # 192.168.205.10 dev eth2  src 192.168.205.254
+        eth_ports_list="$(ip route get $client_ip | grep -iEo 'dev[[:space:]]+.*src' | awk -F' ' '{print $2}')"
+        echo "This server uses ethernet port $eth_ports_list to connect client $mac_address_normal"
+     else
+        # "range" is used in dhcpd.conf, we have to run vblade on all the available ether port except uplink port.
+        eth_ports_list="$sys_eth_ports"
+        echo "No idea which ethernet port on the server connects to client $mac_address_normal. Running virtual blade on all available ethernet ports except uplink port..."
+     fi
+    
+     if [ -z "$eth_ports_list" ]; then
+       [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+       echo "Something went wrong! No ethernet port on the server connecting to client $mac_address_normal was found!"
+       [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+       echo "$msg_program_stop!!"
+     fi
+     echo -n "Starting virtual blade for ${i##*/} on "
+     for j in $eth_ports_list; do
+       echo -n "$j, "
+       vbladed ${shelf_no} ${slot_no} $j $i
+       rc=$?
+       if [ "$rc" -gt 0 ]; then
+         [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+         echo "Something went wrong when starting vbladed by: vbladed ${shelf_no} ${slot_no} $j $i"
+         [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+         continue
+       fi
+     done
+     echo
+    
+     # Set pxelinux config file
+     cp -f $PXE_CONF_DEF $PXELINUX_DIR/$mac_name_cfg_for_pxe
+     hide_reveal_pxe_img "AoE-client" reveal $PXELINUX_DIR/$mac_name_cfg_for_pxe
+     set-default-pxe-img -i "AoE-client" -c $PXELINUX_DIR/$mac_name_cfg_for_pxe
+     # Change the line: append aoe:e0.0
+     drbl-tune-pxecfg-block AoE-client "^([[:space:]]*)append aoe:.*" "\$1append aoe:e${shelf_no}.${slot_no}" $PXELINUX_DIR/$mac_name_cfg_for_pxe
+    done
+  done
+  [ -e "$IP_MAC_TMP" ] && rm -f $IP_MAC_TMP
+
+  # Use gpxelinux.0 instead of pxelinux.0 in dhcpd.conf
+  if ! grep -iEq '^[[:space:]]*filename[[:space:]]*=[[:space:]]*[\"]*gpxelinux.0[\"]*' $DHCPDCONF_DIR/dhcpd.conf; then
+    echo "Use gpxelinux.0 instead of pxelinux.0 in dhcpd.conf..."
+    perl -pi -e 's|(^filename[[:space:]]*=[[:space:]]*"*pxelinux.0"*.*)|#$1|g' $DHCPDCONF_DIR/dhcpd.conf
+    perl -pi -e 's|(^[#]*[[:space:]]*filename[[:space:]]*=[[:space:]]*"*gpxelinux.0"*.*)|filename = "gpxelinux.0";|g' $DHCPDCONF_DIR/dhcpd.conf
+    # Restart dhcpd service, since different distributions have different names
+    for serv_st in dhcpd isc-dhcp-server dhcp3-server; do
+      [ -e "/etc/init.d/$serv_st" ] && /etc/init.d/$serv_st restart
+    done
+  fi
+} # end of start
+
+stop() {
+  local pxe_mac_files
+  echo -n "Stopping vblade process... "
+  pkill -9 vblade
+  echo "done!"
+  #
+  for i in $PXELINUX_DIR/01-*; do
+    [ -e "$i" ] && pxe_mac_files="$pxe_mac_files $(basename $i)" 
+  done
+  # Remove spaces in the line head
+  pxe_mac_files="$(echo $pxe_mac_files | sed -e "s/^[[:space:]]*//g")"
+  if [ -n "$pxe_mac_files" ]; then
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+    echo "The pxelinux config files used for AoE clients in dir $PXELINUX_DIR/ are: ${pxe_mac_files// /, }"
+    echo "Do you want to remove them now ?"
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+    echo -n "[Y/n] "
+    read ans_rm_pxelinux_cfg
+    case "$ans_rm_pxelinux_cfg" in 
+       n|N|[nN][oO]) true ;;
+       *) 
+         for i in $pxe_mac_files; do
+           rm -fv $PXELINUX_DIR/$i
+         done
+         ;;
+    esac
+  fi
+  # Ask if want to use gpxelinux.0 instead of pxelinux.0 in dhcpd.conf
+  if grep -iEq '^[[:space:]]*filename[[:space:]]*=[[:space:]]*[\"]*gpxelinux.0[\"]*' $DHCPDCONF_DIR/dhcpd.conf; then
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+    echo "Since AoE booting service was stopped. Do you want to use pxelinux.0 instead of gpxelinux.0 in your dhcpd.conf ?"
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+    echo -n "[Y/n] "
+    read ans_use_pxelinux_0
+    case "$ans_use_pxelinux_0" in 
+      n|N|[nN][oO]) true ;;
+      *) 
+        echo "Use pxelinux.0 instead of gpxelinux.0 in dhcpd.conf..."
+        perl -pi -e 's|(^[#]*[[:space:]]*filename[[:space:]]*=[[:space:]]*"*pxelinux.0"*.*)|filename = "pxelinux.0";|g' $DHCPDCONF_DIR/dhcpd.conf
+        perl -pi -e 's|(^filename[[:space:]]*=[[:space:]]*"*gpxelinux.0"*.*)|#$1|g' $DHCPDCONF_DIR/dhcpd.conf
+        # Restart dhcpd service, since different distributions have different names
+        for serv_st in dhcpd isc-dhcp-server dhcp3-server; do
+          [ -e "/etc/init.d/$serv_st" ] && /etc/init.d/$serv_st restart
+        done
+        ;;
+    esac
+  fi
+} # end of stop
+
+#
+restart() {
+  stop
+  echo -n "Wait for 2 secs..."
+  sleep 2
+  echo
+  start
+}
+
+status() {
+  ps -efw | grep -iE "vblade [[:digit:]]+ [[:digit:]]+"
+}
+
+##############
+#### main ####
+##############
+#
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -d|--img-dir) 
+            shift
+            if [ -z "$(echo $1 |grep ^-.)" ]; then
+              # skip the -xx option, in case 
+	      aoe_img_dir="$1"
+              shift
+            fi
+            ;;
+    -*)     echo "${0}: ${1}: invalid option" >&2
+            USAGE >& 2
+            exit 2 ;;
+    *)      break ;;
+  esac
+done
+#
+[ -z "$aoe_img_dir" ] && aoe_img_dir="$sanboot_img_dump_dir"
+
+#
+ask_and_load_lang_set
+
+#
+case $1 in
+  start)   start;;
+  stop)    stop;;
+  restart) restart;;
+  status)  status;;
+  *)       echo "Usage: $0 {start|stop|restart|status}"
+	   exit 1 
+esac

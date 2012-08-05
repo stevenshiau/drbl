@@ -1,0 +1,1242 @@
+#!/bin/bash
+# Author: Steven Shiau <steven _at_ nchc org tw> and Blake, Kuo-Lien Huang <klhaung _at_ gmail.com>. 
+# License: GPL 
+# Description: DRBL utitilty to switch the mode for clients.
+
+# To use reboot, shutdown, wake-on-lan for Cygwin clients, you must put the
+# ssh key to those Cygwin clients.
+
+DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/opt/drbl/}"
+
+. $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
+. $DRBL_SCRIPT_PATH/conf/drbl-ocs.conf
+. $DRBL_SCRIPT_PATH/sbin/ocs-functions
+
+# Load the preset mode
+# we need to know $drbl_ssi_mode...
+[ -f "/etc/drbl/drbl_deploy.conf" ] && . /etc/drbl/drbl_deploy.conf
+
+# Load the config in ocs-live.conf. This is specially for DRBL/Clonezilla live. It will overwrite some settings of /opt/drbl/conf/drbl-ocs.conf, such as $DIA...
+[ -e "/etc/ocs/ocs-live.conf" ] && . /etc/ocs/ocs-live.conf
+
+#
+# DIA (="dialog") is loaded from drbl.conf
+MAX_DIALOG_HEIGHT="12"
+
+#
+check_if_root
+
+check_if_run_in_drbl_server $0
+
+# get the OS_Version and OS_type
+check_distribution_name
+
+# load user's default setting
+[ -e "$HOME/.dcsrc" ] && . $HOME/.dcsrc
+
+# function
+USAGE() {
+   echo "Usage: $0 [OPTION] MODE [MODE2]"
+   echo "OPTION"
+   language_help_prompt_by_idx_no
+   echo "-h, --host [IP_LIST|MAC_LIST] Instead of all DRBL clients, assign some DRBL clients (IP_LIST or MAC_LIST) to be processed, if IP_LIST or MAC_LIST is not set, a dialog menu will be shown so that the target DRBL client(s) can be selected. The IP_LIST is like: \"192.168.0.1 192.168.0.2\", and the MAC_LIST is like \"00:50:56:01:02:01 00:50:56:01:02:02\". NOTE!!! You must put \" \" before and after the IP_LIST or MAC_LIST!"
+   echo "-nl, --no-list-host   Set all clients' mode (This is default)"
+   dialog_like_prog_help_prompt
+   echo "MODE:"
+   echo "remote-linux-gra      Client machine will boot from DRBL server,"
+   echo "                      and enter graphic mode, for powerful client."
+   echo "remote-linux-txt      Client machine will boot from DRBL server,"
+   echo "                      and enter text mode, for powerful client."
+   echo "terminal              Remote display Linux, terminal mode."
+   echo "remote-memtest        Remote boot to run memtest86"
+   echo "remote-fdos           Remote boot to run FreeDOS"
+   echo "clonezilla-start      Start Clonezilla mode"
+   echo "clonezilla-stop       Stop the clonezilla mode"
+   echo "local                 Client machine will boot from local (now PXE only)"
+   echo "reboot                Reboot DRBL clients now"
+   echo "shutdown              Shutdown DRBL clients now"
+   echo "Wake-on-LAN           Turn on DRBL clients by Wake-on-LAN now"
+   echo "netinstall            Let clients to install Linux distribution via network (PXE/etherboot)"
+   echo 
+   echo "MODE2:"
+   echo "Based on MODE, assign the 2nd level mode:"
+   echo "For MODE=clonezilla-start, available MODE2:"
+   echo "save-disk: Clonezilla save disk mode"
+   echo "restore-disk: Clonezilla restore disk Mode"
+   echo "save-parts: Clonezilla save partitions mode"
+   echo "restore-parts: Clonezilla restore partitions mode"
+   echo "For MODE=more, available MODE2:"
+   echo "switch-pxe-menu       Switch DRBL client menus"
+   echo "switch-pxe-bg-mode    Switch PXE Linux background"
+   echo "drbl-mode             Switch diskless linux mode" 
+   echo "clonezilla-mode       Switch clonezilla mode" 
+   echo "login-switch          Switch DRBL client login mode"
+   echo "switch-drbl-serv      Start, stop or restart DRBL related services in DRBL server"
+   echo "client-reautologin    Force to restart client autologin" 
+   echo "clean-autologin-account Delete all autologin accounts" 
+   echo "re-deploy             Re-deploy files to clients, i.e. update the files of server to clients."
+   echo "clean-dhcpd-lease     Force to reset DHCP IP address leases" 
+   echo 
+   echo "If no argument is specified, a dialog will appear to let you choose the mode!"
+   echo
+   echo "EXAMPLE"
+   echo "  To turn off the local and memtest boot menues of clients, run:"
+   echo "  $0 -nl more switch-pxe-menu '-i local -i memtest hide'"
+   echo "  To switch client's PXE boot menu as graphic mode, run:"
+   echo "  $0 -nl more switch-pxe-bg-mode graphic"
+   echo "  To restart drbl-related service, run:"
+   echo "  $0 -nl more switch-drbl-serv restart"
+} # Endo of USAGE
+
+# function : stop_ocs
+stop_ocs_if_necessary() {
+  # $IP_LIST and $OCS_OPTS are global variables
+  # if "LIST_HOST" is NOT nothing, we will process those clients... use the
+  # -h parameter of drbl-ocs.
+  if [ -f "$ocs_lock_dir/clonezilla.lock" ]; then
+    echo "Your system is already in clonezilla mode... we will stop it first, then change to other mode..."
+   if [ -n "$IP_LIST" ]; then 
+     drbl-ocs -n $OCS_OPTS -h "$IP_LIST" -l $lang stop
+   else
+     drbl-ocs -n $OCS_OPTS -l $lang stop
+   fi
+  fi
+}
+
+#
+mcast_clonezilla_restore_not_for_all_clients_warning() {
+  $DIA --title "$msg_multicast_clonezilla_warning" --clear \
+       --msgbox "$msg_multicast_clonezilla_warning_des" 0 0
+}
+
+#
+ask_if_want_list_host() {
+  local TMP mode
+  if [ -z "$dcs_choose_client" ]; then
+    TMP=$(mktemp /tmp/menu.XXXXXX)
+    trap "[ -f "$TMP" ] && rm -f $TMP" HUP INT QUIT TERM EXIT
+    $DIA --backtitle "$msg_nchc_free_software_labs" --title  \
+    "$msg_nchc_drbl" --menu "$msg_hint_multiple_choice_select_by_space \n$msg_select_all_clients_or_select_part_them \n$msg_choose_mode:" \
+    0 0 0 \
+    "All"  "$msg_select_all_clients" \
+    "Part" "$msg_select_clients" \
+    2> $TMP
+    dcs_choose_client="$(cat $TMP)"
+    [ -f "$TMP" ] && rm -f $TMP
+  fi
+  case "$dcs_choose_client" in
+    All)
+      LIST_HOST="off";;
+    Part)
+      LIST_HOST="on";;
+    *)
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+      echo "$msg_program_stop!"
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+      exit 1
+  esac
+} # end of ask_if_want_list_host
+#
+ask_if_input_save_image_name_in_server() {
+  local save_type=$1
+  local TMP mode ans_
+  if [ -z "$dcs_input_img_name" ]; then
+    TMP="$(mktemp /tmp/menu.XXXXXX)"
+    trap "[ -f "$TMP" ] && rm -f $TMP" HUP INT QUIT TERM EXIT
+    $DIA --backtitle "$msg_nchc_free_software_labs" --title  \
+    "$msg_nchc_clonezilla | $msg_mode: $ocs_mode_prompt" --menu "$msg_title_input_save_image_name_in_server \n$msg_ask_if_input_save_image_name_in_server \n$msg_choose_mode:" \
+    0 0 0 \
+    "Now_in_server"  "$msg_now_input_in_server" \
+    "Later_in_client" "$msg_later_input_in_client" \
+    2> $TMP
+    dcs_input_img_name="$(cat $TMP)"
+    [ -f "$TMP" ] && rm -f $TMP
+  fi
+
+  # Check input option
+  case "$dcs_input_img_name" in
+    "Now_in_server"|"Later_in_client") true;;
+    *)
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+      echo "\"$dcs_input_img_name\" is an unknown or unsupported mode! You must assign a correct option for dcs_input_img_name!"
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+      echo "$msg_program_stop!"
+      exit 1
+      ;;
+  esac
+
+  if [ "$dcs_input_img_name" = "Now_in_server" ]; then
+    local ANS_TMP=`mktemp /tmp/ocs_ans.XXXXXX`
+    local ASK_IMG_NAME=1
+    trap "[ -f "$ANS_TMP" ] && rm -f $ANS_TMP" HUP INT QUIT TERM EXIT
+    while [ "$ASK_IMG_NAME" -ne 0 ]; do
+      get_input_image_name $ANS_TMP
+      input_save_img_name="$(cat $ANS_TMP)"
+      if [ "$input_save_img_name" = "ask_user" ]; then
+         $DIA --backtitle "$msg_nchc_free_software_labs" --title "$msg_nchc_clonezilla | $msg_mode: $ocs_mode_prompt" \
+        --msgbox "$msg_ask_user_is_reserved_for_save_mode\n$msg_please_do_it_again!!!" 0 0 
+      else
+	 ASK_IMG_NAME=0
+      fi
+    done
+    [ -f "$ANS_TMP" ] && rm -f $ANS_TMP
+
+    local TMP=`mktemp /tmp/ocs_name.XXXXXX`
+    local dev_prompt_and_example
+    local ASK_DEV_NAME=1
+    trap "[ -f "$TMP" ] && rm -f $TMP" HUP INT QUIT TERM EXIT
+    case "$save_type" in
+     "savedisk")
+           dev_prompt_and_example="$msg_input_device_name ($msg_ex: 'hda' $msg_or 'sda' $msg_or 'hda hdb' $msg_or 'sda sdb') \n$msg_linux_disk_MS_mapping"
+	   # savedisk_preset is from drbl-ocs.conf
+	   dev_preset="$savedisk_preset"
+           ;;
+     "saveparts")
+           dev_prompt_and_example="$msg_input_device_name ($msg_ex: 'hda1 hda2' $msg_or 'sda1 sda2') \n$msg_linux_parts_MS_mapping"
+	   # saveparts_preset is from drbl-ocs.conf
+           dev_preset="$saveparts_preset"
+           ;;
+    esac
+    while [ "$ASK_DEV_NAME" -ne 0 ]; do
+      $DIA --backtitle "$msg_nchc_free_software_labs" --title "$msg_nchc_clonezilla | $msg_mode: $ocs_mode_prompt" \
+      --inputbox "$dev_prompt_and_example" 0 0 "$dev_preset" 2> $TMP
+      input_device_name="$(cat $TMP)"
+      if [ -z "$input_device_name" ]; then
+        $DIA --backtitle "$msg_nchc_free_software_labs" --title "$msg_nchc_clonezilla | $msg_mode: $ocs_mode_prompt" \
+        --yesno "$msg_you_must_input_device_name_to_save_image! $msg_do_u_want_to_do_it_again" 0 0 
+        ans_="$?"
+        case "$ans_" in
+          0) # yes is chosen
+             ASK_DEV_NAME=1;;
+          1) # no is chosen
+             echo "$msg_program_stop!"
+             [ -f "$TMP" ] && rm -f $TMP
+             exit 1;;
+        esac
+      else
+        ASK_DEV_NAME=0
+      fi
+    done
+    [ -f "$TMP" ] && rm -f $TMP
+  fi
+} # end of ask_if_input_save_image_name_in_server
+#
+run_login_switch() {
+  local action="$1"
+  local TMP
+  if [ -z "$action" ]; then
+    TMP="$(mktemp /tmp/menu.XXXXXX)"
+    trap "[ -f "$TMP" ] && rm -f $TMP" HUP INT QUIT TERM EXIT
+    echo "Switch DRBL client login mode"
+    $DIA --backtitle "$msg_nchc_free_software_labs" --title  \
+    "$msg_login_switch" --menu "$msg_choose_action:" \
+    0 0 0 \
+    "normal"  "$msg_normal_login" \
+    "auto"    "$msg_auto_login" \
+    "timed"   "$msg_timed_login" \
+    2> $TMP
+    action="--""$(cat $TMP)"
+    [ -f "$TMP" ] && rm -f $TMP
+  fi
+  [ -z "$action" ] && echo "You must specify the action! Program terminated!!!" && exit 1
+  # If the mode is autologin or timed login graphic mode, we should switch to graphic mode first.
+  if [ "$action" = "--auto" -o "$action" = "--timed" ]; then
+    echo "Set the client as remote-linux graphic mode..."
+    if [ "$LIST_HOST" = "on" ]; then
+      drbl-client-switch -l $lang -h "$IP_LIST" remote-linux-gra
+    else
+      drbl-client-switch -l $lang -nl remote-linux-gra
+    fi
+  fi
+  drbl-login-switch $action -l $lang
+} # end of run_login_switch
+#
+run_drbl_mode_switch() {
+  local drbl_mode_opt="$1"
+  local TMP
+  if [ -z "$drbl_mode_opt" ]; then
+    TMP="$(mktemp /tmp/menu.XXXXXX)"
+    trap "[ -f "$TMP" ] && rm -f $TMP" HUP INT QUIT TERM EXIT
+    $DIA --backtitle "$msg_nchc_free_software_labs" --title  \
+    "$msg_drbl_mode_switch" --menu "$msg_drbl_mode_switch_long" \
+    0 0 0 \
+    "0" "$msg_drbl_mode_0" \
+    "1" "$msg_drbl_mode_1" \
+    "2" "$msg_drbl_mode_2" \
+    2> $TMP
+    drbl_mode_opt="$(cat $TMP)"
+    [ -f "$TMP" ] && rm -f $TMP
+  fi
+  if [ -n "$drbl_mode_opt" ]; then
+    drbl_mode_opt="-d $drbl_mode_opt"
+  else
+    echo "You must specify the drbl_mode_opt! Program terminated!!!"
+    exit 1
+  fi
+  tune-clientdir-opt -l $lang $drbl_mode_opt
+} # end of run_drbl_mode_switch
+#
+run_clonezilla_mode_switch() {
+  local clonezilla_mode_opt="$1"
+  local TMP2
+  if [ -z "$clonezilla_mode_opt" ]; then
+    TMP2="$(mktemp /tmp/menu2.XXXXXX)"
+    trap "[ -f "$TMP2" ] && rm -f $TMP2" HUP INT QUIT TERM EXIT
+    $DIA --backtitle "$msg_nchc_free_software_labs" --title  \
+    "$msg_clonezilla_mode_switch" --menu "$msg_clonezilla_mode_switch_long" \
+    0 0 0 \
+    "0"  "$msg_clonezilla_mode_0" \
+    "1"  "$msg_clonezilla_mode_1" \
+    "2"  "$msg_clonezilla_mode_2" \
+    2> $TMP2
+    clonezilla_mode_opt="$(cat $TMP2)"
+    [ -f "$TMP2" ] && rm -f $TMP2
+  fi
+  if [ -n "$clonezilla_mode_opt" ]; then
+    clonezilla_mode_opt="-z $clonezilla_mode_opt"
+  else
+    echo "You must specify the clonezilla_mode_opt! Program terminated!!!"
+    exit 1
+  fi
+  tune-clientdir-opt -l $lang $clonezilla_mode_opt
+} # end of run_drbl_clonezilla_mode_switch
+
+do_clonezilla_save_dev() {
+  # dev is: disk or parts
+  local dev="$1"
+  [ -z "$dev" ] && echo "You must specify the device type (parts or disk)!!! Program terminated!!!" && exit 1
+
+  echo -n "Setting client as clonezilla-save-${dev} mode..."
+
+  # ask if want to input the saved name now
+  ask_if_input_save_image_name_in_server save${dev}
+
+  # ask if want to set ocs extra param
+  OCS_PARAM_TMP=`mktemp /tmp/ocs_param_tmp.XXXXXX`
+  trap "[ -f "$OCS_PARAM_TMP" ] && rm -f $OCS_PARAM_TMP" HUP INT QUIT TERM EXIT
+  set_drbl_ocs_extra_param save $OCS_PARAM_TMP $dev
+  OCS_OPTS="$(cat $OCS_PARAM_TMP)"
+  [ -f "$OCS_PARAM_TMP" ] && rm -f $OCS_PARAM_TMP
+
+  stop_ocs_if_necessary
+  run_again_fname="/tmp/ocs-${input_save_img_name:-input-later}-`date +%F-%H-%M`"
+  if [ "$LIST_HOST" = "on" ]; then
+    # NOTE: For prompt, we use \" to show ", but actually run it without \
+    drbl-ocs $OCS_OPTS $dcs_save_extra_opt -h "$IP_LIST" -l $lang start${dev} save $input_save_img_name $input_device_name
+    deploy_pxecfg_files
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_SUCCESS
+    # NOTE: For prompt, we use \" to show ", but actually run it without \
+    echo PS. $msg_run_drbl_ocs_again_cmd 
+    echo $DRBL_SCRIPT_PATH/sbin/drbl-ocs -b $OCS_OPTS $dcs_save_extra_opt -h \"$IP_LIST\" -l $lang start${dev} save $input_save_img_name $input_device_name | tee $run_again_fname
+    echo "$msg_ocs_sr_again_command_saved_filename: $run_again_fname"
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+  else
+    drbl-ocs $OCS_OPTS $dcs_save_extra_opt -l $lang start${dev} save $input_save_img_name $input_device_name
+    deploy_pxecfg_files
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_SUCCESS
+    echo PS. $msg_run_drbl_ocs_again_cmd 
+    echo $DRBL_SCRIPT_PATH/sbin/drbl-ocs -b $OCS_OPTS $dcs_save_extra_opt -l $lang start${dev} save $input_save_img_name $input_device_name | tee $run_again_fname
+    echo "$msg_ocs_sr_again_command_saved_filename: $run_again_fname"
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+  fi
+  [ -e "$run_again_fname" ] && chmod 755 $run_again_fname
+  echo "done!"
+} # end of do_clonezilla_save_dev
+
+#
+do_clonezilla_restore_dev() {
+  # dev is: disk or parts
+  local dev="$1"
+  local target_image default_mcast_client_no=''
+  [ -z "$dev" ] && echo "You must specify the device type (parts or disk)!!! Program terminated!!!" && exit 1
+  # We won't provide the method to change the mount point to replace /home/partimag in dcs, so we fix the imagedir="$ocsroot" (/home/partimag). However, user still can use drbl-ocs to do that.
+  #
+  # change to other mount point for extra harddisk
+  #if [ -n "$mount_point" ]; then
+  #   imagedir="$mount_point" 
+  #   echo "Using the mount point $imagedir."
+  #else
+  #   imagedir="$ocsroot"
+  #fi
+  imagedir="$ocsroot"
+
+  echo -n "Setting client as clonezilla-restore-$dev mode..."
+
+  # ask if want to set ocs extra param
+  OCS_PARAM_TMP=`mktemp /tmp/ocs_param_tmp.XXXXXX`
+  trap "[ -f "$OCS_PARAM_TMP" ] && rm -f $OCS_PARAM_TMP" HUP INT QUIT TERM EXIT
+  set_drbl_ocs_extra_param restore $OCS_PARAM_TMP $dev
+  OCS_OPTS="$(cat $OCS_PARAM_TMP)"
+  [ -f "$OCS_PARAM_TMP" ] && rm -f $OCS_PARAM_TMP
+
+  if [ -n "$(echo $OCS_OPTS | grep -E "\-[u]")" ]; then
+    # with -u, we will choose the image in the client, so 
+    # 1. do not ask image name here.
+    # 2. only unicast available.
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+    echo "$msg_ocs_param_exclude_multicast"
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+    dcs_cast_mode="unicast"
+  else
+    # if no -u, we have to ask image name here.
+    # get the image
+    ANS_TMP=`mktemp /tmp/ocs_ans.XXXXXX`
+    trap "[ -f "$ANS_TMP" ] && rm -f $ANS_TMP" HUP INT QUIT TERM EXIT
+    get_existing_${dev}_image $ANS_TMP
+    # the return name will be only one image name.
+    target_image="$(cat $ANS_TMP)"
+    [ -f "$ANS_TMP" ] && rm -f $ANS_TMP
+    # Note! We won't add leading $ocsroot in $target_image, because when task_saveparts do the real job later, it will add that.
+    
+    # choose the only dev we want
+    case "$dev" in
+     "disk")
+        ANS_TMP=`mktemp /tmp/ocs_ans.XXXXXX`
+        trap "[ -f "$ANS_TMP" ] && rm -f $ANS_TMP" HUP INT QUIT TERM EXIT
+	get_existing_disks_from_img $ANS_TMP $imagedir/$target_image
+        # we have to remove " (comes with checklist in dialog) so that for loop
+        # will work (Specially for FC3/4...)
+        target_dev="$(cat $ANS_TMP | tr -d \")"
+        [ -f "$ANS_TMP" ] && rm -f $ANS_TMP
+        ;;
+     "parts")
+        ANS_TMP=`mktemp /tmp/ocs_ans.XXXXXX`
+        trap "[ -f "$ANS_TMP" ] && rm -f $ANS_TMP" HUP INT QUIT TERM EXIT
+	get_existing_partitions_from_img $ANS_TMP $imagedir/$target_image no restore
+        # we have to remove " (comes with checklist in dialog) so that for loop
+        # will work (Specially for FC3/4...)
+        target_dev="$(cat $ANS_TMP | tr -d \")"
+        [ -f "$ANS_TMP" ] && rm -f $ANS_TMP
+        ;;
+    esac
+
+    # get the mode of unicast of multicast
+    eval msg_choose_the_mode_to_restore_dev=\$msg_choose_the_mode_to_restore_$dev
+    if [ -z "$dcs_cast_mode" ]; then
+      TMP=$(mktemp /tmp/menu.XXXXXX)
+      trap "[ -f "$TMP" ] && rm -f $TMP" HUP INT QUIT TERM EXIT
+      $DIA \
+      --backtitle "$msg_nchc_title" \
+      --title "$msg_nchc_clonezilla | $msg_mode: $ocs_mode_prompt" \
+      --menu "$msg_choose_the_mode_to_restore_dev" 0 0 0 \
+      "multicast" "$msg_multicast_restore" \
+      "broadcast" "$msg_broadcast_restore" \
+      "unicast" "$msg_unicast_restore" \
+      2> $TMP
+      dcs_cast_mode=$(cat $TMP) 
+      [ -f "$TMP" ] && rm -f $TMP
+    fi
+  fi
+
+  if [ -z "$dcs_cast_mode" ]; then
+    echo "No mode is selected! Program terminated!!!" 
+    exit 1
+  fi
+  case "$dcs_cast_mode" in
+    "multicast"|"broadcast"|"unicast") true;;
+    *)
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+      echo "\"$dcs_cast_mode\" is an unknown or unsupported mode! You must assign a correct option for dcs_cast_mode!"
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+      echo "$msg_program_stop!"
+      exit 1 
+      ;;
+  esac
+
+  run_again_fname="/tmp/ocs-$target_image-`date +%F-%H-%M`"
+  if [ "$dcs_cast_mode" = "unicast" ]; then
+    if [ "$LIST_HOST" = "on" ]; then
+      # NOTE: For prompt, we use \" to show ", but actually run it without \
+      drbl-ocs $OCS_OPTS $dcs_restore_extra_opt -h "$IP_LIST" -l $lang start${dev} restore $target_image $target_dev
+      deploy_pxecfg_files
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_SUCCESS
+      echo PS. $msg_run_drbl_ocs_again_cmd 
+      # NOTE: For prompt, we use \" to show ", but actually run it without \
+      echo $DRBL_SCRIPT_PATH/sbin/drbl-ocs -b $OCS_OPTS $dcs_restore_extra_opt -h \"$IP_LIST\" -l $lang start${dev} restore $target_image $target_dev | tee $run_again_fname
+      echo "$msg_ocs_sr_again_command_saved_filename: $run_again_fname"
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+    else
+      drbl-ocs $OCS_OPTS $dcs_restore_extra_opt -l $lang start${dev} restore $target_image $target_dev
+      deploy_pxecfg_files
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_SUCCESS
+      echo PS. $msg_run_drbl_ocs_again_cmd 
+      echo $DRBL_SCRIPT_PATH/sbin/drbl-ocs -b $OCS_OPTS $dcs_restore_extra_opt -l $lang start${dev} restore $target_image $target_dev | tee $run_again_fname
+      echo "$msg_ocs_sr_again_command_saved_filename: $run_again_fname"
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+    fi
+  else
+    # multicast or broadcast
+    # Get the multicast options: time_to_wait, clients_to_wait...
+    mcast_mode_opt=""
+    ANS_TMP=`mktemp /tmp/ocs_ans.XXXXXX`
+    trap "[ -f "$ANS_TMP" ] && rm -f $ANS_TMP" HUP INT QUIT TERM EXIT
+    if [ "$LIST_HOST" = "on" ]; then
+      default_mcast_client_no="$(LC_ALL=C echo $IP_LIST | wc -w)"
+    fi
+    ask_time_or_clients_to_wait $ANS_TMP $default_mcast_client_no
+    . $ANS_TMP
+    # we will get time_to_wait or client_to_want.
+    [ -n "$time_to_wait" ] && mcast_mode_opt="$mcast_mode_opt --time-to-wait $time_to_wait"
+    [ -n "$clients_to_wait" ] && mcast_mode_opt="$mcast_mode_opt --clients-to-wait $clients_to_wait"
+    [ -n "$max_time_to_wait" ] && mcast_mode_opt="$mcast_mode_opt --max-time-to-wait $max_time_to_wait"
+    [ -f "$ANS_TMP" ] && rm -f $ANS_TMP
+    #
+    [ "$dcs_cast_mode" = "broadcast" ] && mcast_mode_opt="$mcast_mode_opt --broadcast"
+
+    stop_ocs_if_necessary
+
+    if [ "$LIST_HOST" = "on" ]; then
+      mcast_clonezilla_restore_not_for_all_clients_warning
+      # NOTE: For prompt, we use \" to show ", but actually run it without \
+      drbl-ocs $OCS_OPTS $dcs_restore_extra_opt $mcast_mode_opt -h "$IP_LIST" -l $lang start${dev} multicast_restore $target_image $target_dev
+      deploy_pxecfg_files
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_SUCCESS
+      echo PS. $msg_run_drbl_ocs_again_cmd 
+      # NOTE: For prompt, we use \" to show ", but actually run it without \
+      echo $DRBL_SCRIPT_PATH/sbin/drbl-ocs -b $OCS_OPTS $dcs_restore_extra_opt $mcast_mode_opt -h \"$IP_LIST\" -l $lang start${dev} multicast_restore $target_image $target_dev | tee $run_again_fname
+      echo "$msg_ocs_sr_again_command_saved_filename: $run_again_fname"
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+    else
+      drbl-ocs $OCS_OPTS $dcs_restore_extra_opt $mcast_mode_opt -l $lang start${dev} multicast_restore $target_image $target_dev
+      deploy_pxecfg_files
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_SUCCESS
+      echo PS. $msg_run_drbl_ocs_again_cmd 
+      echo $DRBL_SCRIPT_PATH/sbin/drbl-ocs -b $OCS_OPTS $dcs_restore_extra_opt $mcast_mode_opt -l $lang start${dev} multicast_restore $target_image $target_dev | tee $run_again_fname
+      echo "$msg_ocs_sr_again_command_saved_filename: $run_again_fname"
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+    fi
+  fi
+  [ -e "$run_again_fname" ] && chmod 755 $run_again_fname
+  echo "done!"
+} # end of do_clonezilla_restore_dev
+
+#
+do_clonezilla_select_in_client() {
+  OCS_PARAM_TMP=`mktemp /tmp/ocs_param_tmp.XXXXXX`
+  trap "[ -f "$OCS_PARAM_TMP" ] && rm -f $OCS_PARAM_TMP" HUP INT QUIT TERM EXIT
+  #
+  $DIA --backtitle "$msg_nchc_free_software_labs" --title  \
+  "$msg_clonezilla_advanced_extra_param" --menu "$msg_default_pxemenu_for_clone:" \
+  0 0 0 $DIA_ESC \
+  "-y1 "      "$msg_ocs_param_y1" \
+  "-y0 "      "$msg_ocs_param_y0" \
+  "-y2 "      "$msg_ocs_param_y2" \
+  ""          "$msg_ocs_param_skip" \
+  2> $OCS_PARAM_TMP
+  # ask the action when clone finishes in client
+
+  ocs_advanced_param_post_mode_after_clone $OCS_PARAM_TMP
+
+  # force to strip the unnecessary quotation ', this is specially for dialog (from cdialog) in Mandriva. Otherwise it will cause -p reboot (containing space) becomes '-p reboot', which is wrong option in dcs.
+  OCS_OPTS="$(cat $OCS_PARAM_TMP | sed -e "s/\'//g")"
+  [ -f "$OCS_PARAM_TMP" ] && rm -f $OCS_PARAM_TMP
+
+  stop_ocs_if_necessary
+  run_again_fname="/tmp/ocs-select-in-client-`date +%F-%H-%M`"
+  if [ "$LIST_HOST" = "on" ]; then
+    drbl-ocs -h "$IP_LIST" -l $lang $OCS_OPTS select_in_client
+    deploy_pxecfg_files
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+    echo "$msg_authentication_pxe_linux_info"
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_SUCCESS
+    echo PS. $msg_run_drbl_ocs_again_cmd 
+    echo $DRBL_SCRIPT_PATH/sbin/drbl-ocs -b -h \"$IP_LIST\" -l $lang $OCS_OPTS select_in_client | tee $run_again_fname
+    echo "$msg_ocs_sr_again_command_saved_filename: $run_again_fname"
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+  else
+    drbl-ocs -l $lang $OCS_OPTS select_in_client
+    deploy_pxecfg_files
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+    echo "$msg_authentication_pxe_linux_info"
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_SUCCESS
+    echo PS. $msg_run_drbl_ocs_again_cmd 
+    echo $DRBL_SCRIPT_PATH/sbin/drbl-ocs -b -l $lang $OCS_OPTS select_in_client | tee $run_again_fname
+    echo "$msg_ocs_sr_again_command_saved_filename: $run_again_fname"
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+  fi
+  [ -e "$run_again_fname" ] && chmod 755 $run_again_fname
+  echo "done!"
+} # end of do_clonezilla_select_in_client
+
+#
+run_switch_drbl_service() {
+  local action="$1"
+  local TMP
+  if [ -z "$action" ]; then
+    TMP="$(mktemp /tmp/menu.XXXXXX)"
+    trap "[ -f "$TMP" ] && rm -f $TMP" HUP INT QUIT TERM EXIT
+    echo "Switch DRBL related services in DRBL server"
+    $DIA --backtitle "$msg_nchc_free_software_labs" --title  \
+    "$msg_switch_drbl_service" --menu "$msg_choose_action:" \
+    0 0 0 \
+    "start"    "$msg_start_drbl_all_services"  \
+    "stop"     "$msg_stop_drbl_all_services"  \
+    "restart"  "$msg_restart_drbl_all_services"  \
+    "add"      "$msg_add_drbl_all_services"  \
+    "del"      "$msg_del_drbl_all_services"  \
+    2> $TMP
+    action="$(cat $TMP)"
+    [ -f "$TMP" ] && rm -f $TMP
+    [ -z "$action" ] && echo "You must specify the action! Program terminated!!!" && exit 1
+  fi
+  drbl-all-service $action
+} # end of run_switch_drbl_service
+#
+run-switch-pxe-bg-mode() {
+  local action="$1"
+  local TMP
+  if [ -z "$action" ]; then
+    TMP="$(mktemp /tmp/pxemenu.XXXXXX)"
+    trap "[ -f "$TMP" ] && rm -f $TMP" HUP INT QUIT TERM EXIT
+    echo "Switch DRBL client PXE boot menu mode"
+    $DIA --backtitle "$msg_nchc_free_software_labs" --title  \
+    "$msg_switch_pxe_bg_mode" --menu "$msg_switch_pxe_bg_mode" \
+    0 0 0 \
+    "text"  "$msg_pxemenu_text" \
+    "graphic" "$msg_pxemenu_graphic" \
+    2> $TMP
+    action="$(cat $TMP)"
+    [ -f "$TMP" ] && rm -f $TMP
+    [ -z "$action" ] && echo "You must specify the mode! Program terminated!!!" && exit 1
+  fi
+  switch-pxe-bg-mode -m $action
+} # end of run-switch-pxe-bg-mode 
+#
+clean_stale_node_pxe_cfg(){
+  # $PXE_CONF is global variable.
+  # Clean all the previous saved config file.
+  # These files maybe look like: 01-MAC address (with ":" -> "-"), something like C0A8XXXX (only for 192.168.x), default_skeleton
+  echo -n "Clean all the previous saved PXELINUX config file if they exist..."
+  for ifile in $PXELINUX_DIR/*; do
+    [ "$ifile" != "$PXE_CONF" -a -f "$ifile" ] && rm -f $ifile
+  done
+  echo "done!"
+} # end of clean_stale_node_pxe_cfg
+#
+clean_stale_mac_cfg_for_pxelinux_or_not() {
+  local ihlist="$*"
+  local OCS_TMP ih MAC rm_stale_mac_cfg
+  # In this case, use chooses to select client by IP address. Only IP style file will be created in $PXELINUX_DIR/. If no MAC address in dhcpd.conf, and we find some 01-MAC file in $PXELINUX_DIR/, we have to ask use if he want to clean those 01-MAC style files. Since we have no idea which one is for which IP address. Otherwise those stale 01-MAC will have higher priority then IP address style file. That will cause problem.
+  if [ -n "$(ls $PXELINUX_DIR/01-* 2>/dev/null)" ]; then
+    # prepare the HOSTNAME-IP-MAC table
+    OCS_TMP=`mktemp /tmp/ocs_clean_tmp.XXXXXX`
+    trap "[ -f "$OCS_TMP" ] && rm -f $OCS_TMP" HUP INT QUIT TERM EXIT
+    parse_dhcpd_conf $OCS_TMP
+    for ih in $ihlist; do
+      MAC="$(grep ${ih} $OCS_TMP | awk -F" " '{print $3}')"
+      if [ -z "$MAC" ]; then
+        $DIA --title "$msg_nchc_free_software_labs" \
+             --yesno "$msg_do_you_want_to_clean_all_stale_mac_cfg" 0 0 
+        case $? in
+          0)
+            rm_stale_mac_cfg="yes";;
+          1)
+            rm_stale_mac_cfg="no";;
+          255)
+            echo "Box closed.";;
+        esac
+          if [ "$rm_stale_mac_cfg" = "yes" ]; then
+    	    rm -fv $PXELINUX_DIR/01-*
+            echo -n "$msg_press_enter_to_continue"
+            read 
+          fi
+      fi
+    done
+    [ -f "$OCS_TMP" ] && rm -f $OCS_TMP
+  fi
+} # clean_stale_mac_cfg_for_pxelinux_or_not
+#
+deploy_pxecfg_files(){
+  # This function will set the specific config or just keep the "default"
+  if [ "$LIST_HOST" = "on" ]; then
+    # specify the nodes if assigned by user
+    echo "Create specific config for PXE client."
+    set_specific_host_pxe_conf `cat $HOSTS_TMP`
+  else
+    # for all clients, so we just keep the file pxelinux.cfg/default, no others.
+    echo "This is for all clients, so we remove other host-based PXE config files in $PXELINUX_DIR/ and keep $PXE_CONF only."
+    clean_stale_node_pxe_cfg
+  fi
+} # end of deploy_pxecfg_files
+
+# Parse command-line options
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -l|--language)
+	shift
+        if [ -z "$(echo $1 |grep ^-.)" ]; then
+          # skip the -xx option, in case 
+	  specified_lang="$1"
+	  shift
+        fi
+	;;
+    -h|--host)  
+	    LIST_HOST="on"
+            shift
+            # skip the -xx option, in case 
+            if [ -z "$(echo $1 |grep ^-.)" ]; then
+	      # parse if the arg is MAC or IP, skip those not MAC or IP
+              if [ -n "$(echo $1 | grep -E "^[[:space:]]*([[:alnum:]]+:){5}[[:alnum:]]+([[:space:]]|$)+")" -o -n "$(echo $1 | grep -E "^[[:space:]]*([[:digit:]]+\.){3}[[:digit:]]+([[:space:]]|$)+")" -o -z "$1" ] ; then
+                IP_LIST=$1
+                shift
+	      else
+		echo "\"$1\" is not a suitable IP_LIST or MAC_LIST !!! Program terminated!!!"
+		exit 1
+              fi
+            fi
+	    ;;
+    -nl|--no-list-host)  
+	    LIST_HOST="off" 
+	    shift;;
+    -d0|--dialog)  
+            # $DIA, $DIA_OPT are used in dcs, it won't pass to drbl-ocs, ocs-sr.
+	    DIA="dialog" 
+	    DIA_OPT="-d0"
+	    shift;;
+    -d1|--Xdialog)  
+	    DIA="Xdialog" 
+	    DIA_OPT="-d1"
+	    shift;;
+    -d2|--whiptail)  
+	    DIA="whiptail" 
+	    DIA_OPT="-d2"
+	    shift;;
+    -d3|--gdialog)  
+	    DIA="gdialog" 
+	    DIA_OPT="-d3"
+	    shift;;
+    -d4|--kdialog)  
+	    DIA="kdialog" 
+	    DIA_OPT="-d4"
+	    shift;;
+    -*)     echo "${0}: ${1}: invalid option" >&2
+            USAGE >& 2
+            exit 2 ;;
+    *)      break ;;
+  esac
+done
+
+######
+## main script
+######
+MODE="$1"
+# We have two levels, like clonezilla-start save-disk
+MODE2="$2"
+MORE_OPT_for_MODE2="$3"
+
+ask_and_load_lang_set $specified_lang
+
+# check DIA
+check_DIA_set_ESC $DIA
+
+[ -z "$LIST_HOST" ] && ask_if_want_list_host
+
+# 
+if [ "$LIST_HOST" = "on" ]; then
+  # We need 1 file and 1 variable to sepcify hosts, 
+  # (1) file "HOSTS_TMP", which contains IP list or MAC list.
+  # (2) variable "IP_LIST", which contains IP list only (if user specify MAC list, we will convert them to IP list based on dhcpd.conf)
+
+  # NOTES: after the modification of PXE_CONF, we must run
+  #       [ "$LIST_HOST" = "on" ] && set_specific_host_pxe_conf `cat $HOSTS_TMP`
+  # to update the pxeconf (both for 01-MAC and IP)
+
+  HOSTS_TMP="$(mktemp /tmp/hosts_tmp.XXXXXXX)"
+  trap "[ -f "$HOSTS_TMP" ] && rm -f $HOSTS_TMP" HUP INT QUIT TERM EXIT
+  MAC_LIST=""
+  # The content of $HOSTS_TMP can be IP list or MAC list (generated by select-drbl-clients)
+  if [ -z "$IP_LIST" ]; then
+    select-drbl-clients $DIA_OPT -l $lang $HOSTS_TMP
+    retval=$?
+  else
+    # user already specified the hosts, so we just put them in $HOSTS_TMP
+    echo $IP_LIST > $HOSTS_TMP
+    retval=$?
+  fi
+  if [ $retval -eq 0 ]; then
+    # copy the skeleton file
+    PXE_CONF="$PXELINUX_DIR/default_skeleton"
+    cp -f $PXELINUX_DIR/default $PXE_CONF
+  
+    if grep -Eq "^[[:space:]]*([[:alnum:]]+:){5}[[:alnum:]]+([[:space:]]|$)+" $HOSTS_TMP; then
+      # HOSTS_TMP is MAC list.
+      # prepare the IP list if the HOSTS_TMP is MAC list.
+      MAC_LIST="$(cat $HOSTS_TMP)"
+      for imac in $MAC_LIST; do
+        #IP="$(awk -F" " '/$imac/ {print $2}' $HOST_MAC_TABLE)"
+        IP="$(grep -iE "$imac" $HOST_MAC_TABLE | awk -F" " '{print $2}')"
+        IP_LIST="$IP_LIST $IP"
+      done
+    else
+      # HOSTS_TMP is IP list.
+      IP_LIST="$(cat $HOSTS_TMP)"
+      clean_stale_mac_cfg_for_pxelinux_or_not $IP_LIST
+    fi
+  else
+    echo "No client is selected! Abort!"
+    exit 0
+  fi
+else
+  PXE_CONF="$PXELINUX_DIR/default"
+fi
+# If clonezilla box mode, we have to suppress some functions
+[ -f /etc/drbl/drbl_deploy.conf ] && . /etc/drbl/drbl_deploy.conf
+#
+if [ "$drbl_mode" != "none" ]; then
+   # "remote-linux-gra" "$msg_remote_linux_graphic" off \
+   remote_linux_gra_1="remote-linux-gra"
+   remote_linux_gra_2="$(rep_whspc_w_udrsc "$msg_remote_linux_graphic")"
+   # "remote-linux-txt" "$msg_remote_linux_text" off \
+   remote_linux_txt_1="remote-linux-txt"
+   remote_linux_txt_2="$(rep_whspc_w_udrsc "$msg_remote_linux_text")"
+   # "terminal" "$msg_terminal" off \
+   terminal_1="terminal"
+   terminal_2="$(rep_whspc_w_udrsc "$msg_thin_client")"
+   # "login-switch" "$msg_login_switch" off \
+   login_switch_1="login-switch"
+   login_switch_2="$(rep_whspc_w_udrsc "$msg_login_switch")"
+   # "client-reautologin" "$msg_client_reautologin" off \
+   client_reautologin_1="client-reautologin"
+   client_reautologin_2="$(rep_whspc_w_udrsc "$msg_client_reautologin")"
+   # "clean-autologin-account" "$msg_clean_autologin_account" off \
+   clean_autologin_account_1="clean-autologin-account"
+   clean_autologin_account_2="$(rep_whspc_w_udrsc "$msg_clean_autologin_account")"
+   # "reset-autologin-account" "$msg_reset_autologin_account" off \
+   reset_autologin_account_1="reset-autologin-account"
+   reset_autologin_account_2="$(rep_whspc_w_udrsc "$msg_reset_autologin_account")"
+fi
+if [ "$clonezilla_mode" != "none" ]; then
+   clonezilla_start_1="clonezilla-start" 
+   clonezilla_start_2="$(rep_whspc_w_udrsc "$msg_clonezilla_start")"
+   clonezilla_stop_1="clonezilla-stop"
+   clonezilla_stop_2="$(rep_whspc_w_udrsc "$msg_clonezilla_stop")"
+fi
+if [ -n "$(ls $pxecfg_pd/*netinstall* 2>/dev/null )" ]; then
+   netinstall_1="netinstall"
+   netinstall_2="$(rep_whspc_w_udrsc "$msg_netinstall")"
+fi
+
+# Get the mode from use
+if [ -z "$MODE" ]; then 
+     TMP="$(mktemp /tmp/menu.XXXXXX)"
+     trap "[ -f "$TMP" ] && rm -f $TMP" HUP INT QUIT TERM EXIT
+     $DIA \
+     --backtitle "$msg_nchc_title" \
+     --title "$msg_nchc_drbl" \
+     --menu "$msg_switch_client_mode:" 0 0 0 \
+     $remote_linux_gra_1 $remote_linux_gra_2 \
+     $remote_linux_txt_1 $remote_linux_txt_2 \
+     $terminal_1 $terminal_2 \
+     "remote-memtest" "$msg_remote_memtest" \
+     "remote-fdos" "$msg_remote_fdos" \
+     $clonezilla_start_1 $clonezilla_start_2 \
+     $clonezilla_stop_1 $clonezilla_stop_2 \
+     $netinstall_1 $netinstall_2 \
+     "local" "$msg_boot_client_local" \
+     "reboot" "$msg_reboot_the_client" \
+     "shutdown" "$msg_shutdown_the_client" \
+     "Wake-on-LAN" "$msg_Wake_on_LAN" \
+     "more" "$msg_dcs_more_modes" \
+     2> $TMP
+     MODE=$(cat $TMP)
+     [ -f "$TMP" ] && rm -f $TMP
+fi
+
+# set the mode for PXE client
+case "$MODE" in
+  "remote-linux-gra") 
+         echo "Settinig client as remote-linux graphic mode..."
+         stop_ocs_if_necessary
+         set-default-pxe-img -i drbl -c $PXE_CONF -l "$FULL_OS_Version $powerful_client_menu_label"
+         if [ "$LIST_HOST" = "on" ]; then
+           # now use --no-gen-ssi, but we will run drbl-gen-ssi-files when finished
+	   drbl-powerful-thin-client --no-gen-ssi -p -h "$IP_LIST" -ln $lang
+         else
+           # now use --no-gen-ssi, but we will run drbl-gen-ssi-files when finished
+	   drbl-powerful-thin-client --no-gen-ssi -p -ln $lang
+         fi
+
+	 deploy_pxecfg_files
+
+         for host in $drblroot/*; do
+           # if the LIST_HOST is on, skip those IP not listed in the $IP_LIST
+	   if [ "$LIST_HOST" = "on" ]; then
+	     [ -z "$(echo $IP_LIST | grep -E "\<${host##/*/}\>")" ] && continue
+           fi
+
+	   # 
+           host_ip=$(basename $host)
+           echo "Setting the remote-linux graphic mode for node IP = $host_ip"
+	   if [ -e /etc/debian_version ]; then
+             # Debian
+             if [ -e /etc/b2d-release ]; then
+	       # For B2D, it uses runlevel 5 for X 
+               CLIENT_INIT="5"
+             else
+	       # For Debian, Ubuntu, it uses runlevel 2 for X 
+               CLIENT_INIT="2"
+             fi
+             default_dm="$(drbl-check-dm -h $host_ip)"
+             prepare_update_rc_d_env $host
+             get_debian_ubuntu_init_serv_control_prog
+             if [ "$dbn_ubn_serv_control_prog" = "use-insserv" ]; then
+               # Use insserv
+	       LC_ALL=C chroot $host/ insserv $default_dm &> /dev/null
+	     else
+               # Use update-rc.d
+               LC_ALL=C chroot $host/ /usr/sbin/update-rc.d $default_dm start 99 2 3 4 5 . stop 05 0 1 6 . &> /dev/null
+             fi
+	     if [ -e "$host/etc/init/${default_dm}.conf" ]; then
+               switch_upstart_service $host/etc/init/${default_dm}.conf on
+	     fi
+           else
+             # RH-like or SUSE
+             # set the init to 5, i.e. default is X
+             CLIENT_INIT="5"
+           fi
+	   # Modify client's /etc/inittab
+	   if [ -e "$host/etc/inittab" ]; then
+             perl -p -i -e "s/^id:[0-9]:initdefault:/id:$CLIENT_INIT:initdefault:/g" $host/etc/inittab
+           fi
+         done
+	 echo "done!"
+         #
+         echo "-------------------------------------------------------"
+         if [ "$drbl_mode" = "drbl_ssi_mode" ]; then
+           echo "Since it's in DRBL SSI mode, and some config files are modified in template client, creating template tarball for DRBL SSI..."
+           drbl-gen-ssi-files
+         fi
+         ;;
+  "remote-linux-txt") 
+         echo "Settinig client as remote-linux text mode..."
+         stop_ocs_if_necessary
+         set-default-pxe-img -i drbl -c $PXE_CONF -l "$FULL_OS_Version $powerful_client_menu_label"
+         if [ "$LIST_HOST" = "on" ]; then
+           # now use --no-gen-ssi, but we will run drbl-gen-ssi-files when finished
+	   drbl-powerful-thin-client --no-gen-ssi -p -h "$IP_LIST" -ln $lang
+         else
+           # now use --no-gen-ssi, but we will run drbl-gen-ssi-files when finished
+	   drbl-powerful-thin-client --no-gen-ssi -p -ln $lang
+	 fi
+
+	 deploy_pxecfg_files
+
+         for host in $drblroot/*; do
+           # if the LIST_HOST is on, skip those IP not listed in the $IP_LIST
+	   if [ "$LIST_HOST" = "on" ]; then
+	     [ -z "$(echo $IP_LIST | grep -E "\<${host##/*/}\>")" ] && continue
+           fi
+
+           # 
+           host_ip=$(basename $host)
+           echo "Setting the remote-linux text mode for node IP = $host_ip"
+	   if [ -e /etc/debian_version ]; then
+             CLIENT_INIT="2"
+             default_dm="$(drbl-check-dm -h $host_ip)"
+             prepare_update_rc_d_env $host
+             get_debian_ubuntu_init_serv_control_prog
+             if [ "$dbn_ubn_serv_control_prog" = "use-insserv" ]; then
+               # Use insserv
+	       LC_ALL=C chroot $host/ insserv -r $default_dm &> /dev/null
+	     else
+               # Use update-rc.d
+               LC_ALL=C chroot $host/ /usr/sbin/update-rc.d -f $default_dm remove &> /dev/null
+             fi
+	     if [ -e "$host/etc/init/${default_dm}.conf" ]; then
+               switch_upstart_service $host/etc/init/${default_dm}.conf off
+	     fi
+           else
+             # RH-like or SUSE
+             # set the init to 3, i.e. default is text mode
+             CLIENT_INIT="3"
+           fi
+	   if [ -e "$host/etc/inittab" ]; then
+             perl -p -i -e "s/^id:[0-9]:initdefault:/id:$CLIENT_INIT:initdefault:/g" $host/etc/inittab
+           fi
+         done
+	 echo "done!"
+         #
+         echo "-------------------------------------------------------"
+         if [ "$drbl_mode" = "drbl_ssi_mode" ]; then
+           echo "Since it's in DRBL SSI mode, and some config files are modified in template client, creating template tarball for DRBL SSI..."
+           drbl-gen-ssi-files
+         fi
+         ;;
+  "remote-memtest")
+         echo -n "Setting client as remote-memtest mode..."
+         stop_ocs_if_necessary
+         set-default-pxe-img -i memtest -c $PXE_CONF
+	 deploy_pxecfg_files
+	 echo "done!"
+	 ;;
+  "remote-fdos")
+         echo -n "Setting client as remote-fdos mode..."
+         stop_ocs_if_necessary
+         set-default-pxe-img -i fdos -c $PXE_CONF
+	 deploy_pxecfg_files
+	 echo "done!"
+	 ;;
+  "terminal")
+         echo -n "Settinig client as DRBL terminal mode..."
+         stop_ocs_if_necessary
+         set-default-pxe-img -i drbl-terminal -c $PXE_CONF -l "$FULL_OS_Version $thin_client_menu_label"
+	 deploy_pxecfg_files
+
+         if [ "$LIST_HOST" = "on" ]; then
+           drbl-client-system-select -e -h "$IP_LIST" on
+	   drbl-powerful-thin-client -t -h "$IP_LIST" -ln $lang
+         else
+           drbl-client-system-select -e on
+	   drbl-powerful-thin-client -t -ln $lang
+         fi
+	 echo "done!"
+	 ;;
+  "netinstall")
+     netinstall_list="$(grep -Ei "^[[:space:]]*label[[:space:]]+netinstall-" $PXELINUX_DIR/default | sed -e "s/^[[:space:]]*label[[:space:]]*//g" | sort)"
+     if [ -z "$MODE2" ]; then
+       TMP="$(mktemp /tmp/menu.XXXXXX)"
+       trap "[ -f "$TMP" ] && rm -f $TMP" HUP INT QUIT TERM EXIT
+       if [ -z "$netinstall_list" ]; then
+          $DIA --title "$msg_no_network_installation_img" --clear \
+          --msgbox "$msg_no_network_installation_img_des" 0 0
+         exit 0
+       fi
+       MENU=""
+       numimages=0
+       for i in $netinstall_list; do
+          numimages=$((numimages + 1))
+          # EX for i: netinstall-ubuntu-breezy-i386
+          # create the description for the netinstall image
+          des="$(echo $i | sed -e "s/^netinstall-//gi" | sed -e "s/-/_/g")"
+          des="${des}_$(rep_whspc_w_udrsc "$msg_install_via_network")"
+          # NOTE! The extra space in the end is a must!
+          MENU="$MENU $i $des "
+       done
+       if [ $numimages -gt 0 ]; then
+         if [ $numimages -lt $MAX_DIALOG_HEIGHT ]; then
+           height=$numimages
+         else
+           height="$MAX_DIALOG_HEIGHT"
+         fi
+         $DIA \
+         --backtitle "$msg_nchc_title" \
+         --title "$msg_netinstall" \
+         --menu "$msg_choose_netinstall_imag" 0 80 $height \
+         $MENU 2> $TMP
+         OS_netinstall="$(cat $TMP)"
+       fi
+       [ -f "$TMP" ] && rm -f $TMP
+     else
+         if [ -n "$(echo $netinstall_list | grep -Ew "$MODE2")" ]; then
+           # only if MODE2 containing netinstall and the image block exists in pxelinux.cfg/default.
+           OS_netinstall="$MODE2"
+         else
+           [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+           echo "netinstall \"$MODE2\" is not found in $PXELINUX_DIR/default!"
+           [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+	   echo "Available netinstall are: `echo $netinstall_list`" # make it show in one line
+           echo "$msg_program_stop!"
+           exit 1
+         fi
+     fi
+     [ -z "$OS_netinstall" ] && echo "No distribution is selected! Program terminated!!!" && exit 1
+     echo "This network installation is for: $OS_netinstall"
+     echo "Setting client to the mode for installing this distribution via network..."
+     stop_ocs_if_necessary
+     echo -n "Set the PXE environment..."
+     set-default-pxe-img -i $OS_netinstall -c $PXE_CONF
+     echo "done!"
+     deploy_pxecfg_files
+     ;;
+  "clonezilla-start")
+     [ -z "$ocs_user_mode" ] && ask_if_beginner_or_expert_mode
+     if [ -z "$MODE2" ]; then
+       TMP=$(mktemp /tmp/menu.XXXXXX)
+       trap "[ -f "$TMP" ] && rm -f $TMP" HUP INT QUIT TERM EXIT
+       $DIA \
+       --backtitle "$msg_nchc_title" \
+       --title "$msg_start_clonezilla_mode" \
+       --menu "$msg_clonezilla_is_free_and_no_warranty\n$msg_choose_mode:" 0 0 0 \
+       "save-disk" "$msg_clonezilla_save_disk" \
+       "save-parts" "$msg_clonezilla_save_parts" \
+       "restore-disk" "$msg_clonezilla_restore_disk" \
+       "restore-parts" "$msg_clonezilla_restore_parts" \
+       "select-in-client" "$msg_clonezilla_selec_in_client" \
+       2> $TMP
+       ocs_mode=$(cat $TMP)
+       [ -f "$TMP" ] && rm -f $TMP
+     else
+       ocs_mode="$MODE2"
+     fi
+     # ocs_mode_prompt is to be shown in the title of dialog menu later
+     ocs_mode_prompt="$ocs_mode"
+     [ -z "$ocs_mode" ] && echo "No clonezilla mode is selected! Program terminated!!!" && exit 1
+     echo "Now the clonezilla mode is: $ocs_mode"
+     case "$ocs_mode" in
+       # keep clonezilla-* for backword compatible
+       "clonezilla-save-disk"|"save-disk")
+          do_clonezilla_save_dev disk
+          ;;
+       "clonezilla-restore-disk"|"restore-disk")
+          do_clonezilla_restore_dev disk
+          ;;
+       "clonezilla-save-parts"|"save-parts")
+          do_clonezilla_save_dev parts
+          ;;
+       "clonezilla-restore-parts"|"restore-parts")
+          do_clonezilla_restore_dev parts
+          ;;
+       "select-in-client")
+          do_clonezilla_select_in_client
+          ;;
+     esac
+     ;;
+
+  "clonezilla-stop")
+     echo -n "Trying to stop the clonezilla mode..."
+     stop_ocs_if_necessary
+     # When clonezilla stops, we should make clients boot locally
+     set-default-pxe-img -i local -c $PXE_CONF
+     deploy_pxecfg_files
+     echo "done!"
+     ;;
+
+  "local")
+         echo -n "Setting client as local mode..."
+         stop_ocs_if_necessary
+         set-default-pxe-img -i local -c $PXE_CONF
+	 deploy_pxecfg_files
+	 echo "done!"
+	 ;;
+  "reboot")
+         echo "Rebooting clients if they are up and running... 3 types of clients are possible..."
+	 echo "(1) For DRBL clients... (Commands run in background)"
+         if [ "$LIST_HOST" = "on" ]; then
+	   drbl-doit -b -u root -h "$IP_LIST" reboot &
+         else
+	   drbl-doit -b -u root reboot &
+	 fi
+	 echo "(2) For Cygwin clients... (Commands run in background)"
+         if [ "$LIST_HOST" = "on" ]; then
+	   drbl-doit -b -u $MSWIN_ADMIN_ID -h "$IP_LIST" /usr/bin/shutdown -f -r now &
+         else
+	   drbl-doit -b -u $MSWIN_ADMIN_ID /usr/bin/shutdown -f -r now &
+	 fi
+	 echo "(3) For Clonezilla live clients of Clonezilla SE... (Commands run in background)"
+         if [ "$LIST_HOST" = "on" ]; then
+	   drbl-doit -b -u $ocs_live_username -p $ocs_live_passwd -h "$IP_LIST" sudo reboot &
+         else
+	   drbl-doit -b -u $ocs_live_username -p $ocs_live_passwd sudo reboot &
+	 fi
+	 ;;
+  "shutdown")
+         echo "Shutdowning clients if they are up and running... 3 types of clients are possible..."
+	 echo "(1) For DRBL clients... (Commands run in background)"
+         if [ "$LIST_HOST" = "on" ]; then
+	   drbl-doit -b -u root -h "$IP_LIST" poweroff &
+         else
+	   drbl-doit -b -u root poweroff &
+         fi
+	 echo "(2) For Cygwin clients... (Commands run in background)"
+         if [ "$LIST_HOST" = "on" ]; then
+	   drbl-doit -b -u $MSWIN_ADMIN_ID -h "$IP_LIST" /usr/bin/shutdown -f -s -x now &
+         else
+	   drbl-doit -b -u $MSWIN_ADMIN_ID /usr/bin/shutdown -f -s -x now &
+         fi
+	 echo "(3) For Clonezilla live clients of Clonezilla SE... (Commands run in background)"
+         if [ "$LIST_HOST" = "on" ]; then
+	   drbl-doit -b -u $ocs_live_username -p $ocs_live_passwd -h "$IP_LIST" sudo poweroff &
+         else
+	   drbl-doit -b -u $ocs_live_username -p $ocs_live_passwd sudo poweroff &
+	 fi
+	 ;;
+  "Wake-on-LAN")
+         echo "Turn on DRBL clients by Wake-on-LAN now..."
+         if [ "$LIST_HOST" = "on" ]; then
+	   drbl-doit -b -h "$IP_LIST" --wol
+         else
+	   drbl-doit -b --wol
+         fi
+	 echo "done!"
+	 ;;
+  "more")
+         if [ -z "$MODE2" ]; then
+           TMP="$(mktemp /tmp/menu.XXXXXX)"
+           trap "[ -f "$TMP" ] && rm -f $TMP" HUP INT QUIT TERM EXIT
+           $DIA \
+           --backtitle "$msg_nchc_title" \
+           --title "$msg_nchc_drbl" \
+           --menu "$msg_switch_client_mode:" 0 0 0 \
+           "switch-pxe-menu" "$msg_switch_pxe_menu" \
+           "switch-pxe-bg-mode" "$msg_switch_pxe_bg_mode" \
+           "drbl-mode" "$msg_drbl_mode_switch" \
+           "clonezilla-mode" "$msg_clonezilla_mode_switch" \
+	   "gen-template-files" "$msg_gen_template_files" \
+           $login_switch_1 $login_switch_2 \
+	   $client_reautologin_1 $client_reautologin_2 \
+	   $clean_autologin_account_1 $clean_autologin_account_2 \
+	   $reset_autologin_account_1 $reset_autologin_account_2 \
+           "switch-drbl-serv" "$msg_switch_drbl_service" \
+           "re-deploy" "$msg_re_deploy" \
+           "clean-dhcpd-lease" "$msg_clean_dhcpd_lease" \
+           "gen_3N_conf" "$msg_regenerate_nfs_nis_nat_config" \
+           2> $TMP
+           OTHER_MODE=$(cat $TMP)
+           [ -f "$TMP" ] && rm -f $TMP
+         else
+           OTHER_MODE=$MODE2
+	 fi
+	 case "$OTHER_MODE" in
+          "switch-pxe-menu")
+              echo "Switch DRBL client menus..."
+       	      switch-pxe-menu -c $PXE_CONF -l $lang $DIA_OPT $MORE_OPT_for_MODE2
+       	      rc=$?
+       	      [ "$rc" -eq 0 ] && deploy_pxecfg_files
+       	      ;;
+          "switch-pxe-bg-mode")
+	      run-switch-pxe-bg-mode $MORE_OPT_for_MODE2 ;;
+          "drbl-mode")
+              run_drbl_mode_switch $MORE_OPT_for_MODE2 ;;
+          "clonezilla-mode")
+              run_clonezilla_mode_switch $MORE_OPT_for_MODE2 ;;
+	  "gen-template-files")
+              drbl-gen-ssi-files $MORE_OPT_for_MODE2 ;;
+          "client-reautologin")
+              if [ "$LIST_HOST" = "on" ]; then
+                drbl-client-reautologin -h "$IP_LIST"
+              else
+                drbl-client-reautologin
+              fi
+              ;;
+          "clean-autologin-account")
+              drbl-clean-autologin-account -l $lang ;;
+          "reset-autologin-account")
+              drbl-user-env-reset -l $lang --auto-login ;;
+          "switch-drbl-serv")
+              run_switch_drbl_service $MORE_OPT_for_MODE2 ;;
+          "re-deploy")
+              if [ ! -f "$drbl_syscfg/drblpush.conf" ]; then
+                [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+                echo "Previously saved config file $drbl_syscfg/drblpush.conf is NOT found. Did you run \"drblpush -i\" before ?"
+                echo "Program Terminated!!!"
+                [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+                exit 1
+              fi
+              drblpush --ln $lang -c $drbl_syscfg/drblpush.conf
+              ;;
+          "clean-dhcpd-lease")
+	      drbl-clean-dhcpd-leases ;;
+          "gen_3N_conf")
+	      drbl-3n-conf generate ;;
+          "login-switch")
+              run_login_switch $MORE_OPT_for_MODE2;;
+	 esac
+	 ;;
+  *)
+         USAGE
+	 ;;
+esac
+#
+[ -f "$HOSTS_TMP" ] && rm -f $HOSTS_TMP
+
+exit 0

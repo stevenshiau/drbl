@@ -1,0 +1,24 @@
+#!/bin/bash
+# Steven Shiau <steven@nchc.org.tw>
+# License: GPL
+# Description: To clean the dhcpd.leases then restart dhcpd
+
+# Load DRBL setting and functions
+if [ ! -f "/opt/drbl/sbin/drbl-conf-functions" ]; then
+  echo "Unable to find /opt/drbl/sbin/drbl-conf-functions! Program terminated!" 
+  exit 1
+fi
+. /opt/drbl/sbin/drbl-conf-functions
+
+#
+check_if_root
+
+# find the path of dhcpd.leases ($DHCPDLEASE_DIR), such as /var/lib/dhcp3 in debian or /var/lib/dhcp in FC1-4.
+get_dhcpdlease_dir
+
+# drcp_srv_name is loaded from conf/drbl.conf
+/etc/init.d/$DHCP_SRV_NAME stop
+[ -f "$DHCPDLEASE_DIR/dhcpd.leases" ] && rm -f $DHCPDLEASE_DIR/dhcpd.leases
+[ -f "$DHCPDLEASE_DIR/dhcpd.leases~" ] && rm -f $DHCPDLEASE_DIR/dhcpd.leases~
+touch $DHCPDLEASE_DIR/dhcpd.leases
+/etc/init.d/$DHCP_SRV_NAME start

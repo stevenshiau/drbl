@@ -1,0 +1,255 @@
+#!/usr/bin/perl -T
+# Written by Steven Shiau <steven _at_ nchc org tw> for DRBL and translated by Gianfranco Gentili <gf.gentili _at_ libero it>.
+# License: GPL
+#
+
+$lang_charset = 'iso-8859-1';
+
+%delimiter =
+   (
+   dash_line => '------------------------------------------------------',
+   star_line => '******************************************************',
+   exclamation_line => "!!!!!!!!!!!!!!!!!!!!!!!!!",
+   warning_line => "!!!!!!!!!!!!!!!!!!!!! Attenzione !!!!!!!!!!!!!!!!!!!!!",
+   );
+
+%lang_text =
+   (  
+   Say        => 'Rispondi',
+   or         => 'o',
+   seconds    => 'secondi',
+   WARNING    => 'ATTENZIONE',
+   Accept     => 'Accetta',
+   as         => 'come',
+   login      => 'login',
+   clear      => 'pulizia',
+   of         => 'di',
+   logout     => 'logout',
+   page       => 'pagina',
+   move       => 'muove',
+   date       => 'data',
+   size       => 'dimensioni',
+   type       => 'tipo',
+   filename   => 'filename',
+   encoding   => 'codifica',
+   download   => 'download',
+   cancel     => 'cancella',
+   continue   => 'continua',
+   for        => 'per',
+   save       => 'salva',
+   add        => 'aggiungere',
+   delete     => 'delete',
+   uninstall  => 'uninstall',
+   done       => 'fatto',
+   finish     => 'finito',
+   space      => 'spazio',
+   );
+
+
+%lang_word =
+   (
+   please_enter => "si_prega_immettere",
+   to_deploy_them => "spiegarli",
+   root_passwd => " password_di_root",
+   initial_digit => "cifra_iniziale",
+   unable_to_find_the => "non_si_trova_il",
+   program_stop => "Fine_del_programma",
+   );
+
+
+%lang_deploy =
+   (
+   interactive_mode_prompt => 'La modalità interattiva vi consente di fornire le informazioni del vostro ambiente DRBL.',
+   domain_unset_prompt => 'DOMAIN non è impostato, immettete DOMAIN adesso:',
+   domain_prompt => 'Inserite il dominio DNS (as esempio drbl.sf.net):',
+   nisdomain_unset_prompt => 'NISDOMAIN non è impostato, inserite il NISDOMAIN ora:',
+   nisdomain_prompt => 'Inserite il nome del dominio NIS/YP:',
+   not_allowed_domainname => 'non è consentito DOMAINNAME, inseritelo di nuovo!',
+   not_allowed_nisdomainname => 'non è consentito come NISDOMAINNAME, inseritelo di nuovo!',
+   set_domain_as => 'Imposto DOMAIN come',
+   enter_client_hostname_prefix => "Inserite il prefisso dell\'hostname del client:\nQuesto prefisso viene usato per creare automaticamente l\'hostname per i client. Se volete sovrascrivere alcuni o tutti gli hostname generati automaticamente, premete Ctrl-C per uscire da questo programma ora, editate $DRBL_SCRIPT_PATH/conf/client-ip-hostname, e dopo eseguite nuovamente questo programma.",
+   not_allowed_hostname => 'non è consentito come prefisso dell\'hostname del client, immettetelo di nuovo!',
+   set_client_hostname_prefix => 'Imposto il prefisso dell\'hostname del client come',
+   no_NIC_setup => 'Non avete impostato nessuna rete Internet regolando le schede di rete per i client (come ad esempio l\'indirizzo IP di eth1, eth2...), o c\'è qualcosa di sbagliato!',
+   configured_nic => 'Le schede ethernet trovate nel vostro sistema sono configurate:',
+   we_can_NOT_continue => 'Non possiamo continuare...',
+   but_not_private_IP_or_configured => 'ma il suo IP non è privato, non è ben configurato, o adesso non è attivo!!!',
+   enter_public_IP_for_the_client => "Inserite l\'IP publico per questo client ",
+   its_IP_in_DRBL_is => "Il suo indirizzo IP in DRBL è",
+   wrong_entered_IP => "L\'indirizzo IP che avete immesso è sbagliato, inseritelo di nuovo!",
+   enter_gateway_for_client => "Inserite il gateway per questo client",
+   enter_netmask_for_client => "Inserite la netmask per questo client",
+   wrong_entered_netmask => "La NETMASK che avete immesso è sbagliata, inseritela di nuovo!",
+   set_client_public_IP_as => "Imposteremo i parametri di rete degli IP pubblici dei client come:",
+   we_will_skip => 'Salteremo',
+   for_internet_access_prompt => 'Quale porta ethernet in questo server è per l\'accesso pubblico ad Internet, non per la connessione DRBL?',
+   drbl_website_prompt => 'Per i dettagli si consulti http://drbl.nchc.org.tw/redhat o http://drbl.sf.net/redhat',
+   ethernet_port_for_internet => 'La porta ethernet per l\'accesso ad Internet è:',
+   ethernet_port_for_DRBL => 'Le porte ethernet per l\'ambiente DRBL: ',
+   only_1_IP_for_eth0 => 'Solo il primo indirizzo IP per eth0, non useremo eth0 per l\'ambiente DRBL!',
+   no_DRBL_port => 'Nessuna porta ethernet è disponibile per l\'ambiente DRBL!',
+   saved_mac_address_files_in_etc => "Questi file vengono salvati nella directory $drbl_syscfg.",
+   collect_MAC_prompt => 
+          "Ora siamo in grado di raccogliere l\'indirizzo MAC dei client!\n".
+          "Se desiderate lasciare che il servizio DHCP nel server DRBL assegni lo stesso indirizzo IP al client ogni volta che questo viene avviato, e non avete mai fatto questa procedura, dovreste farlo ora!\n".
+          "Se disponete già degli indirizzi MAC dei client, li potete mettere in differenti gruppi di file (questi numeri di file hanno lo stesso numero delle schede di rete per il servizio DRBL). In questo caso, potete saltare questo passo.\n".
+          "Questo passo vi permette di registrare gli indirizzi MAC dei client, poi li divide in gruppi diversi. Vi farà risparmiare tempo e ridurre gli errori di battitura.\n".
+	  "Gli indirizzi MAC saranno registrati a turno a seconda del boot dei client,\n".
+	  " e saranno messi in file differenti a seconda della scheda di rete nel server, il nome del file sarà del tipo macadr-eth1.txt, macadr-eth2.txt ... Potete trovarli nella directory $drbl_syscfg.\n".
+	  "Si prega di avviare i client in ordine, assicurandovi che essi vengano avviati da etherboot o PXE!\n". 
+          "Volete raccoglierli?",
+   ok_let_do_it => 'OK! Facciamolo!',
+   you_are_not_root => 'Non siete root',
+   ok_let_continue => 'OK! Proseguiamo...',
+   fix_eth_IP_prompt => "Volete lasciare che il servizio DHCP nel server DRBL assegni lo stesso indirizzo IP al cliente ogni volta che questo viene avviato (Se si desidera questa funzione, è necessario raccogliere gli indirizzi MAC dei client, e salvarli nei file (come nella precedente procedura)). Questo è per i clienti collegati alla interfaccia di rete Ethernet del server DRBL ",
+   MAC_file_prompt => "OK! Per favore ditemi il nome del file che riga per riga contiene l\'indirizzo MAC dei client ",
+   range_prompt => " OK! Proseguiamo assegnando l\'indirizzo IP del client secondo la regola \"chi prima si avvia, prima ottiene IP\" invece di assegnarne uno fisso!",
+   client_number_connected_to_eth => " Quanti client DRBL (PC per gli studenti) collegati all\'interfaccia di rete Ethernet del server DRBL ",
+   enter_the_no => "Inserite il numero",
+   the_value_you_set => "L\'ultimo numero dell\'ultimo gruppo di cifre degli IP dei client è",
+   set_the_IP_connected_to_eth => "Imposteremo l'indirizzo IP per i client collegati all\'interfaccia di rete Ethernet del server DRBL ",
+   do_you_want_to_continue => "Volete continuare ?",
+   reenter_or_accept => " per immetterlo di nuovo, o qualsiasi altra lettera per accettare questo valore e andate avanti!",
+   filename_you_set => "Il nome del file che avete impostato è",
+   by_MAC_file => " Con l\'indirizzo MAC file che avete impostato, gli indirizzi IP per i client collegati all\'interfaccia di rete Ethernet del server DRBL ",
+   let_restart_it_again => "OK, andiamo ad riavviarlo!",
+   layout_for_DRBL => "Il Layout per il vostro ambiente DRBL:",
+   swap_prompt =>
+              "Se c\'è un harddisk locate con una partizione di swap o un file system scrivibile nella vostra macchina client,\n".
+              "volete usare detta partizione di swap o creare un file di swap nel file system scrivibile così che il client abbia più memoria da usare? (Questa fase non distrugge nessun dato nell\'harddisk)",
+   try_to_create_swap =>
+                " OK! Cercheremo di creare uno spazio di swap per il vostro client se ha un disco rigido locale!",
+   max_swap_size =>
+                "Qual\'è la massima dimensione (in Megabyte) per lo spazio di swap?\n".
+                "Proveremo ad allocare lo spazio di swap, se non ce n\'è abbastanza useremo il 60% dello spazio libero.",
+   mode_for_client_init =>
+              " Quali modalità volete che i client usino dopo il loro avvio?\n".
+              "\"1\": Modalità grafica (sistema X window) (default),\n".
+              "\"2\": Modalità testo.",
+   client_text_mode => "I client useranno la modalità testo al loro avvio.",
+   client_graphic_mode => "I client useranno la modalità grafica dopo il boot.",
+   login_mode_for_client =>
+                  "Quale modalità di login volete quando il client si avvia in modalità grafica?\n".
+                  "0: login normale, 1: auto login, 2: login a tempo",
+   auto_login => "I client faranno l\'auto login al loro avvio.",
+   created_account_for_auto_login =>
+                      "verranno creati gli account per le macchine client con auto login.\n".
+		      "L\'ID dell\'auto login è lo stesso dell\'hostname del client.\n".
+                      "Le informazioni di account e password saranno elencati nel file",
+   time_for_countdown => " Quanti secondi per il conto alla rovescia?",
+   timed_login_prompt => "I client faranno l\'auto login dopo che è trascorso il tempo",
+   normal_login_prompt => "I client al loro avvio aspetteranno che l\'utente faccia il login.",
+   keep_client_setting_question => "Volete mantenere la vecchia impostazione degli attuali client DRBL se esistono?",
+   remove_client_setting => "Rimuoveremo tutte le impostazioni dei client DRBL se esse già esistono.",
+   keep_client_setting => "Cercheremo di mantenere le impostazioni dei client DRBL se esse già esistono.",
+   set_client_root_passwd => "Volete impostare la password di root per i client invece di utilizzare la password di root copiata dal server ? (Per maggior sicurezza)",
+   whats_client_root_passwd => "Nuova password di root per i client (Non verrà visualizzata sullo schermo) ?",
+   set_client_pxelinux_passwd => "Volete impostare la password pxelinux per i client in modo che quando il client si avvia, debba essere fornita una password allo startup (Per maggior sicurezza)",
+   whats_client_pxelinux_passwd => "Nuova password pxelinux per i client (Non verrà visualizzata sullo schermo) ?",
+   retype_root_passwd => "Ridigitare la nuova password (Non verrà visualizzata sullo schermo).",
+   sorry_passwd_not_match => "Spiacente, le password non coincidono",
+   sorry_passwd_can_not_empty => "Spiacente, la password non può essere vuota",
+   set_client_alias_IP =>
+      "Usando l\'interfaccia alias, ogni client può avere 2 IP,\n".
+      " uno di essi è l\'IP privato per il client DRBL collegato al server, e l\'altro è l\'IP pubblico per i client collegati direttamente alla rete WAN da switchare!\n".
+      "Volete impostare l\'IP pubblico per i client?",
+   searching_installed_drbl_packages => "Ricerca dei pacchetti installati per il server DRBL...Questo potrebbe richiedere diversi minuti...",
+   no_drbl_server_package_found =>
+	      "Nessun pacchetto per il server DRBL è installato!!!\n". 
+	      "Dovreste eseguire un altro script (drblsrv -i) per impostare prima il server DRBL!!!, Altrimenti il sistema non funzionerà!!!\n".
+	      "Siete sicuri di voler continuare? Rispondete \"yes\" or \"y\" per continuare, o qualsiasi altra lettera per uscire!",
+   but_you_will_see_errors => " Ma vedrete un sacco di messaggi di errore ...!!!",
+   smart_decision => "OK, decisione sofferta, andiamo a chiudere!",
+   finished_searching_installed_drbl_packages => "La ricerca dei pacchetti installati per il server DRBL è terminata.",
+   note_for_keep_client_setting => "Nota! State cercando di mantenere le impostazioni dei client DRBL se esistono, e a volte i client DRBL quando termina questo script vanno male! In tal caso, riavviateli e poi dovrebbero andar bene!",
+   press_enter_to_continue => "Premete Invio per continuare... ",
+   no_deploy_prompt =>
+	      "Tutti i file di configurazione vengono creati in questa directory di lavoro,\n".
+	      "ma NON sono a disposizione del sistema! \n".
+	      "Se volete distribuirli al sistema, non usate l\'opzione \"-n\" o \"--no_deploy\"",
+   ready_to_deploy =>
+	      "Siamo pronti per distribuire i file al sistema! \n".
+	      "Volete continuare?",
+   overwrite_firewall_rule => "Attenzione! Se andate avanti, le vostre regole del firewall verranno ricoperte durante il setup!",
+   backup_firewall_rule => "Le regole originali verranno salvate come iptables.drblsave nella directory di configurazione del sistema (/etc/sysconfig or /etc/default).",
+   oh_quit_now => "Oh, ora terminerò!",
+   accept_or_enter => "Rispondete \"Y\" per accettare o un\'altra lettera per immetterli uno per volta...",
+   failed_to_open_file => "Impossibile aprire il file",
+   #
+   analyzing_rpm_info => "Analizzo le informazioni dei pacchetti rpm ... Questo potrebbe richiedere diversi minuti ...",
+   no_drbl_server_package => "Non è installato nessun pacchetto per il server DRBL!!!",
+   apt_pkg_not_installed =>  "\"apt\" pacchetto NON installato!!!", 
+   we_are_now_ready_to => "Ora siamo pronti a",
+   the_files_for_DRBL_server => "i file per il server DRBL!",
+   say_yes_to_continue_other_to_quit => "Rispondere \"yes\" o \"y\" per continuare, o qualsiasi altra lettera per terminare!",
+   say_no_to_quit_other_to_continue => "Rispondete \"no\" o \"n\" per terminare, o qualsiasi altra lettera per proseguire!",
+   syncing_flush => "Sincronizzazione in corso – svuotamento dei buffer del filesystem...", 
+   install_and_upgrade => "installo e aggiorno",
+   IP_start_prompt => "Qual è il valore iniziale che si desidera utilizzare nell\'ultimo gruppo di cifre dell\'IP (cioè il valore iniziale di \"d\" nell\'indirizzo IP a.b.c.d) per i client DRBL collegati a questa porta Ethernet",
+   client_no_in_MAC_file => "Il numero di client in questo file è ",
+   not_initial_value => "Il numero uno non è ammesso come valore iniziale! Inseritelo di nuovo!!!",
+   can_not_be_the_last_IP => "NON può essere l\'ultimo gruppo di cifre nell\'IP!!!",
+   can_not_be_the_first_IP => "NON può essere il primo gruppo di cifre nell\'IP!!!",
+   set_client_system_select => "Volete impostare il prompt di avvio per i client?",
+   use_graphic_pxelinux_menu => "Volete usare lo sfondo grafico per il menu PXE quando il client si avvia?",
+   note_for_use_graphic_pxelinux_menu => "Nota! Se usate il menu grafico di PXELinux ed il client non riesce ad avviarsi, potete passare alla modalità testo eseguendo \"$DRBL_SCRIPT_PATH/sbin/switch-pxe-bg-mode -m text\".",
+   whats_client_system_boot_timeout => "Quanti 1/10 sec è il timeout del prompt di oot per i client?",
+   sorry_timeout_must_be_number => "Il timeout deve essere un numero (per esempio: 70)!!!",
+   unable_to_get_ethx_IP => "Impossibile ottenere l\'indirizzo IP!!! Dovete impostare un indirizzo IP privato di classe C statico (ad esempio 192.168.1.1), e NON un indirizzo IP fluttuante (come un client DHCP)! La scheda di rete dà questo errore:",
+   program_stop => "Stop del programma!!!",
+   open_thin_client_option => 
+        " Volete lasciare che i client DRBL abbiano la possibilità di funzionare in modalità terminale? Vale a dire volete che i client utilizzino il display remoto (che utilizza le risorse del server). In caso affermativo, rispondere \" Y \" qui.\n".
+        "Nota!\n".
+	"0. Se rispondete di sì a questa opzione, l\'ambiente per i client sarà molto limitato, cioè NESSUN accesso locale per USB, CD, audio, stampante, etc.\n".
+	"1. Se il vostro server non è potente, rispondete \"no\" qui.\n".
+	"2. Rispondendo \"yes\" qui, accenderemo xdmcp,\n".
+	"L\'attivazione di questa opzione non è sicura. Un\'altra possibilità è quella di parametrare /etc/hosts.allow e /etc/hosts.deny al fine di permettere soltanto l\'accesso locale, ma non è la più sicura..\n".
+	"Il Firewall della porta 177 è la più sicura se volete avere attivo xdmcp.\n".
+	"Per ulteriori note sulla sicurezza di XDMCP, leggete il manuale.\n".
+	"Vi prego di impostarlo da voi stessi!\n".
+	"3. Se qui rispondete \"yes\", in seguito potreste dover riavviare il vostro gestore dell\'ambiente desktop (gdm/kdm). Ricordatevi di salvare i vostri dati prima di chiudere le applicazioni!\n".
+	"Volete lasciare al client la possibilità di funzionare in modo terminale?",
+   server_kernel_nfsd_support => "Il kernel in esecuzione nel server supporta",
+   change_kernel_notes => " Nota: se modificate il kernel in esecuzione nel server, e non siete sicuri che il kernel supporti NFS su udp o tcp, fareste meglio a ri-eseguire \"drblpush -i\" di nuovo per evitare che l\'avvio del client fallisca!",
+   hint_for_answer => "Suggerimento! Quando è disponibile una opzione si/no, il valore di default è maiuscolo, Es. (y/N), il valore di default è \"n\", e quando premete \"Invio\", sarà come se aveste premuto \"N\". Se non siete sicuri di quale scegliere, premete il tasto di \"Invio\".",
+   hint_for_detect_MAC => " Se desiderate usare l\'indirizzo IP statico per i client DRBL, dovete eseguire \"drblpush\" in modalità interattiva (con l\'opzione -i) e raccogliere gli indirizzi MAC dei client!",
+   illegal_char_in_MAC => "Il file degli indirizzi MAC contiene caratteri illeciti",
+   fix_wrong_MAC_file => "Si prega di verificare e modificare il file degli indirizzi MAC che avete immesso.",
+   unable_to_find_public_IP => "L\'indirizzo IP pubblico di questo server NON è stato trovato.",
+   available_eth_ports => "Porte ethernet disponibili in questo server",
+   is_not_in_the_lists => "non è negli elenchi ",
+   enter_it_again => "Immetterlo di nuovo",
+   the_eth_port_you_choose_for_wan => " La porta Ethernet che avete scelto per il collegamento WAN ",
+   set_DBN_client_audio_plugdev_etc_open_to_all => "Volete lasciare che l\'audio, CD-Rom, floppy, video e plugdev (come dispositivo USB) accessibili a tutti gli utenti nel cliente DRBL? In caso di risposta affermativa, tutti gli utenti verranno aggiunti ai gruppi di quelle periferiche sul server e sui client.",
+   use_random_password => "Volete utilizzare una password *RANDOM* per gli account con auto login?",
+   enter_password_for_autologin_accounts => "Inserite la password per gli account con auto login.",
+   whats_client_autologin_passwd => "Qual\'è la password dell\'account con auto login per i client (Non verrà visualizzata sullo schermo) ?",
+   retype_autologin_passwd => "Ridigitare la password (Non verrà visualizzata sullo schermo).",
+   clonezilla_box_mode_for_client => "Volete utilizzare solo la modalità \"Clonezilla box\"? In caso affermativo, alcune funzioni DRBL saranno soppresse, ma avrete un modo elegante di usare Clonezilla. Nota! In questa modalità, i file di impostazione e di configurazione del client non possono essere salvati sul server DRBL! Verranno usati solo una volta e svaniranno dopo la chiusura della macchina!",
+   clonezilla_box_mode_is_set => "È impostata la modalità Clonezilla box, un elegante modo di usare Clonezilla!",
+   full_clonezilla_mode_is_set => " È impostata la modalità completa di Clonezilla!",
+   clonezilla_box_mode_not_set => "La modalità Clonezilla box NON è impostata, avrete la piena funzionalità di DRBL box!",
+   no_clonezilla_in_system => "Sul sistema non c\'è Clonezilla!",
+   class_c_IP_for_multicast_clonezilla => "Se volete usare Clonezilla multicast, dovete usare la classe C privata (192.168 .*.*)! In caso contrario le prestazioni del clone multicast saranno terribilmente peggiori!",
+   drbl_ssi_mode_for_client => "Volete usare la modalità DRBL SSI (Single System Image)? In caso affermativo il caricamento e lo spazio necessario sul disco saranno più leggeri. NOTA! In questa modalità, (1) La macchina client dovrà avere una memoria di almeno 256 MB. (2) I file di definizione e di configurazione del client non verranno salvati sul server DRBL! Verranno utilizzati solo una volta e svaniranno allo spegnimento della macchina! Inoltre, se modificate un qualsiasi file nel modello dei client (situato in $drblroot), dovrete eseguire $DRBL_SCRIPT_PATH/sbin/drbl-gen-ssi-files per creare il modello di tarball in $drbl_common_root/drbl_ssi/. (3) Se desiderate fornire alcuni file per sovrascrivere l\'impostazione del modello tarball quando il cliente si avvia, consultate $drbl_common_root/drbl_ssi/clients/00_README per maggiori dettagli.",
+   which_drbl_mode_for_client => " Nel sistema, ci sono 3 modalità per i servizi diskless Linux: \n[0] Modalità DRBL completa, ogni cliente ha il proprio NFS via /etc e /var. \n[1] Modalità DRBL SSI (Single System Image), ogni client utilizza tmpfs via /etc e /var. In questo modo, il caricamento e lo spazio necessario sul disco del server saranno più leggeri. NOTA! (A) Si raccomanda una memoria della macchina client di almeno 256 MB. (B) I file di impostazione e di configurazione del client non verranno salvati sul server DRBL! Verranno usati solo una volta e svaniranno dopo lo spegnimento della macchina! Inoltre, se modificate un qualsiasi file nel modello del client (situato in $drblroot), dovrete eseguire $DRBL_SCRIPT_PATH/sbin/drbl-gen-ssi-files per creare il modello di tarball in $drbl_common_root/drbl_ssi/. (C) Se desiderate fornire alcuni file per sovrascrivere l\'impostazione del modello tarball quando il cliente si avvia, consultate $drbl_common_root/drbl_ssi/clients/00_README per maggiori dettagli. \n[2] Non voglio fornire il servizio diskless Linux al client. \nQuale modalità preferite?",
+   drbl_ssi_mode_is_set => "È impostata la modalità DRBL SSI, un elegante modo di usare DRBL!",
+   full_drbl_mode_is_set => " È stata scelta la modalità DRBL completa!",
+   no_drbl_mode_in_system => "Nessun diskless Linux per il client nel sistema.",
+   where_is_ocs_img_repo_dir => " Quando si utilizza clonezilla, in quale directory del server si desidera memorizzare l\'immagine salvata (Si prega di utilizzare un percorso assoluto, e NON assegnarlo sotto /mnt/, /media/ o /tmp )?",
+   not_allowed_ocs_img_repo_dir => " non è una directory valida per salvare le immagini di clonezilla. Inseritela di nuovo.",
+   drbl_server_as_NAT_server => " Volete lasciare il server DRBL come un server NAT? In caso contrario, il vostro client DRBL non sarà in grado di accedere a Internet.",
+   drbl_server_is_NOT_NAT_server => " Questo server DRBL non può fornire il servizio NAT, perciò il vostro client DRBL non sarà in grado di accedere a Internet.",
+   both_drbl_clonezilla_are_none => " Le modalità drbl e clonezilla non sono disponibili. In questo sistema sono disponibili solo alcune funzioni molto limitate (come netinstall, se voi installate i file necessari, e drbl-SL.sh)!",
+   only_one_network_card_in_system => "///ATTENZIONE/// In questo sistema è stata trovata una sola scheda di rete configurata, e questo non è raccomandato in quanto il server DRBL fornirà un servizio DHCP che potrebbe perturbare il vostro ambiente di rete se già esiste un altro servizio DHCP! Per evitare questo problema, si raccomanda di usare almeno 2 schede di rete in questo server.",
+   are_you_sure_you_want_to_continue => "Siete sicuro di voler continuare?" ,
+   # Tag on 2010/12/13
+   # which_clonezilla_mode_for_client => "Nel sistema, sono disponibili tre modalità:\n[0] Clonezilla modalità completa, ciascun client ha il suo NFS via /etc e /var.\n[1] Clonezilla modalità box, ogni client usa tmpfs via /etc e /var. In questo modo, il caricamento e lo spazio necessario sul disco del server saranno più leggeri che in Clonezilla modalità completa. Nota! In Clonezilla modalità box, i file di impostazione e configurazione non verranno salvati sul server DRBL! Verranno utilizzati solo una volta e svaniranno quando la macchina verrà spenta!\n[2] Non voglio Clonezilla.\nQuale modalità preferite?",
+   which_clonezilla_mode_for_client => "Nel sistema, sono disponibili 4 modalità per clonezilla:\n[0] Clonezilla in modalità completa: ciascun client ha il suo NFS tramite /etc e /var.\n[1] Clonezilla in modalità box: ciascun client usa tmpfs tramite /etc e /var. In questo modo, il caricamento e lo spazio necessario sul disco del server saranno più leggeri che in Clonezilla modalità completa. Nota! In Clonezilla modalità box, i file di impostazione e di configurazione non verranno salvati sul server DRBL, ma verranno utilizzati solo una volta e svaniranno quando la macchina verrà spenta!\n[2] NON voglio clonezilla.\n[3] Usare Clonezilla live come OS (Operating System) dei client (Testing).\nQuale modalità preferite?",
+   clonezilla_live_mode_is_set => "Usare Clonezilla live come OS (Operating System) dei client quando si esege il job di Clonezilla.",
+   which_clonezilla_live_branch => "Quale tipo di release di Clonezilla live per i client?\n[0]: stable (basato su Debian)\n[1]: testing (basato su Debian)\n[2]: alternative stable (basato su Ubuntu)\n[3]: alternative testing (basato su Ubuntu)\nSe non siete sicuri, scegliete [2]: alternative stable.",
+   which_live_client_cpu_mode => "Quale architettura di CPU per i client quando si esegue il job di Clonezilla con Clonezilla live?\n[0]: i486\n[1]: i686\n[2]: amd64\nSe non siete sicuri, scegliete i486.",
+   live_client_branch_set=> "Il tipo di Clonezilla live è scelto come",
+   live_client_cpu_arch_is_set => "L'\''architettura della CPU per i client quando si esegue il job di Clonezilla",
+   mark_the_end_of_lang =>"."
+   );

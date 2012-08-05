@@ -1,0 +1,29 @@
+#!/bin/bash
+# Description: Script to run boinc in DRBL client.
+# Author: Steven Shiau <steven _at_ nchc org tw>
+# License: GPL 
+
+# Load settings
+. /opt/BOINC/conf/drbl-boinc.conf
+
+#
+export PATH=$PATH:$BOINC_DIR
+
+if ! mountpoint $workzone &>/dev/null; then
+  echo "tmpfs working dir is not found."
+  echo "Program terminated!"
+  exit 1
+fi
+
+cd $workzone
+# We need 3 files
+cp -f $BOINC_DIR/template/ca-bundle.crt .
+cp -f $BOINC_DIR/template/account_www.worldcommunitygrid.org.xml.template account_www.worldcommunitygrid.org.xml
+cp -f $BOINC_DIR/template/global_prefs.xml.template global_prefs.xml
+
+# The key in account_www.worldcommunitygrid.org.xml is like:
+#     <authenticator>7294d1ee005bf25b0c46f27330c54326</authenticator>
+perl -pi -e "s|(^[[:space:]]*\<authenticator\>).*(\</authenticator\>)|\$1 ${BOINC_Account_Key}\$2|g" $workzone/account_www.worldcommunitygrid.org.xml
+
+# Run it as daemon. The outout will be stderrdae.txt & stdoutdae.txt
+boinc -no_gui_rpc -daemon

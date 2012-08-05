@@ -1,0 +1,24 @@
+#!/bin/bash
+# Author: Steven Shiau <steven _at_ nchc org tw>
+# License: GPL
+# Description: To get the latest version of deb in a local directory.
+
+# Load DRBL setting and functions
+DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/opt/drbl/}"
+
+. $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
+
+
+#
+usage () {
+  echo "Usage: `basename $0` [path]"
+  echo "Example:"
+  echo "`basename $0` /mirror/drbl-core/drbl-core/pool/drbl/unstable/drbl/"
+}
+
+TDIR=$1
+[ -z "$TDIR" ] && echo "You must provide the PATH!" && usage && exit 1
+latest_deb="$(LC_ALL=C ls -lv $TDIR/*.deb 2>/dev/null | tail -n 1 | awk -F" " '{print $NF}')"
+if [ -n "$latest_deb" ]; then
+  echo "$(basename $latest_deb)"
+fi

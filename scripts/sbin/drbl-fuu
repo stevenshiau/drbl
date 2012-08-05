@@ -1,0 +1,222 @@
+#!/bin/bash
+# Author: Blake, Kuo-Lien Huang
+# License: GPL
+# Description: put/get the file to/from all user, file utility for user (fuu)
+#
+# Modified by Steven Shiau <steven@nchc.org.tw> to be used in DRBL for RedHat
+
+# Load DRBL setting and functions
+DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/opt/drbl/}"
+
+. $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
+
+#
+run_cmd="`basename $0`"
+
+# to backword compatible
+case "$run_cmd" in 
+   "drbl-cp-user"|"drbl-user-cp")
+	   run_cmd="drbl-fuu-put"
+	   ;;
+   "drbl-rm-user"|"drbl-user-rm")
+	   run_cmd="drbl-fuu-rm"
+	   ;;
+   "drbl-get-user"|"drbl-user-get")
+	   run_cmd="drbl-fuu-get"
+	   ;;
+esac
+
+usage() {
+  echo "NAME    Put(default)/get/remove files to/from user's home directory."
+  echo
+  echo "DESCRIPTION"
+  echo "drbl-cp-user (or drbl-user-cp) for putting files, drbl-get-user (or drbl-user-get) for collecting files, drbl-rm-user (or drbl-user-rm) for removing files."
+  echo "Usage: `basename $0` [-g|--group] group [-d|--directory] directory [-v|--verbose] source target"
+  echo "-g, --group:     set the user group to be processed." 
+  echo "-d, --directory DIR: process the sub-directory DIR in user's home"
+  echo "-v, --verbose    prints out verbose information"
+  echo
+  echo "Example:"
+  echo "drbl-cp-user -d work source_files new_file.txt" 
+  echo "will copy source_files into user's ~/work/ directory as file name new_file.txt"
+  echo
+  echo "drbl-rm-user -d work target.txt" 
+  echo "will remove target.txt from user's ~/work directory"
+  echo
+  echo "drbl-get-user -d work target.txt" 
+  echo "will get target.txt from user's ~/work directory"
+  echo
+  echo "drbl-get-user -d work \"*.txt\"" 
+  echo "will get *.txt from user's ~/work directory"
+  echo "NOTE!!! You must put \" \" before and after the star wildcard * filename!"
+}
+
+#
+if [ "$run_cmd" = "drbl-fuu" ]; then
+  echo "use drbl-cp-user (or drbl-user-cp) for putting files, drbl-get-user (or drbl-user-get) for collecting files, drbl-rm-user (or drbl-user-rm) for removing files."
+  exit 1
+fi
+
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -g|--group)
+		shift; chosen_group="$1"
+		shift;;
+    -d|--directory)
+		shift; sub_dir="$1"
+		shift;;
+    -v|--verbose)
+		shift; VERBOSE="on"
+                ;;
+
+    -*)		echo "${0}: ${1}: invalid option" >&2
+		usage >& 2
+		exit 2 ;;
+    *)		break ;;
+  esac
+done
+
+# get the source and target
+source_file=$1
+target_file=$2
+
+# check if source_file is dir or file, if dir, append /
+# To do:
+# how about in get mode ? the prefix path (like /home/test/$source_file) must be appended.
+[ -d "$source_file" ] && source_file=$source_file"/"
+
+# check parameter
+if [ $# -le 0 ]; then
+  usage
+  exit 1
+fi
+case "$run_cmd" in
+    "drbl-fuu-put")
+                  mode="put"
+                  ;;
+    "drbl-fuu-get")
+                  mode="get"
+                  ;;
+    "drbl-fuu-rm")
+                  mode="rm"
+                  ;;
+    *)
+                  echo "Unknown mode! Did you change the filename ?"
+                  echo "Program terminated!"
+                  exit 1
+                  ;;
+esac
+
+# set the default values if empty
+[ -z "$chosen_group" ] && chosen_group="all"
+[ -z "$mode" ] && mode="put"
+[ -z "$source_file" ] && echo "No source! Program terminated!" && exit 1
+[ -z "$target_file" ] && target_file="$source_file"
+
+#
+if [ -n "$VERBOSE" ]; then
+   echo "chosen_group=$chosen_group"
+   echo "mode=$mode"
+   echo "source_file=$source_file"
+   echo "target_file=$target_file"
+fi
+
+# main
+if  [ $chosen_group = "all" ]; then 
+    echo "We will treat all users..."
+    #
+    IFS_org=$IFS
+    IFS=':'
+    grp_member=""
+    while read uname x uid gid x x x; do
+        # nfs user create a user called "nfsnobody", skip it.
+        if [ "$uid" -ge "$UID_BEGIN_DEFAULT" -a "$uname" != "nfsnobody" ]; then
+           grp_member="$grp_member $uname"
+        fi
+    done </etc/passwd
+    IFS=$IFS_org
+    echo "grp_member=$grp_member"
+elif ! grep "^$chosen_group:" /etc/group 2>/dev/null; then
+    echo "group $chosen_group does NOT exist!!!"
+    exit
+else
+    grp_member=$(grep "^$chosen_group:" /etc/group | awk -F':' '{print $4}' | sed -e "s/,/ /g")
+fi
+
+if [ "$mode" = "rm" ]; then
+  echo "Warning! This will delete $source_file in user's (i.e. $grp_member) home directory"
+  echo "[y/N]"
+  read rm_confirm
+  case "$rm_confirm" in
+      y|[yY][eE][sS])
+       if [ -n "$sub_dir" ]; then
+         echo "Do you want to remove the directory \"$sub_dir\" in each user's home directory ?"
+         echo "[y/N]"
+         read rm_dir_confirm
+         case "$rm_dir_confirm" in
+             y|[yY][eE][sS])
+                           rm_dir_confirm="yes"
+                           ;;
+             *) 
+                           rm_dir_confirm="no"
+                           ;;
+         esac 
+       fi
+       ;;
+  esac    
+fi
+#dest_file=${source_file##/*/}
+#dest_file=${dest_file##*/}
+
+# store the LC_ALL
+LC_ALL_org=$LC_ALL
+export LC_ALL=C
+
+# main
+for imember in $grp_member; do
+  #echo "$imember user_home_dir:$USER_HOME_DIR"
+  USER_HOME_DIR=`LC_ALL=C grep "^$imember:" /etc/passwd | awk -F':' '{print $6}'`
+  uid=`LC_ALL=C grep "^$imember:" /etc/passwd | awk -F':' '{print $3}'`
+  gid=`LC_ALL=C grep "^$imember:" /etc/passwd | awk -F':' '{print $4}'`
+  case "$mode" in
+    "rm")
+      case "$rm_confirm" in
+      y|[yY][eE][sS])
+        # just in case, we separate the rm -rf $sub_dir into two steps
+        rm -rfv $USER_HOME_DIR/$sub_dir/$source_file
+        if [ "$rm_dir_confirm" = "yes" ]; then
+           rmdir -v $USER_HOME_DIR/$sub_dir/
+        fi 
+        ;;
+      *)
+        echo "abort!"
+        exit
+      esac
+      ;;
+    "get")
+      users=`LC_ALL=C grep "^.*:.*:$uid:" /etc/passwd | awk -F':' '{print $1}'`
+      for iuser in $users; do
+        # check if the uid is really the username
+        if [ `LC_ALL=C id -u $iuser` = "$uid" ]; then
+           #echo "The username for uid $uid is $iuser"
+           usrname="$iuser"
+        fi
+      done
+      for ifile in $USER_HOME_DIR/$sub_dir/$source_file; do
+        [ -f "$ifile" ] && cp -rv $ifile ${usrname}_"$(basename ${ifile})"
+      done
+      ;;
+    "put")
+      [ ! -e "$source_file" ] && echo "$source_file does not exist!" && exit 1
+      if [ -n "$sub_dir" ]; then mkdir -p $USER_HOME_DIR/$sub_dir; fi
+      cp -rv $source_file $USER_HOME_DIR/$sub_dir/$target_file
+      chown -R $uid.$gid $USER_HOME_DIR/$sub_dir/$target_file
+      ;;
+    *)
+      usage
+      ;;
+  esac
+done
+
+# restore the LC_ALL
+export LC_ALL=$LC_ALL_org

@@ -1,0 +1,52 @@
+#!/bin/bash
+#-------------------------------------------------------------------------------
+# This program is borrowed from http://staff.washington.edu/corey/new-patches.cgi
+# The original author:
+# Corey Satten, corey @ cac.washington.edu, 06/26/03, release 1.8
+# For the latest version visit: http://staff.washington.edu/corey/tools.html
+#
+# Modified by Blake Huang and Steven Shiau to use in DRBL
+#
+# Find all installed packages with patches
+# "$NEWER" is in drbl-functions
+
+# Load DRBL setting and functions
+# Setting
+# Source function library.
+[ -f /etc/rc.d/init.d/functions ] && . /etc/rc.d/init.d/functions
+
+# Source DRBL setting
+. /opt/drbl/conf/drbl.conf
+
+# Source the drbl related functions
+. $DRBL_SCRIPT_PATH/sbin/drbl-functions
+
+(
+    # Note! Here we must use gawk, not awk (mawk which exists in Debian)
+    gawk "$NEWER"'	# omit all but newest of multiple available patches
+  		{ L0=R0; L1=R1; L2=R2
+		  R0=$0
+                  # For RedHat/Fedora
+                  # Ex. kernel-smp#2.6.9-1.681_FC3
+                  # R1: 2.6.9-1.681_FC3
+                  # R2: kernel-smp
+                  # For MDK:
+                  # Ex. kernel-smp-2.4.22.37mdk
+                  # R1: 2.4.22.37mdk 
+                  # R2: kernel-smp
+		  # For Debian:
+		  # Ex. kernel-image-2.6.8-2-686
+		  # R1: 2.6.8-2-686
+		  # R2: kernel-image
+		  # For Ubuntu:
+		  # Ex. linux-image-2.6.8-2-686
+		  # R1: 2.6.8-2-686
+		  # R2: linux-image
+		  R1=$0; sub(/^(kernel|linux)(|-smp|-image)[#-]/,"",R1)  # pkg version
+		  R2=$0; sub(/[#-]+[0-9]+.*$/,"",R2) 	  # pkg name
+		  #printf("before newer: %s %s %s %s\n",R1,R2,L1,L2);
+		  if ((R2 == L2) && newer(R1, L1)) {R0=L0; R1=L1}
+		  if ((R2 != L2) && L0) {print L0}
+		}
+	END	{ print R0 }'
+)

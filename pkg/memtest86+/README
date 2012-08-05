@@ -1,0 +1,2 @@
+This directory is for memtest86+, which will be shown in the boot menu of the DRBL client. The package is from http://www.memtest.org/. You can find all the source and binary codes there. 
+memtest86+ is released under GPL.

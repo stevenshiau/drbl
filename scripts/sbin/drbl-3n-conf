@@ -1,0 +1,102 @@
+#!/bin/bash
+# Author: Steven Shiau <steven _at_ nchc org tw>
+# License: GPL
+#
+# set the NFS, NIS, NAT config for DRBL clients to access
+
+# Load DRBL setting and functions
+if [ ! -f "/opt/drbl/sbin/drbl-conf-functions" ]; then
+  echo "Unable to find /opt/drbl/sbin/drbl-conf-functions! Program terminated!" 
+  exit 1
+fi
+. /opt/drbl/sbin/drbl-conf-functions
+
+#
+check_if_root
+
+# main
+usage() {
+  echo "To generate or clean NFS, NIS and NAT setting for DRBL clients to access"
+  echo "Usage: $0 [Options] {generate|clean}"
+  echo "Options:"
+  echo "-a, --all-subnet:   Make all subnet can access to this NFS/NIS/NAT server."
+  echo "-n, --no-restart: Not restart NFS/NIS services (except NAT, i.e. NAT will always be restarted)"
+  echo "-v, --verbose:  Verbose mode."
+  echo "Example: To generate NFS, NIS and NAT setting for DRBL clients to access"
+  echo "$0 generate"
+}
+
+# default setting
+all_subnet="no"
+restart_srv="yes"
+
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -a|--all-subnet)
+		all_subnet="yes"
+                shift;;
+    -n|--no-restart)
+		restart_srv="no"
+                shift;;
+    -v|--verbose)
+		shift; verbose="on"
+                ;;
+    -*)		echo "${0}: ${1}: invalid option" >&2
+		usage >& 2
+		exit 2 ;;
+    *)		break ;;
+  esac
+done
+switch=$1
+
+[ -z "$switch" ] && usage && exit 1
+ask_and_load_lang_set en
+
+[ "$all_subnet" = "yes" ] && SUBNET_OPT="--all-subnet"
+[ "$restart_srv" = "no" ] && RESTART_OPT="--no-restart"
+# load the preset mode
+[ -f "/etc/drbl/drbl_deploy.conf" ] && . /etc/drbl/drbl_deploy.conf
+if [ "$drbl_mode" != "drbl_ssi_mode" ]; then
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+  echo "$msg_not_in_SSI_mode"
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+  echo "$msg_program_stop"
+  exit 1
+fi
+
+# update /etc/hosts
+drbl-etc-hosts
+# Update the /etc/hosts in clients
+# Find the template client
+for ih in $drblroot/*; do
+  # use the 1st one drbl client we found as template
+  if [ -d "$ih" ]; then
+    template="$ih"
+    break
+  fi
+done
+cp -f /etc/hosts $drbl_common_root/etc/hosts
+cp -f /etc/hosts $template/etc/hosts
+
+case "$switch" in
+   "generate")
+      drbl-nfs-exports $SUBNET_OPT $RESTART_OPT generate
+      echo "$msg_delimiter_star_line"
+      drbl-yp-securenets $SUBNET_OPT $RESTART_OPT generate
+      echo "$msg_delimiter_star_line"
+      drbl-nat-rules $SUBNET_OPT generate
+      echo "done!"
+      ;;
+    "clean")
+      drbl-nfs-exports clean
+      echo "$msg_delimiter_star_line"
+      drbl-yp-securenets clean
+      echo "$msg_delimiter_star_line"
+      drbl-nat-rules clean
+      echo "done!"
+      ;;
+     *)
+      usage
+      exit 1
+      ;;
+esac

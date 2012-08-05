@@ -1,0 +1,23 @@
+# DRBL clients IP-Address HOSTNAME Mapping
+# The format is:
+# ---------------------
+# IP-Address Hostname
+# ---------------------
+# List them line by line, edit this before you run "drblpush -i".
+# *******NOTE********
+# 1. The hostname must be unique! Do NOT duplicate them.
+# 2. For IP address format, do NOT use something like 192.168.001.010, 
+#    use 192.168.1.10, i.e. do NOT put extra "0" for IP address digits.
+# 3. If some client you do not assign here, drblpush will automatically 
+#    create one for you. It is based on the prefix you assing when 
+#    running "drblpush -i"
+# 4. Host names may contain only alphanumeric characters, minus signs ("-"), 
+#    and periods ("."). They must begin with an alphabetic character and end 
+#    with an alphanumeric character. "man hosts" for more details.
+# 5. This hostname is not FQDN (Fully Qualified Domain Name), it's just Unix hostname
+#
+# Example:
+# 192.168.1.1 tux
+# 192.168.51.1 forge
+# 192.168.51.2 Tiger
+# 192.168.1.10 Lion

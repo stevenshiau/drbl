@@ -1,0 +1,114 @@
+#!/bin/bash
+# Author: Blake, Kuo-Lien Huang
+# License: GPL
+# Description:
+#   * creat and delete accounts for DRBL, actually it for NIS (YP).
+#
+# Modified by Steven Shiau <steven@nchc.org.tw> to use in DRBL for Redhat
+
+# Load DRBL setting and functions
+if [ ! -f "/opt/drbl/sbin/drbl-conf-functions" ]; then
+  echo "Unable to find /opt/drbl/sbin/drbl-conf-functions! Program terminated!" 
+  exit 1
+fi
+. /opt/drbl/sbin/drbl-conf-functions
+
+#
+ACCOUNT_FILE="$1"
+ACCOUNT_FILE_TMP=`mktemp /tmp/account_tmp.XXXXXX`
+mode=""
+
+USAGE="Usage: $0 account_file"
+# Check if root or not
+if [ ! "$UID" = "0" ]; then
+  echo
+  echo "[$LOGNAME] You need to run this script \"$0\" as root."
+  echo
+  exit 1
+fi
+
+if [ $# -ne 1 ]; then
+  echo "$USAGE"
+  echo "Create or delete accounts from the specified account_file."
+  echo "The format of the file <filename>:  PREFIX START END GROUPNAME PASSWD_OPT"
+  echo "PASSWD_OPT:"
+  echo "If one digit, it's the length of randomly created password."
+  echo "If blank, it will be randomly generated with some (say:8) characters."
+  echo "Other setting is the password itself."
+  echo "for example: "
+  echo "-----------------------------------------------------------------"
+  echo "# account for student"
+  echo "s		89101	89129  g3c9   8"
+  echo "# account for teacher"
+  echo "tckps	01	99   teacher  drblnice"
+  echo "-----------------------------------------------------------------"
+  exit 1
+fi
+
+[ ! -f "$ACCOUNT_FILE" ] && echo "File $ACCOUNT_FILE not exists!" && exit 1
+[ ! -f "$useradd_range_exec_file" ] && echo "Can NOT find $useradd_range_exec_file file!" && exit 1 
+[ ! -f "$userdel_range_exec_file" ] && echo "Can NOT find $userdel_range_exec_file file!" && exit 1 
+
+# filter the comment line, only keep the account line
+grep -v '^[[:space:]]*#' $ACCOUNT_FILE > $ACCOUNT_FILE_TMP
+
+#
+if [ -n "$(basename $0 | grep -E "useradd")" ]; then
+  mode="useradd"
+elif [ -n "$(basename $0 | grep -E "userdel")" ]; then
+  mode="userdel"
+else
+  echo "Unknown mode!"
+  exit 1
+fi
+
+# useradd mode
+if [ "$mode" = "useradd" ]; then
+   while read prefix start end groupname password_opt; do
+     # check if groupname is not valid one
+     if `echo "$groupname" | grep -q "^[0-9]"`; then
+        echo "groupname can NOT begin with digits (0-9)!"
+        echo "The one you specified is \"$groupname\""
+        echo "Program terminated"
+        exit 1
+     fi 
+     if [ -n "$prefix" ]; then
+       echo -n "Creating accounts with $prefix $start $end $groupname $password_opt"
+       $useradd_range_exec_file $prefix $start $end $groupname $password_opt
+       echo "done!"
+     fi
+   done < $ACCOUNT_FILE_TMP
+fi
+
+# userdel mode
+if [ "$mode" = "userdel" ]; then
+   # prompt to ask some confirmation
+   echo -n "Do you also want to clean user's home directory [y/N] ? "
+   read clean_home
+   case "$clean_home" in
+      y|Y|[yY][eE][sS]) 
+         echo "Warning! The user's home directory will be deleted! Are you sure ?"
+         echo -n "[y/N] "
+         read clean_home_confirm
+         ;;
+      *)
+         RM_HOME_OPT=""
+   esac
+   echo -n "Do you also want to clean group [Y/n] ? "
+   read clean_group
+   CONFIRM_TMP=`mktemp /tmp/confirm_tmp.XXXXXX`
+   echo "$clean_home" >> $CONFIRM_TMP
+   echo "$clean_home_confirm" >> $CONFIRM_TMP
+   echo "$clean_group" >> $CONFIRM_TMP
+
+   while read prefix start end groupname password_opt; do
+     if [ -n "$prefix" ]; then
+       echo "Deleting accounts with $prefix $start $end $groupname $password_opt"
+       $userdel_range_exec_file $prefix $start $end $groupname < $CONFIRM_TMP
+       echo "done!"
+     fi
+   done < $ACCOUNT_FILE_TMP
+fi
+
+[ -f "$ACCOUNT_FILE_TMP" ] && rm -f $ACCOUNT_FILE_TMP
+[ -f "$CONFIRM_TMP" ] && rm -f $CONFIRM_TMP

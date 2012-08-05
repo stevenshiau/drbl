@@ -1,0 +1,147 @@
+#!/bin/bash
+#
+# Copyright (C) 2002-2003 by NCHC, Steven Shiau, K. L. Huang
+# (steven _at_ nchc org tw, klhaung _at_ gmail com)
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2, or (at your option)
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+#
+
+# Load DRBL setting and functions
+# Setting
+# Source function library.
+[ -f /etc/rc.d/init.d/functions ] && . /etc/rc.d/init.d/functions
+
+# Load DRBL setting and functions
+DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/opt/drbl/}"
+. $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
+
+# get the distribution name and type: OS_Version and OS_type
+check_distribution_name
+
+# Settings
+# PKG_FROM_DRBL is loaded from drbl.conf, we append "drbl, partimage, ntfsprogs lzop..."
+PKG_FROM_DRBL="drbl $PKG_FROM_DRBL partimage ntfsprogs gzip bzip2 lzop pigz pbzip2 udpcast syslinux"
+
+echo -n "Acquiring some info about the system."
+#
+echo -n .
+case "$OS_Version" in
+   RH*|FC*|CO*|MDK*|MDV*|SUSE*)
+      for ipkg in $PKG_FROM_DRBL; do
+        ipkg_ver=""
+        ipkg_ver="$(rpm -q $ipkg)"
+	[ -n $ipkg_ver ] && installed_pkgs="$installed_pkgs $ipkg_ver"
+      done
+
+      # Extra: glibc and mkpxeinitrd-net
+      glibc_ver="$(rpm -q glibc)"
+      LC_ALL=C rpm -q --qf '%{ARCH}' glibc > /dev/null && glibc_arch=`rpm -q --qf '%{ARCH}' glibc`
+      ;;
+   DBN*)
+      for ipkg in $PKG_FROM_DRBL; do
+        ipkg_ver=""
+        ipkg_ver="$(LC_ALL=C dpkg -l $ipkg | tail -n 1 | awk -F" " '{print $2"-"$3}')"
+	[ -n $ipkg_ver ] && installed_pkgs="$installed_pkgs $ipkg_ver"
+      done
+      ;;
+   *)
+      echo "This version in this distribution is NOT supported by DRBL, maybe you can try to use the drbl in testing or unstable repository. Program terminated!"
+      exit 1 
+esac
+
+echo -n .
+ARCH="$(LC_ALL=C uname -m)"
+Kernel_VER="$(LC_ALL=C uname -r)"
+SERVER_CPU="$(LC_ALL=C awk -F":" '/^model name/ {print $2}' /proc/cpuinfo | sort | uniq)"
+
+echo -n .
+if [ -f $pxecfg_pd/kernel_version_in_initrd.txt ]; then
+  client_kernel_ver="$(LC_ALL=C cat $pxecfg_pd/kernel_version_in_initrd.txt)"
+fi
+
+if [ -f $pxecfg_pd/client_kernel_arch.txt ]; then
+  client_kernel_arch="$(LC_ALL=C cat $pxecfg_pd/client_kernel_arch.txt)"
+fi
+
+echo -n .
+# server memory
+server_mem_size="$(LC_ALL=C cat /proc/meminfo | grep "^MemTotal:" | awk -F" " '{print $2" " $3}')"
+
+#
+echo -n .
+total_client_no="$(LC_ALL=C get-client-ip-list | wc -l)"
+
+# To strip the line feed, we use echo ``
+echo -n .
+private_NIC="$(LC_ALL=C get-all-nic-ip  --private-ip-port)"
+echo -n .
+private_IP="$(LC_ALL=C get-all-nic-ip --private-ip-address)"
+echo -n .
+client_IP="$(echo `get-client-ip-list`)"
+
+
+echo " done!"
+
+# output the results:
+time_now="$(LC_ALL=C date +%Y%m%d-%H%M)"
+output_filename="DRBL-BUG-RPT-${time_now}.txt"
+
+# dump it
+  cat <<-REP_END > $output_filename
+To report the bug, fill the contents in the following table, then send it to DRBL mailing list or post it on the DRBL forum."
+-------CUT BEGIN HERE--------------------------------------------
+Description of problem:
+
+How reproducible:
+
+Steps to Reproduce:
+
+Actual results:
+
+Expected results:
+
+
+Some info about the DRBL environment (PLEASE DO NOT EDIT THEM!):
+===
+OS version: $FULL_OS_Version
+Server arch: $ARCH
+Server CPU: $SERVER_CPU
+Server memory size: $server_mem_size
+Server Kernel version: $Kernel_VER
+Installed DRBL-related packages: $installed_pkgs
+REP_END
+
+# This is only necessary for RH-like
+if [ -n "$glibc_ver" ]; then
+  cat <<-REP_END >> $output_filename
+Server glibc ver and arch: $glibc_ver $glibc_arch
+REP_END
+fi
+
+cat <<-REP_END >> $output_filename
+Client kernel version: $client_kernel_ver
+Client kernel arch: $client_kernel_arch
+NICs with private IP address in server: $private_NIC
+Private IP address in server: $private_IP
+Total client no: $total_client_no
+Client IP address: $client_IP
+===
+-------CUT END HERE----------------------------------------------
+REP_END
+
+[ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+echo "The results are in file $output_filename"
+[ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+echo "To report the bug, fill the contents in file $output_filename then send it to DRBL mailing list or post it on the DRBL forum."

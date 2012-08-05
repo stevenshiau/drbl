@@ -1,0 +1,86 @@
+#!/bin/bash
+# Author: Steven Shiau <steven _at_ nchc org tw>
+# License: GPL
+# Description: swith the pxe menu (simple menu format) to text or graphic mode
+
+# Load DRBL setting and functions
+if [ ! -f "/opt/drbl/sbin/drbl-conf-functions" ]; then
+  echo "Unable to find /opt/drbl/sbin/drbl-conf-functions! Program terminated!" 
+  exit 1
+fi
+. /opt/drbl/sbin/drbl-conf-functions
+
+#
+PXE_CONF_DEF="$PXELINUX_DIR/default"
+
+#
+USAGE() {
+    echo "Usage:"
+    echo "To set the default PXE client menu:"
+    echo "`basename $0` [OPTION]"
+    echo " Options:"
+    echo " -m, --mode [text|graphic]  Set the default mode to text or graphic"
+    echo " -c, --config CONF Use the CONF file instead of default one ($PXE_CONF_DEF)"
+    echo " -v, --verbose     Show verbose messages"
+    echo " -h, --help        Display this help and exit"
+}
+
+SIMPLE_MENU=""
+# Parse command-line options
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -m|--mode)  
+            shift;
+            # skip the -xx option, in case 
+	    if [ -z "$(echo $1 |grep ^-.)" ]; then
+	      mode="$1"
+	      shift
+            fi
+            ;;
+    -c|--config)  
+            shift;
+            # skip the -xx option, in case 
+	    if [ -z "$(echo $1 |grep ^-.)" ]; then
+              PXE_CONF="$1" 
+	      shift
+            fi
+            ;;
+    -h|--help)  
+            USAGE >& 2
+            exit 2 ;;
+    -v|--verbose)  
+            VERBOSE="on"
+	    shift;;
+    -*)     echo "${0}: ${1}: invalid option" >&2
+            USAGE >& 2
+            exit 2 ;;
+    *)      break ;;
+  esac
+done
+
+[ -z "$PXE_CONF" ] && PXE_CONF=$PXE_CONF_DEF
+if [ -z "$mode" ]; then
+   [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+   echo "You must specify the mode! Program terminated!!!"
+   [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+   USAGE
+   exit 1
+fi
+
+# process mode
+case "$mode" in
+  text|TEXT)
+    echo -n "Modifying $PXE_CONF to let DRBL client use text PXE boot menu... "
+    perl -pi -e 's/^default .*/default menu.c32/g' $PXE_CONF
+    # Turn off all the color settings, use the default value
+    perl -pi -e 's/^(MENU COLOR .*)/# $1/g' $PXE_CONF
+    echo "done!"
+    ;;
+  graphic|GRAPHIC)
+    echo -n "Modifying $PXE_CONF to let DRBL client use graphical PXE boot menu... "
+    perl -pi -e 's/^default .*/default vesamenu.c32/g' $PXE_CONF
+    # Turn on all the color settings
+    perl -pi -e 's/^[[:space:]]*#[[:space:]]*(MENU COLOR .*)/$1/g' $PXE_CONF
+    echo "done!"
+    ;;
+esac

@@ -1,0 +1,213 @@
+#!/bin/bash
+#
+# start_udev
+#
+# script to initialize /dev by using udev.
+#
+# Copyright (C) 2004 Greg Kroah-Hartman <greg@kroah.com>
+#
+# Released under the GPL v2 only.
+#
+# This needs to be run at the earliest possible point in the boot 
+# process.
+#
+# Based on the udev init.d script
+#
+# Thanks go out to the Gentoo developers for proving 
+# that this is possible to do.
+#
+# Yes, it's very verbose, feel free to turn off all of the echo calls,
+# they were there to make me feel better that everything was working
+# properly during development...
+#
+# don't use udev if sysfs is not mounted.
+
+sysfs_dir=/sys
+TZ=/etc/localtime
+export TZ
+
+[ -d $sysfs_dir/class ] || exit 1
+[ -r /proc/mounts ] || exit 1
+[ -x /sbin/udev ] || exit 1
+[ -f /etc/udev/udev.conf ] && . /etc/udev/udev.conf
+
+
+. /etc/init.d/functions
+
+prog=udev
+bin=/sbin/udev
+udevd=/sbin/udevd
+MAKEDEV="/sbin/MAKEDEV"
+
+make_extra_nodes () {
+	ln -snf /proc/self/fd $udev_root/fd
+	ln -snf /proc/self/fd/0 $udev_root/stdin
+	ln -snf /proc/self/fd/1 $udev_root/stdout
+	ln -snf /proc/self/fd/2 $udev_root/stderr
+	ln -snf /proc/kcore $udev_root/core
+
+	[ -d $udev_root/pts ] || mkdir -m 0755 $udev_root/pts
+	[ -d $udev_root/shm ] || mkdir -m 0755 $udev_root/shm
+
+	if [ -x $MAKEDEV ]; then
+		$MAKEDEV -x $( 
+			for i in 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15; do
+				echo cpu/$i/microcode;
+			done;
+			for i in 1 2 3 4 5 6; do echo tty$i;done;
+			for i in 0 1 2 3 4 5 6 7; do echo loop$i; done;
+			for i in 0 1 2 3; do echo lp$i; echo parport$i;done;
+			echo net/tun ppp console null zero;
+			for i in 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 \
+				 16 17 18 19 20 21 22 23 24 25 26 27 28 29 \
+				 30 31; do echo md$i;done;
+		);
+		[ -a /dev/MAKEDEV ] || ln -s $MAKEDEV /dev/MAKEDEV;
+		cp -a /etc/udev/devices/* /dev/ >/dev/null 2>&1 || :
+	fi
+}
+
+# we cannot use /usr/bin/find here
+find_d () {
+        where=$1
+        what=$2
+        found=""
+        for f in $where/*; do
+                if [ -d "$f" -a ! -L "$f" ]; then
+			if [ "$f" != "${f%%$what}" ];then 
+			        # make sure we are at the path end
+			        # we have no dirname and basename
+				rest="${f#*$what}"
+				[ "${rest##*/}" = "$rest" ] && found="$found $f"
+			fi
+                        found="$found $(find_d $f $what)"
+                fi
+        done
+        echo "$found"
+}
+
+
+# we cannot use /usr/bin/find here
+find_f () {
+	where=$1
+	what=$2
+	found=""
+	for f in $where/*; do
+		if [ -d "$f" -a ! -L "$f" ]; then
+			found="$found $(find_f $f $what)"
+		elif [ -e "$f" ]; then 
+			[ "$where/" = "${f%$what}" ] && found="$found $f"
+		fi
+	done
+	[ -n "$found" ] && echo "$found"
+}
+
+kill_udevd() {
+	if [ -x /sbin/pidof ]; then
+		pid=`/sbin/pidof -x udevd`
+        	[ -n "$pid" ] && kill $pid
+	fi
+}
+
+
+# call hotplug with the scsi devices
+scsi_replay () {
+        HOTPLUG=$(cat /proc/sys/kernel/hotplug)
+        [ -z "$HOTPLUG" ] && return 1
+
+        scsi_hosts=$(find_d /sys/devices host\*)
+        SEQNUM=1
+
+        for host in $scsi_hosts;do
+                [ -d $host ] || continue
+                devs=$(find_f $host type)
+                for dev in $devs;do
+                        [ -f $dev ] || continue
+                        export SEQNUM
+                        DEVPATH=${dev%/type}
+                        DEVPATH=${DEVPATH#/sys}
+                        export DEVPATH
+                        export ACTION=add
+                        $HOTPLUG scsi_device
+                        SEQNUM=$[$SEQNUM + 1]
+                        $HOTPLUG scsi 
+                        SEQNUM=$[$SEQNUM + 1]
+                done
+        done
+        return 0
+}
+
+ide_scan() {
+    if [ ! -d /proc/ide ]; then
+	return 1
+    fi
+    for i in /proc/ide/*/media; do
+	read media < "$i"
+	case "$media" in
+	    disk)
+		module=ide-disk
+		;;
+	    cdrom)
+		module=ide-cd
+		;;
+	    tape)
+		module=ide-tape
+		;;
+	    floppy)
+		module=ide-floppy
+		;;
+	    *)
+		module=ide-generic
+		;;
+	esac
+	/sbin/modprobe $module
+    done
+    return 0
+}
+
+
+export ACTION=add
+export UDEV_NO_SLEEP=1
+prog=udev
+ret=0
+STRING=$"Starting $prog: "
+# propagate $udev_root from /sys
+echo -n "$STRING "
+
+# mount the tmpfs on ${udev_root%/}, if not already done
+LANG=C fgrep -q "none ${udev_root%/} " /proc/mounts || { 
+	if LANG=C fgrep -q "none ${udev_root%/}/pts " /proc/mounts; then
+		PTSDIR=$(mktemp -d)
+		mount --move /dev/pts "$PTSDIR"
+	fi
+	if LANG=C fgrep -q "none ${udev_root%/}/shm " /proc/mounts; then
+		SHMDIR=$(mktemp -d)
+		mount --move /dev/shm "$SHMDIR"
+	fi
+	mount -n -o mode=0755 -t tmpfs none "$udev_root"
+	mkdir -m 0755 $udev_root/pts
+	mkdir -m 0755 $udev_root/shm
+	if [ -n "$PTSDIR" ]; then
+		mount --move "$PTSDIR" /dev/pts
+		rmdir "$PTSDIR"
+	fi
+	if [ -n "$SHMDIR" ]; then
+		mount --move "$SHMDIR" /dev/shm
+		rmdir "$SHMDIR"
+	fi
+	
+	ret=$[$ret + $?]
+}
+
+rm -f $udev_root/.udev.tdb
+make_extra_nodes
+kill_udevd >/dev/null 2>&1
+scsi_replay >/dev/null 2>&1
+ret=$[$ret + $?]
+kill_udevd >/dev/null 2>&1
+ide_scan >/dev/null 2>&1
+/sbin/udevstart </dev/null >/dev/null 2>&1
+ret=$[$ret + $?]
+[ $ret -eq 0 ] && success $"$STRING" || failure $"$STRING"
+echo
+exit 0

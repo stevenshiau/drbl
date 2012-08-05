@@ -1,0 +1,53 @@
+#!/bin/bash
+# Author: Steven Shiau, <steven _at_ nchc org tw>
+# License: GPL
+
+# Loading setting
+. /opt/drbl/sbin/drbl-conf-functions
+export LC_ALL=C
+
+Usage() {
+  echo "Get the NFS server IP address of some IP address from DRBL setting." 
+  echo "Normally this command is used in DRBL clients."
+  echo "Usage:"
+  echo "$(basename $0) IP_ADDRESS"
+  echo "Ex: $(basename $0) 192.168.1.1"
+}
+
+#
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -*)	echo "${0}: ${1}: invalid option" >&2
+	Usage >& 2
+	exit 2 ;;
+    *)	break ;;
+  esac
+done
+
+# Load config file
+if [ -f /etc/diskless-image/config ]; then
+ . /etc/diskless-image/config
+elif [ -f $drbl_common_root/etc/diskless-image/config ]; then
+ . $drbl_common_root/etc/diskless-image/config
+else
+ exit 1
+fi
+
+IP=$1
+[ -z "$IP" ] && exit 1
+IP_prefix="$(echo $IP |cut -d"." -f1-3)"
+if [ -n "$(echo "$NFSSERVER_LIST" |grep -E "$IP_prefix.[0-9]+")" ]; then
+  for i in $NFSSERVER_LIST; do
+    if [ "$(echo $i |cut -d"." -f1-3)" = $IP_prefix ]; then
+      nfsserver=$i
+    fi
+  done 
+else
+    nfsserver=$nfsserver_default
+fi
+if [ -n "$nfsserver" ]; then
+  echo $nfsserver
+  exit 0
+else
+  exit 1
+fi

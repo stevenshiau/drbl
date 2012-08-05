@@ -1,0 +1,9 @@
+[drbl-testing]
+name=DRBL testing packages
+enabled=0
+autorefresh=0
+baseurl=http://free.nchc.org.tw/drbl-core/i386/RPMS.drbl-testing
+type=rpm-md
+gpgcheck=1
+gpgkey=http://drbl.nchc.org.tw/GPG-KEY-DRBL
+keeppackages=0

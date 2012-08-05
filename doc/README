@@ -1,0 +1,33 @@
+DRBL - Diskless Remote Boot in Linux
+Copyright (C) 2002-2005 Steven Shiau and K. L. Huang
+
+  This program is free software; you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation; either version 2 of the License, or
+  (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+
+
+-------------------------------------------------------------
+DRBL (Diskless Remote Boot in Linux) is an open source environment to to manage GNU/Linux operating system deployment. Imagine the time required to install GNU/Linux on 40, 30, or even 10 client machines individually. DRBL will allow you to configure all of your client computers by installing just one server machine. The features of DRBL are:
+
+* Coexist with other Operating Systems
+* Install one server, you have all clients ready
+* Save hardware budget and maintenance fee
+
+This package "drbl" include some scripts to setup DRBL server, and some tool programs to maintain the DRBL environment.
+
+For more details, check the website:
+Chinese Big5 - Taiwan
+http://drbl.nchc.org.tw
+
+English
+http://drbl.sf.net

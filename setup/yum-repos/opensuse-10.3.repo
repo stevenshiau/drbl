@@ -1,0 +1,5 @@
+[base]
+name=OpenSuSE $releasever packages
+baseurl=http://ftp.twaren.net/Linux/OpenSuSE/distribution/$releasever/repo/oss/suse/
+enabled=1
+gpgcheck=0

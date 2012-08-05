@@ -1,0 +1,369 @@
+#!/bin/bash
+# This file is borrowed from Debian's diskless.
+# Modified by Steven Shiau, <steven _at_ nchc org tw>
+# License: GPL
+# 2006/02/28
+# Thanks to James MacLean for providing clientdir method in kernel cmdline.
+# it looks like:
+# append initrd=initrd-pxe.img ramdisk_size=12288 devfs=nomount drblthincli=off selinux=0 clientdir=images
+
+# Append a default search path.
+PATH="$PATH:/sbin:/usr/sbin:/bin:/usr/bin:/usr/X11R6/bin"
+export PATH
+
+# NFS opt for /etc, /var, /usr, /opt..
+nfs_ver_opt="nfsvers=3"
+# If need, you can add "rsize=65536,wsize=65536"
+RO_NFS_EXTRA_OPT="ro,tcp,nolock,$nfs_ver_opt"
+RW_NFS_EXTRA_OPT="rw,tcp,nolock,$nfs_ver_opt"
+
+# This param nosharecache is for Kernel 2.6.23 (some in kernel 2.6.22 in Fedora) or later... Kernel 2.6.23 or later will detect the nfs mounting parameters are the same or not for mounting point and sub-tree mouting point. If not, it will exit unless nosharecache is added. See "man 5 nfs" or https://bugzilla.redhat.com/bugzilla/show_bug.cgi?id=251655 for more details.
+NFS_OPT_TO_ADD="nosharecache"
+
+# Flag to have tmpfs /run or not. This value will be enabled by drblpush if /run is found as tmpfs mounted on DRBL server.
+TMPFS_RUN="false"
+
+#
+create_dev(){
+   # Forget the devfs, we create it by ourself...
+   echo -n "Unmounting the old dev if it exists... "
+   umount -l /dev 2>/dev/null
+   echo "done!"
+
+   if ! mount -t devtmpfs -o mode=0755 udev /dev; then
+      echo "W: devtmpfs not available, falling back to tmpfs for /dev"
+      mount -t tmpfs -o nr_inodes=24576 -o mode=0755 udev /dev
+      [ -e /dev/console ] || mknod -m 0600 /dev/console c 5 1
+      [ -e /dev/null ] || mknod /dev/null c 1 3
+   fi
+
+   echo -n "Creating dev... "
+   # Note! We put dev.tgz as the first priority so that if necessary, such MDK 10, we can force to use dev.tgz instead of udev. (Since in MDK10, there is /sbin/udev, but no /sbin/udevstart or /sbin)
+   if [ -f /etc/diskless-image/dev.tgz ]; then
+     # the option "m" to make sure the time will NOT be extracted, it will use
+     # the time now, so that we can avoid the wrong clock or timezone.
+     echo -n "Using old-style dev instead of udev... " 
+     tar -xzmf /etc/diskless-image/dev.tgz -C /dev
+   elif [ -n "$(ls /sbin/udev* 2>/dev/null)" ]; then
+     echo -n "Mounting sysfs... "
+     mount -n -t sysfs none /sys
+     ln -snf /proc/self/fd /dev/fd
+     ln -snf /proc/self/fd/0 /dev/stdin
+     ln -snf /proc/self/fd/1 /dev/stdout
+     ln -snf /proc/self/fd/2 /dev/stderr
+     ln -snf /proc/kcore /dev/core
+     [ -d /dev/pts ] || mkdir -m 0755 /dev/pts
+     [ -d /dev/shm ] || mkdir -m 1777 /dev/shm
+     echo -n "Using udev... " 
+     # http://www.redhat.com/archives/rhl-devel-list/2006-April/msg00785.html
+     # * Thu Apr 13 2006 Harald Hoyer <harald redhat com> - 089-1
+     # - version 089
+     # - start_udev uses udevtrigger now instead of udevstart 
+     if [ -x /sbin/udevadm ]; then
+       # From FC12, it's /sbin/udevadm trigger
+       /sbin/udevadm trigger
+     elif [ -x /sbin/udevtrigger ]; then
+       # From FC6, it's udevtrigger
+       /sbin/udevtrigger
+     elif [ -x /sbin/udevstart ]; then
+     # i.e. for FC2-FC5, it's udevstart
+        /sbin/udevstart
+     fi
+     # Debian Etch, no more udevstart
+     # Create console, null, since in FC5, udevstart won't create them.
+     [ ! -e /dev/console ] && mknod -m 600 /dev/console c 5 1
+     [ ! -e /dev/null ] && mknod -m 666 /dev/null c 1 3
+   else
+     echo "Unable to create the dev filesystem!!!"
+     echo "***Something went wrong***"
+     echo "System will not be able to function well!!!"
+     echo "Program terminated!"
+     exit 1
+   fi
+   echo "done!"
+} # end of create_dev()
+#
+do_nfs_mount() {
+  local nfs_src="$1"
+  local mnt_point="$2"
+  local nfs_opt="$3"
+  local nfs_opt_try="$4"
+  local flag
+  flag="0"
+  # Ex: mount -t nfs -n -o $RW_NFS_EXTRA_OPT $nfsserver:$nfshostsdir/$IP/etc /etc 2>/dev/null
+  mount -t nfs -n -o $nfs_opt $nfs_src $mnt_point 2>/dev/null
+  if [ "$?" -gt 0 ]; then
+    echo -n "Try to mount with option \"$NFS_OPT_TO_ADD\"... "
+    # Ex: mount -t nfs -n -o $RW_NFS_EXTRA_OPT,$NFS_OPT_TO_ADD $nfsserver:$nfshostsdir/$IP/etc /etc
+    mount -t nfs -n -o $nfs_opt,$nfs_opt_try $nfs_src $mnt_point
+    [ "$?" -eq 0 ] && flag="1"
+  fi
+  return $flag
+} # end of do_nfs_mount
+#
+add_extra_nfs_opt_to_fstab() {
+  echo "Try to add $NFS_OPT_TO_ADD in /etc/fstab..."
+  if [ -z "$(grep -Ew "nosharecache" /etc/fstab)" ]; then
+    # Make it like:
+    # 192.168.130.254:/tftpboot/nodes/192.168.130.1/etc      /etc    nfs     rw,rsize=65536,wsize=65536,tcp,nosharecache,defaults        0 0
+    perl -pi -e "s|(^[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+:.*[[:space:]]+.*nfs.*)(,defaults.*)|\$1,nosharecache\$2|g" /etc/fstab
+  fi
+} # end of add_extra_nfs_opt_to_fstab
+#
+remove_extra_nfs_opt_to_fstab() {
+  echo "Try to remove $NFS_OPT_TO_ADD in /etc/fstab..."
+  if [ -n "$(grep -Ew "nosharecache" /etc/fstab)" ]; then
+    # Make it like:
+    # 192.168.130.254:/tftpboot/nodes/192.168.130.1/etc      /etc    nfs     rw,rsize=65536,wsize=65536,tcp,defaults        0 0
+    perl -pi -e "s|,nosharecache||g" /etc/fstab
+  fi
+} # end of remove_extra_nfs_opt_to_fstab() {
+
+############
+### MAIN ###
+############
+# Don't do anything special if computer is already booted
+if [ $$ -ne 1 ]; then
+   exec /sbin/init.orig $*
+   echo "FATAL ERROR: exec /sbin/init.orig failed" >&2
+   exit 1
+fi
+
+# Don't do anything special if root is rw (ie master system).
+if touch /test-rw 2> /dev/null; then
+   rm /test-rw
+   echo "WARNING: master system installed" >&2
+   exec /sbin/init.orig $*
+   echo "FATAL ERROR: exec /sbin/init.orig failed" >&2
+   exit 1
+fi
+
+# Try and find configuration file
+if [ ! -f /etc/diskless-image/config ]; then
+   echo "ERROR: Cannot find image config file /etc/diskless-image/config!"
+   echo "       Not mounting NFS-root directories"
+   echo "Program terminated!"
+   exit 1
+fi
+
+# Load config file
+. /etc/diskless-image/config
+
+# To get IP address, we need to mount /proc first
+echo -n "Mounting /proc in init... "
+mount -n none /proc -t proc
+echo "done!"
+
+# Remount the root filesystem read-write.
+# For kernel 2.6.18, it seems if root is ro, all the mount later (such as /etc, /var) will be ro.
+echo -n "Remounting root filesystem in read-write mode... " 
+mount -n -o remount,rw / 2>/dev/null
+echo "done!"
+
+# Create the necessary dev files, this should be as early as possible
+create_dev
+
+if [ "$TMPFS_RUN" = "true" ]; then
+  [ ! -d /run ] && mkdir /run
+  mount -t tmpfs -o "nosuid,size=20%,mode=0755" tmpfs /run
+  mkdir /run/initramfs
+fi
+
+# find my IP address
+NETDEVICES="$(cat /proc/net/dev | awk -F: '/eth.:|tr.:/{print $1}')"
+for DEVICE in $NETDEVICES; do
+  IP_tmp="$(ifconfig $DEVICE | grep -A1 $DEVICE | grep -v $DEVICE | grep "inet addr" | sed -e 's/^.*inet addr:\([0-9\.]\+\).*$/\1/')"
+  if [ -n "$IP_tmp" ]; then
+    # Got the IP address, stop to get from other port, so break
+    IP=$IP_tmp
+    echo "My IP address is $IP ([$DEVICE])."
+    break
+  fi
+done
+
+IP_prefix="$(echo $IP | cut -d"." -f1-3)"
+if [ -n "$(echo "$NFSSERVER_LIST" | grep -E "$IP_prefix.[0-9]+")" ]; then
+  for i in $NFSSERVER_LIST; do
+    if [ "$(echo $i | cut -d"." -f1-3)" = $IP_prefix ]; then
+      nfsserver=$i
+      break
+    fi
+  done 
+else
+  # Try to use gateway as NFS server
+  gateway="$(LANG=C route -n | awk '/^0.0.0.0/ {print $2}')"
+  if [ -n "$gateway" ]; then
+    nfsserver=$gateway
+  else
+    echo "NFSSERVER is not found, use default one: \"$nfsserver_default\"."
+    nfsserver=$nfsserver_default
+  fi
+fi
+
+if [ -n "$nfsserver" ]; then
+  echo "NFS server is $nfsserver."
+else
+  echo "Something went wrong! No NFS Server was found!"
+  echo "Program terminated!"
+  exit 1
+fi
+
+# Check if single system image is on
+ssi_flag=0
+clientdir="$(grep clientdir /proc/cmdline | sed -e "s/.*clientdir=\([^ ]\+\).*$/\1/")"
+[ -n "$clientdir" ] && ssi_flag=1
+
+# The flag to modify /etc/fstab
+NFS_OPT_TO_ADD_FLAG=0
+
+# client's /etc directory (1) NFS (2) created from a tarball template
+if [ "$ssi_flag" = 0 ]; then
+  # Normal mode, every client has its own /etc, /var
+  echo -en "\\033[0;33m"
+  echo "Full DRBL mode: I have my own NFS-based /etc and /var directories."
+  echo -en "\\033[0;39m"
+  echo -n "Mounting NFS dir /etc... "
+  do_nfs_mount $nfsserver:$nfshostsdir/$IP/etc /etc $RW_NFS_EXTRA_OPT $NFS_OPT_TO_ADD
+  NFS_OPT_TO_ADD_FLAG=$((NFS_OPT_TO_ADD_FLAG + $?))
+  echo "done!"
+  echo -n "Mounting NFS dir /var... "
+  do_nfs_mount $nfsserver:$nfshostsdir/$IP/var /var $RW_NFS_EXTRA_OPT $NFS_OPT_TO_ADD
+  NFS_OPT_TO_ADD_FLAG=$((NFS_OPT_TO_ADD_FLAG + $?))
+  echo "done!"
+else
+  # DRBL SSI mode
+  # We need to know if it's in clonezilla box mode (DRBL SSI + runlevel=1)
+  # Command "runlevel" in this stage is useless. we have to check by ourself
+  # Check if "1" exists in /proc/cmdline
+  RL=""
+  if grep -qE ".*[[:space:]]+\<1\>([[:space:]]+|$)" /proc/cmdline 2>/dev/null; then
+    RL=1
+    # It's clonezilla box mode, client does not have to use some graphics
+    # setting, expecially large dir like /etc/gconf, /etc/X11, /etc/selinux
+    # In RH, we still need an empty directory /etc/X11 for kudzu to write
+    # X config,,otherwise kudzu will complain. For Debian, it's not necessary
+    # To make it simple, we will create /etc/X11 later.
+    ETC_EXCLUDE="--exclude=gconf --exclude=X11 --exclude=selinux"
+    echo -en "\\033[0;33m"
+    echo "Clonezilla box mode: I use tmpfs /etc and /var, based on tarball templates."
+    echo -en "\\033[0;39m"
+  else
+    # DRBL SSI mode
+    echo -en "\\033[0;33m"
+    echo "DRBL SSI mode: I use tmpfs /etc and /var, based on tarball templates."
+    echo -en "\\033[0;39m"
+  fi
+
+  echo -n "Creating one-time-use dir... "
+  echo -n "/root... "
+  mount -n -t tmpfs -o mode=0700 none /root
+  tar -xzmf /drbl_ssi/template_root.tgz -C /
+  echo -n "/etc... "
+  mount -n -t tmpfs -o mode=0755 none /etc
+  tar $ETC_EXCLUDE -xzmf /drbl_ssi/template_etc.tgz -C /
+  echo -n "/var... "
+  mount -n -t tmpfs -o mode=0755 none /var
+  tar -xzmf /drbl_ssi/template_var.tgz -C /
+  echo "done!"
+fi
+
+# NFS-based /usr is necessary both for normal mode and DRBL SSI mode
+echo -n "Mounting NFS dir /usr... "
+do_nfs_mount $nfsserver:/usr /usr $RO_NFS_EXTRA_OPT $NFS_OPT_TO_ADD
+NFS_OPT_TO_ADD_FLAG=$((NFS_OPT_TO_ADD_FLAG + $?))
+echo "done!"
+
+# We have to modify the fstab for DRBL SSI mode (drbl-ssi-client-prepare).
+# Perl (used in drbl-ssi-client-prepare) is only available after
+# /usr is mounted.
+if [ "$ssi_flag" = "1" ]; then
+  # we need /opt/drbl, where a lot of drbl programs exist.
+  if [ "$RL" = "1" ]; then
+    # In clonezill box mode, to let kudzu shut up, we need /etc/X11 to write X config, since we already use --exclude=X11 to exclude that dir.
+    mkdir -p /etc/X11
+    # To lower the network, use tarball & tmpfs
+    echo -n "Creating one-time-use dir... "
+    echo -n "/opt/drbl... "
+    mount -n -t tmpfs -o mode=0755 none /opt/
+    tar -xzf /drbl_ssi/template_opt_drbl.tgz -C /
+  else
+    # only DRBL SSI mode, not in clonezilla box mode, use NFS
+    echo -n "Mounting NFS dir /opt... "
+    do_nfs_mount $nfsserver:/opt /opt $RO_NFS_EXTRA_OPT $NFS_OPT_TO_ADD
+    NFS_OPT_TO_ADD_FLAG=$((NFS_OPT_TO_ADD_FLAG + $?))
+    # We need /var/lib/dpkg or /var/lib/rpm so that later in drbl-ssi-client-prepare, we can use dpkg or rpm to query package to get the GDM_CFG or KDE_CFG
+    if [ -d /var/lib/dpkg ]; then
+      echo -n "/var/lib/dpkg... "
+      do_nfs_mount $nfsserver:/tftpboot/node_root/var/lib/dpkg /var/lib/dpkg $RO_NFS_EXTRA_OPT $NFS_OPT_TO_ADD
+      NFS_OPT_TO_ADD_FLAG=$((NFS_OPT_TO_ADD_FLAG + $?))
+    elif [ -d /var/lib/rpm ]; then
+      echo -n "/var/lib/rpm... "
+      do_nfs_mount $nfsserver:/tftpboot/node_root/var/lib/rpm /var/lib/rpm $RO_NFS_EXTRA_OPT 
+      NFS_OPT_TO_ADD_FLAG=$((NFS_OPT_TO_ADD_FLAG + $?))
+    fi
+  fi
+  echo "done!"
+  /opt/drbl/sbin/drbl-ssi-client-prepare $nfsserver "$RO_NFS_EXTRA_OPT" $RL
+fi
+
+# 
+if [ "$NFS_OPT_TO_ADD_FLAG" -eq 0 ]; then
+  remove_extra_nfs_opt_to_fstab
+else
+  add_extra_nfs_opt_to_fstab
+fi
+
+# Clear mtab
+rm -f /etc/mtab /etc/mtab~ /etc/mtab~~ /etc/nologin
+
+# if, for any reason, mtab was not synced with what it should be, Sync it.
+while read ilist; do
+  # skip the "rootfs / rootfs rw 0 0" 
+  [ -n "$(echo $ilist | grep -E "^rootfs \/ rootfs .*")" ] && continue
+  echo $ilist >> /etc/mtab
+done < /proc/mounts
+
+# umount the useless /initrd/proc and /initrd if they exist.
+for i in /initrd/proc /initrd; do
+  if [ -n "$(awk -F " " '{print $2}' /etc/mtab | grep -E "^$i\>")" ]; then
+    umount -l $i
+  fi
+done
+
+# Public IP
+if [ -n "$IP" ]; then
+  # public ip alias
+  if [ -e "/etc/diskless-image/public_ip.drbl" ]; then
+    # PUBLIC_IP result is like: 10.231.97.81 netmask 255.255.255.0
+    PUBLIC_IP="$(grep -Ew "$IP" /etc/diskless-image/public_ip.drbl | awk '{ print $2" netmask "$3; }')"
+    PUBLIC_GW="$(grep -Ew "$IP" /etc/diskless-image/public_ip.drbl | awk '{ print $4; }')"
+    if [ -z "$PUBLIC_IP" ]; then
+      PUBLIC_IP="$(grep -i -Ew "$HWADDR" /etc/diskless-image/public_ip.drbl | awk '{ print $2" netmask "$3; }')"
+      PUBLIC_GW="$(grep -i -Ew "$HWADDR" /etc/diskless-image/public_ip.drbl | awk '{ print $4; }')"
+    fi
+    
+    if [ -n "$PUBLIC_IP" ]; then
+      echo "Setting public IP $PUBLIC_IP $GW in $DEVICE:1 by:"
+      echo "ifconfig $DEVICE:1 $PUBLIC_IP"
+      ifconfig $DEVICE:1 $PUBLIC_IP
+      GW="$(route -n | grep -e "^0\.0\.0\.0" | awk '{ print $2; }')"
+      route del default gw $GW
+      echo "Setting routing table by:"
+      echo "route add default gw $PUBLIC_GW dev $DEVICE"
+      route add default gw $PUBLIC_GW dev $DEVICE
+    fi
+  fi
+fi
+
+# report success
+echo "Done. NFS-root directories are mounted."
+echo "Let original init take over..."
+
+# A normal bootparam in /proc/cmdline for clonezilla client is like:
+# initrd=initrd-pxe.img devfs=nomount drblthincli=off selinux=0   1 ocs_opt="--language en  -b -g auto -y0 -p true --max-time-to-wait 300 --mcast-port 22 32 multicast_restoredisk 2disks hda hdb"
+# We have to filter the ocs_opt to avoid some options, like -b or 1 inside it, which init will think it's emergency mode or other mode
+pure_cmdline="$(sed -e "s/ocs_opt=\".*\"//g" /proc/cmdline)"
+exec /sbin/init.orig $pure_cmdline $*
+# Only should get here if something went wrong
+echo "FATAL ERROR: exec /sbin/init.orig failed" >&2
+exit 1

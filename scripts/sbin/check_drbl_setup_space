@@ -1,0 +1,91 @@
+#!/bin/bash
+# Author: Steven Shiau <steven _at_ nchc org tw>
+# License: GPL
+# Check if the harddrive space is enough for DRBL environment
+# input: the client no
+# output: $total_avail_space $drbl_need $common_root_space $per_node_space
+# if space is enough, the return code is 0, if no, return code is 1
+
+# Load DRBL setting and functions
+DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/opt/drbl/}"
+
+. $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
+
+check_if_root
+
+#
+usage() {
+  echo "Check if the space is enough to install DRBL"
+  echo "Usage: `basename $0` [OPTION]"
+  echo "Options:"
+  echo "-v, --verbose:  verbose mode."
+  echo "-n, --client-no CLIENT_NO:  The DRBL client number."
+  echo "If space is enough for setup, nothing will be shown, and the return code is 0. If not enough space, return code is 1, and the output number are: total_avail_space drbl_need_space common_root_space per_node_space"
+  echo "A estimation will be made by current necessary space multiplying ratio $buffer_ratio_for_client_space"
+}
+#
+# main
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -n|--client-no)
+		shift; client_no="$1"
+		shift
+                ;;
+    -v|--verbose)
+		shift; verbose="on"
+                ;;
+    -*)		echo "${0}: ${1}: invalid option" >&2
+		usage >& 2
+		exit 2 ;;
+    *)		break ;;
+  esac
+done
+
+[ -z "$client_no" ] && usage && exit 1
+
+# The extra space in front of /tftpboot is to exclude something like /mnt/tftpboot
+tftpboot_space=$(LC_ALL=C df --block-size 1M 2>/dev/null | awk -F" " '/ \/tftpboot/ {print $4}')
+[ -z "$tftpboot_space" ] && tftpboot_space=0
+# we will overwrite the necessary directories in /tftpboot/, the space
+# will be released, so add it to $total_avail_space
+tftpboot_current_used=$(LC_ALL=C du -smc /tftpboot/ 2>/dev/null | cut -f1 | tail -n1)
+[ -z "$tftpboot_current_used" ] && tftpboot_current_used=0
+
+# use $(NF-2) is safer than $4, because longer device name will use 2 lines like
+# df -h /
+# Filesystem            Size  Used Avail Use% Mounted on
+# /dev/mapper/VolGroup00-LogVol00
+# Then it's $3, not $3.
+root_space=$(LC_ALL=C df --block-size 1M / 2>/dev/null | awk -F" " '/\/$/ { print $(NF-2)}')
+[ -z "$root_space" ] && root_space=0
+
+total_avail_space=$(expr $tftpboot_space + $root_space + $tftpboot_current_used)
+common_root_space=$(du -smc $common_root_dir 2>/dev/null | cut -f1 | tail -n1)
+[ -z "$common_root_space" ] && common_root_space=0
+
+# for /var/lib, we need to exclude the /var/lib/dpkg or /var/lib/rpm
+per_node_space=$(du -smc /etc /var/lib 2>/dev/null | cut -f1 | tail -n1)
+if [ -d /var/lib/dpkg ]; then
+  varlib_pkg_space=$(du -smc /var/lib/dpkg 2>/dev/null | cut -f1 | tail -n1)
+  [ -z "$varlib_pkg_space" ] && varlib_pkg_space=0
+elif [ -d /var/lib/rpm ]; then
+  varlib_pkg_space=$(du -smc /var/lib/rpm 2>/dev/null | cut -f1 | tail -n1)
+  [ -z "$varlib_pkg_space" ] && varlib_pkg_space=0
+fi
+per_node_space=$(($per_node_space - $varlib_pkg_space))
+drbl_need=$(expr $client_no "*" $per_node_space + $common_root_space)
+drbl_need=$(echo "scale=0; $drbl_need * $buffer_ratio_for_client_space" | bc -l)
+# truncate the $drbl_need to be integer
+drbl_need=$(echo "$drbl_need / 1" | bc)
+if [ "$drbl_need" -gt "$total_avail_space" ]; then
+ if [ "$verbose" = "on" ]; then
+  echo "Warning!!! The system space maybe not enough for DRBL environment!!!"
+  echo "Estimated necessary space for each DRBL client (MB): $DRBL_CLIENT_SPACE_PER_NODE"
+  echo "Total DRBL clients: $client_no"
+  echo "Available space (MB): $total_avail_space"
+  echo "DRBL need space (MB): $drbl_need"
+ fi
+ echo $total_avail_space $drbl_need $common_root_space $per_node_space
+ exit 1
+fi
+exit 0

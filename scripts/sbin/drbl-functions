@@ -1,0 +1,2791 @@
+# -*-Shell-script-*-
+# Steven Shiau <steven _at_ nchc org tw>
+# License: GPL
+#
+# Functions:	This file contains functions to be used by most or all	shell scripts in the DRBL environment
+#
+# //NOTE// Do NOT set the locale by "export LC_ALL=C". It will make dialog distortation.
+
+# Source DRBL setting
+DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/opt/drbl/}"
+. $DRBL_SCRIPT_PATH/conf/drbl.conf
+
+# Append a default search path.
+PATH="$DRBL_SCRIPT_PATH/sbin:$DRBL_SCRIPT_PATH/bin:$PATH:/usr/sbin:/usr/bin:/sbin:/bin:/usr/X11R6/bin"
+export PATH
+
+# setup some parameters for color output. The variables should be already 
+# defined in the /etc/init.d/functions in RH-like distribution 
+
+[ -z "$SETCOLOR_SUCCESS" ] && SETCOLOR_SUCCESS="echo -en \\033[1;32m"
+[ -z "$SETCOLOR_FAILURE" ] && SETCOLOR_FAILURE="echo -en \\033[1;31m"
+[ -z "$SETCOLOR_WARNING" ] && SETCOLOR_WARNING="echo -en \\033[1;33m"
+[ -z "$SETCOLOR_NORMAL"  ] && SETCOLOR_NORMAL="echo -en \\033[0;39m"
+
+# some functions
+# get OS type
+get_os_type() {
+  case "$OS_Version" in
+     RH*|FC*|CO*)
+        OS_type="RH"
+        ;;
+     MD[KV]*)
+        OS_type="MDK"
+        ;;
+     DBN*)
+        OS_type="DBN"
+        ;;
+     SUSE*)
+        OS_type="SUSE"
+        ;;
+     *)
+        echo "This version in this distribution is NOT supported by DRBL, maybe you can try to use the drbl in testing or unstable repository. Program terminated!"
+        exit 1 
+  esac
+}
+
+#
+check_distribution_name() {
+  local VER
+  local DIST
+  local FULL_DIST
+  # Reset these values
+  OS_Version=
+  FULL_OS_Version=
+  # FULL_OS_Version is only used in the label
+  # like the files /tftpboot/nbi_img/pxelinux.cfg/* (default or 0A....).
+  # OS_Version is used in drblsrv and drblpush to judge the dist and version.
+  if [ -f /etc/fedora-release ]; then
+   VER=$(rpm -qf /etc/fedora-release --qf "%{VERSION}" | sed "s/[^0-9\.]//g")
+   DIST=FC
+   FULL_DIST=Fedora
+  elif [ -f /etc/mandriva-release ]; then
+   VER=$(rpm -qf /etc/mandriva-release --qf "%{VERSION}" | sed "s/[^0-9\.]//g")
+   DIST=MDV
+   FULL_DIST=Mandriva
+  elif [ -f /etc/mandrake-release ]; then
+   # /etc/mandrake-release must be after the /etc/mandriva-release, since the
+   # new Mandriva distributions has /etc/mandrake-release, too.
+   VER=$(rpm -qf /etc/mandrake-release --qf "%{VERSION}" | sed "s/[^0-9\.]//g")
+   if [ "$VER" = "10.2" ]; then
+     # Exception:
+     # "Mandrakelinux release 10.2.*" /etc/mandrakelinux-release
+     # OS_Version="MDV2005"
+     DIST=MDV
+     FULL_DIST=Mandriva
+     VER=2005
+   else
+     DIST=MDK
+     FULL_DIST=Mandrake
+   fi
+  elif [ -e /etc/SuSE-release ]; then
+   VER=$(rpm -qf /etc/SuSE-release --qf "%{VERSION}" | sed "s/[^0-9\.]//g")
+   DIST=SUSE
+   FULL_DIST=SuSE
+  elif [ -f /etc/redhat-release ]; then
+   # /etc/redhat-release must be the last "elif" for RH-like dist, since there
+   # are so many distributions are based on RH, and do exist /etc/redhat-release
+   if grep -q -i "CentOS" /etc/redhat-release; then
+     # The release of CentOS is a little difference, we can not use
+     # rpm -qf /etc/redhat-release --qf "%{VERSION}" to get the version, since
+     # we will get "4", but actually it's "4.2" or "4.1"
+     VER=$(cat /etc/redhat-release | sed "s/[^0-9\.]//g")
+     DIST=CO
+     FULL_DIST=CentOS
+   elif grep -q -i "Scientific Linux" /etc/redhat-release; then
+     # Scientific Linux
+     # To simplify that, we only support drblsrv-offline for Scientific Linux
+     # The DIST is set as CO for compatibility.
+     VER=$(cat /etc/redhat-release | sed "s/[^0-9\.]//g")
+     DIST=CO
+     FULL_DIST=SL
+   elif grep -q -i "OSSII" /etc/redhat-release; then
+     # The release of OSSII M6 Linux is like:
+     # OSSII M6 Linux
+     # To simplify that, we only support drblsrv-offline for OSSII
+     # The DIST is set as CO for compatibility, basically it's useless here.
+     VER=$(grep -Eo "M[[:digit:]]" /etc/redhat-release)
+     DIST=CO
+     FULL_DIST=OSSII
+   else
+     # The last one... RedHat
+     # In some case, no idea why, when run this as root in RH9, it will crash
+     # [root]# rpm -qf --qf '%{VERSION}' /etc/redhat-release
+     # Segmentation fault
+     # So we do not use this:
+     #VER=$(rpm -qf /etc/redhat-release --qf "%{VERSION}" | sed "s/[^0-9\.]//g")
+     # We use this:
+     VER=$(cat /etc/redhat-release | sed "s/[^0-9\.]//g")
+     DIST=RH
+     FULL_DIST=RedHat
+   fi
+  elif [ -f /etc/debian_version ]; then
+   DIST=DBN
+   FULL_DIST=Debian
+   # get the version
+   if grep -qE "(testing/unstable|sid)" /etc/debian_version; then
+     VER="-TU"
+     # Here we assign a better tag for FULL_OS_Version
+     FULL_OS_Version="Debian Testing-Unstable"
+   else
+     VER="$(cat /etc/debian_version)"
+   fi
+   # Overwrite the FULL_OS_Version if others are found. Especially for Ubuntu
+   if [ -e /etc/lsb-release ]; then
+     . /etc/lsb-release
+     FULL_OS_Version="$DISTRIB_ID $DISTRIB_RELEASE"
+   fi
+  fi
+
+  if [ -z "$DIST" -o -z "$VER" ]; then
+    echo "The distribution or version is unknown! Program terminated!"
+    exit 1
+  fi
+  # If not assigned, assign it
+  [ -z "$OS_Version" ] && OS_Version=${DIST}${VER}
+  [ -z "$FULL_OS_Version" ] && FULL_OS_Version="${FULL_DIST} ${VER}"
+
+  # get the OS_type variable
+  get_os_type
+  #
+  # echo $OS_Version
+}
+
+# create the shared library program runtime env.
+# ldd might give these 3 type results:
+# 1. newer version (FC3):
+# ldd /sbin/depmod
+#         libc.so.6 => /lib/libc.so.6 (0x00a08000)
+#         /lib/ld-linux.so.2 (0x009f1000)
+# 2. older version (RH8/9,FC1/2):
+# ldd /sbin/depmod
+#         libc.so.6 => /lib/libc.so.6 (0x40025000)
+#         /lib/ld-linux.so.2 => /lib/ld-linux.so.2 (0x40000000)
+# 3. MDK10
+#         linux-gate.so.1 =>  (0xffffe000)
+#         libc.so.6 => /lib/tls/libc.so.6 (0x40028000)
+#         /lib/ld-linux.so.2 => /lib/ld-linux.so.2 (0x40000000)
+#RH9:
+#libc.so.6 => /lib/libc.so.6 (0x40025000)
+#/lib/ld-linux.so.2 => /lib/ld-linux.so.2 (0x40000000)
+#FC1:
+#libc.so.6 => /lib/libc.so.6 (0x00a35000)
+#/lib/ld-linux.so.2 => /lib/ld-linux.so.2 (0x00a20000)
+#FC2:
+#libc.so.6 => /lib/libc.so.6 (0x00b76000)
+#linux.so.2 => /lib/ld-linux.so.2 (0x00b61000)
+#FC3:
+#libc.so.6 => /lib/tls/i686/libc.so.6 (0x007b3000)
+#linux.so.2 (0x0079c000)
+#mdk10:
+#linux-gate.so.1 =>  (0xffffe000)
+#libc.so.6 => /lib/tls/libc.so.6 (0x40028000)
+#/lib/ld-linux.so.2 => /lib/ld-linux.so.2 (0x40000000)
+ 
+create_depmod_env() {
+  # This function is useless from drbl 1.7.6-23 or later, since we use 
+  # depmod -b baseroot/ instead of chroot.
+  # However, we still keep this for ref.
+  local newroot="$1"
+  [ -z "$newroot" ] && exit 1
+  # some distribution, like Mandriva, use link in /sbin/depmod, so we clean it
+  # to avoid some error.
+  [ -e "$newroot/sbin/depmod" ] && rm -f $newroot/sbin/depmod
+  # -L: always follow symbolic links
+  cp -L --parents /sbin/depmod* $newroot
+  if ldd /sbin/depmod &>/dev/null; then
+    depmod_lib_need=$(ldd /sbin/depmod | sed -e "s/.*=> //g" -e "s/(0x.*)//g" | awk '{print $1}')
+    for imod in $depmod_lib_need; do
+        cp --parents $imod $newroot
+    done
+  fi
+}
+clean_depmod_env() {
+  # This function is useless from drbl 1.7.6-23 or later, since we use 
+  # depmod -b baseroot/ instead of chroot.
+  # However, we still keep this for ref.
+  local newroot="$1"
+  [ -z "$newroot" ] && exit 1
+  [ -f $newroot/sbin/depmod ] && rm -f $newroot/sbin/depmod
+  # for MDK 9.2, there is another depmod.old...
+  [ -f $newroot/sbin/depmod.old ] && rm -f $newroot/sbin/depmod.old
+  if ldd /sbin/depmod &>/dev/null; then
+    depmod_lib_need=$(ldd /sbin/depmod | sed -e "s/.*=> //g" -e "s/(0x.*)//g" | awk '{print $1}')
+    for f2rm in $depmod_lib_need; do
+      [ -f "$newroot/$f2rm" ] && rm -f $newroot/$f2rm
+    done
+  fi
+}
+
+# function to create chkconfig environment
+create_chkconfig_env() {
+  local newroot="$1"
+  [ -z "$newroot" ] && exit 1
+  cp --parents /sbin/chkconfig $newroot
+  if ldd /sbin/chkconfig &>/dev/null; then
+    chkconfig_lib_need=$(ldd /sbin/chkconfig | sed -e "s/.*=> //g" -e "s/(0x.*)//g" | awk '{print $1}')
+    for imod in $chkconfig_lib_need; do
+      cp --parents $imod $newroot
+    done
+  fi
+}
+
+# function to clean chkconfig environment
+clean_chkconfig_env() {
+  local newroot="$1"
+  [ -z "$newroot" ] && exit 1
+  chkconfig_lib_need=$(ldd /sbin/chkconfig | sed -e "s/.*=> //g" -e "s/(0x.*)//g" | awk '{print $1}')
+  [ -f $newroot/sbin/chkconfig ] && rm -f $newroot/sbin/chkconfig
+  for f2rm in $chkconfig_lib_need; do
+    [ -f $newroot/$f2rm ] && rm -f $newroot/$f2rm
+  done
+}
+
+# function to create insserv environment
+create_insserv_env() {
+  local newroot="$1"
+  [ -z "$newroot" ] && exit 1
+  cp --parents /sbin/insserv $newroot
+  if ldd /sbin/insserv &>/dev/null; then
+    insserv_lib_need=$(ldd /sbin/insserv | sed -e "s/.*=> //g" -e "s/(0x.*)//g" | awk '{print $1}')
+    for imod in $insserv_lib_need; do
+      cp --parents $imod $newroot
+    done
+  fi
+}
+# Check if root or not
+check_if_root() {
+   if [ ! "$UID" = "0" ]; then
+     echo
+     echo "[$LOGNAME] You need to run this script \"`basename $0`\" as root."
+     echo
+     exit 1
+   fi
+}
+
+# function to get the autologin_account
+# input is the host dir, like /tftpboot/nodes/192.168.1.1, then
+# return the auto_login ID
+get_autologin_account() {
+    local ihost="$1"
+    local ip HOSTNAME
+    # $auto_login_id and $echo_no_digit_0_1 are global variables
+    # auto login username is set as hostname, i.e. use client's hostname as the auto-login ID.
+    # Reset variable auto_login_id
+    auto_login_id=""
+    if [ -e /etc/debian_version ]; then
+      # Debian
+      auto_login_id="$(cat $ihost/etc/hostname 2>/dev/null)"
+    elif [ -e /etc/SuSE-release ]; then
+      # SuSE
+      auto_login_id="$(cat $ihost/etc/HOSTNAME 2>/dev/null | sed -e "s/\..*//g")"
+    else
+      # RH-like
+      if [ -e $ihost/$SYSCONF_PATH/network ]; then
+        HOSTNAME=""
+        . $ihost/$SYSCONF_PATH/network
+        auto_login_id="$HOSTNAME"
+      fi
+    fi
+    # if no hostname, such as in DRBL SSI mode, try to map the hostname from $IP_HOST_TABLE
+    if [ -z "$auto_login_id" ]; then
+      ip="$(basename $ihost)"
+      auto_login_id="$(awk -F" " "/^$ip[[:space:]]+/ {print \$2}" $IP_HOST_TABLE)"
+    fi
+}
+# only show existing autologin account
+get_existing_autologin_account() {
+    local ihost="$1"
+    get_autologin_account $ihost
+    if grep -q $auto_login_id /etc/passwd ; then
+      # account $auto_login_id exists, show it
+      echo "$auto_login_id"
+    fi
+}
+
+# check switch if it is input correct as on or off
+check_switch_on_off() {
+  local switch="$1"
+  case "$switch" in
+    on|ON|[oO]|[nN]|off|OFF|[oO][fF][fF])
+         true;;
+     "")
+         usage && exit 1
+         ;;
+     *)
+         echo "You must specify \"on\" or \"off\" !!! Program stop!!!"
+         exit 1
+         ;;
+  esac
+}
+
+#
+create_authconfig_env() {
+  local newroot="$1"
+  [ -z "$newroot" ] && exit 1
+   file_need="/usr/sbin/authconfig /usr/sbin/pwconv /usr/sbin/grpconv"
+   cp --parents $file_need $newroot
+
+   if ldd /usr/sbin/authconfig &>/dev/null; then
+     authconfig_lib_need=$(ldd /usr/sbin/authconfig | sed -e "s/.*=> //g" -e "s/(0x.*)//g" | awk '{print $1}')
+     for imod in $authconfig_lib_need; do
+       cp --parents $imod $newroot
+     done
+   fi
+   if ldd /usr/sbin/pwconf &>/dev/null; then
+     pwconf_lib_need=$(ldd /usr/sbin/pwconf | sed -e "s/.*=> //g" -e "s/(0x.*)//g" | awk '{print $1}')
+     for imod in $pwconf_lib_need; do
+       cp --parents $imod $newroot
+     done
+   fi
+   if ldd /usr/sbin/grpconv &>/dev/null; then
+     grpconv_lib_need=$(ldd /usr/sbin/grpconv | sed -e "s/.*=> //g" -e "s/(0x.*)//g" | awk '{print $1}')
+     for imod in $grpconv_lib_need; do
+       cp --parents $imod $newroot
+     done
+   fi
+}
+
+#
+create_chpasswd_env() {
+  local newroot="$1"
+  [ -z "$newroot" ] && exit 1
+  # These *.so were found by using strace
+  # If something goes wrong in newer GNU/Linux distribution, we can find more by:
+  # (1) uncomment this line in this function:
+  #     # cp --parents /usr/bin/strace $newroot
+  # (2) in drbl-client-root-passwd, make it run
+  #     echo "root:$new_passwd" | /usr/bin/strace /usr/sbin/chpasswd
+  #     instead of "echo "root:$new_passwd" | /usr/sbin/chpasswd"
+  #     Then by running drbl-client-root-passwd we can see which lib*.so* is missing.
+  # //NOTE// /lib* includes /lib and /lib64
+  PAM_need_files="/lib*/security/ /usr/lib*/libcrack*.so* /usr/lib*/cracklib_dict.* /lib*/libnss_files*.so* /lib/*/libnss_files*.so* /usr/lib/*/libnss_files*.so* /lib*/libnsl*.so* /lib/*/libnss_nis*.so* /usr/lib/*/libnss_nis*.so*  /usr/lib/pwdutils/*.so* /lib*/libcrypt*.so* /usr/lib*/libcrypto*.so* /lib/xcrypt/libxcrypt*.so* /lib/*/security/pam*.so* /lib/security/pam*.so* /lib/*/libnsl*.so*  /lib/*/tls/i686/sse2/cmov/libnsl*.so* /lib/*/tls/cmov/libnsl*.so* /usr/lib/*/tls/i686/sse2/cmov/libnsl*.so* /usr/lib/*/tls/cmov/libnsl*.so* /lib/tls/*/libnsl*.so* /lib/tls/sse2/cmov/libnsl*.so* /lib/tls/cmov/libnsl*.so* /lib/*/libdbus*.so* /lib/*/tls/libdbus*.so*  /usr/lib/*/i686/libnsl*.so* /usr/lib*/libdbus*.so* /usr/lib/cmov/libdbus*.so* /lib/*/libcap*.so* /lib/libcap*.so* /usr/lib/libcap*.so* /lib/libck-connector*.so* /lib/*/libck-connector*.so* /usr/lib/libck-connector*.so* /lib/*/librt*.so* /usr/lib/*/librt*.so*"
+  chpasswd_lib_need="$(LC_ALL=C ldd /usr/sbin/chpasswd | sed -e "s/.*=> //g" -e "s/(0x.*)//g" | awk '{print $1}')"
+  echo_lib_need="$(LC_ALL=C ldd /bin/echo | sed -e "s/.*=> //g" -e "s/(0x.*)//g" | awk '{print $1}')"
+  for imod in $chpasswd_lib_need $echo_lib_need; do
+    cp --parents $imod $newroot
+  done
+  # /bin/echo is necessary for chpasswd
+  cp --parents /bin/echo $newroot
+  cp --parents /usr/sbin/chpasswd $newroot
+  # cp --parents /usr/bin/strace $newroot
+
+  #cp --parents -r $PAM_need_files $newroot
+  for ipam in $PAM_need_files; do
+    [ -n "$(ls $ipam 2>/dev/null)" ] && cp --parents -r $ipam $newroot
+  done
+  # we need sh to run the script, borrow it from mkpxeinitrd-net's busybox
+  cp /usr/lib/mkpxeinitrd-net/initrd-skel/bin/sh $newroot/bin
+} # end of create_chpasswd_env
+
+#
+#create_passwd_env() {
+#  local newroot="$1"
+#  [ -z $newroot ] && exit 1
+#  # /lib* includes /lib and /lib64
+#  PAM_need_files="/lib*/security/ /usr/lib*/libcrack*.so* /usr/lib*/cracklib_dict.* /lib*/libnss_files*.so* /lib*/libnsl*.so* /usr/lib/pwdutils/*.so*"
+#  passwd_lib_need=$(ldd /usr/bin/passwd | sed -e "s/.*=> //g" -e "s/(0x.*)//g" | awk '{print $1}')
+#  for imod in $passwd_lib_need; do
+#    cp --parents $imod $newroot
+#  done
+#  cp --parents /usr/bin/passwd $newroot
+#
+#  # /bin/echo is necessary for passwd --stdin
+#  cp --parents /bin/echo $newroot
+#
+#  cp --parents -r $PAM_need_files $newroot
+#  # we need sh to run the script, borrow it from mkpxeinitrd-net's busybox
+#  cp /usr/lib/mkpxeinitrd-net/initrd-skel/bin/sh $newroot/bin
+#}
+
+clean_passwd_env() {
+  local newroot="$1"
+  [ -z "$newroot" ] && exit 1
+#  passwd_lib_need=$(ldd /usr/bin/passwd | cut -d" " -f3)
+#  [ -f "$newroot/usr/bin/passwd" ] && rm -f $newroot/usr/bin/passwd
+#  [ -f "$newroot/bin/echo" ] && rm -f $newroot/bin/echo
+#  for f2rm in $passwd_lib_need; do
+#    [ -f $newroot/$f2rm ] && rm -f $newroot/$f2rm
+#  done
+#  for f2rm in $PAM_need_files; do
+#    [ -f $newroot/$f2rm ] && rm -f $newroot/$f2rm
+#  done
+#  [ -f "$newroot/bin/sh" ] && rm -f $newroot/bin/sh
+  for d2rm in bin lib usr; do
+    if [ -d "$newroot/$d2rm" ]; then
+      [ -n "$verbose" ] && echo "Cleaning the unnecessary directory $newroot/$d2rm ..."
+      rm -rf $newroot/$d2rm
+    fi
+  done
+}
+
+clean_chpasswd_env() {
+  local newroot="$1"
+  [ -z "$newroot" ] && exit 1
+  for d2rm in bin lib usr; do
+    if [ -d "$newroot/$d2rm" ]; then
+      [ -n "$verbose" ] && echo "Cleaning the unnecessary directory $newroot/$d2rm ..."
+      rm -rf $newroot/$d2rm
+    fi
+  done
+}
+
+# check if the user input /dev/hda, /dev/hdb...
+check_input_hd() {
+    local target_hd="$1"
+    case "$target_hd" in
+	 [hsv]d[a-z])
+	   continue
+	   ;;
+	 *)
+	  echo "Unknown HD device! Program stop!"
+          Usage
+	  exit 1
+    esac
+}
+
+## description:
+##   convert devfs names into normal short ones, written by Tom Rini.
+fixdevfs() {
+    ## get partition number, if any
+    local PARTNUM="${1##*[a-z]}"
+    ## Find the bus type.
+    local TYPE="$(v=${1#/dev/} ; echo ${v%/host*})"
+    ## Find the host number.
+    local HOST="$(v=${1#/dev/*/host} ; echo ${v%/bus*})"
+    ## Find the bus number.
+    local BUS="$(v=${1#/dev/*/bus} ; echo ${v%/tar*})"
+    ## Find the target.
+    local TARGET="$(v=${1#/dev/*/target} ; echo ${v%/lun*})"
+
+    case "$TYPE" in
+	ide)
+	case "$HOST" in
+	    0)
+	    case "$TARGET" in
+		0)
+		local DEV=hda
+		;;
+		1)
+		local DEV=hdb
+		;;
+	    esac
+	    ;;
+	    1)
+	    case "$TARGET" in
+		0)
+	        local DEV=hdc
+	        ;;
+		1)
+		local DEV=hdd
+		;;
+	    esac
+	    ;;
+	    2)
+	    case "$TARGET" in
+		0)
+	        local DEV=hde
+	        ;;
+		1)
+		local DEV=hdf
+		;;
+	    esac
+	    ;;
+	    3)
+	    case "$TARGET" in
+		0)
+	        local DEV=hdg
+	        ;;
+		1)
+		local DEV=hdh
+		;;
+	    esac
+	    ;;
+	    *)
+		echo "${1#/dev/}"
+		#echo "Unable to translate this device, try again without devfs."
+		return 1
+	esac
+	local DEV="${DEV}${PARTNUM}"
+	echo "$DEV"
+	return 0
+	;;
+	scsi)
+	local LUN="$(v=${1#/dev/*/lun} ; echo ${v%/*})"
+
+	## In this case, we need to figure out what number our device is
+	local DEVCOUNT=0
+
+	## copy scsi file into a variable removing "Attached Devices"
+	## which is the first line. this avoids a lot of
+	## [incmopatible] crap later, and improves readability.
+
+	## find number of lines once and recycle that number, to save
+	## some time (linecount is a bit slow). subtract one line
+	## to scrap Attached Devices:
+
+	local SCSILINES="$(($(wc -l /proc/scsi/scsi | cut -d' ' -f1) - 1))"
+	local PROCSCSI="$(cat /proc/scsi/scsi | tail -n $SCSILINES)"
+
+	for i in $(seq $(($SCSILINES / 3))) ; do
+
+	    ## put every scsi device into one single line
+	    local DEVINFO="$(echo "$PROCSCSI" | head -n $(($i * 3)) | tail -n 3)"
+	    [ "$DEBUG" = 1 ] && echo 1>&2 "$PRG: DEBUG: fixdevfs: DEVINFO=$DEVINFO"
+
+	    ## cut the type field, expect "Direct-Access" later.
+	    local DEVTYPE="$(v=$(echo ${DEVINFO##*Type: }) ; echo ${v%% *})"
+	    [ "$DEBUG" = 1 ] && echo 1>&2 "$PRG: DEBUG: fixdevfs: DEVTYPE=$DEVTYPE"
+
+	    if [ "$DEVTYPE" = "Direct-Access" ] ; then
+		## Lets find out some more information
+		## get the device id.
+		local DEVID="$(v=$(echo ${DEVINFO##*Id: }) ; n=$(echo ${v%% *}) ; echo ${n#*0})"
+		[ "$DEBUG" = 1 ] && echo 1>&2 "$PRG: DEBUG: fixdevfs: DEVID=$DEVID"
+
+		## get the device lun.
+		local DEVLUN="$(v=$(echo ${DEVINFO##*Lun: }) ; n=$(echo ${v%% *}) ; echo ${n#*0})"
+		[ "$DEBUG" = 1 ] && echo 1>&2 "$PRG: DEBUG: fixdevfs: DEVLUN=$DEVLUN"
+
+		## get the device channel.
+		local DEVCHAN="$(v=$(echo ${DEVINFO##*Channel: }) ; n=$(echo ${v%% *}) ; echo ${n#*0})"
+		[ "$DEBUG" = 1 ] && echo 1>&2 "$PRG: DEBUG: fixdevfs: DEVCHAN=$DEVCHAN"
+
+		## get the scsi host id.
+		local DEVHOST="$(v=$(echo ${DEVINFO##*Host: scsi}) ; echo ${v%% *})"
+		[ "$DEBUG" = 1 ] && echo 1>&2 "$PRG: DEBUG: fixdevfs: DEVHOST=$DEVHOST"
+
+		local DEVCOUNT="$(($DEVCOUNT + 1))"
+		[ "$DEBUG" = 1 ] && echo 1>&2 "$PRG: DEBUG: fixdevfs: DEVCOUNT=$DEVCOUNT"
+		if [ "$DEVHOST" = "$HOST" -a "$DEVCHAN" = "$BUS" -a \
+		    "$DEVID" = "$TARGET" -a "$DEVLUN" = "$LUN" ] ; then
+		    local DEV="sd$(smalltr $DEVCOUNT)${PARTNUM}"
+		    echo "$DEV"
+		    return 0
+		fi
+	    fi
+	done
+	echo "${1#/dev/}"
+	#echo "Unable to translate this device, try again without devfs."
+	return 1
+	;;
+	*)
+	echo "${1#/dev/}"
+	#echo "Unknown bus"
+	return 1
+	;;
+    esac
+    ## we should never get here
+    return 1
+}
+
+conv_devfspart_to_tradpart() {
+   # function to convert devfs partitions to traditional partitions
+   # fix the disk/partition, we do not want the devfs style for clonezilla
+   TARGET_FILE="$1"
+   [ -z "$TARGET_FILE" ] && echo "No output filename! Program stop!!!" && return 1
+   [ -f "$TARGET_FILE" ] && rm -f $TARGET_FILE
+   while read major minor block p x; do
+     p="$(fixdevfs "/dev/$p")"
+     echo "$major $minor $block $p" >> $TARGET_FILE
+   done < /proc/partitions
+}
+
+# get dhcpd interface
+get_dhcpd_interface() {
+  local INTERFACES= INTERFACES_TMP=
+  if [ -e /etc/debian_version ]; then
+    # Debian
+    . $SYSCONF_PATH/$DHCP_SRV_NAME
+  elif [ -e /etc/SuSE-release ]; then
+    # SuSE
+    . $SYSCONF_PATH/$DHCP_SRV_NAME
+    INTERFACES="$DHCPD_INTERFACE"
+  else
+    # RH-like
+    # get the setting of dhcp server
+    . $SYSCONF_PATH/$DHCP_SRV_NAME
+    # collect those interface, filter out other options, such as -p 60
+    INTERFACES=""
+    for ieth in $DHCPDARGS; do
+       INTERFACES_TMP="$(echo $ieth |grep -o eth.*)"
+       INTERFACES="$INTERFACES $INTERFACES_TMP"
+    done
+  fi
+  echo $INTERFACES
+}
+
+# HD dma status
+check_hd_dma() {
+   # input example: /dev/hda
+   # return 0/1, 0: DMA off, 1: DMA on
+   local hd_dev=$1
+   DMA_status=$(hdparm -d $hd_dev 2>/dev/null | grep using_dma | awk  '{print $3}')
+   echo "$DMA_status"
+}
+
+# turn on hd dma
+turn_on_hd_dma() {
+    local hd_dev="$1"
+    if [ -z "$hd_dev" ]; then
+      echo "To turn on HD dma, you have to specify the HD dev!"
+      exit 1
+    fi
+    # Only IDE (/dev/hda) need to be turned on DMA.
+    [ -z "$(echo $hd_dev | grep -F "/dev/hd")" ] && return 3
+    #
+    echo "*******************************************"
+    echo "Try to turn on the harddisk \"$hd_dev\" DMA..."
+    if [ "$(check_hd_dma $hd_dev)" = "0" ]; then
+      # turn on DMA if it's off (0)
+      hdparm -d1m1c1 $hd_dev
+    fi
+    # check the result
+    DMA="$(check_hd_dma $hd_dev)"
+    if [ -n "$DMA" ]; then
+       # This is IDE device, we can get DMA status
+       [ "$DMA" -eq 0 ] && echo "Warning!!! Failed to turn on harddisk \"$hd_dev\" DMA... The clone performance might be NOT good..." && sleep 5
+    else
+       # This is SCSI device, we can not get DMA status
+       echo "No HD DMA information, maybe this not a IDE device!"
+    fi
+    echo "*******************************************"
+} # end of turn_on_hd_dma
+
+# do not let screen be blank
+screen_not_blank() {
+    setterm -blank 0
+}
+
+# set passwd login for single user mode
+set_clients_rc1_passwd() {
+  local rc1_sulogin="~~:S:wait:/sbin/sulogin"
+  IP_LIST=$*
+  # make a flag "LIST_HOST"
+  [ -n "$IP_LIST" ] && LIST_HOST="on"
+
+  for ihost in $drblroot/*; do
+     # skip those IP not listed in the $IP_LIST
+     if [ "$LIST_HOST" = "on" ]; then
+       [ -z "$(echo $IP_LIST | grep ${ihost##/*/})" ] && continue
+     fi
+
+    if ! grep -qE ^$rc1_sulogin $ihost/etc/inittab 2>/dev/null; then
+      echo "Set the single user password for client ${ihost##/*/}, this will be safer..."
+      cat <<-EOF >> $ihost/etc/inittab
+
+# Single User Mode Password, added by DRBL
+$rc1_sulogin
+EOF
+    fi
+  done
+}
+
+# function to active the /proc/partitions. For SCSI devices, even when device
+# modules is loaded, the device is not shown in /proc/partitions if no program
+# like fdisk or sg_map runs... We also do it for /dev/hdx.
+active_proc_partitions() {
+   local disk_proc
+   disk_proc="$(LC_ALL=C awk '/[hsv]d[a-z]+($| )/ { print $4; }' /proc/partitions)"
+   echo -n "Activating the partition info in /proc... "
+   for ihd in $disk_proc; do
+      fdisk -l /dev/$ihd &> /dev/null
+   done
+   echo "done!"
+}
+#
+get_lang_index() {
+   local lang=$1
+   local language
+   case "$lang" in
+      "1")
+           language="zh_TW.BIG5"
+           ;;
+      "2")
+           language="zh_TW.UTF-8"
+           ;;
+       *)
+           language="en_US.UTF-8"
+           ;;
+   esac
+   echo $language
+}
+
+check_kernel_nfsd_tcp_config() {
+  # note the kernel should be the one is using in the drbl server
+  kernel_ver=$(uname -r)
+  # check if /boot/config-$kernel_ver exists
+  # kernel config is either in /boot/ 
+  kernel_config="/boot/config-$kernel_ver"
+  echo "Checking server kernel config \"$kernel_config...\""
+  if [ ! -f $kernel_config ]; then 
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+    echo "$kernel_config does NOT exist!"
+    echo "I can not judge whether NFS over TCP is supported in the kernel you are using!!!"
+    echo "We will assume that the NFS server use UDP protocol!"
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+    protocol="udp"
+  else
+    # we assume the the priority is higher for EXT2, i.e. EXT2 option will overwrite the CRAMFS.
+    if [ -n "$(grep "^CONFIG_NFSD_TCP=y" $kernel_config)" ]; then
+      protocol="tcp"
+    else
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+      echo "$kernel_config is found but NFS over TCP is not supported in the kernel you are using for the DRBL clients!!!"
+      echo "We will use NFS over UDP !"
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+      protocol="udp"
+    fi
+  fi
+  case "$protocol" in
+    [tT][cC][pP])
+       rc=0 
+       ;;
+    [uU][dD][pP])
+       rc=1 
+       ;;
+  esac
+  return $rc
+}
+
+switch_clients_init() {
+   # input: client_init IP_LIST
+   # if IP_LIST is none, this function will process all the clients.
+   local CLIENT_INIT
+   local IP_LIST
+   CLIENT_INIT=$1
+   shift
+   IP_LIST=$*
+   # make a flag "LIST_HOST"
+   [ -n "$IP_LIST" ] && LIST_HOST="on"
+   [ -z "$CLIENT_INIT" ] && echo "No specified mode for client inittab!!! Program stop!!!" && exit 1
+   for host in $drblroot/*; do
+     # skip those IP not listed in the $IP_LIST
+     if [ "$LIST_HOST" = "on" ]; then
+       [ -z "$(echo $IP_LIST | grep ${host##/*/})" ] && continue
+     fi
+
+     echo "Setting the graphic mode for node IP = $(basename $host)..."
+     # set the init to 5, i.e. default is X
+     /usr/bin/perl -p -i -e "s/^id:[1-5]:initdefault:/id:$CLIENT_INIT:initdefault:/g" $host/etc/inittab
+   done
+}
+
+# This "NEWER" program is borrowed from http://staff.washington.edu/corey/new-patches.cgi
+# The original author:
+# Corey Satten, corey @ cac.washington.edu, 06/26/03, release 1.8
+# For the latest version visit: http://staff.washington.edu/corey/tools.html
+#
+# Modified by Blake Huang and Steven Shiau to use in DRBL
+NEWER='
+    # Function newer:
+    # Return 1 if second arg is "newer" than the first arg, else return 0.
+    #
+    # Because extra dotted fields before a hyphen are more significant
+    # than those after a hyphen, first split on hyphens, then loop over
+    # dotted fields passing the hard alphanumerics to function "compare"
+    # for further splitting and comparing.
+    #
+    # eg.  older bind-utils-8.2.2_P5-9     and  older gzip-1.2.4-14
+    #      newer bind-utils-8.2.2_P7-0.6.2 and  newer gzip-1.2.4a-2
+    #
+    #      older apmd-3.0beta9-3           and  older rmt-0.4b4-11 
+    #      newer apmd-3.0final-2           and  newer rmt-0.4b19-5.6x
+
+    function newer(a, b,    na1, nb1, na, nb, minn, i, j) {
+	#printf("newer called with %s %s\n", a, b)
+	if ('"${EFLAG-0}"') return a!=b
+	if (O) {na=a; a=b; b=na}
+	na1 = split(a, A1, /-/)
+	nb1 = split(b, B1, /-/)
+	if (na1 != nb1) {
+	  #printf "unsure about %s and %s\n", a, b > "/dev/stderr"
+	  return 1 }
+	for (j=1; j<=na1; ++j) {
+	  na = split(A1[j], A, /\./)
+	  nb = split(B1[j], B, /\./)
+	  minn = na < nb ? na : nb
+	  for (i=1; i<=minn; ++i) {
+	    if ('"${DEBUG-0}"') \
+	      printf(" newer%d comparing %s %s\n", i, A[i], B[i])>"/dev/stderr"
+	    if ((A[i] B[i]) ~ /^[0-9]+$/) {
+	      if (A[i]+0 < B[i]+0) return 1
+	      if (A[i]+0 > B[i]+0) return 0 }
+	    else if (A[i] "" != B[i] "") return compare(A[i], B[i])
+	    }
+	  if (nb > na) return 1
+	  if (nb < na) return 0
+	  }
+	return 0
+	}
+
+    # Function compare (called only by function newer):
+    # Return 1 if second arg is "newer" than the first arg, else return 0.
+    #
+    # This is harder than it looks: consider "v9" vs "v10a", etc.
+    # split out and compare alternating fields of numeric and non-numeric
+
+    function compare (a, b,    xa, xb) {
+	#printf(" compare called with %s %s\n", a, b)
+	while (length(a) && length(b)) {
+	  if (a ~ /^[0-9]/) {
+	    match(a, /^[0-9]+/)
+	    xa = substr(a, 1, RLENGTH); a = substr(a, RLENGTH+1) }
+	  else {
+	    match(a, /^[^0-9]+/)
+	    xa = substr(a, 1, RLENGTH); a = substr(a, RLENGTH+1) }
+	  if (b ~ /^[0-9]/) {
+	    match(b, /^[0-9]+/)
+	    xb = substr(b, 1, RLENGTH); b = substr(b, RLENGTH+1) }
+	  else {
+	    match(b, /^[^0-9]+/)
+	    xb = substr(b, 1, RLENGTH); b = substr(b, RLENGTH+1) }
+	    #printf("  compare2 %s %s <%s> <%s>\n", xa, xb, a, b)
+	  if ( (xa xb) ~ /^[0-9]+$/) {
+	    if (xa+0 < xb+0) return 1
+	    if (xa+0 > xb+0) return 0 }
+	  else {
+	    if (xa "" < xb "") return 1
+	    if (xa "" > xb "") return 0 }
+	  }
+	if (length(b)) return 1
+	else return 0
+	}
+    '
+#
+set_specific_host_pxe_conf() {
+  local HOSTS="$*"
+  local pxecfg pxecfg_MAC pxecfg_MIP OCS_TMP IP
+  # prepare the HOSTNAME-IP-MAC table
+  OCS_TMP=`mktemp /tmp/ocs_clean_tmp.XXXXXX`
+  trap "[ -f "$OCS_TMP" ] && rm -f $OCS_TMP" HUP INT QUIT TERM EXIT
+  parse_dhcpd_conf $OCS_TMP
+
+  for ih in $HOSTS; do
+    case "$ih" in
+      *.*.*.*)
+        # list by IP
+	# the pxecfg will like "C0A80001"
+	pxecfg="$(drbl-gethostip $ih)"
+        # These files look like: 01-MAC address (with ":" -> "-"),
+	# We'd better to clean the 01-MAC file if it exists since maybe it's created by ocsmgrd when received the results from client in the previous save/restoration. Since 01-MAC has higher priority than "C0A80001" style file in pxelinux, this is a must if we can find it, we have to remove it.
+	# TODO: What if no MAC address setting in dhcpd.conf ? Then $OCS_TMP will be empty, then... ?
+        pxecfg_MAC="01-$(grep ${ih} $OCS_TMP | awk -F" " '{print $3}' | tr ":" "-")"
+        [ -f "$PXELINUX_DIR/$pxecfg_MAC" ] && rm -f $PXELINUX_DIR/$pxecfg_MAC
+        ;;
+      *:*:*:*:*:*)
+        # list by MAC
+	# for an Ethernet (ARP type 1) with address 88:99:AA:BB:CC:DD it would search for the filename 01-88-99-aa-bb-cc-dd (lowercase)
+	pxecfg="$(echo $ih | tr "[A-Z]" "[a-z]" | tr ":" "-")"
+	# append "01-" in the beginning
+	pxecfg="01-$pxecfg"
+	# We'd better to clean the IP-based setting file if it exists since maybe it's created by ocsmgrd when received the results from client in the previous save/restoration. Although 01-MAC has higher priority than "C0A80001" style file in pxelinux, this NOT a must if we can find it, but we remove it to avoid confusion.
+        IP="$(grep -E ${ih} $OCS_TMP | awk -F" " '{print $2}')"
+	pxecfg_MIP="$(drbl-gethostip $IP)"
+        [ -f "$PXELINUX_DIR/$pxecfg_MIP" ] && rm -f $PXELINUX_DIR/$pxecfg_MIP
+        ;;
+    esac
+    echo -n "Generate the PXE config file for host $ih ... "
+    cp -f $PXELINUX_DIR/default_skeleton $PXELINUX_DIR/$pxecfg
+    echo "done!"
+  done
+  [ -f "$OCS_TMP" ] && rm -f $OCS_TMP
+} # end of set_specific_host_pxe_conf
+
+# function to get the pxecfg image block line number
+get_pxecfg_image_block() {
+     local IMG_NAME="$1"
+     local PXE_CONF_TMP="$2"
+     [ -z "$IMG_NAME" ] && exit 1
+     # By using
+     # grep -Ei -n '^[[:space:]]*label[[:space:]]+.*([[:space:]]|$)+' /tftpboot/nbi_img/pxelinux.cfg/default | grep -A1 -E "label[[:space:]]+drbl([[:space:]]|$)+"
+     # 10:label drbl
+     # 17:label local
+     # so we know we can replace the one between line no. 10 and 17
+     between_lines="$(LC_ALL=C grep -Ei -n "^[[:space:]]*label[[:space:]]+.*([[:space:]]|$)+" $PXE_CONF_TMP | grep -Ei -A1 "label[[:space:]]+$IMG_NAME([[:space:]]|$)+" | cut -d":" -f1)"
+     begin_line="$(LC_ALL=C echo $between_lines | awk -F" " '{print $1}')"
+     end_line="$(LC_ALL=C echo $between_lines | awk -F" " '{print $2}')"
+     # if end_line is nothing, it must be the last block, i.e. we can not find the next [.*]
+     if [ -z "$end_line" ]; then
+       end_line="$(LC_ALL=C wc -l $PXE_CONF_TMP | awk -F" " '{print $1}')"
+     else
+       # if not nothing, backword one line
+       end_line="$(($end_line - 1))"
+     fi
+     echo "$begin_line $end_line"
+} # end of get_pxecfg_image_block
+check_img_in_pxe_cfg() {
+     local IMG="$1"
+     local PXE_CONF_TMP="$2"
+     if [ -z "$IMG" ]; then
+        [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+        echo "You must specify the image name! Program terminated!!!"
+        [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+        exit 1
+     fi
+     if ! grep -Eiq "^[[:space:]]*label[[:space:]]+$IMG" $PXE_CONF_TMP; then
+        [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+        echo "Unable to find the image ($IMG) label! Make sure the $IMG is labeled in $PXE_CONF_TMP! Program terminated!!!"
+        [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+        exit 1
+     fi
+} # end of check_img_in_pxe_cfg
+sub_default_pxe_img() {
+     local IMG="$1"
+     local PXE_CONF_TMP="$2"
+     local MENU_LABEL="$3"
+     check_img_in_pxe_cfg $IMG $PXE_CONF_TMP
+     # turn off all MENU DEFAULT
+     echo "Turn off all MENU DEFAULT in $PXE_CONF_TMP... "
+     perl -pi -e "s/^(#|[[:space:]])*MENU DEFAULT.*/  # MENU DEFAULT/i" $PXE_CONF_TMP
+     all_label="$(awk '/^[[:space:]]*label[[:space:]]+.*([[:space:]]|$)+/ {print $2}' $PXE_CONF_TMP)"
+     # 2006/09/10 Steven commented this, we'd better keep the way pxelinux config is.
+     #for i in $all_label; do
+     #  if [ -z "$(echo $IMG_SHOW_IN_MENU | grep -i $i)" ]; then
+     #    [ -n "$VERBOSE" ] && echo "Hide image $i"
+     #    hide_reveal_pxe_img $i hide $PXE_CONF_TMP
+     #  fi
+     #done
+
+     # turn on MENU DEFAULT & turn off MENU HIDE for the specified image
+     lines="$(get_pxecfg_image_block $IMG $PXE_CONF_TMP)"
+     begin_line="$(echo $lines | awk -F" " '{print $1}')"
+     end_line="$(echo $lines | awk -F" " '{print $2}')"
+     echo "Make \"$IMG\" as default label in $PXE_CONF_TMP."
+     sub_def_cmd="if ($begin_line..$end_line) {s/^(#|[[:space:]])*MENU DEFAULT.*/  MENU DEFAULT/i}"
+     sub_hide_cmd="if ($begin_line..$end_line) {s/^(#|[[:space:]])*MENU HIDE.*/  # MENU HIDE/i}"
+     perl -pi -e "$sub_def_cmd" $PXE_CONF_TMP
+     perl -pi -e "$sub_hide_cmd" $PXE_CONF_TMP
+
+     if [ -n "$MENU_LABEL" ]; then
+       echo The MENU LABEL is \"$MENU_LABEL\"
+       sub_menu_label_cmd="if ($begin_line..$end_line) {s|^[[:space:]]*MENU LABEL.*|  MENU LABEL $MENU_LABEL|i}"
+       perl -pi -e "$sub_menu_label_cmd" $PXE_CONF_TMP
+     fi
+} # end of sub_default_pxe_img
+# use script /opt/drbl/bin/hide_reveal_pxe_img instead of fnction.
+#hide_reveal_pxe_img() {
+#     local IMG="$1"
+#     local ACT="$2"
+#     local PXE_CONF_TMP="$3"
+#     check_img_in_pxe_cfg $IMG $PXE_CONF_TMP
+#     # turn off MENU DEFAULT & turn on MENU HIDE for the specified image
+#     lines=$(get_pxecfg_image_block $IMG $PXE_CONF_TMP)
+#     begin_line=$(echo $lines | awk -F" " '{print $1}')
+#     end_line=$(echo $lines | awk -F" " '{print $2}')
+#     case "$ACT" in
+#       "hide")
+#         [ -n "$VERBOSE" ] && echo "Hide $IMG in $PXE_CONF_TMP... "
+#         sub_act_cmd="if ($begin_line..$end_line) {s/^(#|[[:space:]])*MENU HIDE.*/  MENU HIDE/i}"
+#         ;;
+#       "reveal")
+#         [ -n "$VERBOSE" ] && echo "Reveal $IMG in $PXE_CONF_TMP... "
+#         sub_act_cmd="if ($begin_line..$end_line) {s/^(#|[[:space:]])*MENU HIDE.*/  # MENU HIDE/i}"
+#         ;;
+#     esac
+#     perl -pi -e "$sub_act_cmd" $PXE_CONF_TMP
+#}
+#
+delete_label_block_pxe_img() {
+     local LABEL="$1"
+     local PXE_CONF_TMP="$2"
+     [ -z "$LABEL" -o -z "$PXE_CONF_TMP" ] && return 1
+     lines=$(get_pxecfg_image_block $LABEL $PXE_CONF_TMP)
+     begin_line=$(echo $lines | awk -F" " '{print $1}')
+     end_line=$(echo $lines | awk -F" " '{print $2}')
+     # delete lines between $begin_line and $end_line
+     perl -i -ne "print unless $begin_line..$end_line" $PXE_CONF_TMP
+     return 0
+}
+
+ask_lang_set() {
+  local language_opt="$1"
+  local chosen_lang_var
+  # lang will be the global variable
+  # get the language
+  if [ -z "$language_opt" ]; then
+    # Try the Environment variable "LC_ALL", then "LANG"
+    if [ -n "$LC_ALL" ]; then
+      chosen_lang_var="$LC_ALL"
+    elif [ -n "$LANG" ]; then
+      chosen_lang_var="$LANG"
+    fi
+    # Normally we use the locale format like: en_US.UTF-8, however, it's possible it is en_US.utf8. Therefore here we format it to be *.UTF-8.
+    chosen_lang_var="$(LC_ALL=C echo $chosen_lang_var | sed -e "s/\.utf8/.UTF-8/g")"
+    if [ -n "$chosen_lang_var" -a -e "$DRBL_SCRIPT_PATH/lang/bash/$chosen_lang_var" ] ; then
+      lang_answer="$chosen_lang_var"
+    else
+      lang_answer="en_US.UTF-8"
+    fi
+  elif [ "$language_opt" = "ask" -o "$language_opt" = "a" ]; then
+    # Language
+    echo "Language?".
+    echo "[0]: English"
+    echo "[1]: Traditional Chinese (Big5) - Taiwan".
+    echo "[2]: Traditional Chinese (UTF-8, Unicode) - Taiwan"
+    echo -n "[0] "
+    read lang_answer
+    [ -z "$lang_answer" ] && lang_answer="en_US.UTF-8"
+  else
+    lang_answer="$language_opt"
+  fi
+} # end of ask_lang_set
+
+load_lang_set() {
+  lang_answer=$1
+  # The language files are en, tw.BIG5 and tw.UTF-8, we have to format the input parameter.
+  case "$lang_answer" in
+     1|zh_TW.BIG5|zh_TW.big5|tw.BIG5)
+        lang="zh_TW.BIG5"
+        ;;
+     2|zh_TW.UTF-8|zh_TW.utf8|tw.UTF-8|tw.utf8)
+        lang="zh_TW.UTF-8"
+        ;;
+     *)
+        if [ -n "$lang_answer" -a -e "$DRBL_SCRIPT_PATH/lang/bash/$lang_answer" ] ; then
+          lang="$lang_answer"
+        else
+          lang="en_US.UTF-8"
+        fi
+  esac
+  
+  # get the l10n message
+  if [ -n "$lang" -a -e "$DRBL_SCRIPT_PATH/lang/bash/$lang" ] ; then
+    . $DRBL_SCRIPT_PATH/lang/bash/$lang
+  else
+    echo "Not such language option!!!"
+    exit 1
+  fi
+} # end of load_lang_set
+#
+ask_and_load_lang_set() {
+  local language_opt="$1"
+  ask_lang_set $language_opt
+  load_lang_set $lang_answer
+} # end of ask_and_load_lang_set
+
+#
+language_help_prompt_by_idx_no() {
+  echo "-l, --language INDEX Set the language to be shown by index number:"
+  echo "       [0|en_US.UTF-8]: English,"
+  echo "       [1|zh_TW.BIG5]: Traditional Chinese (Big5) - Taiwan,"
+  echo "       [2|zh_TW.UTF-8]: Traditional Chinese (UTF-8, Unicode) - Taiwan"
+  echo "       [a|ask]: Prompt to ask the language index"
+}
+#
+language_help_prompt_by_idx_name() {
+  echo "-ln  NAME    Set the language to be shown by index name, not number, such as en_US.UTF-8, zh_TW.BIG5, zh_TW.UTF-8"
+}
+
+# For update-rc.d in Debian
+prepare_update_rc_d_env() {
+  local newroot="$1"
+  local perl_lib_need insserv_lib_need
+  [ -z "$newroot" ] && exit 1
+  # for update-rc.d
+  cp -f --parents /usr/sbin/update-rc.d $newroot
+  cp -f --parents /usr/bin/perl $newroot
+  perl_lib_need="$(ldd /usr/bin/perl | sed -e "s/.*=> //g" -e "s/(0x.*)//g" | awk '{print $1}')"
+  for imod in $perl_lib_need; do
+    cp --parents $imod $newroot
+  done
+  # Ugly! we need some perl pm...
+  mkdir -p $newroot/usr/{share,lib}
+  rsync -a /usr/share/perl /usr/lib/perl $newroot/usr/share/
+
+  # for insserv
+  if type insserv &>/dev/null; then
+    cp -f --parents /sbin/insserv $newroot
+    insserv_lib_need="$(ldd /sbin/insserv | sed -e "s/.*=> //g" -e "s/(0x.*)//g" | awk '{print $1}')"
+    for imod in $insserv_lib_need; do
+      cp --parents $imod $newroot
+    done
+  fi
+} # end of prepare_update_rc_d_env
+
+#
+clean_update_rc_d_env() {
+  local newroot="$1"
+  [ -z "$newroot" ] && exit 1
+  # we can clean files in /usr/bin and /usr/sbin in common_root because they are mount ponts.
+  [ -f $newroot/usr/bin/perl ] && rm -f $newroot/usr/bin/perl 
+  [ -f $newroot/usr/sbin/update-rc.d ] && rm -f $newroot/usr/sbin/update-rc.d
+  perl_lib_need=$(ldd /usr/bin/perl | sed -e "s/.*=> //g" -e "s/(0x.*)//g" | awk '{print $1}')
+  for f2rm in $perl_lib_need; do
+    [ -f $newroot/$f2rm ] && rm -f $newroot/$f2rm
+  done
+}
+
+#
+chk_deb_installed () {
+  local pkg_name=$1
+  local RC
+  [ -z "$pkg_name" ] && exit 1
+  dpkg-query --print-avail $pkg_name &>/dev/null
+  RC=$?
+  return $RC
+}
+#
+copy_rc1d_for_drbl_ssi() {
+  # Note! use absolute path for template_cli 
+  local template_cli="$1"
+  echo -n "Copying files to $drbl_common_root/drbl_ssi for DRBL SSI... "
+  mkdir -p "$drbl_common_root/drbl_ssi/rc1.d"
+  if [ -z "$template_cli" ]; then
+    for ih in $drblroot/*; do
+      # use the 1st one drbl client we found as template
+      if [ -d "$ih" ]; then
+        template_cli="$ih"
+        break
+      fi
+    done
+  fi
+  cp -af $template_cli/$RCX_ROOTDIR/rc1.d/* $drbl_common_root/drbl_ssi/rc1.d/
+  echo "done!"
+} # end of copy_rc1d_for_drbl_ssi
+#
+remove_rc1d_for_drbl_ssi() {
+  # Note! use absolute path for template_cli 
+  local template_cli="$1"
+  echo -n "Resetting files of $drbl_common_root/drbl_ssi for DRBL SSI... "
+  # we just clean the unnecessary files, keep the directory
+  if [ -d "$drbl_common_root/drbl_ssi/rc1.d" ]; then
+    rm -rf $drbl_common_root/drbl_ssi/rc1.d
+  fi
+  echo "done!"
+} # end of remove_rc1d_for_drbl_ssi
+#
+prepare_gdm_custom_conf(){
+  # For ubuntu 9.10, the gdm 2.28.1-0ubuntu does not put /etc/gdm/custom.conf in the deb. It will be added when user creates it.
+  if [ -n "$($query_pkglist_cmd gdm 2>/dev/null | grep -F "/usr/share/doc/gdm/examples/custom.conf")" ]; then
+   # It must be /etc/gdm/custom.conf. We prepare one if not exits.
+   # (1) For server, since drbl-powerful-thin-client might need that:
+   if [ ! -e "/etc/gdm/custom.conf" ]; then
+     cp -a /usr/share/doc/gdm/examples/custom.conf /etc/gdm/custom.conf
+   fi
+   # (2) For client. We always use the one from /usr/share/doc/gdm/examples/custom.conf in case /etc/gdm/custom.conf is modified.
+   cp -af /usr/share/doc/gdm/examples/custom.conf $drbl_common_root/etc/gdm/custom.conf
+   if [ -z "$(grep -E "^\[daemon\]" $drbl_common_root/etc/gdm/custom.conf 2>/dev/null)" ]; then
+     echo "" >> $drbl_common_root/etc/gdm/custom.conf
+     echo "[daemon]" >> $drbl_common_root/etc/gdm/custom.conf
+   fi
+   GDM_CFG="/etc/gdm/custom.conf"
+  fi
+} # end of prepare_gdm_custom_conf
+#
+get_gdm_kdm_conf_filename() {
+  # Get the gdm, kdm config:
+  # Ex: this is the setting for gdm 2.13 before and kdm 2.x/3.x
+  # GDM_CFG="/etc/X11/gdm/gdm.conf"
+  # FAC_GDM_CFG="/etc/X11/gdm/factory-gdm.conf"
+  # KDM_CFG="/etc/kde3/kdm/kdmrc"
+  # For gdm 2.13 or later, different filenames, such as custom.conf, gdm.conf-custom and kdmrc, no more factory-gdm.conf
+  # For Ubuntu 9.10, since upstart use /etc/init/gdm.conf, we have to exclude that.
+  GDM_CFG=""
+  # The order "gdm.conf-custom custom.conf gdm.conf" is important, we put gdm.conf as the last one, since we wan to get only one $GDM_CFG, gdm.conf is always the last one to choose, if we can get gdm.conf-custom or custom.conf, we use that first
+  # Note: Even in SuSE, gdm.conf/custom.conf is in /etc/opt/gnome/gdm/gdm.conf, we can get it by rpm -ql gdm, unlike kdm. It's not necessary to put /etc/ in the beginning.
+  # For OpenSuSE 11.1, /etc/gdm/custom.conf is from package gdm-branding-openSUSE, and there is another same file name /etc/dbus-1/system.d/gdm.conf from package gdm, and /etc/dbus-1/system.d/gdm.conf is NOT what we want.
+  for ipkg in gdm3 gdm gdm-branding-openSUSE; do
+    for ig in daemon.conf gdm.conf-custom custom.conf gdm.conf; do
+      GDM_CFG="$($query_pkglist_cmd $ipkg 2>/dev/null | grep -E "\/$ig$" | grep -Ev "dbus" | grep -Evi "examples" | grep -Evi "\/etc\/init\/")"
+      [ -n "$GDM_CFG" ] && break
+    done
+    [ -n "$GDM_CFG" ] && break
+  done
+  FAC_GDM_CFG="$($query_pkglist_cmd gdm 2>/dev/null | grep -E "\/factory-gdm.conf$")"
+  if [ -z "$GDM_CFG" ]; then
+    prepare_gdm_custom_conf
+  fi
+
+  # kdmrc maybe in package kdm (Debian-based), kdebase (FC), kdebase-kdm-config-file (Mandrake) or kdebase3-kdm (OpenSuSE)
+  # In FC, there are 2 kdmrc:
+  # /etc/X11/xdm/kdmrc
+  # /etc/kde/kdm/kdmrc
+  # But /etc/X11/xdm/kdmrc is actually linked to /etc/kde/kdm/kdmrc, so use either one will be ok.
+  for ipkg in kde4-kdm kdm kdebase kdebase-kdm-config-file kdebase3-kdm; do
+    KDM_CFG="$($query_pkglist_cmd $ipkg 2>/dev/null | grep -E "(\/kdmrc$)" | head -n 1)"
+    if [ -n "$(echo $KDM_CFG | grep -E "^\/opt\/kde")" ]; then
+      # For SuSE 10.1 or earlier, actually the config file is in /etc/opt/kde3/share/config/kdm/kdmrc, therefore put /etc/ in the beginning.
+      # For SuSE 10.2, no more /etc/opt/kde3/share/config/kdm/kdmrc, only /opt/kde3/share/config/kdm/kdmrc
+      # Ref: http://lists.opensuse.org/opensuse-factory/2006-09/msg00021.html
+      [ -e "/etc/$KDM_CFG" ] && KDM_CFG=/etc/$KDM_CFG
+    fi
+    [ -n "$KDM_CFG" ] && break
+  done
+  # For lightdm
+  if [ -e "/etc/lightdm/lightdm.conf" ]; then
+    LIGHTDM_CFG=/etc/lightdm/lightdm.conf
+  fi
+} # end of get_gdm_kdm_conf_filename
+#
+get_block_line_in_gdm_kdm() {
+  local session="$1"
+  local CFG_FILE="$2"
+  [ -e "$CFG_FILE" ] || exit 1
+  # Take xdmcp as an example:
+  # Turn on the Enable=true in [xdmcp]
+  # Enable=true
+  # By using
+  # grep -n "^\[.*\]" gdm.conf |grep -A1 "\[xdmcp\]"                 
+  # We can get the results like:
+  # 175:[xdmcp]
+  # 210:[gui]
+  # so we know we can replace the one between line no. 175 and 210
+  between_lines="$(LC_ALL=C grep -n "^\[.*\]" $CFG_FILE |grep -i -A1 "\[$session\]" | cut -d":" -f1)"
+  begin_line="$(echo $between_lines | awk -F" " '{print $1}')"
+  end_line="$(echo $between_lines | awk -F" " '{print $2}')"
+  # if end_line is nothing, it must be the last block, i.e. we can not find the next [.*]
+  if [ -z "$end_line" ]; then
+    end_line="$(LC_ALL=C wc -l $CFG_FILE | awk -F" " '{print $1}')"
+  else
+    # if not nothing, backword one line
+    end_line="$(($end_line - 1))"
+  fi
+  echo "$begin_line $end_line"
+} # end of get_block_line_in_gdm_kdm
+
+#
+get_dhcpdlease_dir() {
+  if [ -e /etc/debian_version ]; then
+    # Debian
+    if [ -d "/var/lib/dhcp" ]; then
+      DHCPDLEASE_DIR="/var/lib/dhcp"
+    elif [ -d "/var/lib/dhcp3" ]; then
+      DHCPDLEASE_DIR="/var/lib/dhcp3"
+    fi
+  elif [ -e /etc/SuSE-release ]; then
+    # SuSE
+    DHCPDLEASE_DIR="/var/lib/dhcp/db"
+  else
+    # RH-like
+    # FC5: /var/lib/dhcpd/dhcpd.leases
+    # RH 8.0/9, FC1-4: /var/lib/dhcp/dhcpd.leases
+    # So this method is better:
+    DHCPDLEASE_DIR="$(dirname `rpm -ql dhcp | grep -E "dhcpd.leases$"`)"
+  fi
+}
+#
+countdown () {
+ local time_limit="$1"
+ local i
+       ( i="$time_limit"
+         while [ "$i" -ne 0  ]; do
+           echo -n "$i "
+           sleep 1
+           i=$((i-1))
+         done
+       )
+}
+#
+is_drbl_client() {
+  root_src="$(LC_ALL=C mount | grep -Ew "on /" | awk -F" " '{print $1}')"
+  # Example for $root_src: 192.168.50.254:/tftpboot/node_root
+  if [ -n "$(echo $root_src | grep -E "^[[:space:]]*([[:digit:]]+\.){3}[[:digit:]]+:/.*")" ] ; then
+   rc=0
+  else
+   rc=1
+  fi
+  return $rc
+}
+#
+add_param_in_pxelinux_cfg_drbl_related_block() {
+  local PXE_CONF="$1"
+  local param_tmp="$2"
+  [ -z "$param_tmp" ] && echo "You have to assign param_tmp in function add_param_in_pxelinux_cfg_drbl_related_block!" && return 1
+  for iblock in drbl drbl-terminal; do
+    lines="$(get_pxecfg_image_block $iblock $PXE_CONF)"
+    begin_line="$(LC_ALL=C echo $lines | awk -F" " '{print $1}')"
+    end_line="$(LC_ALL=C echo $lines | awk -F" " '{print $2}')"
+    tag_found="$(LC_ALL=C head -n $end_line $PXE_CONF | tail -n $(($end_line-$begin_line)) | grep -Ei "^[[:space:]]*append[[:space:]]*.*[[:space:]]+$param_tmp([[:space:]]+|$)")"
+    if [ -z "$tag_found" ]; then
+      sub_menu_label_cmd="if ($begin_line..$end_line) {s|(^[[:space:]]*append[[:space:]]+.*)|\$1 $param_tmp|i}"
+      perl -pi -e "$sub_menu_label_cmd" $PXE_CONF
+    fi
+  done
+} # end of add_param_in_pxelinux_cfg_drbl_related_block
+#
+del_param_in_pxelinux_cfg_drbl_related_block() {
+  local PXE_CONF="$1"
+  local param_tmp="$2"
+  [ -z "$param_tmp" ] && echo "You have to assign param_tmp in function del_param_in_pxelinux_cfg_drbl_related_block!" && return 1
+  for iblock in drbl drbl-terminal; do
+    lines="$(get_pxecfg_image_block $iblock $PXE_CONF)"
+    begin_line="$(LC_ALL=C echo $lines | awk -F" " '{print $1}')"
+    end_line="$(LC_ALL=C echo $lines | awk -F" " '{print $2}')"
+    tag_found="$(LC_ALL=C head -n $end_line $PXE_CONF | tail -n $(($end_line-$begin_line)) | grep -Ei "^[[:space:]]*append[[:space:]]*.*[[:space:]]+$param_tmp([[:space:]]+|$)")"
+    if [ -n "$tag_found" ]; then
+      sub_menu_label_cmd="if ($begin_line..$end_line) {s|$param_tmp||i}"
+      perl -pi -e "$sub_menu_label_cmd" $PXE_CONF
+    fi
+  done
+} # end of del_param_in_pxelinux_cfg_drbl_related_block
+#
+ocs_advanced_param_post_mode_after_clone() {
+  local ocs_parm="$1" # The file to output the result //NOTE// This is to be append, not overwritten.
+  # For Clonezilla SE mode, we always ask this (reboot, poweroff...) no matter it's advanced or beginner mode.
+  if [ -z "$ocs_postmode" ]; then
+    $DIA --backtitle "$msg_nchc_free_software_labs" --title  \
+    "$msg_clonezilla_advanced_extra_param | $msg_mode: $ocs_mode_prompt" --menu "$msg_choose_post_mode_after_clone:" \
+    0 0 0 $DIA_ESC \
+    "-p reboot "    "$msg_ocs_param_p_reboot" \
+    "-p poweroff "  "$msg_ocs_param_p_poweroff" \
+    "-p choose "    "$msg_ocs_param_p_choose" \
+    "-p true "      "$msg_ocs_param_p_true" \
+    2>> $ocs_parm
+  else
+    echo "-p $ocs_postmode " >> $ocs_parm
+  fi
+} # end of ocs_advanced_param_post_mode_after_clone
+ocs_sr_advanced_param_post_mode_after_clone() {
+  local ocs_parm="$1" # The file to output the result //NOTE// This is to be append, not overwritten.
+  if [ "$ocs_user_mode" = "expert" ]; then
+    $DIA --backtitle "$msg_nchc_free_software_labs" --title  \
+    "$msg_clonezilla_advanced_extra_param | $msg_mode: $ocs_mode_prompt" --menu "$msg_choose_post_mode_after_clone:" \
+    0 0 0 $DIA_ESC \
+    "-p true "      "$msg_ocs_param_p_true" \
+    "-p reboot "    "$msg_ocs_param_p_reboot" \
+    "-p poweroff "  "$msg_ocs_param_p_poweroff" \
+    2>> $ocs_parm
+  else
+    echo "-p true " >> $ocs_parm
+  fi
+} # end of ocs_sr_advanced_param_post_mode_after_clone
+#
+show_z4_or_above_menu_or_not() {
+  # function to show -z4, -z5/z5p, -z6/z6p options
+  if type lzma &>/dev/null; then
+    # "-z4"      "$msg_ocs_param_z4" \
+    ocs_z4_option_1="-z4"
+    ocs_z4_option_2="$(rep_whspc_w_udrsc "$msg_ocs_param_z4")"
+  fi
+  if type xz &>/dev/null; then
+    # "-z5"      "$msg_ocs_param_z5" \
+    ocs_z5_option_1="-z5"
+    ocs_z5_option_2="$(rep_whspc_w_udrsc "$msg_ocs_param_z5")"
+  fi
+  if type pxz &>/dev/null; then
+    # "-z5p"      "$msg_ocs_param_z5p" \
+    ocs_z5p_option_1="-z5p"
+    ocs_z5p_option_2="$(rep_whspc_w_udrsc "$msg_ocs_param_z5p")"
+  fi
+  if type lzip &>/dev/null; then
+    # "-z6"      "$msg_ocs_param_z6" \
+    ocs_z6_option_1="-z6"
+    ocs_z6_option_2="$(rep_whspc_w_udrsc "$msg_ocs_param_z6")"
+  fi
+  if type plzip &>/dev/null; then
+    # "-z6p"      "$msg_ocs_param_z6p" \
+    ocs_z6p_option_1="-z6p"
+    ocs_z6p_option_2="$(rep_whspc_w_udrsc "$msg_ocs_param_z6p")"
+  fi
+  if type lrzip &>/dev/null; then
+    # "-z7"      "$msg_ocs_param_z7" \
+    ocs_z7_option_1="-z7"
+    ocs_z7_option_2="$(rep_whspc_w_udrsc "$msg_ocs_param_z7")"
+  fi
+} # end show_z4_or_above_menu_or_not
+#
+set_drbl_ocs_extra_param() {
+local mode="$1"
+OCS_PARAM_TMP="$2"
+local dev_="$3"
+local vol_size_tmp
+local ASK_VOL_SIZE=1
+vol_size_tmp="$(mktemp /tmp/vol_size_tmp.XXXXXX)"
+
+if [ "$mode" = "restore" ]; then
+  if [ "$ocs_user_mode" = "expert" ]; then
+    $DIA --separate-output --backtitle "$msg_nchc_free_software_labs" --title  \
+    "$msg_clonezilla_advanced_extra_param | $msg_mode: $ocs_mode_prompt" --checklist "$msg_choose_param_to_set_multiple_choices ($msg_press_space_to_mark_selection)" \
+    0 0 0 $DIA_ESC \
+    "-g auto"  "$msg_ocs_param_g_auto" on \
+    "-e1 auto" "$msg_ocs_param_e1_auto" on \
+    "-e2"      "$msg_ocs_param_e2" on \
+    "-x"       "$msg_ocs_param_x" on \
+    "-hn0 $WIN_HOSTNAME_PREFIX"  "$msg_ocs_param_hn0" off \
+    "-hn1 $WIN_HOSTNAME_PREFIX"  "$msg_ocs_param_hn1" off \
+    "-v"       "$msg_ocs_param_v" off \
+    "-nogui"   "$msg_ocs_param_nogui" off \
+    "-c"       "$msg_ocs_param_c" off \
+    "-u"       "$msg_ocs_param_u" off \
+    "-t"       "$msg_ocs_param_t" off \
+    "-t1"      "$msg_ocs_param_t1" off \
+    "-r"       "$msg_ocs_param_r" on \
+    "-ns"      "$msg_ocs_param_ns" off \
+    "-e"       "$msg_ocs_param_e" off \
+    "-icrc"    "$msg_ocs_param_icrc" off \
+    "-irhr"    "$msg_ocs_param_irhr" off \
+    "-ius"     "$msg_ocs_param_ius" off \
+    "-icds"    "$msg_ocs_param_icds" off \
+    "-j1"      "$msg_ocs_param_j1" off \
+    "-j2"      "$msg_ocs_param_j2" on \
+    "-cm"      "$msg_ocs_param_cm" off \
+    "-cs"      "$msg_ocs_param_cs" off \
+    "-f"       "$msg_ocs_param_f" off \
+    "-s"       "$msg_ocs_param_s" off \
+    "-a"       "$msg_ocs_param_a" off \
+    "-o0"      "$msg_ocs_param_o0" off \
+    "-o1"      "$msg_ocs_param_o1" off \
+  2> $OCS_PARAM_TMP
+  else
+    echo "-g auto" "-e1 auto" "-e2" "-r" "-x" "-j2" > $OCS_PARAM_TMP
+  fi
+
+  # About partition table
+  case "$dev_" in 
+  parts)
+    # Partition restore only. default NOT to create partition table
+    if [ "$ocs_user_mode" = "expert" ]; then
+      $DIA --backtitle "$msg_nchc_free_software_labs" --title  \
+      "$msg_clonezilla_advanced_extra_param | $msg_mode: $ocs_mode_prompt" --menu "$msg_choose_param_to_set_single_choice $msg_hint_for_fdisk:" \
+      0 0 0 $DIA_ESC \
+      "-k "      "$msg_ocs_param_k"  \
+      "-k1 "     "$msg_ocs_param_k1"  \
+      "-k2 "     "$msg_ocs_param_k2"  \
+      "-j0 "     "$msg_ocs_param_j0" \
+      " "        "$msg_use_the_part_table_from_image"  \
+      "exit "    "$msg_exit" \
+      2>> $OCS_PARAM_TMP
+    else
+      echo "-k " >> $OCS_PARAM_TMP
+    fi
+    ;;
+  *)
+    # Disk restore, default to create partition table
+    if [ "$ocs_user_mode" = "expert" ]; then
+      $DIA --backtitle "$msg_nchc_free_software_labs" --title  \
+      "$msg_clonezilla_advanced_extra_param | $msg_mode: $ocs_mode_prompt" --menu "$msg_choose_param_to_set_single_choice $msg_hint_for_fdisk:" \
+      0 0 0 $DIA_ESC \
+      " "        "$msg_use_the_part_table_from_image"  \
+      "-k "      "$msg_ocs_param_k"  \
+      "-k1 "     "$msg_ocs_param_k1"  \
+      "-k2 "     "$msg_ocs_param_k2"  \
+      "-j0 "     "$msg_ocs_param_j0" \
+      "exit "    "$msg_exit" \
+      2>> $OCS_PARAM_TMP
+    else
+      echo " " >> $OCS_PARAM_TMP
+    fi
+    ;;
+  esac
+  if grep -Ew "exit" $OCS_PARAM_TMP &>/dev/null; then
+    echo "$msg_program_stop"
+    exit 1
+  fi
+  if grep -Ew "(-k1|k2)" $OCS_PARAM_TMP &>/dev/null; then
+    # k1-2 is different partition size, turn on -r by default
+    if [ -z "$(grep -w "\-r" $OCS_PARAM_TMP)" ]; then
+      echo "Since the mode you choose might resize partition size, we turn on file system resize funtion automatically (-r)..."
+      echo " -r " >> $OCS_PARAM_TMP
+    fi
+  fi
+
+  # about y[0-2]
+  if [ "$ocs_user_mode" = "expert" ]; then
+    $DIA --backtitle "$msg_nchc_free_software_labs" --title  \
+    "$msg_clonezilla_advanced_extra_param | $msg_mode: $ocs_mode_prompt" --menu "$msg_if_always_provide_clonezilla_srv" \
+    0 0 0 $DIA_ESC \
+    ""          "$msg_ocs_param_skip" \
+    "-y0 "      "$msg_ocs_param_y0" \
+    "-y1 "      "$msg_ocs_param_y1" \
+    "-y2 "      "$msg_ocs_param_y2" \
+    2>> $OCS_PARAM_TMP
+  else
+    echo "" >> $OCS_PARAM_TMP
+  fi
+else
+  # save
+  # about -q, -q1, -q2
+  if [ "$ocs_user_mode" = "expert" ]; then
+    $DIA --backtitle "$msg_nchc_free_software_labs" --title  \
+    "$msg_clonezilla_advanced_extra_param | $msg_mode: $ocs_mode_prompt" --menu "$msg_choose_param_for_clone_prog" \
+    0 0 0 $DIA_ESC \
+    "-q2 "       "$msg_ocs_param_q2" \
+    "-q1 "       "$msg_ocs_param_q1" \
+    "-q "        "$msg_ocs_param_q" \
+    " "          "$msg_ocs_param_none_ie_partimage" \
+    2> $OCS_PARAM_TMP
+  else
+    echo "-q2 " > $OCS_PARAM_TMP
+  fi
+
+  if [ "$ocs_user_mode" = "expert" ]; then
+    $DIA --separate-output --backtitle "$msg_nchc_free_software_labs" --title  \
+    "$msg_clonezilla_advanced_extra_param | $msg_mode: $ocs_mode_prompt" --checklist "$msg_choose_param_to_set_multiple_choices ($msg_press_space_to_mark_selection):" \
+    0 0 0 $DIA_ESC \
+    "-c "        "$msg_ocs_param_c" off \
+    "-j2 "       "$msg_ocs_param_j2" on \
+    "-nogui "    "$msg_ocs_param_nogui" off \
+    "-a "        "$msg_ocs_param_a" off \
+    "-f "        "$msg_ocs_param_f" off \
+    "-s "        "$msg_ocs_param_s" off \
+    "-rm-win-swap-hib " "$msg_ocs_param_rm_win_swap_hib" off \
+    "-ntfs-ok "  "$msg_ocs_param_ntfs_ok" off \
+    "-rescue "   "$msg_ocs_param_rescue" off \
+    "-gm "       "$msg_ocs_param_gm" off \
+    "-gs "       "$msg_ocs_param_gs" off \
+    "-o0 "       "$msg_ocs_param_o0" off \
+    "-o1 "       "$msg_ocs_param_o1" off \
+    2>> $OCS_PARAM_TMP
+  else
+    echo "-j2 " >> $OCS_PARAM_TMP
+  fi
+  # Question about fsck the source partition
+  $DIA --backtitle "$msg_nchc_free_software_labs" --title  \
+  "$msg_clonezilla_advanced_extra_param | $msg_mode: $ocs_mode_prompt" --menu "$msg_choose_if_fsck_the_source_part" \
+  0 0 0 $DIA_ESC \
+  " "     "$msg_skip_check_source_fs" \
+  "-fsck-src-part "   "$msg_ocs_param_fsck_src_part" \
+  "-fsck-src-part-y " "$msg_ocs_param_fsck_src_part_yes" \
+  2>> $OCS_PARAM_TMP
+
+  # Question about checking the image is restorable or not
+  $DIA --backtitle "$msg_nchc_free_software_labs" --title  \
+  "$msg_clonezilla_advanced_extra_param | $msg_mode: $ocs_mode_prompt" --menu "$msg_choose_if_checking_image_restorable" \
+  0 0 0 $DIA_ESC \
+  " "     "$msg_ocs_param_check_img_restorable" \
+  "-sc "  "$msg_ocs_param_skip_checking_img_restorable" \
+  2>> $OCS_PARAM_TMP
+fi
+
+ocs_advanced_param_post_mode_after_clone $OCS_PARAM_TMP
+
+# if -hn0|-hn1 is chosen, 
+# (1). prompt the warning about ntfs-3g/nfsmount for ntfs is necessary
+# (2). ask if the hostname prefix want to change
+if grep -qE "\-hn[01]" $OCS_PARAM_TMP; then
+  # part 1.
+  $DIA --title "$msg_change_hostname_of_MS_WIN_on_the_fly" --clear \
+       --msgbox "$msg_write_MS_WIN_is_necessary" 15 70
+
+  # part 2.
+  HNTMP="$(mktemp /tmp/winhn.XXXXXX)"
+  $DIA --backtitle "$msg_nchc_free_software_labs" --title "$msg_nchc_clonezilla" \
+  --inputbox "$msg_What_the_win_hostname_prefix ?" 0 0 "$WIN_HOSTNAME_PREFIX" 2> $HNTMP
+  HN_PREFIX="$(cat $HNTMP)"
+  if [ -z "$HN_PREFIX" ]; then
+     echo "You did not specify the hostname prefix for M$ windows! We use the default value in drbl-ocs.conf"
+  else
+     perl -pi -e "s|(-hn.*) $WIN_HOSTNAME_PREFIX|\$1 $HN_PREFIX|g" $OCS_PARAM_TMP
+  fi
+  [ -f "$HNTMP" ] && rm -f $HNTMP
+fi
+
+if [ "$mode" = "save" ]; then
+  # save
+  show_z4_or_above_menu_or_not
+  if [ "$ocs_user_mode" = "expert" ]; then
+    $DIA --backtitle "$msg_nchc_free_software_labs" --title  \
+    "$msg_clonezilla_advanced_extra_param | $msg_mode: $ocs_mode_prompt" --menu "$msg_choose_one_compression_param_to_save" \
+    0 0 0 $DIA_ESC \
+    "-z1p"     "$msg_ocs_param_z1p" \
+    "-z1"      "$msg_ocs_param_z1" \
+    "-z2p"     "$msg_ocs_param_z2p" \
+    "-z2"      "$msg_ocs_param_z2" \
+    "-z3"      "$msg_ocs_param_z3($msg_note!!)" \
+    $ocs_z4_option_1      $ocs_z4_option_2 \
+    $ocs_z5p_option_1     $ocs_z5p_option_2 \
+    $ocs_z5_option_1      $ocs_z5_option_2 \
+    $ocs_z6p_option_1     $ocs_z6p_option_2 \
+    $ocs_z6_option_1      $ocs_z6_option_2 \
+    $ocs_z7_option_1      $ocs_z7_option_2 \
+    "-z0"      "$msg_ocs_param_z0" \
+    2>> $OCS_PARAM_TMP
+    # We need to append a space after this parameter so it won't be connected to next parameter.
+    echo -n " " >> $OCS_PARAM_TMP
+  else
+    echo "-z1p " >> $OCS_PARAM_TMP
+  fi
+  # About image volume size
+  if [ -z "$dcs_img_vol_limit" ]; then
+    trap "[ -f "$vol_size_tmp" ] && rm -f $vol_size_tmp" HUP INT QUIT TERM EXIT
+    while [ "$ASK_VOL_SIZE" -ne 0 ]; do
+      $DIA --backtitle "$msg_nchc_free_software_labs" --title  \
+      "$msg_clonezilla_advanced_extra_param | $msg_mode: $ocs_mode_prompt" --inputbox "$msg_set_image_volume_size" \
+      0 0 $VOL_LIMIT_DEFAULT \
+      2> $vol_size_tmp
+      if [ -n "$(cat $vol_size_tmp | grep -iE "[^[:digit:]]")" ]; then
+        ASK_VOL_SIZE=1
+        $DIA --backtitle "$msg_nchc_free_software_labs" --title "$msg_nchc_clonezilla | $msg_mode: $ocs_mode_prompt" \
+        --msgbox "$msg_enter_digits_only\n$msg_please_do_it_again!!!" 0 0 
+      else
+        ASK_VOL_SIZE=0
+      fi
+    done
+    echo "-i $(cat $vol_size_tmp)" >> $OCS_PARAM_TMP
+    [ -f "$vol_size_tmp" ] && rm -f $vol_size_tmp
+  else
+    echo "-i $dcs_img_vol_limit" >> $OCS_PARAM_TMP
+  fi
+fi
+# Force to strip the unnecessary quotation ', this is specially for dialog (from cdialog) in Mandriva and same reason to strip the unnecessary double quotation ", this is sepcially for dialog in OpenSuSE 11.1. Otherwise it will cause -p reboot become (containing space) '-p reboot', which is wrong option in dcs.
+LC_ALL=C perl -pi -e "s/\'//g" $OCS_PARAM_TMP
+LC_ALL=C perl -pi -e "s/\"//g" $OCS_PARAM_TMP
+
+} # end of set_drbl_ocs_extra_param
+
+#
+set_ocs_sr_extra_param() {
+# This function is used to be called inside ocs-sr, not from other program.
+local mode="$1"
+OCS_PARAM_TMP="$2"
+local mode2_="$3"
+local cpu_no
+local vol_size_tmp
+local ASK_VOL_SIZE=1
+vol_size_tmp="$(mktemp /tmp/vol_size_tmp.XXXXXX)"
+
+if [ "$mode" = "restore" ]; then
+  # Although -u/-y0/-y1 is shown in ocs-sr, but actually they are used to
+  # pass the varialbe, and in this function, when chooing parameters, we
+  # remove them on purpose. Since the necessay parameters will be assigned by
+  # drbl-ocs (Ex: we use "-y1 -p choose" in drbl-ocs)
+  if [ "$ocs_user_mode" = "expert" ]; then
+    $DIA --separate-output --backtitle "$msg_nchc_free_software_labs" --title  \
+    "$msg_clonezilla_advanced_extra_param | $msg_mode: $ocs_mode_prompt" --checklist "$msg_choose_param_to_set_multiple_choices ($msg_press_space_to_mark_selection)" \
+    0 0 0 $DIA_ESC \
+    "-g auto"  "$msg_ocs_param_g_auto" on \
+    "-e1 auto" "$msg_ocs_param_e1_auto" on \
+    "-e2"      "$msg_ocs_param_e2" on \
+    "-hn0 $WIN_HOSTNAME_PREFIX"  "$msg_ocs_param_hn0" off \
+    "-hn1 $WIN_HOSTNAME_PREFIX"  "$msg_ocs_param_hn1" off \
+    "-v"       "$msg_ocs_param_v" off \
+    "-nogui"   "$msg_ocs_param_nogui" off \
+    "-batch"   "$msg_ocs_param_b" off \
+    "-c"       "$msg_ocs_param_c" on \
+    "-t"       "$msg_ocs_param_t" off \
+    "-t1"      "$msg_ocs_param_t1" off \
+    "-r"       "$msg_ocs_param_r" on \
+    "-e"       "$msg_ocs_param_e" off \
+    "-icrc"    "$msg_ocs_param_icrc" off \
+    "-irhr"    "$msg_ocs_param_irhr" off \
+    "-ius"     "$msg_ocs_param_ius" off \
+    "-icds"    "$msg_ocs_param_icds" off \
+    "-j1"      "$msg_ocs_param_j1" off \
+    "-j2"      "$msg_ocs_param_j2" on \
+    "-cm"      "$msg_ocs_param_cm" off \
+    "-cs"      "$msg_ocs_param_cs" off \
+    "-a"       "$msg_ocs_param_a" off \
+    "-o0"      "$msg_ocs_param_o0" off \
+    "-o1"      "$msg_ocs_param_o1" off \
+    2> $OCS_PARAM_TMP
+  else
+    echo "-g auto" "-e1 auto" "-e2" "-c" "-r" "-j2" > $OCS_PARAM_TMP
+  fi
+
+  # About partition table
+  case "$mode2_" in 
+    "restoreparts") 
+      # Partition restore only. default NOT to create partition table
+      if [ "$ocs_user_mode" = "expert" ]; then
+        $DIA --backtitle "$msg_nchc_free_software_labs" --title  \
+        "$msg_clonezilla_advanced_extra_param | $msg_mode: $ocs_mode_prompt" --menu "$msg_choose_param_to_set_single_choice $msg_hint_for_fdisk:" \
+        0 0 0 $DIA_ESC \
+        "-k "      "$msg_ocs_param_k"  \
+        "-k1 "     "$msg_ocs_param_k1"  \
+        "-k2 "     "$msg_ocs_param_k2"  \
+        "-j0 "     "$msg_ocs_param_j0" \
+        " "        "$msg_use_the_part_table_from_image"  \
+        "exit "    "$msg_exit" \
+        2>> $OCS_PARAM_TMP
+      else
+        echo "-k " >> $OCS_PARAM_TMP
+      fi
+      ;;
+    *)
+      # Disk restore, default to create partition table
+      if [ "$ocs_user_mode" = "expert" ]; then
+        $DIA --backtitle "$msg_nchc_free_software_labs" --title  \
+        "$msg_clonezilla_advanced_extra_param | $msg_mode: $ocs_mode_prompt" --menu "$msg_choose_param_to_set_single_choice $msg_hint_for_fdisk:" \
+        0 0 0 $DIA_ESC \
+        " "        "$msg_use_the_part_table_from_image"  \
+        "-k "      "$msg_ocs_param_k"  \
+        "-k1 "     "$msg_ocs_param_k1"  \
+        "-k2 "     "$msg_ocs_param_k2"  \
+        "-j0 "     "$msg_ocs_param_j0" \
+        "exit "    "$msg_exit" \
+        2>> $OCS_PARAM_TMP
+      else
+        echo " " >> $OCS_PARAM_TMP
+      fi
+      ;;
+  esac
+  if grep -Ew "exit" $OCS_PARAM_TMP &>/dev/null; then
+    echo "$msg_program_stop"
+    exit 1
+  fi
+  if grep -Ew "(-k1|k2)" $OCS_PARAM_TMP &>/dev/null; then
+    # k1-2 is different partition size, turn on -r by default
+    echo "Since the mode you choose might resize partition size, we turn on file system resize funtion automatically (-r)..."
+    echo " -r " >> $OCS_PARAM_TMP
+  fi
+else
+  # save
+  # about -q, -q1, -q2
+  if [ "$ocs_user_mode" = "expert" ]; then
+    $DIA --backtitle "$msg_nchc_free_software_labs" --title  \
+    "$msg_clonezilla_advanced_extra_param | $msg_mode: $ocs_mode_prompt" --menu "$msg_choose_param_for_clone_prog" \
+    0 0 0 $DIA_ESC \
+    "-q2 "       "$msg_ocs_param_q2" \
+    "-q1 "       "$msg_ocs_param_q1" \
+    "-q "        "$msg_ocs_param_q" \
+    " "          "$msg_ocs_param_none_ie_partimage" \
+    2> $OCS_PARAM_TMP
+  else
+    echo "-q2 " > $OCS_PARAM_TMP
+  fi
+
+  if [ "$ocs_user_mode" = "expert" ]; then
+    $DIA --separate-output --backtitle "$msg_nchc_free_software_labs" --title  \
+    "$msg_clonezilla_advanced_extra_param | $msg_mode: $ocs_mode_prompt" --checklist "$msg_choose_param_to_set_multiple_choices ($msg_press_space_to_mark_selection):" \
+    0 0 0 $DIA_ESC \
+    "-c "       "$msg_ocs_param_c" on \
+    "-j2 "      "$msg_ocs_param_j2" on \
+    "-nogui "   "$msg_ocs_param_nogui" off \
+    "-a "       "$msg_ocs_param_a" off \
+    "-rm-win-swap-hib " "$msg_ocs_param_rm_win_swap_hib" off \
+    "-ntfs-ok " "$msg_ocs_param_ntfs_ok" off \
+    "-rescue "  "$msg_ocs_param_rescue" off \
+    "-gm "      "$msg_ocs_param_gm" off \
+    "-gs "      "$msg_ocs_param_gs" off \
+    2>> $OCS_PARAM_TMP
+  else
+    echo "-c " "-j2 " >> $OCS_PARAM_TMP
+  fi
+fi
+
+# if -hn0|-hn1 is chosen, 
+# (1). prompt the warning about ntfs-3g/nfsmount for ntfs is necessary
+# (2). ask if the hostname prefix want to change
+if grep -qE "\-hn[01]" $OCS_PARAM_TMP; then
+  # part 1.
+  $DIA --title "$msg_change_hostname_of_MS_WIN_on_the_fly" --clear \
+       --msgbox "$msg_write_MS_WIN_is_necessary" 15 70
+
+  # part 2.
+  HNTMP="$(mktemp /tmp/winhn.XXXXXX)"
+  $DIA --backtitle "$msg_nchc_free_software_labs" --title "$msg_nchc_clonezilla" \
+  --inputbox "$msg_What_the_win_hostname_prefix ?" 0 0 "$WIN_HOSTNAME_PREFIX" 2> $HNTMP
+  HN_PREFIX="$(cat $HNTMP)"
+  if [ -z "$HN_PREFIX" ]; then
+     echo "You did not specify the hostname prefix for M$ windows! We use the default value in drbl-ocs.conf"
+  else
+     perl -pi -e "s|(-hn.*) $WIN_HOSTNAME_PREFIX|\$1 $HN_PREFIX|g" $OCS_PARAM_TMP
+  fi
+  [ -f "$HNTMP" ] && rm -f $HNTMP
+fi
+
+if [ "$mode" = "save" ]; then
+  cpu_no="$(LC_ALL=C grep -iE "^processor" /proc/cpuinfo | wc -l)" 
+  # Due to the extra space required after -z1p, we can NOT use variable like this:
+  # if [ "$cpu_no" -gt 1 ]; then
+  #   z1p_option_1="-z1p "
+  #   z1p_option_2="$msg_ocs_param_z1p"
+  # else
+  #   z1p_option_1=""
+  #   z1p_option_2=""
+  # fi
+  # $DIA --backtitle "$msg_nchc_free_software_labs" --title  \
+  # "$msg_clonezilla_advanced_extra_param" --menu "$msg_choose_one_compression_param_to_save" \
+  # 0 0 0 $DIA_ESC \
+  # "-z1 "            "$msg_ocs_param_z1" \
+  # $z1p_option_1     $z1p_option_2 \
+  # "-z2 "            "$msg_ocs_param_z2" \
+  # "-z3 "            "$msg_ocs_param_z3" \
+  # "-z0 "            "$msg_ocs_param_z0" \
+  # 2>> $OCS_PARAM_TMP
+  show_z4_or_above_menu_or_not
+  if [ "$cpu_no" -gt 1 ]; then
+    # Show -z1p
+    if [ "$ocs_user_mode" = "expert" ]; then
+      $DIA --backtitle "$msg_nchc_free_software_labs" --title  \
+      "$msg_clonezilla_advanced_extra_param | $msg_mode: $ocs_mode_prompt" --menu "$msg_choose_one_compression_param_to_save" \
+      0 0 0 $DIA_ESC \
+      "-z1p"           "$msg_ocs_param_z1p" \
+      "-z1"            "$msg_ocs_param_z1" \
+      "-z2p"           "$msg_ocs_param_z2p" \
+      "-z2"            "$msg_ocs_param_z2" \
+      "-z3"            "$msg_ocs_param_z3($msg_note!!)" \
+      $ocs_z4_option_1      $ocs_z4_option_2 \
+      $ocs_z5p_option_1     $ocs_z5p_option_2 \
+      $ocs_z5_option_1      $ocs_z5_option_2 \
+      $ocs_z6p_option_1     $ocs_z6p_option_2 \
+      $ocs_z6_option_1      $ocs_z6_option_2 \
+      $ocs_z7_option_1      $ocs_z7_option_2 \
+      "-z0"            "$msg_ocs_param_z0" \
+      2>> $OCS_PARAM_TMP
+      # We need to append a space after this parameter so it won't be connected to next parameter.
+      echo -n " " >> $OCS_PARAM_TMP
+    else
+      echo "-z1p " >> $OCS_PARAM_TMP
+    fi
+  else
+    # Hide -z1p, z2p...
+    if [ "$ocs_user_mode" = "expert" ]; then
+      $DIA --backtitle "$msg_nchc_free_software_labs" --title  \
+      "$msg_clonezilla_advanced_extra_param | $msg_mode: $ocs_mode_prompt" --menu "$msg_choose_one_compression_param_to_save" \
+      0 0 0 $DIA_ESC \
+      "-z1"            "$msg_ocs_param_z1" \
+      "-z2"            "$msg_ocs_param_z2" \
+      "-z3"            "$msg_ocs_param_z3($msg_note!!)" \
+      $ocs_z4_option_1      $ocs_z4_option_2 \
+      $ocs_z5_option_1      $ocs_z5_option_2 \
+      $ocs_z6_option_1      $ocs_z6_option_2 \
+      $ocs_z7_option_1      $ocs_z7_option_2 \
+      "-z0"            "$msg_ocs_param_z0" \
+      2>> $OCS_PARAM_TMP
+      # We need to append a space after this parameter so it won't be connected to next parameter.
+      echo -n " " >> $OCS_PARAM_TMP
+    else
+      echo "-z1 " >> $OCS_PARAM_TMP
+    fi
+  fi
+
+  # About image volume size
+  if [ "$ocs_user_mode" = "expert" ]; then
+    trap "[ -f "$vol_size_tmp" ] && rm -f $vol_size_tmp" HUP INT QUIT TERM EXIT
+    while [ "$ASK_VOL_SIZE" -ne 0 ]; do
+      $DIA --backtitle "$msg_nchc_free_software_labs" --title  \
+      "$msg_clonezilla_advanced_extra_param | $msg_mode: $ocs_mode_prompt" --inputbox "$msg_set_image_volume_size" \
+      0 0 $VOL_LIMIT_IN_INTERACTIVE\
+      2> $vol_size_tmp
+      if [ -n "$(cat $vol_size_tmp | grep -iE "[^[:digit:]]")" ]; then
+        ASK_VOL_SIZE=1
+        $DIA --backtitle "$msg_nchc_free_software_labs" --title "$msg_nchc_clonezilla | $msg_mode: $ocs_mode_prompt" \
+        --msgbox "$msg_enter_digits_only\n$msg_please_do_it_again!!!" 0 0 
+      else
+        ASK_VOL_SIZE=0
+      fi
+    done
+    echo "-i $(cat $vol_size_tmp)" >> $OCS_PARAM_TMP
+    [ -f "$vol_size_tmp" ] && rm -f $vol_size_tmp
+  else
+    echo "-i $VOL_LIMIT_IN_INTERACTIVE" >> $OCS_PARAM_TMP
+  fi
+  # Question about fsck the source partition
+  $DIA --backtitle "$msg_nchc_free_software_labs" --title  \
+  "$msg_clonezilla_advanced_extra_param | $msg_mode: $ocs_mode_prompt" --menu "$msg_choose_if_fsck_the_source_part" \
+  0 0 0 $DIA_ESC \
+  " "     "$msg_skip_check_source_fs" \
+  "-fsck-src-part "   "$msg_ocs_param_fsck_src_part" \
+  "-fsck-src-part-y " "$msg_ocs_param_fsck_src_part_yes" \
+  2>> $OCS_PARAM_TMP
+  
+  # Question about checking the image is restorable or not
+  $DIA --backtitle "$msg_nchc_free_software_labs" --title  \
+  "$msg_clonezilla_advanced_extra_param | $msg_mode: $ocs_mode_prompt" --menu "$msg_choose_if_checking_image_restorable" \
+  0 0 0 $DIA_ESC \
+  " "     "$msg_ocs_param_check_img_restorable" \
+  "-sc "  "$msg_ocs_param_skip_checking_img_restorable" \
+  2>> $OCS_PARAM_TMP
+fi
+
+ocs_sr_advanced_param_post_mode_after_clone $OCS_PARAM_TMP
+
+# Force to strip the unnecessary quotation ', this is specially for dialog (from cdialog) in Mandriva and same reason to strip the unnecessary double quotation ", this is sepcially for dialog in OpenSuSE 11.1. Otherwise it will cause -p reboot become (containing space) '-p reboot', which is wrong option in dcs.
+LC_ALL=C perl -pi -e "s/\'//g" $OCS_PARAM_TMP
+LC_ALL=C perl -pi -e "s/\"//g" $OCS_PARAM_TMP
+
+} # end of set_ocs_sr_extra_param
+#
+check_DIA_set_ESC(){
+  # function to check dialog/Xdialog/whiptail
+  # DIA_ESC is global variable, 
+  # man dialog:
+  # A "--" by itself is used as an escape, i.e., the next token on the com-
+  # mand-line is not treated as an option.
+  # dialog --title -- --Not an option
+  # 3 cases if those Not an option is like (-g auto, -x...):
+  # (1) dialog can go with or without --
+  # (2) Xdialog can NOT go with --
+  # (3) whiptail can go only with --
+  local dia_="$1"
+  # check DIA
+  if ! type $dia_ &>/dev/null; then
+     [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+     echo "$dia_: command not found!"
+     [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+     echo "Program terminated!!!"
+     exit 1
+  fi
+  case "$dia_" in
+    dialog|[Xgk]dialog) DIA_ESC="" ;;
+    whiptail) DIA_ESC="--" ;;
+  esac
+} # end of check_DIA_set_ESC
+#
+check_if_run_in_drbl_server() {
+  local prog="$1"
+  # check if it s run in drbl server
+  if [ ! -d "$PXELINUX_DIR" ]; then
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+    echo "[$LOGNAME] You should run this program $prog in DRBL server, NOT in DRBL client or other machine."
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+    echo "Program terminated!"
+    exit 1
+  fi
+}
+dialog_like_prog_help_prompt() {
+   echo " -d0, --dialog         Use dialog"
+   echo " -d1, --Xdialog        Use Xdialog"
+   echo " -d2, --whiptail       Use whiptail"
+   echo " -d3, --gdialog        Use gdialog"
+   echo " -d4, --kdialog        Use kdialog"
+}
+root_over_nfs() {
+  local root_over_nfs
+  root_over_nfs="$(grep -Ew "^[[:space:]]*([[:digit:]]+\.){3}[[:digit:]]+:/tftpboot/node_root([[:space:]]+|$)" /proc/mounts | awk -F " " '{print $2}')"
+  if [ "$root_over_nfs" = "/" ]; then
+    echo "yes"
+    rc=0
+  else
+    echo "no"
+    rc=1
+  fi
+  return $rc
+}
+#
+get_dir_filesystem(){
+  # function to show the filesystem of input dir
+  local target_dir="$1"
+  local df_list
+  [ -z "$target_dir" ] && return 1
+  # merge the  df -T output as one line, otherwise for some version of df with nfs, the results is in 2 lines like:
+  # [root@co50102 tmp]# LC_ALL=C df -T /home/partimag/
+  #    Filesystem    Type   1K-blocks      Used Available Use% Mounted on
+  #    192.168.205.254:/home
+  #                   nfs     7395808   3855328   3158752  55% /home
+  df_list="$(LC_ALL=C df -T $target_dir | tail -n +2)"
+  echo $df_list | awk -F" " '{print $2}'
+}
+
+# Copyright (C) 2007 Bryan McLellan <btm@loftninjas.org>
+# Licensed under the GNU GPL version 2 or greater, see COPYING
+# generate a random password of length passed out of characters in array char. returns password in $random_password
+# replaces external perl password generation script
+# Modified by Steven Shiau, remove 0, 1, add [ ] ^ ! $ %
+make_random_password(){ 
+  local randchar=""
+  [ -z "$1" ] && lenpass=6 || lenpass=$1
+
+  # To avoid confusing, no 0, 1 for passwd, the O (oh) and l (L) will be clear. 
+  char=(A B C D E F G H I J K L M N O P Q R S T U V W X Y Z a b c d e f g h i j k l m n o p q r s t u v w x y z 2 3 4 5 6 7 8 9 \[ \] ^ ! \$ %)
+  lenchars=${#char[*]}
+
+  for (( x=0 ; x<${lenpass} ; x+=1 ));
+  do
+    let rand=${RANDOM}%${lenchars}
+    randchar=${randchar}${char[$rand]}
+  done
+
+  random_password=${randchar}
+}
+#
+is_boot_from_live() {
+  # function to check if the running OS is boot from live cd/usb stick ?
+  if [ -e /etc/debian_version -a \
+       -n "$(grep -iEo "(boot=casper|boot=live)" /proc/cmdline)" ]; then
+     return 0
+  else
+     return 1
+  fi
+}
+#
+config_drbl_live_network(){
+  # This function only works for Debian based network setting.
+  # drbl_live_private_IP_alias_eth_def is global variable from drbl.conf.
+  echo "Detecting the network status..."
+  eth_port_no="$(LC_ALL=C get-nic-devs | wc -l)"
+  configured_ip_no="$(LC_ALL=C get-all-nic-ip -i | wc -w)"
+  while [ "$configured_ip_no" -lt "$eth_port_no" ]; do
+    [ -n "$(LC_ALL=C route -n | grep -E "^0.0.0.0")" ] && config_gw_opt="--ignore-gw"
+    [ -n "$(LC_ALL=C grep -E "^[[:space:]]*nameserver[[:space:]]+\b(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\b" /etc/resolv.conf 2>/dev/null)" ] && config_dns_opt="--ignore-dns"
+    # find the configured ports, we will exclude them.
+    eth_ports="$(LC_ALL=C get-nic-devs)"
+    configured_port_list=""
+    for i in $eth_ports; do
+      if [ -n "$(LC_ALL=C drbl-get-ipadd $i)" ]; then
+       configured_port_list="$configured_port_list $i"
+      fi
+    done
+    echo "The ethernet port(s) already configured: $configured_port_list"
+    if [ -n "$configured_port_list" ]; then
+      ocs-live-netcfg --ip-add " " $config_gw_opt $config_dns_opt --ignore-dv "$configured_port_list"
+    else
+      ocs-live-netcfg --ip-add " " $config_gw_opt $config_dns_opt
+    fi
+    configured_ip_no="$(get-all-nic-ip -i | wc -w)"
+    [ "$configured_ip_no" -eq "$eth_port_no" ] && break
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+    echo $msg_do_not_assign_default_gw_for_DRBL_NIC
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+    echo "$msg_continue_to_conf_another_NIC"
+    echo -n "[Y/n] "
+    read continue_conf_eth
+    case "$continue_conf_eth" in
+       n|N|[nN][oO]) break ;;
+    esac
+  done
+
+  IP_no="$(get-all-nic-ip -i | wc -w)"
+  if [ "$IP_no" -eq 0 ]; then
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+    echo $msg_no_ip_address_is_configured
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+    echo "$msg_program_stop"
+    exit 1
+  elif [ "$IP_no" -eq 1 ]; then
+    if [ -z "$limit_pxe_drbl_client" ]; then
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+      echo "$msg_one_NIC_one_IP_limitation_prompt"
+      echo "$msg_if_lease_IP_add_to_pxe_etherboot_only"
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+      echo -n "[Y/n] "
+      read limit_pxe_drbl_client_ans
+      case "$limit_pxe_drbl_client_ans" in
+         n|N|[nN][oO]) limit_pxe_drbl_client="no" ;;
+         *) limit_pxe_drbl_client="yes" ;;
+      esac
+    else
+      case "$limit_pxe_drbl_client" in
+         n|N|[nN][oO]|y|Y|[yY][eE][sS]) true ;;
+         *) 
+            [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+            echo "\"$limit_pxe_drbl_client\" is an unknown or unsupported option for limit_pxe_drbl_client."
+            [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+            echo "$msg_program_stop"
+            exit 1
+            ;;
+      esac
+    fi
+    echo -n "$msg_only_one_IP_so_create_alias_IP "
+    alias_done="no"
+    i="$drbl_live_private_IP_alias_eth_def"
+    while [ "$alias_done" = "no" ]; do
+      if ! ping -c 3 192.168.$i.254 &>/dev/null; then
+        ifconfig eth0:1 192.168.$i.254 netmask 255.255.255.0
+        alias_done="yes"
+      else
+        i=$((i+1))
+      fi
+    done
+    if ! egrep -e "^auto[[:space:]]+eth0:1" /etc/network/interfaces; then
+      cat <<-NET_END >> /etc/network/interfaces
+auto eth0:1
+iface eth0:1 inet static
+	address 192.168.$i.254
+	netmask 255.255.255.0
+NET_END
+    fi
+    echo "$msg_done!"
+  else
+    # More than one IP address, so it's not necessary to use alias IP address.
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+    echo $msg_more_than_1_IP_some_for_DRBL_clients
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+  fi
+  if [ -z "$(LC_ALL=C route -n | grep -E "^0.0.0.0")" ]; then
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+    echo "No default gateway was configured! Did you enter it or the input gateway is the correct one ?"
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+    echo "The routing table:"
+    echo "---------------------------------------------------------"
+    LC_ALL=C route -n
+    echo "---------------------------------------------------------"
+    echo "$msg_program_stop"
+    exit 1
+  fi
+} # end of config_drbl_live_network
+#
+get_existing_language(){
+   # show existing language file
+   local ANS_TMP=$1
+   local rec_lang=
+   local lang_shown
+   local TMP=`mktemp /tmp/ocs.XXXXXX`
+   trap "[ -f "$TMP" ] && rm -f $TMP" HUP INT QUIT TERM EXIT
+   numfiles=`LC_ALL=C ls $DRBL_SCRIPT_PATH/lang/bash/*.UTF-8 2> /dev/null | wc -l`
+   numfiles=`LC_ALL=C expr $numfiles + 0`
+   # list the previous saved images
+   # the list of images can be put in one page
+   filelist=""
+   numfiles=0
+   for file in $DRBL_SCRIPT_PATH/lang/bash/*.UTF-8; do
+     fileinfo="$(basename $file)"
+     fileinfo_="$(echo $fileinfo | sed -e "s/\.UTF-8//g")"
+     # Convert to human can read, i.e. show "English" instead of "en_US"
+     eval lang_shown=\$msg_locale_${fileinfo_}
+     # Replace the space with "-" so that dialog won't fail.
+     lang_shown="$(LC_ALL=C echo $lang_shown | sed -r -e "s/[[:space:]]/_/g")"
+     if [ -n "$lang_shown" ]; then
+       filelist="$filelist $fileinfo $lang_shown"
+     else
+       filelist="$filelist $fileinfo $fileinfo_"
+     fi
+     numfiles=`LC_ALL=C expr $numfiles + 1`
+   done
+   # Find the system lang setting "ocs_lang"
+   [ -e "/etc/ocs/ocs-live.conf" ] && . /etc/ocs/ocs-live.conf
+   if [ -n "$ocs_lang" ]; then
+     preferred_lang_opt="--default-item $ocs_lang"
+   fi
+
+   if [ "$numfiles" -gt 0 ]; then
+     if [ "$numfiles" -lt "$MAX_DIALOG_HEIGHT" ]; then
+       height="$numfiles"
+     else
+       height="$MAX_DIALOG_HEIGHT"
+     fi
+     $DIA \
+       --backtitle "$msg_nchc_free_software_labs" \
+       --title "$msg_nchc_clonezilla | $msg_mode: $ocs_mode_prompt" \
+       $preferred_lang_opt \
+       --menu "$msg_choose_the_language_in_recovery_iso_zip:" 0 0 \
+       $height $filelist 2> $TMP
+     rec_lang="$(cat $TMP)"
+   else
+     [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+     echo "No lanaguage file was found! $msg_program_stop!!!"
+     [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+     exit 1
+   fi
+   [ -f "$TMP" ] && rm -f $TMP
+   # return the valule
+   echo $rec_lang > $ANS_TMP
+} # end of get_existing_language
+#
+gen_locale_if_not_found() {
+  local lang_region_tmp="$1"
+  local lang_tmp="$2"
+  # Generate locale files.
+  # The outputs for localedef --list-archive are like:
+  # en_US.utf8
+  # zh_TW.utf8
+  # While we use en_US.UTF-8 or zh_TW.UTF-8 as the locale.
+  # If it's not a archive, the locales will be saved as the name of a subdirectory in /usr/lib/locale where per-category compiled files are placed.
+  [ -z "$lang_region_tmp" ] && echo "You should assign lang_region_tmp in function gen_locale_if_not_found!!!" && exit 1
+  [ -z "$lang_tmp" ] && echo "You should assign lang_tmp in function gen_locale_if_not_found!!!" && exit 1
+  if [ -z "$(localedef --list-archive | sed -e 's|\.utf8|.UTF-8|g' | grep -iw "$lang_tmp")" ] && \
+     [ -z "$(unalias ls 2>/dev/null; ls /usr/lib/locale 2>/dev/null | sed -e 's|\.utf8|.UTF-8|g' | grep -iw "$lang_tmp")" ]
+  then 
+    echo -n "Generating locale $lang_tmp by: localedef -f UTF-8 -i $lang_region_tmp $lang_tmp... "
+    localedef -f UTF-8 -i $lang_region_tmp $lang_tmp
+    echo "done!"
+  fi
+} # end of gen_locale_if_not_found
+#
+parse_cmdline_option() {
+  # The reason we have this function is some boot parameter is like xxx="-k -x", therefore we can not just use 
+  # case $param in
+  # xxx=*) ...
+  # method, since it won't catch the right xxx. It will just catch xxx="-k.
+  # //NOTE// This function won't work for those boot parameter can not be a varialble, e.g. live-boot-media (with -, it's not a legal variable), since if we assign it by ". live-boot-media=/live-hd", it will failed.
+  local param_ parse_tmp cmdl_file
+  #
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      -c|--cmdline-file)
+         shift
+         if [ -z "$(echo $1 |grep ^-.)" ]; then
+           # skip the -xx option, in case 
+           cmdl_file="$1"
+           shift
+         fi
+         [ -z "$cmdl_file" ] && echo "-c is used, but no cmdl_file assigned." && exit 1
+         ;;
+      -*) echo "${0}: ${1}: invalid option" >&2
+          exit 2 ;;
+      *)  break ;;
+    esac
+  done
+  param_="$1"
+  parse_tmp="$(mktemp /tmp/cmdtmp.XXXXXX)"
+
+  [ -z "$cmdl_file" ] && cmdl_file="/proc/cmdline"
+  if [ ! -e "$cmdl_file" ]; then
+    echo "cmdl_file ($cmdl_file) does _NOT_ exist!"
+    exit 1
+  fi
+
+  for ik in $param_; do
+    # The parameter maybe like: xxx=xyz, xxx="xyz", xxx="-k -x", or "xxx=-k -x" (see below)
+    ###
+    # The 1st 3 are cases xxx="-k -x", xxx="xyz" or "xxx=a b c", it allows spaces between " "
+    # Possible complicated commands:
+    # ocs_prerun="sshfs -o nonempty -p 22 root@myhost.mymachine:/home/partimag/ /home/partimag"
+    # ocs_prerun="mount -t cifs -o username=user,password=pass //127.0.0.1/test /home/partimag"
+    # ocs_prerun="sudo mount -t cifs -o user=ghost,password=ghost123 //192.168.1.1/tftpboot$/images/clonezilla /home/partimag" # Ref: https://sourceforge.net/projects/clonezilla/forums/forum/663168/topic/4589215, for samba share with hidden share, a "$" is in the end of dir name.
+    # Therefore we have to add "/" ":" "=" "," "@", "\\$"
+    #
+    # For gurb2 1.99, although \" is put in boot parameter, it will be shown.
+    # 3 cases:
+    # Boot parameters           /proc/cmdline
+    # ocs_prerun="sleep 5"      "ocs_prerun=sleep 5" (Yes, with " in the beginning and in the end.
+    # ocs_prerun='sleep 5'      "ocs_prerun=sleep 5"
+    # ocs_prerun=\"sleep 5\"    ocs_prerun=\"sleep 5\"
+    # So far for syslinux (4.04), no such problem. Just use ocs_prerun="sleep 5".
+    # ///NOTE/// We can not make it in _one_ case like this:
+    # LC_ALL=C grep -oE -- "(\"|)*$ik=(\\\\\"|\")*([[:space:]]|[[:alnum:]]|_|-|\.|\/|:|=|,|@|\\$|>|\^|\*)*(\\\\\"|\")*([[:space:]]|$)+" $cmdl_file | sed -r -e "s|=\\\\\"|=\"|g" -e "s@\\\\\"([[:space:]]|$)+@\"@g" | sed -r -e 's|^\"(.*)=|\1=\"|g' > $parse_tmp
+    # Since it might get wrong parsing like this:
+    # root@debian:~# cat /proc/cmdline 
+    # initrd=/live/initrd.img boot=live config  noswap nolocales edd=on nomodeset ocs_live_run="ocs-live-general" ocs_live_extra_param="" ocs_live_keymap="" ocs_live_batch="no" ocs_lang="" vga=788 ip=frommedia  nosplash BOOT_IMAGE=/live/vmlinuz 
+    # root@debian:~# grep -oE -- '("|)*ocs_lang=(\\"|")*([[:space:]]|[[:alnum:]]|_|-|\.|\/|:|=|,|@|\$|>|\^|\*)*(\\"|")*([[:space:]]|$)+' /proc/cmdline
+    # ocs_lang="" vga=788 ip=frommedia  nosplash BOOT_IMAGE=/live/vmlinuz <- WRONG RESULT. We just want ocs_lang=""
+    if LC_ALL=C grep -Eq "($ik=\"|$ik=\\\\\")" $cmdl_file; then
+      # For case like: ocs_prerun="sleep 5" or ocs_prerun=\"sleep 5\"
+      LC_ALL=C grep -oE -- "$ik=(\"|\\\\\")([[:space:]]|[[:alnum:]]|_|-|\.|\/|:|=|,|@|\\$|>|\^|\*)*(\"|\\\\\")([[:space:]]|$)+" $cmdl_file | sed -r -e "s|=\\\\\"|=\"|g" -e "s@\\\\\"([[:space:]]|$)+@\"@g" | sed -r -e 's|^\"(.*)=|\1=\"|g' > $parse_tmp
+    elif LC_ALL=C grep -Eq "\"$ik=" $cmdl_file; then
+      # For case like: "ocs_prerun=sleep 5"
+      LC_ALL=C grep -oE -- "\"$ik=([[:space:]]|[[:alnum:]]|_|-|\.|\/|:|=|,|@|\\$|>|\^|\*)*\"([[:space:]]|$)+" $cmdl_file | sed -r -e "s|=\\\\\"|=\"|g" -e "s@\\\\\"([[:space:]]|$)+@\"@g" | sed -r -e 's|^\"(.*)=|\1=\"|g' > $parse_tmp
+    else
+      # This is for case xxx=xyz, no space in its assignment
+      LC_ALL=C grep -oE -- "$ik=([[:alnum:]]|_|-|\.|\/|:)*([[:space:]]|$)+" $cmdl_file > $parse_tmp
+    fi
+    # now we can get the variables
+    . $parse_tmp
+  done
+  [ -f "$parse_tmp" ] && rm -f $parse_tmp
+} # parse_cmdline_option
+#
+output_netinstall_syslinux_pxelinux_menu() {
+  local TDIR="$1"  # Where netinstall kernel/initrd exists (/tftpboot/nbi_img)
+  local PXECFG_DIR_FNAME="$2"  # Where pxeliux cfg file exists (/tftpboot/nbi_img/pxelinux.cfg/)
+  local menu_hint ni_ver ni_arch
+  # output the netinstall menu
+  # Here 2 types: Linux and BSD
+  # The netinstall kernel files (linux) or pxeboot file (bsd) in /tftpboot/nbi_img are, e.g.:
+  # Type 1: for Linux, the file names are like:
+  # vmlinuz-netinstall-CentOS-4.6-i386
+  # vmlinuz-netinstall-CentOS-4.6-x86_64
+  # vmlinuz-netinstall-CentOS-5.1-i386
+  # vmlinuz-netinstall-CentOS-5.1-x86_64
+  # vmlinuz-netinstall-Debian-etch-amd64
+  # vmlinuz-netinstall-Debian-etch-i386
+  # vmlinuz-netinstall-Debian-sarge-i386
+  # vmlinuz-netinstall-Fedora-7-i386
+  # vmlinuz-netinstall-Fedora-7-x86_64
+  
+  # Type 2: for BSD, the file names are like:
+  # OpenBSD-4.2-i386-pxeboot.0
+  # FreeBSD-7.0-i386-pxeboot.0
+  
+  # Type 1: Linux
+  for inet in $TDIR/vmlinuz-netinstall-*; do
+   # /tftpboot/nbi_img/vmlinuz-netinstall-CentOS-4-i386
+   # /tftpboot/nbi_img/initrd-netinstall-CentOS-4-i386.img
+
+   [ ! -e "$inet" ] && continue
+   # Truncate "vmlinuz-"
+   # For debina based, back convert x86-64 to x86_64, since alien convert x86_64 to x86-64.
+   kernel="$(basename $inet)"
+   inet_="$(basename $inet | sed -e "s/^vmlinuz-//g" -e "s/x86-64/x86_64/g")"
+   img_menu="$(echo "$inet_" | awk -F"-" '{print $1"-"$2"-"$3"-"$4}')"
+   img="$(unalias ls 2>/dev/null; ls $TDIR/*${inet_}* 2>/dev/null)"
+   img="$(basename $img)"
+
+   extra_append=""
+   if [ -n "$(echo $inet | grep -i "\-debian-woody" 2>/dev/null)" ]; then
+      # For Debian Woody, we use extra options bf24
+      # refer to http://www.debianplanet.com/node.php?id=818&cid=13384
+      NETINSTALL_RAMDISK_SIZE="$NETINSTALL_RAMDISK_SIZE_DEF"
+      extra_append="flavor=bf2.4"
+      menu_hint=""
+   elif [ -n "$(echo $inet | grep -i "\-debian-sarge" 2>/dev/null)" ]; then
+      # For Debian Sarge, we need extra options in append
+      # refer to http://opensource.nchc.org.tw/debian/dists/sarge/main/installer-i386/current/images/netboot/pxelinux.cfg/default
+      NETINSTALL_RAMDISK_SIZE="$NETINSTALL_RAMDISK_SIZE_DEF"
+      extra_append="root=/dev/rd/0 devfs=mount,dall rw  --"
+      menu_hint=""
+   elif [ -n "$(echo $inet | grep -iE "\-debian-etch" 2>/dev/null)" ]; then
+      # Ref: http://free.nchc.org.tw/debian/dists/etch/main/installer-i386/current/images/netboot//debian-installer/i386/pxelinux.cfg/default
+      NETINSTALL_RAMDISK_SIZE=""
+      extra_append="vga=normal"
+   elif [ -n "$(echo $inet | grep -iE "\-debian-" 2>/dev/null)" ]; then
+      # For version >= lenny, gtk netinstall mode is available, actually we can turn on it by adding "video=vesa:ywrap,mtrr vga=788" in the boot parameters. However, since normally those people use debian can accept text mode, we do not put "video=vesa:ywrap,mtrr vga=788" here.
+      # http://free.nchc.org.tw/debian/dists/lenny/main/installer-i386/current/images/netboot/gtk/debian-installer/i386/boot-screens/txt.cfg
+      NETINSTALL_RAMDISK_SIZE=""
+      extra_append="vga=normal"
+      menu_hint="# Hint: To turn on gtk mode installation, append 'video=vesa:ywrap,mtrr vga=788' in the boot parameters"
+   elif [ -n "$(echo $inet | grep -iE "\-redhat-" 2>/dev/null)" ]; then
+      # For RedHat, enable reiserfs when installing
+      NETINSTALL_RAMDISK_SIZE="$NETINSTALL_RAMDISK_SIZE_DEF"
+      extra_append="reiserfs"
+      menu_hint=""
+   elif [ -n "$(echo $inet | grep -iE "\-fedora-" 2>/dev/null)" ]; then
+      # Fedora vmlinuz name e.g. vmlinuz-netinstall-Fedora-17-x86_64
+      ni_ver="$(echo $inet | cut -f 4 -d "-")"
+      ni_arch="$(echo $inet | cut -f 5 -d "-")"
+      # ramdisk_size only necessary for fedora 1-4, from fc5, it's initramfs, ramdisk_size is not used anymore 
+      if [ -n "$(echo $inet | grep -iE "\-fedora-[1-4]-" 2>/dev/null)" ]; then
+        NETINSTALL_RAMDISK_SIZE="$NETINSTALL_RAMDISK_SIZE_DEF"
+      else
+        NETINSTALL_RAMDISK_SIZE=""
+      fi
+      if [ -n "$(echo $inet | grep -iE "\-fedora-([5-9]|1[1-6])-" 2>/dev/null)" ]; then
+        # For Fedora 5 to 16.
+        extra_append=""
+      else
+        # Ref: https://bugzilla.redhat.com/show_bug.cgi?id=810005
+        echo "Using Fedora installation repository \"$fedora_url_site\" from drbl.conf"
+        extra_append="inst.repo=$fedora_url_site/fedora/linux/releases/$ni_ver/Fedora/$ni_arch/os"
+      fi
+      # For Fedora, enable reiserfs when installing
+      menu_hint=""
+   elif [ -n "$(echo $inet | grep -iE "(\-mandrake-|\-mandriva-)" 2>/dev/null)" ]; then
+      # For Mandrake/Mandriva
+      # use larger ramdisk size for Mandrake, overwrite the default one.
+      NETINSTALL_RAMDISK_SIZE=128000
+      extra_append="acpi=ht vga=788 splash=silent label vgalo"
+      menu_hint=""
+   elif [ -n "$(echo $inet | grep -iE "\-ubuntu-[a-e]" 2>/dev/null)" ]; then
+      # For other Ubuntu: 5.10, 6.06, 6.10
+      # ref to ftp://linux.nchc.org.tw/distributions/ubuntu/dists/hoary/main/installer-i386/current/images/netboot/ubuntu-installer/i386/pxelinux.cfg/default
+      NETINSTALL_RAMDISK_SIZE="$NETINSTALL_RAMDISK_SIZE_DEF"
+      extra_append="root=/dev/rd/0 rw  --"
+      menu_hint=""
+   elif [ -n "$(echo $inet | grep -iE "\-ubuntu-[f-i]" 2>/dev/null)" ]; then
+      # For Ubuntu Feisty (7.04)
+      # ref to http://opensource.nchc.org.tw/ubuntu/dists/feisty/main/installer-i386/current/images/netboot/ubuntu-installer/i386/pxelinux.cfg/default
+      # It's initramfs, so ramdisk_size is no more.
+      NETINSTALL_RAMDISK_SIZE=""
+      extra_append="vga=normal --"
+      menu_hint=""
+   elif [ -n "$(echo $inet | grep -iE "\-ubuntu-[j-z]" 2>/dev/null)" ]; then
+      # Ref: http://free.nchc.org.tw/ubuntu/dists/jaunty/main/installer-i386/current/images/netboot/gtk/ubuntu-installer/i386/boot-screens/text.cfg
+      # It's initramfs, so ramdisk_size is no more.
+      NETINSTALL_RAMDISK_SIZE=""
+      # Looks like gtk netinstall in not quite stable for jaunty, here we turn off framebuffer mode.
+      #extra_append="video=vesa:ywrap,mtrr vga=788 --"
+      extra_append="vga=normal --"
+      menu_hint="# Hint: To turn on gtk mode installation, append 'video=vesa:ywrap,mtrr vga=788' in the boot parameters"
+   elif [ -n "$(echo $inet | grep -i "\-suse-" 2>/dev/null)" ]; then
+      # For SuSE
+      # For extra_append, refer to something like 
+      # http://free.nchc.org.tw/SuSE/SuSE/i386/9.3/boot/loader/isolinux.cfg
+      # use larger ramdisk size, overwrite the default one.
+      NETINSTALL_RAMDISK_SIZE=128000
+      extra_append="splash=silent showopts"
+      menu_hint=""
+   elif [ -n "$(echo $inet | grep -i "\-opensuse-" 2>/dev/null)" ]; then
+      # For OpenSuSE
+      # For extra_append, refer to something like 
+      # http://ftp.cs.pu.edu.tw/Linux/OpenSuse/distribution/SL-10.0-OSS/inst-source/boot/loader/isolinux.cfg
+      # use larger ramdisk size, overwrite the default one.
+      NETINSTALL_RAMDISK_SIZE=128000
+      extra_append="splash=silent showopts"
+      menu_hint=""
+   else
+      NETINSTALL_RAMDISK_SIZE="$NETINSTALL_RAMDISK_SIZE_DEF"
+      extra_append=""
+      menu_hint=""
+   fi
+
+   # skip if we can not find the menu, img or kernel.
+   [ -z "$img_menu" ] && continue
+   [ -z "$img" -o -z "$kernel" ] && continue
+
+   echo "Adding $img_menu menu..."
+   [ -n "$verbose" ] && echo "extra option in append: $extra_append"    
+   # Generate the description:
+   # EX for i: rh-8.0-netinstall
+   # create the description for the netinstall image
+   des="$(echo $img_menu | sed -e "s/^netinstall-//g" | sed -e "s/-/ /g")"
+   des="${des} installation via network"
+   # For initramfs, ramdisk_size is no more.
+   if [ -n "$NETINSTALL_RAMDISK_SIZE" ]; then
+     ramdisk_size_opt="ramdisk_size=$NETINSTALL_RAMDISK_SIZE"
+   else
+     ramdisk_size_opt=""
+   fi
+   cat <<-PXE_END >> $PXECFG_DIR_FNAME
+label $img_menu
+  # MENU DEFAULT
+  MENU HIDE
+  MENU LABEL $des
+  # MENU PASSWD
+  kernel $kernel
+  append initrd=$img $ramdisk_size_opt $extra_append
+  $menu_hint
+  TEXT HELP
+  $des
+  ENDTEXT
+
+PXE_END
+  done
+
+  # Type 2: BSD
+  for inet in $TDIR/*-pxeboot.0; do
+   # Ex: /tftpboot/nbi_img/FreeBSD-7.0-i386-pxeboot.0
+   [ ! -e "$inet" ] && continue
+   # Truncate "-pxeboot.0"
+   inet_="$(basename $inet | sed -e "s/-pxeboot.0//g")"
+   img_menu="$(echo "$inet_" | awk -F"-" '{print $1"-"$2"-"$3}')-netinstall"
+   img="$(unalias ls 2>/dev/null; ls $TDIR/*${inet_}* 2>/dev/null)"
+   img="$(basename $img)"
+   # create the description for the netinstall image
+   des="$(echo $img_menu | sed -e "s/-netinstall$//g" | sed -e "s/-/ /g")"
+   des="${des} installation via network"
+   [ -z "$img_menu" ] && continue
+   echo "Adding $img_menu menu..."
+   cat <<-PXE_END >> $PXECFG_DIR_FNAME
+label $img_menu
+  # MENU DEFAULT
+  MENU HIDE
+  MENU LABEL $des
+  # MENU PASSWD
+  kernel $img
+  TEXT HELP
+  $des
+  ENDTEXT
+
+PXE_END
+  done
+} # end of output_netinstall_syslinux_pxelinux_menu
+#
+get_syslinux_binary_for_dos_linux() {
+  local sysl_dir="$1"
+  # syslinux_ver is not required. If it's not assigned, the latest one on the web will be used.
+  local syslinux_ver="$2"
+  local syslinux_tarball syslinux_ver_subdir
+  [ -z "$sysl_dir" -o ! -d "$sysl_dir" ] && echo "No sysl_dir!" && exit 1
+  # syslinux_binsrc_url is like:
+  # http://www.kernel.org/pub/linux/utils/boot/syslinux/
+  # For any version 4.xx, it will be found in http://www.kernel.org/pub/linux/utils/boot/syslinux/4.xx/. However, the latest one is in http://www.kernel.org/pub/linux/utils/boot/syslinux/
+  if [ -z "$syslinux_ver" ]; then
+    # If no version is assigned, find the latest one.
+    syslinux_tarball="$(LC_ALL=C list_available_tbz2 $syslinux_binsrc_url | sort | uniq | sort -r -V | head -n 1)"
+    syslinux_ver="$(LC_ALL=C echo "$syslinux_tarball" | sed -e "s/^syslinux-//g" -e "s/.tar.bz2//g")"
+  else
+    syslinux_tarball="syslinux-${syslinux_ver}.tar.bz2"
+  fi
+  # Convert the version number to subdir name, e..g 4.04 -> 4.xx
+  syslinux_ver_subdir="$(LC_ALL=C echo "$syslinux_ver" | sed -r -e "s/\.[[:digit:]]*$/\.xx/g")"
+  echo "Downloading $syslinux_binsrc_url/$syslinux_ver_subdir/$syslinux_tarball..."
+  wget $wget_opt -P $sysl_dir $syslinux_binsrc_url/$syslinux_ver_subdir/$syslinux_tarball
+  # Extract win32/syslinux.exe and linux/syslinux
+  echo "Extracting files..."
+  (
+   cd $sysl_dir
+   # From syslinux 3.73, linux/syslinux is hardlink to linux/syslinux-nomtools, therefore we have to use --wildcards to extract it. Otherwise it will fail.
+   tar --wildcards -xvjf syslinux-${syslinux_ver}.tar.bz2 syslinux-${syslinux_ver}/win32/syslinux.exe syslinux-${syslinux_ver}/win64/syslinux64.exe syslinux-${syslinux_ver}/linux/syslinux* syslinux-${syslinux_ver}/mbr/mbr.bin
+   mv -f syslinux-${syslinux_ver}/win32/syslinux.exe . 
+   mv -f syslinux-${syslinux_ver}/win64/syslinux64.exe . 
+   mv -f syslinux-${syslinux_ver}/linux/syslinux .
+   mv -f syslinux-${syslinux_ver}/mbr/mbr.bin .
+  )
+} # end of get_syslinux_binary_for_dos_linux
+#
+put_syslinux_makeboot_for_usb_flash() {
+  local t_dir="$1"
+  # syslinux_ver is not required. If it's not assigned, the latest one on the web will be used.
+  local syslinux_ver="$2"  
+  local sysl_dir
+  [ -z "$t_dir" -o ! -d "$t_dir" ] && echo "No t_dir!" && exit 1
+  # Function to put syslinux.exe and syslinux (linux ELF 32-bit LSB executable) in dir t_dir 
+  mkdir -p $t_dir/utils/{win32,linux,mbr}
+  cp -a $pxelinux_binsrc_dir/makeboot.bat $t_dir/utils/win32/
+  cp -a $pxelinux_binsrc_dir/makeboot.sh $t_dir/utils/linux/
+  sysl_dir="$(mktemp -d /tmp/sysl_dir.XXXXXX)"
+  get_syslinux_binary_for_dos_linux $sysl_dir $syslinux_ver
+  # syslinux does not provide any option to find the version number.
+  # Try to find the version of syslinux
+  # Use strings to find the version, the output is like:
+  # SYSLINUX 3.71 Debian-2008-08-04
+  SYSLINUX_VER="$(strings $sysl_dir/syslinux | grep -iE "^SYSLINUX.*[[:digit:]]+" | awk -F" " '{print $2}')"
+  echo "SYSLINUX version: $SYSLINUX_VER" > $t_dir/utils/win32/VERSION.txt
+  echo "SYSLINUX version: $SYSLINUX_VER" > $t_dir/utils/linux/VERSION.txt
+  echo "Precompiled binary syslinux files were extracted from $syslinux_binsrc_url/syslinux-${syslinux_ver}.tar.bz2" > $t_dir/utils/README.txt
+  cp -af $sysl_dir/syslinux.exe $t_dir/utils/win32/
+  cp -af $sysl_dir/syslinux $t_dir/utils/linux/
+  cp -af $sysl_dir/mbr.bin $t_dir/utils/mbr/
+  [ -d "$sysl_dir" -a -n "$(echo $sysl_dir | grep "sysl_dir")" ] && rm -rf $sysl_dir
+} # end of put_syslinux_makeboot_for_usb_flash
+#
+create_live_required_debian_based_prompt() {
+  # lh_ver_required is global varible from drbl-ocs.conf
+  local lh_ver cdebootstrap_ver
+  # live-helper package name was changed to be live-build after 2.0~a20
+  lh_ver="$(LC_ALL=C dpkg-query -W -f='${Version}\n' live-build)"
+  if [ -z "$lh_ver" ]; then
+    # Try to find the old package name.
+    lh_ver="$(LC_ALL=C dpkg-query -W -f='${Version}\n' live-helper)"
+  fi
+  cdebootstrap_ver="$(LC_ALL=C cdebootstrap --version | grep -iEw "^cdebootstrap" | awk -F" " '{print $2}')"
+  if dpkg --compare-versions "$lh_ver" "<<" "$lh_ver_required"; then
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+    echo "Required live helper or live build version: $lh_ver_required"
+    echo "Installed live helper or live build version: $lh_ver"
+    echo "You have to install patched live-helper or live-build (${lh_ver_required}drbl or later, modified by DRBL project)"
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+    echo "Program terminated!"
+    exit 1
+  fi
+  if dpkg --compare-versions "$cdebootstrap_ver" "<<" "$cdebootstrap_ver_required"; then
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+    echo "Required cdebootstrap version: $cdebootstrap_ver_required"
+    echo "Installed cdebootstrap version: $cdebootstrap_ver"
+    echo "You have to install cdebootstrap (version $cdebootstrap_ver_required or later)."
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+    echo "Program terminated!"
+    exit 1
+  fi
+  if [ "$batch_mode" = "no" ]; then
+    echo -n "Press enter to continue... "
+    read
+  fi
+} # End of create_live_required_debian_based_prompt
+#
+turn_on_ipv4_forward() {
+  # Making the rules stick and load on boot:
+  if grep -q "^net.ipv4.ip_forward" /etc/sysctl.conf 2>/dev/null; then
+    perl -p -i -e "s/^net.ipv4.ip_forward.*/net.ipv4.ip_forward = 1/" /etc/sysctl.conf
+  else
+    echo "net.ipv4.ip_forward = 1" >> /etc/sysctl.conf
+  fi
+  # Turn on ip_forward now.
+  if [ "$(cat /proc/sys/net/ipv4/ip_forward)" != "1" ]; then
+    echo "Turn on ip_forward now."
+    echo 1 > /proc/sys/net/ipv4/ip_forward
+  else 
+    echo "ip_forward is already on."
+  fi
+} # end of turn_on_ipv4_forward
+#
+ask_if_beginner_or_expert_mode(){
+  local TMP mode
+  # ocs_user_mode is global variable
+  TMP="$(mktemp /tmp/menu.XXXXXX)"
+  trap "[ -f "$TMP" ] && rm -f $TMP" HUP INT QUIT TERM EXIT
+  $DIA --backtitle "$msg_nchc_free_software_labs" --title  \
+  "$msg_nchc_clonezilla" --menu "$msg_select_beginner_or_expert_mode:" \
+  0 0 0 \
+  "Beginner"  "$msg_beginner_mode" \
+  "Expert"    "$msg_expert_mode" \
+  2> $TMP
+  mode="$(cat $TMP)"
+  [ -f "$TMP" ] && rm -f $TMP
+  case "$mode" in
+    "Beginner") ocs_user_mode="beginner" ;;
+    "Expert")   ocs_user_mode="expert" ;;
+    *)
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+      echo "$msg_program_stop!"
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+      exit 1
+  esac
+} # end of ask_if_beginner_or_expert_mode
+#
+rep_whspc_w_udrsc() {
+  # Function to replace white space as "_", so in dialog we won't make it as 2 or more tags or items.
+  local inp_txt="$1"
+  local out_txt
+  out_txt="$(echo ${inp_txt} | sed -r -e "s/[[:space:]]/_/g")"
+  echo "$out_txt"
+} # end of rep_whspc_w_udrsc
+#
+# Function copy_exec_drbl is borrowed from copy_exec from Debian's package initramfs-tools: /usr/share/initramfs-tools/hook-functions. The difference is that we use "cp -pL" instead of "ln -fs" in this function. This is because when we run mkpxeinitrd-net, we run cpio without "--dereference" (mkinitramfs uses cpio with "--dereference"), i.e. in mkpxeinitrd-net, we use:
+ # find . | cpio --quiet -o -H newc | gzip -9 > $output_dir/initrd-$initrd_suffix.$kernel_ver.img )
+ # instead of
+ # find . | cpio --quiet --dereference -o -H newc | gzip -9 > $output_dir/initrd-$initrd_suffix.$kernel_ver.img )
+ # The reason to do so is we use symbolic link to link the command to busybox in/usr/lib/mkpxeinitrd-net/initrd-skel/bin/. If we use --dereference, it will take a lot of space. This might be improved in the future.
+ 
+# $1 is the source path (e.g. /usr/bin/time)
+# $2 is the relative destination (e.g. /usr or /usr/time)
+#
+# The destination is interpreted in the same way "cp" would, meaning
+# (assuming /bin is a directory):
+#
+#   "copy_exec_drbl /usr/bin/time /bin"        -> /bin/time
+#   "copy_exec_drbl /usr/bin/time /bin/mytime" -> /bin/mytime
+# 
+# If $2 is left out, the same destination path as for the source arg will
+# be used and directories will be created as needed, so:
+#
+#   "copy_exec_drbl /usr/bin/time"             -> /usr/bin/time
+#
+copy_exec_drbl() {
+	local source target destination final_destination x nonoptlib
+	local libname dirname
+
+	source="${1}"
+	if [ -n "${2}" ]; then
+		target="${2}"
+	else
+		if [ ! -e "${DESTDIR}/$(dirname "${1}")" ]; then
+			mkdir -p "${DESTDIR}/$(dirname "${1}")"
+		fi
+		target="${1}"
+	fi
+
+	if [ -d "${DESTDIR}/${target}" ]; then
+		destination="${target}/$(basename "${source}")"
+	else
+		destination="${target}"
+	fi
+	final_destination="${DESTDIR}/${destination}"
+
+	if [ -L "$final_destination" ]; then
+		if [ $(readlink "${final_destination}") != "${source}" ]; then
+			echo "W:copy_exec_drbl: Not copying ${source} to \$DESTDIR${destination}, which is already a copy of $(readlink ${final_destination})" >&2
+			return
+		fi
+	else
+		cp -pL ${source} ${DESTDIR}/${destination}
+		if [ "${verbose}" = "y" ]; then
+			echo "Adding binary ${source}"
+		fi
+	fi
+
+	# Copy the dependant libraries
+	for x in $(ldd ${source} 2>/dev/null | sed -e '
+	    /\//!d;
+	    /linux-gate/d;
+	    /=>/ {s/.*=>[[:blank:]]*\([^[:blank:]]*\).*/\1/};
+	    s/[[:blank:]]*\([^[:blank:]]*\) (.*)/\1/' 2>/dev/null); do
+
+		# Try to use non-optimised libraries where possible.
+		# We assume that all HWCAP libraries will be in tls,
+		# sse2, vfp or neon
+		nonoptlib=$(echo "${x}" | sed -e 's#/lib/\(tls\|i686\|sse2\|neon\|vfp\).*/\(lib.*\)#/lib/\2#')
+
+		if [ -e "${nonoptlib}" ]; then
+			x="${nonoptlib}"
+		fi
+
+		libname=$(basename "${x}")
+		dirname=$(dirname "${x}")
+
+		mkdir -p "${DESTDIR}/${dirname}"
+		if [ ! -e "${DESTDIR}/${dirname}/${libname}" ]; then
+			cp -pL "${x}" "${DESTDIR}/${dirname}"
+			if [ "${verbose}" = "y" ]; then
+				echo "Adding library ${x}"
+			fi
+		fi
+	done
+} # end of copy_exec_drbl
+#
+get_block_line_in_upstart_conf() {
+  local CFG_FILE="$1"
+  local comment_status="$2"
+  local comment
+  [ -e "$CFG_FILE" ] || exit 1
+  # There are 2 types of init config:
+  # (1)
+  #    start on filesystem
+  # (2)
+  #    start on (local-filesystems
+  #              and net-device-up IFACE=lo)
+  # Wen can judge them by: grep -n -E "^start on[[:space:]]+\(" $CFG_FILE
+  # Take /etc/init/gdm.conf as an example:
+  # start on (filesystem
+  # 	  and started hal
+  # 	  and tty-device-added KERNEL=tty7
+  # 	  and (graphics-device-added or stopped udevtrigger))
+  # By using:
+  # grep -n -E "^start on[[:space:]]+\(" gdm.conf
+  # We can get the results like:
+  # ------------
+  # 9:start on (filesystem
+  # ------------
+  # grep -n -E -A 1000 "^start on[[:space:]]+\(" gdm.conf  | grep -E  "\)" | head -n 1
+  # We can get the results like:
+  # ------------
+  # 12-       and (graphics-device-added or stopped udevtrigger))
+  # ------------
+  # so we know we can replace the one between line no. 9 and 12
+  if [ "$comment_status" = "commented" ]; then
+    comment="#"
+  else
+    comment=""
+  fi
+  if [ -z "$(LC_ALL=C grep -n -E "^${comment}[[:space:]]*start on[[:space:]]+\(" $CFG_FILE)" ]; then
+    # Type 1
+    begin_line="$(LC_ALL=C grep -n -E "^${comment}[[:space:]]*start on[[:space:]]+" $CFG_FILE | cut -d":" -f1)"
+    end_line="${begin_line}"
+  else
+    # Type 2
+    begin_line="$(LC_ALL=C grep -n -E "^${comment}[[:space:]]*start on[[:space:]]+\(" $CFG_FILE | cut -d":" -f1)"
+    end_line="$(LC_ALL=C grep -n -E -A 1000 "^${comment}[[:space:]]*start on[[:space:]]+\(" $CFG_FILE | grep -E  "\)" | head -n 1 | cut -d "-" -f1)"
+  fi
+  echo "$begin_line $end_line"
+} # end of get_block_line_in_upstart_conf
+#
+switch_upstart_service() {
+  # The function to comment or uncomment the upstart /etc/init/*.conf 	 
+  local CFG_F="$1"
+  local mod_want="$2"  # "on" or "off"
+  [ -z "$CFG_F" ] && "No 'CFG_F' assigned in function switch_upstart_service!" && exit 1
+  [ -z "$mod_want" ] && "No 'mod_want' assigned in function switch_upstart_service!" && exit 1
+  # If we want to turn on the service, the status now should be commented.
+  case "$mod_want" in
+   on)  status="commented";;
+   off) status="not_commented";;
+  esac
+
+  lines="$(get_block_line_in_upstart_conf $CFG_F $status)"
+  begin_line="$(echo $lines | awk -F" " '{print $1}')"
+  end_line="$(echo $lines | awk -F" " '{print $2}')"
+  case "$mod_want" in
+   off) sub_cmd="if ($((begin_line))..$((end_line))) {s/^(.*)$/# \$1/g}" ;;
+   on)  sub_cmd="if ($((begin_line))..$((end_line))) {s/^#[[:space:]]?(.*)$/\$1/g}" ;;
+  esac
+  perl -pi -e "$sub_cmd" $CFG_F
+} # end of switch_upstart_service
+#
+canonical_hostname_prep() {
+  # This function is used to avoid the bug of nfs-utils 1.2.2-1:
+  # statd wont't work without reverse lookups. Therefore lockd will fail.
+  # Ref: http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=579397
+  # The problem is not only on the server side, but also on the client side.
+  local nfs_srv="$1"
+  if ! host "$nfs_srv" &>/dev/null && \
+     [ -z "$(LC_ALL=C  grep -Ew "^[[:space:]]*$nfs_srv" /etc/hosts )" ]; then
+    echo "# Dummy NFS server lookup to avoid NFS statd/lockd issue. Created by Clonezilla." >> /etc/hosts
+    echo "$nfs_srv nfs-server" >> /etc/hosts
+  fi
+} # end of canonical_hostname_prep
+#
+get_debian_ubuntu_init_serv_control_prog() {
+  # Find to use update-rc.d or insserv in Debian or Ubuntu
+  # dbn_ubn_serv_control_prog is global value
+  [ -e /etc/lsb-release ] && . /etc/lsb-release
+  dbn_ubn_serv_control_prog=""
+  if [ "$DISTRIB_ID" = "Ubuntu" ]; then
+     # Ubuntu, do not use insserv, otherwise it might confuse upstart and traditional rc
+     dbn_ubn_serv_control_prog="use-update-rc-d"
+  else
+     # Debian, we check if insserv exists or not.
+     if type insserv &>/dev/null; then
+       dbn_ubn_serv_control_prog="use-insserv"
+     else
+       dbn_ubn_serv_control_prog="use-update-rc-d"
+     fi
+  fi
+} # end of get_debian_ubuntu_init_serv_control_prog
+#
+get_sort_V_opt() {
+  # A function to get if the "-V" option is supported on the system. This is because old version of sort does not support the option "-V", but newer one does.
+  # Variable "sort_V_opt" is global variable.
+  if [ -n "$(LC_ALL=C sort --help 2>&1 | grep -i -- "--version-sort")" ]; then
+    # Check if version sorting option is supported. If so, use it.
+    sort_V_opt="-V"
+  fi
+} # get_sort_V_opt
+#
+disable_apt_lang_translation() {
+  local lang_cf_file="$1" # e.g. chroot/etc/apt/apt.conf.d/99lang
+  if [ -z "$lang_cf_file" ]; then
+    echo "No \"lang_cf_file\" in function disable_apt_lang_translation!"
+    exit 1
+  fi
+  mkdir -p $(dirname $lang_cf_file)
+  cat <<-APT_END > $lang_cf_file
+Acquire
+{
+  Retries "0";
+        Languages "none";
+        Translation "none";
+};
+APT_END
+} # end of disable_apt_lang_translation

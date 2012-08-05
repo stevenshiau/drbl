@@ -1,0 +1,323 @@
+#!/bin/sh
+
+# set -e
+
+mountpoint=/cdrom
+
+mkdir -p $mountpoint
+
+overlay_method=unionfs
+if [ "${DPKG_ARCH}" = "ia64" ] || [ "${DPKG_ARCH}" = "hppa" ] || [ "${DPKG_ARCH}" = "sparc" ]; then
+    overlay_method=devmapper
+fi
+
+USERNAME=ubuntu
+USERFULLNAME="Ubuntu LiveCD user"
+HOST=ubuntu
+
+[ -f /etc/casper.conf ] && . /etc/casper.conf
+
+export USERNAME USERFULLNAME HOST
+
+casper_path() {
+    path=$1
+    if [ -e "$path/casper/filesystem.cloop" ]; then
+        echo "$path/casper/filesystem.cloop"
+        return 0
+    elif [ -e "$path/casper/filesystem.squashfs" ]; then
+        echo "$path/casper/filesystem.squashfs"
+        return 0
+    fi
+    return 1
+}
+
+subdevices() {
+    sysblock=$1
+    r=""
+    for dev in "${sysblock}" "${sysblock}"/*; do
+        if [ -e "${dev}/dev" ]; then
+            r="${r} ${dev}"
+        fi
+    done
+    echo ${r}
+}
+
+get_backing_device() {
+	case "$1" in
+            *.cloop)
+                echo $(setup_loop "$1" "cloop" "/sys/block/cloop*")
+			;;
+            *.squashfs)
+                echo $(setup_loop "$1" "loop" "/sys/block/loop*")
+                ;;
+            *)
+                panic "Unrecognized casper filesystem: $1"
+                ;;
+	esac
+}
+
+setup_cow() {
+	case "$1" in
+            unionfs)
+                setup_unionfs "$2" "$rootmnt"
+                ;;
+            devmapper)
+                setup_devmapper "$2" "$rootmnt"
+	esac
+}
+
+sys2dev() {
+    sysdev=${1#/sys}
+    echo "/dev/$(udevinfo -q name -p ${sysdev} 2>/dev/null|| echo ${sysdev##*/})"
+}
+
+setup_loop() {
+    local fspath=$1
+    local module=$2
+    local pattern=$3
+
+    modprobe -Qb "$module"
+    udevplug -W
+ 
+    for loopdev in $pattern; do
+        if [ "$(cat $loopdev/size)" -eq 0 ]; then
+            dev=$(sys2dev "${loopdev}")
+            losetup "$dev" "$fspath"
+            echo "$dev"
+            return 0
+        fi
+    done
+    panic "No loop devices available"
+}
+
+get_fstype() {
+    local FSTYPE
+    local FSSIZE
+    eval $(fstype < $1)
+    if [ "$FSTYPE" != "unknown" ]; then
+        echo $FSTYPE
+        return 0
+    fi
+    /lib/udev/vol_id -t $1 2>/dev/null
+}
+
+setup_devmapper() {
+    backdev="$1"
+    rootmnt="$2"
+
+    modprobe -Qb dm-mod
+    COW_DEVICE=/dev/ram1
+    COW_NAME="casper-cow"
+
+    BACKING_FILE_SIZE=$(blockdev --getsize "$backdev")
+    MAX_COW_SIZE=$(blockdev --getsize "$COW_DEVICE")
+    CHUNK_SIZE=8 # sectors
+
+    if [ -z "$COW_SIZE" -o "$COW_SIZE" -gt "$MAX_COW_SIZE" ]; then
+        COW_SIZE=$MAX_COW_SIZE
+    fi
+
+    echo "0 $COW_SIZE linear $COW_DEVICE 0" | dmsetup create $COW_NAME
+
+    echo "0 $BACKING_FILE_SIZE snapshot $backdev /dev/mapper/$COW_NAME p $CHUNK_SIZE" | \
+        dmsetup create casper-snapshot
+    if [ "$(get_fstype $backdev)" = "unknown" ]; then
+        panic "Unknown file system type on $backdev"
+    fi
+    mount -t $(get_fstype "$backdev") /dev/mapper/casper-snapshot $rootmnt || panic "Can not mount /dev/mapper/casper/snapshot on $rootmnt"
+
+    mkdir -p "$rootmnt/rofs"
+    echo "0 $BACKING_FILE_SIZE linear $backdev 0" | dmsetup create casper-backing
+    mount -t $(get_fstype "$backdev") /dev/mapper/casper-backing "$rootmnt/rofs"
+}
+
+where_is_mounted() {
+    device=$1
+    if grep -q "^$device " /proc/mounts; then
+        grep "^$device " /proc/mounts | read d mountpoint rest
+        echo $mountpoint
+        return 0
+    fi
+    return 1
+}
+
+find_cow_device() {
+    for sysblock in $(echo /sys/block/* | tr ' ' '\n' | grep -v loop); do
+        for dev in $(subdevices "${sysblock}"); do
+            devname=$(sys2dev "${dev}")
+            if [ "$(/lib/udev/vol_id -l $devname 2>/dev/null)" = "casper-rw" ]; then
+                echo "$devname"
+                return
+            elif [ "$(get_fstype ${devname})" = "vfat" ]; then
+                mkdir -p /cow-backing
+                if where_is_mounted ${devname} > /dev/null; then
+                    mount -o remount,rw ${devname} $(where_is_mounted ${devname}) || panic "Remounting failed"
+                    mount -o bind $(where_is_mounted ${devname}) /cow-backing || panic "Cannot bind-mount"
+                else
+                    mount -t $(get_fstype "${devname}") -o rw "${devname}" /cow-backing || panic "Cannot mount $devname on /cow-backing"
+                fi
+
+                if [ -e "/cow-backing/casper-rw" ]; then
+                    echo $(setup_loop "/cow-backing/casper-rw" "loop" "/sys/block/loop*")
+                    return 0
+                else
+                    umount /cow-backing
+                fi
+            fi
+            
+        done
+    done
+    return 1    
+}
+
+setup_unionfs() {
+	backdev="$1"
+	rootmnt="$2"
+        modprobe -Qb unionfs
+        mkdir -p /cow
+
+        if grep -q persistent /proc/cmdline; then
+            i=0
+            # We love udev and the kernel!
+            while [ "$i" -lt 300 ]; do
+                cowdevice=$(find_cow_device) 
+                if [ -b "$cowdevice" ]; then
+                    mount -t $(get_fstype "$cowdevice") -o rw "$cowdevice" /cow || panic "Can not mount $cowdevice on /cow"
+                    break
+                fi
+                sleep 5
+#                sleep 0.1
+                i=$(( $i + 1 ))
+            done
+        else
+            mount -t tmpfs tmpfs /cow
+        fi
+
+	mkdir -p /rofs
+    if [ "$(get_fstype $backdev)" = "unknown" ]; then
+        panic "Unknown file system type on $backdev"
+    fi
+	mount -t $(get_fstype "$backdev") -o ro "$backdev" /rofs || panic "Can not mount $backdev on /rofs"
+
+	mount -t unionfs -o dirs=/cow=rw:/rofs=ro unionfs "$rootmnt"
+        if grep -q show-cow /proc/cmdline; then
+            mkdir -p "$rootmnt/cow"
+            mount -o bind /cow "$rootmnt/cow"
+        fi
+        mkdir -p "$rootmnt/rofs"
+        mount -o bind /rofs "$rootmnt/rofs"
+}
+
+is_usb_device() {
+    sysfs_path="${1#/sys}"
+    if /lib/udev/path_id "${sysfs_path}" | grep -q "ID_PATH=usb"; then
+        return 0
+    fi
+    return 1
+}
+
+find_cd() {
+	mounted=
+        for sysblock in $(echo /sys/block/* | tr ' ' '\n' | grep -v loop | grep -v ram); do
+            devname=$(sys2dev "${sysblock}")
+            fstype=$(get_fstype "${devname}")
+            if /lib/udev/cdrom_id ${devname} > /dev/null; then
+                mount -t ${fstype} -o ro "$devname" $mountpoint || continue
+                if casper_path $mountpoint; then
+                    echo $(casper_path $mountpoint)
+                    return
+                else
+                    umount $mountpoint
+                fi
+            elif is_usb_device "$sysblock"; then
+                for dev in $(subdevices "${sysblock}"); do
+                    devname=$(sys2dev "${dev}")
+                    fstype=$(get_fstype "${devname}")
+                    case ${fstype} in
+                        vfat|iso9660|udf)
+                            mount -t ${fstype} -o ro "${devname}" $mountpoint || continue
+                            if casper_path $mountpoint; then
+                                echo $(casper_path $mountpoint)
+                                return
+                            else
+                                umount $mountpoint
+                            fi
+                            ;;
+                    esac
+                done
+	    elif [ "${fstype}" = "squashfs" ]; then
+
+                # This is an ugly hack situation, the block device has
+                # a squashfs image directly on it.  It's hopefully
+                # casper, so take it and run with it.
+
+                ln -s "${devname}" "${devname}.${fstype}"
+                echo "${devname}.${fstype}"
+                return
+            fi
+        done
+}
+
+copy_to_ram() {
+        [ "$quiet" != "y" ] && log_begin_msg "Copying live media to ram..."
+	toram_dir='/toram'
+	mkdir -p $toram_dir
+	mount -t tmpfs /dev/shm $toram_dir
+	cp -a $mountpoint/* $toram_dir
+	umount $mountpoint
+	mount -r -o move $toram_dir $mountpoint
+	rmdir $toram_dir
+        [ "$quiet" != "y" ] && log_end_msg
+}
+
+set_usplash_timeout() {
+    if [ -x /sbin/usplash_write ]; then
+        /sbin/usplash_write "TIMEOUT 120"
+    fi
+}
+
+mountroot() {
+    exec 6>&1
+    exec 7>&2
+    exec > casper.log
+    exec 2>&1
+
+    set_usplash_timeout
+    [ "$quiet" != "y" ] && log_begin_msg "Running /scripts/casper-premount"
+    run_scripts /scripts/casper-premount
+    [ "$quiet" != "y" ] && log_end_msg
+
+    # Needed here too because some things (*cough* udev *cough*)
+    # changes the timeout
+
+    set_usplash_timeout
+
+    for i in 0 1 2 3 4 5 6 7 8 9 a b c d e f 10 11 12 13; do
+        live_image=$(find_cd)
+        if [ "${live_image}" ]; then
+            break
+        fi
+        sleep 1
+    done
+    if [ "$?" -gt 0 ]; then
+        panic "Unable to find a CD-ROM containing a live file system"
+    fi
+   
+    if grep -q toram /proc/cmdline; then
+	copy_to_ram
+    fi
+ 
+    setup_cow "$overlay_method" "$(get_backing_device $live_image)" "$rootmnt"
+
+    log_end_msg
+
+    maybe_break casper-bottom
+    [ "$quiet" != "y" ] && log_begin_msg "Running /scripts/casper-bottom"
+
+    PATH=/root/usr/bin:/root/usr/sbin:/root/bin:/root/sbin:$PATH run_scripts /scripts/casper-bottom
+    [ "$quiet" != "y" ] && log_end_msg
+
+    exec 1>&6 6>&-
+    exec 2>&7 7>&-
+    cp casper.log "${rootmnt}/var/log/"
+}

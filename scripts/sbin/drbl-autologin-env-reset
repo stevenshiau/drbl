@@ -1,0 +1,64 @@
+#!/bin/bash
+#
+# description: reset autologin account's home directory as initial status.
+#
+# Author: Steven Shiau <steven _at_ nchc org tw>
+# License: GPL
+
+# Load DRBL setting and functions
+DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/opt/drbl/}"
+
+. $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
+
+#
+check_if_root
+#
+usage() {
+  echo "Turn on/off the drbl-autologin-home-reset service."
+  echo "Usage: $0 [OPTION] [on|off]"
+  echo "Options:"
+  echo "-v, --verbose:  verbose mode."
+  echo "-h, --host IP_ADDRESS:  set only for the host with IP_ADDRESS instead of all DRBL clients"
+}
+
+# main
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -h|--host)
+		shift; specified_host="$1"
+		shift
+                ;;
+    -v|--verbose)
+		shift; verbose="on"
+                ;;
+    -*)		echo "${0}: ${1}: invalid option" >&2
+		usage >& 2
+		exit 2 ;;
+    *)		break ;;
+  esac
+done
+
+#
+switch=$1
+
+check_switch_on_off $switch
+
+[ -n "$specified_host" ] && HOST_OPT="-h $specified_host"
+#
+case "$switch" in
+  on)
+     # copy drbl-autologin-home-reset to all clients.
+     drbl-cp-host $DRBL_SCRIPT_PATH/sbin/drbl-autologin-home-reset /etc/init.d/
+     # add it then turn on it.
+     drbl-client-service $HOST_OPT drbl-autologin-home-reset add
+     drbl-client-service $HOST_OPT drbl-autologin-home-reset on
+    ;;
+  off)
+     # delete it
+     drbl-client-service $HOST_OPT drbl-autologin-home-reset off
+     drbl-client-service $HOST_OPT drbl-autologin-home-reset del
+    ;;
+   *)
+    usage && exit 1
+    ;;
+esac

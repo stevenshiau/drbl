@@ -1,0 +1,55 @@
+#!/bin/bash
+#
+# drbl-autologin-home-reset: Reset autologin account's home directory as initial status. This script in usually run when client boots, i.e. make it as a service.
+#
+# Version:      @(#) /etc/init.d/drbl-autologin-home-reset 1.0
+#
+# chkconfig: 35 99 99
+# description: reset autologin account's home directory as initial status when system boot.
+# 
+# For SuSE insserv
+### BEGIN INIT INFO
+# Provides: drbl-autologin-home-reset
+# Required-Start: nfs portmap
+# Required-Stop:  nfs portmap
+# X-UnitedLinux-Should-Start: 
+# X-UnitedLinux-Should-Stop:
+# Default-Start: 2 3 4 5
+# Default-Stop: 0 1 2 6
+# Description: Reset autologin account's home directory
+### END INIT INFO
+#
+# Author: Steven Shiau <steven _at_ nchc org tw>
+# License: GPL
+# Modified by Steven Shiau <steven _at_ nchc org tw> to be used in DRBL for RedHat
+
+# Load DRBL setting and functions
+DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/opt/drbl/}"
+
+. $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
+
+#
+check_if_root
+
+# get the hostname and auto_login_id
+# use client's hostname as the auto-login ID.
+if [ -e /etc/debian_version ]; then
+  # Debian
+  auto_login_id="$(cat /etc/hostname)"
+elif [ -e /etc/SuSE-release ]; then
+  # SuSE
+  # SuSE use hostname+domainname, like cat.suse.com.tw
+  auto_login_id="$(cat /etc/HOSTNAME | sed -e "s/\..*//g")"
+else
+  # RH-like
+  . /$SYSCONF_PATH/network
+  auto_login_id="$HOSTNAME"
+fi
+[ -z "$auto_login_id" ] && echo "No hostname, no autologin account... Program terminated!!!" && exit 1
+# Thanks for Blake to prompt this. Since in client, we can not use /etc/passwd to get the account's home directory. It's NIS/YP.
+USER_HOME_DIR=$(bash -c "echo ~$auto_login_id")
+auto_login_group="$(id -n -g $auto_login_id)"
+if [ -n "$USER_HOME_DIR" -a -d "$USER_HOME_DIR" ]; then
+  rsync -a --delete --progress /etc/skel/ $USER_HOME_DIR/
+  chown -R $auto_login_id.$auto_login_group $USER_HOME_DIR/
+fi

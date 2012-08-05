@@ -1,0 +1,57 @@
+#!/bin/bash
+#
+# firstboot:         Starts the firstboot X config
+### BEGIN INIT INFO
+# Provides:          firstboot
+# Required-Start:    nfs
+# Should-Start:      kbd
+# Required-Stop:
+# Default-Start:     5
+# Default-Stop:
+# Description:       Config X
+### END INIT INFO
+#
+# chkconfig: 5 29 95
+#
+# description: Firstboot is a druid style program that runs on the first time \
+#              a machine is booted after install.  It checks for the existence \
+#              of an /etc/sysconfig/firstboot file.  If it doesn't find the file, \
+#              then the firstboot program needs to run.  If it finds the file, \
+#              firstboot will not be run.
+#              If /etc/reconfigSys exists, run the reconfiguration
+#	       program and remove /etc/reconfigSys when done.
+#
+# Modified by Steven Shiau <steven _at_ nchc org tw> to use in 
+# DRBL for SuSE 2005/7/31
+# 
+
+# load the display setting
+. /etc/sysconfig/displaymanager
+default_dm="$DISPLAYMANAGER"
+# if default_dm is unset, exit
+[ -z "$default_dm" ] && echo "Default DM is unset! Skip firstboot!" && exit 0
+
+case "$1" in
+ start)
+        if grep -i reconfig /proc/cmdline >/dev/null || [ -f /etc/reconfigSys ]; then
+
+	    echo "Running system reconfiguration tool"
+            #/usr/bin/perl /usr/X11R6/lib/sax/xc.pl -y --nointro --sysconfig
+            /usr/X11R6/bin/sax2
+	    rm -f /etc/reconfigSys
+	    exit 0
+	fi
+
+	runlevel=$(set -- $(runlevel); eval "echo \$$#" )
+	# DRBL, no matter runlevel 5 in /etc/inittab or now in runlevel 5
+	if grep -q "^id:5:initdefault:" /etc/inittab || [ "x$runlevel" = x5 ]; then
+	    if [ ! -f /etc/X11/xorg.conf ] ; then
+		echo "X is not configured.  Running configure program..."
+                #/usr/bin/perl /usr/X11R6/lib/sax/xc.pl -y --nointro --sysconfig
+                /usr/X11R6/bin/sax2
+		echo "X is now configured."
+	    fi
+	fi
+	exit 0
+	;;
+esac

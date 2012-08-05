@@ -1,0 +1,150 @@
+#!/bin/bash
+# Author: Blake, Kuo-Lien Huang
+# License: GPL
+# Description:
+#   * creat and delete accounts for DRBL, actually it for NIS (YP).
+#
+# Modified by Steven Shiau <steven@nchc.org.tw> to use in DRBL for Redhat
+
+# Load DRBL setting and functions
+if [ ! -f "/opt/drbl/sbin/drbl-conf-functions" ]; then
+  echo "Unable to find /opt/drbl/sbin/drbl-conf-functions! Program terminated!" 
+  exit 1
+fi
+. /opt/drbl/sbin/drbl-conf-functions
+
+#
+ACCOUNT_FILE="$1"
+ACCOUNT_FILE_TMP=`mktemp /tmp/account_tmp.XXXXXX`
+mode=""
+
+#
+USAGE="Usage: $0 account_file"
+# Check if root or not
+if [ ! "$UID" = "0" ]; then
+  echo
+  echo "[$LOGNAME] You need to run this script \"$0\" as root."
+  echo
+  exit 1
+fi
+
+if [ $# -ne 1 ]; then
+  echo "$USAGE"
+  echo "Example:"
+  echo "The file account.txt consists the following:"
+  echo "student001 g3c2 drblgood"
+  echo "student002 g5c9 8"
+  echo "run \"drbl-useradd-list account.txt\" will create the accounts"
+  echo "student001 with his/her supplementary group g3c2 and password drblgood"
+  echo "and"
+  echo "student002 with his/her supplementary group g5c9 and randomly password with some (say, 8) characters."
+  echo
+  echo "The file account.txt consists the following:"
+  echo "student001 g3c2"
+  echo "student002 g5c9"
+  echo "run \"drbl-userdel-list account.txt\" will delete the accounts"
+  echo "student001 with his/her supplementary group g3c2"
+  echo "and"
+  echo "student002 with his/her supplementary group g5c9"
+
+  exit 1
+fi
+
+[ ! -f "$ACCOUNT_FILE" ] && echo "File $ACCOUNT_FILE not exists!" && exit 1
+
+# filter the comment line, only keep the account line
+grep -v '^[[:space:]]*#' $ACCOUNT_FILE > $ACCOUNT_FILE_TMP
+
+if [ -n "$(basename $0 | grep -E "useradd")" ]; then
+  mode="useradd"
+elif [ -n "$(basename $0 | grep -E "userdel")" ]; then
+  mode="userdel"
+else
+  echo "Unknown mode!"
+  exit 1
+fi
+
+# useradd mode
+if [ "$mode" = "useradd" ]; then
+
+   while read id groupname password_opt; do 
+    # check if groupname is not valid one
+    if `echo "$groupname" | grep -q "^[0-9]"`; then
+       echo "groupname can NOT begin with digits (0-9)!"
+       echo "The one you specified is \"$groupname\""
+       echo "Program terminated"
+       exit 1
+    fi 
+    if ! grep -q "^$groupname:" /etc/group; then
+      echo -n "Creating group $groupname..."
+      /usr/sbin/groupadd $groupname
+      echo "done!"
+    fi
+
+    if ! grep -q "^$id:" /etc/passwd; then
+      echo -n "Creating account $id..."
+      /usr/sbin/useradd -m $id -G "$groupname"
+      echo "done!"
+    else
+      echo "Account $id exists! Skip!"
+    fi
+    
+    case "$password_opt" in
+     [0-9]|"")
+        # get one digit, so it must be the length of password
+        # or it's empty, we set it as $password_opt_default
+        if [ -z "$password_opt" ]; then
+          echo "You did NOT set the length of password, set it as $PASSWD_LENGTH_DEFAULT." 
+          password_opt="$PASSWD_LENGTH_DEFAULT"
+        fi
+        echo "Randomly set password from password length..." 
+		make_random_password $password_opt
+		random_pw=$random_password
+        echo "The password of $id is \"$random_pw\""
+        echo "$id:$random_pw" | /usr/sbin/chpasswd
+        ;;
+     *)
+        echo "Set password from input..." 
+        echo "The password of $id is \"$password_opt\""
+        echo "$id:$password_opt" | /usr/sbin/chpasswd
+    esac  
+    echo "finished creating account for $id"
+   done < $ACCOUNT_FILE_TMP
+fi
+
+# useradd mode
+if [ "$mode" = "userdel" ]; then
+   echo -n "Do you also want to clean user's home directory [y/N] ? "
+   read clean_home
+   case "$clean_home" in
+      y|Y) 
+         echo "Warning! The user's home directory will be deleted! Are you sure ?"
+         echo -n "[y/N] "
+         read clean_home_confirm
+         case "$clean_home_confirm" in
+            y|Y) 
+               RM_HOME_OPT="-r"
+               ;;
+            *)
+               RM_HOME_OPT=""
+         esac
+         ;;
+      *)
+         RM_HOME_OPT=""
+   esac
+   while read id groupname password_opt; do 
+    if grep -q "^$groupname:" /etc/group; then
+      echo -n "Deleting group $groupname..."
+      /usr/sbin/groupdel $groupname
+      echo "done!"
+    fi
+    
+    if grep -q "^$id:" /etc/passwd; then
+      echo -n "Deleting account $id..."
+      /usr/sbin/userdel $RM_HOME_OPT $id
+      echo "done!"
+    fi
+   done < $ACCOUNT_FILE_TMP
+fi
+
+[ -f "$ACCOUNT_FILE_TMP" ] && rm -f $ACCOUNT_FILE_TMP

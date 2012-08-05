@@ -1,0 +1,18 @@
+#!/bin/bash
+# Description: Script to start boinc as a service in DRBL client.
+# Author: Steven Shiau <steven _at_ nchc org tw>
+# License: GPL 
+
+# Load the setting
+. /opt/BOINC/conf/drbl-boinc.conf
+
+#
+export PATH=$PATH:$BOINC_DIR
+
+if ! mount -t tmpfs -o size="$RAMDISK_SIZE" none $workzone; then
+  echo "Unable to mount tmpfs working zone! Abort!"
+  exit 1
+fi
+
+echo "Running BOINC..."
+su -c "/opt/BOINC/run-as-user" -l $USERNAME

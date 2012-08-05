@@ -1,0 +1,169 @@
+#!/bin/bash
+# Author: Steven Shiau <steven _at_ nchc org tw>
+# License: GPL
+# Description: change the setting of NFS client
+#
+
+# Load DRBL setting and functions
+DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/opt/drbl/}"
+
+. $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
+
+#
+check_if_root
+
+#
+run_cmd="`basename $0`"
+
+#
+usage() {
+  echo "Set the NFS parameters for DRBL client."
+  echo "Usage: $run_cmd [-s|--size] SIZE [--rsize] SIZE [--wsize] SIZE [-p|--protocol] PROTOCOL [-v|--verbose]"
+  echo "-s, --size SIZE:  set the NFS blocksize (both rszie & wsize) to be SIZE bytes." 
+  echo "-g, --no-gen-ssi do NOT generate DRBL SSI template tarball."
+  echo "--rsize SIZE:  set the NFS rsize blocksize to be SIZE bytes." 
+  echo "--wsize SIZE:  set the NFS wsize blocksize to be SIZE bytes." 
+  echo "-p, --protocol PROTOCOL:   set the NFS to use the PROTOCOL (tcp, udp or auto)." 
+  echo "-v, --verbose    print out verbose information."
+}
+
+if [ $# -le 0 ]; then
+  usage
+  exit 1
+fi
+#
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -s|--size)
+		shift; 
+		rsize="$1"
+		wsize="$1"
+		shift;;
+    --rsize)
+		shift; rsize="$1"
+		shift;;
+    --wsize)
+		shift; wsize="$1"
+		shift;;
+    -p|--protocol)
+		shift; protocol="$1"
+		shift;;
+    -g|--no-gen-ssi)
+		gen_ssi="no"
+                shift;;
+    -v|--verbose)
+		shift; VERBOSE="on"
+                ;;
+    -*)		echo "${0}: ${1}: invalid option" >&2
+		usage >& 2
+		exit 2 ;;
+    *)		break ;;
+  esac
+done
+
+
+# check parameter
+[ -n "`echo $rsize | grep [^0-9]`" ] && echo "rsize is \"$rsize\", but rsize must be numbers!!! Program terminated!" && exit 1
+[ -n "`echo $wsize | grep [^0-9]`" ] && echo "wsize is \"$wsize\", but wsize must be numbers!!! Program terminated!" && exit 1
+# The specified protocol is higher priority, it  will overwrite the protocol gton from kernel config
+if [ -n "$protocol" ]; then
+  case "$protocol" in
+     [uU][dD][pP])
+                 protocol="udp"
+                 ;;
+     [tT][cC][pP])
+                 protocol="tcp"
+                 ;;
+          "auto")
+                 check_kernel_nfsd_tcp_config
+                 rtv=$?
+                 case "$rtv" in
+                   0)
+                      protocol="udp"
+                      ;;
+                   1)
+                      protocol="tcp"
+                      ;;
+                 esac
+                 ;;
+  	       *)
+  	         echo "PROTOCOL must be \"tcp\" or \"udp\" only"
+                 exit 1
+  esac
+fi
+
+run_mknic_nbi="0"
+
+# for rsize
+if [ -n "$rsize" ]; then
+  echo "The rsize you set for DRBL client is: $rsize"
+  echo -n "Modifying the NFS rsize parameter of clients... "
+  perl_str="s/,rsize=[[:digit:]]*,/,rsize=$rsize,/"
+  # change the fstab of clients
+  for itab in $drblroot/*; do
+     [ -f $itab/etc/fstab ] && perl -pi -e "$perl_str" $itab/etc/fstab
+  done
+  # change the drbl init in common root
+  perl -pi -e "$perl_str" $drblroot/../node_root/sbin/init
+
+  # change the mkinitrd mount
+  perl -pi -e "$perl_str" /usr/lib/mkpxeinitrd-net/initrd-skel/sbin/udhcpc-post
+  echo "done!"
+  # set the flag to run mknic_nbi
+  run_mknic_nbi="1"
+fi
+
+# for wsize
+if [ -n "$wsize" ]; then
+  echo "The wsize you set for DRBL client is: $wsize"
+
+  echo -n "Modifying the NFS wsize parameter of clients... "
+  perl_str="s/,wsize=[[:digit:]]*,/,wsize=$wsize,/"
+  # change the fstab of clients
+  for itab in $drblroot/*; do
+     [ -f $itab/etc/fstab ] && perl -pi -e "$perl_str" $itab/etc/fstab
+  done
+  # change the drbl init in common root
+  perl -pi -e "$perl_str" $drblroot/../node_root/sbin/init
+
+  # change the mkinitrd mount
+  perl -pi -e "$perl_str" /usr/lib/mkpxeinitrd-net/initrd-skel/sbin/udhcpc-post
+  echo "done!"
+  # set the flag to run mknic_nbi
+  run_mknic_nbi="1"
+fi
+
+# for protocol
+if [ -n "$protocol" ]; then
+  echo "The NFS protocol you set for DRBL client is: $protocol"
+
+  echo -n "Modifying the NFS protocol parameter of clients... "
+  perl_str="s/,tcp,|,udp,/,$protocol,/"
+  # change the fstab of clients
+  for itab in $drblroot/*; do
+     [ -f $itab/etc/fstab ] && perl -pi -e "$perl_str" $itab/etc/fstab
+  done
+  # change the drbl init in common root
+  perl -pi -e "$perl_str" $drblroot/../node_root/sbin/init
+
+  # change the mkinitrd mount
+  perl -pi -e "$perl_str" /usr/lib/mkpxeinitrd-net/initrd-skel/sbin/udhcpc-post
+  echo "done!"
+  # set the flag to run mknic_nbi
+  run_mknic_nbi="1"
+fi
+
+# make the initrd-net effect if necessary
+if [ "$run_mknic_nbi" -eq "1" ]; then
+   echo "-------------------------------------------------------"
+   echo "Creating the network boot kernel image for DRBL clients..."
+   mknic-nbi -a
+fi
+#
+if [ "$gen_ssi" != "no" ]; then
+  echo "-------------------------------------------------------"
+  echo "Since some config files are modified in template client, creating template tarball for DRBL SSI..."
+  drbl-gen-ssi-files
+fi
+
+echo "Please reboot the CLIENTS to make the new setting of NFS effect!"

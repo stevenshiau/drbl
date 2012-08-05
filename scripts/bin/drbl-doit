@@ -1,0 +1,283 @@
+#!/bin/bash
+# Author: Blake, Kuo-Lien Huang and Steven Shiau <steven _at_ nchc org tw>
+# License: GPL
+# Description: send commands to drbl clients
+#
+
+# Load DRBL setting and functions
+DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/opt/drbl/}"
+
+. $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
+
+# some userful function
+USAGE() {
+  echo "Usage: `basename $0` Options [command]"
+  echo "Options:"
+   langue_help_prompt_by_idx_no
+  echo "-b, --batch       Batch mode, same with -n/--no-ping"
+  echo "-h, --hosts IP_LIST  Instead of all DRBL clients, assign the clients by IP address, like: -h \"192.168.0.1 192.168.0.2\" NOTE!!! You must put \" \" before and after the IP_LIST!"
+  echo "-n, --no-ping     Do NOT ping machine to check if hosts is alive before running command"
+  echo "-p, --password PASSWD  Assign the plain text password of the USER (option -u|--user) to be used. //NOTE// This is not secure. It's recommended to avoid using this option. Better to use the ssh public key method."
+  echo "-u, --user USER   Execute command on all drbl clients as username USER"
+  echo "-v, --verbose:    Verbose mode."
+  echo "-w, --wol         Use Wake On LAN to wake up all drbl clients (Clients must be soft shutdown"
+  echo "Examples:"
+  echo "  To poweroff all DRBL clients"
+  echo "  `basename $0` -u root /sbin/poweroff"
+  echo "  To reboot all Cygwin clients, use"
+  echo "  `basename $0` -u Administrator /usr/bin/reboot -f now"
+}
+
+# main
+[ $# -eq 0 ] && USAGE && exit 1
+
+# Parse command
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -l|--language)
+	shift
+        if [ -z "$(echo $1 |grep ^-.)" ]; then
+          # skip the -xx option, in case 
+	  specified_lang="$1"
+	  shift
+        fi
+        [ -z "$specified_lang" ] && USAGE && exit 1
+	;;
+    -w|--wol)
+	shift; mode="WOL" ;;
+    -h|--hosts)
+	LIST_HOST="on"
+	shift
+        if [ -z "$(echo $1 |grep ^-.)" ]; then
+          # skip the -xx option, in case 
+	  IP_LIST="$1"
+	  shift
+        fi
+        [ -z "$IP_LIST" ] && USAGE && exit 1
+	;;
+    -u|--user)
+	shift
+        if [ -z "$(echo $1 |grep ^-.)" ]; then
+          # skip the -xx option, in case 
+	  specified_user="$1"
+	  shift
+        fi
+        [ -z "$specified_user" ] && USAGE && exit 1
+	;;
+    -p|--password)
+	shift
+        if [ -z "$(echo $1 |grep ^-.)" ]; then
+          # skip the -xx option, in case 
+	  specified_passwd="$1"
+	  shift
+        fi
+        [ -z "$specified_passwd" ] && USAGE && exit 1
+	;;
+    -n|--no-ping|-b|--batch)
+	shift; ping="no" ;;
+    -v|--verbose)
+	shift; verbose="on" ;;
+    -*)	echo "${0}: ${1}: invalid option" >&2
+	USAGE >& 2
+	exit 2 ;;
+    *)	break ;;
+  esac
+done
+
+# get the command
+CMD=$1
+[ -n "$verbose" ] && echo "CMD:$CMD"
+[ -n "$verbose" ] && echo "specified_user: $specified_user"
+
+#
+ask_and_load_lang_set $specified_lang
+
+# The reasone we do not to use $HOME is that sudo will not change 
+# environmental variable $HOME, but it will change the $USER
+# we need to know who is really running this after applying sudo.
+# say, sudo echo "$HOME", it will show user's home, instead of root's home, 
+REALHOME=$(LC_ALL=C grep -Ew "^$USER" /etc/passwd | cut -d":" -f6)
+
+# get client IP lists
+drbl_client_list="$(LC_ALL=C get-client-ip-list)"
+
+#
+case "$mode" in
+  "WOL")
+    ## Wake on LAN (--wol)
+    broadcast_address="255.255.255.255"
+    echo -n "Parsing the $DHCPDCONF_DIR/dhcpd.conf..."
+    WOL_TMP=`mktemp /tmp/wol_tmp.XXXXXX`
+    trap "[ -f "$WOL_TMP" ] && rm -f $WOL_TMP" 0 1 2 5 15
+    parse_dhcpd_conf $WOL_TMP
+    echo "done!"
+    # find the interfaces for the wake-on-lan packet to be sent, in DRBL, only
+    # private IP address is used to connect to client
+
+    # only root can update arp data
+    if [ "$UID" = "0" ]; then
+      # Dave Haakenhout suggests to create the static ethers files so that
+      # the arp can work.
+      echo -n "Creating the /etc/ethers... "
+      if [ -f /etc/ethers ]; then
+        echo -n "Backup the original /etc/ethers as /etc/ethers.orig... "
+        mv -f /etc/ethers /etc/ethers.orig
+      fi
+      # skip those comment lines
+      (grep "^[^#]" $WOL_TMP; echo ) | # make sure there is a LF at the end
+      while read host ip mac; do
+        echo $mac $ip >> /etc/ethers
+      done
+      echo -n "Reading the ARP address mapping... "
+      arp -f /etc/ethers
+      echo "done!"
+    fi
+
+    for ihost in $drbl_client_list; do
+      # skip those IP not listed in the $IP_LIST
+      if [ "$LIST_HOST" = "on" ]; then
+        [ -z "$(echo $IP_LIST | grep -E "\<$ihost\>")" ] && continue
+      fi
+      ethernet_address="$(grep -E "${ihost}\>" $WOL_TMP | awk -F" " '{print $3}')"
+      echo "-------------------------------------------------------------------"
+      if [ -n "$ethernet_address" ]; then
+        # find the etherwake/ether-wake program first. For FC: ether-wake, for Debian: etherwake.
+	if type etherwake &>/dev/null; then
+           ETH_WAKE="etherwake"
+	elif type ether-wake &>/dev/null; then
+           ETH_WAKE="ether-wake"
+        else
+           ETH_WAKE=""
+	fi
+        # use etherwake/ether-wake for the 1st priority, but it need to be root to run it
+        if [ -n "$ETH_WAKE" ] && [ "$UID" = "0" ]; then
+          # find the ether port, we can find it from the routing table
+          # 1st, find the subnet: 192.168.1.x -> 192.168.1
+          IP_grp_1_3="$(LC_ALL=C echo $ihost | sed -e "s/\.[[:digit:]]*$//g")"
+          iport="$(LC_ALL=C route -n | grep -E "^$IP_grp_1_3\." | awk -F" " '{print $NF}')"
+          echo Running \"$ETH_WAKE -i $iport $ethernet_address\"
+          $ETH_WAKE -i $iport $ethernet_address
+        else
+          echo Running drbl-wakeonlan -i ${ihost} $ethernet_address\"
+          drbl-wakeonlan -i ${ihost} $ethernet_address
+        fi
+      else
+         [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+         echo "The MAC address of the specified host ${ihost} NOT found!"
+         echo "Do you use the range mode in dhcpd.conf or is there any stale directory in $drblroot/ ?"
+         echo "Skip host ${ihost}!"
+         [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+      fi
+    done
+    [ -f "$WOL_TMP" ] && rm -f $WOL_TMP
+
+    echo "$msg_delimiter_star_line"
+    echo "$msg_wol_0"
+    echo "$msg_wol_1"
+    echo "$msg_wol_2"
+    echo "$msg_wol_3"
+    echo "$msg_wol_4"
+    echo "$msg_delimiter_star_line"
+
+    exit 0
+    ;;
+  *)
+    # for mode "RUN"...
+    [ -z "$CMD" ] && USAGE && exit 1
+    true
+esac
+
+# create the rsa key if not exists
+if [ ! -f $REALHOME/.ssh/id_rsa ]; then
+  ssh-keygen -t rsa -q -f $REALHOME/.ssh/id_rsa -N ""
+fi
+
+# Put authorized_keys for the user. 2 cases:
+# (1). It is root running drbl-doit.
+# (2). It is normal user running drbl-doit.
+# For root, we will NOT copy authorized_keys in server, since the root in the client should not share the same authorized_keys with that in server. We only put them in the client. (Note! Every client has its own root directory in $ihost/root/)
+# For normal user, we let user can ssh login back to server and other machine without password (Note! This is NFS-based home, so we just have to copy id_rsa.pub as authorized_keys in user's home, then no matter which machine user logins, it will use this key).
+if [ "$UID" = "0" ]; then
+  # for root, copy id_rsa.pub as authorized_keys in clients.
+  for ihost in $drblroot/*; do
+    if [ -f "$REALHOME/.ssh/id_rsa.pub" ]; then
+      mkdir -p $ihost/root/.ssh
+      cp -af $REALHOME/.ssh/id_rsa.pub $ihost/root/.ssh/authorized_keys
+    fi
+  done
+else
+  if [ -f "$REALHOME/.ssh/id_rsa.pub" ]; then
+    cp -af $REALHOME/.ssh/id_rsa.pub $REALHOME/.ssh/authorized_keys
+  fi
+fi
+
+# if user is not specified, set it as the one who is running this script
+[ -z "$specified_user" ] && specified_user="$USER"
+
+#
+if [ "$LIST_HOST" = "on" ]; then
+ for ihost in $IP_LIST; do
+   [ ! -d "$drblroot/$ihost" ] && echo "Can NOT find DRBL client $ihost (i.e. no $drblroot/$ihost)! Assume it's DRBL SSI client."
+ done
+ [ -n "$verbose" ] && echo "IP_LIST: $IP_LIST"
+fi
+
+# Execute the command
+for IP in $drbl_client_list; do
+  # skip those IP not listed in the $IP_LIST
+  if [ "$LIST_HOST" = "on" ]; then
+    [ -z "$(echo $IP_LIST | grep -E "\<$IP\>")" ] && continue
+  fi
+  # check if $IP is myself
+  me="$(LC_ALL=C ifconfig | grep "$IP" | cut -d: -f2 | cut -d' ' -f1)"
+  if [ "$me" = "" -o "$me" != "$IP" ]; then
+    echo "Sending command \"$@\" to $specified_user@$IP..."
+    if [ "$ping" = "no" ]; then
+      if [ -n "$specified_passwd" ]; then
+       if [ -n "$(echo $@ | grep -E "(reboot|poweroff)")" ]; then
+         # If command includes reboot or shutdown, redirect the output to /dev/null.
+         echo "spawn ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null $specified_user@$IP $@; expect password:; send $specified_passwd\r; expect eof" | expect -f - &>/dev/null &
+       else
+         echo "spawn ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null $specified_user@$IP $@; expect password:; send $specified_passwd\r; expect eof" | expect -f - &
+       fi
+      else
+       if [ -n "$(echo $@ | grep -E "(reboot|poweroff)")" ]; then
+         # If command includes reboot or shutdown, redirect the output to /dev/null.
+         ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null $specified_user@$IP $@ &>/dev/null &
+       else
+         ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null $specified_user@$IP $@ &
+       fi
+      fi
+    else
+      # ping before run command
+      if ping -c 2 $IP > /dev/null 2>&1; then
+          [ "$BOOTUP" = "color" ] && $SETCOLOR_SUCCESS
+          echo "$IP is alive... Sending command now..."
+          if [ -n "$specified_passwd" ]; then
+            if [ -n "$(echo $@ | grep -E "(reboot|poweroff)")" ]; then
+              # If command includes reboot or shutdown, redirect the output to /dev/null.
+              echo "spawn ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null $specified_user@$IP $@; expect password:; send $specified_passwd\r; expect eof" | expect -f - &>/dev/null &
+            else
+              echo "spawn ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null $specified_user@$IP $@; expect password:; send $specified_passwd\r; expect eof" | expect -f - &
+            fi
+          else
+            if [ -n "$(echo $@ | grep -E "(reboot|poweroff)")" ]; then
+              # If command includes reboot or shutdown, redirect the output to /dev/null.
+              ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null $specified_user@$IP $@ &>/dev/null &
+            else
+              ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null $specified_user@$IP $@ &
+            fi
+          fi
+          [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+      else
+          [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+          echo "$IP is unreachable... Abort command." 
+          [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+      fi
+    fi
+  fi
+done
+# wait for all processes to finish before exit
+wait
+
+exit 0

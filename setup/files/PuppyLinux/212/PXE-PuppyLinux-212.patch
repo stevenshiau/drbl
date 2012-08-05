@@ -1,0 +1,72 @@
+--- linuxrc.PuppyLinux-212.orig	2006-11-12 00:44:05.000000000 +0800
++++ linuxrc.PuppyLinux-212.drbl	2006-11-13 14:22:45.000000000 +0800
+@@ -545,6 +545,14 @@
+   mount -r -t squashfs -o noatime /dev/loop0 /pup_ro2;check_status $?
+ }
+ 
++# DRBL modify start
++loadpupsfsfunc_initrd() {
++  # mounts pup_xxx.sfs file on /pup_ro2...
++  echo -n "Mounting /$PUPSFS on (/initrd)/pup_ro2..." >/dev/console
++  mount -r -o loop -t squashfs -o noatime /$PUPSFS /pup_ro2;check_status $?
++}
++# DRBL modify end
++
+ loadpupsavefunc() {
+  #loads pup_save.3fs onto $EFSMNT
+   SMNTPT="`mount | grep "/dev/$SAVEPART" | tr -s " " | cut -f 3 -d " "`"
+@@ -772,6 +780,12 @@
+   findpupfunc $HDDRIVES
+   #...return with PDEV1=hda3 FSTYPE=ext3 PUPSFS=pup_001.sfs (for example)
+   ;;
++ # DRBL modify start
++ initrd)
++  # We already set PUPSFS when we assign PUPMODE=99
++  echo "Use the $PUPSFS from initrd" >/dev/console
++  ;;
++ # DRBL modify end
+  usbflash)
+   #note, this could be a "superfloppy" with no mbr and no partitions.
+   #USBDRIVES="`cat /proc/partitions | grep "sd[a-z]$" | tr -s " " | cut -f 5 -d " " | tr "\n" " "`"
+@@ -893,13 +907,25 @@
+  fi
+  #multisession cd, run in PUPMODE 13+64=77
+  [ ! "`echo -n "$PUPSAVE" | grep '/20[0-9][0-9]'`" = "" ] && PUPMODE=77  
++ #
+ fi
+ if [ $PUPMODE -eq 7 ];then
+  #PDEV1 has puppy installed (or sessions saved direct to partition) and pup_xxx.sfs, but do
+  #not use a tmpfs layer if PDEV1 is fast media...
+  [ ! "`echo -n "$PMEDIA" | grep --extended-regexp "idehd|satahd|scsihd"`" = "" ] && PUPMODE=6
+ fi
+-
++# DRBL modify start
++if [ -n "$(grep -i "frominitrd" /proc/cmdline)" ]; then
++  # We add a mode 99 here.
++  PUPMODE=99
++  PMEDIA="initrd"
++  PUPPYVERSION=`cat /PUPPYVERSION`
++  PUPSFS="pup_${PUPPYVERSION}.sfs"
++  echo "$PUPSFS:$PUPSFS" >/dev/console
++  echo "PUPMODE=$PUPMODE" >/dev/console
++fi
++# DRBL modify end
++#
+ #mount the main puppy f.s....
+ NEWFILESMNTPT="/pup_ro2"
+ OLDFILESMNTPT=""
+@@ -1034,6 +1060,14 @@
+   umount /dev/$SAVEPART 2>/dev/null
+   OLDFILESMNTPT="/pup_ro1"
+   ;;
++ # DRBL modify start
++ 99) #tmpfs, pup_xxx.sfs from initrd
++  loadpupsfsfunc_initrd / #loads pup_xxx.sfs (in / in initrd) to /pup_ro2
++  echo -n "Mounting tmpfs on (/initrd)/pup_rw..." >/dev/console
++  mount tmpfs /pup_rw -t tmpfs -o size=${SIZEFILLK}k;check_status $?
++  UMNT1='/pup_rw=rw:/pup_ro2=ro'
++  ;;
++ # DRBL modify end
+  *) #incomplete combination.
+   #nothing to save to and/or no puppy found.
+   echo -e "\\033[1;31m" >/dev/console #34=blue, 33=yellow, 32=green, 31=red, 35=purple, 36=aquablue, 38=black.

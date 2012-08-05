@@ -1,0 +1,12 @@
+# This file is for DRBL client to append specific mount point in fstab
+# Yo can put local device to be mounted in this file
+# The mount point will be created by drblpush.
+# The format is just like /etc/fstab
+# Ex:
+# /dev/hda1 /work1      ext3    defaults        1 2
+# In the example, 
+# (1) A dir /tftpboot/node_root/work1 will be created in drbl server.
+# (2) This line will be appended to client's /etc/fstab
+#
+# NOTE! NOTE!  NOTE! NOTE!  NOTE! NOTE!  NOTE! NOTE!
+# NOTE! You have to create the partition table and format the partition by yourself.

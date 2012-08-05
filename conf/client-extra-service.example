@@ -1,0 +1,7 @@
+# You can put the extra service you want client to run, put them in one line.
+# The necessary services (nfs, firstboot, xfs...) for DRBL client are already
+# specified in the drblpush, so you do not have to add them.
+# Example:
+# service_extra_added="webmin apmd"
+#
+service_extra_added=""

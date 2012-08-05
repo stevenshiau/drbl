@@ -1,0 +1,133 @@
+#!/bin/bash
+# Author: Steven Shiau <steven _at_ nchc org tw>
+# License: GPL
+# Description: To set the login mode for DRBL clients
+
+# Load DRBL setting and functions
+DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/opt/drbl/}"
+
+. $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
+
+#
+usage() {
+  echo "Delete the auto login accounts in DRBL."
+  echo "Usage: $0 [OPTION]"
+  echo "Options:"
+  language_help_prompt_by_idx_no
+  echo "-v, --verbose:  verbose mode."
+  echo "-h, --host IP_ADDRESS:  set only for the host with IP_ADDRESS instead of all DRBL clients"
+}
+
+#
+check_if_root
+
+#
+     
+# main
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -l|--language)
+		shift; specified_lang="$1"
+		shift;;
+    -h|--host)
+		shift; specified_host="$1"
+		shift
+                ;;
+    -v|--verbose)
+		shift; verbose="on"
+                ;;
+    -*)		echo "${0}: ${1}: invalid option" >&2
+		usage >& 2
+		exit 2 ;;
+    *)		break ;;
+  esac
+done
+
+ask_and_load_lang_set $specified_lang
+#
+if [ -n "$specified_host" ]; then
+ [ ! -d "$drblroot/$specified_host" ] && echo "Can NOT find DRBL client $specified_host (i.e. no $drblroot/$specified_host)! Assume it's DRBL SSI client."
+ [ -n "$verbose" ] && echo "specified_host: $specified_host"
+fi
+
+# set the host to be processed
+# host_list is the IP address of client, like 192.168.1.1...
+host_list=""
+if [ -n "$specified_host" ]; then
+   # set the host path
+   host_list=$drblroot/$specified_host
+else
+   # withoud specified_host, it must be all clients, append each one to $host_list
+   for ihost in `get-client-ip-list`; do
+     host_list="$host_list $drblroot/$ihost"
+   done
+fi
+
+account_list=
+# get the autologin account
+echo -n "Finding the auto login accounts..."
+for ihost in $host_list; do
+  iaccount="`get_existing_autologin_account $ihost`"
+  account_list="$account_list $iaccount"
+  echo -n "."
+done
+echo " done!"
+
+# remove the leading space
+account_list=`echo $account_list | sed -e "s/^ //g"`
+
+[ -z "$account_list" ] && echo "No autologin account! Program terminated!" && exit 1
+
+#
+[ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+echo "$msg_r_u_sure_want_to_del_autologin_accounts"
+echo "$msg_these_accounts_are:"
+[ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+echo "$account_list"
+[ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+echo "$msg_are_u_sure_u_want_to_continue"
+[ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+echo -n "[y/N] "
+read delete_account_confirm
+case "$delete_account_confirm" in
+	Y|y|[yY][eE][sS])
+	   echo "$msg_ok_let_do_it!"
+	   ;;
+	*)
+	   echo "$msg_do_not_del_accounts! $msg_program_stop!!!"
+	   exit 0
+esac
+
+[ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+echo "$msg_also_clean_autologin_accounts"
+echo "$msg_these_accounts_are:"
+[ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+echo "$account_list"
+[ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+echo -n "[y/N] "
+read clean_home
+case "$clean_home" in
+   y|Y|[yY][eE][sS]) 
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+      echo "$msg_warning_home_dir_will_be_deleted!!!"
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+      echo -n "[y/N] "
+      read clean_home_confirm
+      case "$clean_home_confirm" in
+        y|Y|[yY][eE][sS]) 
+                        RM_HOME_OPT="-r"
+	                ;;
+      esac
+      ;;
+esac
+
+for id in $account_list; do
+  echo -n "Deleting account $id..."
+  [ -n "$RM_HOME_OPT" ] && echo -n "and his/her home directory..."
+  /usr/sbin/userdel $RM_HOME_OPT $id
+  echo "done!"
+done
+
+echo "Updating YP..."
+make -C /var/yp
+echo "done!"

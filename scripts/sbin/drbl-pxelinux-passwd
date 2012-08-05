@@ -1,0 +1,354 @@
+#!/bin/bash
+# Author: Steven Shiau <steven _at_ nchc org tw>
+# License: GPL
+
+# Load DRBL setting and functions
+. /opt/drbl/sbin/drbl-conf-functions
+
+# slat for SHA1, better to leave it empty, let the program pick a random one.
+salt=""
+
+#
+usage() {
+    echo "Usage:"
+    echo "To set the pxelinux password for clients:"
+    echo "`basename $0` [OPTION]"
+    echo "Options:"
+    echo "--stdin PASSWORD     set the root's password for clients as PASSWORD"
+    echo "-h, --host IP_ADDRESS:  set only for the host with IP_ADDRESS instead of all DRBL clients"
+    echo "-d, --disable        disable the menu password"
+    echo "-e, --enable         enable the menu password"
+    echo "-o, --overwrite-pxelinux-passwd [y/n]  when a PXELinux password already exists in config file, overwrite it or not."
+    echo "-b, --label LABEL    enable/disable the LABEL block only in PXELinux config file"
+    echo "-v, --verbose        prints out verbose information"
+    echo "Example:"
+    echo "To assign the PXELinux password for all label blocks, run"
+    echo "`basename $0` -e"
+    echo "To assign the PXELinux password for menu label \"drbl\" and \"local\" only, run"
+    echo "`basename $0` -e -b \"drbl local\""
+    echo "To disable the authentication mechanism, run"
+    echo "`basename $0` -d"
+}
+
+#
+check_if_root
+
+# main
+unalias ls 2>/dev/null
+
+specified_host=''
+# Parse command-line options
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --stdin)  
+            shift;
+            if [ -z "$(echo $1 |grep ^-.)" ]; then
+              # skip the -xx option, in case 
+	      pxelinux_passwd="$1"
+            fi
+            shift;;
+    -h|--host)
+            shift; specified_host="$specified_host $1"
+            shift;;
+    -d|--disable)
+            shift; mode="disable"
+	    ;;
+    -e|--enable)
+            shift; mode="enable"
+	    ;;
+    -o|--overwrite-pxelinux-passwd)
+	    shift
+            if [ -z "$(echo $1 |grep ^-.)" ]; then
+              # skip the -xx option, in case 
+	      overwrite_pxelinux_passwd="$1"
+	      shift
+            fi
+	    ;;
+    -b|--label)
+	    shift
+            if [ -z "$(echo $1 |grep ^-.)" ]; then
+              # skip the -xx option, in case 
+	      labels="$1"
+	      shift
+            fi
+	    ;;
+    -v|--verbose)
+            shift; VERBOSE="on"
+            ;;
+    -*)     echo "${0}: ${1}: invalid option" >&2
+            usage >& 2
+            exit 2 ;;
+    *)      break ;;
+  esac
+done
+
+if [ -z "$mode" ]; then
+  usage
+  exit 1
+fi
+
+#
+switch_label_block_menu_passwd() {
+  local LAB="$1"
+  local ACT="$2"
+  local PXE_CONF_TMP="$3"
+  local PASSWD_STR="$4"
+  check_img_in_pxe_cfg $LAB $PXE_CONF_TMP
+  # turn on/off MENU PASSWD for specified label block
+  lines=$(get_pxecfg_image_block $LAB $PXE_CONF_TMP)
+  begin_line=$(echo $lines | awk -F" " '{print $1}')
+  end_line=$(echo $lines | awk -F" " '{print $2}')
+  case "$ACT" in
+    "on")
+      [ -n "$VERBOSE" ] && echo "Turn on 'MENU PASSWD' for label block $LAB in $PXE_CONF_TMP... "
+      sub_act_cmd="if ($begin_line..$end_line) {s/^(#|[[:space:]])*MENU PASSWD.*/  MENU PASSWD $PASSWD_STR/i}"
+      ;;
+    "off")
+      [ -n "$VERBOSE" ] && echo "Turn off 'MENU PASSWD' for label block $LAB in $PXE_CONF_TMP... "
+      sub_act_cmd="if ($begin_line..$end_line) {s/^(#|[[:space:]])*(MENU PASSWD.*)/  # \$2/i}"
+      ;;
+  esac
+  perl -pi -e "$sub_act_cmd" $PXE_CONF_TMP
+} # end of switch_label_block_menu_passwd
+#
+input_new_passwd() {
+  # interactive
+  echo "New password: (It will not be echoed in the screen)"
+  read -s pass1
+  echo "Retype new password: (It will not be echoed in the screen)"
+  read -s pass2
+  while [ "$pass1" != "$pass2" ]; do
+    echo "Sorry, passwords do not match"
+    echo "New password: (It will not be echoed in the screen)"
+    read -s pass1
+    echo "Retype new password: (It will not be echoed in the screen)"
+    read -s pass2
+  done
+  #
+  [ -z "$pass1" ] && echo "Password can NOT be empty!!! Program terminated" && exit 1
+  # set the matched password
+  new_passwd="$pass1"
+}
+
+get_pxelinux_master_sha1passwd() {
+  local CONFILE="$1"
+  sha1_passwd="$(grep -i "^[[:space:]]*[#]*[[:space:]]*MENU MASTER PASSWD.*" $PXELINUX_DIR/$CONFILE | sed -e "s/^[[:space:]]*[#]*[[:space:]]*MENU MASTER PASSWD[[:space:]]*//g")"
+}
+
+get_pxelinux_sha1passwd_in_label_block() {
+  local PXE_CONF_TMP="$1"  # Use file name without path. Ex. default
+  local LAB="$2"
+  check_img_in_pxe_cfg $LAB $PXELINUX_DIR/$PXE_CONF_TMP
+  # MENU PASSWD for specified label block
+  lines=$(get_pxecfg_image_block $LAB $PXELINUX_DIR/$PXE_CONF_TMP)
+  begin_line=$(echo $lines | awk -F" " '{print $1}')
+  end_line=$(echo $lines | awk -F" " '{print $2}')
+  search_cmd="if ($begin_line..$end_line) {print}"
+  sha1_passwd="$(perl -n -e "$search_cmd" $PXELINUX_DIR/$PXE_CONF_TMP | grep -i "^[[:space:]]*[#]*[[:space:]]*MENU PASSWD.*" | sed -e "s/^[[:space:]]*[#]*[[:space:]]*MENU PASSWD[[:space:]]*//g")"
+}
+
+get_new_master_passwd_or_old_master_sha1_passwd() {
+  local CONFILE="$1"
+  get_pxelinux_master_sha1passwd $CONFILE
+  if [ -z "$pxelinux_passwd" ]; then
+     if [ -z "$sha1_passwd" ]; then
+       # ask user the input
+       input_new_passwd
+     else
+       # confirm since old sha1_passwd exists
+       if [ -z "$overwrite_pxelinux_passwd" ]; then
+         echo "Previous password for pxelinux exists! Do you want to overwrite that ?"
+         echo -n "[y/N] "
+         read overwrite_pxelinux_passwd
+       fi
+       case "$overwrite_pxelinux_passwd" in
+          y|Y|[yY][eE][sS])
+             input_new_passwd
+             ;;
+          *)
+             echo "We will use the old password."
+             ;;
+       esac
+     fi
+  else
+     # enter from stdin
+     new_passwd="$pxelinux_passwd"
+  fi
+}
+#
+get_new_block_passwd_or_old_block_sha1_passwd() {
+  local CONFILE="$1"
+  local LAB="$2"
+  get_pxelinux_sha1passwd_in_label_block $CONFILE $LAB
+  if [ -z "$pxelinux_passwd" ]; then
+     if [ -z "$sha1_passwd" ]; then
+       # ask user the input
+       input_new_passwd
+     else
+       # confirm since old sha1_passwd exists
+       if [ -z "$overwrite_pxelinux_passwd" ]; then
+         echo "Previous PXELinux password for label block $LAB exists! Do you want to overwrite that ?"
+         echo -n "[y/N] "
+         read overwrite_pxelinux_passwd
+       fi
+       case "$overwrite_pxelinux_passwd" in
+          y|Y|[yY][eE][sS])
+             input_new_passwd
+             ;;
+          *)
+             echo "We will use the old password."
+             ;;
+       esac
+     fi
+  else
+     # enter from stdin
+     new_passwd="$pxelinux_passwd"
+  fi
+}
+
+disable_pxepasswd_in_config() {
+  local CONFILE="$1"
+  local labels="$2"
+  echo -n "Disabling PXE password in config file $PXELINUX_DIR/$CONFILE... "
+  perl -pi -e 's/^[[:space:]]*[#]*[[:space:]]*(timeout .*)/$1/gi' $PXELINUX_DIR/$CONFILE
+  perl -pi -e 's/^[[:space:]]*[#]*[[:space:]]*(MENU MASTER PASSWD.*)/# $1/gi' $PXELINUX_DIR/$CONFILE
+  if [ -z "$labels" ]; then
+    # set all label blocks.
+    perl -pi -e 's/^[[:space:]]*[#]*[[:space:]]*(MENU PASSWD.*)/  # $1/gi' $PXELINUX_DIR/$CONFILE
+  else
+    # set specific label blocks.
+    echo -n "For label block: "
+    for ib in $labels; do
+      echo -n "$ib "
+      switch_label_block_menu_passwd "$ib" off $PXELINUX_DIR/$CONFILE
+    done
+  fi
+  echo
+} # end of disable_pxepasswd_in_config
+#
+enable_pxepasswd_in_config() {
+  local CONFILE="$1"
+  local PASSWD_STR="$2"
+  local LAB="$3"
+  echo -n "Enabling PXE password in config file $PXELINUX_DIR/$CONFILE "
+  perl -pi -e 's/^[[:space:]]*(timeout .*)/# $1/gi' $PXELINUX_DIR/$CONFILE
+  if [ -z "$LAB" ]; then
+    # set all label blocks.
+    perl -pi -e "s/^[[:space:]]*[#]*[[:space:]]*MENU MASTER PASSWD.*/MENU MASTER PASSWD $PASSWD_STR/gi" $PXELINUX_DIR/$CONFILE
+    perl -pi -e 's/^[[:space:]]*[#]*[[:space:]]*MENU PASSWD.*/  MENU PASSWD/gi' $PXELINUX_DIR/$CONFILE
+  else
+    # set specific label blocks.
+    echo -n "for label block: $LAB "
+    switch_label_block_menu_passwd "$LAB" on $PXELINUX_DIR/$CONFILE $PASSWD_STR
+  fi
+  echo
+} # end of enable_pxepasswd_in_config
+
+enable_pxe_passwd() {
+#
+if [ -n "$specified_host" ]; then
+  PXE_CONF="$PXELINUX_DIR/default_skeleton"
+  cp -f $PXELINUX_DIR/default $PXE_CONF
+  # check every hosts
+  for ip in $specified_host; do
+    if [ ! -d "$drblroot/$ip" ]; then
+       [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+       echo "Warning! Can NOT find DRBL client $ip (i.e. no $drblroot/$ip)! Program terminated!"
+       [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+    fi
+  done
+ [ -n "$verbose" ] && echo "specified_host: $specified_host"
+fi
+
+# set the host to be processed
+# host_list is the IP address of client, like 192.168.1.1...
+if [ -n "$specified_host" ]; then
+   # set the host path
+   for ip in $specified_host; do
+     hex_ip="$(drbl-gethostip $ip)"
+     echo "Enabling the pxelinux simple menu for DRBL client $ip..."
+     cp -f $PXE_CONF $PXELINUX_DIR/$hex_ip
+     if [ -z "$labels" ]; then
+       # master password
+       get_new_master_passwd_or_old_master_sha1_passwd $hex_ip
+       if [ -n "$new_passwd" ]; then
+         sha1_passwd="$(drbl-sha1pass $new_passwd $salt)"
+       fi
+       sha1_passwd_escape="$(echo "$sha1_passwd" | sed -e 's|\$|\\\$|g' -e 's|/|\\/|g')"
+       # comment the timeout
+       enable_pxepasswd_in_config $hex_ip $sha1_passwd_escape "$labels"
+     else
+       # password for every label block
+       for ib in $labels; do
+         get_new_block_passwd_or_old_block_sha1_passwd $hex_ip $ib
+         if [ -n "$new_passwd" ]; then
+           sha1_passwd="$(drbl-sha1pass $new_passwd $salt)"
+         fi
+         sha1_passwd_escape="$(echo "$sha1_passwd" | sed -e 's|\$|\\\$|g' -e 's|/|\\/|g')"
+         # comment the timeout
+         enable_pxepasswd_in_config $hex_ip $sha1_passwd_escape "$labels"
+       done
+     fi
+   done
+else
+   # withoud specified_host, it must be all clients, create the default
+   echo "Enabling the default pxelinux simple menu for all DRBL clients..."
+   if [ -z "$labels" ]; then
+     # master password
+     get_new_master_passwd_or_old_master_sha1_passwd default
+     if [ -n "$new_passwd" ]; then
+       sha1_passwd="$(drbl-sha1pass $new_passwd $salt)"
+     fi
+     sha1_passwd_escape="$(echo "$sha1_passwd" | sed -e 's|\$|\\\$|g' -e 's|/|\\/|g')"
+     # comment the timeout
+     enable_pxepasswd_in_config default $sha1_passwd_escape
+   else
+     # password for every label block
+     for ib in $labels; do
+       echo "Now process label block $ib..."
+       get_new_block_passwd_or_old_block_sha1_passwd default $ib
+       if [ -n "$new_passwd" ]; then
+         sha1_passwd="$(drbl-sha1pass $new_passwd $salt)"
+       fi
+       sha1_passwd_escape="$(echo "$sha1_passwd" | sed -e 's|\$|\\\$|g' -e 's|/|\\/|g')"
+       # comment the timeout
+       enable_pxepasswd_in_config default $sha1_passwd_escape $ib
+     done
+   fi
+fi
+} # end of enable_pxe_passwd
+#
+disable_pxe_passwd() {
+# set the host to be processed
+# host_list is the IP address of client, like 192.168.1.1...
+if [ -n "$specified_host" ]; then
+   # set the host path
+   for ip in $specified_host; do
+     hex_ip="$(drbl-gethostip $ip)"
+     echo "Disabling the password in gxelinux simple menu for client $ip... "
+     cp -f $PXE_CONF $PXELINUX_DIR/$hex_ip
+     # comment the timeout
+     disable_pxepasswd_in_config $hex_ip "$labels"
+   done
+else
+   # withoud specified_host, it must be all clients, create the default
+   echo "Disable the password in pxelinux simple menu for all clients... "
+   # comment the timeout
+   disable_pxepasswd_in_config default "$labels"
+   # TODO: clean all hexip and mac config ?
+   if [ -n "$PXELINUX_DIR" ]; then
+     find $PXELINUX_DIR/ -maxdepth 1 ! -name "default" -type f -exec rm -f {} \;
+   fi
+fi
+} # end of disable_pxe_passwd
+
+case "$mode" in
+   "disable")
+         disable_pxe_passwd
+         ;;
+   "enable")
+         enable_pxe_passwd
+         ;;
+esac
+echo "done!"
+exit 0

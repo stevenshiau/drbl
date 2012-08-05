@@ -1,0 +1,1245 @@
+#!/bin/bash
+#
+# /etc/rc.d/rc.sysinit - run once at boot time
+#
+# Taken in part from Miquel van Smoorenburg's bcheckrc.
+#
+
+# Rerun ourselves through initlog
+if [ -z "$IN_INITLOG" -a -x /sbin/initlog ]; then
+    exec /sbin/initlog -r /etc/rc.d/rc.sysinit
+fi
+
+# Set the path
+PATH=/bin:/sbin:/usr/bin:/usr/sbin
+export PATH
+
+HOSTNAME=`/bin/hostname`
+HOSTTYPE=`uname -m`
+unamer=`uname -r`
+eval version=`echo $unamer | awk -F '.' '{ print "(" $1 " " $2 ")" }'`
+
+if [ -f /etc/sysconfig/network ]; then
+    . /etc/sysconfig/network
+fi
+
+# Read in config data.
+if [ -f /etc/sysconfig/usb ]; then
+    . /etc/sysconfig/usb
+fi
+
+if [ -f /etc/sysconfig/system ]; then
+    . /etc/sysconfig/system
+fi
+
+. /etc/init.d/functions
+
+if [ -z "$HOSTNAME" -o "$HOSTNAME" = "(none)" ]; then
+    HOSTNAME=localhost
+fi
+
+
+# This must be done before anything else because now most messages
+# are translated so we need correct system font very early
+# This must be done before Aurora is started too, since screenchars
+# --tty=foo is broken :(
+# Note that if setting of system font fails here boot messages
+# may be unreadable so we may need to reset LANGUAGE to C in this case
+# Load system font
+#
+# the font and other needed files should be available under
+# /etc/sysconfig/console, in case they aren't we define DELAYED_FONT=yes
+# to load the font later, when the /usr partition is mounted
+if [ -x /sbin/setsysfont ]; then
+    [ -f /etc/sysconfig/i18n ] && . /etc/sysconfig/i18n
+    [ -x /usr/bin/consolechars ] || DELAYED_FONT=yes
+    if [ -n "$SYSFONT" ]; then
+	   [ -f /etc/sysconfig/console/consolefonts/$SYSFONT.psf.gz -o \
+	     -f /etc/sysconfig/console/consolefonts/$SYSFONT.psf ] || \
+			DELAYED_FONT=yes
+    fi 
+    if [ -n "$SYSFONTACM" ]; then
+	   [ -f /etc/sysconfig/console/consoletrans/$SYSFONTACM \
+		-o -f /etc/sysconfig/console/consoletrans/$SYSFONTACM.acm.gz \
+		-o -f /etc/sysconfig/console/consoletrans/$SYSFONTACM.acm ] || \
+			DELAYED_FONT=yes
+    fi
+    if [ -n "$UNIMAP" ]; then
+	   [ -f /etc/sysconfig/console/consoletrans/$UNIMAP \
+		-o -f /etc/sysconfig/console/consoletrans/$UNIMAP.sfm.gz \
+		-o -f /etc/sysconfig/console/consoletrans/$UNIMAP.sfm ] || \
+			DELAYED_FONT=yes
+    fi
+    # We have to set font before printing message, so we cannot
+    # use ``action message command'' directly because it prints
+    # message before executing command
+    [ "$DELAYED_FONT" != "yes" -o -r /usr/lib/kbd/consolefonts ] && \
+	OUR_CHARSET=${CHARSET=`get_locale_encoding`}
+	case "$OUR_CHARSET" in 
+	    UTF-8)
+		action "Setting default font ($SYSFONT): " /bin/unicode_start $SYSFONT
+		# this is done by unicode_start, but apparently
+		# "action" filters the output, so it has to be redone
+		echo -n -e '\033%G'
+		;;
+	    *)
+		action "Setting default font ($SYSFONT): " /sbin/setsysfont
+		;;
+	esac
+fi
+
+
+# Mount /proc (done here so volume labels can work with fsck)
+action "Mounting proc filesystem" mount -n -t proc none /proc
+
+# Only read this once.
+cmdline=$(cat /proc/cmdline)
+
+# for 2.5 - mount sysfs if it is available
+if [[ -d /sys ]] && grep -q sysfs /proc/filesystems; then
+    action "Mounting sysfs on /sys" mount -t sysfs none /sys
+fi
+
+# we better have udev create all block device nodes before going
+# any further (not limited to /sys/block/sd*, since scsi_hostadapter
+# might contain non-scsi drivers)
+# it also loads usb now to be able to use an usb keyboard to answer questions 
+# it will also copy then initrd's /dev if present (lvm, dmraid)
+service udev start
+
+# Unmount the initrd, if necessary
+# (pixel) do not unmount if /initrd/loopfs is mounted (happens for root loopback)
+# (bluca) handle udev /dev tmpfs here since kernel will happily umount /dev after initrd end
+# (blino) do it after the udev service has copied the lvm/dmraid nodes
+if LC_ALL=C grep -q /initrd /proc/mounts && ! LC_ALL=C grep -q /initrd/loopfs /proc/mounts ; then
+   if LC_ALL=C grep -q /initrd/dev /proc/mounts; then
+	  umount /initrd/dev
+   fi
+   action "Unmounting initrd: " umount -l /initrd
+   /sbin/blockdev --flushbufs /dev/ram0 >/dev/null 2>&1
+fi
+
+# Check SELinux status
+selinuxfs=`awk '/ selinuxfs / { print $2 }' /proc/mounts`
+SELINUX=
+if [ -n "$selinuxfs" ] && [ "`cat /proc/self/attr/current`" != "kernel" ]; then
+	if [ -r $selinuxfs/enforce ] ; then
+		SELINUX=`cat $selinuxfs/enforce`
+	else
+		# assume enforcing if you can't read it
+		SELINUX=1
+	fi
+fi
+
+disable_selinux() {
+	echo "*** Warning -- SELinux is active"
+	echo "*** Disabling security enforcement for system recovery."
+	echo "*** Run 'setenforce 1' to reenable."
+	echo "0" > $selinuxfs/enforce
+}
+
+if [ "$HOSTTYPE" != "s390" -a "$HOSTTYPE" != "s390x" -a -c /dev/tty0 ]; then
+  last=0
+  for i in `LC_ALL=C grep '^[0-9].*respawn:/sbin/mingetty' /etc/inittab | sed 's/^.* tty\([0-9][0-9]*\).*/\1/g'`; do
+      if [ -c /dev/tty$i ]; then
+	  > /dev/tty$i
+      fi
+      last=$i
+  done
+  if [ $last -gt 0 -a -c /dev/tty$((last+1)) -a -c /dev/tty$((last+2)) ]; then
+       > /dev/tty$((last+1))
+       > /dev/tty$((last+2))
+  fi
+fi
+
+# Do the following while waiting for an 'I' from the user...
+{
+# Print a banner. ;)
+# C-like escape sequences don't work as 2nd and up parameters of gprintf,
+# so real escap chars were written
+PRODUCT=`sed "s/.*release \([0-9.]*\).*/\1/g" /etc/mandriva-release 2> /dev/null`
+SYSTEM=${SYSTEM="Mandriva Linux"}
+
+if [ -r /etc/sysconfig/oem ]; then
+    . /etc/sysconfig/oem
+fi
+
+if [ "$BOOTUP" != "serial" ]; then
+ gprintf "\t\t\tWelcome to %s" "`echo -en '\\033[1;36m'`$SYSTEM`echo -en '\\033[0;39m'` $PRODUCT"
+else
+ gprintf "\t\t\tWelcome to  %s" "$SYSTEM $PRODUCT"
+fi
+echo -en "\r"
+echo
+
+if [ "$PROMPT" != "no" ]; then
+ gprintf "\t\tPress 'I' to enter interactive startup."
+ echo -en "\r"
+ echo
+fi
+
+# Try to get devfsd
+if [ -c /dev/.devfsd ]; then
+  if [ -x /sbin/devfsd ]; then
+    action "Running DevFs daemon" devfsd /dev
+  else
+      if strstr "$cmdline" nodevfsd || strstr "$cmdline" devfs=nomount ; then
+          : no devfs is wanted - do nothing
+      else
+	  # devfs is used but devfsd isn't installed
+	  gprintf " #### your system is currently using devfs but devfsd isn't available"; echo
+	  gprintf " #### you should disable devfs (add 'devfs=nomount' to the parameters"; echo
+	  gprintf " #### that your bootloader gives to the kernel"; echo
+	  # Let devfs being tested, but disable it on /dev
+	  action " Disabling devfs (was mounted on /dev)" umount /dev
+    fi
+  fi
+fi
+
+if ! grep -q /dev/pts /proc/mounts; then
+    mount -n -t devpts -o mode=620 none /dev/pts
+fi
+if ! grep -q /dev/shm /proc/mounts; then
+    mount -n -t tmpfs  none /dev/shm
+fi
+
+# If brltty exist start it
+[ -x /bin/brltty ] && action "Starting braille terminal" /bin/brltty
+
+# If user was not fast enough he gets another chance
+# before exiting rc.sysinit
+kill -TERM `/sbin/pidof getkey` >/dev/null 2>&1
+} &
+if [ "$PROMPT" != "no" ]; then
+   /sbin/getkey i && export CONFIRM=yes
+fi
+wait
+
+
+# Fix console loglevel
+if [ -n "$LOGLEVEL" ]; then
+	/bin/dmesg -n $LOGLEVEL
+fi
+
+initsplash 5
+
+# devfsd must run
+rc_splash start 1
+
+# Configure kernel parameters
+action "Configuring kernel parameters: " sysctl -e -p /etc/sysctl.conf
+
+rc_splash kernel 2
+
+#
+ARCH=$(/bin/uname -m)
+
+# Set the system clock.
+ARC=0
+SRM=0
+UTC=0
+
+if [ -f /etc/sysconfig/clock ]; then
+   . /etc/sysconfig/clock
+
+   # convert old style clock config to new values
+   if [ "${CLOCKMODE}" = "GMT" ]; then
+      UTC=true
+   elif [ "${CLOCKMODE}" = "ARC" ]; then
+      ARC=true
+   fi
+fi
+
+CLOCKDEF=""
+if [ "$ARCH" = "ppc" ];then
+CLOCKFLAGS="$CLOCKFLAGS -s"
+else
+CLOCKFLAGS="$CLOCKFLAGS --hctosys"
+fi
+
+case "$UTC" in
+    yes|true)	CLOCKFLAGS="$CLOCKFLAGS --utc"
+		CLOCKDEF="$CLOCKDEF (utc)" ;;
+    no|false)	CLOCKFLAGS="$CLOCKFLAGS --localtime"
+		CLOCKDEF="$CLOCKDEF (localtime)" ;;
+esac
+case "$ARC" in
+    yes|true)	CLOCKFLAGS="$CLOCKFLAGS --arc"
+		CLOCKDEF="$CLOCKDEF (arc)" ;;
+esac
+case "$SRM" in
+    yes|true)	CLOCKFLAGS="$CLOCKFLAGS --srm"
+		CLOCKDEF="$CLOCKDEF (srm)" ;;
+esac
+
+if [ "$ARCH" = "alpha" -a -f /lib/modules/$(uname -r)/modules.dep ];then
+/sbin/hwclock $CLOCKFLAGS
+elif [ "$ARCH" != "alpha" ];then
+/sbin/hwclock $CLOCKFLAGS
+fi
+
+action "Setting clock %s: %s" "$CLOCKDEF" "`date`" date
+
+rc_splash clock 3
+
+if [ "$CONSOLETYPE" = "vt" -a -x /usr/bin/loadkeys ]; then
+ KEYTABLE=
+ KEYMAP=
+ if [ -f /etc/sysconfig/console/default.kmap ]; then
+  KEYMAP=/etc/sysconfig/console/default.kmap
+ else
+  if [ -f /etc/sysconfig/keyboard ]; then
+    . /etc/sysconfig/keyboard
+  fi
+  if [ -n "$KEYTABLE" -a -d /usr/lib/kbd/keymaps -o -d /lib/kbd/keymaps ]; then
+     KEYMAP="$KEYTABLE"
+  fi
+ fi
+ if [ -n "$KEYMAP" ]; then 
+  # Since this takes in/output from stdin/out, we can't use initlog
+  if [ -n "$KEYTABLE" ]; then
+    gprintf "Loading default keymap (%s): " $KEYTABLE
+  else
+    gprintf "Loading default keymap: "
+  fi
+  loadkeys $KEYMAP < /dev/tty0 > /dev/tty0 2>/dev/null && \
+     success "Loading default keymap" || failure "Loading default keymap"
+  echo
+ fi
+fi   
+
+# Set the hostname.
+action "Setting hostname %s: " ${HOSTNAME} hostname ${HOSTNAME}
+
+# Set the NIS domain name
+if [ -n "$NISDOMAIN" ]; then
+    action "Setting NIS domain name %s: " $NISDOMAIN nisdomainname $NISDOMAIN
+fi
+
+# Initialiaze ACPI bits
+if [ -d /proc/acpi ]; then
+   for module in /lib/modules/$unamer/kernel/drivers/acpi/* ; do
+      insmod $module >/dev/null 2>&1
+   done
+fi
+
+if [ -r /etc/sysconfig/init ]; then
+    . /etc/sysconfig/init
+fi
+
+needusbstorage=
+if ! strstr "$cmdline" nousb; then
+    # If you are running 2.6, and you built your own modular mouse/keyboard drivers
+    # get them via hotplug. (and if it's your boot keyboard, build them in! :)
+    if [ "${version[0]}" -lt "3" -a "${version[1]}" -lt "6" ]; then 
+      # only needed for 2.4, it's handled by udevstart on 2.6 kernels
+      /etc/init.d/usb start
+      LC_ALL=C fgrep 'hid' /proc/bus/usb/drivers || action "Initializing USB HID interface: " modprobe hid 2> /dev/null
+      action "Initializing USB keyboard: " modprobe keybdev 2> /dev/null
+      action "Initializing USB mouse: " modprobe mousedev 2> /dev/null 
+    fi
+    needusbstorage=`LC_ALL=C grep -e "^I.*Cls=08" /proc/bus/usb/devices 2>/dev/null`
+fi
+
+if [ -f /fastboot ] || strstr "$cmdline" fastboot ; then
+	fastboot=yes
+fi
+
+
+if [ -f /forcefsck ] || strstr "$cmdline" forcefsck ; then
+	fsckoptions="-f $fsckoptions"
+elif [ -f /.autofsck ]; then
+        rc_splash verbose
+	gprintf "Your system appears to have shut down uncleanly\n"
+	AUTOFSCK_TIMEOUT=5
+	[ -f /etc/sysconfig/autofsck ] && . /etc/sysconfig/autofsck
+	if [ "$AUTOFSCK_DEF_CHECK" = "yes" ]; then
+		AUTOFSCK_OPT=-f
+	fi
+
+	if [ "$PROMPT" != "no" ]; then
+		if [ "$AUTOFSCK_DEF_CHECK" = "yes" ]; then
+		        MSG=`gprintf "Press N within %%d seconds to not force file system integrity check..."`
+			KEYS=`gprintf "nN"`
+			if /sbin/getkey -c $AUTOFSCK_TIMEOUT -m "$MSG" "$KEYS" ; then
+				AUTOFSCK_OPT=
+			else
+			        echo
+			fi
+		else
+		        MSG=`gprintf "Press Y within %%d seconds to force file system integrity check..."`
+			KEYS=`gprintf "yY"`
+			if /sbin/getkey -c $AUTOFSCK_TIMEOUT -m "$MSG" "$KEYS" ; then
+				AUTOFSCK_OPT=-f
+			else
+				echo
+			fi
+			
+		fi
+		echo
+	else
+		# PROMPT not allowed
+		if [ "$AUTOFSCK_DEF_CHECK" = "yes" ]; then
+			gprintf "Forcing file system integrity check due to default setting\n"
+		else
+			gprintf "Not forcing file system integrity check due to default setting\n"
+		fi
+	fi
+	fsckoptions="$AUTOFSCK_OPT $fsckoptions"
+fi
+
+if [ "$BOOTUP" = "color" ]; then
+	fsckoptions="-C $fsckoptions"
+else
+	fsckoptions="-V $fsckoptions"
+fi
+
+if [ -f /etc/rc.readonly ]; then
+    # Call rc.readonly to set up magic stuff needed for readonly root
+    . /etc/rc.readonly
+    READONLY=1
+fi
+ 
+Fsck()
+{	initlog -c "/sbin/fsck $*"
+	rc=$?
+
+	if [ $rc -gt 3 ]; then
+	    rc_splash verbose
+	    gprintf "Failed to check filesystem. Do you want to repair the errors? (Y/N)\n"
+	    gprintf "(beware, you can lose data)\n"	    
+	    read answer
+
+	    KEYS=`gprintf "yY"`
+	    if strstr "$KEYS" "$answer" ; then
+		opts=`echo "$* " | sed 's/-a //'`
+		initlog -c "/sbin/fsck $opts -y"
+		rc=$?
+	    fi
+	fi
+
+        if [ "$rc" = "0" ]; then
+		echo_success
+		echo
+	elif [ "$rc" = "1" ]; then
+	        echo_passed
+		echo
+		if [ -x /sbin/quotacheck ]; then
+		    _RUN_QUOTACHECK=1
+		fi
+	# A return of 2 or higher means there were serious problems.
+	elif [ $rc -gt 1 ]; then
+	    if [ $rc -gt 3 ]; then
+		rc_splash verbose
+		echo_failure
+		echo
+		echo
+		gprintf "*** An error occurred during the file system check.\n"
+		gprintf "*** Dropping you to a shell; the system will reboot\n"
+		gprintf "*** when you leave the shell.\n"
+
+		str=`gprintf "(Repair filesystem)"`
+		PS1="$str \# # "; export PS1
+		[ "$SELINUX" = "1" ] && disable_selinux
+		sulogin
+	    else
+	        echo_passed
+	    fi
+            gprintf "Unmounting file systems\n"
+	    umount -a
+	    mount -n -o remount,ro /
+	    gprintf "Automatic reboot in progress.\n"
+	    reboot -f
+	fi
+}
+
+_RUN_QUOTACHECK=0
+ROOTFSTYPE=`awk '/ \/ / && ($3 !~ /rootfs/) { print $3 }' /proc/mounts`
+if [ -z "$fastboot" -a "X$ROOTFSTYPE" != "Xnfs" ]; then 
+
+        gprintf "Checking root filesystem\n"
+	Fsck -T -a $fsckoptions /
+fi
+
+
+rc_splash fsck 4
+
+# Possibly update quotas if fsck was run on /.
+LC_ALL=C grep -E '[[:space:]]+/[[:space:]]+' /etc/fstab | \
+    awk '{ print $4 }' | \
+    LC_ALL=C fgrep -q quota
+_ROOT_HAS_QUOTA=$?
+if [ X"$_RUN_QUOTACHECK" = X1 -a \
+    "$_ROOT_HAS_QUOTA" = "0" -a \
+    -x /sbin/quotacheck ]; then
+	if [ -x /sbin/convertquota ]; then
+	    if [ -f /quota.user ]; then
+		action "Converting old user quota files: " \
+		    /sbin/convertquota -u / && rm -f /quota.user
+	    fi
+	    if [ -f /quota.group ]; then
+		action "Converting old group quota files: " \
+		    /sbin/convertquota -g / && rm -f /quota.group
+	    fi
+	fi
+	action "Checking root filesystem quotas: " /sbin/quotacheck -nug /
+fi
+
+if [ -x /sbin/isapnp -a -f /etc/isapnp.conf -a ! -f /proc/isapnp ]; then
+    # check for arguments passed from kernel
+    if ! strstr "$cmdline" nopnp ; then
+	PNP=yes
+    fi
+    if [ -n "$PNP" ]; then
+	action "Setting up ISA PNP devices: " /sbin/isapnp /etc/isapnp.conf
+    else
+	action "Skipping ISA PNP configuration at users request: " /bin/true
+    fi
+fi
+
+# Remount the root filesystem read-write.
+state=`awk '/ \/ / && ($3 !~ /rootfs/) { print $4 }' /proc/mounts`
+[ "$state" != "rw" -a -z "$READONLY" ] && \
+  action "Remounting root filesystem in read-write mode: " mount -n -o remount,rw /
+
+# Now that we load only one scsi_hostadapter in the initrd, we
+# need to load the others here
+modprobe scsi_hostadapter >/dev/null 2>&1
+
+# MiB: Device-Mapper initialization
+if [ -f /etc/evms.conf -a -x /sbin/evms_activate ] || [ -f /etc/lvm/lvm.conf -a -x /sbin/lvm2 ]; then
+    dm_minor=`awk '$2 == "device-mapper" {print $1}' /proc/misc 2>/dev/null`
+    [ -n "$dm_minor" ] || modprobe dm-mod >/dev/null 2>&1
+    dm_minor=`awk '$2 == "device-mapper" {print $1}' /proc/misc 2>/dev/null`
+
+    if [ -f /etc/lvm/lvm.conf -a -x /sbin/lvm2 ] && [ -n "$dm_minor" ]; then
+	if [ -c /dev/.devfsd ]; then
+	    _vgcmd_2=/bin/true
+	else
+	    mkdir -p /dev/mapper 2>/dev/null
+	    mknod /dev/mapper/control c 10 $dm_minor 2>/dev/null
+	    _vgcmd_2="/sbin/lvm2 vgmknodes"
+	fi
+	_vgcmd_1="/sbin/lvm2 vgchange -a y"
+	[ -n "$SELINUX" ] && restorecon /dev/mapper/control >/dev/null 2>&1
+    fi
+fi
+
+# MiB: EVMS Startup
+if [ -f /etc/evms.conf -a -x /sbin/evms_activate ]; then
+    [ -f /proc/mdstat ] || modprobe md >/dev/null 2>&1
+    action "Starting %s: " EVMS /sbin/evms_activate
+fi
+# /MiB
+
+# LVM initialization
+if [ -z "${_vgcmd_1}" -a -f /etc/lvmtab ] ; then
+    [ -e /proc/lvm ] || modprobe lvm-mod >/dev/null 2>&1
+
+    if [ -e /proc/lvm -a -x /sbin/lvm1-vgchange ]; then
+	_vgcmd_1="/sbin/lvm1-vgscan"
+	_vgcmd_2="/sbin/lvm1-vgchange -a y"
+    elif [ -e /proc/lvm -a -x /sbin/vgchange ]; then
+	_vgcmd_1="/sbin/vgscan"
+	_vgcmd_2="/sbin/vgchange -a y"
+    fi
+fi
+
+if [ -n "${_vgcmd_1}" ]; then
+    action "Setting up Logical Volume Management:" ${_vgcmd_1} && ${_vgcmd_2}
+fi
+
+# Clean up SELinux labels
+if [ -n "$SELINUX" ]; then
+   for file in /etc/mtab /etc/ld.so.cache ; do
+   	[ -r $file ] && restorecon $file  >/dev/null 2>&1
+   done
+fi
+
+# Start up swapping. #we don't do encryted swap now since
+# (pixel) it was done between setting keytable and setting hostname
+#         but it can't be done before "vgchange -a y", 
+#         which can't be done before "vgscan" (which writes to /etc/lvmtab)
+#         which can't be done before re-mounting rw /
+# Changed by Michel Bouissou on 2004/12/22:
+# MiB: As the current version of swapon will take care by itself of
+#      encrypted swap partitions specified in fstab with the following
+#      syntax: "/dev/hda4 swap swap loop=/dev/loop0,encryption=AES128"
+#      we need to check if there are some right now and insert the
+#      proper crypto modules if needed.
+if egrep -q "[[:space:]]swap[[:space:]].*encryption=" /etc/fstab; then
+    modprobe loop 2> /dev/null
+    modprobe aes 2> /dev/null
+    modprobe cryptoloop 2> /dev/null
+fi
+# /MiB
+
+action "Activating swap partitions: " swapon -a -e
+
+rc_splash swap 5
+
+# Clear mtab
+(> /etc/mtab) &> /dev/null
+
+# Remove stale backups
+rm -f /etc/mtab~ /etc/mtab~~
+
+# Enter root, /proc and (potentially) /proc/bus/usb and devfs into mtab.
+# (pixel) also added /initrd/loopfs for loopback root
+mount -f /initrd/loopfs 2>/dev/null
+mount -f /
+mount -f /proc
+if [ -f /proc/bus/usb/devices ]; then
+	if grep -q usbfs /proc/mounts; then
+		mount -f -t usbfs none /proc/bus/usb
+	elif grep -q usbdevfs /proc/mounts; then
+		mount -f -t usbdevfs none /proc/bus/usb
+	fi
+fi
+[ -e /dev/.devfsd ] && mount -f -t devfs none /dev 
+# add /sys if mounted
+[ -d /sys/devices ] && mount -f -t sysfs none /sys
+
+# The root filesystem is now read-write, so we can now log
+# via syslog() directly..
+if [ -n "$IN_INITLOG" ]; then
+    IN_INITLOG=
+fi
+
+if ! strstr "$cmdline" nomodules && [ -f /proc/modules ] ; then
+    USEMODULES=y
+fi
+
+# Our modutils don't support it anymore, so we might as well remove
+# the preferred link.
+rm -f /lib/modules/preferred /lib/modules/default
+
+# tweak isapnp settings if needed.
+if [ -n "$PNP" -a  -f /proc/isapnp -a -x /sbin/sndconfig ]; then
+    /sbin/sndconfig --mungepnp >/dev/null 2>&1
+fi
+
+# Load sound modules if and only if they need persistent DMA buffers
+if LC_ALL=C /sbin/modprobe -c | grep -q "^[^#]*options[[:space:]]\+sound[[:space:]].*dmabuf=1" 2>/dev/null ; then
+  RETURN=0
+  alias=`/sbin/modprobe -c | awk '/^alias sound / { print $3 }'`
+  if [ -n "$alias" -a "$alias" != "off" ]; then
+      action "Loading sound module (%s): " $alias modprobe sound
+  fi
+  alias=`/sbin/modprobe -c | awk '/^alias[[:space:]]+sound-slot-0[[:space:]]/ { print $3 }'`
+  if [ -n "$alias" -a "$alias" != "off" ]; then
+      action "Loading sound module (%s): " $alias modprobe sound-slot-0
+  fi
+fi
+
+if [ -f /proc/sys/kernel/modprobe ]; then
+   if [ -n "$USEMODULES" ]; then
+       sysctl -n -w kernel.modprobe="/sbin/modprobe" >/dev/null 2>&1
+       if [[ ! -e /dev/.udevdb ]]; then
+	       sysctl -n -w kernel.hotplug="/sbin/hotplug" >/dev/null 2>&1
+       fi
+   else
+       # We used to set this to NULL, but that causes 'failed to exec' messages"
+       sysctl -n -w kernel.modprobe="/bin/true" >/dev/null 2>&1
+       sysctl -n -w kernel.hotplug="/bin/true" >/dev/null 2>&1
+   fi
+fi
+
+# Load modules (for backward compatibility with VARs)
+if [ -x /etc/rc.d/rc.modules ]; then
+	/etc/rc.d/rc.modules
+fi
+
+# Add raid devices
+if grep -q -s '^[[:space:]]*ARRAY[[:space:]]' /etc/mdadm.conf && [ -x /sbin/mdadm ]; then
+	raid=mdadm
+elif grep -q -s '^[[:space:]]*raiddev[[:space:]]' /etc/raidtab; then
+	raid=raidtools
+fi
+# Add raid devices
+[ -n "${raid}" -a ! -f /proc/mdstat ] && modprobe md >/dev/null 2>&1
+if [ "${raid}" = "mdadm" -a  -f /proc/mdstat ]; then
+	gprintf "Starting up RAID devices: "
+	/sbin/mdadm -A -s
+	if [ $? -gt 0 ]; then
+		echo
+		gprintf "*** An error occurred during the RAID startup\n"
+		gprintf "*** If it is critical the boot process will stop\n"
+		gprintf "*** when trying to mount filesystems. Else check\n"
+		gprintf "*** /etc/mdadm.conf for obsolete ARRAY entries\n"
+	else
+		echo OK
+	fi
+		
+elif [ "${raid}" = "raidtools" -a -f /proc/mdstat ]; then
+	gprintf "Starting up RAID devices: " 
+
+	rc=0
+	
+	for i in `awk '{if ($1=="raiddev") print $2}' /etc/raidtab`
+	do
+		RAIDDEV=`basename $i`
+                RAIDSTAT=`LC_ALL=C grep "^$RAIDDEV : active" /proc/mdstat`
+		if [ -z "$RAIDSTAT" ]; then
+			# First scan the /etc/fstab for the "noauto"-flag
+			# for this device. If found, skip the initialization
+			# for it to avoid dropping to a shell on errors.
+			# If not, try raidstart...if that fails then
+			# fall back to raidadd, raidrun.  If that
+			# also fails, then we drop to a shell
+			RESULT=1
+			INFSTAB=`LC_ALL=C grep -c "^$i" /etc/fstab`
+			if [ $INFSTAB -eq 0 ] ; then
+			    RESULT=0
+			    RAIDDEV="$RAIDDEV(skipped)"
+			fi
+			NOAUTO=`LC_ALL=C grep "^$i" /etc/fstab | LC_ALL=C fgrep -c "noauto"`
+			if [ $NOAUTO -gt 0 ]; then
+			    RESULT=0
+			    RAIDDEV="$RAIDDEV(skipped)"
+			fi
+			if [ $RESULT -gt 0 -a -x /sbin/raidstart ]; then
+				/sbin/raidstart $i
+				RESULT=$?
+			fi
+			if [ $RESULT -gt 0 -a -x /sbin/raid0run ]; then
+				/sbin/raid0run $i
+				RESULT=$?
+			fi
+			if [ $RESULT -gt 0 -a -x /sbin/raidadd -a -x /sbin/raidrun ]; then
+				/sbin/raidadd $i
+				/sbin/raidrun $i
+				RESULT=$?
+			fi
+			if [ $RESULT -gt 0 ]; then
+				rc=1
+			fi
+			echo -n "$RAIDDEV "
+		else
+			echo -n "$RAIDDEV "
+		fi
+	done
+	echo
+
+	# A non-zero return means there were problems.
+	if [ $rc -gt 0 ]; then
+		local str=
+		echo
+		echo
+		gprintf "*** An error occurred during the RAID startup\n"
+		gprintf "*** Dropping you to a shell; the system will reboot\n"
+		gprintf "*** when you leave the shell.\n"
+
+ 		str=`gprintf "(RAID Repair)"`
+		PS1="$str \# # "; export PS1
+		[ "$SELINUX" = "1" ] && disable_selinux
+		sulogin
+
+            gprintf "Unmounting file systems\n"
+	    umount -a
+	    mount -n -o remount,ro /
+            gprintf "Automatic reboot in progress.\n"
+	    reboot -f
+	fi
+fi
+
+# LVM initialization, take 2 (it could be on top of RAID)
+if [ -n "${raid}" -a -n "${_vgcmd_1}" ]; then
+    action "Setting up Logical Volume Management:" ${_vgcmd_1} && ${_vgcmd_2}
+fi
+
+if [ -x /sbin/devlabel ]; then
+	/sbin/devlabel restart
+fi
+
+_RUN_QUOTACHECK=0
+# Check filesystems
+# (pixel) do not check loopback files, will be done later (aren't available yet)
+if [ -z "$fastboot" ]; then
+        gprintf "Checking filesystems\n"
+	Fsck -T -R -A -a -t noopts=loop $fsckoptions
+fi
+
+# (stew) since we're defaulting to ext3 now, and kernel22 doesn't 
+# support it yet - mount ext3 partitions as ext2 for kernel22
+# mkinitrd covers the case for rootfs as ext3
+
+IS22=$(/bin/uname -r | /bin/grep '^2\.2')
+
+if [ -n "$IS22" ]; then
+    for i in `grep ext3 /etc/fstab | grep defaults | awk '{print $1}'`
+    do
+        mntpt=`grep "^$i" /etc/fstab | awk '{print $2}'`
+        if [ "$mntpt" != "/" ]; then
+            gprintf "Mount $i on $mntpt as ext2 for kernel22"
+            mount $i $mntpt -text2
+            if [ "$rc" = "0" ]; then
+                echo_success
+                echo
+            elif [ "$rc" = "1" ]; then
+                echo_passed
+                echo
+            fi
+        fi
+    done
+fi
+
+# Mount all other filesystems (except for network based fileystems)
+# Contrary to standard usage, filesystems are NOT unmounted in single
+# user mode.
+# (pixel) also do not mount loopback and encrypted filesystems
+# will be done later
+action "Mounting local filesystems: " mount -a -t nodevpts,nonfs,nfs4,smbfs,ncpfs,cifs,gfs,shfs -O no_netdev,noloop,noencrypted
+
+rc_splash mount 6
+
+[[ -z $AUTOFSCK_CRYPTO_TIMEOUT ]] && AUTOFSCK_CRYPTO_TIMEOUT=15
+
+#Mounting Encrypted filesystem
+encrypted_swap=
+if [[ ! -f /fastboot ]];then
+    encrypted=
+    while read -a entry;do
+	device=${entry[0]}
+	mountpoint=${entry[1]}
+	options=${entry[3]}
+	type=${entry[2]}
+	if [[ $options == *encryption=* || $options == *encrypted* ]];then
+	    [[ $options == *noauto* ]] && continue
+	    if [[ $type == *swap* ]];then
+		encrypted_swap="$encrypted_swap $device"
+		continue
+	    fi
+	    encrypted="$encrypted $mountpoint"
+	fi
+    done < /etc/fstab
+    if [[ -n $encrypted ]];then
+	modprobe aes
+	modprobe cryptoloop
+	rc_splash verbose
+	echo "We have discovered Encrypted filesystems, do you want to mount them now ?"
+	MSG=`gprintf "Press Y within %%d seconds to mount your encrypted filesystems..."`
+	KEYS=`gprintf "yY"`
+	if /sbin/getkey -c $AUTOFSCK_CRYPTO_TIMEOUT -m "$MSG" "$KEYS"; then
+	    echo -e '\n'
+	    for i in ${encrypted};do
+		echo -n "${i} "; mount ${i}
+	    done
+	else
+	    echo -e '\n'
+	fi
+    fi
+fi
+
+# (pixel) Check loopback filesystems
+if [ ! -f /fastboot ]; then
+        modprobe loop
+        gprintf "Checking loopback filesystems"
+	Fsck -T -R -A -a -t opts=loop $fsckoptions
+fi
+
+# Mount loopback
+action "Mounting loopback filesystems: " mount -a -O loop
+
+rc_splash i18n 7
+
+# Reset pam_console permissions
+rm -rf /var/run/console.lock /var/run/console/*
+
+# at this point everything should be mounted; if the loading
+# of the system font failed, try again
+if [ "$DELAYED_FONT" = "yes" ]; then
+   if [ -x /sbin/setsysfont ]; then
+       [ -f /etc/sysconfig/i18n ] && . /etc/sysconfig/i18n
+	OUR_CHARSET=${CHARSET=`get_locale_encoding`}
+	case "$OUR_CHARSET" in 
+	    UTF-8)
+		action "Setting default font ($SYSFONT): " /bin/unicode_start $SYSFONT
+		# this is done by unicode_start, but apparently
+		# "action" filters the output, so it has to be redone
+		echo -n -e '\033%G'
+		;;
+	    *)
+		action "Setting default font ($SYSFONT): " /sbin/setsysfont
+		;;
+	esac
+   fi
+fi
+
+if [ -x /etc/init.d/keytable -a -d /usr/lib/kbd/keymaps ]; then
+    /etc/init.d/keytable start
+fi
+
+# check remaining quotas other than root
+if [ X"$_RUN_QUOTACHECK" = X1 -a -x /sbin/quotacheck ]; then
+	if [ -x /sbin/convertquota ]; then
+	    # try to convert old quotas
+	    for mountpt in `awk '$4 ~ /quota/{print $2}' /etc/mtab` ; do
+		if [ -f "$mountpt/quota.user" ]; then
+		    action "Converting old user quota files: " \
+		    /sbin/convertquota -u $mountpt && \
+			rm -f $mountpt/quota.user
+		fi
+		if [ -f "$mountpt/quota.group" ]; then
+		    action "Converting old group quota files: " \
+		    /sbin/convertquota -g $mountpt && \
+			rm -f $mountpt/quota.group
+		fi
+	    done
+	fi
+	action "Checking local filesystem quotas: " /sbin/quotacheck -aRnug
+fi
+
+# Initialize pseudo-random number generator
+if [ -f "/var/lib/random-seed" ]; then
+	cat /var/lib/random-seed > /dev/urandom
+else
+	touch /var/lib/random-seed
+fi
+chmod 600 /var/lib/random-seed
+dd if=/dev/urandom of=/var/lib/random-seed count=1 bs=512 2>/dev/null
+
+
+# Configure machine if necessary.
+if [ -f /.unconfigured ]; then
+    if [ -x /usr/bin/rhgb-client ] && /usr/bin/rhgb-client --ping ; then
+	chvt 1
+    fi
+
+    if [ -x /usr/sbin/kbdconfig ]; then
+	/usr/sbin/kbdconfig
+    fi
+    if [ -x /usr/bin/passwd ]; then 
+        /usr/bin/passwd root
+    fi
+    if [ -x /usr/sbin/netconfig ]; then
+	/usr/sbin/netconfig
+    fi
+    if [ -x /usr/sbin/timeconfig ]; then
+	/usr/sbin/timeconfig
+    fi
+    if [ -x /usr/sbin/authconfig ]; then
+	/usr/sbin/authconfig --nostart
+    fi
+    if [ -x /usr/sbin/ntsysv ]; then
+	/usr/sbin/ntsysv --level 35
+    fi
+
+    # Reread in network configuration data.
+    if [ -f /etc/sysconfig/network ]; then
+	. /etc/sysconfig/network
+
+	# Reset the hostname.
+	action "Resetting hostname %s: " ${HOSTNAME} hostname ${HOSTNAME}
+
+	# Reset the NIS domain name.
+	if [ -n "$NISDOMAIN" ]; then
+	    action "Resetting NIS domain name %s: " $NISDOMAIN nisdomainname $NISDOMAIN
+	fi
+    fi
+
+    rm -f /.unconfigured
+
+    if [ -x /usr/bin/rhgb-client ] && /usr/bin/rhgb-client --ping ; then
+	chvt 8
+    fi
+fi
+
+if [ -x /sbin/quotaon ]; then
+    action "Turning on user and group quotas for local filesystems: " /sbin/quotaon -aug
+fi
+
+# Clean out /.
+rm -f /fastboot /fsckoptions /forcefsck /.autofsck /halt /poweroff /etc/killpower &> /dev/null
+
+# Do we need (w|u)tmpx files? We don't set them up, but the sysadmin might...
+_NEED_XFILES=
+[ -f /var/run/utmpx -o -f /var/log/wtmpx ] && _NEED_XFILES=1
+
+# Clean up /var.  I'd use find, but /usr may not be mounted.
+for afile in /var/lock/* /var/run/* ; do
+	if [ -d "$afile" ]; then
+	    case "$afile" in
+		*/news|*/mon)	;;
+		*/sudo)		rm -f $afile/*/* ;;
+		*/xdmctl)	rm -rf $afile/*/* ;;
+		*/vmware)	rm -rf $afile/*/* ;;
+		*/samba)	rm -rf $afile/*/* ;;
+		*)		rm -f $afile/* ;;
+	    esac
+	else
+      [ "$afile" = "/var/lock/TMP_1ST" ] && continue
+	   rm -f $afile
+	fi
+done
+rm -f /var/lib/rpm/__db* &> /dev/null
+
+# Reset pam_console permissions
+[ -x /sbin/pam_console_apply -a ! -c /dev/.devfsd ] && \
+    /sbin/pam_console_apply -r
+
+{
+# Clean up utmp/wtmp
+> /var/run/utmp
+touch /var/log/wtmp
+chgrp utmp /var/run/utmp /var/log/wtmp
+chmod 0664 /var/run/utmp /var/log/wtmp
+if [ -n "$_NEED_XFILES" ]; then
+  > /var/run/utmpx
+  touch /var/log/wtmpx
+  chgrp utmp /var/run/utmpx /var/log/wtmpx
+  chmod 0664 /var/run/utmpx /var/log/wtmpx
+fi
+
+# Clean up various /tmp bits
+rm -f /tmp/.X*-lock /tmp/.lock.* /tmp/.gdm_socket /tmp/.s.PGSQL.*
+rm -rf /tmp/.X*-unix /tmp/.ICE-unix /tmp/.font-unix /tmp/hsperfdata_* \
+       /tmp/kde-* /tmp/ksocket-* /tmp/mc-* /tmp/mcop-* /tmp/orbit-*  \
+       /tmp/scrollkeeper-*  /tmp/ssh-*
+# Make ICE directory
+mkdir -m 1777 -p /tmp/.ICE-unix >/dev/null 2>&1
+chown root:root /tmp/.ICE-unix
+[ -n "$SELINUX" ] && restorecon /tmp/.ICE-unix >/dev/null 2>&1
+
+# Delete VNC & X locks
+rm -rf /tmp/.X*-unix /tmp/.font-unix
+
+# Clean ICE locks
+mkdir -p /tmp/.ICE-unix
+chown root:root /tmp/.ICE-unix
+rm -rf /tmp/.ICE-unix/*
+chmod a+rwx,+t /tmp/.ICE-unix
+
+# Delete Postgres sockets
+rm -f /tmp/.s.PGSQL.*
+
+# GNOME and KDE related cleanup
+rm -rf /tmp/.fam_socket /tmp/kde-* /tmp/ksocket-* /tmp/mcop-* /tmp/orbit-* /tmp/.esd /tmp/.sawfish-* /tmp/esrv* /tmp/kio* /tmp/scrollkeeper-tempfile.*
+
+# clean dynamic stuff
+for f in /var/lib/gnome/desktop/dynamic_*.desktop /usr/share/apps/kdesktop/Desktop/dynamic_*.desktop; do
+    if [ -r $f ]; then
+	device=`sed -n 's/# dynamic_device=//p' $f`
+	if [ -n "$device" -a ! -e "$device" ]; then
+	    rm -f $f
+	fi
+    fi
+done
+
+# openssh related cleanup
+rm -rf /tmp/ssh-*
+
+#Detect and create/activate encrypted swap
+#Changed by Michel Bouissou on 2004/12/22
+if [[ -n $encrypted_swap ]];then
+    loop=NONE
+    modprobe loop 2> /dev/null
+    modprobe aes 2> /dev/null
+    modprobe cryptoloop 2> /dev/null
+    # MiB: Wait for a loop device to become available in case devfsd needs
+    #      to create it
+    for (( s = 1; s <= 10; s++ )); do
+        [ -b /dev/loop0 ] && { loop=OK; break; }
+        sleep 1
+    done
+    if [ $loop == OK ]; then
+        for swdev in ${encrypted_swap}; do
+            # MiB: as the current version of swapon takes care by itself of encrypted
+            #      partitions specified in fstab with "loop=/dev/loop0,encryption=AES128"
+            #      we *MUST* leave these alone as they have probably been activated earlier,
+            #      otherwise we would result in having them mounted on 2 different loop
+            #      devices with different encryption keys, and we would activate both,
+            #      resulting in serious swap corruption.
+            egrep -q "^${swdev}[[:space:]]+(swap|none)[[:space:]]+swap[[:space:]]+.*encryption=" /etc/fstab && continue
+
+            loop=NONE
+            for l in `echo /dev/loop[0-7]`; do
+                if [ $loop == NONE ] && ! grep -q $l /proc/mounts && ! { losetup $l &> /dev/null; }; then
+                    loop=$l
+                fi
+            done
+            if [ $loop != NONE ]; then
+                action "Found available loop device %s." $loop /bin/true
+                swapoff $swdev > /dev/null 2>&1
+                # MiB: losetup the swap device with an offset of 4096 to preserve
+                #      existing (unencrypted) swap space signature
+                dd if=$swdev bs=1024 skip=8 count=40 2>/dev/null |\
+                mcookie -f /dev/stdin | losetup -o 4096 -p 0 -e AES128 $loop $swdev > /dev/null 2>&1
+                if [ $? == 0 ]; then
+                    action "Mounting %s on encrypted %s with random key" $swdev $loop /bin/true
+                    dd if=/dev/zero of=$loop bs=1024 count=40 > /dev/null 2>&1
+                    action "Creating encrypted swap on %s using %s:" $swdev $loop mkswap $loop
+                    if [ $? == 0 ]; then
+                       action "Activating encrypted swap on %s using %s:" $swdev $loop swapon -p 0 $loop
+                    fi
+                else
+                    action "Mounting %s on encrypted %s with random key" $swdev $loop /bin/false
+                fi
+            else
+                action "Could not find any available loop device!" /bin/false
+            fi
+        done
+    fi
+fi
+
+# Now turn on swap in case we swap to files.
+action "Enabling swap space: " swapon -a -e
+
+# Initialize the serial ports.
+if [ -f /etc/rc.serial ]; then
+	. /etc/rc.serial
+fi
+
+# Load usb storage here, to match most other things
+if [ -n "$needusbstorage" ]; then
+	modprobe usb-storage >/dev/null 2>&1
+fi
+
+# Ooh, firewire too.
+if ! strstr "$cmdline" nofirewire && ! strstr "$cmdline" nomodules ; then
+   aliases=`/sbin/modprobe -c | awk '/^alias[[:space:]]+ieee1394-controller/ { print $3 }'`
+   if [ -n "$aliases" -a "$aliases" != "off" ]; then
+      for alias in $aliases ; do 
+      	[ "$alias" = "off" ] && continue
+	action "Initializing firewire controller (%s): " $alias modprobe $alias
+      done
+      LC_ALL=C fgrep -q "SBP2" /proc/bus/ieee1394/devices 2>/dev/null && \
+		modprobe sbp2 >/dev/null 2>&1
+   fi
+fi
+
+# If they asked for ide-scsi, load it
+# This must come before hdparm call because if hdd=ide-scsi
+# /dev/hdd is inaccessible until ide-scsi is loaded
+if ! strstr "$cmdline" no-ide-cd; then
+    modprobe ide-cd >/dev/null 2>&1
+fi
+if strstr "$cmdline" ide-scsi; then
+	modprobe ide-scsi >/dev/null 2>&1
+fi
+
+# If a SCSI tape has been detected, load the st module unconditionally
+# since many SCSI tapes don't deal well with st being loaded and unloaded
+if [ -n "$USEMODULES" -a -f /proc/scsi/scsi ] && LC_ALL=C grep -q 'Type:   Sequential-Access' /proc/scsi/scsi 2>/dev/null ; then
+    LC_ALL=C fgrep -q ' 9 st' /proc/devices || modprobe st >/dev/null 2>&1
+fi
+
+# Turn on harddisk optimization
+# There is only one file /etc/sysconfig/harddisks for all disks
+# after installing the hdparm-RPM. If you need different hdparm parameters
+# for each of your disks, copy /etc/sysconfig/harddisks to
+# /etc/sysconfig/harddiskhda (hdb, hdc...) and modify it.
+# Each disk which has no special parameters will use the defaults.
+# Each non-disk which has no special parameters will be ignored.
+# 
+ 
+disk[0]=s;
+disk[1]=hda;  disk[2]=hdb;  disk[3]=hdc;  disk[4]=hdd;
+disk[5]=hde;  disk[6]=hdf;  disk[7]=hdg;  disk[8]=hdh;
+disk[9]=hdi;  disk[10]=hdj; disk[11]=hdk; disk[12]=hdl;
+disk[13]=hdm; disk[14]=hdn; disk[15]=hdo; disk[16]=hdp;
+disk[17]=hdq; disk[18]=hdr; disk[19]=hds; disk[20]=hdt;
+ 
+ 
+# Skip hard disks optimization if software RAID arrays are currently
+# resyncing and disks heavily active, because hdparm might hang and
+# lock system startup in such situation
+
+if [ ! -f /proc/mdstat ] || ! /bin/egrep -qi "re(cover|sync)|syncing" /proc/mdstat; then
+   if [ -x /sbin/hdparm ]; then
+      for device in 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20; do
+	   unset MULTIPLE_IO USE_DMA EIDE_32BIT LOOKAHEAD EXTRA_PARAMS
+           if [ -f /etc/sysconfig/harddisk${disk[$device]} ]; then
+                   . /etc/sysconfig/harddisk${disk[$device]}
+                   HDFLAGS[$device]=
+                   if [ -n "$MULTIPLE_IO" ]; then
+                       HDFLAGS[$device]="-q -m$MULTIPLE_IO"
+                   fi
+                   if [ -n "$USE_DMA" ]; then
+                       HDFLAGS[$device]="${HDFLAGS[$device]} -q -d$USE_DMA"
+                   fi
+                   if [ -n "$EIDE_32BIT" ]; then
+                       HDFLAGS[$device]="${HDFLAGS[$device]} -q -c$EIDE_32BIT"
+                   fi
+                   if [ -n "$LOOKAHEAD" ]; then
+                       HDFLAGS[$device]="${HDFLAGS[$device]} -q -A$LOOKAHEAD"
+                   fi
+                   if [ -n "$EXTRA_PARAMS" ]; then
+                       HDFLAGS[$device]="${HDFLAGS[$device]} $EXTRA_PARAMS"
+                   fi
+           else
+                   HDFLAGS[$device]="${HDFLAGS[0]}"
+           fi
+           if [ -e "/proc/ide/${disk[$device]}/media" ]; then
+                hdmedia=`cat /proc/ide/${disk[$device]}/media`
+                if [ "$hdmedia" = "disk" -o -f "/etc/sysconfig/harddisk${disk[$device]}" ]; then
+                     if [ -n "${HDFLAGS[$device]}" ]; then
+                         sleep 2
+                         action "Setting hard drive parameters for %s: " ${disk[$device]}  /sbin/hdparm ${HDFLAGS[$device]} /dev/${disk[$device]}
+                     fi
+                fi
+           fi
+      done
+   fi
+else
+    action "RAID Arrays are resyncing. Skipping hard drive parameters section." /bin/true
+fi
+
+# Adjust symlinks as necessary in /boot to keep system services from
+# spewing messages about mismatched System maps and so on.
+if [ -L /boot/System.map -a -r /boot/System.map-`uname -r` -a \
+	! /boot/System.map -ef /boot/System.map-`uname -r` ] ; then
+	ln -s -f System.map-`uname -r` /boot/System.map 2>/dev/null
+fi
+if [ ! -e /boot/System.map -a -r /boot/System.map-`uname -r` ] ; then
+	ln -s -f System.map-`uname -r` /boot/System.map 2>/dev/null
+fi
+
+# Adjust symlinks as necessary in /boot to have the default config
+if [ -L /boot/config -a -r /boot/config-`uname -r` ] ; then
+	ln -sf config-`uname -r` /boot/config 2>/dev/null
+fi
+if [ ! -e /boot/config -a -r /boot/config-`uname -r` ] ; then
+	ln -sf config-`uname -r` /boot/config 2>/dev/null
+fi
+
+# Now that we have all of our basic modules loaded and the kernel going,
+# let's dump the syslog ring somewhere so we can find it later
+dmesg -s 131072 > /var/log/dmesg
+
+# create the crash indicator flag to warn on crashes, offer fsck with timeout
+touch /.autofsck &> /dev/null
+
+kill -TERM `/sbin/pidof getkey` >/dev/null 2>&1
+} &
+if strstr "$cmdline" confirm ; then
+	touch /var/run/confirm
+fi
+if [ "$PROMPT" != "no" ]; then
+	/sbin/getkey i && touch /var/run/confirm
+fi
+wait
+
+if strstr "$cmdline" failsafe; then
+    touch /var/run/failsafe
+fi
+
+if [ -f /var/lock/TMP_1ST ];then
+ if [ -f /etc/init.d/mandrake_firstime ];then
+	/bin/sh /etc/init.d/mandrake_firstime
+ fi
+fi
+
+if [ -f /etc/init.d/mandrake_everytime ]; then 
+	/bin/sh /etc/init.d/mandrake_everytime
+fi
+
+# (pixel) a kind of profile for XF86Config
+# if no XFree=XXX given on kernel command-line, restore XF86Config.standard
+for i in XF86Config XF86Config-4; do 
+    if [ -L "/etc/X11/$i" ]; then
+        XFree=`sed -n 's/.*XFree=\(\w*\).*/\1/p' /proc/cmdline`
+        [ -n "$XFree" ] || XFree=standard
+        [ -r "/etc/X11/$i.$XFree" ] && ln -sf "$i.$XFree" "/etc/X11/$i"
+    fi
+done

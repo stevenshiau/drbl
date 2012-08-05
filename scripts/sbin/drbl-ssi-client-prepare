@@ -1,0 +1,198 @@
+#!/bin/bash
+# Author: Steven Shiau, <steven _at_ nchc org tw>
+# License: GPL
+
+# Loading setting
+DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/opt/drbl/}"
+
+. $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
+
+# Option
+nfsserver=$1
+RO_NFS_EXTRA_OPT=$2
+RL=$3
+
+# functions
+jobs_for_clonezilla_box() {
+# 1. comment unnesessary mount, /opt, /var/spool/mail, /var/lib/rpm/ and /var/lib/dpkg
+# 2. remove ntp
+# 3. set runlevel in /etc/inittab to cheat kudzu
+# 4. copy necessary files from rc1.d
+
+# (1)
+for im in /opt /var/spool/mail /var/lib/rpm /var/lib/dpkg; do
+  # Use subshell to avoid some parameter to be overwriten
+  (
+    . $DRBL_SCRIPT_PATH/conf/drbl.conf
+    # If $ocsroot is happened to be /opt/xxx or /var/spool/mail/xxx... we have
+    # to avoid that to be commented, since we need the $ocsroot as clonezilla
+    # image dir.
+    # /etc/fstab 
+    # Example 1 (with $ocsroot=/opt/partimag):
+    # -------------------------
+    # 192.168.123.254:/opt            /opt       nfs    rw,rsize=65536,wsize=65536,tcp,defaults        0 0
+    # 192.168.123.254:/opt/partimag            /opt/partimag       nfs    rw,rsize=65536,wsize=65536,tcp,defaults        0 0
+    # -------------------------
+    # We will NOT comment 192.168.123.254:/opt and 192.168.123.254:/opt/partimag
+    # because we need /opt/ and its subdirectories as mount point.
+    # Example 2 (with $ocsroot=/opt2):
+    # -------------------------
+    # 192.168.123.254:/opt            /opt       nfs    rw,rsize=65536,wsize=65536,tcp,defaults        0 0
+    # 192.168.123.254:/opt2            /opt2       nfs    rw,rsize=65536,wsize=65536,tcp,defaults        0 0
+    # -------------------------
+    # We will comment 192.168.123.254:/opt, but will NOT comment 192.168.123.254:/opt2
+    if [ -z "$(echo $ocsroot | grep -Ew "$im")" ]; then
+      perl -pi -e "s|(^[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+:.*$im[[:space:]]+.*)|# \$1|g" /etc/fstab
+    fi
+  )
+done
+
+# (2)
+# Remove ntp setting, we do not need that in cloinezilla box
+# Debian-based: /etc/default/ntpdate
+# RH-like, SuSE: /etc/ntp.conf
+for intp in /etc/ntp.conf /etc/default/ntpdate; do
+  if [ -f $intp ]; then
+    rm -f $intp
+    # create an empty file so that the NTPSERVERS is none.
+    touch $intp
+  fi
+done
+
+# (3)
+# We need to cheat the inittab (Note! Now init.org not start yet), and in FC,
+# kudzu will check inittab, and if it's rc 5, it will switch to rc 5...
+# Therefore here we force to make inittab 1.
+# Command "runlevel" in this stage is useless. we have to check by ourself
+# Check if "1" exists in /proc/cmdline
+# For Ubuntu 6.10 or later, no /etc/inittab.
+if [ -e /etc/inittab ]; then
+  perl -pi -e "s/^id:[1-5]:initdefault:/id:1:initdefault:/g" /etc/inittab
+fi
+
+# (4)
+# we need to mount rc1.d if ocs start, since this won't exist in the etc template.
+if [ -n "$(unalias ls 2>/dev/null; ls /drbl_ssi/rc1.d/* 2>/dev/null)" ]; then
+  if [ -e /etc/debian_version ]; then
+    # Debian # RCX_ROOTDIR="/etc"
+    rc1_mnt_pnt=/etc/rc1.d
+  elif [ -e /etc/SuSE-release ]; then
+    # SuSE # RCX_ROOTDIR="/etc/init.d"
+    rc1_mnt_pnt=/etc/init.d/rc1.d
+  else
+    # RH-like # RCX_ROOTDIR="/etc"
+    rc1_mnt_pnt=/etc/rc1.d
+  fi
+
+  # (1)
+  # If we use symbolic link, the ../init.d/ will not exist.. Any solution ?
+  #rm -rf $rc1_mnt_pnt
+  #ln -fs /drbl_ssi/rc1.d $rc1_mnt_pnt
+  # (2) # Use NFS mount ?
+  # mount -n $nfsserver:$nfsimagedir/drbl_ssi/rc1.d $rc1_mnt_pnt -o $RO_NFS_EXTRA_OPT
+  # (3) just copy the files...
+  [ -d "$rc1_mnt_pnt" -a "$(echo $rc1_mnt_pnt | grep "rc1.d")" ] && rm -rf $rc1_mnt_pnt/*
+  cp -af /drbl_ssi/rc1.d/* $rc1_mnt_pnt/
+fi
+} # end of jobs_for_clonezilla_box
+
+#
+jobs_for_DRBL_SSI() {
+# (1) GDM/KDM autologin if necessary
+# (2) Overwrite some setting from /drbl_ssi/clients/$IP/ to /
+
+# (1)
+# GDM/KDM autologin if necessary
+# Here we just force to change the login ID, and let the original config file to
+# control auto/timed/normal login option.
+
+# Get the gdm or kdm config filename
+get_gdm_kdm_conf_filename
+
+case "$HN" in
+  "[0-9]*")
+      echo "$HN can NOT be a login name for autologin, we won't change Gnome/KDE config file!"
+      ;;
+   *)
+      auto_login_id="$HN"
+      if [ -e "$GDM_CFG" ]; then
+        # change timed login account
+        perl -p -i -e "s/^[[:space:]]*#*[[:space:]]*TimedLogin=.*/TimedLogin=$auto_login_id/" $GDM_CFG
+        # change auto login account
+        perl -p -i -e "s/^[[:space:]]*#*[[:space:]]*AutomaticLogin=.*/AutomaticLogin=$auto_login_id/" $GDM_CFG
+      fi
+      if [ -e "$KDM_CFG" ]; then
+        # change auto login account
+        perl -p -i -e "s/^[[:space:]]*#*[[:space:]]*AutoLoginUser=.*/AutoLoginUser=$auto_login_id/" $KDM_CFG
+      fi
+      ;;
+esac
+
+# (2) Overwrite some setting from /drbl_ssi/clients/$IP/
+if [ -n "$(unalias ls 2>/dev/null; ls /drbl_ssi/clients/$ip/* 2>/dev/null)" ]; then
+   echo -n "Syncing files from /drbl_ssi/clients/$ip/ to /... "
+   rsync -aq /drbl_ssi/clients/$ip/* /
+   echo "done!"
+fi
+} # end of jobs_for_DRBL_SSI
+
+############
+### MAIN ###
+############
+# This part is common for DRBL SSI and clonezilla box
+if [ -f /etc/fstab ]; then
+  # remove those /tftpboot/nodes/$IP.
+  # now it's single system image
+  # First we find the template machine IP address:
+  template_host_ip="$(LANG=C grep -E "[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+:/tftpboot/nodes/.*/etc" /etc/fstab | cut -d":" -f 1)"
+  echo "# This fstab is modified by DRBL SSI (init.drbl)." > /etc/fstab.mod
+  grep -vE "[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+:/tftpboot/nodes/" /etc/fstab  >> /etc/fstab.mod
+  #perl -pi -e "s/^[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+:/$nfsserver:/g" /etc/fstab.mod
+  perl -pi -e "s/^$template_host_ip:/$nfsserver:/g" /etc/fstab.mod
+  mv -f /etc/fstab.mod /etc/fstab
+fi
+
+# Modify hostname, yp.conf...
+# Hostname, remove the hostname to let DHCP server provide that.
+ip=""
+netdevices="$(get-nic-devs)"
+for device in $netdevices; do
+  ip="$(drbl-get-ipadd $device)"
+  [ -n "$ip" ] && break
+done
+# Try to mapping the hostname from /etc/hosts, if not, use IP-based hostname 
+HN="$(grep "^[[:space:]]*$ip\>" /etc/hosts | awk -F" " '{print $NF}')"
+[ -z  "$HN" ] && HN="$(echo $ip | sed -e "s/\./-/g")"
+if [ -e /etc/debian_version ]; then
+  # Debian
+  echo $HN > /etc/hostname
+elif [ -e /etc/SuSE-release ]; then
+  # SuSE
+  echo $HN > /etc/HOSTNAME
+else
+  # RH-like
+  perl -pi -e "s/^[[:space:]]*HOSTNAME=.*/HOSTNAME=$HN/g" /etc/sysconfig/network
+fi
+# Set the hostname now
+hostname $HN
+
+# for YP
+perl -pi -e "s/(domain.*server)[[:space:]]+.*/\$1 $nfsserver/g" /etc/yp.conf
+
+# ssh public key so that we can run drbl-doit
+# /drbl_ssi/root_ssh_key/authorized_keys is already copied from root's home by drbl-gen-ssi-files
+if [ -d "/drbl_ssi/root_ssh_key" ]; then
+  mkdir -m 600 /root/.ssh
+  if [ -f "/drbl_ssi/root_ssh_key/authorized_keys" ]; then
+    cp -f /drbl_ssi/root_ssh_key/authorized_keys /root/.ssh/
+  fi
+fi
+
+#
+if [ "$RL" = "1" ]; then 
+  # If runlevel 1, it's clonezilla box mode. 
+  jobs_for_clonezilla_box
+else
+  # not in runleve 1, it's DRBL SSI mode.
+  jobs_for_DRBL_SSI
+fi

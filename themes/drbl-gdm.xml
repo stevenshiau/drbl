@@ -1,0 +1,430 @@
+<?xml version="1.0"?>
+<!DOCTYPE greeter SYSTEM "greeter.dtd">
+<greeter>
+  <item type="pixmap">
+    <normal file="drbl.png"/>
+    <pos x="0" y="0" width="100%" height="100%"/>
+  </item>
+  <item type="rect">
+    <normal color="#000000"/>
+    <pos x="0" y="0" width="100%" height="1"/>
+    <fixed>
+      <item type="rect">
+        <normal color="#000000"/>
+        <pos x="0" y="4" width="100%" height="100%"/>
+        <box orientation="vertical" spacing="10" xpadding="10">
+          <item type="rect" id="language_button" button="true">
+            <normal color="#000000" alpha="0.0"/>
+            <pos y="50%" anchor="w" width="box" height="box"/>
+            <box orientation="horizontal" spacing="10" xpadding="10">
+              <item type="pixmap">
+                <normal file="language.png" tint="#dddddd"/>
+                <prelight file="language.png"/>
+                <active file="language.png" tint="#dddddd"/>
+                <pos y="50%" anchor="w"/>
+              </item>
+              <item type="label">
+                <normal color="#999999" font="Sans 14"/>
+                <prelight color="#666666" font="Sans 14"/>
+                <active color="#ff0000" font="Sans 14"/>
+                <pos y="50%" anchor="w"/>
+                <text>Language</text>
+                <text xml:lang="ca">Opci&#xF3;</text>
+                <text xml:lang="cs">Mo&#x17E;nosti</text>
+                <text xml:lang="da">Indstillinger</text>
+                <text xml:lang="es">Idioma</text>
+                <text xml:lang="et">Valikud</text>
+                <text xml:lang="fi">Valinta</text>
+                <text xml:lang="fr">Option</text>
+                <text xml:lang="ko">&#xC635;&#xC158;</text>
+                <text xml:lang="lt">Parinktis</text>
+                <text xml:lang="ms">Opsyen</text>
+                <text xml:lang="nl">Optie</text>
+                <text xml:lang="no">Alternativ</text>
+                <text xml:lang="pl">Opcja</text>
+                <text xml:lang="pt">Op&#xE7;&#xE3;o</text>
+                <text xml:lang="sk">Mo&#x17E;nos&#x165;</text>
+                <text xml:lang="sl">Mo&#x17E;nost</text>
+                <text xml:lang="sv">Alternativ</text>
+                <text xml:lang="vi">T&#xF9;y ch&#x1ECD;n</text>
+                <text xml:lang="zh_TW">&#x9078;&#x9805;</text>
+              </item>
+            </box>
+          </item>
+          <item type="rect" id="session_button" button="true">
+            <normal color="#000000" alpha="0.0"/>
+            <pos y="50%" anchor="w" width="box" height="box"/>
+            <box orientation="horizontal" spacing="10" xpadding="10">
+              <item type="pixmap">
+                <normal file="session.png" tint="#dddddd"/>
+                <prelight file="session.png"/>
+                <active file="session.png" tint="#dddddd"/>
+                <pos y="50%" anchor="w"/>
+              </item>
+              <item type="label">
+                <normal color="#999999" font="Sans 14"/>
+                <prelight color="#666666" font="Sans 14"/>
+                <active color="#ff0000" font="Sans 14"/>
+                <pos y="50%" anchor="w"/>
+                <text>Session</text>
+                <text xml:lang="az">Iclas</text>
+                <text xml:lang="ca">Sessi&#xF3;</text>
+                <text xml:lang="cs">Sezen&#xED;</text>
+                <text xml:lang="da">Session</text>
+                <text xml:lang="de">Sitzung</text>
+                <text xml:lang="el">&#x3A3;&#x3C5;&#x3BD;&#x3B5;&#x3B4;&#x3C1;&#x3AF;&#x3B1;</text>
+                <text xml:lang="es">Sesi&#xF3;n</text>
+                <text xml:lang="et">Sessioon</text>
+                <text xml:lang="eu">Saioa</text>
+                <text xml:lang="fi">Istunto</text>
+                <text xml:lang="fr">Session</text>
+                <text xml:lang="ga">Seisi&#xFA;n</text>
+                <text xml:lang="gl">Sesi&#xF3;n</text>
+                <text xml:lang="hu">Munkafolyamat</text>
+                <text xml:lang="it">Sessione</text>
+                <text xml:lang="ja">&#x30BB;&#x30C3;&#x30B7;&#x30E7;&#x30F3;</text>
+                <text xml:lang="ko">&#xC138;&#xC158;</text>
+                <text xml:lang="lt">Sesija</text>
+                <text xml:lang="lv">Sesija</text>
+                <text xml:lang="ms">Sesi</text>
+                <text xml:lang="nl">Sessie</text>
+                <text xml:lang="nn">&#xD8;kt</text>
+                <text xml:lang="no">Sesjon</text>
+                <text xml:lang="pl">Typ sesji</text>
+                <text xml:lang="pt">Sess&#xE3;o</text>
+                <text xml:lang="pt_BR">Sess&#xF5;es</text>
+                <text xml:lang="ro">Sesiune</text>
+                <text xml:lang="ru">&#x421;&#x435;&#x430;&#x43D;&#x441;</text>
+                <text xml:lang="sk">Sedenie</text>
+                <text xml:lang="sl">Seja</text>
+                <text xml:lang="sv">Session</text>
+                <text xml:lang="ta">&#xAB;&#xC1;&#xF7;&#xD7;</text>
+                <text xml:lang="tr">Oturum</text>
+                <text xml:lang="uk">&#x421;&#x435;&#x430;&#x43D;&#x441;</text>
+                <text xml:lang="vi">Session</text>
+                <text xml:lang="zh_CN">&#x4F1A;&#x8BDD;</text>
+                <text xml:lang="zh_TW">&#x4F5C;&#x696D;&#x968E;&#x6BB5;</text>
+              </item>
+            </box>
+          </item>
+          <item type="rect" id="system_button" button="true">
+            <normal color="#000000" alpha="0.0"/>
+            <show modes="console" type="system"/>
+            <pos y="50%" anchor="w" width="box" height="box"/>
+            <box orientation="horizontal" spacing="10" xpadding="10">
+              <item type="pixmap">
+                <normal file="system.png" tint="#dddddd"/>
+                <prelight file="system.png"/>
+                <active file="system.png" tint="#dddddd"/>
+                <pos y="50%" anchor="w"/>
+              </item>
+              <item type="label">
+                <normal color="#999999" font="Sans 14"/>
+                <prelight color="#666666" font="Sans 14"/>
+                <active color="#ff0000" font="Sans 14"/>
+                <pos y="50%" anchor="w"/>
+                <text>System</text>
+                <text xml:lang="az">Sistem</text>
+                <text xml:lang="ca">Sistema</text>
+                <text xml:lang="cs">Syst&#xE9;m</text>
+                <text xml:lang="da">System</text>
+                <text xml:lang="de">System</text>
+                <text xml:lang="el">&#x3A3;&#x3CD;&#x3C3;&#x3C4;&#x3B7;&#x3BC;&#x3B1;</text>
+                <text xml:lang="es">Sistema</text>
+                <text xml:lang="et">S&#xFC;steem</text>
+                <text xml:lang="eu">Sistema</text>
+                <text xml:lang="fi">J&#xE4;rjestelm&#xE4;</text>
+                <text xml:lang="fr">Syst&#xE8;me</text>
+                <text xml:lang="ga">Cor&#xE1;s</text>
+                <text xml:lang="gl">Sistema</text>
+                <text xml:lang="hu">Rendszer</text>
+                <text xml:lang="it">Sistema</text>
+                <text xml:lang="ja">&#x30B7;&#x30B9;&#x30C6;&#x30E0;</text>
+                <text xml:lang="ko">&#xC2DC;&#xC2A4;&#xD15C;</text>
+                <text xml:lang="lt">Sistema</text>
+                <text xml:lang="lv">Sist&#x113;ma</text>
+                <text xml:lang="ms">Sistem</text>
+                <text xml:lang="nl">Systeem</text>
+                <text xml:lang="nn">System</text>
+                <text xml:lang="no">System</text>
+                <text xml:lang="pl">Systemowe</text>
+                <text xml:lang="pt">Sistema</text>
+                <text xml:lang="pt_BR">Sistema</text>
+                <text xml:lang="ro">Sistem</text>
+                <text xml:lang="ru">&#x421;&#x438;&#x441;&#x442;&#x435;&#x43C;&#x430;</text>
+                <text xml:lang="sk">Syst&#xE9;m</text>
+                <text xml:lang="sl">Sistem</text>
+                <text xml:lang="sv">System</text>
+                <text xml:lang="ta">&#xAB;&#xA8;&#xC1;&#xF4;&#xD2;</text>
+                <text xml:lang="tr">Sistem</text>
+                <text xml:lang="uk">&#x421;&#x438;&#x441;&#x442;&#x435;&#x43C;&#x430;</text>
+                <text xml:lang="vi">H&#x1EC7; th&#x1ED1;ng</text>
+                <text xml:lang="zh_CN">&#x7CFB;&#x7EDF;</text>
+                <text xml:lang="zh_TW">&#x7CFB;&#x7D71;</text>
+              </item>
+            </box>
+          </item>
+          <item type="rect" id="disconnect_button" button="true">
+            <normal color="#ffffff" alpha="0.0"/>
+            <show modes="flexi,remote"/>
+            <pos y="50%" anchor="w" width="box" height="box"/>
+            <box orientation="horizontal" spacing="10" xpadding="10">
+              <item type="pixmap">
+                <normal file="quit.png" tint="#dddddd"/>
+                <prelight file="quit.png"/>
+                <active file="quit.png" tint="#dddddd" alpha=".5"/>
+                <pos y="50%" anchor="w"/>
+              </item>
+              <item type="label">
+                <normal color="#000000" font="Sans 14"/>
+                <prelight color="#666666" font="Sans 14"/>
+                <active color="#ff0000" font="Sans 14"/>
+                <pos y="50%" anchor="w"/>
+                <text>Disconnect</text>
+                <text xml:lang="az">Ba&#x11F;lant&#x131;n&#x131; k&#x259;s</text>
+                <text xml:lang="ca">Desconnecta</text>
+                <text xml:lang="cs">Odpojit se</text>
+                <text xml:lang="da">Frakobl</text>
+                <text xml:lang="es">Desconectar</text>
+                <text xml:lang="et">Lahuta &#xFC;hendus</text>
+                <text xml:lang="eu">Deskonektatu</text>
+                <text xml:lang="fi">Katkaise yhteys</text>
+                <text xml:lang="fr">D&#xE9;connecter</text>
+                <text xml:lang="gl">Desconectar</text>
+                <text xml:lang="it">Disconnetti</text>
+                <text xml:lang="ja">&#x63A5;&#x7D9A;&#x5207;&#x65AD;</text>
+                <text xml:lang="ko">&#xC5F0;&#xACB0; &#xD574;&#xC81C;</text>
+                <text xml:lang="lt">Atsijungti</text>
+                <text xml:lang="lv">Atsl&#x113;gties</text>
+                <text xml:lang="ms">Putus</text>
+                <text xml:lang="nl">Verbreek verbinding</text>
+                <text xml:lang="nn">Kople fr&#xE5;</text>
+                <text xml:lang="no">Koble fra</text>
+                <text xml:lang="pl">Roz&#x142;&#x105;cz</text>
+                <text xml:lang="pt">Desligar</text>
+                <text xml:lang="pt_BR">Desconectar</text>
+                <text xml:lang="ro">Deconecteaz&#x103;</text>
+                <text xml:lang="ru">&#x41E;&#x442;&#x43A;&#x43B;&#x44E;&#x447;&#x438;&#x442;&#x44C;&#x441;&#x44F;</text>
+                <text xml:lang="sk">Odpoji&#x165;</text>
+                <text xml:lang="sl">Odklopi se</text>
+                <text xml:lang="sv">Koppla fr&#xE5;n</text>
+                <text xml:lang="uk">&#x412;&#x456;&#x434;'&#x454;&#x434;&#x43D;&#x430;&#x442;&#x438;&#x441;&#x44C;</text>
+                <text xml:lang="vi">Ng&#x1EAF;t k&#x1EBF;t n&#x1ED1;i</text>
+                <text xml:lang="zh_CN">&#x65AD;&#x5F00;&#x8FDE;&#x63A5;</text>
+                <text xml:lang="zh_TW">&#x4E2D;&#x65B7;&#x9023;&#x7DDA;</text>
+                <show modes="remote"/>
+              </item>
+              <item type="label">
+                <normal color="#999999" font="Sans 14"/>
+                <prelight color="#666666" font="Sans 14"/>
+                <active color="#ff0000" font="Sans 14"/>
+                <pos y="50%" anchor="w"/>
+                <text>Quit</text>
+                <text xml:lang="az">&#xC7;&#x131;x</text>
+                <text xml:lang="ca">Surt</text>
+                <text xml:lang="cs">Konec</text>
+                <text xml:lang="da">Afslut</text>
+                <text xml:lang="de">Beenden</text>
+                <text xml:lang="es">Salir</text>
+                <text xml:lang="et">L&#xF5;peta</text>
+                <text xml:lang="eu">Irten</text>
+                <text xml:lang="fi">Lopeta</text>
+                <text xml:lang="fr">Quitter</text>
+                <text xml:lang="gl">Sa&#xED;r</text>
+                <text xml:lang="hu">Kil&#xE9;p&#xE9;s</text>
+                <text xml:lang="it">Esci</text>
+                <text xml:lang="ja">&#x7D42;&#x4E86;</text>
+                <text xml:lang="ko">&#xB05D;&#xB0B4;&#xAE30;</text>
+                <text xml:lang="lt">I&#x161;eiti</text>
+                <text xml:lang="lv">Iziet</text>
+                <text xml:lang="ms">Keluar</text>
+                <text xml:lang="nl">Afsluiten</text>
+                <text xml:lang="nn">Avslutt</text>
+                <text xml:lang="no">Avslutt</text>
+                <text xml:lang="pl">Zako&#x144;cz</text>
+                <text xml:lang="pt">Sair</text>
+                <text xml:lang="pt_BR">Sair</text>
+                <text xml:lang="ro">Renun&#x163;&#x103;</text>
+                <text xml:lang="ru">&#x412;&#x44B;&#x439;&#x442;&#x438;</text>
+                <text xml:lang="sk">Koniec</text>
+                <text xml:lang="sl">Izhod</text>
+                <text xml:lang="sv">Avsluta</text>
+                <text xml:lang="tr">&#xC7;&#x131;k</text>
+                <text xml:lang="uk">&#x412;&#x438;&#x439;&#x442;&#x438;</text>
+                <text xml:lang="vi">Tho&#xE1;t</text>
+                <text xml:lang="zh_CN">&#x9000;&#x51FA;</text>
+                <text xml:lang="zh_TW">&#x96E2;&#x958B;</text>
+                <show modes="flexi"/>
+              </item>
+            </box>
+          </item>
+        </box>
+      </item>
+    </fixed>
+  </item>
+  <item type="label" id="clock">
+    <normal color="#000000" font="Sans 16"/>
+    <pos x="-20" y="-30" anchor="e"/>
+    <text>%c</text>
+  </item>
+  <item type="rect" id="caps-lock-warning">
+    <normal color="#FFFFFF" alpha="0.5"/>
+    <pos anchor="c" x="50%" y="75%" width="box" height="box"/>
+    <box orientation="vertical" min-width="400" xpadding="10" ypadding="5" spacing="0">
+      <item type="label">
+        <normal color="#000000" font="Sans 14"/>
+        <pos x="50%" anchor="n"/>
+        <text>You've got capslock on!</text>
+        <text xml:lang="ca">Teniu capslock activat!</text>
+        <text xml:lang="da">Caps lock-tasten er sl&#xE5;et til!</text>
+        <text xml:lang="es">Tiene activado el bloqueo de may&#xFA;sculas.</text>
+        <text xml:lang="et">Sul on caplock peal!</text>
+        <text xml:lang="fi">Sinulla on caps lock p&#xE4;&#xE4;ll&#xE4;!</text>
+        <text xml:lang="fr">Vous avez la touche Verr. Maj. activ&#xE9;&#xA0;!</text>
+        <text xml:lang="ko">Caps Lock&#xC774; &#xCF1C;&#xC838; &#xC788;&#xC2B5;&#xB2C8;&#xB2E4;!</text>
+        <text xml:lang="lt">J&#x16B;s&#x173; Caps Lock yra &#x12F;jungtas!</text>
+        <text xml:lang="ms">Anda mempunyai capslock dihidupkan!</text>
+        <text xml:lang="nl">Caps-lock staat aan!</text>
+        <text xml:lang="no">Du har capslock p&#xE5;!</text>
+        <text xml:lang="pl">W&#x142;&#x105;czony jest klawisz Caps Lock!</text>
+        <text xml:lang="pt">Tem o capslock ligado!</text>
+        <text xml:lang="sk">M&#xE1;te zapnut&#xFD; CAPS LOCK.</text>
+        <text xml:lang="sl">Vklju&#x10D;ene imate velike &#x10D;rke!</text>
+        <text xml:lang="sv">Du har CapsLock p&#xE5;!</text>
+        <text xml:lang="vi">B&#x1EA1;n &#x111;ang b&#x1EAD;t CapsLock!</text>
+        <text xml:lang="zh_TW">&#x8ACB;&#x7559;&#x610F;&#x4E0D;&#x8981;&#x6309;&#x4E0B; capslock&#xFF01;</text>
+      </item>
+    </box>
+  </item>
+  <item type="rect" id="timed-rect">
+    <show type="timed"/>
+    <normal color="#FFFFFF" alpha="0.5"/>
+    <pos anchor="c" x="50%" y="25%" width="box" height="box"/>
+    <box orientation="vertical" min-width="400" xpadding="10" ypadding="5" spacing="0">
+      <item type="label" id="timed-label">
+        <normal color="#000000" font="Sans 14"/>
+        <pos x="50%" anchor="n"/>
+        <text>User %s will login in %d seconds</text>
+        <text xml:lang="az">%s istifad&#x259;&#xE7;isi %d saniy&#x259; i&#xE7;ind&#x259; sistem&#x259; gir&#x259;c&#x259;kdir</text>
+        <text xml:lang="ca">L'usuari %s entrar&#xE0; en %d segons</text>
+        <text xml:lang="cs">U&#x17E;ivatel %s bude p&#x159;ihl&#xE1;&#x161;en za %d vte&#x159;in</text>
+        <text xml:lang="da">Brugeren %s logger p&#xE5; om %d sekunder</text>
+        <text xml:lang="de">Benutzer %s wird in %d Sekunden angemeldet</text>
+        <text xml:lang="es">El usuario %s acceder&#xE1; en %d segundos</text>
+        <text xml:lang="et">Kasutaja %s logitakse sisse %d sekundi p&#xE4;rast</text>
+        <text xml:lang="eu">%s erabiltzaileak %d segundo barru hasiko du saioa</text>
+        <text xml:lang="fi">k&#xE4;ytt&#xE4;j&#xE4; %s kirjautuu %d sekunnin kuluttua</text>
+        <text xml:lang="fr">L'utilisateur %s se connectera dans %d secondes</text>
+        <text xml:lang="gl">A/O usuaria/o %s conectar&#xE1; en %d segundos</text>
+        <text xml:lang="hu">%s felhaszn&#xE1;l&#xF3; bel&#xE9;ptet&#xE9;se %d m&#xE1;sodperc m&#xFA;lva</text>
+        <text xml:lang="it">L'utente %s effettuer&#xE0; il login fra %d secondi</text>
+        <text xml:lang="ja">&#x30E6;&#x30FC;&#x30B6;%s&#x306F;%d&#x79D2;&#x5F8C;&#x306B;&#x30ED;&#x30B0;&#x30A4;&#x30F3;</text>
+        <text xml:lang="ko">&#xC0AC;&#xC6A9;&#xC790; %s&#xB294; %d &#xCD08; &#xC774;&#xB0B4;&#xC5D0; &#xB85C;&#xADF8;&#xC778; &#xD558;&#xC5EC;&#xC57C; &#xD569;&#xB2C8;&#xB2E4;</text>
+        <text xml:lang="lt">Vartotojas %s bus prijungtas per %d sek.</text>
+        <text xml:lang="lv">Lietot&#x101;js %s ielogosies %d sekund&#x113;s</text>
+        <text xml:lang="ms">Pengguna %s akan logmasuk dalam %d saat</text>
+        <text xml:lang="nl">Gebruiker %s wordt aangemeld over %d seconden</text>
+        <text xml:lang="nn">Brukar %s vil logge inn om %d sekund</text>
+        <text xml:lang="no">Bruker %s vil logge p&#xE5; om %d sekunder</text>
+        <text xml:lang="pl">U&#x17C;ytkownik %s zostanie zalogowany w ci&#x105;gu %d sekund</text>
+        <text xml:lang="pt">Utilizador %s iniciar&#xE1; sess&#xE3;o em %d segundos</text>
+        <text xml:lang="pt_BR">O usu&#xE1;rio %s efetuar&#xE1; login em %d segundos</text>
+        <text xml:lang="ro">Utilizatorul %s va fi logat &#xEE;n %d secunde</text>
+        <text xml:lang="sk">Pou&#x17E;&#xED;vate&#x13E; %s bude automaticky prihl&#xE1;sen&#xFD; za %d sek&#xFA;nd</text>
+        <text xml:lang="sl">Uporabnik %s se bo prijavil v %d sekundah</text>
+        <text xml:lang="sv">Anv&#xE4;ndaren %s kommer att logga in om %d sekunder</text>
+        <text xml:lang="tr">%s kullan&#x131;c&#x131;s&#x131; %d saniye i&#xE7;inde giri&#x15F; yapacak</text>
+        <text xml:lang="vi">Ng&#x1B0;&#x1EDD;i d&#xF9;ng %s s&#x1EBD; &#x111;&#x103;ng nh&#x1EAD;p trong v&#xF2;ng %d gi&#xE2;y</text>
+        <text xml:lang="zh_CN">&#x7528;&#x6237; %s &#x5C06;&#x5728; %d &#x79D2;&#x540E;&#x767B;&#x5F55;</text>
+        <text xml:lang="zh_TW">&#x4F7F;&#x7528;&#x8005; %s &#x5C07;&#x6703;&#x5728; %d &#x5167;&#x767B;&#x5165;</text>
+      </item>
+    </box>
+  </item>
+  <item type="rect">
+    <normal color="#000000" alpha="0.4"/>
+    <pos anchor="c" x="50%" y="50%" width="box" height="box"/>
+    <box orientation="vertical" min-width="300" xpadding="30" ypadding="30" spacing="10">
+      <item type="label">
+        <pos anchor="n" x="50%"/>
+        <normal color="#FFFFFF" font="Sans 14"/>
+        <text>Welcome to %h</text>
+        <text xml:lang="ca">Benvingut a %h</text>
+        <text xml:lang="cs">V&#xED;tejte na %h</text>
+        <text xml:lang="da">Velkommen til %h</text>
+        <text xml:lang="es">Bienvenido a %h</text>
+        <text xml:lang="et">Tere tulemast masinasse %h</text>
+        <text xml:lang="fi">%h - tervetuloa.</text>
+        <text xml:lang="fr">Bienvenue sur %h</text>
+        <text xml:lang="ko">%n&#xC5D0; &#xC624;&#xC2E0; &#xAC83;&#xC744; &#xD658;&#xC601;&#xD569;&#xB2C8;&#xB2E4;</text>
+        <text xml:lang="lt">Sveiki atvyk&#x119; &#x12F; %h</text>
+        <text xml:lang="ms">Selamat Datang ke %h</text>
+        <text xml:lang="nl">Welkom bij %h</text>
+        <text xml:lang="no">Velkommen til %h</text>
+        <text xml:lang="pl">Witaj w systemie %h</text>
+        <text xml:lang="pt">Bem Vindo ao %h</text>
+        <text xml:lang="sk">V&#xED;ta v&#xE1;s %h</text>
+        <text xml:lang="sl">Dobrodo&#x161;li na %h</text>
+        <text xml:lang="sv">V&#xE4;lkommen till %h</text>
+        <text xml:lang="vi">Ch&#xE0;o m&#x1EEB;ng t&#x1EDB;i %h</text>
+        <text xml:lang="zh_TW">&#x6B61;&#x8FCE;&#x4F86;&#x5230; %h</text>
+      </item>
+      <item type="label" id="pam-prompt">
+        <pos anchor="nw" x="10%"/>
+        <normal color="#FFFFFF" font="Sans 14"/>
+        <text>Username:</text>
+        <text xml:lang="az">&#x130;stifad&#x259;&#xE7;i Ad&#x131;:</text>
+        <text xml:lang="ca">Nom d'usuari:</text>
+        <text xml:lang="cs">U&#x17E;ivatel:</text>
+        <text xml:lang="da">Brugernavn:</text>
+        <text xml:lang="es">Nombre de usuario:</text>
+        <text xml:lang="et">Kasutajanimi:</text>
+        <text xml:lang="eu">Erabiltzaile-izena:</text>
+        <text xml:lang="fi">K&#xE4;ytt&#xE4;j&#xE4;tunnus:</text>
+        <text xml:lang="fr">Identifiant&#xA0;:</text>
+        <text xml:lang="gl">Usuaria/o:</text>
+        <text xml:lang="it">Nome utente:</text>
+        <text xml:lang="ja">&#x30E6;&#x30FC;&#x30B6;ID:</text>
+        <text xml:lang="ko">&#xC0AC;&#xC6A9;&#xC790;&#xC774;&#xB984;:</text>
+        <text xml:lang="lt">Vartotojo vardas:</text>
+        <text xml:lang="lv">Lietot&#x101;jv&#x101;rds:</text>
+        <text xml:lang="ms">Nama Pengguna:</text>
+        <text xml:lang="nl">Gebruikersnaam:</text>
+        <text xml:lang="nn">Brukarnamn:</text>
+        <text xml:lang="no">Brukernavn:</text>
+        <text xml:lang="pl">Nazwa u&#x17C;ytkownika:</text>
+        <text xml:lang="pt">Utilizador:</text>
+        <text xml:lang="pt_BR">Nome do usu&#xE1;rio:</text>
+        <text xml:lang="ro">Nume utilizator:</text>
+        <text xml:lang="ru">&#x418;&#x43C;&#x44F; &#x43F;&#x43E;&#x43B;&#x44C;&#x437;&#x43E;&#x432;&#x430;&#x442;&#x435;&#x43B;&#x44F;:</text>
+        <text xml:lang="sk">Pou&#x17E;&#xED;vate&#x13E;sk&#xE9; meno:</text>
+        <text xml:lang="sl">Uporabni&#x161;ko ime:</text>
+        <text xml:lang="sv">Anv&#xE4;ndarnamn:</text>
+        <text xml:lang="uk">&#x41A;&#x43E;&#x440;&#x438;&#x441;&#x442;&#x443;&#x432;&#x430;&#x447;:</text>
+        <text xml:lang="vi">T&#xEA;n ng&#x1B0;&#x1EDD;i d&#xF9;ng:</text>
+        <text xml:lang="zh_CN">&#x7528;&#x6237;&#x540D;&#xFF1A;</text>
+        <text xml:lang="zh_TW">&#x7528;&#x6236;&#x540D;&#x7A31;&#xFF1A;</text>
+      </item>
+      <item type="rect">
+        <normal color="#000000"/>
+        <pos anchor="n" x="50%" height="24" width="80%"/>
+        <fixed>
+          <item type="entry" id="user-pw-entry">
+            <pos anchor="nw" x="1" y="1" height="-2" width="-2"/>
+          </item>
+        </fixed>
+      </item>
+      <item type="label" id="pam-message">
+        <pos anchor="n" x="50%"/>
+        <normal color="#FFFFFF" font="Sans 14"/>
+        <text/>
+      </item>
+    </box>
+    <fixed>
+      <item type="label" id="pam-error">
+        <pos anchor="n" x="50%" y="110%"/>
+        <normal color="#FFFFFF" font="Sans 14"/>
+        <text/>
+      </item>
+    </fixed>
+  </item>
+</greeter>

@@ -1,0 +1,100 @@
+#!/bin/bash
+# Steven Shiau <steven _at_ nchc org tw>
+# License: GPL
+# Description: To get the setting of network-related parameters, works for 
+#              Redhat-like and Debian.
+
+export LC_ALL=C
+
+# load setting
+. /opt/drbl/sbin/drbl-conf-functions
+#
+usage() {
+  echo "Usage:"
+  echo "$(basename $0) [OPTION] [DEVICE NAME] [PARAMETER]"
+  echo "Options:"
+  echo "-h, --host IP_ADDRESS: search the DRBL client IP_ADDRESS instead of this server."
+  echo "DEVICE NAME: network interface card name, EX: eth0, eth1..."
+  echo "PARAMETER: network parameter, EX: DOMAINNAME NISDOMAINNAME HOSTNAME IPADDR NETWORK NETMASK (case insensitive)"
+  echo "Ex: $(basename $0) eth0 ipaddr"
+}
+# Parse command-line options
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -h|--host)
+            shift; specified_host="$1"
+	    if [ -z "$specified_host" ]; then
+              usage >& 2
+              exit 2
+	    fi
+            shift
+            ;;
+    -*)     echo "${0}: ${1}: invalid option" >&2
+            usage >& 2
+            exit 2 ;;
+    *)      break ;;
+  esac
+done
+#
+if [ -z "$specified_host" ]; then
+  hpath=""
+else
+  hpath="$drblroot/$specified_host"
+fi
+
+#
+NDV=$1
+return_var=$2
+[ -z "$NDV" ] && exit 0
+[ -z "$return_var" ] && exit 0
+# convert return_var to uppercase
+return_var="$(echo $return_var | tr "[a-z]" "[A-Z]")"
+
+if [ -e /etc/debian_version ]; then
+  # Debian
+  # This code is borrowed from:
+  # netcardconfig - A very light-weight text-based network configuration tool.
+  # (C) Klaus Knopper Jun 2001
+  TMP="$(mktemp /tmp/netconfig-tmp.XXXXXX)"
+  awk '/iface/{if(/'"$NDV"'/){found=1}else{found=0}} 
+       /address/{if(found){address=$NF}}
+       /netmask/{if(found){netmask=$NF}}
+       /broadcast/{if(found){broadcast=$NF}}
+       /gateway/{if(found){gateway=$NF}}
+       /network/{if(found){ntework=$NF}}
+     END{print "IPADDR="address"\n""NETMASK="netmask"\n""BROADCAST="broadcast"\n""GATEWAY="gateway"\n""NETWORK="network}' $hpath/etc/network/interfaces > $TMP 2>/dev/null
+  hostname="$(cat $hpath/etc/hostname)"
+  #domainname="$(domainname)"
+  #nisdomainname="$(nisdomainname)"
+  domainname="$(cat $hpath/etc/defaultdomain)"
+  nisdomainname="$(cat $hpath/etc/defaultdomain)"
+
+  echo "HOSTNAME=$hostname" >> $TMP
+  echo "DOMAINNAME=$domainname" >> $TMP
+  echo "NISDOMAINNAME=$nisdomainname" >> $TMP
+  . $TMP
+  [ -f "$TMP" ] && rm -f $TMP
+elif [ -e /etc/SuSE-release ]; then
+  # SuSE
+  TMP="$(mktemp /tmp/netconfig-tmp.XXXXXX)"
+  hostname="$(cat $hpath/etc/HOSTNAME)"
+  domainname="$(cat $hpath/etc/defaultdomain)"
+  nisdomainname="$(cat $hpath/etc/defaultdomain)"
+
+  echo "HOSTNAME=$hostname" >> $TMP
+  echo "DOMAINNAME=$domainname" >> $TMP
+  echo "NISDOMAINNAME=$nisdomainname" >> $TMP
+  . $TMP
+  [ -f "$TMP" ] && rm -f $TMP
+  [ -f $hpath/$SYSCONF_PATH/network/ifcfg-$NDV ] && . $hpath/$SYSCONF_PATH/network/ifcfg-$NDV
+else
+  # RH-like style
+  # For RH-like, it's "NISDOMAIN" instead of "NISDOMAINNAME"
+  [ "$return_var" = "NISDOMAINNAME" ] && return_var="NISDOMAIN"
+  [ -f $hpath/$SYSCONF_PATH/network ] && . $hpath/$SYSCONF_PATH/network 
+  [ -f $hpath/$SYSCONF_PATH/network-scripts/ifcfg-$NDV ] && . $hpath/$SYSCONF_PATH/network-scripts/ifcfg-$NDV
+fi
+
+#parameter, EX: DOMAINNAME NISDOMAIN HOSTNAME IPADDR NETWORK NETMASK (case insensitive)"
+eval ret_var=\$${return_var}
+echo $ret_var

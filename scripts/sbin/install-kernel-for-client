@@ -1,0 +1,209 @@
+#!/bin/bash
+# Author: Steven Shiau <steven _at_ nchc org tw>
+# License: GPL 
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2, or (at your option)
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program; if not, write to the Free Software
+# Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
+#
+
+# Load DRBL setting and functions
+# Setting
+# Source function library.
+[ -f /etc/rc.d/init.d/functions ] && . /etc/rc.d/init.d/functions
+
+# Source DRBL setting
+DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/opt/drbl/}"
+. $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
+
+#
+USAGE() {
+   echo "Usage: $0 [OPTION]"
+   echo "OPTION"
+   language_help_prompt_by_idx_no
+   echo "-k, --client-kernel-pkg KERNEL_PKG: specify the KERNEL_PKG (rpm or deb) which you want DRBL client to use."
+   echo "-s, --client-kernel-ver-from-server KERNEL_VER: use the kernel version KERNEL_VER from server, i.e. from /boot/vmlinuz-KERNEL_VER and /lib/modules/KERNEL_VER..."
+   echo "-c, --just-cp-files: just install files for client, do not create kernel tag for client and do not run some script. Usually this option is useed to install linux-restricted-modules in ubuntu."
+   echo "-v, --verbose:       prints verbose information"
+}
+
+# default settings
+just_cp_files="no"
+depmod_stderr="/dev/null"
+
+# Parse command-line options
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -l|--language)
+	shift
+        if [ -z "$(echo $1 |grep ^-.)" ]; then
+          # skip the -xx option, in case 
+	  specified_lang="$1"
+	  shift
+        fi
+	;;
+    -k|--client-kernel-pkg)
+	shift
+        if [ -z "$(echo $1 |grep ^-.)" ]; then
+          # skip the -xx option, in case 
+	  client_kernel_pkg="$1"
+	  shift
+        fi
+	;;
+    -s|--client-kernel-ver-from-server)
+	shift
+        if [ -z "$(echo $1 |grep ^-.)" ]; then
+          # skip the -xx option, in case 
+	  client_kernel_ver_from_server="$1"
+	  shift
+        fi
+	;;
+    -c|--just-cp-files)
+	shift; just_cp_files="yes"
+	;;
+    -v|--verbose)
+	verbose="on"
+	shift;;
+    -*) echo "${0}: ${1}: invalid option" >&2
+        USAGE >& 2
+        exit 2 ;;
+    *)  break ;;
+  esac
+done
+
+#
+check_if_root
+
+#
+ask_and_load_lang_set $specified_lang
+
+#
+if [ "$verbose" = "on" ]; then
+  # The default output for depmod is surpressed, now turn it on
+  depmod_stderr="/dev/stderr"
+fi
+
+# parse the input kernel package
+if [ -n "$client_kernel_pkg" ]; then
+   if [ -n "$(file -Ls $client_kernel_pkg | grep -i RPM)" ]; then
+     mode="rpm"
+   elif [ -n "$(file -Ls $client_kernel_pkg | grep -i "Debian binary package")" ]; then
+     mode="deb"
+   fi
+elif [ -n "$client_kernel_ver_from_server" -a \
+       -f /boot/vmlinuz-$client_kernel_ver_from_server -a \
+       -d /lib/modules/$client_kernel_ver_from_server ]; then
+   mode="local"
+   client_kernel_ver="$client_kernel_ver_from_server"
+else
+   [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+   echo "You must provide the kernel package (rpm or deb) or the kernel in the server"
+   [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+   USAGE
+   exit 1
+fi
+case "$mode" in
+   rpm)
+    client_kernel_ver="$(rpm -qpl $client_kernel_pkg | grep -E "^/boot/vmlinuz-" | sed -e "s|/boot/vmlinuz-||g")"
+    if [ -z "$client_kernel_ver" ]; then
+      # For OpenSuSE 11.1, kernel-default or kernel-pae, there is no vmlinuz-* file, try another method, i.e. use the path:
+      # /lib/modules/2.6.27.7-9-default/...
+      client_kernel_ver="$(rpm -qpl $client_kernel_pkg | awk -F" " '{print $NF}' | awk -F"/" '/\/lib\/modules/ {print $4}' | sort | uniq)"
+    fi
+    # we might need /tftpboot/node_root/var/lock/rpm/ for locking in some dist (like CentOS 4.4).
+    mkdir -p $drbl_common_root/var/lock/rpm/
+    echo "Installing $client_kernel_pkg for clients... "
+    echo "$msg_install_kernel_might_take_several_minutes "
+    # We do not care about those files put into $drbl_common_root/usr/
+    rpm -ivh --root $drbl_common_root/ --force --nodeps --noscripts $client_kernel_pkg
+    rc=$?
+    echo "$msg_done!"
+    ;;
+   deb)
+    client_kernel_ver="$(dpkg --contents $client_kernel_pkg | awk -F" " '{print $NF}' | grep -E "./boot/vmlinuz-" | sed -e "s|\./boot/vmlinuz-||g")"
+    if [ -z "$client_kernel_ver" ]; then
+      # For deb linux-ubuntu-modules-* or linux-restricted-modules-*, there is no vmlinuz-* file, try another method, i.e. use the path:
+      # ./lib/modules/2.6.22-14-386/...
+      client_kernel_ver="$(dpkg --contents $client_kernel_pkg | awk -F" " '{print $NF}' | awk -F"/" '/\.\/lib\/modules/ {print $4}' | sort | uniq)"
+    fi
+    echo "Installing $client_kernel_pkg for clients... "
+    echo "$msg_install_kernel_might_take_several_minutes "
+    # We do not care about those files put into $drbl_common_root/usr/
+    dpkg-deb --extract $client_kernel_pkg $drbl_common_root
+    rc=$?
+    echo "$msg_done!"
+    ;;
+  "local")
+    echo "Installing kernel $client_kernel_ver for clients... "
+    echo -n "$msg_install_kernel_might_take_several_minutes"
+    echo -n "."
+    mkdir -p $drbl_common_root/boot/ $drbl_common_root/lib/modules/
+    echo -n "."
+    rsync -a /boot/*$client_kernel_ver $drbl_common_root/boot/
+    echo -n "."
+    rsync -a /lib/modules/$client_kernel_ver $drbl_common_root/lib/modules/
+    echo "$msg_done!"
+    rc=0
+    ;;
+esac
+
+# If just copy files, we end program here.
+[ "$just_cp_files" = "yes" ] && exit 0
+
+# Need to create the files
+# $pxecfg_pd/kernel_version_in_initrd.txt
+# $pxecfg_pd/client_kernel_arch.txt
+
+if [ "$rc" -eq 0 ]; then
+  # Only when we can find something like /tftpboot/node_root/boot/System.map-2.6.27.39-0.2-default we can find KARCH.
+  if [ -e "$drbl_common_root/boot/System.map-$client_kernel_ver" ]; then
+    # make a tag in the system for client's kernel arch.
+    KARCH="$(LC_ALL=C drbl-check-kernel-cpu-arch --drbl-client $client_kernel_ver)"
+    if [ -z "$KARCH" ]; then
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+      echo "Client CPU arch NOT found! The $pxecfg_pd/client_kernel_arch.txt will be empty!"
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+      echo -n "$msg_press_enter_to_continue"
+      read 
+    fi
+    mkdir -p $pxecfg_pd/
+    echo "$KARCH" > $pxecfg_pd/client_kernel_arch.txt
+  fi
+else
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+  echo "Failed to install the kernel $client_kernel_pkg!"
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+  exit 1
+fi
+
+# UGLY... find a better to strip the tail for MDK kernel
+# for MDK kernel-2.6.8.1.24mdk-1-1mdk, however the kernel tag is 2.6.8.1-24mdk
+# we need to strip the -1-1mdk
+client_kernel_ver="$(echo $client_kernel_ver | sed -e "s/-1-1mdk//g")"
+
+# create modules.dep...
+if [ -e "$drbl_common_root/boot/System.map-$client_kernel_ver" ]; then
+   echo -n "Generating modules.dep and map files for clients... "
+   depmod -ae -b $drbl_common_root/ -F $drbl_common_root/boot/System.map-$client_kernel_ver -r $client_kernel_ver 2> $depmod_stderr
+   echo "done!"
+else
+   echo "$drbl_common_root/boot/System.map-$client_kernel_ver NOT found! Assume it's in another kernel package."
+fi
+
+# Firmwares. For Ubuntu, the firmwares come with kernel package, however, it's not true for other distributions. We can only try to use that from server
+if [ -d "/lib/firmware" ]; then
+  echo "Preparing the kernel firmware for clients..."
+  rsync -a /lib/firmware $drbl_common_root/lib/
+fi
+
+exit 0

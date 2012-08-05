@@ -1,0 +1,260 @@
+#!/usr/bin/perl -T
+# Written by Steven Shiau <steven _at_ nchc org tw> for DRBL
+# License: GPL
+#
+# Revised by T. C. Lin <tclin@mail.dfes.tpc.edu.tw> on 3/29/2004
+# Many thanks to Mr. Lin.
+
+%delimiter =
+   (
+   dash_line => '------------------------------------------------------',
+   star_line => '******************************************************',
+   exclamation_line => "!!!!!!!!!!!!!!!!!!!!!!!!!",
+   warning_line => "!!!!!!!!!!!!!!!!!!!!!! 警告 !!!!!!!!!!!!!!!!!!!!!!!",
+   );
+
+
+%lang_text =
+   (  
+   Say        => '回答',
+   or         => '或是',
+   seconds    => '秒',
+   WARNING    => '警告',
+   Accept     => '接受',
+   as         => '為',
+   login      => '登入',
+   clear      => '清除',
+   of         => '的',
+   logout     => '登出',
+   page       => '頁',
+   move       => '搬移',
+   date       => '日期',
+   size       => '大小',
+   type       => '類型',
+   filename   => '檔名',
+   encoding   => '編碼',
+   download   => '下載',
+   cancel     => '取消',
+   continue   => '繼續',
+   for        => 'FOR',
+   save       => '儲存',
+   add        => '增加',
+   delete     => '刪除',
+   uninstall  => '解除',
+   done       => '完成',
+   finish     => '執行完畢',
+   space      => '空白',
+   );
+
+
+%lang_word =
+   (
+   please_enter => "請輸入",
+   to_deploy_them => "來部署他們",
+   root_passwd => "管理者的密碼",
+   initial_digit => "數字開頭",
+   unable_to_find_the => "無法找到",
+   program_stop => "程式停止",
+   );
+
+
+%lang_deploy =
+   (
+   interactive_mode_prompt => '這是一個交談模式，在設定DRBL環境的過程中，您必須提供相關資料',
+   domain_unset_prompt => '網域名稱(DOMAIN)未設定,請輸入網域名稱(DOMAIN):',
+   domain_prompt => '請輸入網域名稱(DNS domain)，例如drbl.sf.net:',
+   nisdomain_unset_prompt => 'NIS網域未設定,請輸入NIS網域:',
+   nisdomain_prompt => '請輸入NIS/YP網域名稱:',
+   not_allowed_domainname => '是不允許設為網域名稱,請重新輸入!',
+   not_allowed_nisdomainname => '是不允許設為NIS網域名稱,請重新輸入!',
+   set_domain_as => '您設定的網域名稱(DOMAIN)是',
+   enter_client_hostname_prefix => "請輸入用戶端電腦名稱的前置字元:\n這個前置字元是用來搭配流水編號自動產生用戶端電腦名稱，如果你有部份或是全部機器不想使用這個自動產生的電腦名稱，想要自己指定用戶端電腦名稱，現在可以先按Ctrl-C中斷此程式，編輯$DRBL_SCRIPT_PATH/conf/client-ip-hostname後，再執行此程式。",
+   not_allowed_hostname => '是不允許設為用戶端電腦名稱,請重新輸入!',
+   set_client_hostname_prefix => '您設定的用戶端電腦名稱的前置字元是',
+   no_NIC_setup => '找不到可以設定給用戶端的電腦使用的網路卡,可能沒插網路卡或是網路卡有問題!',
+   configured_nic => '在你的系統上找到已經設定好的乙太網路埠有:',
+   we_can_NOT_continue => '我們無法繼續下去...',
+   but_not_private_IP_or_configured => '但不是私有IP,未設定好,或是沒有啟用!',
+   enter_public_IP_for_the_client => "輸入這台用戶端電腦的公開IP (public IP)",
+   its_IP_in_DRBL_is => "這台電腦在DRBL環境中的IP是",
+   wrong_entered_IP => "你輸入的IP位址有錯,請重新輸入!",
+   enter_gateway_for_client => "請輸入給這台用戶端電腦使用的閘道器(Gateway)",
+   enter_netmask_for_client => "請輸入給這台用戶端電腦使用的網路遮罩(NetMask)",
+   wrong_entered_netmask => "你輸入的網路遮罩(NetMask)有錯誤,請重新輸入!",
+   set_client_public_IP_as => "用戶端電腦的公開IP與其他網路參數設定為:",
+   we_will_skip => '我們將略去',
+   #
+   for_internet_access_prompt => '哪個網路連接埠是這台伺服器用來連接到外部網際網路,而不是給DRBL環境使用的?',
+   drbl_website_prompt => '詳情請參考網址http://drbl.nchc.org.tw/redhat或是http://drbl.sf.net/redhat。',
+   ethernet_port_for_internet => '外部網際網路使用的乙太網路埠是:',
+   ethernet_port_for_DRBL => 'DRBL環境使用乙太網路埠是: ',
+   only_1_IP_for_eth0 => 'eth0只有設定一IP位址,因此DRBL環境將不會使用eth0來連接用戶端的電腦!',
+   no_DRBL_port => '找不到任何設定好的網路卡可以讓 DRBL 環境使用!',
+   saved_mac_address_files_in_etc => "這些檔案被存在目錄$drbl_syscfg中.",
+   collect_MAC_prompt => 
+          "現在我們可以收集用戶端電腦網卡卡號(MAC Address)!\n".
+          "透過這個收集的步驟可以幫助您的DRBL環境讓用戶端電腦每次開機都拿到相同的IP,\n".
+          "如果您沒有用戶端電腦網卡卡號的紀錄檔時,你現在就應該做!\n".
+          "如果您已經有用戶端電腦網卡卡號時,您也可以把那些卡號依序,分組後,一行一行填在檔案中(檔案的數目就是您DRBL分流網路卡的張數),那麼,這個步驟您就可以略過.\n".
+          "這個步驟就是幫您做偵測卡號,然後存到檔案中,省去您抄錄卡號的時間與可能造成的打字錯誤.!\n".
+	  "用戶端電腦的網卡卡號(MAC Adrees)將會依照您用戶端電腦開機的順序依序被紀錄下來.\n".
+	  "所收集到的網路卡卡號將會依照用戶端電腦連到DRBL伺服器的網路卡來給檔名，存下來的檔名如macadr-eth1.txt, macadr-eth2.txt... 你可以在$drbl_syscfg/目錄下找到這些檔案。\n".
+	  "請先將用戶端的電腦設定為由網路開機(etherboot或是PXE),並依照您想要排列的順序開機!\n". 
+          "你是否要收集用戶端的網卡卡號?",
+   ok_let_do_it => '開始進行...',
+   you_are_not_root => '你不是系統管理者',
+   ok_let_continue => '繼續...',
+   fix_eth_IP_prompt => "你是否要讓DRBL伺服器的DHCP服務每次都發相同的IP給用戶端電腦(要使用此選項，您必須已經收集好用戶端電腦的網卡卡號(MAC Adrees)(如前述的步驟)並且存在檔案中),這是針對連接到DRBL伺服器網路連接埠",
+   MAC_file_prompt => "請輸入紀錄網卡卡號(MAC Adrees)的檔名,這是針對連接到DRBL伺服器網路連接埠",
+   #
+   range_prompt => "繼續...用戶端電腦會採用非固定IP!",
+   client_number_connected_to_eth => "有多少台DRBL用戶端的電腦(也就是給學生使用的電腦)連接到DRBL伺服器網路連接埠",
+   enter_the_no => "請輸入數字",
+   the_value_you_set => "這個網域的用戶端電腦中，起始的IP 4組數字中，最後一組數字的最後一個為",
+   set_the_IP_connected_to_eth => "我們將設定這些用戶端電腦的IP為，這是針對連接到DRBL伺服器網路連接埠",
+   do_you_want_to_continue => "你是否要繼續?",
+   reenter_or_accept => "來重新輸入,或是其他字母接受這個設定並繼續執行!",
+   filename_you_set => "你設定的檔名是",
+   by_MAC_file => "依據設定的網卡卡號紀錄檔,這些用戶端的IP,連接到網路埠",
+   let_restart_it_again => "重做一次!",
+   layout_for_DRBL => "你的DRBL環境配置:",
+   swap_prompt =>
+              "如果你的用戶端的電腦有硬碟，其中有置換分割區(swap partition)或是可以寫的檔案系統,你是否要使用該置換分割區或是在上面產生一個置換檔來做虛擬記憶體， \n".
+              "以便用戶端的電腦可以使用需要更多記憶體的程式? (這個步驟不會毀損硬碟中原來的資料)",
+   try_to_create_swap =>
+                "確定要產生一個置換檔在用戶端電腦的硬碟中!",
+   max_swap_size =>
+                "置換檔要用多少硬碟空間(Megabytes)?\n".
+                "我們將會試著配置您指定的置換空間大小，但是如果可寫的空間不夠的話，我們只會取可用空間的60%.",
+   mode_for_client_init =>
+              "用戶端開機後要進入何種模式?\n".
+              "\"1\" 為圖形模式(預設),\n".
+              "\"2\" 為文字模式.",
+   client_text_mode => "用戶端開機後為文字模式.",
+   client_graphic_mode => "用戶端開機後為圖形模式.",
+   login_mode_for_client =>
+                  "用戶端開機後圖形模式您可以選擇登入的種類:\n".
+                  "(0)一般登入, (1)自動登入, (2)限時登入",
+   auto_login =>  "用戶端開機後自動登入.",
+   created_account_for_auto_login =>
+                      "個帳號將會被產生，以便自動登入使用.\n".
+		      "自動登入的帳號的名稱與該台用戶端電腦的名稱相同.\n".
+                      "所產生的帳號與密碼將會被列在這個檔案",
+   time_for_countdown => "自動登入倒數幾秒?",
+   timed_login_prompt => "如果您在指定秒數內未登入, 用戶端電腦將會自動登入:",
+   normal_login_prompt => "用戶端電腦開機後,使用者必須輸入帳號與密碼才能使用",
+   keep_client_setting_question => "你是否要保留以前DRBL用戶端電腦的設定?",
+   remove_client_setting => "如果原來DRBL用戶端電腦的設定存在的話，將會被清除.",
+   keep_client_setting => "如果原來DRBL用戶端電腦的設定存在的話，將會予以保留.",
+   set_client_root_passwd => "基於安全考量, 你是否要為用戶端電腦設定管理者密碼(預設為複製DRBL伺服器的管理者密碼給用戶端電腦管理者使用)? ",
+   whats_client_root_passwd => "用戶端的管理者密碼是(您輸入的字不會在螢幕上顯示出來)?",
+   set_client_pxelinux_passwd => "基於安全考量, 你是否要為用戶端電腦設定開機密碼?",
+   whats_client_pxelinux_passwd => "用戶端的開機密碼是(您輸入的字不會在螢幕上顯示出來)?",
+   retype_root_passwd => "再次輸入新的密碼(您輸入的字不會在螢幕上顯示出來).",
+   sorry_passwd_not_match => "抱歉，輸入的兩個密碼不一致",
+   sorry_passwd_can_not_empty => "抱歉，一定要輸入密碼",
+   set_client_alias_IP =>
+      "利用別名介面的方式，每台用戶端電腦可以擁有2個IP,\n".
+      "其中一個是私有IP，用來連接到DRBL伺服器,另一個公開IP是用來直接透過交換器連接到外部網路使用!\n".
+      "你是否要設定每台用戶端電腦的公開IP?",
+   searching_installed_drbl_packages => "正在搜尋DRBL伺服器中已經安裝的相關程式...這個可能需要幾分鐘...",
+   no_drbl_server_package_found =>
+	      "沒有發現任何DRBL相關的程式!!!\n". 
+	      "你應該先執行另外一個程式(drblsrv -i)來設定DRBL伺服器!!!, 否則這個DRBL系統是無法使用的!!!\n".
+	      "你確定要繼續執行?\n".
+              "(\"yes\"或是\"y\" 執行此步驟, 其他字母來略去此步驟!)",
+   but_you_will_see_errors => "但是你將會看到一堆錯誤訊息...!!!",
+   smart_decision => "明智的選擇, 程式結束!\n",
+   finished_searching_installed_drbl_packages => "完成尋找DRBL伺服器所需的相關程式.",
+   note_for_keep_client_setting => "【注意】你選擇保留用戶端電腦的原有設定，執行完這個程式後，用戶端電腦可能會有些不正常的現象，不過您只要將那些用戶端電腦重新開機即可!",
+   press_enter_to_continue => "按\"Enter\"鍵來繼續... ",
+   no_deploy_prompt =>
+	      "所有的設定檔已經產生在目前這個工作目錄,\n".
+	      "但是並沒有部署到系統中! \n".
+	      "如果你要部署它們，就不要用這個選項\"-n\"或是\"--no_deploy\"",
+   ready_to_deploy =>
+	      "現在準備部署這些檔案到系統中! \n".
+	      "你要繼續執行嗎?",
+   overwrite_firewall_rule => "警告!如果你繼續執行，你的防火牆規則將會被改掉!",
+   backup_firewall_rule => "原來的規則將會被備份成iptables.drblsave於系統的設定目錄中(/etc/sysconfig或是/etc/default).",
+   oh_quit_now => "結束程式, 中斷執行!",
+   #
+   accept_or_enter => "(\"Y\" 接受這個設定，或是其他任何字母來依序輸入...)",
+   failed_to_open_file => "無法開啟檔案",
+   #
+   analyzing_rpm_info => "正在分析rpm程式的資訊...這可能需要幾分鐘...",
+   no_drbl_server_package => "沒有安裝任何DRBL相關程式!!!",
+   apt_pkg_not_installed =>  "沒有安裝\"apt\"程式!!!", 
+   we_are_now_ready_to => "現在準備",
+   the_files_for_DRBL_server => "DRBL伺服器所需的檔案!",
+   say_yes_to_continue_other_to_quit => "回答\"yes\"或是\"y\"來執行此步驟,或是其他任何字母來略去此步驟!",
+   say_no_to_quit_other_to_continue => "回答\"no\"或是\"n\"來結束程式，或是其他任何字母來繼續!",
+   syncing_flush => "現在將記憶體中的資料寫入硬碟中...", 
+   install_and_upgrade => "安裝與升級",
+   IP_start_prompt => "這個網域的用戶端電腦中，起始的IP 4組數字中，最後一組數字的起始值是(也就是IP a.b.c.d的d的起始值)? 這是針對連接到DRBL伺服器網路連接埠",
+   client_no_in_MAC_file => "這個檔中用戶端的電腦數目是",
+   not_initial_value => "你輸入的值不正確,它不能當作這個網域的第一個起始數字,請重新輸入!!!",
+   can_not_be_the_last_IP => "不能當作IP位址的最後一組數字!!!",
+   can_not_be_the_first_IP => "不能當作IP位址的第一組數字!!!",
+   set_client_system_select => "你是否要在用戶端電腦開機的時候讓使用者可以選擇所要的系統?",
+   use_graphic_pxelinux_menu => "你是否要在用戶端電腦開機的時候使用圖形背景的選單?",
+   note_for_use_graphic_pxelinux_menu => "注意!如果你的用戶端使用圖形背景無法正常開機，你可以使用\"$DRBL_SCRIPT_PATH/sbin/switch-pxe-bg-mode -m text\"來切換成文字模式的背景.",
+   whats_client_system_boot_timeout => "用戶端電腦開機,出現提示符號時要等待多少個0.1秒?",
+   sorry_timeout_must_be_number => "倒數的時間必須是數字(例如70)!!!",
+   unable_to_get_ethx_IP => "無法取得IP位址!!!\ 你必須設定一個固定的class C私有 IP address (例如192.168.1.1)。請注意，這個IP位址不能是浮動的(例如由DHCP伺服器拿到的)! 這個錯誤在於網路卡:",
+   program_stop => "程式停止!!!",
+   open_thin_client_option => 
+        "你是否要讓DRBL用戶端可以選擇使用終端機(Terminal)模式? 也就是說,你要讓用戶端電腦執行DRBL伺服器的遠端畫面(remote display) (這會大部分使用伺服器的資源), 請在此回答\"Y\".\n".
+        "請注意!\n".
+	"0. 若開啟此模式，用戶端的環境是非常有限的，例如用戶端無法直接使用USB，CD，聲音，印表機等.\n".
+	"1. 如果你的DRBL伺服器不夠強,你最好在此回答\"no\".\n".
+	"2. 如果你在此回答\"yes\",我們會開啟XDMCP讓用戶端來連線,\n".
+	"開啟XDMCP永遠不會是一個安全的作法,一個可行的方式是另外設定/etc/hosts.allow以及/etc/hosts.deny來讓您的用戶端機器連接,但是還不是最安全的.\n".
+	"在防火牆中設定網路埠177的規則是一個最安全的做法.\n".
+	"你可以讀XDMCP的相關手冊來了解相關細節.\n".
+	"請您自己根據您的需要來設定這些規則.\n".
+	"3. 如果你這裡回答\"yes\",待會你可能必須要重新啟動X視窗的桌面環境管理程式(gdm/kdm),在關閉所有的應用程式之前請記得先儲存您的資料!\n".
+	"你是否要開放終端機(Terminal)模式給用戶端選用?",
+   server_kernel_nfsd_support => "DRBL伺服器目前使用的核心支援",
+   change_kernel_notes => "【注意】如果你改變DRBL伺服器目前使用的核心版本，並且不確認那個核心是否支援NFS over UDP 或是 TCP，你最好重新執行\"drblpush -i\"以免用戶端電腦開不了機!",
+   hint_for_answer => "提示! 當有yes/no選項的時候，預設的值是大寫的字母。例如 (y/N), 預設值是 \"N\", 當你按 \"Enter\"的時候，程式使用的值就是 \"N\"。如果你不確認選用那個好的時候，直接按\"Enter\"鍵是一個保險的方式。",
+   hint_for_detect_MAC => "如果你要讓DRBL伺服器的DHCP服務每次都發相同的IP給用戶端電腦，您必須已經收集好用戶端電腦的網卡卡號(MAC Adrees)(如前述的步驟)並且存在檔案",
+   illegal_char_in_MAC => "這個MAC address檔含有不合法的字元",
+   fix_wrong_MAC_file => "請檢查並修改這個MAC address檔.",
+   unable_to_find_public_IP => "沒有找到這台伺服器的公開IP位址,",
+   available_eth_ports => "這台伺服器有的乙太網路埠",
+   is_not_in_the_lists => "不在目前可用的列表中",
+   enter_it_again => "請重新輸入",
+   the_eth_port_you_choose_for_wan => "你所選擇連接到網際網路的乙太網路埠是",
+   set_DBN_client_audio_plugdev_etc_open_to_all => "你是否要讓所有使用者在用戶端可以使用聲音、光碟機、軟碟機、影像與抽取式(例如USB隨身碟)等裝置? 若回答yes, 我們將會把所有使用者加到這台伺服器與用戶端的這些裝置群組中.",
+   use_random_password => "你是否要讓程式用亂數產生用戶端自動登入的密碼?",
+   enter_password_for_autologin_accounts => "輸入用戶端自動登入帳號的密碼.",
+   whats_client_autologin_passwd => "用戶端自動登入帳號的密碼為何(您輸入的字不會在螢幕上顯示出來)?",
+   retype_autologin_passwd => "再次輸入密碼(您輸入的字不會在螢幕上顯示出來).",
+   clonezilla_box_mode_for_client => "你是否只要使用再生龍模式? 如果是的話，一些DRBL的模式將會被關掉，你會有一個簡潔俐落的模式來使用再生龍。請注意！這個模式中，用戶端電腦的系統設定檔並不會回存到伺服器中。所有開機後的系統設定只會使用一次然後關機後就消失。",
+   clonezilla_box_mode_is_set => "只要單獨使用再生龍模式，簡潔俐落的模式將會被使用!",
+   full_clonezilla_mode_is_set => "你選用完全模式(Full clonezilla mode)!",
+   clonezilla_box_mode_not_set => "不要單獨使用再生龍模式，其他的DRBL模式將可以使用!",
+   no_clonezilla_in_system => "系統中將不使用再生龍!",
+   class_c_IP_for_multicast_clonezilla => "如果你要在再生龍中使用群播(multicast), 你一定要使用C級的私有IP位址(192.168.*.*)! 要不然群播效能會極端的差!",
+   drbl_ssi_mode_for_client => "你是否要使用DRBL單一系統印象檔模式(DRBL SSI, single system image)? 如果是的話，DRBL伺服器的負載與所需要的硬碟空間會少一些。但是請注意！在這個模式中，(1)用戶端電腦的記憶體建議至少要256MB以上，(2)用戶端電腦的系統設定檔並不會回存到伺服器中。所有開機後的系統設定只會使用一次然後關機後就消失。此外，如果你有修改過任何範本機器的設定檔(也就是位於$drblroot下的設定檔)，你要再執行$DRBL_SCRIPT_PATH/sbin/drbl-gen-ssi-files來產生新的tarball範本檔於$drbl_common_root/drbl_ssi/中，(3) 如果你要針對某些用戶端設定一些特別的檔案，可以參考$drbl_common_root/drbl_ssi/clients/00_README。",
+   which_drbl_mode_for_client => "本系統中，有3種模式可以提供無碟的Linux服務給用戶端使用:\n[0] 完全DRBL模式(Full DRBL mode),每個用戶端都有自己的/etc與/var (基於NFS).\n[1] 單一系統印象檔模式(DRBL SSI, single system image) , 每個用戶端都使用tmpfs(以記憶體來當虛擬磁碟)的/etc與/var。此模式中，DRBL伺服器的負載與所需要的硬碟空間會少一些。但是請注意！在這個模式中，(a)用戶端電腦的記憶體建議至少要256MB以上，(b)用戶端電腦的系統設定檔並不會回存到伺服器中。所有開機後的系統設定只會使用一次然後關機後就消失。此外，如果你有修改過任何範本機器的設定檔(也就是位於$drblroot下的設定檔)，你要再執行$DRBL_SCRIPT_PATH/sbin/drbl-gen-ssi-files來產生新的tarball範本檔於$drbl_common_root/drbl_ssi/中，(c) 如果你要針對某些用戶端設定一些特別的檔案，可以參考$drbl_common_root/drbl_ssi/clients/00_README。\n[2] 不要提供無碟Linux服務給用戶端使用.\n你要選用哪一個模式?",
+   drbl_ssi_mode_is_set => "要使用企鵝龍單一系統印象檔模式，較為簡潔俐落的模式將會被使用!",
+   full_drbl_mode_is_set => "使用完全DRBL模式.",
+   no_drbl_mode_in_system => "不要提供無碟Linux服務給用戶端使用.",
+   where_is_ocs_img_repo_dir => "使用再生龍的時候，你要把印象檔存在此台機器的那個目錄中(請用絕對路徑，並且不要指定在/mnt/, /media/ 或是/tmp/下)?",
+   not_allowed_ocs_img_repo_dir => "是不能用來當存clonezilla印象檔的目錄，請再輸入一次",
+   drbl_server_as_NAT_server => "你是否要讓DRBL伺服器也能提供NAT服務(也就是一般俗稱的IP分享器功能)? 如果不要的話，DRBL用戶端電腦將無法連到網際網路.",
+   drbl_server_is_NOT_NAT_server => "這台DRB伺服器未提供NAT服務(也就是一般俗稱的IP分享器功能)，DRBL用戶端電腦將無法連到網際網路.",
+   both_drbl_clonezilla_are_none => "由於企鵝龍drbl與再生龍clonezilla模式都被指定為不使用，因而此系統只有提供一些基本的功能，例如netinstall(如果有安裝相關的程式的話)與drbl-SL.sh!",
+   only_one_network_card_in_system => "///警告/// 在這台機器上只有找到一張有設定好的網路卡，我們不建議你這樣做。因為這台DRBL伺服器將會提供DHCP服務，只有一張網路卡可能會擾亂你現有的網路環境，特別是如果你已經有一個現存的DHCP服務和這張網卡透過網路交換器連接在一起。建議你至少使用兩張網路卡來避免這個問題。",
+   are_you_sure_you_want_to_continue => "你確認要繼續執行?" ,
+   # Tag on 2010/12/13
+   which_clonezilla_mode_for_client => "本系統中，Clonezilla再生龍有4個模式可以選用:\n[0] 完全模式(Full clonezilla mode)，每個用戶端都有自己的/etc與/var (基於NFS).\n[1] 再生龍盒模式(Clonezilla box mode), 每個用戶端都使用tmpfs(以記憶體來當虛擬磁碟)的/etc與/var。此模式中，Clonezilla伺服器的負載與所需要的硬碟空間會少一些。但是請注意！這個模式中，用戶端電腦的系統設定檔並不會回存到伺服器中。所有開機後的系統設定只會使用一次然後關機後就消失!\n[2] 我不要使用再生龍.\n[3] 使用Clonezilla live當作用戶端做clonezilla工作時候的作業系統(測試中).\n你要選用哪一個模式?",
+   clonezilla_live_mode_is_set => "使用Clonezilla live當作用戶端執行Clonezilla工作的作業系統。",
+   which_clonezilla_live_branch => "使用來那哪個分類的Clonezilla live?\n[0]: 穩定版 (Debian-based)\n[1]: 測試版 (Debian-based)\n[2]: 穩定替代版 (Ubuntu-based)\n[3]: 測試的替代版 (Ubuntu-based)\n若不確認, 選 [2]: 穩定替代版",
+   which_live_client_cpu_mode => "當使用Clonezilla live來執行Clonezilla的工作時，用戶端的CPU架構要選用那一種?\n[0]: i486\n[1]: i686\n[2]: amd64\n如果不確認，請選用i486.",
+   live_client_branch_set=> "Clonezilla live分類選定為",
+   live_client_cpu_arch_is_set => "用戶端執行Clonezilla的工作時，選用的CPU架構是",
+   mark_the_end_of_lang =>"."
+   );

@@ -1,0 +1,252 @@
+#!/bin/bash
+# Author: Blake, Kuo-Lien Huang
+# License: GPL
+# Description:
+#   * creat and delete accounts for DRBL, actually it for NIS (YP).
+#
+# Modified by Steven Shiau <steven@nchc.org.tw> to used in DRBL for Redhat
+
+# Load DRBL setting and functions
+if [ ! -f "/opt/drbl/sbin/drbl-conf-functions" ]; then
+  echo "Unable to find /opt/drbl/sbin/drbl-conf-functions! Program terminated!" 
+  exit 1
+fi
+. /opt/drbl/sbin/drbl-conf-functions
+
+
+# 
+check_if_root
+
+# Parse command-line options
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -s|--single)
+		format="single"
+		shift; username=$1
+		shift; groupname=$1
+		shift;;
+    -r|--range)
+		format="range"
+		shift; prefix=$1
+		shift; start=$1
+		shift; end=$1
+		shift; groupname=$1
+		shift ;;
+    -f|--file)  
+		format="file"
+		shift; filename=$1
+		shift ;;
+    -l|--list)  
+		format="list"
+		shift; filename=$1
+		shift ;;
+    -g|--group)  
+		format="group"
+		shift; group2del=$1
+		shift ;;
+    -*)		echo "${0}: ${1}: invalid option" >&2
+		echo $USAGE >& 2
+		exit 2 ;;
+    *)		break ;;
+  esac
+done
+
+case "$format" in
+  single)
+        [ -z "$username" ] && echo "No username! Program terminated!" && exit 1
+        ;;
+  range)
+        [ -z "$prefix" ] && echo "No prefix! Program terminated!" && exit 1
+        [ -z "$start" ] && echo "No start! Program terminated!" && exit 1
+        [ -z "$end" ] && echo "No end! Program terminated!" && exit 1
+        ;;
+  file)
+        [ -z "$filename" ] && echo "No filename! Program terminated!" && exit 1
+        ;;
+  list)
+        [ -z "$filename" ] && echo "No filename! Program terminated!" && exit 1
+        ;;
+  group)
+        [ -z "$group2del" ] && echo "No groupname to delete! Program terminated!" && exit 1
+        ;;
+  *)
+        echo "Usage: "
+	echo "Option 1:"
+        echo "$0 [-s|--single] <username> <groupname>"
+        echo "  delete a single user <username> with group <groupname>"
+        echo
+        echo "$0 [-r|--range] <prefix> <start> <end> <groupname>"
+        echo "  delete a range of users from <prefix><start> to <prefix><end> with group <groupname>,"
+	echo "Option 2:"
+        echo "$0 [-f|--file] <filename>"
+        echo "  delete users that are listed in <filename>."
+        echo "  the username/password pairs are listed in $useradd_gen"
+        echo 
+        echo "  the format of the file <filename>: PREFIX START END GROUPNAME"
+        echo "  for example: "
+        echo "  # account for student"
+        echo "  s		89101	89129  g3c9"
+        echo "  # account for teacher"
+        echo "  tckps	01	99   teacher"
+	echo "Option 3:"
+        echo "$0 [-l|--list] <filename>"
+        echo "  delete users that are listed in <filename>."
+        echo "  the username/password pairs are listed in $useradd_gen"
+        echo 
+        echo "  the format of the file <filename>: ID GROUPNAME"
+        echo "  for example: "
+        echo "  # account for student001"
+        echo "  student001 g3c9"
+        echo "  # account for student002"
+        echo "  student002 g3c9"
+	echo "Option 4:"
+        echo "$0 [-g|--group] <group>"
+        echo "  delete users that are in the group."
+        exit 1
+        ;;
+         
+esac
+
+# check the necessary files
+file_to_be_checked="$useradd_range_exec_file $userdel_range_exec_file $useradd_file_exec_file $userdel_file_exec_file $useradd_list_exec_file $userdel_list_exec_file" 
+
+for ifile in $file_to_be_checked; do 
+  if ! type "$ifile" &>/dev/null; then
+    echo "No $ifile file!"
+    exit 1
+  fi
+done
+
+userdel_gen_tmp=`mktemp /tmp/userdel.XXXXXX`
+
+# file to store the username and password, clean it first.
+[ -f "$userdel_gen" ] && rm -f $userdel_gen
+
+# add/delete single user
+case "$format" in
+   single)
+      # delete single users
+         echo -n "Do you also want to clean user's home directory [y/N] ? "
+         read clean_home
+         case "$clean_home" in
+            y|Y|[yY][eE][sS]) 
+               echo "Warning! The user's home directory will be deleted! Are you sure ?"
+               echo -n "[y/N] "
+               read clean_home_confirm
+               case "$clean_home_confirm" in
+                  y|Y) 
+                     RM_HOME_OPT="-r"
+                     ;;
+                  *)
+                     RM_HOME_OPT=""
+               esac
+               ;;
+            *)
+               RM_HOME_OPT=""
+         esac
+         
+         if grep "^$username:" /etc/passwd >/dev/null; then
+           echo -n "Deleting account $username..."
+           /usr/sbin/userdel $RM_HOME_OPT $username
+           echo "done!"
+         fi
+         ;;
+      
+      range)
+         # del a range of users
+         echo "Setuping..."
+         run_cmd="$userdel_range_exec_file $prefix $start $end $groupname"
+         eval "$run_cmd | tee -a $userdel_gen_tmp"
+         ;;
+      
+      file)
+         # del users which are listed in file
+         echo "Setuping..."
+         run_cmd="$userdel_file_exec_file $filename"
+         eval "$run_cmd | tee -a $userdel_gen_tmp"
+         ;;
+
+      list)
+         # del users which are listed line by line in file
+         echo "Setuping..."
+         run_cmd="$userdel_list_exec_file $filename"
+         eval "$run_cmd | tee -a $userdel_gen_tmp"
+         ;;
+
+      group)
+         # del the users in a group
+	 # check if the group2del exist ?
+	 user2del=`grep "^$group2del:" /etc/group | awk -F':' '{print $4}' | sed -e "s/,/ /g" `
+	 if ! grep "^$group2del:" /etc/group > /dev/null; then
+	    echo "The group \"$group2del\" to be killed does not exist!!! Program terminated!"
+	    exit 1
+         else
+	    echo "The usernames for the group \"$group2del\" to be killed are: $user2del, are you sure want to continue ?"
+	    echo "[y/N] "
+	    read kill_group_confirm
+            case "$kill_group_confirm" in
+               y|Y|[yY][eE][sS]) 
+	          continue
+                  ;;
+               *)
+                  echo "Ok, exit now!"
+		  exit 0
+            esac
+	    
+	 fi
+
+         echo -n "Do you also want to clean user's home directory [y/N] ? "
+         read clean_home
+         case "$clean_home" in
+            y|Y|[yY][eE][sS]) 
+               echo "Warning! The user's home directory will be deleted! Are you sure ?"
+               echo -n "[y/N] "
+               read clean_home_confirm
+               case "$clean_home_confirm" in
+                  y|Y) 
+                     RM_HOME_OPT="-r"
+                     ;;
+                  *)
+                     RM_HOME_OPT=""
+               esac
+               ;;
+            *)
+               RM_HOME_OPT=""
+         esac
+         echo -n "Do you also want to clean group [Y/n] ? "
+         read clean_group
+         case "$clean_group" in
+            n|N|[nN][oO]) 
+               RM_GROUP_OPT=""
+               ;;
+            *)
+               RM_GROUP_OPT="yes"
+         esac
+         echo "Setuping..."
+	 for iuser in $user2del; do
+           echo -n "Deleting account $iuser..."
+           /usr/sbin/userdel $RM_HOME_OPT $iuser
+           echo "done!"
+	 done
+
+         if [ "$RM_GROUP_OPT" = "yes" ]; then
+           if grep "^$group2del:" /etc/group >/dev/null; then
+             echo -n "Deleting group $group2del..."
+             /usr/sbin/groupdel $group2del
+             echo "done!"
+           fi
+         fi
+         ;;
+
+esac
+
+#
+echo "Now update the NIS data in /var/yp ..."
+make -C /var/yp/
+echo
+
+#
+[ -f "$userdel_gen_tmp" ]  && rm -f $userdel_gen_tmp
+
+echo "Done."
+exit 0

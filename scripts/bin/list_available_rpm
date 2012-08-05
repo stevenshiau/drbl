@@ -1,0 +1,73 @@
+#!/bin/bash
+# The script is borrowed from 
+#============================================================================
+# http://staff.washington.edu/corey/tools.html
+# Author: Corey Satten, corey @ cac.washington.edu, 06/26/03, release 1.8
+#============================================================================
+# Modified by Steven Shiau <steven _at_ nchc org tw> 12/12/04
+# 2005/8/22 Steven Shiau modified to add sed -n '/\.rpm$/s/^[-l].* //p' since there are some ftp mirror site can NOT handle symbolic link well (.i.e. dir -L will fail). One of the site is
+# ftp://mirrors.mathematik.uni-bielefeld.de/pub/linux/suse/apt/SuSE/9.3-i386/RPMS.base/
+# 2006/6/24 Steven Shiau modified it to use lftp for http instead of lynx, since
+# 1. For some apache2, "lynx -dump" will get the html format instead of plain text
+# 2. lynx does not support http_proxy and ftp_proxy.
+#============================================================================
+# Load DRBL setting and functions
+DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/opt/drbl/}"
+
+. $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
+
+#
+usage () {
+  echo "Usage: `basename $0` [path]"
+  echo "Example:"
+  echo "`basename $0` /mirror/apt/RPMS.drbl-test"
+  echo "`basename $0` http://free.nchc.org.tw/fedora/apt/fedora/linux/2/i386/RPMS.drbl"
+}
+
+# Try to help people figure out if/when this file has DOS line terminators
+# Chances are the initial #!/bin/sh will fail with a cryptic "not found" msg
+# If someone tries to debug it by feeding it to sh manually, this should help:
+NL=
+case "$NL" in '');; *)                                                    #
+    echo "ERROR: $0 was improperly saved with CR-LF newlines." 1>&2       #
+    echo "Please try again after restoring Unix-style (LF) newlines" 1>&2 #
+    exit 1 ;;                                                             #
+esac                                                                      #
+
+SRC=$1
+[ -z "$SRC" ] && echo "You must provide the URL or PATH!" && usage && exit 1
+
+case "$SRC" in */);; *) SRC=$SRC/;; esac	# URL must end in slash
+
+#-------------------------------------------------------------------------------
+#
+# Find all redhat patches available
+#
+
+export LC_ALL=C
+
+if [ -d $SRC ] ;then	# local directory
+    (cd $SRC && ls -l)
+else			# http/ftp... directory
+    case "$SRC" in
+	ftp://*)
+            ( echo set ftp:passive-mode on
+	      # Steven Shiau modified to use lftp.
+	      #echo dir -L) | ftp -p -n $HST | grep '\.rpm$' > $TMP
+	      echo rels ) | lftp $SRC 2>/dev/null | grep -E '\.rpm\>'
+            ;;
+	http://*)
+	    # Steven Shiau modified to use lftp instead of lynx
+	    #lynx -dump $SRC | sed -n 's,^[ 0-9.]*http://.*/,-& ,p';;
+	    echo rels | lftp $SRC 2>/dev/null
+            ;;
+	file://*)
+	    DIR="$(echo $SRC | sed -e "s|file://||g")"
+            (cd $DIR && ls -l)
+            ;;
+    esac
+    # In case dir -L fails, we need to add ^[-l] to strip the junk msg.
+    # Some repo output DOS (CR/LF), 
+    # convert to Unix format: sed 's/[^[:print:]]$//'
+    # For OpenSuSE, there are some *.delta.rpm and .rpm.metalink, we have to filter them, too.
+fi | sed 's/[^[:print:]]$//' | sed -r -n '/\.rpm($|[[:space:]]])\>/s/^[-l].* //p' | grep -v -E "\.delta\.rpm($|[[:space:]])" | while read x; do basename $x; done | sort

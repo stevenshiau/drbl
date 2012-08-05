@@ -1,0 +1,569 @@
+#!/bin/bash
+# Author: Steven Shiau <steven _at_ nchc org tw>
+# License: GPL
+# Description: Download the netinstall kernel & initrd for DRBL client to install GNU/Linux via network.
+
+DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/opt/drbl/}"
+
+. $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
+. $DRBL_SCRIPT_PATH/conf/drbl-ocs.conf
+. $DRBL_SCRIPT_PATH/sbin/ocs-functions
+
+#
+supported_dists="$(set | grep -i "_netinstall_ver" | awk -F"_" '{print $1}' | sort | uniq)"
+
+# make it in a line, and use comma to separate them.
+supported_dists="$(echo $supported_dists)"
+supported_dists_with_comma="$(echo $supported_dists | sed -e "s/ /, /g")"
+USAGE() {
+  echo "Download GNU/Linux netinstall kernel and initrd for DRBL client to install GNU/Linux."
+  echo "Usage: $0 [OPTION] DIST"
+  echo "OPTION:"
+  language_help_prompt_by_idx_no
+  echo "-b, --enable-bsd:         Include BSD distributions in the 'all' lists. Use this with '-i all'"
+  echo "-d, --dir DIR             Put the netinstall files in DIR instead of default dir $pxecfg_pd"
+  echo "-i, --install DIST:       Load GNU/Linux DIST netinstall package into DRBL environment."
+  echo "-o, --overwrite:          Overwrite existing images"
+  echo "-q, --quiet:              Quiet mode"
+  echo "-s, --skip-rerun-gen:     Skip the message about re-run generate-pxe-menu"
+  echo "-u, --uninstall DIST:     Uninstall GNU/Linux DIST netinstall package."
+  echo "-v, --verbose:     Verbose mode."
+  echo "-w, --run-wo-check-if-root Run $0 without checking if run as root"
+  echo "DIST is one of these: $supported_dists_with_comma"
+  echo "The settings are in drbl.conf."
+  echo "Ex: To load Debian netinstall packages, run '$0 -i debian'"
+  echo "    To load Fedora netinstall packages, run '$0 -i fedora'"
+  echo "    To load all supported GNU/Linux netinstall packages, run '$0 -i all'"
+  echo "    To remove Fedora netinstall packages, run '$0 -u fedora'"
+  echo "    To remove all GNU/Linux netinstall packages, run '$0 -u all'"
+}
+#
+get_and_put_linux_img() {
+  local img_url="$1"
+  local dist="$2"
+  local iver="$3"
+  local iarch="$4"
+  local net_ker="$5"
+  local net_initrd="$6"
+  netinst_tmp="$(mktemp -d /tmp/netinst_tmp.XXXXXX)"
+  if [ ! -e "$TDIR/vmlinuz-netinstall-${dist}-${iver}-${iarch}" -o "$overwrite_img" = "yes" ]; then
+    [ "$verbose" = "on" ] && echo "Fetching $img_url/$net_ker..."
+    wget $wget_opt -P "$netinst_tmp" $img_url/$net_ker
+    if [ -e "$netinst_tmp/$net_ker" ]; then
+      mv -f $netinst_tmp/$net_ker $TDIR/vmlinuz-netinstall-${dist}-${iver}-${iarch}
+    else
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+      echo "netinstall kernel $net_ker for $iarch $iver ${dist} not found!"
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+    fi
+  else
+    echo "Existing $TDIR/vmlinuz-netinstall-${dist}-${iver}-${iarch} found!"
+  fi
+
+  if [ ! -e "$TDIR/initrd-netinstall-${dist}-${iver}-${iarch}.img" -o "$overwrite_img" = "yes" ]; then
+    [ "$verbose" = "on" ] && echo "Fetching $img_url/$net_initrd..."
+    wget $wget_opt -P "$netinst_tmp" $img_url/$net_initrd
+    if [ -e "$netinst_tmp/$net_initrd" ]; then
+      mv -f $netinst_tmp/$net_initrd $TDIR/initrd-netinstall-${dist}-${iver}-${iarch}.img
+    else
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+      echo "netinstall initrd $net_initrd for $iarch $iver ${dist} not found!"
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+    fi
+  else
+    echo "Existing $TDIR/initrd-netinstall-${dist}-${iver}-${iarch}.img found!"
+  fi
+  [ -d "$netinst_tmp" ] && rm -f $netinst_tmp/* && rmdir $netinst_tmp
+} # end of get_and_put_linux_img
+
+#
+get_debian_netinstall() {
+  # output file format in /tftpboot/nbi_img/:
+  # vmlinuz-netinstall-${dist}-${ver}-${arch)
+  # initrd-netinstall-${dist}-${ver}-${i386}.img
+  #
+  for ver in $debian_netinstall_ver; do
+    for arch in $debian_netinstall_arch; do
+      if [ "$ver" = "sarge" -a "$arch" = "amd64" ]; then
+        echo -n "amd64 version of Sarge is not officially supported! Skip this. "
+	continue
+      fi
+      case "$ver" in
+        woody|sarge|etch)
+          # For version <= etch, only text mode available.
+          # URL e.g.:
+          # http://free.nchc.org.tw/debian/dists/etch/main/installer-i386/current/images/netboot/debian-installer/i386
+          # http://free.nchc.org.tw/debian/dists/etch/main/installer-amd64/current/images/netboot/debian-installer/amd64
+          url=$debian_url_site/$path_to_debian/$ver/main/installer-$arch/current/images/netboot/debian-installer/$arch
+          ;;
+        *)
+          # For version >= lenny, gtk mode used to be available
+          # URL e.g.:
+          # http://free.nchc.org.tw/debian/dists/lenny/main/installer-i386/current/images/netboot/gtk/debian-installer/i386/
+          #url=$debian_url_site/$path_to_debian/$ver/main/installer-$arch/current/images/netboot/gtk/debian-installer/$arch
+          url=$debian_url_site/$path_to_debian/$ver/main/installer-$arch/current/images/netboot/debian-installer/$arch
+	  ;;
+      esac
+      get_and_put_linux_img $url Debian $ver $arch $debian_netinstall_kernel $debian_netinstall_initrd
+    done
+  done
+} # end of get_debian_netinstall
+
+#
+get_ubuntu_netinstall() {
+  # output file format in /tftpboot/nbi_img/:
+  # vmlinuz-netinstall-${dist}-${ver}-${arch)
+  # initrd-netinstall-${dist}-${ver}-${i386}.img
+  #
+  for ver in $ubuntu_netinstall_ver; do
+    for arch in $ubuntu_netinstall_arch; do
+      case $ver in
+      [j]*)
+        # For the version = jaunty, gtk mode is available. However, it's not available in karmic...
+	# URL e.g. 
+	# http://free.nchc.org.tw/ubuntu/dists/jaunty/main/installer-i386/current/images/netboot/gtk/ubuntu-installer/i386/
+        url=$ubuntu_url_site/$path_to_ubuntu/$ver/main/installer-$arch/current/images/netboot/gtk/ubuntu-installer/$arch ;;
+      *)
+        # URL e.g:
+        # http://free.nchc.org.tw/ubuntu//dists/edgy/main/installer-i386/current/images/netboot/ubuntu-installer/i386/
+        # http://free.nchc.org.tw/ubuntu/dists/dapper/main/installer-i386/current/images/netboot/ubuntu-installer/i386/
+        # For the version earlier than jaunty, only text mode is available
+        url=$ubuntu_url_site/$path_to_ubuntu/$ver/main/installer-$arch/current/images/netboot/ubuntu-installer/$arch ;;
+      esac
+      get_and_put_linux_img $url Ubuntu $ver $arch $ubuntu_netinstall_kernel $ubuntu_netinstall_initrd
+    done
+  done
+} # end of get_ubuntu_netinstall
+
+#
+get_fedora_netinstall() {
+  # Example output file format in /tftpboot/nbi_img/:
+  # vmlinuz-netinstall-Fedora-6-i386, initrd-netinstall-Fedora-6-i386.img
+  # vmlinuz-netinstall-Fedora-6-x86_64, initrd-netinstall-Fedora-6-x86_64.img
+  # i.e.
+  # vmlinuz-netinstall-${dist}-${ver}-${arch)
+  # initrd-netinstall-${dist}-${ver}-${i386}.img
+  #
+  # url ex:
+  # http://free.nchc.org.tw/fedora/linux/core/6/i386/os/images/pxeboot/
+  # http://free.nchc.org.tw/fedora/linux/releases/7/Fedora/i386/os/images/pxeboot/
+  for ver in $fedora_netinstall_ver; do
+    for arch in $fedora_netinstall_arch; do
+      case $ver in
+        [1-6])
+          url=$fedora_url_site/$path_to_fedora/core/$ver/$arch/os/images/pxeboot
+          ;;
+        *)
+          # For 7 or later... who knows about the future
+          url=$fedora_url_site/$path_to_fedora/releases/$ver/Fedora/$arch/os/images/pxeboot
+          ;;
+      esac
+      get_and_put_linux_img $url Fedora $ver $arch $fedora_netinstall_kernel $fedora_netinstall_initrd
+    done
+  done
+} # end of get_fedora_netinstall
+
+#
+get_centos_netinstall() {
+  # output file format in /tftpboot/nbi_img/:
+  # vmlinuz-netinstall-${dist}-${ver}-${arch)
+  # initrd-netinstall-${dist}-${ver}-${i386}.img
+  #
+  # url ex:
+  # http://free.nchc.org.tw/centos/4.5/os/i386/images/pxeboot
+  # http://free.nchc.org.tw/centos/5.0/os/x86_64/images/pxeboot
+  for ver in $centos_netinstall_ver; do
+    for arch in $centos_netinstall_arch; do
+      url=$centos_url_site/$path_to_centos/$ver/os/$arch/images/pxeboot
+      get_and_put_linux_img $url CentOS $ver $arch $centos_netinstall_kernel $centos_netinstall_initrd
+    done
+  done
+} # end of get_centos_netinstall
+
+#
+get_redhat_netinstall() {
+  # output file format in /tftpboot/nbi_img/:
+  # vmlinuz-netinstall-${dist}-${ver}-${arch)
+  # initrd-netinstall-${dist}-${ver}-${i386}.img
+  #
+  # url ex:
+  # http://free.nchc.org.tw/redhat/linux/8.0/en/os/i386/images/pxeboot
+  # http://free.nchc.org.tw/redhat/linux/9/en/os/i386/images/pxeboot
+  for ver in $redhat_netinstall_ver; do
+    for arch in $redhat_netinstall_arch; do
+      url=$redhat_url_site/$path_to_redhat/$ver/en/os/$arch/images/pxeboot
+      get_and_put_linux_img $url RedHat $ver $arch $redhat_netinstall_kernel $redhat_netinstall_initrd
+    done
+  done
+} # end of get_redhat_netinstall
+
+#
+get_mandriva_netinstall() {
+  # output file format in /tftpboot/nbi_img/:
+  # vmlinuz-netinstall-${dist}-${ver}-${arch)
+  # initrd-netinstall-${dist}-${ver}-${i386}.img
+  #
+  # url ex:
+  # http://free.nchc.org.tw/mandrake/official/2007.0/i586/isolinux/alt0/
+  # http://free.nchc.org.tw/mandrake/official/2007.1/i586/isolinux/alt0/
+  for ver in $mandriva_netinstall_ver; do
+    for arch in $mandriva_netinstall_arch; do
+      url=$mandriva_url_site/$path_to_mandriva/$ver/$arch/isolinux/alt0
+      get_and_put_linux_img $url Mandriva $ver $arch $mandriva_netinstall_kernel $mandriva_netinstall_initrd
+    done
+  done
+} # end of get_mandriva_netinstall
+
+#
+get_mageia_netinstall() {
+  # output file format in /tftpboot/nbi_img/:
+  # vmlinuz-netinstall-${dist}-${ver}-${arch)
+  # initrd-netinstall-${dist}-${ver}-${i386}.img
+  #
+  # url ex:
+  # http://free.nchc.org.tw/mageia/distrib/cauldron/i586/isolinux/alt0/
+  # http://free.nchc.org.tw//mageia/distrib/cauldron/i586/isolinux/alt0/
+  for ver in $mageia_netinstall_ver; do
+    for arch in $mageia_netinstall_arch; do
+      url=$mageia_url_site/$path_to_mageia/$ver/$arch/isolinux/alt0
+      get_and_put_linux_img $url Mageia $ver $arch $mageia_netinstall_kernel $mageia_netinstall_initrd
+    done
+  done
+} # end of get_mageia_netinstall
+
+#
+get_scientific_netinstall() {
+  # output file format in /tftpboot/nbi_img/:
+  # vmlinuz-netinstall-${dist}-${ver}-${arch)
+  # initrd-netinstall-${dist}-${ver}-${i386}.img
+  #
+  # url ex:
+  # http://free.nchc.org.tw/scientific/50/i386/images/pxeboot/
+  # http://free.nchc.org.tw/scientific/50/x86_64/images/pxeboot/
+  for ver in $scientific_netinstall_ver; do
+    for arch in $scientific_netinstall_arch; do
+      # For Scientific Linux, the path is used without dot (.): 5.0 -> 50
+      ver_path="$(echo $ver | sed -e "s/\.//g")"
+      case $ver in
+       [4-5]*)
+        url=$scientific_url_site/$path_to_scientific/$ver_path/$arch/images/pxeboot
+	;;
+       *)
+        url=$scientific_url_site/$path_to_scientific/$ver_path/$arch/os/images/pxeboot
+	;;
+      esac
+      get_and_put_linux_img $url Scientific $ver $arch $scientific_netinstall_kernel $scientific_netinstall_initrd
+    done
+  done
+} # end of get_scientific_netinstall
+
+#
+get_opensuse_netinstall() {
+  # vmlinuz-netinstall-${dist}-${ver}-${arch)
+  # initrd-netinstall-${dist}-${ver}-${i386}.img
+  #
+  # url ex:
+  # http://free.nchc.org.tw/opensuse/distribution/SL-10.1/inst-source/boot/i386/loader
+  # http://free.nchc.org.tw/opensuse/distribution/10.2/repo/oss/boot/i386/loader
+  for ver in $opensuse_netinstall_ver; do
+    for arch in $opensuse_netinstall_arch; do
+      case $ver in
+        10.1)
+          url=$opensuse_url_site/$path_to_opensuse/SL-10.1/inst-source/boot/$arch/loader
+          ;;
+        *)
+          # For 10.2 or later... who knows about the future
+          url=$opensuse_url_site/$path_to_opensuse/$ver/repo/oss/boot/$arch/loader
+          ;;
+      esac
+      get_and_put_linux_img $url openSUSE $ver $arch $opensuse_netinstall_kernel $opensuse_netinstall_initrd
+    done
+  done
+} # end of get_opensuse_netinstall
+#
+get_freebsd_netinstall() {
+  #  1. Download FreeBSD 7.0 boot ISO:
+  #  wget ftp://ftp.twaren.net/BSD/FreeBSD/releases/i386/ISO-IMAGES/7.0/7.0-RELEASE-i386-bootonly.iso
+  #  2. mount -o loop 7.0-RELEASE-i386-bootonly.iso /mnt
+  #  3. mkdir /pxeroot/
+  #  4. cp -a /mnt/boot /pxeroot/
+  #  cp /mnt/boot/pxeboot /tftpboot/nbi_img/FreeBSD-7.0-pxeboot.0
+  #  Add the following in /pxeroot/boot/loader.conf:
+  #  vfs.root.mountfrom="ufs:/dev/md0c"
+  #  which means that the later booting process will use a ramdisk as root instead of using NFS.
+  #  5. append the following in /tftpboot/nbi_img/pxelinux.cfg/default
+  #  ---------
+  #  label FreeBSD 7.0 netinstall
+  #  # MENU DEFAULT
+  #  # MENU HIDE
+  #  MENU LABEL FreeBSD 7.0 netinstall
+  #  # MENU PASSWD
+  #  kernel FreeBSD-7.0-pxeboot.0
+  #  ---------
+  #  6. Append one line by edit /etc/exports:
+  #  ---------
+  #  /pxeroot/ 192.168.120.2(ro,sync,async,no_root_squash,subtree_check)
+  #  ---------
+  #  then restart nfs service (Ex. /etc/init.d/nfs-kernel-server restart)
+  #  Ref: http://www.hack.org/mc/freebsd-x60.html; http://www.fefe.de/netboot/how-to-netboot-installer.html
+  #  For FreeBSD 8.0, ref: http://mark-oshea.blogspot.com/2009/11/installing-freebsd-8-using-pxe-and-nfs.html
+
+  # output file format in /tftpboot/nbi_img/:
+  # FreeBSD-7.0-i386-pxeboot.0
+  #
+  # url ex:
+  # ftp://ftp.twaren.net/BSD/FreeBSD/releases/i386/ISO-IMAGES/6.3/6.3-RELEASE-i386-bootonly.iso
+  # ftp://ftp.twaren.net/BSD/FreeBSD/releases/i386/ISO-IMAGES/7.0/7.0-RELEASE-i386-bootonly.iso
+  local iso_url ver arch netinst_tmp
+  netinst_tmp="$(mktemp -d /tmp/netinst_tmp.XXXXXX)"
+  iso_mnt_tmp="$(mktemp -d /tmp/iso_mnt_tmp.XXXXXX)"
+  for ver in $freebsd_netinstall_ver; do
+    for arch in $freebsd_netinstall_arch; do
+      iso_url="$freebsd_url_site/$path_to_freebsd/releases/$arch/ISO-IMAGES/$ver/$ver-RELEASE-${arch}-bootonly.iso"
+      if [ ! -e "$TDIR/FreeBSD-${ver}-${arch}-pxeboot.0" -o "$overwrite_img" = "yes" ]; then
+        [ "$verbose" = "on" ] && echo "Fetching $iso_url..."
+        wget $wget_opt -P "$netinst_tmp" $iso_url
+	if [ -e "$netinst_tmp/$ver-RELEASE-${arch}-bootonly.iso" ]; then
+          mount -o loop $netinst_tmp/$ver-RELEASE-${arch}-bootonly.iso $iso_mnt_tmp
+	  echo "Creating /pxeroot/ for FreeBSD network install..."
+          mkdir -p /pxeroot/
+	  echo "Copying dir boot from iso to /pxeroot..."
+          cp -a $iso_mnt_tmp/boot /pxeroot/
+	  echo "Copying pxeboot from iso to $TDIR..."
+          cp -af $iso_mnt_tmp/boot/pxeboot $TDIR/FreeBSD-${ver}-${arch}-pxeboot.0
+	  umount $iso_mnt_tmp
+	  # files in iso is read-only
+	  chmod u+w /pxeroot/boot/loader.conf
+	  echo "Append ramdisk setting in /pxeroot/boot/loader.conf..."
+	  # For FreeBSD 7.x, use: "vfs.root.mountfrom="ufs:/dev/md0c"
+	  # For FreeBSD 8.0, use: "vfs.root.mountfrom="ufs:/dev/md0"
+	  case "$ver" in
+           7.*)
+            cat <<-LOAD_END >> /pxeroot/boot/loader.conf
+vfs.root.mountfrom="ufs:/dev/md0c"
+LOAD_END
+            ;;
+           *)
+            cat <<-LOAD_END >> /pxeroot/boot/loader.conf
+vfs.root.mountfrom="ufs:/dev/md0"
+LOAD_END
+            ;;
+          esac
+	fi
+	# pxelinux memu will be created by generate-pxe-menu, so we do not proces that here.
+	# For FreeBSD, we have to setup NFS for /pxeroot. I hate this...
+        [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+	echo "///NOTE/// You have to append the following to /etc/exports:"
+	echo "/pxeroot/ *(ro,all_squash,no_subtree_check)"
+	echo "Then restart NFS service."
+        [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+      else
+        echo "Existing $TDIR/FreeBSD-${ver}-${arch}-pxeboot.0 found!"
+      fi
+    done
+  done
+  [ -d "$netinst_tmp" ] && rm -f $netinst_tmp/* && rmdir $netinst_tmp
+  [ -d "$iso_mnt_tmp" ] && rm -f $iso_mnt_tmp/* && rmdir $iso_mnt_tmp
+} # end of get_freebsd_netinstall
+#
+get_openbsd_netinstall() {
+  # output file format in /tftpboot/nbi_img/:
+  # OpenBSD-4.2-i386-pxeboot.0
+  #
+  # Two files need to be download: pxeboot and bsd.rd
+  # ///NOTE/// To use netinstall in openbsd, the root file is bsd.rd, not bsd, and we have to rename bsd.rd as bsd.
+  # url ex:
+  # ftp://ftp.twaren.net/BSD/OpenBSD/4.2/i386/pxeboot
+  # ftp://ftp.twaren.net/BSD/OpenBSD/4.2/i386/bsd.rd
+  # Ref: http://www.hack.org/mc/freebsd-x60.html; http://www.fefe.de/netboot/how-to-netboot-installer.html
+  local url ver arch netinst_tmp
+  netinst_tmp="$(mktemp -d /tmp/netinst_tmp.XXXXXX)"
+  iso_mnt_tmp="$(mktemp -d /tmp/iso_mnt_tmp.XXXXXX)"
+  for ver in $openbsd_netinstall_ver; do
+    for arch in $openbsd_netinstall_arch; do
+      if [ ! -e "$TDIR/OpenBSD-${ver}-${arch}-pxeboot.0" -o "$overwrite_img" = "yes" ]; then
+        url="$openbsd_url_site/$path_to_openbsd/$ver/$arch/"
+        [ "$verbose" = "on" ] && echo "Fetching $url/pxeboot..."
+        wget $wget_opt -P "$netinst_tmp" $url/pxeboot
+	if [ -e "$netinst_tmp/pxeboot" ]; then
+	  echo "Copying pxeboot as $TDIR/OpenBSD-${ver}-${arch}-pxeboot.0..."
+          cp -af $netinst_tmp/pxeboot $TDIR/OpenBSD-${ver}-${arch}-pxeboot.0
+	fi
+        [ "$verbose" = "on" ] && echo "Fetching $url/bsd..."
+        wget $wget_opt -P "$netinst_tmp" $url/bsd.rd
+	if [ -e "$netinst_tmp/bsd.rd" ]; then
+	  echo "Copying bsd.rd as $TDIR/bsd..."
+          cp -af $netinst_tmp/bsd.rd $TDIR/bsd
+	fi
+	# pxelinux memu will be created by generate-pxe-menu, so we do not proces that here.
+      else
+        echo "Existing $TDIR/OpenBSD-${ver}-${arch}-pxeboot.0 found!"
+      fi
+    done
+  done
+  [ -d "$netinst_tmp" ] && rm -f $netinst_tmp/* && rmdir $netinst_tmp
+  [ -d "$iso_mnt_tmp" ] && rm -f $iso_mnt_tmp/* && rmdir $iso_mnt_tmp
+} # end of get_openbsd_netinstall
+
+#
+install_GL_netinstall() {
+  # download them and put in the system...
+  # //NOTE// The GL_INST will contain bsd if drbl.conf containing any netinstall of bsd, since we get GL_INST by:
+  # . /opt/drbl/conf/drbl.conf
+  # supported_dists="$(set |grep -i _netinstall_ | awk -F"_" '{print $1}' | sort | uniq)"
+  if [ "$GL_INST" = "all" ]; then
+    # Therefore we have to remove those BSD lists if setup_bsd_netinst is no
+    if [ "$setup_bsd_netinst" = "no" ]; then
+      GL_INST="$(echo $supported_dists | sed -e "s/[[:alnum:]]*bsd[[:space:]]//g" | sort)"
+    else
+      [ "$GL_INST" = "all" ] && GL_INST="$supported_dists"
+    fi
+  fi
+  echo "The following action will download a lot of network install packages, including these distributions: $GL_INST. This might take a long time..."
+  echo 'If you want to assign the url, check "netinstall image settings" in drbl.conf.'
+  for i in $GL_INST; do
+    echo "Downloading $i netinstall packages... "
+    eval get_${i}_netinstall
+  done
+}
+
+#
+uninstall_GL_netinstall() {
+  [ "$GL_TO_BE_REMOVED" = "all" ] && GL_TO_BE_REMOVED="$supported_dists"
+  for i in $GL_TO_BE_REMOVED; do
+     # Type 1: Linux
+     find $TDIR/ -iname "*netinstall*$i*" -exec rm -fv {} \;
+     # Type 2: BSD
+     find $TDIR/ -iname "*$i*-pxeboot.0" -exec rm -fv {} \;
+  done
+  # UGLY!!! Remove the nfs exported dir came with freebsd
+  if [ -n "$(echo $GL_TO_BE_REMOVED  | grep -i "freebsd")" ]; then
+    if [ -d "/pxeroot/" ]; then
+      echo "Removing /pxeroot..."
+      rm -rf /pxeroot/
+    fi
+  elif [ -n "$(echo $GL_TO_BE_REMOVED  | grep -i "openbsd")" ]; then
+    rm -fv $TDIR/bsd
+  fi
+}
+
+#############
+###  MAIN ###
+#############
+
+#
+GL_INST=""
+show_rerun_generate_pxe_menu="yes"
+overwrite_img="no"
+verbose="on"
+verbose_opt="-v"
+check_if_root_flag="yes"
+
+# Parse command-line options
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -l|--language)
+            shift
+            if [ -z "$(echo $1 |grep ^-.)" ]; then
+              # skip the -xx option, in case 
+              specified_lang="$1"
+	      [ -z "$specified_lang" ] && USAGE && exit 1
+              shift
+            fi
+            ;;
+    -i|--install)
+        shift; mode="install"
+        if [ -z "$(echo $1 |grep ^-.)" ]; then
+          # skip the -xx option, in case 
+          GL_INST="$1"
+          [ -z "$GL_INST" ] && USAGE && exit 1
+	  shift
+        fi
+	;;
+    -o|--overwrite)
+        shift
+        overwrite_img="yes" ;;
+    -b|--enable-bsd)
+        shift
+        setup_bsd_netinst="yes" ;;
+    -d|--dir)
+        shift;
+        if [ -z "$(echo $1 |grep ^-.)" ]; then
+          # skip the -xx option, in case 
+          TDIR="$1"
+          [ -z "$TDIR" ] && USAGE && exit 1
+	  shift
+        fi
+        ;;
+    -s|--skip-rerun-gen)
+        shift
+        show_rerun_generate_pxe_menu="no" ;;
+    -u|--uninstall)
+        shift; mode="uninstall"
+        if [ -z "$(echo $1 |grep ^-.)" ]; then
+          # skip the -xx option, in case 
+          GL_TO_BE_REMOVED="$1"
+          [ -z "$GL_TO_BE_REMOVED" ] && USAGE && exit 1
+	  shift
+        fi
+        ;;
+    -q|--quiet)
+	verbose="off"
+	verbose_opt=""
+        shift ;;
+    -v|--verbose)
+	verbose="on"
+	verbose_opt="-v"
+        shift ;;
+    -w|--run-wo-check-if-root)
+        check_if_root_flag="no"
+        shift ;;
+    *)  USAGE && exit 1 ;;
+  esac
+done
+
+# mode is essential
+[ -z "$mode" ] && USAGE && exit 1
+
+#
+[ "$check_if_root_flag"  = "yes" ] && check_if_root
+
+# Load the language file
+ask_and_load_lang_set $specified_lang
+
+[ -z "$TDIR" ] && TDIR="$pxecfg_pd"
+[ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+echo "The netinstall files will be in dir \"$TDIR\"."
+[ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+
+[ ! -d "$TDIR" ] && mkdir -p $TDIR
+
+# run it
+case "$mode" in
+   install) install_GL_netinstall;;
+   uninstall) uninstall_GL_netinstall;;
+esac
+
+#
+if [ "$show_rerun_generate_pxe_menu" = "yes" ] ; then
+  echo "$msg_delimiter_star_line"
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+  echo "$msg_run_generage_pxe_menu_after_drbl_netinstall"
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+  echo -n "[Y/n] "
+  read run_genpxemenu_ans
+  case "$run_genpxemenu_ans" in
+    n|N|[nN][oO]) 
+       [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+       echo "$msg_run_generate_pxe_menu_and_dcs_to_show_netboot_menu"
+       [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+       ;;
+    *)
+       echo "$msg_ok_let_do_it"
+       generate-pxe-menu
+       [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+       echo "$msg_run_dcs_to_show_netboot_menu"
+       [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+       ;;
+  esac
+fi

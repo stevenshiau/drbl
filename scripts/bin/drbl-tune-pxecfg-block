@@ -1,0 +1,52 @@
+#!/bin/bash
+# Program to modify pxelinux config file block, e.g A label block like this:
+#label AoE-client
+#  # MENU DEFAULT
+#  MENU HIDE
+#  MENU LABEL Diskless client (AoE booting)
+#  # MENU PASSWD
+#  kernel sanboot.c32
+#  append aoe:e0.0
+#  TEXT HELP
+#  Boot from AoE device
+#  ENDTEXT
+#
+# We want to change append line only in the label AoE-client block.
+
+DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/opt/drbl/}"
+. $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
+
+USAGE() {
+   echo Usage:
+   echo $0 LABEL PATTERN STRING PXE_CONF_FILE
+   echo "Ex. $0 AoE-client \"^([[:space:]]*)append aoe:.*\" \"\$1append aoe:e5.3\" /tftpboot/nbi_img/pxelinux.cfg/default"
+}
+
+LABEL_NAME="$1"
+PATTERN="$2"
+STRING="$3"
+PXE_CONF_TMP="$4"
+
+for i in LABEL_NAME PATTERN STRING PXE_CONF_TMP; do
+   eval var_tmp=\$$i
+   if [ -z "$var_tmp" ]; then
+     [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+     echo "$i is not assigned!"
+     [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+     echo "Program terminated!"
+     USAGE
+     exit 1
+   fi
+done
+
+lines=$(get_pxecfg_image_block $LABEL_NAME $PXE_CONF_TMP)
+begin_line=$(echo $lines | awk -F" " '{print $1}')
+end_line=$(echo $lines | awk -F" " '{print $2}')
+if [ -n "$begin_line" -a -n "$end_line" ]; then
+  sub_act_cmd="if ($begin_line..$end_line) {s|$PATTERN|$STRING|i}"
+  perl -pi -e "$sub_act_cmd" $PXE_CONF_TMP
+else
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+  echo "$LABEL_NAME block was not found in $PXE_CONF_TMP"
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+fi

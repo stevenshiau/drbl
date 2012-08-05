@@ -1,0 +1,148 @@
+#!/bin/bash
+# Author: Steven Shiau <steven _at_ nchc org tw>
+# License: GPL
+# Description: To get the display manager of server
+
+# The following is borrowed from Mandrake 9.2
+# we have to assume that /$SYSCONF_PATH/desktop has two variables, DESKTOP
+# and DISPLAYMANAGER because administors may prefer a specific DM regardless
+# of desktops.
+# DISPLAYMANAGER is referenced by this script, and DESKTOP is referenced
+# as system-wide default by /etc/X11/Xsession script only when X-session
+# is opened by "startx" command. 
+# when DMs open an X-session, they send DESKTOP, which is in this case
+# directly selected by users, as a commandline argument of /etc/X11/Xsession.
+# actually Xsession script is only able to know by existance of its first
+# argument whether it is called by DM or "startx". see the logic
+# in /etc/X11/Xsession.
+# If DISPLAYMANAGER is not defined, then assume that it is the same as DESKTOP
+
+# load setting
+. /opt/drbl/sbin/drbl-conf-functions
+#
+usage() {
+    echo "Usage:"
+    echo "To get the default display manager:"
+    echo "`basename $0` [OPTION]"
+    echo " Options:"
+    echo " -h, --host IP_ADDRESS:  get the default display manager of the host with IP_ADDRESS."
+    echo " -v, --verbose        prints out verbose information"
+}
+
+# Parse command-line options
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -h|--host)
+            shift; specified_host="$1"
+	    if [ -z "$specified_host" ]; then
+              usage >& 2
+              exit 2
+	    fi
+            shift
+            ;;
+    -v|--verbose)
+		shift; VERBOSE="on"
+                ;;
+    -*)     echo "${0}: ${1}: invalid option" >&2
+            usage >& 2
+            exit 2 ;;
+    *)      break ;;
+  esac
+done
+
+#
+if [ -z "$specified_host" ]; then
+  hpath=""
+else
+  hpath="$drblroot/$specified_host"
+fi
+
+preferred=
+if [ -e $hpath/etc/debian_version ]; then
+  # Debian
+  if [ -e $hpath/etc/X11/default-display-manager ]; then
+    # Debian
+    default_dm="$(cat $hpath/etc/X11/default-display-manager 2> /dev/null)"
+    [ -n "$default_dm" ] && preferred="$(basename $default_dm)"
+  fi
+elif [ -e $hpath/etc/SuSE-release ]; then
+  # SuSE
+  if [ -e $hpath/$SYSCONF_PATH/displaymanager ]; then
+    # SuSE
+    . $hpath/$SYSCONF_PATH/displaymanager &>/dev/null
+    if [ "$DISPLAYMANAGER" = "GDM" -o "$DISPLAYMANAGER" = "gdm" -o "$DISPLAYMANAGER" = "GNOME" -o "$DISPLAYMANAGER" = "gnome" -o "$DISPLAYMANAGER" = "Gnome" ]; then
+        preferred=gdm
+    elif [ "$DISPLAYMANAGER" = "KDE" -o "$DISPLAYMANAGER" = "kde" ]; then
+        preferred=mdkkdm
+    elif [ "$DISPLAYMANAGER" = "KDM" -o "$DISPLAYMANAGER" = "kdm" ]; then
+        preferred=kdm
+    elif [ "$DISPLAYMANAGER" = "XDM" -o "$DISPLAYMANAGER" = "xdm" ] ; then
+        preferred=xdm
+    fi
+  fi
+else
+  # RH-like
+  if [ -e $hpath/$SYSCONF_PATH/desktop ]; then
+    . $hpath/$SYSCONF_PATH/desktop &>/dev/null
+    [ -z "$DISPLAYMANAGER" ] && DISPLAYMANAGER=$DESKTOP
+    if [ "$DISPLAYMANAGER" = "GDM" -o "$DISPLAYMANAGER" = "gdm" -o "$DISPLAYMANAGER" = "GNOME" -o "$DISPLAYMANAGER" = "gnome" -o "$DISPLAYMANAGER" = "Gnome" ]; then
+        preferred=gdm
+    elif [ "$DISPLAYMANAGER" = "KDE" -o "$DISPLAYMANAGER" = "kde" ]; then
+        preferred=mdkkdm
+    elif [ "$DISPLAYMANAGER" = "KDM" -o "$DISPLAYMANAGER" = "kdm" ]; then
+        preferred=kdm
+    elif [ "$DISPLAYMANAGER" = "XDM" -o "$DISPLAYMANAGER" = "xdm" ] ; then
+        preferred=xdm
+    fi
+  fi
+fi
+
+# if the preferred dm is not found, set the default one
+# For Redhat/FC, the default dm is gdm, for Mandrake, the default dm is kdm
+if [ -z "$preferred" ]; then
+  # /etc/redhat-release & /etc/fedora-release should be the last one to test, since like MDV, it also has /etc/redhat-release.
+  if [ -e $hpath/etc/mandrakelinux-release -o \
+	 -e $hpath/etc/mandrake-release -o \
+	 -e $hpath/etc/mandriva-release ]; then
+     # For Mandrake, the default dm is kdm or mdkkdm, make sure it exists
+     if type kdm &>/dev/null; then
+        preferred="kdm"
+     elif type mdkkdm &>/dev/null; then
+        preferred="mdkkdm"
+     fi
+  elif [ -e $hpath/etc/debian_version ]; then
+     # For Debian, the default gdm, then kdm or xdm
+     if type gdm &>/dev/null; then
+        preferred="gdm"
+     elif type kdm &>/dev/null; then
+        preferred="kdm"
+     elif type xdm &>/dev/null; then
+        preferred="xdm"
+     fi
+  elif [ -e $hpath/etc/SuSE-release ]; then
+     # For SuSE, the default kdm, then gdm or xdm
+     if type kdm &>/dev/null; then
+        preferred="kdm"
+     elif type gdm &>/dev/null; then
+        preferred="gdm"
+     elif type xdm &>/dev/null; then
+        preferred="xdm"
+     fi
+  elif [ -e $hpath/etc/redhat-release -o -e $hpath/etc/fedora-release ]; then
+     # /etc/redhat-release & /etc/fedora-release should be the last one to test, since like MDV, it also has /etc/redhat-release.
+     # For Redhat/FC, the default dm is gdm, make sure it exists
+     type gdm &>/dev/null && preferred="gdm"
+  else
+     # echo "Unsupported distribution! Can NOT decide which dm is used in your system...Program terminated!"
+     exit 1
+  fi
+fi
+
+# output the results.
+if [ -n "$preferred" ]; then
+  echo $preferred
+  exit 0
+else
+  # echo "The gdm, kdm or xdm is NOT found in your system!"
+  exit 1
+fi

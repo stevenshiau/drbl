@@ -1,0 +1,48 @@
+#!/usr/bin/perl -T
+sub lang_set{
+  my $lang_opt=$_[0];
+  my $chosen_lang_var;
+  if ( "$lang_opt" eq "" ){
+    # Try the Environment variable "LC_ALL", then "LANG"
+    if ( "$ENV{'LC_ALL'}" ne "" ) {
+      $chosen_lang_var="$ENV{'LC_ALL'}";
+    } elsif ( "$ENV{'LANG'}" ne "" ){
+      $chosen_lang_var="$ENV{'LANG'}";
+    }
+    $chosen_lang_var =~ s/\.utf8/.UTF-8/g;
+    if ( "$chosen_lang_var" && -e "$DRBL_SCRIPT_PATH/lang/perl/$chosen_lang_var" ) {
+      $language="$chosen_lang_var";
+    } else { 
+      $language="en_US.UTF-8";
+    }
+  } elsif ("$lang_opt" eq "1"){
+      $language="zh_TW.BIG5";
+  } elsif ("$lang_opt" eq "2"){
+      $language="zh_TW.UTF-8";
+  } elsif ( "$lang_opt" eq "ask" || "$lang_opt" eq "a" ){
+    # l10n
+    print "Language?\n".
+          "[0]: English\n".
+          "[1]: Chinese Traditional (Big5) - Taiwan\n".
+          "[2]: Chinese Traditional (UTF-8, Unicode) - Taiwan\n".
+          "[0] ";
+    chomp($language=<STDIN>);
+    if ($language eq "1"){
+      $language="zh_TW.BIG5";
+    } elsif ($language eq "2"){
+      $language="zh_TW.UTF-8";
+    } else {
+      $language="en_US.UTF-8";
+    }
+  } else {
+    # lang_opt is not nothing, nor 0/1/2/ask/a
+    if (-e "$DRBL_SCRIPT_PATH/lang/perl/$lang_opt") {
+      $language="$lang_opt";
+    } else { 
+      $language="en_US.UTF-8";
+    }
+  }
+  return $language;
+} # end of lang
+
+return 1;

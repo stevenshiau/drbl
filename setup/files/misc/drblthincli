@@ -1,0 +1,176 @@
+#!/bin/bash
+# drblthincli    This shell script takes care of DRBL thin client
+#
+# chkconfig: 2345 98 2
+# description: drblthincli is a script to let DRBL client run server's gdm/kdm/xdm, i.e. remote display
+#
+# Author: Steven Shiau <steven _at_ nchc org tw>
+# License: GPL
+#
+# For SuSE insserv
+### BEGIN INIT INFO
+# Provides: drblthincli
+# Required-Start: $network $portmap $remote_fs ypbind xfs
+# Required-Stop: $network $portmap $remote_fs ypbind xfs
+# X-UnitedLinux-Should-Start: 
+# X-UnitedLinux-Should-Stop:
+# Default-Start: 2 3 4 5
+# Default-Stop: 0 1 2 6
+# Description: Start DRBL terminal mode
+### END INIT INFO
+
+# For SuSE
+[ -e /etc/rc.status ] && . /etc/rc.status
+
+# Source DRBL function library.
+. /opt/drbl/sbin/drbl-conf-functions
+
+PATH=$PATH:/usr/X11R6/bin
+
+if [ -e /etc/debian_version ]; then
+  # Debian
+  LOG_CMD="echo"
+elif [ -e /etc/SuSE-release ]; then
+  # SuSE
+  LOG_CMD="echo"
+else
+  # RH-like
+  LOG_CMD="initlog -n drblthincli -s" 
+fi
+
+# The mode assigned by server
+[ ! -f "$SYSCONF_PATH/drblthincli" ] && exit 0
+. $SYSCONF_PATH/drblthincli
+
+# The mode assigned when client boots, if this is assigned, 
+# it will overide the mode assigned by server
+if grep -i -q "drblthincli=on" /proc/cmdline; then
+  DRBL_THIN_CLIENT=on
+elif grep -i -q "drblthincli=off" /proc/cmdline; then
+  DRBL_THIN_CLIENT=off
+fi
+
+#
+[ "$DRBL_THIN_CLIENT" = "off" ] && exit 0
+
+# Load config file
+[ -f /etc/diskless-image/config ] && . /etc/diskless-image/config
+
+#
+start() {
+  echo -n $"Starting drblthincli: "
+  # try to get the server IP address
+  NETDEVICES="$(cat /proc/net/dev | awk -F: '/eth.:|tr.:/{print $1}')"
+  for DEVICE in $NETDEVICES; do
+    IP_tmp=`LC_ALL=C /sbin/ifconfig | grep -A1 $DEVICE | grep -v $DEVICE | grep "inet addr" | sed 's/^.*inet addr:\([0-9\.]\+\).*$/\1/'`
+    if [ -n "$IP_tmp" ]; then
+      # Got the IP address, stop to get from other port, so break
+      IP=$IP_tmp
+      $LOG_CMD $"Client IP address is $IP (got from [$DEVICE])"
+      break
+    else
+      $LOG_CMD $"Failed to get IP from [$DEVICE]!"
+      $LOG_CMD $"Try next NIC if available..."
+    fi
+  done
+  
+  IP_prefix=`echo $IP |cut -d"." -f1-3`
+  if [ -n "`echo "$NFSSERVER_LIST" |grep -o "$IP_prefix"`" ]; then
+      for i in $NFSSERVER_LIST; do
+  	if [ "`echo $i |cut -d"." -f1-3`" = $IP_prefix ]; then
+  	  nfsserver=$i
+  	  $LOG_CMD $"NFS server is $nfsserver"
+  	fi
+      done 
+  else
+      $LOG_CMD $"Can not find the right NFSSERVER, using default one"
+      nfsserver=$nfsserver_default
+  fi
+  
+  # if XF86Config is not available, run firstboot to setup it
+  if  [ ! -f "/etc/X11/XF86Config-4" -a ! -f "/etc/X11/XF86Config" -a ! -f "/etc/X11/xorg.conf" ]; then
+    # For RedHat 8.0/9 Fedora Core 1
+    [ -x "/usr/bin/redhat-config-xfree86" ] && /usr/bin/redhat-config-xfree86
+    # For Fedora Core 2
+    [ -x "/usr/bin/system-config-display" ] && /usr/bin/system-config-display
+    # For Mandrake
+    if [ -x "/usr/sbin/XFdrake" ]; then
+      chvt 7
+      TERM=linux XFdrake --noauto < /dev/tty7 > /dev/tty7
+    fi
+    # For Deiban
+    if [ -x "/usr/sbin/dpkg-reconfigure" ]; then
+      LC_ALL=C /usr/sbin/dpkg-reconfigure xserver-xfree86
+    fi
+  fi
+
+  # change to text mode
+  if [ -e /etc/debian_version ]; then
+    # Debian
+    default_dm="$(drbl-check-dm)"
+    # Clean the dm (S99) in rc2.d so that it won't start after this S98drblthincli.
+    rm -f /etc/rc2.d/S*${default_dm}
+
+    pid_run="$(cat /var/run/${default_dm}.pid 2>/dev/null)"
+    if [ -n "$(ps --pid $pid_run 2>/dev/null | grep $default_dm 2>/dev/null)" ]; then
+      /etc/init.d/${default_dm} stop
+      sleep 2
+    fi
+  elif [ -e /etc/SuSE-release ]; then
+    # SuSE
+    /etc/init.d/xdm stop
+    sleep 2
+  else
+    # RH-like
+    # set the init to 3 so that we can run X -query... We do not want the
+    # local gdm (/usr/bin/gdmgreeter) to run...
+    telinit 3; sleep 2
+  fi
+  # How about in Mandrake ? Will dm run ?
+  X -query $nfsserver vt7 >/dev/null &
+  #X :0 -audit 0 -auth /var/gdm/:0.Xauth -query $nfsserver vt7
+  RETVAL=$?
+  if [ ! -f /etc/debian_version -a ! -f /etc/SuSE-release ]; then
+    # For RH-like, we create the tag for service.
+    [ "$RETVAL" = 0 ] && touch /var/lock/subsys/drblthincli
+  fi
+  return $RETVAL
+}
+
+stop() {
+  echo -n $"Shutting down drblthincli: "
+  if [ -e /etc/debian_version ]; then
+    # Debian
+    default_dm="$(drbl-check-dm)"
+    (cd /etc/rc2.d; ln -fs /etc/init.d/${default_dm} S99${default_dm})
+    PID_X="$(pidof X)"
+    for ipid in $PID_X; do
+      kill -9 $ipid
+      RETVAL=$((RETVAL + $?))
+    done
+  else
+    # For RH-like, we create the tag for service.
+    killproc X
+    RETVAL=$?
+    [ "$RETVAL" = 0 ] && rm -f /var/lock/subsys/drblthincli
+  fi
+  echo
+  return $RETVAL
+}
+
+###
+case "$1" in
+  "start")
+          start
+          ;;
+   "stop")
+          stop
+          ;;
+   "restart")
+          $0 stop
+          $0 start
+          ;;
+   *)
+    echo $"Usage: $0 {start|stop|restart}"
+          exit 1
+esac

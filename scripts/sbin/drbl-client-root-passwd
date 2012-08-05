@@ -1,0 +1,131 @@
+#!/bin/bash
+# Written by Steven Shiau <steven@nchc.org.tw> for using in DRBL
+# License: GPL
+
+# These *.so were found by using strace in create_chpasswd_env function in drbl-functions
+# /lib/security/*
+# /usr/lib/libcrack.so.2  -> passwd: Module is unknown
+# /usr/lib/cracklib_dict.*
+# /lib/libnss_files.so.2 is necessary for uid, gid -> username, group.
+# /lib/libnsl.so.1 -> without this, will cause this error:
+#                     passwd: Authentication token manipulation error
+# /lib*/libcrypt*.so* -> without this, will cause this error:
+#                     pam_chauthtok: Module is unknown
+# TODO:
+# DRBL client should only have
+# dev  etc  root  var
+# so  have to rm "bin  lib  usr"
+
+# Load DRBL setting and functions
+DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/opt/drbl/}"
+
+. $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
+
+#
+usage() {
+    echo "Usage:"
+    echo "To set the root's password for clients:"
+    echo "`basename $0` [OPTION]"
+    echo " Options:"
+    echo " --stdin PASSWORD     set the root's password for clients as PASSWORD"
+    echo " -h, --host IP_ADDRESS:  set only for the host with IP_ADDRESS instead of all DRBL clients"
+    echo " -g, --no-gen-ssi Do NOT generate DRBL SSI template tarball."
+    echo " -v, --verbose        prints out verbose information"
+    echo "If option is not given, the interactive mode will be used."
+}
+
+#
+check_if_root
+
+# main
+unalias ls 2>/dev/null
+
+# Parse command-line options
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --stdin)  
+            shift;
+            if [ -z "$(echo $1 |grep ^-.)" ]; then
+              # skip the -xx option, in case 
+	      client_root_password="$1"
+            fi
+            shift ;;
+    -h|--host)
+            shift; specified_host="$1"
+            shift
+            ;;
+    -g|--no-gen-ssi)
+		gen_ssi="no"
+                shift;;
+    -v|--verbose)
+		shift; VERBOSE="on"
+                ;;
+    -*)     echo "${0}: ${1}: invalid option" >&2
+            usage >& 2
+            exit 2 ;;
+    *)      break ;;
+  esac
+done
+
+if [ -z "$client_root_password" ]; then
+   # interactive
+   echo "New password: (It will not be echoed in the screen)"
+   read -s pass1
+   echo "Retype new password: (It will not be echoed in the screen)"
+   read -s pass2
+   while [ "$pass1" != "$pass2" ]; do
+     echo "Sorry, passwords do not match"
+     echo "New password: (It will not be echoed in the screen)"
+     read -s pass1
+     echo "Retype new password: (It will not be echoed in the screen)"
+     read -s pass2
+   done
+   #
+   [ -z "$pass1" ] && echo "Password can NOT be empty!!! Program terminated" && exit 1
+   # set the matched password
+   new_passwd="$pass1"
+else
+   new_passwd="$client_root_password"
+fi
+#
+if [ -n "$specified_host" ]; then
+ [ ! -d "$drblroot/$specified_host" ] && echo "Can NOT find DRBL client $specified_host (i.e. no $drblroot/$specified_host)! Program terminated!" && exit 1
+ [ -n "$verbose" ] && echo "specified_host: $specified_host"
+fi
+
+# set the host to be processed
+# host_list is the IP address of client, like 192.168.1.1...
+host_list=""
+if [ -n "$specified_host" ]; then
+   # set the host path
+   host_list=$drblroot/$specified_host
+else
+   # withoud specified_host, it must be all clients, append each one to $host_list
+   for ihost in $drblroot/*; do
+     [ -d "$ihost" ] && host_list="$host_list $ihost"
+   done
+fi
+
+#
+for ihost in $host_list; do
+   echo -n "Change the root's password for DRBL client `basename $ihost`..."
+   create_chpasswd_env $ihost
+   cat <<-PWD_END > $ihost/pwd_tmp.sh
+   # echo "root:$new_passwd" | /usr/bin/strace /usr/sbin/chpasswd
+   echo "root:$new_passwd" | /usr/sbin/chpasswd
+PWD_END
+   chmod u+x $ihost/pwd_tmp.sh
+   # For SuSE, it seems /dev/urandom is necessary.
+   [ ! -e $ihost/dev/urandom ] && cp -a /dev/urandom $ihost/dev/
+   chroot $ihost/ /pwd_tmp.sh
+   [ -f $ihost/pwd_tmp.sh ] && rm -f $ihost/pwd_tmp.sh
+   #clean_chpasswd_env $ihost
+   echo "done!"
+done
+
+#
+if [ "$gen_ssi" != "no" ]; then
+  echo "-------------------------------------------------------"
+  echo "Since some config files are modified in template client, creating template tarball for DRBL SSI..."
+  drbl-gen-ssi-files
+fi

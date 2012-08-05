@@ -1,0 +1,159 @@
+#!/bin/bash
+# Steven Shiau <steven _at_ nchc org tw>
+# License: GPL
+# Description: prepare the memtest86+ by using the files on the system or download and extract the required programs for DRBL.
+DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/opt/drbl/}"
+
+. $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
+. $DRBL_SCRIPT_PATH/conf/drbl-ocs.conf
+. $DRBL_SCRIPT_PATH/sbin/ocs-functions
+
+# Local settings
+# By default we only copy the required files to $pxelinux_binsrc_dir. This option will allow us to copy files to dir $pxecfg_pd.
+deploy_to_system_too="no"
+
+# Functions
+USAGE() {
+  echo "Put the memtest86+ files in DRBL package repository"
+  echo "Usage: $0 [OPTION]"
+  echo "OPTION:"
+  echo "-u, --from-upstream   Use the binary from upstream ($MEMTEST86_URL). If this option is not assigned, DRBL will try to use the memtest86+ from your GNU/Linux distribution."
+  echo "-mv, --memtest86-version VERSION  The memtest86+ version to be used with -u|--from-upstream. If not assigned, the version number specified in drbl.conf will be used."
+  echo "-d, --deploy-to-system-too   Deploy the file to DRBL system ($pxecfg_pd), too."
+  echo "Ex: To use the memtest86+ 4.20 from $MEMTEST86_URL, run '$0 -u -mv 4.20'"
+}
+
+#
+put_memtest_bin_2_drbl_repo() {
+  local memtest_bin_abs_path="$1"
+  [ -z "$memtest_bin_abs_path" ] && return 1
+  rm -f $memtest86_file
+  path_memtest="$(LC_ALL=C dirname $memtest86_file)"
+  echo "Putting memtest86+ in DRBL package repository $path_memtest/... "
+  cp -af $memtest_bin_abs_path $memtest86_file
+  memtest_v="$(LC_ALL=C strings $memtest_bin_abs_path  | grep "Memtest86  v" | sed -r -e "s/^[[:space:]]*//g")"
+  echo "Memtest86+ version: $memtest_v"
+  echo $memtest_v > $path_memtest/VERSION
+  echo "done!"
+  if [ "$deploy_to_system_too" = "yes" ]; then
+    echo -n "Putting memtest86+ in DRBL system dir $pxecfg_pd/... "
+    cp -af $memtest86_file $pxecfg_pd/
+    echo $memtest_v > $pxecfg_pd/MEMTEST86+_VERSION
+    echo "done!"
+  fi
+}
+
+#
+put_upstream_memtest(){
+  # Function to use the upstream binary directly
+  local ver="$1"
+  if [ -z "$ver" ]; then
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+    echo "No upstream memtest version was assigned. Program terminated."
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+    USAGE
+    exit 1
+  fi
+  memfile="memtest86+-${ver}.bin"
+  tmp_wd="$(LC_ALL=C mktemp -d /tmp/memtest_tmp.XXXXXXX)"
+  echo -n "Downloading ${ver} memtest86+ files from $MEMTEST86_URL... "
+  LC_ALL=C wget $wget_opt -P $tmp_wd $MEMTEST86_URL/$ver/$memfile
+  echo "done!"
+  put_memtest_bin_2_drbl_repo $tmp_wd/$memfile
+  if [ -d "$tmp_wd" -a -n "$(echo "$tmp_wd" | grep -i memtest_tmp)" ]; then
+    rm -rf $tmp_wd
+  fi
+} # end of put_upstream_memtest
+#
+put_distribution_memtest() {
+  # Function to use the package from distribution.
+  # Memtest86+ file name on different distributions:
+  # Debian/Ubuntu: "memtest86+.bin"
+  # SuSE: "memtest.bin"
+  # Fedora 14: "/boot/memtest86+"
+  # Centos 5.6: "/boot/memtest86+-1.65"
+  if $query_pkglist_exist_cmd memtest86+ &>/dev/null; then
+     # Found on the system
+     # For Redhat-like system, there might return more than one file on a system, i.e. one file belongs to 2 rpm packages.
+     memtest_bin="$(LC_ALL=C $query_pkglist_cmd memtest86+ | grep -Ew "(memtest86\+.bin$|memtest\.bin$|^/boot/memtest86+)" | sort | head -n 1)"
+     if [ -n "$memtest_bin" ]; then
+       echo "Found $memtest_bin in this system, copying the memtest file to DRBL local repository..."
+       put_memtest_bin_2_drbl_repo $memtest_bin
+     else
+       [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+       echo "Package of memtest was installed, but memtest boot file not found!"
+       [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+     fi
+  else
+     # Download and extract it. The reason we do not install it is we do not want to bother the server's boot menu
+     tmp_wd="$(LC_ALL=C mktemp -d /tmp/memtest_tmp.XXXXXXX)"
+     echo "Trying to download memtest86+ from distribution repository..."
+     if [ -e /etc/debian_version ]; then
+       # Debian
+       # The binary for memtest86+ in Debian Squeeze: /boot/memtest86+.bin
+       # Clean all stale deb files in the cache dir. Otherwise there might be some old version of debs exist in the cache dir.
+       LC_ALL=C apt-get clean  
+       LC_ALL=C apt-get -d --reinstall install memtest86+
+       (
+        cd $tmp_wd
+        LC_ALL=C dpkg --extract /var/cache/apt/archives/memtest86+*.deb .
+        put_memtest_bin_2_drbl_repo "$(pwd)"/boot/memtest86+.bin
+       )
+     elif [ -e /etc/SuSE-release ]; then
+       # SuSE
+       # The binary for memtest86+ in openSuse 11.3 is: /boot/memtest.bin
+       LC_ALL=C zypper install -d -f -y memtest86+
+       memtest86_rpm="$(LC_ALL=C find /var/cache/zypp/packages/ -name "memtest86+-*.rpm" -print)"
+       memtest_bin="$(LC_ALL=C rpm -qpl "$memtest86_rpm" | grep -Ew "memtest.bin$")"
+       (
+        cd $tmp_wd
+        LC_ALL=C rpm2cpio "$memtest86_rpm" | cpio -idm
+        put_memtest_bin_2_drbl_repo "$(pwd)"/$memtest_bin
+       )
+     else
+       # RH-like
+       # The binary for memtest86+ in Fedora 14 is: /boot/memtest86+-4.10
+       LC_ALL=C yumdownloader --destdir $tmp_wd memtest86+
+       memtest_bin="$(LC_ALL=C rpm -qpl "$tmp_wd/memtest86*.rpm" | grep -Ew "^/boot/memtest86+")"
+       (
+        cd $tmp_wd
+        LC_ALL=C rpm2cpio $tmp_wd/memtest86*.rpm | cpio -idm
+        put_memtest_bin_2_drbl_repo "$(pwd)"/$memtest_bin
+       )
+     fi
+     if [ -d "$tmp_wd" -a -n "$(LC_ALL=C echo "$tmp_wd" | grep -i memtest_tmp)" ]; then
+       rm -rf $tmp_wd
+     fi
+  fi
+} # end of put_distribution_memtest
+
+############
+### MAIN ###
+############
+
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -u|--from-upstream) shift; mode="from-upstream" ;;
+    -mv|--memtest86-version)
+        shift;
+        if [ -z "$(echo $1 |grep ^-.)" ]; then
+          # skip the -xx option, in case 
+          memtest_ver_requested="$1"
+          [ -z "$memtest_ver_requested" ] && USAGE && exit 1
+	  shift
+        fi
+	;;
+    -d|--deploy-to-system-too) shift; deploy_to_system_too="yes" ;;
+    *)  USAGE && exit 1 ;;
+  esac
+done
+# mode is essential
+[ -z "$mode" ] && mode="from-distribution"
+[ -z "$memtest_ver_requested" ] && memtest_ver_requested="$MEMTEST86_VER_DEF"
+
+case "$mode" in
+  from-distribution) put_distribution_memtest ;;
+  from-upstream)     put_upstream_memtest $memtest_ver_requested ;;
+esac
+
+exit 0

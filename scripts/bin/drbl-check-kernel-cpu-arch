@@ -1,0 +1,54 @@
+#!/bin/bash
+# Author: Steven Shiau <steven _at_ nchc org tw>
+# License: GPL
+# Description: If this program is able to find the arch, it will print. Otherwise, nothing will be shown.
+
+Usage() {
+  echo "Usage:"
+  echo "$(basename $0) [-c|--drbl-client] KERNEL_VER"
+  echo "-c|--drbl-client is to check DRBL client's kernel arch."
+  echo "If not specified, it will check DRBL server's kernel arch."
+  echo "Ex: $0 2.4.20-31.9smp"
+}
+
+# Load DRBL setting and functions
+DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/opt/drbl/}"
+
+. $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
+
+# Parse command-line options
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -c|--drbl-client)
+            shift; check_drbl_client_kernel="yes"
+	    ;;
+    -*)     echo "${0}: ${1}: invalid option" >&2
+            Usage >& 2
+            exit 2 ;;
+    *)      break ;;
+  esac
+done
+KERNEL=$1
+
+[ -z "$KERNEL" ] && exit 1
+
+if [ "$check_drbl_client_kernel" = "yes" ]; then
+  CONFIG_FILE=$drbl_common_root/boot/config-$KERNEL
+else
+  CONFIG_FILE=/boot/config-$KERNEL
+fi
+[ ! -f "$CONFIG_FILE" ] && exit 1
+
+# Actully, maybe we just need 386/586/686/X86_64 ? K8 is not necessary.
+CPULIST="CONFIG_M386 CONFIG_M486 CONFIG_M586 CONFIG_M586TSC CONFIG_M586MMX CONFIG_M686 CONFIG_MPENTIUMII CONFIG_MPENTIUMIII CONFIG_MPENTIUMM CONFIG_MPENTIUM4 CONFIG_MK6 CONFIG_MK7 CONFIG_MK8 CONFIG_X86_64"
+for icpu in $CPULIST; do
+  if grep -q "$icpu=y" $CONFIG_FILE; then
+    arch="$(echo $icpu | sed -e "s/CONFIG_M//g" -e "s/CONFIG_//g" -e "s/TSC$//g" -e "s/MMX$//g" | tr "[A-Z]" "[a-z]")"
+    case "$arch" in
+     [3456]86):
+       arch=i${arch}
+       ;;
+    esac
+    echo "$arch"
+  fi
+done

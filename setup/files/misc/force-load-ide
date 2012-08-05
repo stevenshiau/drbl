@@ -1,0 +1,52 @@
+#!/bin/bash
+# Author: Steven Shiau <steven _at_ nchc org tw>
+# License: GPL
+# Force to load the ide devices modules, since in some chip (like piix), the hotplug is unable to load them.
+# Some codes are from /etc/hotplug/ide.rc of hotplug
+
+# For SuSE
+### BEGIN INIT INFO
+# Provides:          force-load-ide
+# Required-Start:    boot.coldplug hwscan parse-load-mod-suse
+# Should-Start:      
+# Required-Stop:
+# Default-Start:     B
+# Default-Stop:
+# Description:       Load IDE storage modules
+### END INIT INFO
+
+case "$1" in
+    start)
+        # first we load ide-generic if necessary so that we have some info in /proc/ide/*/media
+	if modinfo ide-generic &>/dev/null; then
+	  [ -z "$(lsmod | grep -E "ide[-_]generic")" ] && modprobe ide-generic
+        fi
+
+	# if still nothing in /proc/ide/, exit this program.
+        [ "$(echo /proc/ide/*/media)" = "/proc/ide/*/media" ] && exit
+
+        for drive in /proc/ide/*/media; do
+	read media < $drive
+	case "$media" in
+	    disk)     MODULE=ide-disk ;;
+	    cdrom)    MODULE=ide-cd ;;
+	    tape)     MODULE=ide-tape ;;
+	    floppy)   MODULE=ide-floppy ;;
+	    *)        MODULE=ide-generic ;;
+	esac
+	if modprobe --quiet $MODULE; then
+	    echo "     $MODULE: loaded sucessfully"
+	else
+	    echo "     $MODULE: can't be loaded"
+	fi
+        done
+	;;
+    stop)
+        # do nothing.
+        true
+	;;
+    *)
+	echo "Usage: $0 start" >&2
+	exit 1
+	;;
+esac

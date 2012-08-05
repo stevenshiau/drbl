@@ -1,0 +1,106 @@
+#!/bin/bash
+#
+# firstboot:         Configure the X config file.
+#
+# chkconfig: 5 53 47
+#
+# description:       Program to set the X config file. 
+#                    If /etc/reconfigSys exists, run the reconfiguration
+#		     program and remove /etc/reconfigSys when done.
+#                    Also will run if 'reconfig' is on the kernel cmdline.
+#
+# Mandriva 2007.0 uses prcsys, we have to set X-Mandriva-Interactive (Special tag to tell prcsys that the service is interactive. So it must have direct and exclusive access to the console) if prcsys is on. Ref: http://qa.mandriva.com/twiki/bin/view/Main/ParallelInit
+#
+### BEGIN INIT INFO
+# Provides: firstboot
+# Required-Start: $network $portmap $remote_fs keytable
+# Required-Stop:
+# Default-Start: 5
+# Short-Description: configure the X config file
+# Description: configure the X config file
+# X-Mandriva-Interactive
+### END INIT INFO
+#
+# Modified by Steven Shiau <steven _at_ nchc org tw> to use this in 
+# DRBL for Mandriva 2007.0 2006/9/26
+# 
+# Ref: Redhat kudzu
+# This is an interactive program, we need the current locale
+
+# To avoid there is no input output in rc running, we add this one:
+exec </dev/console > /dev/console 2>&1
+
+unset LC_MESSAGES
+[ -f /etc/sysconfig/i18n ] && . /etc/sysconfig/i18n
+export LANG
+
+# Load DRBL setting and functions
+if [ -e "/opt/drbl/sbin/drbl-conf-functions" ]; then
+  . /opt/drbl/sbin/drbl-conf-functions
+fi
+
+#
+set_mode() {
+  echo '*****************************************************'
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+  echo "Which mode do you want when configuring X ?"
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+  echo "0: Auto mode, use whatever the default settings."
+  echo "1: Expert mode, very verbose."
+  echo "NOTE: If X-window fails to start, you can run \"/etc/init.d/firstboot restart\" to configure it again."
+  echo -n "[0] "
+  read ans_ver
+  case "$ans_ver" in
+    1) mode="noauto" ;;
+    *) mode="auto"   ;;
+  esac
+} # end of set_mode
+
+run_X_config() {
+  echo
+  echo "X is not configured.  Running XFdrake"
+
+  # Comment "set_mode" temperarily, since if export mode is chosen, no any 
+  # output in the screen. 
+  # Filed a bug report: http:/qa.mandriva.com/show_bug.cgi?id=26199
+  #set_mode
+
+  # In case if mode is not set, we set it as auto
+  [ -z "$mode" ] && mode="auto"
+  # Thanks to pixel@mandrakesoft.com, he provided this method
+  chvt 7
+  TERM=linux XFdrake --$mode < /dev/tty7 > /dev/tty7
+  echo "X is now configured."
+}
+
+[ -z "${CONSOLETYPE:-}" ] && CONSOLETYPE="`/sbin/consoletype`"
+
+if [ "$CONSOLETYPE" != "pty" ]; then
+	case "${LANG:-}" in
+		ja_JP*|ko_KR*|zh_CN*|zh_TW*)
+			export LANG=en_US
+			;;
+		*)
+			export LANG
+			;;
+	esac
+fi
+
+#
+case "$1" in
+ start|restart)
+   if grep -i reconfig /proc/cmdline >/dev/null || [ -f /etc/reconfigSys ]; then
+       run_X_config
+   fi
+   
+   runlevel=$(set -- $(runlevel); eval "echo \$$#" )
+   # no matter set runlevel 5 in /etc/inittab or now in runlevel 5
+   if grep -q "^id:5:initdefault:" /etc/inittab || [ "x$runlevel" = x5 ]; then
+       if [ ! -f /etc/X11/xorg.conf ] ; then
+         run_X_config
+       fi
+   fi
+   
+   exit 0
+   ;;
+esac

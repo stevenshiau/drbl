@@ -1,0 +1,5 @@
+[updates]
+name=OpenSuSE $releasever updates packages
+baseurl=http://free.nchc.org.tw/SuSE/SuSE/update/$releasever/
+enabled=1
+gpgcheck=0

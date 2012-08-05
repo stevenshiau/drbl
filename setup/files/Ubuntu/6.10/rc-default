@@ -1,0 +1,35 @@
+# rc - runlevel compatibility
+#
+# This task guesses what the "default runlevel" should be and starts the
+# appropriate script.
+# 
+# This file is modified by DRBL project. It's a workaround to avoid upstart bug in Ubuntu 6.10 (https://launchpad.net/ubuntu/+source/upstart/+bug/85014). This file will honor the [013456] in /proc/cmdline. 
+# Steven Shiau 2/15/2007.
+
+start on rcS/stop
+
+script
+	runlevel --reboot || true
+
+	if grep -q -w -- "-s\|single\|S" /proc/cmdline; then
+	    telinit S
+        # Modified by DRBL, start
+        elif grep -qE -- "(^|[[:space:]])[0-9]([[:space:]]|$)" /proc/cmdline; then
+            RL="$(grep -Eo -- "(^|[[:space:]])[0-9]([[:space:]]|$)" /proc/cmdline)"
+	    if [ -n "$RL" ]; then
+		telinit $RL
+	    else
+		telinit 2
+	    fi
+        # Modified by DRBL, end
+	elif [ -r /etc/inittab ]; then
+	    RL="$(sed -n -e "/^id:[0-9]*:initdefault:/{s/^id://;s/:.*//;p}" /etc/inittab || true)"
+	    if [ -n "$RL" ]; then
+		telinit $RL
+	    else
+		telinit 2
+	    fi
+	else
+	    telinit 2
+	fi
+end script

@@ -1,0 +1,140 @@
+#!/bin/bash
+# Author: Steven Shiau <steven _at_ nchc org tw>
+# License: GPL
+# Description: This program is modified from Fedora Core 4 Init file for OpenSSH server daemon (/etc/init.d/sshd), so that it can generate the host key for DRBL Debian clients.
+# 
+# config: /etc/ssh/ssh_host_key
+# config: /etc/ssh/ssh_host_key.pub
+# config: /etc/ssh/ssh_random_seed
+# config: /etc/ssh/sshd_config
+
+# Load DRBL setting and functions
+if [ ! -f "/opt/drbl/sbin/drbl-conf-functions" ]; then
+  echo "Unable to find /opt/drbl/sbin/drbl-conf-functions! Program terminated!" 
+  exit 1
+fi
+. /opt/drbl/sbin/drbl-conf-functions
+
+KEYGEN=/usr/bin/ssh-keygen
+
+export LC_ALL=C
+
+Usage() {
+  echo "Usage: $0 [OPTION] {generate|clean|regenerate} Client_IP_LIST"
+  echo "Options:"
+  echo "-v, --verbose:  verbose mode."
+  echo "Ex: "$0 generate 192.168.0.1" will generate the OpenSSH host keys for DRBL client 192.168.0.1."
+}
+
+do_rsa1_keygen() {
+	if [ ! -s $RSA1_KEY ]; then
+		[ -n "$verbose" ] && echo -n "Generating SSH1 RSA host key: "
+		if $KEYGEN -q -t rsa1 -f $RSA1_KEY -C '' -N '' >&/dev/null; then
+			chmod 600 $RSA1_KEY
+			chmod 644 $RSA1_KEY.pub
+			[ -n "$verbose" ] && echo "RSA1 key generation done!"
+		else
+			echo "RSA1 key generation failed!"
+			exit 1
+		fi
+	fi
+}
+
+do_rsa_keygen() {
+	if [ ! -s $RSA_KEY ]; then
+		[ -n "$verbose" ] && echo -n "Generating SSH2 RSA host key: "
+		if $KEYGEN -q -t rsa -f $RSA_KEY -C '' -N '' >&/dev/null; then
+			chmod 600 $RSA_KEY
+			chmod 644 $RSA_KEY.pub
+			[ -n "$verbose" ] && echo "RSA key generation done!"
+		else
+			echo "RSA key generation failed"
+			exit 1
+		fi
+	fi
+}
+
+do_dsa_keygen() {
+	if [ ! -s $DSA_KEY ]; then
+		[ -n "$verbose" ] && echo -n "Generating SSH2 DSA host key: "
+		if $KEYGEN -q -t dsa -f $DSA_KEY -C '' -N '' >&/dev/null; then
+			chmod 600 $DSA_KEY
+			chmod 644 $DSA_KEY.pub
+			[ -n "$verbose" ] && echo "DSA key generation done!"
+		else
+			echo "DSA key generation failed!"
+			exit 1
+		fi
+	fi
+}
+
+generate() {
+	# Create keys if necessary
+	echo -n "Generating SSH host keys for client $HOST_IP if they do not exist... "
+	do_rsa1_keygen
+	do_rsa_keygen
+	do_dsa_keygen
+	echo "done!"
+}
+
+clean() {
+	echo -n  "Cleaning SSH host keys for client $HOST_IP..."
+        [ -n "$verbose" ] && vop="-v" 
+	[ -f "$RSA1_KEY" ] && rm -f $vop $RSA1_KEY
+	[ -f "$RSA1_KEY.pub" ] && rm -f $vop $RSA1_KEY.pub
+	[ -f "$RSA_KEY" ] && rm -f $vop $RSA_KEY
+	[ -f "$RSA_KEY.pub" ] && rm -f $vop $RSA_KEY.pub
+	[ -f "$DSA_KEY" ] && rm -f $vop $DSA_KEY
+	[ -f "$DSA_KEY.pub" ] && rm -f $vop $DSA_KEY.pub
+	echo "done!"
+}
+
+#
+check_if_root
+
+# Parse command-line options
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -v|--verbose)
+            shift; verbose="on"
+            ;;
+    -*)     echo "${0}: ${1}: invalid option" >&2
+            Usage >& 2
+            exit 2 ;;
+    *)      break ;;
+  esac
+done
+#
+mode=$1
+shift
+IP_LIST=$*
+
+[ -z "$IP_LIST" ] && Usage && exit 1
+#
+for HOST_IP in $IP_LIST; do
+  [ ! -d "$drblroot/$HOST_IP/etc/ssh" ] && echo "No directory $drblroot/$HOST_IP/etc/ssh!!! Skip this client!!!"
+  
+  RETVAL=0
+  
+  # Some functions to make the below more readable
+  RSA1_KEY="$drblroot/$HOST_IP/etc/ssh/ssh_host_key"
+  RSA_KEY="$drblroot/$HOST_IP/etc/ssh/ssh_host_rsa_key"
+  DSA_KEY="$drblroot/$HOST_IP/etc/ssh/ssh_host_dsa_key"
+  
+  case "$mode" in
+  	generate)
+  		generate
+  		;;
+  	clean)
+  		clean
+  		;;
+  	regenerate)
+  		clean
+  		generate
+  		;;
+  	*)
+  		Usage
+  		RETVAL=1
+  esac
+done
+exit $RETVAL

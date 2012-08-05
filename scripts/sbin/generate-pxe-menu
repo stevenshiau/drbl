@@ -1,0 +1,376 @@
+#!/bin/bash
+# Author: Steven Shiau <steven _at_ nchc org tw>
+# License: GPL
+# Description: Output pxelinux config on DRBL server.
+
+DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/opt/drbl/}"
+
+. $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
+. $DRBL_SCRIPT_PATH/conf/drbl-ocs.conf
+. $DRBL_SCRIPT_PATH/sbin/ocs-functions
+
+export LC_ALL=C
+#
+USAGE() {
+  echo "Generate the PXELINUX menu for DRBL clients."
+  echo "Usage: $(basename $0) [OPTION]"
+  echo "Options:"
+  echo "-c, --console OPT: set the console output parameters."
+  echo "-d, --dir DIR:     Assign the netinstall files are in DIR instead of default dir $pxecfg_pd"
+  echo "-s, --serial OPT:  set the PXE menu to work with serial console output."
+  echo "-g, --graphic [y|n]:  Option to set client to use graphical mode or not when booting GNU/Linux (now only for Fedora Core)"
+  echo "-m, --pxe-mode [text|graphic]:  Set the default PXE linux menu mode to text or graphic"
+  echo "-p, --pxelinux-dir DIR:  Assign PXELINUX config dir as DIR instead of deafult dir $PXELINUX_DIR."
+  echo "-v, --verbose:  verbose mode."
+  echo "Ex:"
+  echo "To create the console output in DRBL client:"
+  echo "$(basename $0) -v -s \"serial 0 38400\" -c \"console=ttyS0,38400n81 console=tty0\" "
+  echo "Note! You must put the \" before and after your serial OPT and console OPT."
+}
+
+# default settings
+pxe_mode="graphic"
+
+#
+check_if_root
+
+# Parse command-line options
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -s|--serial)
+            shift
+            if [ -z "$(echo $1 |grep ^-.)" ]; then
+              # skip the -xx option, in case 
+              PXE_SERIAL_OUTPUT="$1"
+              shift
+            fi
+	    [ -z "$PXE_SERIAL_OUTPUT" ] && USAGE && exit 1
+	    ;;
+    -c|--console)
+            shift
+            if [ -z "$(echo $1 |grep ^-.)" ]; then
+              # skip the -xx option, in case 
+              CONSOLE_OUTPUT="$1"
+              shift
+            fi
+	    [ -z "$CONSOLE_OUTPUT" ] && USAGE && exit 1
+	    ;;
+    -f|--fdos)
+            shift
+            if [ -z "$(echo $1 |grep ^-.)" ]; then
+              # skip the -xx option, in case 
+              fdos_img_output="$1"
+              shift
+            fi
+	    [ -z "$fdos_img_output" ] && USAGE && exit 1
+	    ;;
+    -g|--graphic)
+            shift
+            if [ -z "$(echo $1 |grep ^-.)" ]; then
+              # skip the -xx option, in case 
+              graphical_boot="$1"
+              shift
+            fi
+	    [ -z "$graphical_boot" ] && USAGE && exit 1
+	    ;;
+    -m|--pxe-mode)  
+            shift;
+            # skip the -xx option, in case 
+	    if [ -z "$(echo $1 |grep ^-.)" ]; then
+	      pxe_mode="$1"
+	      shift
+            fi
+            ;;
+    -d|--dir)
+            shift
+            if [ -z "$(echo $1 |grep ^-.)" ]; then
+              # skip the -xx option, in case 
+              TDIR="$1"
+              shift
+            fi
+	    [ -z "$TDIR" ] && USAGE && exit 1
+	    ;;
+    -p|--pxelinux-dir)
+            shift
+            if [ -z "$(echo $1 |grep ^-.)" ]; then
+              # skip the -xx option, in case 
+              PXECFG_DIR="$1"
+              shift
+            fi
+	    [ -z "$PXECFG_DIR" ] && USAGE && exit 1
+	    ;;
+    -v|--verbose)
+            shift; verbose="on"
+            ;;
+    -*)     echo "${0}: ${1}: invalid option" >&2
+            USAGE >& 2
+            exit 2 ;;
+    *)      break ;;
+  esac
+done
+
+# fdos_img_output should be in /opt/drbl/conf/drbl.conf
+[ -z "$fdos_img_output" ] && echo "You must provide the FreeDOS image filename! Program terminated!!!" && exit 1
+
+# if console output is assign, default to use menu.c32 instead of vesamenu.c32
+if [ -n "$CONSOLE_OUTPUT" ]; then
+  pxe_mode="text"
+fi
+
+[ -z "$PXECFG_DIR" ] && PXECFG_DIR="$PXELINUX_DIR"
+[ -z "$TDIR" ] && TDIR="$pxecfg_pd"
+
+# Find the IP address of this server. Here we choose the first one in the list, since it's just an example.
+
+echo "Generating default pxelinux config ($PXECFG_DIR/default)..."
+# clean the old one
+[ -f "$PXECFG_DIR/default" ] && rm -f $PXECFG_DIR/default
+
+# get the OS_Version and OS_type
+check_distribution_name
+
+# $graphical_boot is in drbl.conf or from command parameter.
+case "$graphical_boot" in
+  y|Y|[yY][eE][sS])
+    case "$OS_Version" in
+      FC*)
+        echo "Use graphical boot for DRBL Fedora Core client..."
+        # We'd better use "rhgb" instead of "quiet rhgb" since if something goes wrong in net initrd, it's not easy to debug.
+        drbl_dist_append="rhgb"
+        ;;
+    esac
+    ;;
+  n|N|[nN][oO])
+    drbl_dist_append=""
+    ;;
+esac
+#
+# PXE Linux menu mode
+case "$pxe_mode" in
+  text*|TEXT*) MENUC32="menu.c32" ;;
+  graphic*|GRAPHIC*) MENUC32="vesamenu.c32" ;;
+esac
+# find the drbl background logo and memtest
+drbl_logo="$(basename $pxelinux_bg_img)"
+# get memtest filename
+memtest_filename="$(basename $memtest86_file)"
+# show some prompts
+echo "Use com32 module: $MENUC32"
+[ -n "$PXE_SERIAL_OUTPUT" ] && echo "PXE serial output param: $PXE_SERIAL_OUTPUT"
+[ -n "$CONSOLE_OUTPUT" ] && echo "Linux console output param: $CONSOLE_OUTPUT"
+[ -n "$drbl_dist_append" ] && echo "Extra param: $drbl_dist_append"
+
+# read drbl_deploy.conf if this program is run again after drblpush is done.
+[ -f /etc/drbl/drbl_deploy.conf ] && . /etc/drbl/drbl_deploy.conf
+[ "$drbl_mode" = "drbl_ssi_mode" ] && drbl_mode_opt="clientdir=node_root"
+[ "$clonezilla_mode" = "clonezilla_box_mode" ] && clonezilla_mode_opt="clientdir=node_root"
+
+# Get version number. 
+case "$OS_Version" in
+   RH*|FC*|CO*|MDK*|MDV*|SUSE*)
+      drbl_ver="$(rpm -q drbl | sed -e "s/^drbl-//g")"
+      ocs_ver="$(rpm -q clonezilla | sed -e "s/^clonezilla-//g")"
+      memtest_ver="$(cat $TDIR/MEMTEST86+_VERSION)"
+      ;;
+   DBN*)
+      drbl_ver="$(dpkg -l drbl | tail -n 1 | awk -F" " '{print $3}')"
+      ocs_ver="$(dpkg -l clonezilla | tail -n 1 | awk -F" " '{print $3}')"
+      memtest_ver="$(cat $TDIR/MEMTEST86+_VERSION)"
+      ;;
+esac
+[ -z "$drbl_ver" ] && drbl_ver="Unknown"
+[ -z "$ocs_ver" ] && ocs_ver="Unknown"
+
+#
+[ -f "$PXECFG_DIR/default" ] && mv -f $PXECFG_DIR/default $PXECFG_DIR/default.drblsaved
+
+# Kernel EDD (sysfs interface to BIOS EDD information) is useful for partclone.ntfsreloc. However, if it's compiled as builtin in kernel, it might be off by default, as the kernel config:
+# CONFIG_EDD=y
+# CONFIG_EDD_OFF=y
+# If so, we have to put edd=on in boot parameter so the edd will be on when booting
+edd_opt=""
+if [ -e "$pxecfg_pd/kernel_version_in_initrd.txt" ]; then
+  # Client's kernel config exists, i.e. this program is run after client's kernel is copied.
+  client_kver="$(cat $pxecfg_pd/kernel_version_in_initrd.txt 2>/dev/null)"
+  if [ -n "$(grep -Ew "CONFIG_EDD=y" $drbl_common_root/boot/config-${client_kver})" ] && [ -n "$(grep -Ew "CONFIG_EDD_OFF=y" $drbl_common_root/boot/config-${client_kver})" ]; then
+     edd_opt="edd=on"
+  fi
+else
+  # Client's kernel config does not exists, i.e. this program is run BEFORE client's kernel is copied. Here we assume the running kernel on server has the same config with that on client.
+  client_kver="$(uname -r)"
+  if [ -n "$(grep -Ew "CONFIG_EDD=y" /boot/config-${client_kver})" ] && [ -n "$(grep -Ew "CONFIG_EDD_OFF=y" /boot/config-${client_kver})" ]; then
+     edd_opt="edd=on"
+  fi
+fi
+
+now_year="$(LC_ALL=C date +%Y)"
+echo "Adding menus for DRBL, local boot, memtest86+, FreeDOS..."
+cat <<-PXE_END > $PXECFG_DIR/default
+# Created by generate-pxe-menu! Do NOT edit unless you know what you are doing! 
+# Keep those comment "MENU DEFAULT" and "MENU HIDE"! Do NOT remove them.
+# Note!!! If "serial" directive exists, it must be the first directive
+$PXE_SERIAL_OUTPUT
+default $MENUC32
+timeout 70
+prompt 0
+noescape 1
+MENU MARGIN 5
+MENU BACKGROUND ${drbl_logo}
+# Set the color for unselected menu item and timout message
+MENU COLOR UNSEL 7;32;41 #c0000090 #00000000
+MENU COLOR TIMEOUT_MSG 7;32;41 #c0000090 #00000000
+MENU COLOR TIMEOUT 7;32;41 #c0000090 #00000000
+MENU COLOR HELP 7;32;41 #c0000090 #00000000
+
+# MENU MASTER PASSWD
+
+say **********************************************
+say Welcome to DRBL.
+say NCHC Free Software Labs, Taiwan.
+say http://drbl.nchc.org.tw; http://drbl.sf.net
+say **********************************************
+
+# Allow client to edit boot parameters
+ALLOWOPTIONS 1
+
+# simple menu title
+MENU TITLE DRBL (http://drbl.nchc.org.tw, http://drbl.sf.net)
+
+label drbl
+  MENU DEFAULT
+  # MENU HIDE
+  MENU LABEL $FULL_OS_Version $powerful_client_menu_label
+  # MENU PASSWD
+  kernel vmlinuz-pxe
+  append initrd=initrd-pxe.img devfs=nomount drblthincli=off selinux=0 $edd_opt $CONSOLE_OUTPUT $drbl_mode_opt $drbl_dist_append
+  TEXT HELP
+  * DRBL version: $drbl_ver. (C) 2003-${now_year}, NCHC, Taiwan
+  * Disclaimer: DRBL comes with ABSOLUTELY NO WARRANTY
+  ENDTEXT
+
+label clonezilla
+  # MENU DEFAULT
+  MENU HIDE
+  MENU LABEL Clonezilla
+  # MENU PASSWD
+  kernel vmlinuz-pxe
+  append initrd=initrd-pxe.img devfs=nomount drblthincli=off selinux=0 text 1 $edd_opt $CONSOLE_OUTPUT $clonezilla_mode_opt $drbl_dist_append
+  TEXT HELP
+  * Clonezilla version: $ocs_ver. (C) 2003-${now_year}, NCHC, Taiwan
+  * Disclaimer: Clonezilla comes with ABSOLUTELY NO WARRANTY
+  ENDTEXT
+
+label local
+  # MENU DEFAULT
+  # MENU HIDE
+  MENU LABEL $local_os_menu_label
+  # MENU PASSWD
+  # 2 method to boot local device:
+  # (1) For localboot 0, it is decided by boot order in BIOS, so uncomment the follow 1 line if you want this method:
+  # localboot 0
+
+  # (2) For chain.c32, you can assign the boot device.
+  # Ref: extlinux.doc from syslinux
+  # Syntax: APPEND [hd|fd]<number> [<partition>]
+  # [<partition>] is optional.
+  # Ex:
+  # Second partition (2) on the first hard disk (hd0);
+  # Linux would *typically* call this /dev/hda2 or /dev/sda2, then it's "APPEND hd0 2"
+  #
+  kernel chain.c32
+  append hd0
+  TEXT HELP
+  Boot local OS from first hard disk if it's available
+  ENDTEXT
+
+# Note! *.bin is specially purpose for syslinux, 
+# Do NOT use memtest86.bin, use memtest86 instead of memtest86.bin
+label memtest
+  # MENU DEFAULT
+  # MENU HIDE
+  MENU LABEL Memory test using Memtest86+
+  # MENU PASSWD
+  kernel $memtest_filename
+  TEXT HELP
+  Run memory test using Memtest86+ $memtest_ver
+  ENDTEXT
+
+# ref: http://syslinux.zytor.com/memdisk.php
+label fdos
+  # MENU DEFAULT
+  MENU HIDE
+  MENU LABEL FreeDOS
+  # MENU PASSWD
+  kernel memdisk
+  append initrd=$fdos_img_output
+  TEXT HELP
+  Run FreeDOS
+  ENDTEXT
+
+label drbl-terminal
+  # MENU DEFAULT
+  MENU HIDE
+  MENU LABEL $FULL_OS_Version $thin_client_menu_label
+  # MENU PASSWD
+  kernel vmlinuz-pxe
+  append initrd=initrd-pxe.img devfs=nomount drblthincli=on
+  TEXT HELP
+  Run DRBL in terminal mode.
+  ENDTEXT
+
+# Example for AoE booting
+label AoE-client
+  # MENU DEFAULT
+  MENU HIDE
+  MENU LABEL Diskless client (AoE booting)
+  # MENU PASSWD
+  kernel sanboot.c32
+  append aoe:e0.0
+  TEXT HELP
+  Boot from AoE device
+  ENDTEXT
+
+# Example for Xen client. ///NOTE/// You might have to copy the required file, e.g. xen-3.0.3-1-i386-pae.gz in this case, from /boot to /tftpboot/nbi_img manually.
+# label Xen client
+#   # MENU DEFAULT
+#   MENU HIDE
+#   MENU LABEL Xen client 
+#   # MENU PASSWD
+#   kernel mboot.c32
+#   append xen-3.0.3-1-i386-pae.gz --- vmlinuz-2.6.18-6-xen-vserver-686 root=/dev/sda1 ro console=tty0 --- initrd-pxe.2.6.18-6-xen-vserver-686.img
+#   TEXT HELP
+#   DRBL client running on Xen kernel
+#   ENDTEXT
+
+# Example for Clonezilla live PXE booting
+# //NOTE// Remember to change the file names to match your files and check parameters in syslinux/syslinux.cfg from the zip file, copy them to here. It might be different from here, say vmlinuz1 path maybe different.
+#label Clonezilla Live
+#  # MENU DEFAULT
+#  MENU HIDE
+#  MENU LABEL Clonezilla Live
+#  # MENU PASSWD
+#  kernel vmlinuz1
+#  append initrd=initrd1.img boot=live union=aufs noswap noprompt nolocales ip=frommedia vga=788 fetch=tftp://\$YOUR_SERVER_IP/filesystem.squashfs
+#  TEXT HELP
+#  Boot Clonezilla live via network
+#  ENDTEXT
+
+
+# Example for GParted live PXE booting
+# //NOTE// Remember to change the file names to match your files and check parameters in syslinux/syslinux.cfg from the zip file, copy them to here. It might be different from here, say vmlinuz1 path maybe different.
+#label GParted Live
+#  # MENU DEFAULT
+#  MENU HIDE
+#  MENU LABEL GParted Live
+#  # MENU PASSWD
+#  kernel vmlinuz1
+#  append initrd=initrd1.img boot=live union=aufs noswap noprompt ip=frommedia vga=788 fetch=tftp://\$YOUR_SERVER_IP/filesystem.squashfs
+#  TEXT HELP
+#  Boot GParted live via network
+#  ENDTEXT
+
+PXE_END
+
+output_netinstall_syslinux_pxelinux_menu $TDIR $PXECFG_DIR/default
+
+echo "done!"

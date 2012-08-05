@@ -1,0 +1,157 @@
+#!/bin/bash
+# Steven Shiau <steven _at_ nchc org tw>
+# License: GPL
+#
+# Loading setting
+DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/opt/drbl/}"
+
+. $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
+. $DRBL_SCRIPT_PATH/conf/drbl-ocs.conf
+. $DRBL_SCRIPT_PATH/sbin/ocs-functions
+#
+check_if_root
+# drbl_deploy.conf can only be access by root, so check_if_root should be run first.
+. /etc/drbl/drbl_deploy.conf
+#
+USAGE() {
+  echo "Usage: $0 Options"
+  echo "Options:"
+  echo "-n, --no-stop-ocs    do NOT stop ocs. (It's better to stop OCS so that the unnecessary services in rc1.d will be removed!)."
+  echo "-h, --help           display this help and exit"
+  echo "-x, --exclude-X-config    when creating template, exclude X config."
+  echo "-t, --template HOST  use HOST as the template to create etc and var tarballs. If not assigned, $0 will find the first client one in dir $drblroot."
+  echo "Example:"
+  echo "$0 -t 192.168.1.1"
+}
+
+# default settings
+stop_ocs="yes"
+template=""
+# Parse command-line options
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -n|--no-stop-ocs)
+	    stop_ocs="no"
+	    shift;;
+    -h|--help)  
+            USAGE >& 2
+            exit 2 ;;
+    -x|--exclude-X-config)
+	    exclude_template_X_conf="yes"
+	    shift;;
+    -t|--template)
+ 	    shift
+            if [ -z "$(echo $1 |grep ^-.)" ]; then
+              # skip the -xx option, in case 
+	      template="$1"
+	      shift
+            fi
+	    ;;
+    -*)     echo "${0}: ${1}: invalid option" >&2
+            USAGE >& 2
+            exit 2 ;;
+    *)      break ;;
+  esac
+done
+
+# check if template exists.
+if [ -n "$template" -a ! -d "$drblroot/$template" ]; then
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+  echo "$drblroot/$template is not found!"
+  echo "Template client does NOT exist! Program terminated!!!"
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+  exit 1
+fi
+
+# default is to stop ocs so that we can get the clean rc1.d
+if [ "$stop_ocs" = "yes" ]; then
+  echo "*****************************************************"
+  if [ -x $DRBL_SCRIPT_PATH/sbin/drbl-ocs ]; then
+    echo -n "Trying to stop clonezilla if necessary so that the unnecessary services in rc1.d will be removed... "
+    $DRBL_SCRIPT_PATH/sbin/drbl-ocs -n -l 0 stop &>/dev/null
+    echo "done!"
+  fi
+  echo "*****************************************************"
+fi
+# We need $drbl_common_root/drbl_ssi/rc1.d/ for SSI clonezilla, root_ssh_key for root's ssh public key.
+rm -rf $drbl_common_root/drbl_ssi/root_ssh_key
+mkdir -p $drbl_common_root/drbl_ssi/{rc1.d,root_ssh_key}
+# Clean the old files if they exist
+rm -f $drbl_common_root/drbl_ssi/{template_root.tgz,template_etc.tgz,template_var.tgz,template_opt.tgz}
+# Find the template client
+if [ -z "$template" ]; then
+  for ih in $drblroot/*; do
+    # use the 1st one drbl client we found as template
+    if [ -d "$ih" ]; then
+      template="$ih"
+      break
+    fi
+  done
+else
+  # append to full path
+  template="$drblroot/$template"
+fi
+echo "Using template host $template"
+# If any reason, some stale files are still in DRBL SSI /tftpboot/node_root/drbl_ssi/rc1.d, reset them
+[ "$copy_rc1d_for_drbl_ssi_clone_box" = "yes" ] && remove_rc1d_for_drbl_ssi $template
+
+# Generate the ssh hostkey for the template so that client won't have to generate.
+drbl-gen-ssh-host-keys generate "$(basename $template)"
+
+#
+if [ "$exclude_template_X_conf" = "yes" ]; then
+  echo "Excluding X config in DRBL SSI template."
+  etc_exclude_X_files="xorg.conf XF86Config XF86Config-4"
+fi
+
+#
+etc_exclude_opt=""
+for ietc in $etc_exclude_dirs $etc_exclude_X_files; do
+  etc_exclude_opt="$etc_exclude_opt --exclude=$ietc"
+done
+
+echo -n "Generating the files for DRBL single system image template... "
+# use only one drbl client as template, the 1st one.
+echo -n "root... "
+(cd $template/; tar -czf $drbl_common_root/drbl_ssi/template_root.tgz root) 
+echo -n "etc... "
+(cd $template/; tar $etc_exclude_opt -czf $drbl_common_root/drbl_ssi/template_etc.tgz etc) 
+echo -n "var... "
+# 2 >/dev/null to avoid some warnings about socket files in /var/
+(cd $template/; tar -czf $drbl_common_root/drbl_ssi/template_var.tgz var 2>/dev/null)
+echo -n "opt/drbl... "
+(cd /; tar --exclude=doc --exclude=setup -czf $drbl_common_root/drbl_ssi/template_opt_drbl.tgz /opt/drbl 2>/dev/null) 
+
+# make them can read by root only, better security
+chmod 600 $drbl_common_root/drbl_ssi/template_*.tgz
+
+#
+echo -n "Root's openssh public key... "
+# For ssh public key
+if [ ! -f /root/.ssh/id_rsa ]; then
+  #$DRBL_SCRIPT_PATH/sbin/autosshkeygen $USER
+  ssh-keygen -t rsa -q -f /root/.ssh/id_rsa -N ""
+fi
+if [ -f /root/.ssh/id_rsa.pub ]; then
+  cp -f /root/.ssh/id_rsa.pub $drbl_common_root/drbl_ssi/root_ssh_key/authorized_keys
+fi
+
+# Create a template dir for client
+mkdir -p $drbl_common_root/drbl_ssi/clients
+cat <<-CLI_END > $drbl_common_root/drbl_ssi/clients/00_README
+To overwrite or put some files to DRBL SSI clients, you can put the corresponding dir and files in this directory. When client boots, it will sync them.
+For example, if you want to overwrite the /etc/X11/xorg.conf for client with IP address 192.168.50.2, then you can
+1. Create a directory "192.168.50.2/etc/X11/" in this directory (By "mkdir -p 192.168.50.2/etc/X11/")
+2. Copy a xorg.conf to 192.168.50.2/etc/X11/
+Therefore next time when client boots, it will copy 192.168.50.2/etc/X11/xorg.conf to its /etc/X11/xorg.conf.
+# Schematic
+$drbl_common_root/drbl_ssi/clients/192.168.50.1/etc/X11/xorg.conf -> 192.168.50.1:/etc/X11/xorg.conf
+$drbl_common_root/drbl_ssi/clients/192.168.50.2/etc/X11/xorg.conf -> 192.168.50.2:/etc/X11/xorg.conf
+
+CLI_END
+
+# Output drbl/clonezilla related packages info in /drbl_ssi/.
+rm -f $drbl_common_root/drbl_ssi/DRBL-Clonezilla-related-pkgs.txt
+output_ocs_related_pkgs $drbl_common_root/drbl_ssi DRBL-Clonezilla-related-pkgs.txt
+
+echo "done!"

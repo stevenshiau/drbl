@@ -1,0 +1,52 @@
+#!/bin/bash
+# Author: Steven Shiau <steven _at_ nchc org tw>
+# License: GPL
+# Description: Get the network address from IP address and netmask
+# Notes: "ipcalc" program is totally different in Debian and RedHat-like distribution.
+# NOTE! We do NOT use this program in drblpush anymore. Just use the perl script ipcalc which is collected in package drbl.
+
+export LC_ALL=C
+# Append a default search path.
+PATH="$PATH:/sbin:/usr/sbin:/bin:/usr/bin:/usr/X11R6/bin"
+export PATH
+
+Usage() {
+  echo "Get the network address from IP address and netmask" 
+  echo "Usage:"
+  echo "$(basename $0) IPADDR NETMASK"
+  echo "Ex: $(basename $0) 192.168.10.213 255.255.255.240"
+}
+
+# Parse command-line options
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -*)     echo "${0}: ${1}: invalid option" >&2
+            Usage >& 2
+            exit 2 ;;
+    *)      break ;;
+  esac
+done
+
+ipaddr=$1
+netmask=$2
+[ -z "$ipaddr" ] && exit 0
+[ -z "$netmask" ] && exit 0
+
+# For ipcalc in RH-like, the output is like:
+# ---
+# ipcalc --network 192.168.10.213 255.255.255.128
+# NETWORK=192.168.10.128
+# ---
+# The "=" is the key, if we can not find the "=" sign, it must be the Debian's ipcalc.
+network="$(ipcalc --network $ipaddr $netmask 2>/dev/null)"
+# 
+if echo $network | grep -q "="; then
+  # It is running in RH-like OS.
+  network="$(ipcalc --network $ipaddr $netmask | cut -d"=" -f2)"
+else
+  # The output of ipcalc without "=", it must be in Debian... we use ipsc.
+  # Debian's ipcalc output like this
+  # Network:   192.168.103.208/28   11000000.10101000.01100111.1101 0000
+  network="$(ipcalc $ipaddr $netmask | awk -F" " '/Network:/ {print $2}' | sed -e "s/\/.*//g")"
+fi
+echo $network

@@ -1,0 +1,400 @@
+#!/bin/bash
+# Steven Shiau <steven _at_ nchc org tw>
+# License: GPL
+#
+# Loading setting
+DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/opt/drbl/}"
+
+. $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
+
+#
+check_if_root
+# drbl_deploy.conf can only be access by root, so check_if_root should be run first.
+. /etc/drbl/drbl_deploy.conf
+
+#
+usage() {
+  echo "Usage: $0 Options"
+  echo "Options:"
+  language_help_prompt_by_idx_no
+  echo "-h, --host IP_ADDRESS:  Generate the files of host with IP_ADDRESS"
+  echo "-k, --keep-files [y/N]: if assigned client files exists, keep newer files or not. Default is NO, i.e. overwrite all."
+  echo "-n, --nfsserver IP_ADDRESS:  The nfsserver (IP address) for this client."
+  echo "-i, --nisserver IP_ADDRESS:  The nisserver (IP address) for this client."
+  echo "-a, --label LABEL:  The hostname of this client."
+  echo "-p, --pseudo:  Pseudo mode, just create empty client dir to be used in DRBL SSI mode."
+  echo "Example:"
+  echo "$0 -l 0 -h 192.168.100.1 -k n -n 192.168.1.254 -a drbl101 -i 192.168.1.254"
+}
+
+#
+pseudo=
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -h|--host)
+	shift
+        if [ -z "$(echo $1 |grep ^-.)" ]; then
+          # skip the -xx option, in case 
+	  ip="$1"
+	  shift
+        fi
+	;;
+    -k|--keep-files)
+	shift
+        if [ -z "$(echo $1 |grep ^-.)" ]; then
+          # skip the -xx option, in case 
+	  keep_client_files="$1"
+	  shift
+        fi
+	;;
+    -n|--nfsserver)
+	shift
+        if [ -z "$(echo $1 |grep ^-.)" ]; then
+          # skip the -xx option, in case 
+	  nfsserver="$1"
+	  shift
+        fi
+	;;
+    -a|--label)
+	shift
+        if [ -z "$(echo $1 |grep ^-.)" ]; then
+          # skip the -xx option, in case 
+	  label="$1"
+	  shift
+        fi
+	;;
+    -i|--nisserver)
+	shift
+        if [ -z "$(echo $1 |grep ^-.)" ]; then
+          # skip the -xx option, in case 
+	  nisserver="$1"
+	  shift
+        fi
+	;;
+    -l|--language)
+	shift
+        if [ -z "$(echo $1 |grep ^-.)" ]; then
+          # skip the -xx option, in case 
+	  specified_lang="$1"
+	  shift
+        fi
+	;;
+    -p|--pseudo)
+	shift
+        pseudo=on
+	;;
+    -*)	echo "${0}: ${1}: invalid option" >&2
+	usage >& 2
+	exit 2 ;;
+    *)	break ;;
+  esac
+done
+
+#
+ask_and_load_lang_set $specified_lang
+
+#
+if [ -z "$ip" ]; then
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+  echo "No specified client!"
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+  usage
+  exit 1
+fi
+# Some checkings
+if [ -z "$label" ]; then
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+  echo "No assigned label!"
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+  usage
+  exit 1
+fi
+
+# 
+if [ -z "$nfsserver" ]; then
+  nfsserver="$(drbl-get-nfsserver $ip)"
+fi
+
+# if nis server is not assigned, use the nfsserver.
+if [ -z "$nisserver" ]; then
+  nisserver=$nfsserver
+  echo "NIS server is $nisserver"
+fi
+
+# checking
+if [ -z "$nfs_protocol" ]; then
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+  echo "Unable to find the nfs_protocol!!!"
+  echo "Does something go wrong with /etc/drbl/drbl_deploy.conf ?"
+  echo "Program terminated!!!"
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+   exit 1
+fi
+
+# define the variables for fstab
+# nfs_client_extra_opt is loaded from drbl.conf
+nfs_ver_opt="nfsvers=3"
+# If need, you can add "rsize=65536,wsize=65536"
+FSTAB_NFS_RO_OPT="ro,soft,$nfs_ver_opt,$nfs_protocol,$nfs_client_extra_opt,defaults        0 0"
+FSTAB_NFS_RW_OPT="rw,hard,intr,$nfs_ver_opt,$nfs_protocol,$nfs_client_extra_opt,defaults        0 0"
+
+#
+case "$keep_client_files" in
+  y|Y|[yY][eE][sS])
+    RSYNC_OPT_EXTRA="-u"
+    ;;
+  *)
+    RSYNC_OPT_EXTRA=""
+    ;;
+esac
+
+# get the OS_Version and OS_type
+check_distribution_name
+
+# varlib_NOT_2_be_copied_2_each_client is loaded from drbl.conf
+# prepare the options for rsync to exclude when copy files in
+# /tftpboot/node_root/var/lib/* to /tftpboot/nodes/$IP/var/lib/
+varlib_opts_common_to_each=""
+for iv in $varlib_NOT_2_be_copied_2_each_client; do
+  varlib_opts_common_to_each="$varlib_opts_common_to_each --exclude=$iv/ "
+done
+   
+#
+echo -n "Creating DRBL client: "
+[ "$BOOTUP" = "color" ] && $SETCOLOR_SUCCESS
+echo -n "$label $ip... "
+[ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+
+mkdir -p $drblroot/$ip
+# If pseudo is on, then we finish here.
+if [ "$pseudo" = "on" ]; then
+  echo "Pseudo client is created for DRBL SSI or clonezilla box mode! done!"
+  exit 0
+fi
+
+[ ! -d $drblroot ] && mkdir -p -m 700 $drblroot
+mkdir -p $drblroot/$ip/root
+mkdir -p $drblroot/$ip/dev
+rsync -a $RSYNC_OPT_EXTRA $drbl_common_root/etc $drblroot/$ip/
+rsync -a $RSYNC_OPT_EXTRA $drbl_common_root/root $drblroot/$ip/
+
+# Let the boot scripts will not try to check filesystems in the client
+echo "" > $drbl_common_root/fastboot
+# Put a tag for FC3 or newer so that rc.sysinit will know it's a readonly root
+case "$OS_type" in
+  RH|MDK)
+     echo "READONLY=yes" > $drblroot/$ip/etc/sysconfig/readonly-root
+     # put an empty file so rc.sysinit won't complain.
+     touch $drblroot/$ip/etc/rc.readonly
+     ;;
+esac
+
+# copy the node_root/var to client,
+# we do not have to copy /tftproot/node_root/var/lib/rpm /tftproot/node_root/var/lib/dpkg (big directory!), 
+# it will be mounted. i.e. # we just share that for every client.
+#rsync -a $RSYNC_OPT_EXTRA --exclude=rpm/ --exclude=dpkg/ $drbl_common_root/var $drblroot/$ip/
+rsync -a $RSYNC_OPT_EXTRA $varlib_opts_common_to_each $drbl_common_root/var $drblroot/$ip/
+# create those directory excluding in varlib_opts_common_to_each
+rsync -a $RSYNC_OPT_EXTRA --include="*/" --exclude="*" $drbl_common_root/var $drblroot/$ip/
+
+# Instead, we need mount point $drblroot/$ip/var/lib/rpm and dpkg
+# and $drblroot/$ip/var/spool/mail
+# since /var/spool/mail maybe a symbolic dir (Debian-based, it is linked to /var/mail, RH-based, it's a dir), we use "-e" here
+for idir in /var/lib/rpm /var/lib/dpkg /var/spool/mail; do
+  [ -e $idir ] && mkdir -p $drblroot/$ip/$idir
+done
+
+# comment this, now we use "mount -t tmpfs none /dev" in the beginning of 
+# initrd, so we will use mknode to create console, null, tty[0-5] runtime
+## must have some dev for initrd when boot
+#cp -a /dev/console /dev/null /dev/tty[0-5] $drblroot/$ip/dev
+
+# output the file to $ip/etc/fstab
+cat <<-FSTAB > $drblroot/$ip/etc/fstab
+# No more comment this /, since we use mount.nfs from distribution system, not from busybox any more.
+## Comment / to avoid mounting twice, since
+## / is already mounted by busybox's mount, which differs
+## to the mount in system. Mount options maybe differs, too.
+## Therefore if this line is not commented, it will mount again.
+## Keep this line here for ref only.
+$nfsserver:$drbl_common_root  /       nfs     nolock,$FSTAB_NFS_RO_OPT
+$nfsserver:$drblroot/$ip/etc      /etc    nfs     $FSTAB_NFS_RW_OPT
+$nfsserver:$drblroot/$ip/var      /var    nfs     $FSTAB_NFS_RW_OPT
+$nfsserver:$drblroot/$ip/root     /root   nfs     $FSTAB_NFS_RW_OPT
+$nfsserver:/usr             /usr        nfs    $FSTAB_NFS_RO_OPT
+$nfsserver:/opt             /opt        nfs    $FSTAB_NFS_RO_OPT
+$nfsserver:/home            /home       nfs    $FSTAB_NFS_RW_OPT
+$nfsserver:/var/spool/mail /var/spool/mail       nfs     $FSTAB_NFS_RW_OPT
+none                    /proc           proc    defaults        0 0
+tmpfs                   /tmp            tmpfs   defaults        0 0
+#/dev/fd0                /mnt/floppy     auto    noauto,owner,kudzu 0 0
+#/dev/sr0          	/mnt/cdrom      iso9660 iocharset=cp950,noauto,owner,kudzu,ro 0 0
+FSTAB
+# if $ocsroot is not under /home, or if $ocsroot is a mount point, client must mount it.
+if [ -z "$(echo $ocsroot | grep -Ew "^/home")" -o \
+     -n "$(awk -F" " '{print $2}' /proc/mounts | grep -Ew "$ocsroot")" ]; then
+  cat <<-FSTAB >> $drblroot/$ip/etc/fstab
+$nfsserver:$ocsroot            $ocsroot       nfs    $FSTAB_NFS_RW_OPT
+FSTAB
+fi
+
+# no matter it's drbl box or clonezilla box, /var/lib/rpm or /var/lib/dpkg is exported. But when client is clonezilla box and in rc1.d, it won't mount them.
+case "$OS_type" in
+  RH|MDK|SUSE)
+    if [ -d /var/lib/rpm ]; then
+    cat <<-FSTAB >> $drblroot/$ip/etc/fstab
+$nfsserver:$drbl_common_root/var/lib/rpm /var/lib/rpm       nfs     $FSTAB_NFS_RO_OPT
+FSTAB
+    fi
+    # Generate the /dev/pts, /dev/shm... dir.
+    for i in $memfs_dir_in_rh_client_fstab; do
+      if LC_ALL=C grep -q -F "$i" /etc/fstab &>/dev/null; then
+       LC_ALL=C grep -F "$i" /etc/fstab >> $drblroot/$ip/etc/fstab
+      fi
+    done
+    ;;
+  DBN)
+    if [ -d /var/lib/dpkg ]; then
+    cat <<-FSTAB >> $drblroot/$ip/etc/fstab
+$nfsserver:$drbl_common_root/var/lib/dpkg /var/lib/dpkg       nfs     $FSTAB_NFS_RO_OPT
+FSTAB
+    fi
+    ;;
+esac
+
+# append /media, /mnt to fstab if necessary
+for d in media mnt; do
+  if [ -d "$drbl_common_root/$d" ]; then
+    cat <<-FSTAB >> $drblroot/$ip/etc/fstab
+tmpfs                   /$d          tmpfs   defaults        0 0
+FSTAB
+  fi
+done
+
+# append user assigned dir
+for d in $diskless_root_dir_ro_user_add; do
+  if [ -d "$drbl_common_root/$d" ]; then
+    cat <<-FSTAB >> $drblroot/$ip/etc/fstab
+$nfsserver:$d             $d        nfs    $FSTAB_NFS_RO_OPT
+FSTAB
+  fi
+done
+for d in $diskless_root_dir_rw_user_add; do
+  if [ -d "$drbl_common_root/$d" ]; then
+    cat <<-FSTAB >> $drblroot/$ip/etc/fstab
+$nfsserver:$d             $d        nfs    $FSTAB_NFS_RW_OPT
+FSTAB
+  fi
+done
+
+# append user assigned local dir
+# only when there is setting, we will append the fstab
+if [ -n "$(grep -vE "^[[:space:]]*#" $drbl_setup_cfg/client-append-fstab 2>/dev/null)" ]; then
+  echo "" >> $drblroot/$ip/etc/fstab
+  echo "# Extra mount point specified in $drbl_setup_cfg/client-append-fstab" >> $drblroot/$ip/etc/fstab
+  # filter the comment lines
+  (grep -vE "^[[:space:]]*#" $drbl_setup_cfg/client-append-fstab; echo) | # make sure there is a LF at the end
+  while read dev mnt_pnt others; do
+    # create the mount point
+    [ ! -d "$drbl_common_root/$mnt_pnt" ] && mkdir -p $drbl_common_root/$mnt_pnt
+    # append the fstab for client.
+    echo $dev $mnt_pnt $others >> $drblroot/$ip/etc/fstab
+  done
+fi
+
+# TODO, Debian/RH
+# output the file to etc/sysconfig/network for DRBL clients.
+case "$OS_type" in
+  RH|MDK)
+     cat <<-HOSTNAME_END > $drblroot/$ip/etc/sysconfig/network
+NETWORKING=yes
+HOSTNAME=$label
+DOMAINNAME=$domain
+GATEWAY=$nfsserver
+NISDOMAIN=$nisdomain
+HOSTNAME_END
+     ;;
+  DBN)
+     echo $label > $drblroot/$ip/etc/hostname
+     echo $nisdomain > $drblroot/$ip/etc/defaultdomain
+     ;;
+  SUSE)
+     echo $label > $drblroot/$ip/etc/HOSTNAME
+     echo $nisdomain > $drblroot/$ip/etc/defaultdomain
+     echo "default $nfsserver - -" > $drblroot/$ip/etc/sysconfig/network/routes
+     ;;
+esac
+
+# clean all network setting, since we already set the network in init
+if [ -e /etc/debian_version ]; then
+  # Debian
+  rm -f $drblroot/$ip/etc/network/interfaces
+  # Create a dummy file so that hotplug won't complain that.
+cat <<-NIC_END > $drblroot/$ip/etc/network/interfaces
+# This dummy file is automatically created by DRBL to avoid the warning of hotplug.
+# You should *NOT* put any network interface setting here, since it already automatically configured in PXE initrd in this DRBL client, and network service default is not on!!!
+NIC_END
+elif [ -e /etc/SuSE-release ]; then
+  # SuSE
+  rm -f $drblroot/$ip/etc/sysconfig/network/ifcfg-eth* 
+  # For SuSE, we do not generate dummy NIC conf files since 
+  # (1) Until OpenSuSE 10.1 Not config file will be automatically created,
+  # (2) The file name is like ifcfg-eth-id-00:0c:29:45:9b:81, based on MAC address, we can not foresee that.
+else
+  # RH-like
+  rm -f $drblroot/$ip/etc/sysconfig/network-scripts/ifcfg-eth* 
+  for ethx in $dummy_eth_nics; do
+    cat <<-NIC_END > $drblroot/$ip/etc/sysconfig/network-scripts/ifcfg-$ethx
+# This dummy file is automatically created by DRBL to avoid it to be recreated..
+# You should *NOT* put any network interface setting here, since it already automatically configured in PXE initrd in this DRBL client, and network service default is not on!!!
+DEVICE=$ethx
+BOOTPROTO=dhcp
+ONBOOT=no
+NIC_END
+  done
+fi
+
+cat <<-YPCONF_ETH0 > $drblroot/$ip/etc/yp.conf
+domain $nisdomain server $nisserver
+YPCONF_ETH0
+
+# Generate the OpenSSH host key for clients. For RH-like, sshd service will 
+# generated the keys if they do not exist.
+case "$OS_type" in
+  DBN)
+     drbl-gen-ssh-host-keys generate $ip
+     ;;
+esac
+
+[ -f "$drblroot/$ip/etc/resolv.conf" ] && rm -f $drblroot/$ip/etc/resolv.conf
+for nameserver in $nameserver_; do 
+  echo "nameserver $nameserver" >> $drblroot/$ip/etc/resolv.conf
+done
+
+# Comment this, it's not necessary now.
+#ln -fs $drbl_common_root /tftpboot/$ip
+
+# For client login mode
+PASSWD_OPT=""
+[ -n "$client_autologin_passwd" ] && PASSWD_OPT="-p $client_autologin_passwd"
+case "$login_gdm_opt" in
+  "auto_login")
+     drbl-login-switch --no-gen-ssi -l $lang --auto --no_nis_update $PASSWD_OPT --host $ip
+     ;;
+  "timed_login")
+     drbl-login-switch --no-gen-ssi -l $lang --timed $timed_login_time --no_nis_update $PASSWD_OPT --host $ip
+     ;;
+  *)
+     drbl-login-switch --no-gen-ssi -l $lang --normal --no_nis_update --host $ip
+     ;;
+esac
+
+# Now it's not necessary to change client's /etc files when clonezilla start, so
+# we can put the ocs related files in client's rc1.d first.
+# Here we force to use hardware detect for client's rc1.d
+ocs-related-srv --hw-detect on -n $ip put
+# put S19ocs-run
+( cd $drblroot/$ip/$RCX_ROOTDIR/rc1.d/; ln -fs $RCX_REL_INITD/ocs-run S19ocs-run )
+
+# set the root's passwd for clients if set client_root_passwd
+[ -n "$client_root_passwd" ] && drbl-client-root-passwd --no-gen-ssi --stdin $client_root_passwd --host $ip

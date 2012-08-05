@@ -1,0 +1,149 @@
+#!/bin/bash
+######################################################
+#
+# Author:	Ceasar Sun Chen-kai <ceasar@nchc.org.tw>
+# License:	GPL
+# Description: 	Give a legal ip lists from a set of given subnet and count  
+# Usage:	ipcalc-list.sh 192.168.21.13/24 -n 10 # to list ip from 192.168.21.13 ~ 192.168.21.22
+# ChangeLog:	
+#	* 20100603	First version
+#	* 20100604	Fix fisrt character of binary type ip address is 0 within first ip session
+#
+# Wish list:
+#
+#
+######################################################
+# Load DRBL setting and functions
+DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/opt/drbl/}"
+
+. $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
+. $DRBL_SCRIPT_PATH/conf/drbl-ocs.conf
+. $DRBL_SCRIPT_PATH/sbin/ocs-functions
+
+######################################################
+# Sub functions
+######################################################
+
+# Print usage
+Usage(){
+	echo "$0 : Give a legal ip list from a given start ip/subnet and count";
+	echo "Usage: $0 <ipcalc_parameters> -c <count> [-b] [-v] ";
+	echo " -b, --binary		Binary output for ip address"
+	echo " -c, --count		amount of ip, positive number for ascending order,negative for descending , ex: 10, -5"
+	echo " -v, --verbose	verbose mode, if not enough ip , show what we have "
+	echo ""
+	echo "Help options:";
+	echo " -h, --help		Show this help message"
+	echo "	"
+	echo "Example:"
+	echo "To list 20 ascending legal ip form 192.168.121.1/24 . Output: '192.168.121.1 ~ 192.168.1.31 192.168.1.20' "
+	echo " $0 192.168.121.1/24 -c 20 "
+	echo "To list 3 legal descending ip form 172.16.1.32/16 and convert ip as binary. Output: '10101100.00010000.00000001.00100000 10101100.00010000.00000001.00011111 10101100.00010000.00000001.00011110'"
+	echo " $0 172.16.1.32 255.255.0.0 -c -3 -b"
+	echo "To list 10 descnding ip form 10.0.0.3/8 via VERBOSE mode. Output: '10.0.0.3 10.0.0.2 10.0.0.1'"
+	echo " $0 10.0.0.3/8 -c -10 -v"
+	echo ""
+	echo "ipcalc_parameters : <start_ip netmask> or <start_ip/netmask>"
+	echo " <start_ip netmask> , ex: 192.168.11.1 255.255.255.0"
+	echo "the same with "
+	echo " <start_ip/netmask> , ex: 192.168.11.1/24"
+}
+
+
+#convert_(){
+
+#}
+
+######################################################
+#Main 
+######################################################
+declare _OUTPUT_MODE _VERBOSE _COUNT _IPCALC_PARM
+declare -a _IP_ARRAY
+
+declare __VERSION='1.0.0'
+declare _OUTPUT_MODE=d
+declare _VERBOSE=0
+declare _COUNT=1
+
+[ $# -eq 0 ] && Usage && exit 1;
+while [ $# -gt 0 ]; do
+	case "$1" in
+		-b|--binary)
+			shift; _OUTPUT_MODE="b";
+		;;
+		-c|--count)
+			shift;
+			if [[ $1 =~ ^-*[[:digit:]]+$ ]]; then
+				_COUNT=$1
+			else
+				echo "Illegal value for -n option !!" ;
+				Usage; exit 1;
+			fi
+			shift;
+		;;
+		-h|--help)
+			Usage;
+			exit;
+		;;
+		-v|--verbose)
+			shift; _VERBOSE=1;
+		;;
+		*)
+			[ -n "$_IPCALC_PARM" ] && _IPCALC_PARM="$_IPCALC_PARM $1" || _IPCALC_PARM="$1";
+			shift;
+		;;
+	esac
+done
+
+#if [[ ! $_IPCALC_PARM =~ ^[[:digit:]]{1,3}.[[:digit:]]{1,3}.[[:digit:]]{1,3}.[[:digit:]]{1,3}\/[[:digit:]]{1,2}$ ]] && [[ ! $_IPCALC_PARM =~ ^[[:digit:]]{1,3}.[[:digit:]]{1,3}.[[:digit:]]{1,3}.[[:digit:]]{1,3}[[:space:]]+[[:digit:]]{1,3}.[[:digit:]]{1,3}.[[:digit:]]{1,3}.[[:digit:]]{1,3}$ ]]; then
+if [ -z "$(echo $_IPCALC_PARM | grep -E '^[[:digit:]]{1,3}.[[:digit:]]{1,3}.[[:digit:]]{1,3}.[[:digit:]]{1,3}\/[[:digit:]]{1,2}$')" ] && [ -z "$(echo $_IPCALC_PARM | grep -E '^[[:digit:]]{1,3}.[[:digit:]]{1,3}.[[:digit:]]{1,3}.[[:digit:]]{1,3}[[:space:]]+[[:digit:]]{1,3}.[[:digit:]]{1,3}.[[:digit:]]{1,3}.[[:digit:]]{1,3}$')" ]; then
+	echo "Illegal parameters for ipcalc !!" ;
+	Usage; exit 1;
+fi
+
+# Add "1" on first string for solve if the fisrt session of ip is 0xxxxxxx.~
+# 
+bin_start_ip=1$(drbl-ipcalc $_IPCALC_PARM  | grep Address: | awk -F" " '{print $3 $4 }'| sed -e "s/\.//g")
+dec_start_ip=$(echo "ibase=2; obase=A; $bin_start_ip" | bc)
+bin_max_ip=1$(drbl-ipcalc $_IPCALC_PARM  | grep HostMax: | awk -F" " '{print $3 $4 }'| sed -e "s/\.//g")
+dec_max_ip=$(echo "ibase=2; obase=A; $bin_max_ip" | bc)
+bin_min_ip=1$(drbl-ipcalc $_IPCALC_PARM  | grep HostMin: | awk -F" " '{print $3 $4 }'| sed -e "s/\.//g")
+dec_min_ip=$(echo "ibase=2; obase=A; $bin_min_ip" | bc)
+
+#echo "$_OUTPUT_MODE, $_VERBOSE, $_COUNT, '$_IPCALC_PARM', $dec_start_ip, $dec_max_ip, $dec_min_ip";
+
+if [[ $_COUNT =~ ^[[:digit:]]+$ ]]; then
+	for ((i=0; i<$_COUNT; i++)) ;do
+		dec_current_ip=$(expr $dec_start_ip + $i)
+		if [ $dec_max_ip -ge $dec_current_ip ] && [ $dec_min_ip -le $dec_current_ip ] ; then
+			_tmp_bin_ip=`echo "ibase=A; obase=2; $dec_current_ip" | bc`
+			_IP_ARRAY[${#_IP_ARRAY[*]}]=${_tmp_bin_ip:1:32}
+		elif [ $_VERBOSE = 0 ] ; then
+			_IP_ARRAY=()
+			exit 1;
+		fi		
+	done
+else 
+	for ((i=0; i>$_COUNT; i--)) ;do
+		dec_current_ip=$(expr $dec_start_ip + $i)
+		if [ $dec_max_ip -ge $dec_current_ip ] && [ $dec_min_ip -le $dec_current_ip ] ; then
+			_tmp_bin_ip=`echo "ibase=A; obase=2; $dec_current_ip" | bc`
+			_IP_ARRAY[${#_IP_ARRAY[*]}]=${_tmp_bin_ip:1:32}
+		elif [ $_VERBOSE = 0 ] ; then
+			_IP_ARRAY=()
+			exit 1;
+		fi		
+	done
+fi 
+
+for ((i=0; i<${#_IP_ARRAY[*]}; i++)) ;do
+	[ $_OUTPUT_MODE = 'b' ] && p1=${_IP_ARRAY[$i]:0:8} ||  p1=$(echo "ibase=2; obase=A; ${_IP_ARRAY[$i]:0:8}" | bc )
+	[ $_OUTPUT_MODE = 'b' ] && p2=${_IP_ARRAY[$i]:8:8} ||  p2=$(echo "ibase=2; obase=A; ${_IP_ARRAY[$i]:8:8}" | bc )
+	[ $_OUTPUT_MODE = 'b' ] && p3=${_IP_ARRAY[$i]:16:8} ||  p3=$(echo "ibase=2; obase=A; ${_IP_ARRAY[$i]:16:8}" | bc )
+	[ $_OUTPUT_MODE = 'b' ] && p4=${_IP_ARRAY[$i]:24:8} ||  p4=$(echo "ibase=2; obase=A; ${_IP_ARRAY[$i]:24:8}" | bc )
+	echo $p1.$p2.$p3.$p4
+done
+
+exit;
+
+

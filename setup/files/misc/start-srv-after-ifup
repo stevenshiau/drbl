@@ -1,0 +1,16 @@
+#!/bin/bash
+# Steven Shiau <steven _at_ nchc org tw>
+# License: GPL
+# This program is used in service /etc/init.d/waitnfs.sh to start some services in /etc/network/if-up.d/ in Ubuntu dapper or later, since in DRBL client, we won't run serivce networking to start network. This will result in no service located in /etc/network/if-up.d/ will be start, especially the must - mountnfs in DRBL.
+
+services_chklist="mountnfs ntpdate ethtool openssh-server postfix"
+# We have to export ADDRFAM as inet so that /etc/network/if-up.d/mountnfs will run normally. Ref: http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=673936
+export ADDRFAM=inet
+
+for srv in $services_chklist; do
+  if [ -e "/etc/network/if-up.d/$srv" ]; then
+    echo -n "Starting service $srv in background... "
+    /etc/network/if-up.d/$srv &
+    echo "done!"
+  fi
+done

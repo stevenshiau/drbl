@@ -1,0 +1,151 @@
+#!/bin/bash
+# Author: Steven Shiau <steven _at_ nchc org tw>
+# License: GPL
+# Description: Find the url in yum repository setting.
+# parameter: yum_repo_set releasever ARCH
+# if the setting in "yum_repo_set" is like:
+# baseurl=http://free.nchc.org.tw//fedora/linux/core//$releasever/$basearch/os
+# then "releasever" and "ARCH" you assign are not important. But it's really
+# important when the setting in "yum_repo_set" is like:
+# baseurl=http://free.nchc.org.tw//fedora/linux/core/4/i386/os
+
+# Ex: find-url-in-yum-set /etc/yum.repos.d/fedora-core.repo 5 i386 2>/dev/null
+
+yum_repo_set="$1"
+# TODO! maybe find a method to get this from yum ?
+releasever="$2"
+ARCH="$3"
+
+[ -f "$yum_repo_set" ] || exit 1
+[ -n "$releasever" ] || exit 1
+[ -n "$ARCH" ] || exit 1
+
+get_yum_block() {
+     local CFG_FILE=$1
+     local block="$2"
+     [ -f "$CFG_FILE" ] || exit 1
+     # By using
+     # grep -n "^\[.*\]" yum.conf |grep -A1 "\[base\]"                 
+     # We can get the results like:
+     # 175:[base]
+     # 210:[update]
+     # so we know we can replace the one between line no. 175 and 210
+     between_lines=$(grep -ni "^\[.*\]" $CFG_FILE |grep -i -A1 "\[$block\]" | cut -d":" -f1)
+     begin_line=$(echo $between_lines | awk -F" " '{print $1}')
+     end_line=$(echo $between_lines | awk -F" " '{print $2}')
+     # if end_line is nothing, it must be the last block, i.e. we can not find the next [.*]
+     if [ -z "$end_line" ]; then
+       end_line=$(wc -l $CFG_FILE | awk -F" " '{print $1}')
+     else
+       # if not nothing, backword one line
+       end_line=$(($end_line - 1))
+     fi
+     echo "$begin_line $end_line"
+}
+
+#
+convert_url_os_path() {
+  local url="$1"
+  [ -n "$url" ] || exit 1
+  # For FC:
+  # baseurl=http://free.nchc.org.tw//fedora/linux/core//$releasever/$basearch/os
+  # we want to get:
+  # url_os=http://free.nchc.org.tw/
+  # os_ayo_path=fedora/linux/core/
+  # For OpenSuSE 10.0
+  # baseurl=http://free.nchc.org.tw/opensuse/opensuse/distribution/SL-$releasever-OSS/inst-source/suse/
+  # we want to get:
+  # url_os=http://free.nchc.org.tw
+  # os_ayo_path=opensuse/opensuse/distribution
+
+  # Note! Maybe in *.repo, releasever is shown as "$releasever", "4" or "10.0"
+  # Case 1: releasever is shown as "$releasever"
+  url_os_coreroot="$(echo $baseurl | sed -r -e 's@/(SL-|)*\$releasever(-OSS|)*/.*@@g')"
+  # Case 2: releasever is shown as "10.0". This is really a special case for OpenSuSE 10.0 and 10.1 only. 
+  # Ex: http://opensource.nchc.org.tw/opensuse/distribution/SL-10.0-OSS/
+  # or  http://opensource.nchc.org.tw/opensuse/distribution/SL-10.1/
+  # From OpenSuSE 10.2 or later, it's clean as: http://opensource.nchc.org.tw/opensuse/distribution/10.2/
+  if [ -n "$(echo $url_os_coreroot | grep "SL-")" ]; then
+    url_os_coreroot="$(echo $url_os_coreroot | sed -r -e "s@/(SL-|)*$releasever(-OSS|)*/.*@@g")"
+  fi
+  # Case 3: releasever is shown as "8", for example.
+  # baseurl=http://free.nchc.org.tw/fedora/linux/releases/8/Everything/i386/os/
+  url_os_coreroot="$(echo $url_os_coreroot | sed -r -e "s@/$releasever/.*@@g")"
+
+  #
+  os_ayo_path="$(echo $url_os_coreroot | sed -re "s|(http\|ftp\|file)://[^/]*/||g")"
+  url_os="$(echo $url_os_coreroot | sed -re "s|$os_ayo_path||g")"
+  # remove the last / in $url_os
+  url_os="$(echo $url_os | sed -re "s|/$||g")"
+  # strip the /$releasever/$ARCH/os (http://opensource.nchc.org.tw/fedora/linux/core/5/i386/os/) or /$release/os/$ARCH (like CentOS: http://ftp.ncnu.edu.tw//Linux/CentOS/4.3/os/i386/) if found... just in case
+  os_ayo_path="$(echo $os_ayo_path | sed -re "s|/$releasever\.*[[:digit:]]*/(os/)*$ARCH/.*||g")"
+  echo $url_os $os_ayo_path
+}
+
+# for yum
+# For FC1-4, the name in yum repository config: "base", but in FC5, it's "core".
+# We append update and updates, it's very important to keep this order (core base update updates, do NOT put update(s) earlier).
+# For FC7, since core and extra are merged, now the block is [fedora].
+for ipart in fedora updates update core base; do
+  lines="$(get_yum_block $yum_repo_set $ipart)"
+  begin_line=$(echo $lines | awk -F" " '{print $1}')
+  end_line=$(echo $lines | awk -F" " '{print $2}')
+  [ -n "$begin_line" -a -n "$end_line" ] && break
+done
+
+chk_cmd="if ($begin_line..$end_line) {print}"
+baseurl="$(perl -n -e "$chk_cmd" $yum_repo_set | grep -Ei "^[[:space:]]*baseurl[[:space:]]*=[[:space:]]*" | sed -re "s/^[[:space:]]*baseurl[[:space:]]*=[[:space:]]*//gi")"
+if [ -n "$baseurl" ]; then
+  # case 1, baseurl exists
+  convert_url_os_path $baseurl
+else
+  # try to find mirrorlist
+  mirrorlist="$(LC_ALL=C perl -n -e "$chk_cmd" $yum_repo_set | grep -Ei "^[[:space:]]*mirrorlist=" | sed -re "s/^[[:space:]]*mirrorlist=//gi")"
+
+  # eval mirrorlist=$mirrorlist
+  # Note! eval mirrorlist=$mirrorlist fails in CentOS 4.3, since there are "=" in the variable, 
+  # For example:
+  # releasever=4
+  # basearch=i386
+  # mirrorlist='http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo=os'
+  # eval 'mirrorlist=http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo=os'
+  # mirrorlist='http://mirrorlist.centos.org/?release=4'
+  # arch=i386
+  # repo=os
+  # Hence we have to use sed to replace the variables.
+  mirrorlist="$(echo $mirrorlist | sed -e "s/\$releasever/$releasever/g" -e "s/\$basearch/$ARCH/g")"
+  # Use wget, lynx , lftp or curl ? wget is almost installed...
+  # 2006/06/24, use lftp or curl since they are better than lynx, and support
+  # http_proxy, ftp_proxy.
+  # But... In CentOS 4.3,  mirrorlist='http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo=os', then lftp will fail.
+  # The best solution maybe is curl, since it supports environment proxy.
+  # A. wget
+  #tmp_dir="$(mktemp -d /tmp/yummirror_tmp.XXXXXX)"
+  #wget -r -l1 --no-parent --passive-ftp -e robots=off -q -nd --retr-symlinks -P "$tmp_dir" $mirrorlist
+  #mirror_file=`basename $mirrorlist`
+  #baseurl="$(head -n 1 $tmp_dir/$mirror_file)"
+  #[ -d "$tmp_dir" ] && rm -rf $tmp_dir
+  # B. lynx
+  #baseurl="$(lynx -dump $mirrorlist | head -n1)"
+  # C. lftp
+  #mirrorlist_url="$(dirname $mirrorlist)"
+  #mirrorlist_file="$(basename $mirrorlist)"
+  #baseurl="$(echo cat $mirrorlist_file | lftp $mirrorlist_url | head -n1)"
+  # E. curl
+  mlist_tmp="$(mktemp /tmp/mirrorlst_tmp.XXXXXX)"
+  curl $mirrorlist 2>/dev/null > $mlist_tmp
+  if [ -n "$(grep -E "xml version" $mlist_tmp)" ]; then
+  baseurl="$(LC_ALL=C curl $mirrorlist 2>/dev/null | grep -vE "^[[:space:]]*#" | head -n1)"
+    # From Fedora 12, the repository list got from mirrorlist is XML data forma.
+    # Like:
+    # <url protocol="ftp" type="ftp" location="TW" preference="100">ftp://opensource.nchc.org.tw/distributions/Fedora/linux/releases/12/Everything/i386/os/repodata/repomd.xml</url>
+    # <url protocol="http" type="http" location="TW" preference="100">http://opensource.nchc.org.tw/fedora/linux/releases/12/Everything/i386/os/repodata/repomd.xml</url>
+    baseurl="$(LC_ALL=C grep -E "url protocol=" $mlist_tmp | head -n 1 | grep -Eo "(http://|ftp://).*" | sed -e "s/<\/url>//g")"
+  else
+    # Old format
+    baseurl="$(LC_ALL=C grep -vE "^[[:space:]]*#" $mlist_tmp | head -n1)"
+  fi
+  [ -e "$mlist_tmp" ] && rm -f $mlist_tmp
+
+  convert_url_os_path $baseurl
+fi

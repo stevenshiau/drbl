@@ -1,0 +1,83 @@
+#!/bin/bash
+# Author: Steven Shiau <steven _at_ nchc org tw>
+# License: GPL
+# Description: To set the client to be graphic mode and autologin now
+
+# Load DRBL setting and functions
+DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/opt/drbl/}"
+
+. $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
+
+#
+usage() {
+  echo "Force DRBL client machines to re-autologin."
+  echo "Usage: $0 [OPTION]"
+  echo "Options:"
+  echo "-v, --verbose:  verbose mode."
+  echo "-h, --hosts IP_LIST:  Instead of all DRBL clients, assign the clients by IP address, like: -h \"192.168.0.1 192.168.0.2\" NOTE!!! You must put \" \" before and after the IP_LIST!"
+}
+
+#
+check_if_root
+
+# main
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -h|--hosts)
+		shift;
+	        LIST_HOST="on"
+                if [ -z "$(echo $1 |grep ^-.)" ]; then
+                  # skip the -xx option, in case 
+		  IP_LIST="$1"
+                fi
+		shift ;;
+    -v|--verbose)
+		shift; verbose="on"
+                ;;
+    -*)		echo "${0}: ${1}: invalid option" >&2
+		usage >& 2
+		exit 2 ;;
+    *)		break ;;
+  esac
+done
+
+# check if specified host exists
+if [ -n "$specified_host" ]; then
+ [ ! -d "$drblroot/$specified_host" ] && echo "Can NOT find DRBL client $specified_host (i.e. no $drblroot/$specified_host)! Program terminated!" && exit 1
+ [ -n "$verbose" ] && echo "specified_host: $specified_host"
+fi
+
+# set the host to be processed
+# host_list is the IP address of client, like 192.168.1.1...
+host_list=""
+if [ -n "$specified_host" ]; then
+   # set the host path
+   host_list=$drblroot/$specified_host
+else
+   # withoud specified_host, it must be all clients, append each one to $host_list
+   for ihost in `get-client-ip-list`; do
+     host_list="$host_list $drblroot/$ihost"
+   done
+fi
+
+
+# set the host to be autologin, make sure it is, then run init 3 and init 5.
+for ihost in $host_list; do
+  # skip those IP not listed in the $IP_LIST
+  if [ "$LIST_HOST" = "on" ]; then
+    [ -z "$(echo $IP_LIST | grep -E "\<${ihost##/*/}\>")" ] && continue
+  fi
+  host_ip="$(basename $ihost)"
+  if [ -e /etc/debian_version ]; then
+    # Debian
+    # Assume the client uses the same dm with server.
+    #default_dm="$(drbl-check-dm -h $host_ip)"
+    default_dm="$(drbl-check-dm)"
+    restart_dm_cmd="/etc/init.d/$default_dm restart"
+  else
+    # RH-like or SuSE
+    restart_dm_cmd="init 3; sleep 3; init 5"
+  fi
+  drbl-login-switch --no-gen-ssi -l 0 --auto --host $host_ip &
+  drbl-doit -l en --no-ping --hosts $host_ip "$restart_dm_cmd" &
+done
