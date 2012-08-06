@@ -18,8 +18,11 @@
 # clonezilla-2.2.0-4.tar.bz2
 # we just want to list the last one clonezilla-2.2.0-4.tar.bz2
 #============================================================================
-# load setting
-. /opt/drbl/sbin/drbl-conf-functions
+
+# Load DRBL setting and functions
+DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/opt/drbl/}"
+
+. $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
 
 #
 usage () {

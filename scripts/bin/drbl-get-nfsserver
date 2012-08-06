@@ -2,8 +2,11 @@
 # Author: Steven Shiau, <steven _at_ nchc org tw>
 # License: GPL
 
-# Loading setting
-. /opt/drbl/sbin/drbl-conf-functions
+# Load DRBL setting and functions
+DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/opt/drbl/}"
+
+. $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
+#
 export LC_ALL=C
 
 Usage() {

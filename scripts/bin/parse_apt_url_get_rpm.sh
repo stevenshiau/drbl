@@ -5,8 +5,10 @@
 # Usage: $0 PKGNAME
 # Ex: $0 glibc
 
-# load setting
-. /opt/drbl/sbin/drbl-conf-functions
+# Load DRBL setting and functions
+DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/opt/drbl/}"
+
+. $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
 
 #
 usage() {

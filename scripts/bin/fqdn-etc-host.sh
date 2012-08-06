@@ -3,8 +3,11 @@
 # License: GPL
 
 # Load DRBL setting and functions
-. /opt/drbl/sbin/drbl-conf-functions
+DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/opt/drbl/}"
 
+. $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
+
+#
 eth_wan_port="$1"
 [ -z "$eth_wan_port" ] && exit 1
 eth_wan_ip="$(drbl-get-ipadd $eth_wan_port)"

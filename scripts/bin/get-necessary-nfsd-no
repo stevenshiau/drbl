@@ -5,11 +5,9 @@
 # generate the NFS exports or clean the old one.
 
 # Load DRBL setting and functions
-if [ ! -f "/opt/drbl/sbin/drbl-conf-functions" ]; then
-  echo "Unable to find /opt/drbl/sbin/drbl-conf-functions! Program terminated!" 
-  exit 1
-fi
-. /opt/drbl/sbin/drbl-conf-functions
+DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/opt/drbl/}"
+
+. $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
 
 # calculate the number of the NFS daemon 
 total_client_no="$(get-client-ip-list | wc -l)"
