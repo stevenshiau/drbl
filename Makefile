@@ -24,7 +24,7 @@ test:
 		@echo -n "Checking for bashisms"
 		for SCRIPT in $(SCRIPTS); \
 		do \
-			if [ -n "$(LC_ALL=C file -L $${SCRIPT} | grep -i "Bourne-Again shell script text executable")" ]; then
+			@if [ -n "$(LC_ALL=C file -L $${SCRIPT} | grep -i "Bourne-Again shell script text executable")" ]; then \
 				checkbashisms -f -x $${SCRIPT}; \
 				echo -n "."; \
 			fi
