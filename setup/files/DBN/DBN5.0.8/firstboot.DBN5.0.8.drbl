@@ -12,9 +12,9 @@
 #exec </dev/console >/dev/console 2>&1
 
 # Load DRBL setting and functions
-if [ -e "/opt/drbl/sbin/drbl-conf-functions" ]; then
-  . /opt/drbl/sbin/drbl-conf-functions
-fi
+DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/opt/drbl/}"
+
+. $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
 
 # We can not use runlevel to get the runlevel, since this service is still in
 # rcS.d
