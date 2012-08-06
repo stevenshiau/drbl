@@ -1,9 +1,12 @@
-DRBL for Debian/Ubuntu/B2D/RedHat/Fedora/Mandriva/CentOS/SuSE
+DRBL for Debian/Ubuntu/RedHat/Fedora/CentOS/SuSE
 Author: Steven Shiau <steven _at_ nchc org tw>, Blake, Kuo-Lien Huang (klhaung _at_ gmail com), H. T. Wang (c00wht00 _at_ nchc org tw), Ceasar Sun (ceasar _at_ nchc org tw), Jazz Wang (jazz _at_ nchc org tw) and Thomas Tsai (thomas _at_ nchc org tw)
 License: GPL
 http://drbl.org
 http://drbl.nchc.org.tw
 http://drbl.sourceforge.net
+
+* Mon Aug 06 2012 Steven Shiau <steven _at_ nchc org tw> 2.0.0-1drbl
+- DRBL Version 2. New files arch so it's easier to be packaged in Debian.
 
 * Wed Jul 25 2012 Steven Shiau <steven _at_ nchc org tw> 1.12.19-1drbl
 - Minor improving in set-default-pxe-img.
