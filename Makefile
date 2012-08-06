@@ -12,7 +12,7 @@ SHAREDIR = /usr/share/drbl/
 
 SCRIPTS = bin/* sbin/* $(SHAREDIR)/sbin/* $(SHAREDIR)/bin/*
 
-all: drbl-sbin-link languages
+all: drbl-sbin-link languages fail-mbr
 
 build:
 	@echo "Nothing to build."
@@ -20,6 +20,10 @@ build:
 drbl-sbin-link:
 	@echo "Files linking..."
 	$(MAKE) -C sbin all
+
+fail-mbr:
+	@echo "Creating fail-mbr.bin..."
+	$(MAKE) -C pkg/misc all
 
 languages:
 	@echo "Files linking..."
