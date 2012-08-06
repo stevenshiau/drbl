@@ -3,13 +3,13 @@ Upstream-Name: drbl
 Source: http://free.nchc.org.tw/drbl-core/src/
 
 Files: *
-Copyright: 2002-2011 Steven Shiau (steven@nchc.org.tw)
-           2002-2011 Blake, Kuo-Lien Huang Huang  (klhaung@gmail.com)
-           2002-2011 H. T. Wang (c00wht00@nchc.org.tw)
-           2002-2011 Ceasar Sun (ceasar@nchc.org.tw)
-           2002-2011 Jazz Wang (jazz@nchc.org.tw)
-           2002-2011 Thomas Tsai (thomas@nchc.org.tw)
-           2002-2011 NCHC Free Software Labs, Taiwan. (http://free.nchc.org.tw)
+Copyright: 2002-2012 Steven Shiau (steven@nchc.org.tw)
+           2002-2012 Blake, Kuo-Lien Huang Huang  (klhaung@gmail.com)
+           2002-2012 H. T. Wang (c00wht00@nchc.org.tw)
+           2002-2012 Ceasar Sun (ceasar@nchc.org.tw)
+           2002-2012 Jazz Wang (jazz@nchc.org.tw)
+           2002-2012 Thomas Tsai (thomas@nchc.org.tw)
+           2002-2012 NCHC Free Software Labs, Taiwan. (http://free.nchc.org.tw)
 License: GPL-2
  This package is free software; you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by
@@ -33,7 +33,7 @@ License: Unknown
  about this file, and apply eventually a license as for an image. ??
 
 Files: debian/*
-Copyright: 2011 Georges Khaznadar <georgesk@ofset.org>
+Copyright: 2012 Georges Khaznadar <georgesk@ofset.org>
 License: GPL-2+
  This package is free software; you can redistribute it and/or modify
  it under the terms of the GNU General Public License as published by

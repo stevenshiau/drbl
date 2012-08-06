@@ -28,7 +28,7 @@ License: Unknown
  We should contact the author, ask for a source eventually or comments
  about this file, and apply eventually a license as for an image. ??
 
-Files: README.Packages/debian/*
+Files: debian/*
 Copyright: 2011-2012 Georges Khaznadar <georgesk@ofset.org>
 License: GPL-2+
  This package is free software; you can redistribute it and/or modify
