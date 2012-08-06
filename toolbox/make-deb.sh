@@ -14,14 +14,17 @@ echo "VER: $VER"
 
 #
 TARBALL=drbl-$VER.tar.bz2
+TARBALL_ORIG=drbl_$VER.orig.tar.bz2
 
 # check
 [ ! -f "$TARBALL" ] && echo "Can NOT find file $TARBALL! Did you forget to update the rdate in file drbl.spec ? Program Stop!!!" && exit 1
 
 # mkdir for build
-rm -rf debforge
+rm -rf debforge 
 mkdir debforge
+(cd debforge; ln -fs ../$TARBALL $TARBALL_ORIG)
 tar -xvjf $TARBALL -C debforge/
 cp -a debian debforge/drbl-$VER/
 cd debforge/drbl-$VER
 debuild --no-tgz-check --no-lintian
+rm -f $TARBALL_ORIG
