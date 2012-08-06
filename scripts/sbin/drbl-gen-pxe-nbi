@@ -6,12 +6,11 @@
 # If you already finished drblush, it's better to run "mknic-nbi" directly.
 
 # Load DRBL setting and functions
-if [ ! -f "/opt/drbl/sbin/drbl-conf-functions" ]; then
-  echo "Unable to find /opt/drbl/sbin/drbl-conf-functions! Program terminated!" 
-  exit 1
-fi
-. /opt/drbl/sbin/drbl-conf-functions
+DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/opt/drbl/}"
 
+. $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
+
+#
 USAGE() {
    echo "Usage: $0 [OPTION]"
    echo "OPTION"
