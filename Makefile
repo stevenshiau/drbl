@@ -10,30 +10,9 @@ SHELL := sh -e
 DESTDIR =
 SHAREDIR = /usr/share/drbl/
 
-VISIBLE_COMMANDS = sbin/drblsrv
-
-SCRIPTS = bin/* sbin/* share/bin/* $(SHAREDIR)/sbin/* $(SHAREDIR)/bin/*
+SCRIPTS = bin/* sbin/* $(SHAREDIR)/sbin/* $(SHAREDIR)/bin/*
 
 all: drbl-sbin-link languages
-
-test:
-	@echo -n "Checking for syntax errors"
-
-	@if [ -x /usr/bin/checkbashisms ]; \
-	then \
-		@echo -n "Checking for bashisms"
-		for SCRIPT in $(SCRIPTS); \
-		do \
-			if [ -n "$(LC_ALL=C /usr/bin/file -L $${SCRIPT} | grep -i "Bourne-Again shell script text executable")" ]; then
-				checkbashisms -f -x $${SCRIPT}; \
-				echo -n "."; \
-			fi
-		done; \
-	else \
-		echo "WARNING: skipping bashism test - you need to install devscripts."; \
-	fi
-
-	@echo " done."
 
 build:
 	@echo "Nothing to build."
