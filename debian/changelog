@@ -1,0 +1,1923 @@
+drbl (2.0.0-drbl1) unstable; urgency=low
+
+  * DRBL Version 2. New files arch so it's easier to be packaged in Debian.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 06 Aug 2012 15:04:53 +0800
+
+drbl (1.12.19-1drbl) unstable; urgency=low
+
+  * Minor improving in set-default-pxe-img.
+  * The function get_pxecfg_image_block in drbl-functions should not be case sensitive for label name.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 25 Jul 2012 17:25:35 +0800
+
+drbl (1.12.18-1drbl) unstable; urgency=low
+
+  * Language file de_DE was updated. Thanks to Michael Vinzenz.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 12 Jul 2012 19:25:33 +0800
+
+drbl (1.12.17-1drbl) unstable; urgency=low
+
+  * Forcing to run "make -C /var/yp all", i.e. not only "make -C /var/yp", when updating YP in drblpush.
+  * Language files were updated. The warning about -z3 was removed. Thanks to mmx.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 05 Jul 2012 21:57:44 +0800
+
+drbl (1.12.16-1drbl) unstable; urgency=low
+
+  * Some notes were added in drbl-sha1pass.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 29 Jun 2012 11:37:20 +0800
+
+drbl (1.12.15-1drbl) unstable; urgency=low
+
+  * Improve drbl-sha1pass so that it will work for perl <=5.9.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 25 Jun 2012 13:02:51 +0800
+
+drbl (1.12.14-1drbl) unstable; urgency=low
+
+  * Program mkswapfile was updated to skip mounting extended partition. Othewise it might be hang due to a mount bug.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 19 Jun 2012 20:31:27 +0800
+
+drbl (1.12.13-1drbl) unstable; urgency=low
+
+  * Services ethtool, openssh-server and postfix were added to the checklists in start-srv-after-ifup.
+  * Skip removing /lib/init/rw in Debian clients during bootinig.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 18 Jun 2012 21:49:10 +0800
+
+drbl (1.12.12-1drbl) unstable; urgency=low
+
+  * Environmental ADDRFAM=inet was added in start-srv-after-ifup so that mountnfs in if-up.d/ will be run.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sun, 17 Jun 2012 14:16:38 +0800
+
+drbl (1.12.11-1drbl) unstable; urgency=low
+
+  * Package ddrescue was removed from the packages list of Clonezilla live because it's no more in Debian Sid, and we already have gddrescue. Ref: http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=677101
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 12 Jun 2012 22:24:41 +0800
+
+drbl (1.12.10-1drbl) unstable; urgency=low
+
+  * Updating Fedora netinstall as 17 in drbl.conf.
+  * Updating function output_netinstall_syslinux_pxelinux_menu in drbl-functions so that Fedora 17 netinstall boot parameter inst.repo could be generated.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 12 Jun 2012 22:06:08 +0800
+
+drbl (1.12.9-1drbl) unstable; urgency=low
+
+  * Language file zh_CN was updated. Thanks to Zhiqiang Zhang.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 24 May 2012 23:56:02 +0800
+
+drbl (1.12.8-1drbl) unstable; urgency=low
+
+  * Language file fr_FR was updated. Thanks to Jean-Francois Nifenecker.
+  * Language file de_DE was updated. Thanks to Michael Vinzenz.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 22 May 2012 15:13:26 +0800
+
+drbl (1.12.7-1drbl) unstable; urgency=low
+
+  * Language file ja_JP.UTF-8 was updated. Thanks to Akira YOSHIYAMA.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 18 May 2012 23:33:16 +0800
+
+drbl (1.12.6-1drbl) unstable; urgency=low
+
+  * Bug fixed: drbl-SL.sh failed to find vmlinuz for Clonezilla live iso in OpenSuSE 11.3. Thanks to melnikok for this bug report.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 18 May 2012 22:30:32 +0800
+
+drbl (1.12.5-1drbl) unstable; urgency=low
+
+  * Language file ja_JP.UTF-8 was updated. Thanks to Akira YOSHIYAMA.
+  * Language file it_IT was updated. Thanks to Gianfranco Gentili.
+  * Language file es_ES was updated. Thanks to Alex Ibáñez López.
+  * Package cifs-utils instead of smbfs is listed as Clonezilla live package
+    in drbl.conf. Ref: http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=620847
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 18 May 2012 20:06:31 +0800
+
+drbl (1.12.4-1drbl) unstable; urgency=low
+
+  * Netinstall for Ubuntu has changed to "lucid oneiric precise" in drbl.conf.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 04 May 2012 11:37:22 +0800
+
+drbl (1.12.3-1drbl) unstable; urgency=low
+
+  * Using Digest::SHA instead of Digest::SHA1 in drbl-sha1pass.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 03 May 2012 09:11:33 +0800
+
+drbl (1.12.2-1drbl) unstable; urgency=low
+
+  * TIMED_LIGHTDM_TIME_DEFAULT="30" was added in drbl.conf.
+  * Autologin/Normallogin/Timelogin was added for lightdm in drbl-login-switch.
+  * Program drbl-client-root-passwd now supports Ubuntu 12.04.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 02 May 2012 13:57:11 +0800
+
+drbl (1.12.1-1drbl) unstable; urgency=low
+
+  * Removing libdigest-sha1-perl from drbl.conf. It's no more in new GNU/Linux.
+  * Using "udev" instead of "none" for mounting /dev in DRBL clients.
+  * File drbl-client-boot.conf for Ubuntu 12.04 was added.
+  * File drblpush was modified to make drbl work on Ubuntu 12.04.
+  * A better file drbl-client-boot.conf for Ubuntu 11.10 was added. This should fix the issue that keyboard and mount not working on DRBL clients. Thanks to timothyshelley for reporting this issue.  Ref: https://sourceforge.net/projects/drbl/forums/forum/394008/topic/5189191
+  * This release should support Ubuntu 12.04, but still not well tested.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 01 May 2012 13:47:42 +0800
+
+drbl (1.11.15-1drbl) unstable; urgency=low
+
+  * Language files were updated.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 17 Apr 2012 09:56:42 +0800
+
+drbl (1.11.14-1drbl) unstable; urgency=low
+
+  * Language files were updated.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 09 Apr 2012 07:30:58 +0800
+
+drbl (1.11.13-1drbl) unstable; urgency=low
+
+  * Package vlan was added in Clonezilla live packages list in drbl.conf. Thanks to ggarland <ggarland_99 _at_ yahoo com> for this suggestion.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sun, 08 Apr 2012 20:06:03 +0800
+
+drbl (1.11.12-1drbl) unstable; urgency=low
+
+  * Wicd autostart in DRBL clients is disabled in DRBL live.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sat, 07 Apr 2012 21:30:21 +0800
+
+drbl (1.11.1l-1drbl) unstable; urgency=low
+
+  * Language file ja_JP.UTF-8 was updated. Thanks to Akira YOSHIYAMA.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 03 Apr 2012 08:49:00 +0800
+
+drbl (1.11.10-1drbl) unstable; urgency=low
+
+  * Language file zh_CN was updated. Thanks to Zhiqiang Zhang.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 27 Mar 2012 07:43:52 +0800
+
+drbl (1.11.9-1drbl) unstable; urgency=low
+
+  * Language file fr_FR was updated. Thanks to Jean-Francois Nifenecker.
+  * Language file de_DE was updated. Thanks to Michael Vinzenz.
+  * Language file it_IT was updated. Thanks to Gianfranco Gentili.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sun, 25 Mar 2012 15:45:28 +0800
+
+drbl (1.11.8-1drbl) unstable; urgency=low
+
+  * Adding packages dnsutils for Clonezilla live.
+  * Adding package syslinux in drbl-bug-report.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sun, 18 Mar 2012 22:01:38 +0800
+
+drbl (1.11.7-1drbl) unstable; urgency=low
+
+  * Bug fixed: regular expression in  list_available_rpm was fixed.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sun, 11 Mar 2012 19:52:23 +0800
+
+drbl (1.11.6-1drbl) unstable; urgency=low
+
+  * Forcing drbl-prepare-pxelinux to be run in drblsrv-offline if gpxelinux.0 is not found. Thanks to Tomas Moler for reporting this issue.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 09 Mar 2012 11:52:06 +0800
+
+drbl (1.11.5-1drbl) unstable; urgency=low
+
+  * Updating opensuse netinstall as 12.1 in drbl.conf.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 01 Mar 2012 22:19:08 +0800
+
+drbl (1.11.4-1drbl) unstable; urgency=low
+
+  * Language file es_ES of bash was updated. Thanks to Juan Ramón Martínez (JRMC77 _at_ terra es).
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 23 Feb 2012 10:19:38 +0800
+
+drbl (1.11.3-1drbl) unstable; urgency=low
+
+  * Bug fixed: function get_syslinux_binary_for_dos_linux in drbl-functions failed to get the latest version.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 14 Feb 2012 22:32:15 +0800
+
+drbl (1.11.2-1drbl) unstable; urgency=low
+
+  * Language files were updated.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sat, 11 Feb 2012 09:11:26 +0800
+
+drbl (1.11.1-1drbl) unstable; urgency=low
+
+  * Language files were updated.
+  * Option -fsck-src-part-y was added for dialog menus about running fsck with option -y in drbl-functions.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 02 Feb 2012 20:34:16 +0800
+
+drbl (1.10.90-1drbl) unstable; urgency=low
+
+  * Network installation for Fedora has been updated to 16 in drbl.conf.
+  * The mode of Language file zh_CN.UTF-8 is changed to 644.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 31 Jan 2012 14:09:35 +0800
+
+drbl (1.10.89-1drbl) unstable; urgency=low
+
+  * Language file zh_CN was updated. Thanks to Zhiqiang Zhang.
+  * Files firstboot.DBN6.0.4.drbl and firstboot.DBN6.0.3.drbl were added.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 31 Jan 2012 11:33:26 +0800
+
+drbl (1.10.88-1drbl) unstable; urgency=low
+
+  * The updates repository path of Centos 6 was added in drblsrv.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 30 Jan 2012 16:29:08 +0800
+
+drbl (1.10.87-1drbl) unstable; urgency=low
+
+  * Put grub-pc instead of dummy package grub in the packages list of Clonezilla live.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 25 Jan 2012 13:11:10 +0800
+
+drbl (1.10.86-1drbl) unstable; urgency=low
+
+  * Package sysklogd was added back in the packages list of Clonezilla live, which was due to the new initscripts (2.88dsf-16) breaking it.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 23 Jan 2012 21:54:51 +0800
+
+drbl (1.10.85-1drbl) unstable; urgency=low
+
+  * Function disable_apt_lang_translation was added in drbl-functions.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 23 Jan 2012 20:15:41 +0800
+
+drbl (1.10.84-1drbl) unstable; urgency=low
+
+  * Language file es_ES was updated. Thanks to Alex Ibáñez López.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 23 Jan 2012 10:43:54 +0800
+
+drbl (1.10.83-1drbl) unstable; urgency=low
+
+  *- Language file fr_FR was updated. Thanks to Jean-Francois Nifenecker.
+  *- Language file ja_JP.UTF-8 was updated. Thanks to Akira YOSHIYAMA.
+  *- Language file it_IT was updated. Thanks to Gianfranco Gentili.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sat, 21 Jan 2012 21:41:37 +0800
+
+drbl (1.10.82-1drbl) unstable; urgency=low
+
+  * Language file de_DE was updated. Thanks to Michael Vinzenz.
+  * Language file es_ES was updated. Thanks to Alex Ibáñez López.
+  * Language file zh_CN was updated. Thanks to Zhiqiang Zhang.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 20 Jan 2012 19:27:41 +0800
+
+drbl (1.10.81-1drbl) unstable; urgency=low
+
+  * Language files were updated.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 20 Jan 2012 14:39:56 +0800
+
+drbl (1.10.80-1drbl) unstable; urgency=low
+
+  * Language file fr_FR was updated. Thanks to Jean-Francois Nifenecker.
+  * Language file de_DE was updated. Thanks to Michael Vinzenz.
+  * File drbl-functions was updated for the option -icds of drbl-ocs and ocs-sr.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 20 Jan 2012 14:15:42 +0800
+
+drbl (1.10.79-1drbl) unstable; urgency=low
+
+  * Language files were updated.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 10 Jan 2012 22:04:37 +0800
+
+drbl (1.10.78-1drbl) unstable; urgency=low
+
+  * Language files were updated.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 10 Jan 2012 21:35:51 +0800
+
+drbl (1.10.77-1drbl) unstable; urgency=low
+
+  * Use syslinux/pxelinux 4.05 in drbl/clonezilla.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 28 Dec 2011 16:58:58 +0800
+
+drbl (1.10.76-1drbl) unstable; urgency=low
+
+  * Package pv (pipe viewer) was added in the packages list of Clonezilla live. (https://sourceforge.net/tracker/?func=detail&atid=671653&aid=3463112&group_id=115473).
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 22 Dec 2011 16:53:52 +0800
+
+drbl (1.10.75-2drbl) unstable; urgency=low
+
+  * Typo in changelog fixed. It should be CentOS 6.2 support was added.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 21 Dec 2011 22:07:14 +0800
+
+drbl (1.10.75-1drbl) unstable; urgency=low
+
+  * CentOS 6.1 support was added.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 21 Dec 2011 21:49:39 +0800
+
+drbl (1.10.74-1drbl) unstable; urgency=low
+
+  * Package sysklogd was removed temporarily in the packages list of Clonezilla live due to the new initscripts (2.88dsf-16) breaks it.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 21 Dec 2011 12:01:43 +0800
+
+drbl (1.10.73-1drbl) unstable; urgency=low
+
+  * Desktop icon file Grandr.desktop was replaced by Display.desktop.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 20 Dec 2011 15:50:04 +0800
+
+drbl (1.10.72-1drbl) unstable; urgency=low
+
+  * More improvements to make Fedora 14 and CentOS 5/6 DRBL clients reboot faster. Remove those unnecessary file systems mounting and unmounting. Thanks to Robert Arkiletian for helping this issue.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 14 Dec 2011 16:47:57 +0800
+
+drbl (1.10.71-1drbl) unstable; urgency=low
+
+  * CentOS 6.1 support was added.
+  * Bug fixed: /dev/shm and tmpfs won't be umounted or remounted when halting or reboot in Fedora 14 and CentOS 5/6. This will make Fedora 14/CentOS 6 DRBL clients halt and reboot faster. Thanks to Robert Arkiletian for this bug report.
+
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 14 Dec 2011 10:02:03 +0800
+
+drbl (1.10.70-1drbl) unstable; urgency=low
+
+  * Language file es_ES of bash was updated. Thanks to Juan Ramón Martínez (JRMC77 _at_ terra es).
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 12 Dec 2011 21:51:43 +0800
+
+drbl (1.10.69-1drbl) unstable; urgency=low
+
+  * Bug fixed: Failed to create SSI template tarball if only Clonezilla box mode or SSI mode is enabled, while the rest if full mode. Thanks to hsueh.chih.sun for reporting this issue.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 05 Dec 2011 21:40:26 +0800
+
+drbl (1.10.68-1drbl) unstable; urgency=low
+
+  * The option "-z7" was added in the Clonezilla-related TUI menus.
+  * Language files were updated.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 30 Nov 2011 14:56:37 +0800
+
+drbl (1.10.67-1drbl) unstable; urgency=low
+
+  * Package libdigest-sha1-perl was removed from the list of Clonezilla live. Since for Sid the perl has built-in function. (Ref: http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=591091).
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 25 Nov 2011 08:51:11 +0800
+
+drbl (1.10.66-1drbl) unstable; urgency=low
+
+  * Language file ja_JP.UTF-8 was updated. Thanks to Akira YOSHIYAMA.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 21 Nov 2011 09:14:54 +0800
+
+drbl (1.10.65-1drbl) unstable; urgency=low
+
+  *Language file pt_BR was updated. Thanks to Marcos Pereira da Silva Cruz. 
+  *Language file fr_FR was updated. Thanks to Jean-Francois Nifenecker.
+  *Language file it_IT was updated. Thanks to Gianfranco Gentili.
+  *Language file de_DE was updated. Thanks to Michael Vinzenz.
+  *Language file zh_CN was updated. Thanks to Zhiqiang Zhang.
+  *Language file es_ES was updated. Thanks to Alex Ibáñez López.
+  *Packages dirvish, rsnapshot, and lrzip were added in the Clonezilla live packages list in drbl.conf. Package crontabs, which provides run-parts, was added in PKG_FROM_RH in drbl.conf.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sun, 13 Nov 2011 00:59:48 +0800
+
+drbl (1.10.64-1drbl) unstable; urgency=low
+
+  * Language files es_ES was updated. Thanks to Alex Ibáñez López.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 10 Nov 2011 10:34:18 +0800
+
+drbl (1.10.63-1drbl) unstable; urgency=low
+
+  * Language files were updated.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 07 Nov 2011 23:09:52 +0800
+
+drbl (1.10.62-1drbl) unstable; urgency=low
+
+  * Language files were updated.
+  * Function get_sort_V_opt was added in drbl-functions.
+  * Program get-client-ip-list was improved with better sorting.
+  * Bug fixed: get-client-ip-list failed to give correct clients' IP addresses if server's IP address is in the range in dhcpd.conf.
+  * Use function get_sort_V_opt in drblsrv.
+  * The missing icons of Grandr.desktop and GParted.desktop on DRBL live have been fixed.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sun, 06 Nov 2011 10:52:18 +0800
+
+drbl (1.10.61-1drbl) unstable; urgency=low
+
+  * Language file zh_CN was updated. Thanks to Zhiqiang Zhang.
+  * Package acpi was added in Clonezilla live.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 03 Nov 2011 22:52:19 +0800
+
+drbl (1.10.60-1drbl) unstable; urgency=low
+
+  * Language file de_DE was updated. Thanks to Michael Vinzenz.
+  * Default not to turn on "-fsck-src-part".
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 02 Nov 2011 18:34:05 +0800
+
+drbl (1.10.59-1drbl) unstable; urgency=low
+
+  * Language files were updated.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 31 Oct 2011 22:33:19 +0800
+
+drbl (1.10.58-1drbl) unstable; urgency=low
+
+  * Language files were updated.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 28 Oct 2011 08:57:11 +0800
+
+drbl (1.10.57-1drbl) unstable; urgency=low
+
+  * Ubuntu 11.10 support was added. //NOTE// This is not finished yet.
+  * S00wait-drbl was added in /etc/rcS.d so rcS won't start too fast in Ubuntu's upstart.
+  * YP is configured not to show hashed password. Thanks to Robert Arkiletian <robark _at_ gmail com>.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 25 Oct 2011 15:10:27 +0800
+
+drbl (1.10.56-1drbl) unstable; urgency=low
+
+  * Language files were updated.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 21 Oct 2011 13:37:08 +0800
+
+drbl (1.10.55-1drbl) unstable; urgency=low
+
+  * Language files were updated.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 20 Oct 2011 22:32:34 +0800
+
+drbl (1.10.54-1drbl) unstable; urgency=low
+
+  * Put "wait" command in the end of drbl-doit so it won't enter shell before the jobs are done.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 20 Oct 2011 20:49:12 +0800
+
+drbl (1.10.53-1drbl) unstable; urgency=low
+
+  * Language files were updated.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 20 Oct 2011 18:34:54 +0800
+
+drbl (1.10.52-1drbl) unstable; urgency=low
+
+  * Language files were updated.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 20 Oct 2011 14:33:41 +0800
+
+drbl (1.10.51-1drbl) unstable; urgency=low
+
+  * Language files were updated.
+  * Function get_existing_language in drbl-functions was updated to show locales in natual language, not locales.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 17 Oct 2011 22:14:47 +0800
+
+drbl (1.10.50-1drbl) unstable; urgency=low
+
+  * Program cpufrequtils was added in Clonezilla live packages list.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 17 Oct 2011 11:16:17 +0800
+
+drbl (1.10.49-1drbl) unstable; urgency=low
+
+  * Wallpaper image files for Clonezilla live grub2 boot menu were added.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sat, 15 Oct 2011 13:23:52 +0800
+
+drbl (1.10.48-1drbl) unstable; urgency=low
+
+  * The year of copyright in the boot menu was updated.
+  * The dir /dev/shm of the DRBL client is created with mode 1777. The makes Google Chrome can run.
+  * The tmpfs dirs (/dev/pts, /dev/shm, /sys, /proc) are shown in DRBL client's /etc/fstab.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sun, 02 Oct 2011 14:56:29 +0800
+
+drbl (1.10.47-1drbl) unstable; urgency=low
+
+  * Bug fixed: tmpfs file systems should not be umounted in boot.localfs of OpenSuSE 11.3.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 29 Sep 2011 15:02:33 +0800
+
+drbl (1.10.46-1drbl) unstable; urgency=low
+
+  * The usage of drbl-syslinux-netinstall was updated.
+  * Bug fixed: Wrong function name USAGE in mknic-nbi.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 26 Sep 2011 22:55:01 +0800
+
+drbl (1.10.45-1drbl) unstable; urgency=low
+
+  * Language files updated.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 20 Sep 2011 11:34:05 +0800
+
+drbl (1.10.44-1drbl) unstable; urgency=low
+
+  * Files rc.sysinit.CO5.7.drbl and halt.CO5.7.drbl were added.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 20 Sep 2011 10:54:18 +0800
+
+drbl (1.10.43-1drbl) unstable; urgency=low
+
+  * Improvement: Now the RPM repositories of drbl stable/testing/unstable won't be mixed. They will be separate.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sun, 18 Sep 2011 12:08:32 +0800
+
+drbl (1.10.42-1drbl) unstable; urgency=low
+
+  * Bug fixed: Function make_random_password in drbl-functions failed to separate "[", "]", and $ is not escaped. Thanks to Robert Arkiletian for this bug report.
+  * Bug fixed: drbl-prepare-pxelinux might fail due to a file belongs to 2 RPM packages.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sat, 17 Sep 2011 15:00:18 +0800
+
+drbl (1.10.41-1drbl) unstable; urgency=low
+
+  * Bug fixed: Function parse_cmdline_option in drbl-functions was improved. Make the parsing for ocs_lang="" correct.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 12 Sep 2011 11:36:08 +0800
+
+drbl (1.10.40-1drb1) unstable; urgency=low
+
+  * Function parse_cmdline_option in drbl-functions was improved to accept the /proc/cmdline parsed by grub2 1.99. Now it works for 3 cases in /proc/cmdline: E.g. (1) ocs_prerun="sleep 5" (2) ocs_prerun=\"sleep 5\" and (3) "ocs_prerun=sleep 5".
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 08 Sep 2011 18:12:25 +0800
+
+drbl (1.10.39-1drbl) unstable; urgency=low
+
+  * Language files updated.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 31 Aug 2011 22:26:36 +0800
+
+drbl (1.10.38-1drbl) unstable; urgency=low
+
+  * Option "-irhr" was added in dcs.
+  * Language files updated.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 31 Aug 2011 16:29:23 +0800
+
+drbl (1.10.37-1drbl) unstable; urgency=low
+
+  * To avoid the failure message during RH-like Linux booting, "true" was added in firstboot instead of just commenting the command.
+  * Program arm-wol was improved to exit with correct retval.
+  * This version should be ready for CentOS 6.0.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 24 Aug 2011 16:51:53 +0800
+
+drbl (1.10.36-1drbl) unstable; urgency=low
+
+  * Bug fixed: Wrong path for RH_RPMS_os_update_dir of CentOS 6 in drblsrv.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 23 Aug 2011 14:42:44 +0800
+
+drbl (1.10.35-1drbl) unstable; urgency=low
+
+  * Netinstall for CentOS has been moved to 5 and 6 in drbl.conf.
+  * CentOS 6.0 support was added.
+  * Service nfs and nfslock were not restarted when running "drbl-all-service restart" on CentOS 6.0.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 22 Aug 2011 22:26:14 +0800
+
+drbl (1.10.34-1drbl) unstable; urgency=low
+
+  * Language files updated.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 22 Aug 2011 11:04:40 +0800
+
+drbl (1.10.33-1drbl) unstable; urgency=low
+
+  * Bug fixed: For Ubuntu 10.10 and 11.04, i586 kernel should not be an option.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 22 Aug 2011 10:53:02 +0800
+
+drbl (1.10.32-1drbl) unstable; urgency=low
+
+  * Program list_latest_deb was updated to use "ls -v" methoed.
+  * Program partclone-utils was added in Clonezilla live packages list.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 16 Aug 2011 13:21:00 +0800
+
+drbl (1.10.31-1drbl) unstable; urgency=low
+
+  * Language file en_US was slightly updated.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sun, 14 Aug 2011 09:20:50 +0800
+
+drbl (1.10.30-1drbl) unstable; urgency=low
+
+  * File firstboot.DBN6.0.2.drbl was added.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sat, 13 Aug 2011 23:55:49 +0800
+
+drbl (1.10.29-1drbl) unstable; urgency=low
+
+  * Bug fixed: fail to test if "sort -V" works or not.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sat, 13 Aug 2011 22:38:28 +0800
+
+drbl (1.10.28-1drbl) unstable; urgency=low
+
+  * Version sorting (--version-sort) of sort will be used when sorting the kernels of CentOS if it's found (Not working for CentOS 5.6).
+  * /dev/pts won't be mounted in initrd when /run is not mounted (mknic-nbi).
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 12 Aug 2011 22:12:52 +0800
+
+drbl (1.10.27-1drbl) unstable; urgency=low
+
+  * "devpts" is used for /dev/pts on the client's /etc/fstab.
+  * Two more flags were implemented in mknic-nbi: use_run_in_initrd and use_dev_pts_in_initrd.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 12 Aug 2011 17:11:17 +0800
+
+drbl (1.10.26-1drbl) unstable; urgency=low
+
+  * Files rc.sysinit and halt for CentOS 5.6 client were added.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 12 Aug 2011 16:00:05 +0800
+
+drbl (1.10.25-1drbl) unstable; urgency=low
+
+  * German language file was added. Thanks to Michael Vinzenz <michael.vinzenz _at_ scalaris com>.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 11 Aug 2011 23:08:02 +0800
+
+drbl (1.10.24-1drbl) unstable; urgency=low
+
+  * The execution of drbl-prepare-memtest and drbl-prepare-pxelinux were moved to drblsrv-offline from drblsrv.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sat, 06 Aug 2011 23:34:06 +0800
+
+drbl (1.10.23-1drbl) unstable; urgency=low
+
+  * Program drblsrv-offline supports linux kernel 3. 
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sat, 06 Aug 2011 22:03:30 +0800
+
+drbl (1.10.22-1drbl) unstable; urgency=low
+
+  * A prompt was added if ntfsprogs will be installed in Debian Linux.
+  * The Makefile in lang dir was not updated for de_DE.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 05 Aug 2011 23:27:02 +0800
+
+drbl (1.10.21-1drbl) unstable; urgency=low
+
+  * German language files were added. Thanks to Michael Vinzenz <michael.vinzenz _at_ scalaris com>.
+  * Since ntfs-3g in Debian Sid provides ntfsprogs, we should not include that in PKG_FROM_DBN of drbl.conf. A dynamic detection was added in drblsrv.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 05 Aug 2011 21:25:45 +0800
+
+drbl (1.10.20-1drbl) unstable; urgency=low
+
+  * Program mknic-nbi supports linux kernel 3.
+  * Language file es_ES of bash was updated. Thanks to Juan Ramón Martínez (JRMC77 _at_ terra es).
+  * If dir /run is found on server, add that in /tftpboot/node_root/.
+  * Program gawk has some dynamic libs in /usr/lib, so drblpush must prepare that, too.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 04 Aug 2011 22:30:08 +0800
+
+drbl (1.10.19-1drbl) unstable; urgency=low
+
+  * "oneiric" was added in the netinstall of drbl.conf, while maverick was removed.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 27 Jul 2011 22:06:31 +0800
+
+drbl (1.10.18-1drbl) unstable; urgency=low
+
+  * Restored "ntfs-3g" in PKG_FROM_DBN_WHICH_OCS_LIVE_NEED of drbl.conf. It's not duplicated.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 26 Jul 2011 14:57:04 +0800
+
+drbl (1.10.17-1drbl) unstable; urgency=low
+
+  * Duplicated "ntfs-3g" was removed from PKG_FROM_DBN_WHICH_OCS_LIVE_NEED of drbl.conf.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 26 Jul 2011 13:33:16 +0800
+
+drbl (1.10.16-1drbl) unstable; urgency=low
+
+  * Package fbcat was listed for Clonezilla live instead of fbgrab in drbl.conf.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 22 Jul 2011 22:51:12 +0800
+
+drbl (1.10.15-1drbl) unstable; urgency=low
+
+  * Function parse_cmdline_option of drbl-functions was updated to allow ">,^, or *".
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 18 Jul 2011 04:22:15 +0800
+
+drbl (1.10.14-1drbl) unstable; urgency=low
+
+  * Function parse_cmdline_option of drbl-functions was updated to allow "$" because it is required by samba share with hidden share. Thanks to nottaken37. (Ref: https://sourceforge.net/projects/clonezilla/forums/forum/663168/topic/4589215)
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 06 Jul 2011 09:50:17 +0800
+
+drbl (1.10.13-1drbl) unstable; urgency=low
+
+  * Language files were updated.
+  * Big5 language files for traditional Chinese were removed. Now only UTF-8 is supported.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 24 Jun 2011 00:08:21 +0800
+
+drbl (1.10.12-1drbl) unstable; urgency=low
+
+  * Language file pt_BR was added, so the corresponding parts were updated. Thanks to Marcos Pereira da Silva Cruz <marcospcruz _at_ gmail com>.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sun, 19 Jun 2011 09:47:08 +0800
+
+drbl (1.10.11-1drbl) unstable; urgency=low
+
+  * A workaround was added to solve ntfs-3g and ntfsprogs conflict in Debian Sid. However, a better method should be implemented in the future.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 30 May 2011 14:03:41 +0800
+
+drbl (1.10.10-1drbl) unstable; urgency=low
+
+  * Netinstall version for fedora was updated to 15 in drbl.conf.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 26 May 2011 07:33:49 +0800
+
+drbl (1.10.9-1drbl) unstable; urgency=low
+
+  * Patch from Ceasar Sun was applied so that drbl-netinstall could support Mageia. 
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 19 May 2011 11:51:36 +0800
+
+drbl (1.10.8-1drbl) unstable; urgency=low
+
+  * Program drbl-netinstall was updated to work with Scientific Linux 6.
+  * Switch to use 6x as the default netinstall version for Scientific Linux in drbl.conf.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 19 May 2011 10:18:35 +0800
+
+drbl (1.10.7-1drbl) unstable; urgency=low
+
+  * Program drbl-SL.sh was improved to work with XZ compression initrd.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 13 May 2011 10:00:36 +0800
+
+drbl (1.10.6-1drbl) unstable; urgency=low
+
+  * Version number of syslinux can be assigned in get_syslinux_binary_for_dos_linux & put_syslinux_makeboot_for_usb_flash of drbl-functions.
+  * By default the syslinux_binsrc_url in drbl.conf is set as "http://free.nchc.org.tw/syslinux".
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 06 May 2011 14:35:41 +0800
+
+drbl (1.10.5-1drbl) unstable; urgency=low
+
+  * Bug fixed: test before reading /etc/lsb-release in drbl-functions.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 03 May 2011 21:08:33 +0800
+
+drbl (1.10.4-1drbl) unstable; urgency=low
+
+  * Bug fixed: The method to decide using insserv or update-rc.d failed.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 03 May 2011 18:30:23 +0800
+
+drbl (1.10.3-1drbl) unstable; urgency=low
+
+  * A better method to decide using insserv or update-rc.d for Debian and Ubuntu was implemented in drbl-client-switch and drblsrv.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 03 May 2011 15:45:55 +0800
+
+drbl (1.10.2-1drbl) unstable; urgency=low
+
+  * An option "-d|--deploy-to-system-too" was added to drbl-prepare-memtest and drbl-prepare-pxelinux.
+  * A better method to decide using insserv or update-rc.d for Debian and Ubuntu was implemented in drbl-all-service and drbl-client-service.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 03 May 2011 10:28:01 +0800
+
+drbl (1.10.1-1drbl) unstable; urgency=low
+
+  * A betterm method to decide using insserv or update-rc.d for Debian and Ubuntu was implemented in drblpush.
+  * Ubuntu 11.04 was supported in this release.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 02 May 2011 16:31:25 +0800
+
+drbl (1.9.23-1drbl) unstable; urgency=low
+
+  * By default in mknic-nbi we switch to not including all firmwares in initrd, because what "modinfo -F firmwares" should be trusted.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sun, 01 May 2011 15:11:12 +0800
+
+drbl (1.9.22-1drbl) unstable; urgency=low
+
+  * Function parse_cmdline_option of drbl-functions was updated to allow "@" because it is required by sshfs.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 28 Apr 2011 13:28:17 +0800
+
+drbl (1.9.21-1drbl) unstable; urgency=low
+
+  * Minor improvement for drbl-prepare-memtest.
+  * The variable syslinux_binsrc_url in drbl.conf was updated.
+  * Typos "comamnd" were fixed. Thanks to pascaldevuyst for reporting this.
+  * The program drbl-prepare-pxelinux was added, so no more binary pxelinux-related files in drbl package.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 26 Apr 2011 16:07:17 +0800
+
+drbl (1.9.20-1drbl) unstable; urgency=low
+
+  * Program get_memtest86+.sh was removed, since drbl-prepare-memtest has replaced it.
+  * Program list_available_tbz2 was slightly improved.
+  * Function get_syslinux_binary_for_dos_linux was improved to automatically detect the latest version of syslinux.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 19 Apr 2011 15:14:20 +0800
+
+drbl (1.9.19-1drbl) unstable; urgency=low
+
+  * The "gPXE" part is replaced by "iPXE".
+  * "insserv", if found, will be used in drbl-client-service, drbl-all-service, drblsrv, and drblpush for Debian environment.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 19 Apr 2011 09:00:00 +0800
+
+drbl (1.9.18-1drbl) unstable; urgency=low
+
+  * The program drbl-prepare-memtest was added to replace the pre-buildin binary memtest86+ program.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sun, 17 Apr 2011 15:21:18 +0800
+
+drbl (1.9.17-1drbl) unstable; urgency=low
+
+  * Let NFS mount points /usr and /var not to be checked in mountnfs.sh in DRBL clients.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 13 Apr 2011 13:49:35 +0800
+
+drbl (1.9.16-1drbl) unstable; urgency=low
+
+  * Suppress the warning messages when using insserv to add services in drbl-all-service.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 12 Apr 2011 18:11:16 +0800
+
+drbl (1.9.15-1drbl) unstable; urgency=low
+
+  * Suppress the warning messages when using insserv to add services in dcs.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 12 Apr 2011 09:39:27 +0800
+
+drbl (1.9.14-1drbl) unstable; urgency=low
+
+  * To suppress the already mounted message, "checkroot.sh" of a Debian DRBL client won't mount /tftpboot/node_root again.
+  * Bug fixed: the mode remote-linux-txt of dcs was not working.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 12 Apr 2011 08:41:13 +0800
+
+drbl (1.9.13-1drbl) unstable; urgency=low
+
+  * Bug fixed: "nolock" option is still for init.drbl.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 11 Apr 2011 16:59:16 +0800
+
+drbl (1.9.12-1drbl) unstable; urgency=low
+
+  * Bug fixed: "nolock" option is for drbl live only.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 11 Apr 2011 16:37:57 +0800
+
+drbl (1.9.11-1drbl) unstable; urgency=low
+
+  * "rsize=65536,wsize=65536" for NFS clients was removed from init.drbl. Let mount and kernel decide that.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 11 Apr 2011 16:22:13 +0800
+
+drbl (1.9.10-1drbl) unstable; urgency=low
+
+  * "mount.nfs" from distribution system is used.  "/tftpboot/node_root" in /etc/fsta is kept in drbl clients.
+  * "rsize=65536,wsize=65536" for NFS clients was removed. Let mount and kernel decide that.
+  * "insserv" instead of update-rc.d will be used to add or remove service if insserv is found on Debian.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 11 Apr 2011 14:55:01 +0800
+
+drbl (1.9.9-23) unstable; urgency=low
+
+  * "insserv" instead of update-rc.d will be used to add or remove service if insserv is found on Debian.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 11 Apr 2011 13:19:04 +0800
+
+drbl (1.9.9-22) unstable; urgency=low
+
+  * "drbl-all-service" was improved to use insserv and workaround rpcbind service restart too fast error.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 06 Apr 2011 18:31:54 +0800
+
+drbl (1.9.9-21) unstable; urgency=low
+
+  * Bug fixed: udpcast was not listed in PKG_FROM_DBN_MINIMAL_NEED of drbl.conf.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 04 Apr 2011 23:11:53 +0800
+
+drbl (1.9.9-20) unstable; urgency=low
+
+  * syslinux64.exe will be put in function get_syslinux_binary_for_dos_linux of drbl-functions.
+  * Network installation for OpenSuSE was changed to 11.4 in drbl.conf by default.
+  * Let nfs-common deal with the required package (rpcbind or portmap), not to list portmap in PKG_FROM_DBN_WHICH_OCS_LIVE_NEED of drbl.conf, otherwise nfs-common 1.2.3 won't start if portmap is installed.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 04 Apr 2011 14:12:59 +0800
+
+drbl (1.9.9-19) unstable; urgency=low
+
+  * Bug fixed: autologin failed in gdm3. Thanks to TACO <joey741019 _at_ gmail com> for this bug report.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 28 Mar 2011 22:26:23 +0800
+
+drbl (1.9.9-18) unstable; urgency=low
+
+  * Typo fixed: "Mater Boot Record" -> "Master Boot Record". Thanks to rookieace1 for this bug report.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 25 Mar 2011 06:24:35 +0800
+
+drbl (1.9.9-17) unstable; urgency=low
+
+  * File firstboot.DBN6.0.1.drbl was added.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 23 Mar 2011 11:00:14 +0800
+
+drbl (1.9.9-16) unstable; urgency=low
+
+  * Packages hal and pcscd were added in the list of drbl.conf for Clonezilla live.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sun, 13 Mar 2011 15:55:42 +0800
+
+drbl (1.9.9-15) unstable; urgency=low
+
+  * Language file zh_CN was updated. Thanks to Zhiqiang Zhang.
+  * Language file ja_JP.UTF-8 was updated. Thanks to Akira YOSHIYAMA.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sun, 13 Mar 2011 11:29:56 +0800
+
+drbl (1.9.9-14) unstable; urgency=low
+
+  * Program disktype was added in the query packages list drbl.conf.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sat, 12 Mar 2011 09:09:01 +0800
+
+drbl (1.9.9-13) unstable; urgency=low
+
+  * Program ufsutils was added in the packages list of Clonezilla live in drbl.conf.
+  * Language files fr_FR was updated. Thanks to Jean-Francois Nifenecker.
+  * Language file it_IT was updated. Thanks to Gianfranco Gentili.
+  * Language files es_ES was updated. Thanks to Alex Ibáñez López.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 11 Mar 2011 23:44:09 +0800
+
+drbl (1.9.9-12) unstable; urgency=low
+
+  * Language file fr_FR was updated.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 09 Mar 2011 22:44:05 +0800
+
+drbl (1.9.9-11) unstable; urgency=low
+
+  * Use Debian wheezy and Lucid natty in drbl.conf.
+  * Add the missing packages hwinfo and lzop in drbl.conf for Clonezilla live.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 09 Mar 2011 21:07:25 +0800
+
+drbl (1.9.9-10) unstable; urgency=low
+
+  * The packages list for Debian in drbl.conf was sorted.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 09 Mar 2011 15:16:15 +0800
+
+drbl (1.9.9-9) unstable; urgency=low
+
+  * Package lzop, ntfsprogs, and partimage should be in PKG_FROM_DBN_MINIMAL_NEED of drbl.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 09 Mar 2011 14:56:35 +0800
+
+drbl (1.9.9-8) unstable; urgency=low
+
+  * Language files were updated.
+  * Put packages pigz, pbzip2, and udpcast to the packages list for every distribution in drbl.conf. No more listing for DRBL.
+  * Program drbl-bug-report was changed due to the packages list changed in drbl.conf.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 09 Mar 2011 14:11:42 +0800
+
+drbl (1.9.9-7) unstable; urgency=low
+
+  * Config file drbl.conf was improved so when running "drblsrv -u", not too many programs from distribution will be erased.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sun, 06 Mar 2011 14:30:10 +0800
+
+drbl (1.9.9-6) unstable; urgency=low
+
+  * Package drbl-lzop was replaced by lzop. If the GNU/Linux distribution provides ntfsprogs, drblsrv will use it from distribution. If not, the pacakge in DRBL repository is the back up plan.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sun, 06 Mar 2011 00:06:01 +0800
+
+drbl (1.9.9-5) unstable; urgency=low
+
+  * Packages drbl-ntfsprogs and drbl-partimage were replaced by ntfsprogs and partimage. If the GNU/Linux distribution provides ntfsprogs and partimage, drblsrv will use them from distribution. If not, those in DRBL repository are the back up plan.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sat, 05 Mar 2011 16:33:23 +0800
+
+drbl (1.9.9-4) unstable; urgency=low
+
+  * Package gdisk was added in PKG_TO_QUERY of drbl.conf.
+  * Option "-batch" instead of "-b" in ocs-sr and ocs-onthefly is used by default. This will avoid the problem when using in the boot prameters, init will honor it.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 01 Mar 2011 11:39:28 +0800
+
+drbl (1.9.9-3) unstable; urgency=low
+
+  * Language file zh_TW was updated.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sat, 19 Feb 2011 15:50:11 +0800
+
+drbl (1.9.9-2) unstable; urgency=low
+
+  * Language files were updated.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 18 Feb 2011 13:33:12 +0800
+
+drbl (1.9.9-1) unstable; urgency=low
+
+  * An option to check if the image is restorable was added in the wizard.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 18 Feb 2011 12:22:58 +0800
+
+drbl (1.9.8-29) unstable; urgency=low
+
+  * Bug fixed: in dcs, the shutdown command for DRBL clients was reboot.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 16 Feb 2011 13:35:29 +0800
+
+drbl (1.9.8-28) unstable; urgency=low
+
+  * Function get_existing_partitions_from_img changed in ocs-functions, the dcs was modified accordingly.
+  * Language files were updated.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 16 Feb 2011 13:01:07 +0800
+
+drbl (1.9.8-27) unstable; urgency=low
+
+  * Bug fixed: syntax error in drblpush.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sun, 13 Feb 2011 14:27:27 +0800
+
+drbl (1.9.8-26) unstable; urgency=low
+
+  * Service binfmt-support was added in client_services_chklist of drbl.conf.
+  * A workaround to avoid weird nfs locking issue in Ubuntu 10.10 was added in drblpush.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sun, 13 Feb 2011 14:10:04 +0800
+
+drbl (1.9.8-25) unstable; urgency=low
+
+  * Russian language files were updated. Thanks to Anton Pryadko.
+  * Bug fixed: DRBL Squeeze client should not use startpar when booting. Otherwise some drbl/clonezilla services won't work.
+  * An option -b|--drbl-client-ip was added in get-all-nic-ip.
+  * The ocs_server got in DRBL-SL.sh is chosen from those connected to DRBL clients, no uplink one.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 10 Feb 2011 15:56:25 +0800
+
+drbl (1.9.8-24) unstable; urgency=low
+
+  * The virtual block device (/dev/vd[a-z]) support was added. Thanks to Cyril Roos for providing patch.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sun, 06 Feb 2011 20:41:57 +0800
+
+drbl (1.9.8-23) unstable; urgency=low
+
+  * Character in drbl-langchooser was updated.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 31 Jan 2011 21:51:03 +0800
+
+drbl (1.9.8-22) unstable; urgency=low
+
+  * Language file zh_TW.UTF-8 was updated.
+  * Bug fixed: drbl-SL.sh should exclude the boot parameter "ip=frommedia" so that /etc/resolv.conf will be updated.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 31 Jan 2011 18:38:54 +0800
+
+drbl (1.9.8-21) unstable; urgency=low
+
+  * New upstream memtest86+ 4.20.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sat, 29 Jan 2011 13:51:49 +0800
+
+drbl (1.9.8-20) unstable; urgency=low
+
+  * A variable instead of real IP address got from the machine was used in the Clonezilla live and GParted live pxelinux config examples when running generate-pxe-menu.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sun, 16 Jan 2011 09:54:18 +0800
+
+drbl (1.9.8-19) unstable; urgency=low
+
+  * An option -s|--server-ip was added in drbl-SL.sh.
+  * Code rewritten for get-drbl-conf-param.
+  * An option --drbl-ocs-live-server was added for drblpush.
+  * Bug fixed: --skip-drbl-ocs-live-prep wrongly parsed in drblpush.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 12 Jan 2011 14:18:22 +0800
+
+drbl (1.9.8-18) unstable; urgency=low
+
+  * File firstboot.DBN6.0.drbl was added.
+  * Usage message of drblpush was updated. 
+  * The option --skip-drbl-ocs-live-prep was added drblpush. This is specially used for DRBL live.
+  * Program drbl-live.sh uses --skip-drbl-ocs-live-prep to use existing files.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sun, 09 Jan 2011 14:59:22 +0800
+
+drbl (1.9.8-17) unstable; urgency=low
+
+  * Language files fr_FR was updated. Thanks to Jean-Francois Nifenecker.
+  * Language file ja_JP.UTF-8 was updated. Thanks to Akira YOSHIYAMA.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 07 Jan 2011 10:37:56 +0800
+
+drbl (1.9.8-16) unstable; urgency=low
+
+  * Language file it_IT was updated. Thanks to Gianfranco Gentili.
+  * Language file zh_CN was updated. Thanks to Zhiqiang Zhang.
+  * Language files es_ES was updated. Thanks to Alex Ibáñez López.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 06 Jan 2011 08:13:28 +0800
+
+drbl (1.9.8-15) unstable; urgency=low
+
+  * A better method was implemented to query if a package is available in Debian package repository. Thanks to max2107 for this bug report.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 28 Dec 2010 22:48:16 +0800
+
+drbl (1.9.8-14) unstable; urgency=low
+
+  * File timesync on DRBL client was removed. We should let user to that by themselves.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 23 Dec 2010 16:37:08 +0800
+
+drbl (1.9.8-13) unstable; urgency=low
+
+  * Bug fixed: drbl-client-root-passwd was not working on OpenSuSE 11.1.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 22 Dec 2010 22:48:33 +0800
+
+drbl (1.9.8-12) unstable; urgency=low
+
+  * Language files were updated.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sat, 18 Dec 2010 17:04:43 +0800
+
+drbl (1.9.8-11) unstable; urgency=low
+
+  * Language files were updated.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 17 Dec 2010 22:30:14 +0800
+
+drbl (1.9.8-10) unstable; urgency=low
+
+  * Bug fixed: dcs failed to use account "user" to send reboot command to Clonezilla live client of Clonezilla SE.
+  * Bug fixed: The *-info.txt created by drbl-SL.sh should not be appended. It should be overwritten every time drbl-SL.sh is run.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 16 Dec 2010 22:16:23 +0800
+
+drbl (1.9.8-9) unstable; urgency=low
+
+  * Program expect was added in the required list for DRBL server. We need that for ssh login the Clonezilla live clients of Clonezilla SE.
+  * Program drbl-doit was improved to send command to Clonezilla live clients of Clonezilla SE.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 15 Dec 2010 22:47:57 +0800
+
+drbl (1.9.8-8) unstable; urgency=low
+
+  * An option to choose alternative Clonezilla live as client's running OS was added.
+  * Language files were updated.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 13 Dec 2010 14:27:49 +0800
+
+drbl (1.9.8-7) unstable; urgency=low
+
+  * A program drbl-kbdchooser was added to replace the deprecated command "dpkg-reconfigure console-data".
+  * Language files were updated.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 09 Dec 2010 22:12:36 +0800
+
+drbl (1.9.8-6) unstable; urgency=low
+
+  * Package gdisk was added in the Clonezilla live packages list in drbl.conf.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 07 Dec 2010 14:11:16 +0800
+
+drbl (1.9.8-5) unstable; urgency=low
+
+  * The dir /dev/shm should be mounted as mode 777 in Fedora, otherwise google-chrom won't start. Thanks to Bryan Buchanan <bryanb _at_ webbtide com> for the bug report.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 29 Nov 2010 10:28:10 +0800
+
+drbl (1.9.8-4) unstable; urgency=low
+
+  * Bug fixed: /dev/stderr not found before entering rc in Fedora 14.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 24 Nov 2010 21:36:01 +0800
+
+drbl (1.9.8-3) unstable; urgency=low
+
+  * A better way to deal with package name dhcp-client in PKG_FROM_DBN_WHICH_OCS_LIVE_NEED of drbl.conf for Debian and Ubuntu.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 24 Nov 2010 13:24:41 +0800
+
+drbl (1.9.8-2) unstable; urgency=low
+
+  * The bug, /usr is busy when rebooting Fedora 14 client, was fixed.
+  * The package name isc-dhcp-client is used instead of isc-dhcp-client in PKG_FROM_DBN_WHICH_OCS_LIVE_NEED of drbl.conf.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 24 Nov 2010 09:05:26 +0800
+
+drbl (1.9.8-1) unstable; urgency=low
+
+  * Fedora 14 support was added (Not well tested).
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 22 Nov 2010 16:45:04 +0800
+
+drbl (1.9.7-28) unstable; urgency=low
+
+  * Netinstall for Fedora was changed to be 14 in drbl.conf.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sat, 06 Nov 2010 21:35:09 +0800
+
+drbl (1.9.7-27) unstable; urgency=low
+
+  * Package btrfs-tools was added in drbl.conf for GParted live.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 26 Oct 2010 09:19:15 +0800
+
+drbl (1.9.7-26) unstable; urgency=low
+
+  * New upstream pxelinux 4.03.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 26 Oct 2010 08:56:23 +0800
+
+drbl (1.9.7-25) unstable; urgency=low
+
+  *  Minor update (prdownloads.sf.net -> downloads.sf.net) for the example in drbl-SL.sh.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 15 Oct 2010 21:48:25 +0800
+
+drbl (1.9.7-24) unstable; urgency=low
+
+  * Bug fixed: dhcp3 on Ubuntu 10.10 not started.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 13 Oct 2010 18:28:46 +0800
+
+drbl (1.9.7-23) unstable; urgency=low
+
+  * Language files were updated.
+  * Function parse_cmdline_option was updated to allow "=" and ",". Thanks to Jacobo Vilella Vilahur for this bug report (https://sourceforge.net/tracker/?func=detail&atid=671650&aid=3081655&group_id=115473).
+  * The netinstall of ubuntu was change to 10.04 and 10.10 in drbl.conf.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 13 Oct 2010 13:30:45 +0800
+
+drbl (1.9.7-22) unstable; urgency=low
+
+  * Minor update for drbl-get-netmask.
+  * Program drblpush was improved to work with dhcpd 4 and alias IP address.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 01 Oct 2010 15:05:11 +0800
+
+drbl (1.9.7-21) unstable; urgency=low
+
+  * Bug fixed: wrong line feed in get-all-nic-ip.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 30 Sep 2010 14:11:42 +0800
+
+drbl (1.9.7-20) unstable; urgency=low
+
+  * Ubuntu 10.10 support was added (not tested yet).
+  * Minor improvement for drbl-get-ipadd.
+  * Program get-all-nic-ip now can get ppp* device. Thanks to sonic484 for reporting this issue.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 30 Sep 2010 13:43:33 +0800
+
+drbl (1.9.7-19) unstable; urgency=low
+
+  [ Jazz Wang ]
+  * An option "-n" was added to tcpdump in drbl-collect-mac.
+
+  [ Steven Shiau]
+  * Bug fixed: The new boot parameter "ocs_client_no_per_NIC" was not working for DRBL live.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 27 Sep 2010 22:51:56 +0800
+
+drbl (1.9.7-18) unstable; urgency=low
+
+  * Option "-i" was added in makeboot.sh and makeboot.bat.
+  * Environmental variable LC_ALL is honored by drblpush now.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 27 Sep 2010 13:15:47 +0800
+
+drbl (1.9.7-17) unstable; urgency=low
+
+  * The package name drbl3-server for Debian Squeeze was changed to isc-dhcp-server, so more files were changed correspondingly.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 23 Sep 2010 23:00:12 +0800
+
+drbl (1.9.7-16) unstable; urgency=low
+
+  * The package name drbl3-server for Debian Squeeze was changed to isc-dhcp-server, and dhcp3-client was changed to dhcp-client in drbl.conf.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 23 Sep 2010 16:33:26 +0800
+
+drbl (1.9.7-15) unstable; urgency=low
+
+  * No more checking if partition starts or ends on cylinder boundary when running makeboot.sh.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 22 Sep 2010 19:29:40 +0800
+
+drbl (1.9.7-14) unstable; urgency=low
+
+  * Program makeboot.sh was improved to allow running with full path.
+  * The yum repository should not be removed when uninstalling drbl. Thanks to Robert Arkiletian for this bug report.
+  * "nomodeset" should not be added for DRBL client. Thanks to Robert Arkiletian for this bug report.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sun, 19 Sep 2010 21:11:55 +0800
+
+drbl (1.9.7-13) unstable; urgency=low
+
+  * Some minor updates in drbl-bug-report.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 08 Sep 2010 11:11:18 +0800
+
+drbl (1.9.7-12) unstable; urgency=low
+
+  * Mirror update about the output message color of drblpush.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 03 Sep 2010 12:19:42 +0800
+
+drbl (1.9.7-11) unstable; urgency=low
+
+  * The netinstall of opensuse was change to 11.3 in drbl.conf.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 02 Sep 2010 23:01:17 +0800
+
+drbl (1.9.7-10) unstable; urgency=low
+
+  * Russian language files were updated. Thanks to Anton Pryadko.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 01 Sep 2010 22:31:19 +0800
+
+drbl (1.9.7-9) unstable; urgency=low
+
+  * Package btrfs-tools was added in the required one for Clonezilla live.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 30 Aug 2010 14:07:23 +0800
+
+drbl (1.9.7-8) unstable; urgency=low
+
+  * Bug fixed: drbl4imp should be in /opt/drbl/sbin, not linked to /opt/drbl/setup/.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sun, 29 Aug 2010 21:53:02 +0800
+
+drbl (1.9.7-7) unstable; urgency=low
+
+  * Bug fixed: No drblsrv, drblpush and drbl4imp were found in /opt/drbl/sbin.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sun, 29 Aug 2010 20:42:47 +0800
+
+drbl (1.9.7-6) unstable; urgency=low
+
+  * Bug fixed: No more linking drblsrv, drblpush and drbl4imp from /opt/drbl/setup.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sun, 29 Aug 2010 20:28:38 +0800
+
+drbl (1.9.7-5) unstable; urgency=low
+
+  * The related codes about drbl-etherboot were removed in drblpush.
+  * No more drblsrv, drblpush and drbl4imp in /opt/drbl/setup/.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sun, 29 Aug 2010 20:21:03 +0800
+
+drbl (1.9.7-4) unstable; urgency=low
+
+  * Small English Grammatical Errors were fixed. Thanks to Mike Taylor (https://sourceforge.net/tracker/?func=detail&atid=671650&aid=3054348&group_id=115473).
+  * Wrong Message from drblpush about text/graphical PXE boot menu was fixed. Thanks to Mike Taylor (https://sourceforge.net/tracker/?func=detail&atid=671650&aid=3054362&group_id=115473).
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 27 Aug 2010 23:40:07 +0800
+
+drbl (1.9.7-3) unstable; urgency=low
+
+  * Package genisoimage was added in the required one for Clonezilla live.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 27 Aug 2010 13:06:33 +0800
+
+drbl (1.9.7-2) unstable; urgency=low
+
+  * Typos in the Russian language file was fixed.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 27 Aug 2010 10:50:18 +0800
+
+drbl (1.9.7-1) unstable; urgency=low
+
+  * Prompt about live-build version in drbl-functions was updated.
+  * Typos in the language files were fixed. Thanks to Anton Pryadko for the bugs report.
+  * Now drbl script will honor environmental variable LC_ALL, then LANG.
+  * Russian language files were added. Thanks to Anton Pryadko for providing the language files.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 26 Aug 2010 23:01:23 +0800
+
+drbl (1.9.6-43) unstable; urgency=low
+
+  * Make user-setup as the required package for clonezilla/gparted live. In case it is not included by the live-build. This is specially for Ubuntu-based Clonezilla live.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 19 Aug 2010 21:37:22 +0800
+
+drbl (1.9.6-42) unstable; urgency=low
+
+  * Remove a useless comment in the language file en_US.
+  * Commands in prepare-files-for-PXE-client about drbl-etherboot will be tested before run.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 19 Aug 2010 11:32:18 +0800
+
+drbl (1.9.6-41) unstable; urgency=low
+
+  * Do not remove ethtool, tcpdump, dos2unix and lftp when uninstall drbl on OpenSuSE, since some of them are required packages (especially ethtool) for many programs.
+  * Remove installing drbl-etherboot when running drblsrv -i. Since etherboot is not maintained anymore and now we have gPXE.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 18 Aug 2010 18:14:54 +0800
+
+drbl (1.9.6-40) unstable; urgency=low
+
+  * Make busybox as the required package for clonezilla/gparted live. In case it is not included by the live-build.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sun, 08 Aug 2010 12:48:18 +0800
+
+drbl (1.9.6-39) unstable; urgency=low
+
+  * Make sudo as the required package for clonezilla/gparted live. In case it is not included by the live-build.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sun, 08 Aug 2010 10:49:35 +0800
+
+drbl (1.9.6-38) unstable; urgency=low
+
+  * Program "makeboot.bat" was improved to avoid using the different command "find" from cygwin. Thanks to lryoung for providing this solution.
+  * Function create_live_required_debian_based_prompt in drbl-functions was improved to work with live-build (the new package name for live-helper).
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sun, 08 Aug 2010 08:55:24 +0800
+
+drbl (1.9.6-37) unstable; urgency=low
+
+  * New upstream pxelinux 4.02.
+  * Bug fixed: drbl-syslinux-netinstall option error, failed to use the existing downloaded files.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 26 Jul 2010 11:51:28 +0800
+
+drbl (1.9.6-36) unstable; urgency=low
+
+  * Bug fixed: get-client-ip-list should include drbl-functions.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 20 Jul 2010 09:05:11 +0800
+
+drbl (1.9.6-35) unstable; urgency=low
+
+  * Language files fr_FR was updated. Thanks to Jean Francois Martinez <jfm512 _at_ free fr>
+  * Language file es_ES of perl was updated. Thanks to Juan Ramón Martínez.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 15 Jul 2010 13:42:13 +0800
+
+drbl (1.9.6-34) unstable; urgency=low
+
+  * Put package drbl-ntfsprogs only for DRBL, not for Clonezilla live, since for Clonezilla live, it's better to use ntfsprogs, otherwise the 32-bit drbl-ntfsprogs won't work in pure amd64 Clonezilla live.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sun, 04 Jul 2010 01:49:25 +0800
+
+drbl (1.9.6-33) unstable; urgency=low
+
+  * Language file zh_CN was updated. Thanks to Zhiqiang Zhang.
+  * Minor codes improvements were done in drbl-functions, switch-pxe-menu and hide_reveal_pxe_img.
+  * Program drbl-client-switch now can accept options for mode2.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sun, 27 Jun 2010 20:45:06 +0800
+
+drbl (1.9.6-32) unstable; urgency=low
+
+  * Put packages console-data console-setup console-common kbd as the required ones since live-helper changed to depend on keyboard-configuration which is not the one we need.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sat, 26 Jun 2010 10:27:54 +0800
+
+drbl (1.9.6-31) unstable; urgency=low
+
+  * Language file ja_JP.UTF-8 was updated. Thanks to Akira YOSHIYAMA.
+  * Language files es_ES and it_IT were updated. Thanks to Alex Ibáñez López and Gianfranco Gentili.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sat, 26 Jun 2010 08:50:52 +0800
+
+drbl (1.9.6-30) unstable; urgency=low
+
+  * The Clonezilla backgroud photo in the boot menu was updated.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 23 Jun 2010 16:33:00 +0800
+
+drbl (1.9.6-29) unstable; urgency=low
+
+  * By default "nomodeset" is used in the boot parameters.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 23 Jun 2010 15:01:00 +0800
+
+drbl (1.9.6-28) unstable; urgency=low
+
+  * Program mkswapfile was modified to be started in runlevel 2 for insserv.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 22 Jun 2010 14:03:00 +0800
+
+drbl (1.9.6-27) unstable; urgency=low
+
+  * Make drbl-clients-nat work with insserv.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 18 Jun 2010 15:20:00 +0800
+
+drbl (1.9.6-26) unstable; urgency=low
+
+  * Bug fixed: drbl-SL.sh failed to identify correct kernel in the Clonezilla live.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 15 Jun 2010 12:25:00 +0800
+
+drbl (1.9.6-25) unstable; urgency=low
+
+  * Bug fixed: /sbin/mount.nfs will be copied to client only if it exists (CentOS 4.x).
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 15 Jun 2010 10:52:00 +0800
+
+drbl (1.9.6-24) unstable; urgency=low
+
+  * Bug fixed: Files rc.sysinit and halt for DRBL client were not included.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 15 Jun 2010 09:22:00 +0800
+
+drbl (1.9.6-23) unstable; urgency=low
+
+  * Files rc.sysinit and halt for DRBL client were added.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 15 Jun 2010 09:09:00 +0800
+
+drbl (1.9.6-22) unstable; urgency=low
+
+  * Boot parameter ramdisk_size should be adjusted according to the size of initrd-pxe.img.
+  * Variables of add_param_in_pxelinux_cfg_drbl_related_block and del_param_in_pxelinux_cfg_drbl_related_block in drbl-functions were renamed to avoid confusion.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 15 Jun 2010 08:17:00 +0800
+
+drbl (1.9.6-21) unstable; urgency=low
+
+  * Package binutils was added in the required list for all the supported distributions. We need program strings in network initrd.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 09 Jun 2010 16:39:00 +0800
+
+drbl (1.9.6-20) unstable; urgency=low
+
+  * Language files were updated.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 08 Jun 2010 16:20:00 +0800
+
+drbl (1.9.6-19) unstable; urgency=low
+
+  * Files for Fedora 13 client was added.
+  * This release should support Fedora 13.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 07 Jun 2010 11:38:00 +0800
+
+drbl (1.9.6-18) unstable; urgency=low
+
+  * Program drbl-ipcalc-list was added.
+  * Netinstall for Fedora was changed to be 13 in drbl.conf.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sun, 06 Jun 2010 19:17:00 +0800
+
+drbl (1.9.6-17) unstable; urgency=low
+
+  * The patched file plymouth.conf was improved for Ubuntu 10.04 DRBL clients so it won't enter virtual console 7 when running clonezilla job.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 28 May 2010 16:05:00 +0800
+
+drbl (1.9.6-16) unstable; urgency=low
+
+  * A better method to avoid running makeboot.bat on the MS windows system drive was added. Thanks to timobeil for this idea.
+  * A prompt to run syslinux with extra options (-sr) was added in makeboot.bat. Thanks to pama123 for inspiring this idea.
+  * Programs rc.sysinit and halt for CentOS 5.5 were added.
+  * A patched file plymouth.conf will be used in the Ubuntu 10.04 DRBL clients so it won't enter virtual console 7 when running clonezilla job.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 27 May 2010 15:51:00 +0800
+
+drbl (1.9.6-15) unstable; urgency=low
+
+  * Function canonical_hostname_prep was added in drbl-functions.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 21 May 2010 21:05:00 +0800
+
+drbl (1.9.6-14) unstable; urgency=low
+
+  * RELEASE-NOTES was updated.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 11 May 2010 10:58:00 +0800
+
+drbl (1.9.6-13) unstable; urgency=low
+
+  * Package gzrt was added in the packages list for Clonezilla live in drbl.conf.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 11 May 2010 10:51:00 +0800
+
+drbl (1.9.6-12) unstable; urgency=low
+
+  * Openvz kernel for DRBL clients will be excluded when running drblsrv.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 10 May 2010 08:56:00 +0800
+
+drbl (1.9.6-11) unstable; urgency=low
+
+  - Language files were updated.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sun, 09 May 2010 11:16:00 +0800
+
+drbl (1.9.6-10) unstable; urgency=low
+
+  * The usage function in drbl4imp was updated.
+  * One more prompt in drbl4imp was added.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sat, 08 May 2010 11:42:00 +0800
+
+drbl (1.9.6-9) unstable; urgency=low
+
+  * drbl4imp was improved with options "-r|--drbl-mode, -x|--limit-pxe-drbl-client, -u|--live_client_cpu_mode.
+  * Do not touch ntp.conf in drblsrv.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sat, 08 May 2010 10:38:00 +0800
+
+drbl (1.9.6-8) unstable; urgency=low
+
+  * New upstream memtest86+ 4.10.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 03 May 2010 09:28:00 +0800
+
+drbl (1.9.6-7) unstable; urgency=low
+
+  * Program drbl-SL.sh was improved to allow using nfsroot as an option.
+  * Now we can choose the CPU arch for clients in drblpush when using Clonezilla live to do clonezilla job.
+  * Language files were updated.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sun, 02 May 2010 20:27:00 +0800
+
+drbl (1.9.6-6) unstable; urgency=low
+
+  * The netinstall for Ubuntu was updated to be "karmic" and "lucid" in drbl.conf.
+  * No more modifying the /etc/ntp.conf on the server when running drblpush.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 29 Apr 2010 15:06:00 +0800
+
+drbl (1.9.6-5) unstable; urgency=low
+
+  * Duplicated comamnd check_if_root was removed in drbl-SL.sh.
+  * Programs drblpush and tune-clientdir-opt now work for using clonezilla-live as the client's OS in Clonezilla SE mode.
+  * A typo was fixed in drbl-netinstall.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 27 Apr 2010 14:59:00 +0800
+
+drbl (1.9.6-4) unstable; urgency=low
+
+  * Bug fixed: mounted-varrun on Ubuntu 10.04 should be started in drbl-client-boot.conf so /var/run/utmp will be started.
+  * Program drbl-SL.sh was improved to work with drbl-ocs-live-prep.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 26 Apr 2010 10:11:00 +0800
+
+drbl (1.9.6-3) unstable; urgency=low
+
+  * For readonly dir, "async and no_subtree_check" are used in /etc/exports (drbl-nfs-exports).
+  * On the diskless client side, "soft" was added for readonly mounting, and "hard,intr" was added for readwrite mounting.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sat, 24 Apr 2010 11:24:00 +0800
+
+drbl (1.9.6-2) unstable; urgency=low
+
+  * Bug fixed: Random password not working when running "drbl-useradd -s".
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 16 Apr 2010 16:07:00 +0800
+
+drbl (1.9.6-1) unstable; urgency=low
+
+  * Boot parameter ocs_server will be append in pxelinux config when using drbl-SL.sh. This release supports Clonezilla-live based client to do clonezilla job.
+  * Minor update for hide_reveal_pxe_img.
+  * Minor coding update in drbl-functions.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 14 Apr 2010 15:47:00 +0800
+
+drbl (1.9.5-83) unstable; urgency=low
+
+  * Make deb-preconf-drbl work for tftpd-hpa version >= 5.0.
+  * Funtion active_proc_partitions in drbl-functions was improved to only active found disk in /proc/partitions.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 13 Apr 2010 14:32:00 +0800
+
+drbl (1.9.5-82) unstable; urgency=low
+
+  * Ubuntu 10.04 (beta) support was added.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 07 Apr 2010 14:06:00 +0800
+
+drbl (1.9.5-81) unstable; urgency=low
+
+  * New upstream syslinux 3.86.
+  * DRBL SSI template tarball will be extracted with -m option in the client.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sat, 03 Apr 2010 15:56:00 +0800
+
+drbl (1.9.5-80) unstable; urgency=low
+
+  * Program drbl-syslinux-netinstall was improved to show more prompts.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 01 Apr 2010 22:20:00 +0800
+
+drbl (1.9.5-79) unstable; urgency=low
+
+  * Packages console-common and eject were added in Clonezilla live packages list.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 16 Mar 2010 18:23:00 +0800
+
+drbl (1.9.5-78) unstable; urgency=low
+
+  * Language file ja_JP.UTF-8 was updated. Thanks to Annie Wei and Akira YOSHIYAMA.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 12 Mar 2010 10:52:00 +0800
+
+drbl (1.9.5-77) unstable; urgency=low
+
+  * Language files fr_FR was updated. Thanks to Jean-Francois Nifenecker.
+  * clonezilla-jobs.log will be put in /var/log/clonezilla/ now.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 09 Mar 2010 15:53:00 +0800
+
+drbl (1.9.5-76) unstable; urgency=low
+
+  * Package "zfs-fuse" should not be listed in PKG_FROM_DBN_WHICH_OCS_LIVE_NEED. We will add that when creating clonezilla live.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 08 Mar 2010 15:35:00 +0800
+
+drbl (1.9.5-75) unstable; urgency=low
+
+  * PKG_FROM_DBN_WHICH_OCS_LIVE_NEED_CHKLISTS was rolled back to PKG_FROM_DBN_WHICH_OCS_LIVE_NEED.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 08 Mar 2010 10:43:00 +0800
+
+drbl (1.9.5-74) unstable; urgency=low
+
+  * Language file zh_CN was updated. Thanks to Zhiqiang Zhang.
+  * drbl-client-boot.conf was improved to avoid mountall issue in Ubuntu 9.10 (https://bugs.launchpad.net/ubuntu/+source/mountall/+bug/470776)
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sun, 07 Mar 2010 12:20:00 +0800
+
+drbl (1.9.5-73) unstable; urgency=low
+
+  * Language files es_ES and it_IT were updated.  Thanks to Alex Ibáñez López and Gianfranco Gentili.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sat, 06 Mar 2010 09:15:00 +0800
+
+drbl (1.9.5-72) unstable; urgency=low
+
+  * Packages foremost and zfs-fuse were added in the packages list of Clonezilla live.
+  * Improve get-rpm-list-from-yum, get_extract_syslinux.sh, get_memtest86, makeboot.sh, drbl-ssi-client-prepare, drbl-functions, drblsrv, drbl-SL.sh, drblpush (purge), drbl-collect-mac, and drbl-syslinux-netinstall, to avoid potential "rm -rf" error.
+  * Minor updates for drbl-fuu and drbl-fuh.
+  * Bug fixed: For Ubuntu 9.10, xz-utils conflicts with lzma, and lzma is essential.
+  * Variable PKG_FROM_DBN_WHICH_OCS_LIVE_NEED was changed to PKG_FROM_DBN_WHICH_OCS_LIVE_NEED_CHKLISTS in drbl.conf.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 05 Mar 2010 11:29:00 +0800
+
+drbl (1.9.5-71) unstable; urgency=low
+
+  * Code clean: "local OCS_OPTS" is useless in drbl-functions.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 01 Mar 2010 10:50:00 +0800
+
+drbl (1.9.5-70) unstable; urgency=low
+
+  * Package fbgrab was listed as the clonezilla live package in drbl.conf. Thanks to daix for this idea.
+  * Boot parameter ocs_se_save_extra_opt has been renamed as dcs_save_extra_opt, andocs_se_restore_extra_opt has been renamed as dcs_restore_extra_opt.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sun, 28 Feb 2010 11:12:00 +0800
+
+drbl (1.9.5-69) unstable; urgency=low
+
+  * Bug fixed: dcs failed to ask about input image and disk name when dcs_input_img_name is assigned.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 26 Feb 2010 10:09:00 +0800
+
+drbl (1.9.5-68) unstable; urgency=low
+
+  * Bug fixed: a tyop in program dcs.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 26 Feb 2010 09:33:00 +0800
+
+drbl (1.9.5-67) unstable; urgency=low
+
+  * Bug fixed: Program dcs did not honor dcs_input_img_name.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 26 Feb 2010 09:13:00 +0800
+
+drbl (1.9.5-66) unstable; urgency=low
+
+  * Prompt in drbl-client-switch was improved.
+  * Programs ocs-srv-live.sh, drbl-live.sh, and dcs will load the settings of /etc/ocs/ocs-live.conf if it exists.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 25 Feb 2010 22:10:00 +0800
+
+drbl (1.9.5-65) unstable; urgency=low
+
+  * The boot parameter "dcs_choose_client", which can be one of these values: "All" or "Part", will be honored by dcs.
+  * The boot parameter "dcs_input_img_name", which can be one of these values: "in_server" or "in_client", will be honored by dcs.
+  * The boot parameter "dcs_cast_mode", which can be one of these values: "multicast", "broadcast", and "unicast", will be honored by dcs.
+  * The env boot parameters $ocs_se_restore_save_opt and $ocs_se_restore_extra_opt, will be honored by dcs and put to the drbl-ocs command options.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 25 Feb 2010 16:34:00 +0800
+
+drbl (1.9.5-64) unstable; urgency=low
+
+  * Due to chain.c32 fails to boot local OS in syslinux 3.85, roll back to 3.84.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 24 Feb 2010 10:13:00 +0800
+
+drbl (1.9.5-63) unstable; urgency=low
+
+  * New upstream syslinux 3.85.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sun, 21 Feb 2010 15:21:00 +0800
+
+drbl (1.9.5-62) unstable; urgency=low
+
+  * An issue about template_root.tgz was not created and used in DRBL SSI mode. Thanks to vakopian for this bug report.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 18 Feb 2010 16:46:00 +0800
+
+drbl (1.9.5-61) unstable; urgency=low
+
+  * Reorder the z5p and z6p in the menu.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 18 Feb 2010 15:20:00 +0800
+
+drbl (1.9.5-60) unstable; urgency=low
+
+  * Minor update about comment in drblsrv.
+  * Programs pigz pbzip2 lbzip2 were added in the packages list for Clonezilla live.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 18 Feb 2010 14:16:00 +0800
+
+drbl (1.9.5-59) unstable; urgency=low
+
+  * Language files were updated.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 17 Feb 2010 13:50:00 +0800
+
+drbl (1.9.5-58) unstable; urgency=low
+
+  * BSD netinstall lists were updated in drbl.conf and drbl-netinstall. Now it works for both FreeBSD 7.x and 8.0.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 16 Feb 2010 19:13:00 +0800
+
+drbl (1.9.5-57) unstable; urgency=low
+
+  * Bug fixed: when querying package name, name like "xz" will be parsed incorrectly.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 16 Feb 2010 14:00:00 +0800
+
+drbl (1.9.5-56) unstable; urgency=low
+
+  * Menu to show -z4, -z5|-z5p (for xz and pxz), -z6|-z6p (for lzip and plzip) options were added and improved in drbl-functions.
+  * Package xz|xz-utils, pxz, lzip and plzip were added in the list PKG_TO_QUERY in drbl.conf.
+  * Language files were updated.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 16 Feb 2010 11:10:00 +0800
+
+drbl (1.9.5-55) unstable; urgency=low
+
+  * Package sysklogd was added in Clonezilla live packages list. Thanks to tl4ever for this suggestion.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 11 Feb 2010 14:30:00 +0800
+
+drbl (1.9.5-54) unstable; urgency=low
+
+  * Initial deb release.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 09 Feb 2010 16:53:00 +0800
