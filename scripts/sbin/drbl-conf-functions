@@ -7,15 +7,15 @@
 [ -f /etc/rc.d/init.d/functions ] && . /etc/rc.d/init.d/functions
 
 # Source DRBL setting
-if [ ! -f "/opt/drbl/conf/drbl.conf" ]; then
-  echo "Can NOT find /opt/drbl/conf/drbl.conf! Program terminated!" 
+if [ ! -f "/etc/drbl/drbl.conf" ]; then
+  echo "File /etc/conf/drbl.conf not found! Program terminated!" 
   exit 1
 fi
-. /opt/drbl/conf/drbl.conf
+. /etc/drbl/drbl.conf
 
 # check if drbl-functions exists
 if [ ! -f "$DRBL_SCRIPT_PATH/sbin/drbl-functions" ]; then
-  echo "Can NOT find $DRBL_SCRIPT_PATH/sbin/drbl-functions! Program terminated!" 
+  echo "File $DRBL_SCRIPT_PATH/sbin/drbl-functions not found! Program terminated!" 
   exit 1
 fi
 . $DRBL_SCRIPT_PATH/sbin/drbl-functions
