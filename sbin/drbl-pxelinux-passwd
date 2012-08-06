@@ -3,7 +3,9 @@
 # License: GPL
 
 # Load DRBL setting and functions
-. /opt/drbl/sbin/drbl-conf-functions
+DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/opt/drbl/}"
+
+. $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
 
 # slat for SHA1, better to leave it empty, let the program pick a random one.
 salt=""

@@ -1836,11 +1836,9 @@ system("mkdir -p $drbl_syscfg; cp -f drbl_deploy.conf $drbl_syscfg/");
 # **********************************************************************
 
 # Load DRBL setting and functions
-if [ ! -f "/opt/drbl/sbin/drbl-conf-functions" ]; then
-  echo "Unable to find /opt/drbl/sbin/drbl-conf-functions! Program terminated!" 
-  exit 1
-fi
-. /opt/drbl/sbin/drbl-conf-functions
+DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/opt/drbl/}"
+
+. $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
 . /etc/drbl/drbl_deploy.conf
 
 # Get distribution ID and release number.

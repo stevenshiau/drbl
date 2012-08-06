@@ -30,14 +30,17 @@ languages:
 	$(MAKE) -C lang all
 
 install:
+	# install exec files
+	install -d $(DESTDIR)/usr/
+	cp -a sbin $(DESTDIR)/usr/
+	cp -a bin $(DESTDIR)/usr//
 	# install setup dir
 	install -d $(DESTDIR)/$(SHAREDIR)/
 	cp -a setup $(DESTDIR)/$(SHAREDIR)/
 	# install other shared files
-	cp -a scripts conf lang doc pkg pki image $(DESTDIR)/$(SHAREDIR)/
-	install -d $(DESTDIR)/usr/
-	cp -a sbin $(DESTDIR)/usr/
-	cp -a bin $(DESTDIR)/usr//
+	cp -a conf lang doc pkg pki image $(DESTDIR)/$(SHAREDIR)/
+	cp -a scripts/sbin scripts/bin $(DESTDIR)/$(SHAREDIR)/
+	# install config files
 	install -d $(DESTDIR)/etc/drbl/
 	cp -a conf/* $(DESTDIR)/etc/drbl/
 	# install themes
