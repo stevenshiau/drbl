@@ -24,7 +24,7 @@ test:
 		@echo -n "Checking for bashisms"
 		for SCRIPT in $(SCRIPTS); \
 		do \
-			@if [ -n "$(LC_ALL=C file -L $${SCRIPT} | grep -i "Bourne-Again shell script text executable")" ]; then \
+			if [ -n "$(LC_ALL=C /usr/bin/file -L $${SCRIPT} | grep -i "Bourne-Again shell script text executable")" ]; then
 				checkbashisms -f -x $${SCRIPT}; \
 				echo -n "."; \
 			fi
@@ -48,11 +48,13 @@ languages:
 
 install:
 	# install setup dir
-	cp -a setup $(DESTDIR)/$(SHAREDIR)/setup/
+	install -d $(DESTDIR)/$(SHAREDIR)/
+	cp -a setup $(DESTDIR)/$(SHAREDIR)/
 	# install other shared files
 	cp -a scripts conf lang doc pkg pki image $(DESTDIR)/$(SHAREDIR)/
-	cp -a sbin/* $(DESTDIR)/usr/sbin/
-	cp -a bin/* $(DESTDIR)/usr/bin/
+	install -d $(DESTDIR)/usr/
+	cp -a sbin $(DESTDIR)/usr/
+	cp -a bin $(DESTDIR)/usr//
 	install -d $(DESTDIR)/etc/drbl/
 	cp -a conf/* $(DESTDIR)/etc/drbl/
 	# install themes
