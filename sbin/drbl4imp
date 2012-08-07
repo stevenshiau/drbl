@@ -7,7 +7,7 @@
 [ -e /etc/rc.d/init.d/functions ] && . /etc/rc.d/init.d/functions
 
 #
-DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/opt/drbl/}"
+DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/usr/share/drbl/}"
 
 . $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
 

@@ -3,7 +3,7 @@
 # License: GPL
 # Description: Output pxelinux config on DRBL server.
 
-DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/opt/drbl/}"
+DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/usr/share/drbl/}"
 
 . $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
 . $DRBL_SCRIPT_PATH/conf/drbl-ocs.conf

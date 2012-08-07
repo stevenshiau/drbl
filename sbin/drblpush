@@ -1836,7 +1836,7 @@ system("mkdir -p $drbl_syscfg; cp -f drbl_deploy.conf $drbl_syscfg/");
 # **********************************************************************
 
 # Load DRBL setting and functions
-DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/opt/drbl/}"
+DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/usr/share/drbl/}"
 
 . $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
 . /etc/drbl/drbl_deploy.conf

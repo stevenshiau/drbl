@@ -6,7 +6,7 @@
 # To use reboot, shutdown, wake-on-lan for Cygwin clients, you must put the
 # ssh key to those Cygwin clients.
 
-DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/opt/drbl/}"
+DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/usr/share/drbl/}"
 
 . $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
 . $DRBL_SCRIPT_PATH/conf/drbl-ocs.conf
