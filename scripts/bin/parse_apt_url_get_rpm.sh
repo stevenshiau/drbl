@@ -6,7 +6,7 @@
 # Ex: $0 glibc
 
 # Load DRBL setting and functions
-DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/opt/drbl/}"
+DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/usr/share/drbl/}"
 
 . $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
 
@@ -70,7 +70,7 @@ for im in $DIRNAME; do
   # it's like: rpm ftp://ftp.gwdg.de/pub/linux/suse/apt SuSE/9.3-i386 base
   url=$(grep -E "^[[:space:]]*rpm .* ${im/RPMS./}.*" /etc/apt/sources.list | awk -F" " '{print $2"/"$3}')
   for iurl in $url; do
-   pkg_rpm="$(/opt/drbl/bin/list_available_rpm $iurl/${im} | $pkg_ver_filter | $arch_filter)"
+   pkg_rpm="$(LC_ALL=C list_available_rpm $iurl/${im} | $pkg_ver_filter | $arch_filter)"
    if [ -n "$pkg_rpm" ];then
      echo "$iurl/${im}/$pkg_rpm"
      break

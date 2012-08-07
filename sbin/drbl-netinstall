@@ -6,8 +6,8 @@
 DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/usr/share/drbl/}"
 
 . $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
-. $DRBL_SCRIPT_PATH/conf/drbl-ocs.conf
-. $DRBL_SCRIPT_PATH/sbin/ocs-functions
+[ -e /etc/drbl/drbl-ocs.conf ] && . /etc/drbl/drbl-ocs.conf
+[ -e $DRBL_SCRIPT_PATH/sbin/ocs-functions ] && . $DRBL_SCRIPT_PATH/sbin/ocs-functions
 
 #
 supported_dists="$(set | grep -i "_netinstall_ver" | awk -F"_" '{print $1}' | sort | uniq)"
@@ -409,7 +409,7 @@ get_openbsd_netinstall() {
 install_GL_netinstall() {
   # download them and put in the system...
   # //NOTE// The GL_INST will contain bsd if drbl.conf containing any netinstall of bsd, since we get GL_INST by:
-  # . /opt/drbl/conf/drbl.conf
+  # . /etc/drbl/drbl.conf
   # supported_dists="$(set |grep -i _netinstall_ | awk -F"_" '{print $1}' | sort | uniq)"
   if [ "$GL_INST" = "all" ]; then
     # Therefore we have to remove those BSD lists if setup_bsd_netinst is no

@@ -3,7 +3,7 @@
 # License: GPL 
 # Description: DRBL utitilty to create files for PXELINUX clients.
 # Load DRBL setting and functions
-DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/opt/drbl/}"
+DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/usr/share/drbl/}"
 
 . $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
 
@@ -171,7 +171,7 @@ sis900_pxe="$($query_pkglist_cmd drbl-etherboot 2>/dev/null | grep -E "sis900.zp
 
 # create the freedos image, which a clean one.
 # if user wants to insert files, use 
-# the script /opt/drbl/sbin/insert-file-fdos.sh
+# the script insert-file-fdos.sh
 # [ -f kernel.sys ] && rm -f kernel.sys
 if [ -f "$fdos_img_src" ]; then
    # 2005/4/4 since etherboot 5.4.0 is released, no more NBI.

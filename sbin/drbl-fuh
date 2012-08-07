@@ -39,7 +39,7 @@ usage() {
   echo "\"target\" can be a file or a directory, it it's file, it's new filename for source to be copied. If it's a directory, the source will be copied into that directory."
   echo
   echo "Example:"
-  echo "/opt/drbl/sbin/drbl-cp-host ./XF86_DEFAULT /etc"
+  echo "drbl-cp-host ./XF86_DEFAULT /etc"
   echo "will copy XF86_DEFAULT into client's /etc directory"
   echo
   echo "drbl-cp-host -d local source_files new_file.txt" 

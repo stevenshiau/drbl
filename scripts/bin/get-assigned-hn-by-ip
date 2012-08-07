@@ -4,7 +4,7 @@
 # Description: To get the hostname by IP address assigend in $DRBL_SCRIPT_PATH/conf/client-ip-hostname
 
 # Loading setting.
-. /opt/drbl/conf/drbl.conf
+. /etc/drbl/drbl.conf
 #
 export LC_ALL=C
 IP=$1

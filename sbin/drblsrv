@@ -25,11 +25,10 @@
 # Source function library.
 [ -f /etc/rc.d/init.d/functions ] && . /etc/rc.d/init.d/functions
 
-# Source DRBL setting
-. /opt/drbl/conf/drbl.conf
+# Load DRBL setting and functions
+DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/usr/share/drbl/}"
 
-# Source the drbl related functions
-. $DRBL_SCRIPT_PATH/sbin/drbl-functions
+. $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
 
 # functions
 check_if_repository_in_blacklist() {
@@ -3901,9 +3900,9 @@ if [ "$installer" = "yum" ]; then
     # We have to remove the last "/" in the path,
     # Ex: fedora/linux/releases/ -> fedora/linux/releases
     # otherwise for example, this command will have problem:
-    # /opt/drbl/bin/list_available_rpm http://free.nchc.org.tw/fedora/linux/releases//../updates/7/i386
+    # list_available_rpm http://free.nchc.org.tw/fedora/linux/releases//../updates/7/i386
     # The place "//../" is the key problem. It should be
-    # /opt/drbl/bin/list_available_rpm http://free.nchc.org.tw/fedora/linux/releases/../updates/7/i386
+    # list_available_rpm http://free.nchc.org.tw/fedora/linux/releases/../updates/7/i386
     os_ayo_path="$(echo $url_tmp | awk -F' ' '{print $2}' | sed -e "s|/$||g")"
     url_os_coreroot=$url_os/$os_ayo_path
     echo "$msg_delimiter_star_line"
@@ -3920,9 +3919,9 @@ if [ "$installer" = "yum" ]; then
     # We have to remove the last "/" in the path,
     # Ex: fedora/linux/releases/ -> fedora/linux/releases
     # otherwise for example, this command will have problem:
-    # /opt/drbl/bin/list_available_rpm http://free.nchc.org.tw/fedora/linux/releases//../updates/7/i386
+    # list_available_rpm http://free.nchc.org.tw/fedora/linux/releases//../updates/7/i386
     # The place "//../" is the key problem. It should be
-    # /opt/drbl/bin/list_available_rpm http://free.nchc.org.tw/fedora/linux/releases/../updates/7/i386
+    # list_available_rpm http://free.nchc.org.tw/fedora/linux/releases/../updates/7/i386
     updates_ayo_path="$(echo $url_update_tmp | awk -F' ' '{print $2}' | sed -e "s|/$||g")"
     url_updates_root=$url_updates/$updates_ayo_path
     echo "$msg_delimiter_star_line"
@@ -3992,9 +3991,9 @@ elif [ "$installer" = "zypper" ]; then
       # We have to remove the last "/" in the path,
       # Ex: fedora/linux/releases/ -> fedora/linux/releases
       # otherwise for example, this command will have problem:
-      # /opt/drbl/bin/list_available_rpm http://free.nchc.org.tw/fedora/linux/releases//../updates/7/i386
+      # list_available_rpm http://free.nchc.org.tw/fedora/linux/releases//../updates/7/i386
       # The place "//../" is the key problem. It should be
-      # /opt/drbl/bin/list_available_rpm http://free.nchc.org.tw/fedora/linux/releases/../updates/7/i386
+      # list_available_rpm http://free.nchc.org.tw/fedora/linux/releases/../updates/7/i386
       os_ayo_path="$(LC_ALL=C echo $url_tmp | awk -F' ' '{print $2}' | sed -e "s|/$||g")"
       url_os_coreroot=$url_os/$os_ayo_path
       echo "$msg_delimiter_star_line"
@@ -4029,9 +4028,9 @@ elif [ "$installer" = "zypper" ]; then
       # We have to remove the last "/" in the path,
       # Ex: fedora/linux/releases/ -> fedora/linux/releases
       # otherwise for example, this command will have problem:
-      # /opt/drbl/bin/list_available_rpm http://free.nchc.org.tw/fedora/linux/releases//../updates/7/i386
+      # list_available_rpm http://free.nchc.org.tw/fedora/linux/releases//../updates/7/i386
       # The place "//../" is the key problem. It should be
-      # /opt/drbl/bin/list_available_rpm http://free.nchc.org.tw/fedora/linux/releases/../updates/7/i386
+      # list_available_rpm http://free.nchc.org.tw/fedora/linux/releases/../updates/7/i386
       updates_ayo_path="$(LC_ALL=C echo $url_update_tmp | awk -F' ' '{print $2}' | sed -e "s|/$||g")"
       url_updates_root=$url_updates/$updates_ayo_path
       echo "$msg_delimiter_star_line"
@@ -4193,9 +4192,9 @@ get_url_ocs_then_install_curl_etc_via_yum_if_necessary() {
 	# We have to remove the last "/" in the path,
 	# Ex: fedora/linux/releases/ -> fedora/linux/releases
 	# otherwise for example, this command will have problem:
-	# /opt/drbl/bin/list_available_rpm http://free.nchc.org.tw/fedora/linux/releases//../updates/7/i386
+	# list_available_rpm http://free.nchc.org.tw/fedora/linux/releases//../updates/7/i386
 	# The place "//../" is the key problem. It should be
-	# /opt/drbl/bin/list_available_rpm http://free.nchc.org.tw/fedora/linux/releases/../updates/7/i386
+	# list_available_rpm http://free.nchc.org.tw/fedora/linux/releases/../updates/7/i386
         os_ayo_path="$(echo $url_tmp | awk -F' ' '{print $2}' | sed -e "s|/$||g")"
         url_os_coreroot=$url_os/$os_ayo_path
         echo "$msg_delimiter_star_line"

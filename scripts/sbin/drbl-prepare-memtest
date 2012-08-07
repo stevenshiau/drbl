@@ -2,11 +2,11 @@
 # Steven Shiau <steven _at_ nchc org tw>
 # License: GPL
 # Description: prepare the memtest86+ by using the files on the system or download and extract the required programs for DRBL.
-DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/opt/drbl/}"
+DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/usr/share/drbl/}"
 
 . $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
-. $DRBL_SCRIPT_PATH/conf/drbl-ocs.conf
-. $DRBL_SCRIPT_PATH/sbin/ocs-functions
+[ -e /etc/drbl/drbl-ocs.conf ] && . /etc/drbl/drbl-ocs.conf
+[ -e $DRBL_SCRIPT_PATH/sbin/ocs-functions ] && . $DRBL_SCRIPT_PATH/sbin/ocs-functions
 
 # Local settings
 # By default we only copy the required files to $pxelinux_binsrc_dir. This option will allow us to copy files to dir $pxecfg_pd.

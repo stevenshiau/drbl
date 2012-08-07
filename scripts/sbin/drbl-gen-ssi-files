@@ -3,11 +3,11 @@
 # License: GPL
 #
 # Loading setting
-DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/opt/drbl/}"
+DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/usr/share/drbl/}"
 
 . $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
-. $DRBL_SCRIPT_PATH/conf/drbl-ocs.conf
-. $DRBL_SCRIPT_PATH/sbin/ocs-functions
+[ -e /etc/drbl/drbl-ocs.conf ] && . /etc/drbl/drbl-ocs.conf
+[ -e $DRBL_SCRIPT_PATH/sbin/ocs-functions ] && . $DRBL_SCRIPT_PATH/sbin/ocs-functions
 #
 check_if_root
 # drbl_deploy.conf can only be access by root, so check_if_root should be run first.
@@ -119,9 +119,6 @@ echo -n "etc... "
 echo -n "var... "
 # 2 >/dev/null to avoid some warnings about socket files in /var/
 (cd $template/; tar -czf $drbl_common_root/drbl_ssi/template_var.tgz var 2>/dev/null)
-echo -n "opt/drbl... "
-(cd /; tar --exclude=doc --exclude=setup -czf $drbl_common_root/drbl_ssi/template_opt_drbl.tgz /opt/drbl 2>/dev/null) 
-
 # make them can read by root only, better security
 chmod 600 $drbl_common_root/drbl_ssi/template_*.tgz
 

@@ -45,7 +45,7 @@ our $DEFAULT_DOMAINNAME="drbl.name";
 # flag to turn on/off NAT service in drbl server
 our $drbl_server_as_NAT_server;
 
-# This parameters are also defined in /opt/drbl/conf/drbl.conf!!!
+# This parameters are also defined in drbl.conf!!!
 # They need to be consistent!!!
 # TODO: find a better way to do.
 # Except $DRBL_SCRIPT_PATH, others now we can get by get-drbl-conf-param
@@ -2029,7 +2029,7 @@ ocsroot="$(LC_ALL=C echo $ocsroot | sed -e "s|/[[:space:]]*$||g")"
 ocs_img_repo_dir="$(LC_ALL=C echo $ocs_img_repo_dir | sed -e "s|/[[:space:]]*$||g")"
 if [ "$ocs_img_repo_dir" != "$ocsroot" ]; then
   sub_cmd="s|^[[:space:]]*ocsroot=.*|ocsroot=\"$ocs_img_repo_dir\" # Modified by drblpush|g"
-  perl -pi -e "$sub_cmd" /opt/drbl/conf/drbl.conf
+  perl -pi -e "$sub_cmd" /etc/drbl/drbl.conf
 fi
 
 case "$purge_client" in
@@ -3780,7 +3780,7 @@ EOF
       # hostname for client
       # The default name will like fc101, fc2201...,
       # i.e. $prefix{ethx}{client no}
-      # If the hostname is assigned in /opt/drbl/conf/client-ip-hostname, 
+      # If the hostname is assigned in /etc/drbl/client-ip-hostname, 
       # we will ust that.
       $label_default="";
       if($i<10) { $label_default=$hostname."0".$i; }

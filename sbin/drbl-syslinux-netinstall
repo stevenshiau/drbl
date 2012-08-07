@@ -6,8 +6,8 @@
 DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/usr/share/drbl/}"
 
 . $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
-. $DRBL_SCRIPT_PATH/conf/drbl-ocs.conf
-. $DRBL_SCRIPT_PATH/sbin/ocs-functions
+[ -e /etc/drbl/drbl-ocs.conf ] && . /etc/drbl/drbl-ocs.conf
+[ -e $DRBL_SCRIPT_PATH/sbin/ocs-functions ] && . $DRBL_SCRIPT_PATH/sbin/ocs-functions
 
 #
 supported_dists="$(LC_ALL=C set | grep -i "_netinstall_ver" | awk -F"_" '{print $1}' | sort | uniq)"

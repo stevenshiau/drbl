@@ -6,8 +6,8 @@
 DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/usr/share/drbl/}"
 
 . $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
-. $DRBL_SCRIPT_PATH/conf/drbl-ocs.conf
-. $DRBL_SCRIPT_PATH/sbin/ocs-functions
+[ -e /etc/drbl/drbl-ocs.conf ] && . /etc/drbl/drbl-ocs.conf
+[ -e $DRBL_SCRIPT_PATH/sbin/ocs-functions ] && . $DRBL_SCRIPT_PATH/sbin/ocs-functions
 
 export LC_ALL=C
 #
@@ -109,7 +109,7 @@ while [ $# -gt 0 ]; do
   esac
 done
 
-# fdos_img_output should be in /opt/drbl/conf/drbl.conf
+# fdos_img_output should be in /etc/drbl/drbl.conf
 [ -z "$fdos_img_output" ] && echo "You must provide the FreeDOS image filename! Program terminated!!!" && exit 1
 
 # if console output is assign, default to use menu.c32 instead of vesamenu.c32
