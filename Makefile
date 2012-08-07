@@ -38,7 +38,7 @@ install:
 	install -d $(DESTDIR)/$(SHAREDIR)/
 	cp -a setup $(DESTDIR)/$(SHAREDIR)/
 	# install other shared files
-	cp -a conf lang doc pkg pki image $(DESTDIR)/$(SHAREDIR)/
+	cp -a conf lang doc pkg pki image prerun postrun $(DESTDIR)/$(SHAREDIR)/
 	cp -a scripts/sbin scripts/bin $(DESTDIR)/$(SHAREDIR)/
 	# install config files
 	install -d $(DESTDIR)/etc/drbl/
