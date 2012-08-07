@@ -1,6 +1,7 @@
 #!/bin/bash
 # Author: Steven Shiau <steven _at_ nchc org tw>
 # License: GPL 
+# This file should be in /usr/bin/, not in /usr/share/drbl, so drblpush can call it in the beginning.
 
 export LC_ALL=C
 # Source DRBL setting
