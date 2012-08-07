@@ -4,5 +4,5 @@ name=DRBL unstable packages
 mirrorlist=http://free.nchc.org.tw/drbl-core/drbl-unstable-mirror-list
 enabled=0
 gpgcheck=1
-# gpgkey=file:///opt/drbl/pki/rpm-gpg/RPM-GPG-KEY-DRBL
+# gpgkey=file:///usr/share/drbl/pki/rpm-gpg/RPM-GPG-KEY-DRBL
 gpgkey=http://drbl.nchc.org.tw/GPG-KEY-DRBL

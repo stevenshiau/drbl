@@ -277,20 +277,11 @@ echo "done!"
 # Perl (used in drbl-ssi-client-prepare) is only available after
 # /usr is mounted.
 if [ "$ssi_flag" = "1" ]; then
-  # we need /opt/drbl, where a lot of drbl programs exist.
   if [ "$RL" = "1" ]; then
     # In clonezill box mode, to let kudzu shut up, we need /etc/X11 to write X config, since we already use --exclude=X11 to exclude that dir.
     mkdir -p /etc/X11
-    # To lower the network, use tarball & tmpfs
-    echo -n "Creating one-time-use dir... "
-    echo -n "/opt/drbl... "
-    mount -n -t tmpfs -o mode=0755 none /opt/
-    tar -xzf /drbl_ssi/template_opt_drbl.tgz -C /
   else
     # only DRBL SSI mode, not in clonezilla box mode, use NFS
-    echo -n "Mounting NFS dir /opt... "
-    do_nfs_mount $nfsserver:/opt /opt $RO_NFS_EXTRA_OPT $NFS_OPT_TO_ADD
-    NFS_OPT_TO_ADD_FLAG=$((NFS_OPT_TO_ADD_FLAG + $?))
     # We need /var/lib/dpkg or /var/lib/rpm so that later in drbl-ssi-client-prepare, we can use dpkg or rpm to query package to get the GDM_CFG or KDE_CFG
     if [ -d /var/lib/dpkg ]; then
       echo -n "/var/lib/dpkg... "
@@ -303,7 +294,7 @@ if [ "$ssi_flag" = "1" ]; then
     fi
   fi
   echo "done!"
-  /opt/drbl/sbin/drbl-ssi-client-prepare $nfsserver "$RO_NFS_EXTRA_OPT" $RL
+  drbl-ssi-client-prepare $nfsserver "$RO_NFS_EXTRA_OPT" $RL
 fi
 
 # 

@@ -2,7 +2,7 @@
 # Author: Steven Shiau <steven _at_ nchc org tw>
 # License: GPL
 # Description: This program will startup the iptables NAT for DRBL clients when DRBL server boots.
-# Note: This program is different with /opt/drbl/sbin/drbl-nat-rules
+# Note: This program is different with drbl-nat-rules
 #       drbl-nat-rules: a program to generate "NAT rules" for DRBL clients.
 #       drbl-clients-nat: a startup "NAT service" for DRBL server when it boots.
 
@@ -18,7 +18,7 @@
 
 #set -e
 
-DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/opt/drbl/}"
+DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/usr/share/drbl/}"
 
 . $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
 
