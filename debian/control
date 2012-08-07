@@ -4,7 +4,7 @@ Priority: extra
 Maintainer: Georges Khaznadar <georgesk@ofset.org>
 Build-Depends: debhelper (>= 8.0.0), quilt, vim-common
 Standards-Version: 3.9.3
-Homepage: http://drbl.sourceforge.net/
+Homepage: http://drbl.org/
 
 Package: drbl
 Architecture: all

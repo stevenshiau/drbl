@@ -32,13 +32,12 @@ languages:
 install:
 	# install exec files
 	install -d $(DESTDIR)/usr/
-	cp -a sbin $(DESTDIR)/usr/
-	cp -a bin $(DESTDIR)/usr//
+	cp -a sbin bin $(DESTDIR)/usr/
 	# install setup dir
 	install -d $(DESTDIR)/$(SHAREDIR)/
 	cp -a setup $(DESTDIR)/$(SHAREDIR)/
 	# install other shared files
-	cp -a conf lang doc pkg pki image prerun postrun $(DESTDIR)/$(SHAREDIR)/
+	cp -a lang doc pkg pki image prerun postrun $(DESTDIR)/$(SHAREDIR)/
 	cp -a scripts/sbin scripts/bin $(DESTDIR)/$(SHAREDIR)/
 	# install config files
 	install -d $(DESTDIR)/etc/drbl/

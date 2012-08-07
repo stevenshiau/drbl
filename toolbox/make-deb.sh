@@ -13,8 +13,8 @@ VER=`grep ^Version $SPEC_FILE |sed -e "s/\t/ /g" -e "s/ \+/ /g" |cut  -d":" -f2 
 echo "VER: $VER"
 
 #
-TARBALL=drbl-$VER.tar.bz2
-TARBALL_ORIG=drbl_$VER.orig.tar.bz2
+TARBALL=${PKG}-${VER}.tar.bz2
+TARBALL_ORIG=${PKG}_${VER}.orig.tar.bz2
 
 # check
 [ ! -f "$TARBALL" ] && echo "Can NOT find file $TARBALL! Did you forget to update the rdate in file drbl.spec ? Program Stop!!!" && exit 1
