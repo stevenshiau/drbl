@@ -8,7 +8,7 @@
 
 # Source DRBL setting
 if [ ! -f "/etc/drbl/drbl.conf" ]; then
-  echo "File /etc/conf/drbl.conf not found! Program terminated!" 
+  echo "File /etc/drbl/drbl.conf not found! Program terminated!" 
   exit 1
 fi
 . /etc/drbl/drbl.conf
