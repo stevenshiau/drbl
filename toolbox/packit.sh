@@ -31,7 +31,7 @@ td=drbl"-""$VER"
 mkdir -p $td
 # Clean stale files in debian
 rm -rf debian/{drbl,tmp}
-cp -r Makefile sbin bin doc lang pkg scripts themes conf image pki setup $td/
+cp -r Makefile drbl.spec sbin bin doc lang pkg scripts themes conf image pki setup $td/
 
 echo $VER > $td/doc/VERSION.$VER
 tar cvjf $td.tar.bz2 --owner=root --group=root $td
