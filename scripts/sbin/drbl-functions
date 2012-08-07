@@ -8,7 +8,7 @@
 
 # Source DRBL setting
 DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/usr/share/drbl/}"
-. $DRBL_SCRIPT_PATH/conf/drbl.conf
+. /etc/drbl/drbl.conf
 
 # Append a default search path.
 PATH="$DRBL_SCRIPT_PATH/sbin:$DRBL_SCRIPT_PATH/bin:$PATH:/usr/sbin:/usr/bin:/sbin:/bin:/usr/X11R6/bin"
