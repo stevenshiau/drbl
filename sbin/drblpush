@@ -49,7 +49,7 @@ our $drbl_server_as_NAT_server;
 # They need to be consistent!!!
 # TODO: find a better way to do.
 # Except $DRBL_SCRIPT_PATH, others now we can get by get-drbl-conf-param
-our $DRBL_SCRIPT_PATH="/opt/drbl";
+our $DRBL_SCRIPT_PATH;
 our $drbl_setup_path;
 our $drbl_syscfg;
 # file name to record the auto login ID and passwd
@@ -64,7 +64,8 @@ our $DHCPD_DEFAULT_LEASE_TIME;
 our $DHCPD_MAX_LEASE_TIME;
 our $pxecfg_pd;
 
-#
+# First we need to get DRBL_SCRIPT_PATH.
+chomp($DRBL_SCRIPT_PATH=`LC_ALL=C get-drbl-conf-param DRBL_SCRIPT_PATH`);
 $ENV{'PATH'} = "$ENV{'PATH'}:$DRBL_SCRIPT_PATH/sbin:$DRBL_SCRIPT_PATH/bin:";
 
 # Get them from drbl.conf
