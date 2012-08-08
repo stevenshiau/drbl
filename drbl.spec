@@ -27,7 +27,7 @@ make all
 
 %install
 [ -d "$RPM_BUILD_ROOT" ] && rm -rf $RPM_BUILD_ROOT
-make install prefix=$RPM_BUILD_ROOT/
+make install DESTDIR=$RPM_BUILD_ROOT/
 
 %clean
 [ -d "$RPM_BUILD_ROOT" ] && rm -rf $RPM_BUILD_ROOT
@@ -38,16 +38,11 @@ make install prefix=$RPM_BUILD_ROOT/
 
 %files
 %defattr(-,root,root)
-/opt/drbl/setup/*
-/opt/drbl/conf/*
-/opt/drbl/lang/*
-/opt/drbl/pkg/*
-/opt/drbl/pki/*
-/opt/drbl/image/*
-/opt/drbl/doc/*
-/opt/drbl/sbin/*
-/opt/drbl/bin/*
-%{_datadir}/gdm/themes/drbl-gdm/*
+/usr/sbin/*
+/usr/bin/*
+/usr/share/drbl/*
+/etc/drbl/*
+/usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
 * Mon Aug 06 2012 Steven Shiau <steven _at_ nchc org tw> 2.0.0-1drbl
