@@ -40,15 +40,12 @@ our $DEFAULT_CLIENT_SYSTEM_BOOT_TIMEOUT="70";
 
 #
 our $DEFAULT_NISDOMAINNAME="penguinzilla";
-our $DEFAULT_DOMAINNAME="drbl.name";
+our $DEFAULT_DOMAINNAME="drbl.org";
 
 # flag to turn on/off NAT service in drbl server
 our $drbl_server_as_NAT_server;
 
-# This parameters are also defined in drbl.conf!!!
-# They need to be consistent!!!
-# TODO: find a better way to do.
-# Except $DRBL_SCRIPT_PATH, others now we can get by get-drbl-conf-param
+# This parameters are defined in drbl.conf or environment variables (e.g. DRBL_SCRIPT_PATH).
 our $DRBL_SCRIPT_PATH;
 our $drbl_setup_path;
 our $drbl_syscfg;
@@ -4189,7 +4186,7 @@ export LC_ALL=$LC_ALL_org
 
 echo "$msg_delimiter_star_line"
 echo "Enjoy DRBL!!!"
-echo "http://drbl.nchc.org.tw; http://drbl.name"
+echo "http://drbl.org; http://drbl.nchc.org.tw"
 echo "NCHC Free Software Labs, Taiwan. http://free.nchc.org.tw"
 echo "$msg_delimiter_star_line"
 
