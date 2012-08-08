@@ -1,3 +1,9 @@
+drbl (2.0.1-drbl1) unstable; urgency=low
+
+  * Adding firstboot.DBN6.0.5.drbl for Debian 6.0.5.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 08 Aug 2012 19:56:18 +0800
+
 drbl (2.0.0-drbl1) unstable; urgency=low
 
   * DRBL Version 2. New files arch so it's easier to be packaged in Debian.
