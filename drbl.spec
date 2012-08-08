@@ -45,6 +45,8 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+- Bug fixed: get-assigned-hn-by-ip searched the wrong path.
+
 * Wed Aug 08 2012 Steven Shiau <steven _at_ nchc org tw> 2.0.1-1drbl
 - Adding firstboot.DBN6.0.5.drbl for Debian 6.0.5.
 

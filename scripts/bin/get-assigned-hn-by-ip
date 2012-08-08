@@ -3,12 +3,9 @@
 # License: GPL
 # Description: To get the hostname by IP address assigend in $DRBL_SCRIPT_PATH/conf/client-ip-hostname
 
-# Loading setting.
-. /etc/drbl/drbl.conf
 #
-export LC_ALL=C
 IP=$1
 [ -z "$IP" ] && exit 1
-if [ -f $DRBL_SCRIPT_PATH/conf/client-ip-hostname ]; then
-  grep -iEw "^[[:space:]]*${IP}" $DRBL_SCRIPT_PATH/conf/client-ip-hostname | awk -F" " '{print $2}'
+if [ -f /etc/drbl/client-ip-hostname ]; then
+  LC_ALL=C grep -iEw "^[[:space:]]*${IP}" /etc/drbl/client-ip-hostname | awk -F" " '{print $2}'
 fi
