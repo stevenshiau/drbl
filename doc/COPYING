@@ -24,9 +24,7 @@ License: GPL-2
 
 Files: pkg/misc/fail-mbr.bin
 Copyright: 209 Orgad Shaneh
-License: Unknown
- We should contact the author, ask for a source eventually or comments
- about this file, and apply eventually a license as for an image. ??
+License: BSD
 
 Files: debian/*
 Copyright: 2011-2012 Georges Khaznadar <georgesk@ofset.org>

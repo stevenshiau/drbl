@@ -44,8 +44,6 @@ install:
 	# install themes
 	install -d $(DESTDIR)/usr/share/gdm/themes/drbl-gdm
 	cp -a themes/* $(DESTDIR)/usr/share/gdm/themes/drbl-gdm/
-	# erase an extra COPYING
-	rm -f $(DESTDIR)/$(SHAREDIR)/doc/COPYING
 
 clean:
 	$(MAKE) -C sbin clean

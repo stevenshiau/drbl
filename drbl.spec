@@ -45,7 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Thu Aug 09 2012 Steven Shiau <steven _at_ nchc org tw> 2.0.1-1drbl
 - Bug fixed: get-assigned-hn-by-ip searched the wrong path.
+- Keep COPYING because ocs-iso, create-*-live need that.
 
 * Wed Aug 08 2012 Steven Shiau <steven _at_ nchc org tw> 2.0.1-1drbl
 - Adding firstboot.DBN6.0.5.drbl for Debian 6.0.5.
