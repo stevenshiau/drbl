@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.0.1
+Version:	2.0.2
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,9 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
-* Thu Aug 09 2012 Steven Shiau <steven _at_ nchc org tw> 2.0.1-1drbl
+* Thu Aug 09 2012 Steven Shiau <steven _at_ nchc org tw> 2.0.2-1drbl
 - Bug fixed: get-assigned-hn-by-ip searched the wrong path.
-- Keep COPYING because ocs-iso, create-*-live need that.
+- Put the GPL text file instead of COPYING because ocs-iso, create-*-live need that.
 - Put the file license of fail-mbr.bin as BSD. Orgad Shaneh has decided the license.
 
 * Wed Aug 08 2012 Steven Shiau <steven _at_ nchc org tw> 2.0.1-1drbl

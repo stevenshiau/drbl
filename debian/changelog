@@ -1,3 +1,11 @@
+drbl (2.0.2-drbl1) unstable; urgency=low
+
+  * Bug fixed: get-assigned-hn-by-ip searched the wrong path.
+  * Put the GPL text file instead of COPYING because ocs-iso, create-*-live need that.
+  * Put the file license of fail-mbr.bin as BSD. Orgad Shaneh has decided the license.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 09 Aug 2012 09:11:23 +0800
+
 drbl (2.0.1-drbl1) unstable; urgency=low
 
   * Adding firstboot.DBN6.0.5.drbl for Debian 6.0.5.
