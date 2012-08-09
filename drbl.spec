@@ -45,6 +45,8 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+- Remove those related to "$DRBL_SCRIPT_PATH" from language files.
+
 * Thu Aug 09 2012 Steven Shiau <steven _at_ nchc org tw> 2.0.2-1drbl
 - Bug fixed: get-assigned-hn-by-ip searched the wrong path.
 - Put the GPL text file instead of COPYING because ocs-iso, create-*-live need that.
