@@ -1,29 +1,24 @@
 #!/bin/bash
-# generate the ChangeLog.txt from drbl.spec
-SPEC_FILE="drbl.spec"
+# generate the ChangeLog.txt and create the tarball
 
 set -e
 #
-[ ! -e "$SPEC_FILE" ] && exit 1
-[ -f "doc/ChangeLog.txt" ] && rm -f doc/ChangeLog.txt
-line_begin="$(grep -n "%changelog" $SPEC_FILE | awk -F":" '{print $1}')"
-line_eng="$(wc -l $SPEC_FILE | awk -F" " '{print $1}')"
-lines=$(($line_eng - $line_begin))
+VER="$(LC_ALL=C head -n 1 debian/changelog  | grep -i "^drbl" | grep -E -o "\(.*\)" | sed -r -e "s/\(//g" -e "s/\)//g" | cut -d"-" -f1)"
+[ -z "$VER" ] && echo "No version found in debian/changelog! Program terminated!"
+echo "VER: $VER"
+
+#
 cat <<EOF > doc/ChangeLog.txt
-DRBL for Debian/Ubuntu/RedHat/Fedora/CentOS/SuSE
-Author: Steven Shiau <steven _at_ nchc org tw>, Blake, Kuo-Lien Huang (klhaung _at_ gmail com), H. T. Wang (c00wht00 _at_ nchc org tw), Ceasar Sun (ceasar _at_ nchc org tw), Jazz Wang (jazz _at_ nchc org tw) and Thomas Tsai (thomas _at_ nchc org tw)
+DRBL project.
+Author: Steven Shiau <steven _at_ nchc org tw>, Blake, Kuo-Lien Huang (klhaung _at_ gmail com), Ceasar Sun (ceasar _at_ nchc org tw), Jazz Wang (jazz _at_ nchc org tw) and Thomas Tsai (thomas _at_ nchc org tw)
 License: GPL
 http://drbl.org
-http://drbl.nchc.org.tw
 http://drbl.sourceforge.net
+http://drbl.nchc.org.tw
 
 EOF
 
-tail -n $lines $SPEC_FILE >> doc/ChangeLog.txt
-
-#
-VER=`grep ^Version $SPEC_FILE |sed -e "s/\t/ /g" -e "s/ \+/ /g" |cut  -d":" -f2 |tr -d " "`
-echo "VER: $VER"
+cat debian/changelog >> doc/ChangeLog.txt
 
 #
 td=drbl"-""$VER"

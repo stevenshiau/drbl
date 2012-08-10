@@ -1,3 +1,9 @@
+drbl (2.0.3-drbl1) unstable; urgency=low
+
+  * Remove those related to "$DRBL_SCRIPT_PATH" from language files.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 09 Aug 2012 14:45:17 +0800
+
 drbl (2.0.2-drbl1) unstable; urgency=low
 
   * Bug fixed: get-assigned-hn-by-ip searched the wrong path.

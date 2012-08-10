@@ -1,15 +1,12 @@
 #!/bin/bash
 # Steven Shiau <steven _at_ nchc org tw)
 #
-PKG="drbl"
-SPEC_FILE="$PKG.spec"
 
 set -e
+PKG="drbl"
 #
-[ ! -f "$SPEC_FILE" ] && echo "Can NOT find spec file $SPEC_FILE" && exit 1
-
-#
-VER=`grep ^Version $SPEC_FILE |sed -e "s/\t/ /g" -e "s/ \+/ /g" |cut  -d":" -f2 |tr -d " "`
+VER="$(LC_ALL=C head -n 1 debian/changelog  | grep -i "^drbl" | grep -E -o "\(.*\)" | sed -r -e "s/\(//g" -e "s/\)//g" | cut -d"-" -f1)"
+[ -z "$VER" ] && echo "No version found in debian/changelog! Program terminated!"
 echo "VER: $VER"
 
 #
