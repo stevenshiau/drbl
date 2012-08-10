@@ -2,7 +2,7 @@
 # generate the ChangeLog.txt and create the tarball
 
 # Settings
-PKG="clonezilla"
+PKG="drbl"
 FILES_DIRS="Makefile drbl.spec sbin bin doc lang pkg scripts themes conf image pki setup prerun postrun"
 
 set -e
@@ -30,7 +30,6 @@ td="${PKG}-${VER}"
 [ -d "$td" ] && rm -rf $td
 mkdir -p $td
 # Clean stale files in debian
-rm -rf debian/{drbl,tmp}
 cp -ar $FILES_DIRS $td/
 
 echo $VER > $td/doc/VERSION
