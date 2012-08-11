@@ -2826,3 +2826,27 @@ get_latest_pkg_in_drbl_repository() {
   [ -d "$ktmp" -a -n "$(echo $ktmp | grep "live_pver")" ] && rm -rf $ktmp
   return 0
 } # end of get_latest_pkg_in_drbl_repository
+#
+gen_CDG_checksums() {
+  # This function will generate Clonezilla, DRBL, GParted live checksum files, including MD5SUMS, SHA1SUMS, and a file called CHECKSUMS.TXT including MD5 and SHA1 checksums.
+  local sum_file="CHECKSUMS.TXT"
+  local filetype="iso zip tar.gz"
+  echo -n "Creating checksums..."
+  rm -f MD5SUMS SHA1SUMS
+  for i in $filetype; do
+    if [ -n "$(ls *.$i 2>/dev/null)" ]; then
+      echo -n "."
+      LC_ALL=C md5sum *.$i  >> MD5SUMS
+      echo -n "."
+      LC_ALL=C sha1sum *.$i >> SHA1SUMS 
+    fi
+  done
+  echo " Done!"
+  
+  echo "MD5SUMS" > $sum_file
+  cat MD5SUMS >> $sum_file
+
+  echo >> $sum_file
+  echo "SHA1SUMS" >> $sum_file
+  cat SHA1SUMS >> $sum_file
+} # end of gen_CDG_checksums

@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.0.5-drbl1) unstable; urgency=low
+
+  * Function gen_CDG_checksums was added in drbl-funtions.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sat, 11 Aug 2012 17:45:00 +0800
+
 drbl (2.0.4-drbl1) unstable; urgency=low
 
   * Function get_latest_pkg_in_drbl_repository was added in drbl-funtions.

@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.0.4
+Version:	2.0.5
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Sat Aug 11 2012 Steven Shiau <steven _at_ nchc org tw> 2.0.5-1drbl
+- Function gen_CDG_checksums was added in drbl-funtions.
+
 * Sat Aug 11 2012 Steven Shiau <steven _at_ nchc org tw> 2.0.4-1drbl
 - Function get_latest_pkg_in_drbl_repository was added in drbl-funtions.
 
