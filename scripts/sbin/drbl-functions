@@ -2789,3 +2789,40 @@ Acquire
 };
 APT_END
 } # end of disable_apt_lang_translation
+#
+get_latest_pkg_in_drbl_repository() {
+  local branch pkg ktmp
+  # pver is global variabl
+  branch="$1" # e.g. live-experimental, unstable...
+  pkg="$2"  # e.g. live-boot
+  if [ -z "$branch" ]; then
+    echo "No \$branch in function get_latest_pkg_in_repository!"
+    exit 1
+  fi
+  if [ -z "$pkg" ]; then
+    echo "No \$pkg in function get_latest_pkg_in_repository!"
+    exit 1
+  fi
+  ktmp="$(mktemp -d /tmp/live_pver.XXXXXX || exit 1)"
+    echo "Downloading $drbl_mirror_url/dists/drbl/$branch/binary-i386/Packages.gz to finding latest $pkg version..."
+    LC_ALL=C wget -q -P $ktmp/ $drbl_mirror_url/dists/drbl/$branch/binary-i386/Packages.gz
+    pver="$(zgrep -Ew -A 10 "^Package: $pkg" $ktmp/Packages.gz | grep -E "^Version:" | sed -e "s/^Version: //g" | sort -V -r | uniq | head -n 1)"
+    if [ -z "$pver" ]; then
+      # Clean Packages.gz to avoid wget using another name like Packages.gz.1 then search the next again
+      rm -f $ktmp/Packages.gz
+      return 1
+    fi
+  if [ -n "$pver" ]; then
+    release_kernel_ver="$pver"
+  else
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+    echo "Warning!"
+    echo "Unable to find the latest kernel version in $drbl_mirror_url/dists/$i/main/binary-i386/Packages.gz. Use the pre-defined one."
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+    echo -n "$msg_press_enter_to_continue"
+    read 
+    eval release_kernel_ver="\$${i}_release_kernel_ver_def"
+  fi
+  [ -d "$ktmp" -a -n "$(echo $ktmp | grep "live_pver")" ] && rm -rf $ktmp
+  return 0
+} # end of get_latest_pkg_in_drbl_repository
