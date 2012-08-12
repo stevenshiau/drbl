@@ -11,7 +11,14 @@ DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/usr/share/drbl}"
 . /etc/drbl/drbl.conf
 
 # Append a default search path.
-PATH="$DRBL_SCRIPT_PATH/sbin:$DRBL_SCRIPT_PATH/bin:$PATH:/usr/sbin:/usr/bin:/sbin:/bin:/usr/X11R6/bin"
+# To make it like: 
+# PATH="$PATH:$DRBL_SCRIPT_PATH/sbin:$DRBL_SCRIPT_PATH/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/X11R6/bin"
+path_to_add="$DRBL_SCRIPT_PATH/sbin $DRBL_SCRIPT_PATH/bin /usr/sbin /usr/bin /sbin"
+for i in $path_to_add; do
+  if [ -z "$(echo $PATH | grep -F $i)" ]; then
+    PATH="$PATH:$i"
+  fi
+done
 export PATH
 
 # setup some parameters for color output. The variables should be already 
