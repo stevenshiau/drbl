@@ -9,7 +9,7 @@
 # SL: Small Linux (Damn Small Linux, Puppy Linux, Clonezilla live, GParted live..)
 #
 # Load DRBL setting and functions
-DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/usr/share/drbl/}"
+DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/usr/share/drbl}"
 
 . $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
 

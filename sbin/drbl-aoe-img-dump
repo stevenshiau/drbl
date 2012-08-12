@@ -3,7 +3,7 @@
 # License: GPL
 # Description: Program to dump AoE image to DRBL server.
 
-DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/usr/share/drbl/}"
+DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/usr/share/drbl}"
 
 . $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
 [ -e /etc/drbl/drbl-ocs.conf ] && . /etc/drbl/drbl-ocs.conf

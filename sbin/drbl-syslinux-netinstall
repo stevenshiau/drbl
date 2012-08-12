@@ -3,7 +3,7 @@
 # License: GPL
 # Description: Download the netinstall kernel & initrd and package them as a zip file for USB flash drive to boot and install GNU/Linux.
 
-DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/usr/share/drbl/}"
+DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/usr/share/drbl}"
 
 . $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
 [ -e /etc/drbl/drbl-ocs.conf ] && . /etc/drbl/drbl-ocs.conf

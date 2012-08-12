@@ -7,7 +7,7 @@
 # //NOTE// Do NOT set the locale by "export LC_ALL=C". It will make dialog distortation.
 
 # Source DRBL setting
-DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/usr/share/drbl/}"
+DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/usr/share/drbl}"
 . /etc/drbl/drbl.conf
 
 # Append a default search path.

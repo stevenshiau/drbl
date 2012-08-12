@@ -2,7 +2,7 @@
 # Steven Shiau <steven _at_ nchc org tw>
 # License: GPL
 # Description: prepare the memtest86+ by using the files on the system or download and extract the required programs for DRBL.
-DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/usr/share/drbl/}"
+DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/usr/share/drbl}"
 
 . $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
 [ -e /etc/drbl/drbl-ocs.conf ] && . /etc/drbl/drbl-ocs.conf

@@ -13,7 +13,7 @@
 #
 # We want to change append line only in the label AoE-client block.
 
-DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/usr/share/drbl/}"
+DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/usr/share/drbl}"
 . $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
 
 USAGE() {
