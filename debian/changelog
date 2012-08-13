@@ -1,3 +1,9 @@
+drbl (2.0.8-drbl1) unstable; urgency=low
+
+  * Bug fixed: drblsrv-offline should be in /usr/sbin instead of /usr/share/drbl/sbi/.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 13 Aug 2012 11:15:51 +0800
+
 drbl (2.0.7-drbl1) unstable; urgency=low
 
   * A better way to append drbl-related PATH was adopted.
