@@ -1,0 +1,12 @@
+Package: drbl
+Description: diskless remote boot, and a disk cloning utility
+ DRBL (Diskless Remote Boot in Linux) provides a diskless or
+ systemless environment for client machines. It works on Debian,
+ Ubuntu, Mandriva, Red Hat, Fedora, CentOS and OpenSuSE. DRBL uses
+ distributed hardware resources and makes it possible for clients to
+ fully access local hardware. It also includes Clonezilla, a partition
+ and disk cloning utility similar to Symantec Ghost(TM) or True
+ Image(TM).
+ For more details, check
+  1. http://drbl.org, http://drbl.sourceforge.net (English)
+  2. http://drbl.nchc.org.tw (Traditional Chinese - Taiwan)
