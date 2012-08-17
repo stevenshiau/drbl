@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.0.9-drbl1) unstable; urgency=low
+
+  * Improvement: drbl-SL.sh now supports Clonezilla and GParted live zip file format.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 17 Aug 2012 10:52:58 +0800
+
 drbl (2.0.8-drbl1) unstable; urgency=low
 
   * Bug fixed: drblsrv-offline should be in /usr/sbin instead of /usr/share/drbl/sbi/.
