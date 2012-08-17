@@ -45,6 +45,8 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+- Improvement: drbl-SL.sh now supports Clonezilla and GParted live zip file format.
+
 * Mon Aug 13 2012 Steven Shiau <steven _at_ nchc org tw> 2.0.8-1drbl
 - Bug fixed: drblsrv-offline should be in /usr/sbin instead of /usr/share/drbl/sbi/.
 

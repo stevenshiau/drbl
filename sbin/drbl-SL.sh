@@ -14,7 +14,7 @@ DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/usr/share/drbl}"
 . $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
 
 # Settings
-SL_ISO_URL_EXAMPLE="http://downloads.sourceforge.net/clonezilla/clonezilla-live-1.2.6-24-i686.iso"
+SL_ISO_URL_EXAMPLE="http://downloads.sourceforge.net/clonezilla/clonezilla-live-1.2.12-67-i686-pae.iso"
 # The method for netboot's root file system. "fetch" means the client will download the filesystem.squashfs from tftpd server, "nfsroot" means client will mount the nfs server. By default we use fetch. "nfsroot" only works for Debian-live based system (e.g. Clonezilla live, GParted live...)
 rootfs_location="fetch"
 # Force to update the PXELinux config file
@@ -378,7 +378,9 @@ put_kernel_initrd_root_fs_on_pxe_server() {
 } # end of put_kernel_initrd_root_fs_on_pxe_server
 #
 umount_and_clean_tmp_working_dirs(){
-  umount $isomnt
+  if mountpoint $isomnt &>/dev/null; then
+    umount $isomnt
+  fi
   [ -d "$isomnt" -a -n "$(echo $isomnt | grep "drblsl_tmp")" ] && rm -rf $isomnt
   [ -d "$wd" -a -n "$(echo $wd | grep "drbl_sl_wd")" ] && rm -rf $wd
 } # end of umount_and_clean_tmp_working_dirs
@@ -539,8 +541,14 @@ install_SL(){
   #
   isomnt="$(mktemp -d /tmp/drblsl_tmp.XXXXXX)"
   wd="$(mktemp -d drbl_sl_wd.XXXXXX)"
+  if [ -n "$(echo $SL_ISO | grep -iE "\.iso")" ]; then
   echo "Mounting the iso file $SL_ISO at mounting point $isomnt"
-  mount -o loop $SL_ISO $isomnt
+    mount -o loop $SL_ISO $isomnt
+  elif [ -n "$(echo $SL_ISO | grep -iE "\.zip")" ]; then
+    unzip $SL_ISO -d $isomnt
+  else
+    echo "$SL_ISO: Unknown file format! Program terminated!"
+  fi
   
   # Find kernel
   echo "Finding the kernel and initrd from iso..."
