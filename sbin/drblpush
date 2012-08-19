@@ -4121,7 +4121,7 @@ esac
 if [ -e /etc/debian_version ]; then
   case "$set_DBN_client_audio_plugdev" in
      y|Y|[yY][eE][sS])
-       tune-debian-dev-group-perm -l $language -g "audio cdrom plugdev floppy video" -e $tune_DBN_audio_plugdev_extra_opt
+       tune-debian-dev-group-perm -l $language -g "$desktop_user_group_debian" -e $tune_DBN_audio_plugdev_extra_opt
        ;;
   esac
 fi

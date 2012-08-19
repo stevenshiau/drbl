@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.0.9
+Version:	2.0.10
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Sun Aug 18 2012 Steven Shiau <steven _at_ nchc org tw> 2.0.10-1drbl
+- Using $desktop_user_group_debian instead of hardcoded strings in drblpush.  Thanks to dwight (http://sourceforge.net/tracker/?func=detail&atid=537327&aid=3559290&group_id=73280).
+
 * Fri Aug 17 2012 Steven Shiau <steven _at_ nchc org tw> 2.0.9-1drbl
 - Improvement: drbl-SL.sh now supports Clonezilla and GParted live zip file format.
 
