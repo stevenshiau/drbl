@@ -45,6 +45,7 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+- A typo in language file en_US was fixed.  Thanks to René Mérou.
 * Mon Aug 20 2012 Steven Shiau <steven _at_ nchc org tw> 2.0.11-1drbl
 - Bug fixed: Failed to parse boot parameter like: "mount UUID=X /mnt" in grub booting. Thanks to nottaken37 for reporting this issue (https://sourceforge.net/projects/clonezilla/forums/forum/663168/topic/5133379).
 - Variable msg_client_job_are_logged_in in language files was updated. Thanks to René Mérou.
