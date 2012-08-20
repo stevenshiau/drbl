@@ -387,7 +387,6 @@ msg_timed_login='Login por tempo'
 msg_turn_on_client_to_make_template='Agora configure as máquinas clientes para iniciar com PXE ou Etherboot (visite http://drbl.sourceforge.net para mais detalhes). Depois, inicie o cliente para fazer a imagem. Nota: Se o sistema de arquivos da partição a ser salva é NTFS, é recomendável defragmentá-la primeiro.'
 msg_turn_on_client_to_clone='Agora configure as máquinas clientes para iniciar com PXE ou Etherboot (visite http://drbl.sourceforge.net para mais detalhes). Depois, inicie esses clientes para que a imagem possa ser restaurada neles.'
 msg_turn_on_client_to_select_clone_type='Agora configure as máquinas clientes para iniciar com PXE ou Etherboot (visite http://drbl.sourceforge.net para mais detalhes). Depois inicie esses clientes para escolher salvar ou restaurar uma imagem.'
-msg_client_job_are_logged_in='Os trabalhos do cliente são registrados no log'
 msg_client_sfdisk_log_are_in='O log do sfdisk quando Clonezilla está rodando fica no cliente'
 msg_set_the_clients_root_passwd='Configure a senha root dos clientes.'
 msg_new_passwd_prompt='Nova senha: (Serão mostrados asteriscos *)'
@@ -891,3 +890,5 @@ msg_run_clonezilla_live_again_but_keep_mounted_repository="Start over (keep imag
 # Tag on 2012/04/09
 msg_autohostname_is_reserved_for_save_mode='"autohostname" é um nome de imagem reservado, por favor use outro nome!'
 msg_no_partition_table_need_to_create='No partition is found in this machine. To restore an image of patitions, partition(s) must exist on the destination disk.'
+# Tag on 2012/08/20
+msg_client_job_are_logged_in='Client jobs are recoreded in this file'

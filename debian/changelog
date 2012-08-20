@@ -1,3 +1,10 @@
+drbl (2.0.11-drbl1) unstable; urgency=low
+
+  * Bug fixed: Failed to parse boot parameter like: "mount UUID=X /mnt" in grub booting. Thanks to nottaken37 for reporting this issue (https://sourceforge.net/projects/clonezilla/forums/forum/663168/topic/5133379).
+  * Variable msg_client_job_are_logged_in in language files was updated. Thanks to René Mérou.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 20 Aug 2012 14:59:22 +0800
+
 drbl (2.0.10-drbl1) unstable; urgency=low
 
   * Using $desktop_user_group_debian instead of hardcoded strings in drblpush.  Thanks to dwight (http://sourceforge.net/tracker/?func=detail&atid=537327&aid=3559290&group_id=73280).

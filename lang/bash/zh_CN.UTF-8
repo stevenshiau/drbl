@@ -388,7 +388,6 @@ msg_timed_login='限时登陆'
 msg_turn_on_client_to_make_template='现在请设定客户端电脑由PXE或是Etherboot开机(参考4步安装法的第四步骤)。然后启动客户端来将该电脑的硬盘资料制作成范本(母片)镜像文件。注意:如果您要存的范本是采用NTFS的文件系统，建议您先将该分区磁碟重组。'
 msg_turn_on_client_to_clone='现在请设定客户端电脑由PXE或是Etherboot开机(参考4步安装法的第四步骤)。然后启动客户端来将范本(母片)镜像文件复制到这些电脑的硬盘中。'
 msg_turn_on_client_to_select_clone_type='现在请设定客户端电脑由PXE或是Etherboot开机(参考4步安装法的第四步骤)。然后启动客户端来选择要储存或是还原。'
-msg_client_job_are_logged_in='客户端clonezilla执行的结果记录于此DRBL服务器的'
 msg_client_sfdisk_log_are_in='客户端clonezilla执行sfdisk的结果记录于各自机器的'
 msg_set_the_clients_root_passwd='设定客户端管理者(root)密码'
 msg_new_passwd_prompt='输入新的密码: (屏幕上只会出现星号*)'
@@ -894,3 +893,5 @@ msg_run_clonezilla_live_again_but_keep_mounted_repository="重来一次（保持
 # Tag on 2012/04/09
 msg_autohostname_is_reserved_for_save_mode='"autohostname"是保留来的名称，请改用其他名字!'
 msg_no_partition_table_need_to_create='在这台机器上找不到磁盘分区。要还原镜像到分区，目的磁盘必须要有分区才行。'
+# Tag on 2012/08/20
+msg_client_job_are_logged_in='Client jobs are recoreded in this file'

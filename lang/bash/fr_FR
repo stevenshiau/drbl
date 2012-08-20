@@ -388,7 +388,6 @@ msg_timed_login='Ouverture de session Timed login'
 msg_turn_on_client_to_make_template='Paramétrez maintenant les clients pour démarrer à partir de PXE ou par Etherboot (voir http://drbl.sourceforge.net pour plus d'\''informations). Ensuite démarrez un client pour générer l'\''image modèle ! Note : si la partition à sauvegarder est sous NTFS, alors il est recommandé de la défragmenter d'\''abord.'
 msg_turn_on_client_to_clone='Paramétrez maintenant les clients pour démarrer à partir de PXE ou par Etherboot (voir http://drbl.sourceforge.net pour plus d'\''informations). Ensuite démarrez ces clients pour y cloner l'\''image modèle !'
 msg_turn_on_client_to_select_clone_type='Paramétrez maintenant les clients pour démarrer à partir de PXE ou par Etherboot (voir http://drbl.sourceforge.net pour plus d'\''informations). Ensuite démarrez ces clients et choisissez de sauvegarder ou restaurer l'\''image !'
-msg_client_job_are_logged_in='Les processus clients ont ouvert une session'
 msg_client_sfdisk_log_are_in='Le journal sfdisk est enregistré sur le client'
 msg_set_the_clients_root_passwd='Paramétrage du mot de passe super-utilisateur des clients.'
 msg_new_passwd_prompt='Nouveau mot de passe : (montré sous forme d'\''étoiles *)'
@@ -893,3 +892,5 @@ msg_run_clonezilla_live_again_but_keep_mounted_repository="Recommencer (laisser 
 # Tag on 2012/04/09
 msg_autohostname_is_reserved_for_save_mode='"autohostname" est un nom d'\''image réservé. Veuillez choisir un autre nom !'
 msg_no_partition_table_need_to_create='Aucune partition trouvée sur cette machine. Une partition doit exister sur le disque cible pour pouvoir restaurer une image de partition.'
+# Tag on 2012/08/20
+msg_client_job_are_logged_in='Client jobs are recoreded in this file'

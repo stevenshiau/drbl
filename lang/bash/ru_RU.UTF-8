@@ -386,7 +386,6 @@ msg_timed_login='Временный вход в систему'
 msg_turn_on_client_to_make_template='Сейчас клиентские компьютеры настроены на загрузку с PXE или Etherboot (см. http://drbl.sourceforge.net для более подробной информации). Загрузим клиент, чтобы сделать шаблон образа! Примечание: Если раздел, который вы хотите сохранить форматирован как NTFS, рекомендуется его сначала дефрагментировать.'
 msg_turn_on_client_to_clone='Сейчас клиентские компьютеры настроены на загрузку с PXE или Etherboot (см. http://drbl.sourceforge.net для более подробной информации). Загрузим клиенты, чтобы шаблон образа мог быть клонирован на них!'
 msg_turn_on_client_to_select_clone_type='Сейчас клиентские компьютеры настроены на загрузку с PXE или Etherboot (см. http://drbl.sourceforge.net для более подробной информации). Загрузим клиенты, чтобы иметь возможность выбрать сохранить или восстановить образ!'
-msg_client_job_are_logged_in='Журнал работы клиента находится в'
 msg_client_sfdisk_log_are_in='Вести журнала sfdisk пока Clonezilla работает на клиенте'
 msg_set_the_clients_root_passwd='Установка клиентского пароля для root.'
 msg_new_passwd_prompt='Новый пароль: (будет скрыт символами *)'
@@ -890,3 +889,5 @@ msg_run_clonezilla_live_again_but_keep_mounted_repository="Start over (keep imag
 # Tag on 2012/04/09
 msg_autohostname_is_reserved_for_save_mode='"autohostname" является зарезервированным именем образа, пожалуйста, используйте другое имя!'
 msg_no_partition_table_need_to_create='No partition is found in this machine. To restore an image of patitions, partition(s) must exist on the destination disk.'
+# Tag on 2012/08/20
+msg_client_job_are_logged_in='Client jobs are recoreded in this file'

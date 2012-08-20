@@ -387,7 +387,6 @@ msg_timed_login='Zeitgesteuertes Login'
 msg_turn_on_client_to_make_template='Konfigurieren Sie jetzt die Clients, die über PXE oder Etherboot starten sollen (weitere Einzelheiten siehe http://drbl.sourceforge.net). Booten Sie dann den Client zur Erstellung des Muster-Images! Hinweis: Wenn die Partition ein NTFS-Filesystem ist, sollte dieses vorher defragmentiert werden.'
 msg_turn_on_client_to_clone='Konfigurieren Sie jetzt die Clients, die über PXE oder Etherboot starten sollen (weitere Einzelheiten siehe http://drbl.sourceforge.net). Starten Sie dann diese Clients, damit das Musterimage auf sie kopiert werden kann!'
 msg_turn_on_client_to_select_clone_type='Konfigurieren Sie jetzt die Clients, die über PXE oder Etherboot starten sollen (weitere Einzelheiten siehe http://drbl.sourceforge.net). Starten Sie dann diese Clients und wählen Sie, ob sie ein Image erstellen oder wiederherstellen wollen.'
-msg_client_job_are_logged_in='Die Jobs auf dem Client werden protokolliert in'
 msg_client_sfdisk_log_are_in='Das sfdisk-Logfile von Clonezilla ist auf Client'
 msg_set_the_clients_root_passwd='Geben Sie das root-Passwort der Clients an.'
 msg_new_passwd_prompt='Neues Passwort: (wird mit * angezeigt)'
@@ -891,3 +890,5 @@ msg_run_clonezilla_live_again_but_keep_mounted_repository="Nochmal von vorn (das
 # Tag on 2012/04/09
 msg_autohostname_is_reserved_for_save_mode='"autohostname" ist ein reservierter Name, bitte geben Sie einen anderen Namen an!'
 msg_no_partition_table_need_to_create='Auf diesem System sind keine Partitionen vorhanden. Um ein Image von Partitionen zurückzuspielen, muss die Zielplatte partitioniert sein.'
+# Tag on 2012/08/20
+msg_client_job_are_logged_in='Client jobs are recoreded in this file'

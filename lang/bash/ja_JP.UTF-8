@@ -392,7 +392,6 @@ msg_timed_login='タイムアウト後ログイン'
 msg_turn_on_client_to_make_template='ここでクライアントマシンを PXE または etherboot から起動するよう設定します(詳細はhttp://drbl.sourceforge.net 参照)。その後、テンプレートイメージを作成する為にクライアントを起動します!!注意：保存したいパーティションが NTFS ファイルシステムの場合、最初にそのパーティションをデフラグする事をお薦めします。'
 msg_turn_on_client_to_clone='ここでクライアントマシンを PXE または etherboot から起動するよう設定します(詳細はhttp://drbl.sourceforge.net 参照)。その後、クライアントを起動するので、テンプレートイメージをクライアントに複製できます!!'
 msg_turn_on_client_to_select_clone_type='ここでクライアントマシンを PXE または etherboot から起動するよう設定します(詳細はhttp://drbl.sourceforge.net 参照)。その後、クライアントを起動し、イメージの保存またはリストアを選択できます!!'
-msg_client_job_are_logged_in='クライアントジョブは次にログイン：'
 msg_client_sfdisk_log_are_in='sfdisk は Clonezilla がクライアントで実行している時に記録します'
 msg_set_the_clients_root_passwd='クライアントの root パスワードを設定します'
 msg_new_passwd_prompt='新しいパスワード：(星印ワイルドカード * で示されます)'
@@ -911,3 +910,5 @@ msg_run_clonezilla_live_again_but_keep_mounted_repository="やり直し(マウ�
 # Tag on 2012/04/09
 msg_autohostname_is_reserved_for_save_mode='「autohostname」は予約されたイメージ名です。別の名前を使用して下さい!'
 msg_no_partition_table_need_to_create='このマシンにはパーティションがありません。パーティションイメージをリストアする為には、復元先ディスクにパーティションが必要です。'
+# Tag on 2012/08/20
+msg_client_job_are_logged_in='Client jobs are recoreded in this file'
