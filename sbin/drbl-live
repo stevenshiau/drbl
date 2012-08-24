@@ -208,7 +208,7 @@ case "$switch" in
      client_IP_list_ar=( $client_IP_list )  # put it in an array
      # We can not list too long in hosts.allow, so put 20 elements in a line.
      nloop="$(echo "scale=0; ${#client_IP_list_ar[@]}/20" | bc -l )"
-     echo "# Created by drbl-live.sh" > /etc/hosts.allow
+     echo "# Created by drbl-live" > /etc/hosts.allow
      for i in `seq 1 $nloop`; do
        istart="$(echo "scale=0; 20*$((i-1))" | bc -l)"
        iend="$(echo "scale=0; 20*$((i-1))+19" | bc -l)"
@@ -256,7 +256,7 @@ case "$switch" in
    "stop")
      # block all the clients.
      mv -f /etc/hosts.allow /etc/hosts.allow.orig2
-     echo "# Disabled by drbl-live.sh" > /etc/hosts.allow
+     echo "# Disabled by drbl-live" > /etc/hosts.allow
 
      # stop and remove all services
      echo "Stop DRBL service.."

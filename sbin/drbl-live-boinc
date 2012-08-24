@@ -75,7 +75,7 @@ case "$mode" in
 esac
 
 #
-drbl-live.sh --skip-pause-in-the-end start
+drbl-live --skip-pause-in-the-end start
 
 # Set all of clients as text mode
 if [ "$mode" = "text" ]; then
