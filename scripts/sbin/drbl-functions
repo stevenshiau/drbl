@@ -1,3 +1,4 @@
+#!/bin/bash
 # -*-Shell-script-*-
 # Steven Shiau <steven _at_ nchc org tw>
 # License: GPL
@@ -2841,6 +2842,7 @@ get_latest_pkg_in_drbl_repository() {
 gen_CDG_checksums() {
   # This function will generate Clonezilla, DRBL, GParted live checksum files, including MD5SUMS, SHA1SUMS, and a file called CHECKSUMS.TXT including MD5 and SHA1 checksums.
   local sum_file="CHECKSUMS.TXT"
+  local sum_file_html="CHECKSUMS.php"
   local filetype="iso zip tar.gz"
   echo -n "Creating checksums..."
   rm -f MD5SUMS SHA1SUMS
@@ -2860,4 +2862,5 @@ gen_CDG_checksums() {
   echo >> $sum_file
   echo "SHA1SUMS" >> $sum_file
   cat SHA1SUMS >> $sum_file
+  txt2html $sum_file > $sum_file_html
 } # end of gen_CDG_checksums

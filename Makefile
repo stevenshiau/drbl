@@ -33,11 +33,15 @@ install:
 	# install exec files
 	install -d $(DESTDIR)/usr/
 	cp -a sbin bin $(DESTDIR)/usr/
+	rm -f $(DESTDIR)/usr/sbin/Makefile
 	# install setup dir
 	install -d $(DESTDIR)/$(SHAREDIR)/
 	cp -a setup $(DESTDIR)/$(SHAREDIR)/
 	# install other shared files
 	cp -a lang doc pkg pki image prerun postrun scripts/sbin scripts/bin $(DESTDIR)/$(SHAREDIR)/
+	# erase an extra COPYING
+	rm -f $(DESTDIR)/$(SHAREDIR)/pkg/misc/COPYING
+	rm -f $(DESTDIR)/$(SHAREDIR)/pkg/misc/Makefile $(DESTDIR)/$(SHAREDIR)/lang/Makefile
 	# install config files
 	install -d $(DESTDIR)/etc/drbl/
 	cp -a conf/* $(DESTDIR)/etc/drbl/

@@ -1,3 +1,20 @@
+drbl (2.0.13-drbl1) unstable; urgency=low
+
+  * Adding the interpreter's magic number for drbl-perl-functions, 
+    drbl-conf-functions, and drbl-functions to avoid lintian's warning.
+  * Updating debian/control to follow Debian's policy.
+  * To follow Debian's policy, the program drbl-SL.sh was renamed as drbl-sl, 
+    and drbl-live.sh was renamed as drbl-live.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 24 Aug 2012 19:13:59 +0800
+
+drbl (2.0.12-drbl1) unstable; urgency=low
+
+  * A typo in language file en_US was fixed.  Thanks to René Mérou.
+  * Function gen_CDG_checksums will generate a html format for CHECKSUMS file.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 22 Aug 2012 17:03:56 +0800
+
 drbl (2.0.11-drbl1) unstable; urgency=low
 
   * Bug fixed: Failed to parse boot parameter like: "mount UUID=X /mnt" in grub booting. Thanks to nottaken37 for reporting this issue (https://sourceforge.net/projects/clonezilla/forums/forum/663168/topic/5133379).

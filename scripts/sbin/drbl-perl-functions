@@ -1,3 +1,4 @@
+#!/usr/bin/perl -X
 sub lang_set{
   my $lang_opt=$_[0];
   my $chosen_lang_var;
