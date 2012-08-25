@@ -246,7 +246,7 @@
    not_allowed_ocs_img_repo_dir => "是不能用來當存clonezilla印象檔的目錄，請再輸入一次",
    drbl_server_as_NAT_server => "你是否要讓DRBL伺服器也能提供NAT服務(也就是一般俗稱的IP分享器功能)? 如果不要的話，DRBL用戶端電腦將無法連到網際網路.",
    drbl_server_is_NOT_NAT_server => "這台DRB伺服器未提供NAT服務(也就是一般俗稱的IP分享器功能)，DRBL用戶端電腦將無法連到網際網路.",
-   both_drbl_clonezilla_are_none => "由於企鵝龍drbl與再生龍clonezilla模式都被指定為不使用，因而此系統只有提供一些基本的功能，例如netinstall(如果有安裝相關的程式的話)與drbl-SL.sh!",
+   both_drbl_clonezilla_are_none => "由於企鵝龍drbl與再生龍clonezilla模式都被指定為不使用，因而此系統只有提供一些基本的功能，例如netinstall(如果有安裝相關的程式的話)與drbl-sl!",
    only_one_network_card_in_system => "///警告/// 在這台機器上只有找到一張有設定好的網路卡，我們不建議你這樣做。因為這台DRBL伺服器將會提供DHCP服務，只有一張網路卡可能會擾亂你現有的網路環境，特別是如果你已經有一個現存的DHCP服務和這張網卡透過網路交換器連接在一起。建議你至少使用兩張網路卡來避免這個問題。",
    are_you_sure_you_want_to_continue => "你確認要繼續執行?" ,
    # Tag on 2010/12/13

@@ -5,6 +5,20 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.1.0-drbl1) unstable; urgency=low
+
+  * Updating files in dir debian so less lintian warnings.
+  * 
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sat, 25 Aug 2012 11:21:58 +0800
+
+drbl (2.0.14-drbl1) unstable; urgency=low
+
+  * Files renamed, so using ocs-srv-live instead of ocs-srv-live.sh, 
+    drbl-sl instead of drbl-SL.sh.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sat, 25 Aug 2012 07:33:23 +0800
+
 drbl (2.0.13-drbl1) unstable; urgency=low
 
   * Adding the interpreter's magic number for drbl-perl-functions, 

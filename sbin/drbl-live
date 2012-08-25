@@ -20,7 +20,7 @@ USAGE() {
     echo "OPTION:"
     echo "-p, --prepare-ocsroot         Prepare clonezilla image home dir also."
     echo "-s, --skip-pause-in-the-end   Skip showing the messsage and pause in the end of execuation."
-    echo "-n, --no-prompt-drbl-live     Assume it's running for drbl live. (This is normally only used for clonezilla server edition script ocs-srv-live.sh in DRBL live mode)"
+    echo "-n, --no-prompt-drbl-live     Assume it's running for drbl live. (This is normally only used for clonezilla server edition script ocs-srv-live in DRBL live mode)"
     echo "start   Start DRBL services now"
     echo "stop    Stop DRBL services now"
     echo "restart Restart DRBL services now"

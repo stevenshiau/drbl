@@ -3,7 +3,7 @@ Section: admin
 Priority: extra
 Maintainer: Steven Shiau <steven@nchc.org.tw>
 Uploaders: Georges Khaznadar <georgesk@ofset.org>
-Build-Depends: debhelper (>= 8.0.0), quilt, vim-common
+Build-Depends: debhelper (>= 9), quilt, vim-common
 Standards-Version: 3.9.3
 Homepage: http://drbl.org/
 
@@ -21,5 +21,5 @@ Description: diskless remote boot, and a disk cloning utility
  Image(TM).
  .
  For more details, check
-  1. http://drbl.sourceforge.net (English)
-  2. http://drbl.nchc.org.tw (Traditional Chinese - Taiwan)
+ 1. http://drbl.sourceforge.net (English)
+ 2. http://drbl.nchc.org.tw (Traditional Chinese - Taiwan)

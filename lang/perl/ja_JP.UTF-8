@@ -255,7 +255,7 @@ $lang_charset = 'UTF-8';
    not_allowed_ocs_img_repo_dir => "は Clonezilla イメージの保存に許可されていないディレクトリです。再度入力して下さい。",
    drbl_server_as_NAT_server => "DRBL サーバを NAT サーバとしますか? no の場合、DRBL クライアントはインターネットにアクセス出来ません。",
    drbl_server_is_NOT_NAT_server => "この DRBL サーバは NAT サービスを提供しませんので、DRBL クライアントはインターネットアクセスが出来ません。",
-   both_drbl_clonezilla_are_none => "DRBL と Clonezilla モードの両方が利用不可に設定されていますので、このシステムでは(必要なファイルと drbl-SL.sh をインストールした場合、netinstall のような)非常に限定された機能しか利用できません。",
+   both_drbl_clonezilla_are_none => "DRBL と Clonezilla モードの両方が利用不可に設定されていますので、このシステムでは(必要なファイルと drbl-sl をインストールした場合、netinstall のような)非常に限定された機能しか利用できません。",
    only_one_network_card_in_system => "【警告】このマシンで設定済みのネットワークカードが1枚だけ見つかりました、この状態は推薦されません。このDRBLサーバはDHCPサービスを提供するので、ネットワークカードが1枚だけならば、あなたのネットワーク環境が混乱するかもしれません。特に、既存のDHCPサービスがこのネットワークカードに設定されていました。この問題を回避する為に、このサーバに少なくとも2枚のネットワークカードを使用することをお勧めします。",
    are_you_sure_you_want_to_continue => "本当に続けてもよろしいですか?",
    # Tag on 2010/12/13

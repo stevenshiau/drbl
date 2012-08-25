@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.0.13
+Version:	2.1.0
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,12 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Sat Aug 25 2012 Steven Shiau <steven _at_ nchc org tw> 2.1.0-1drbl
+- Updating files in dir debian so less lintian warnings.
+
+* Sat Aug 25 2012 Steven Shiau <steven _at_ nchc org tw> 2.0.14-1drbl
+- Files renamed, so using ocs-srv-live instead of ocs-srv-live.sh, drbl-sl instead of drbl-SL.sh.
+
 * Fri Aug 24 2012 Steven Shiau <steven _at_ nchc org tw> 2.0.13-1drbl
 - Adding the interpreter's magic number for drbl-perl-functions, drbl-conf-functions, and drbl-functions to avoid lintian's warning.
 - Updating debian/control to follow Debian's policy.

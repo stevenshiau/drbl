@@ -240,7 +240,7 @@ $lang_charset = 'iso-8859-1';
    not_allowed_ocs_img_repo_dir => " non è una directory valida per salvare le immagini di clonezilla. Inseritela di nuovo.",
    drbl_server_as_NAT_server => " Volete lasciare il server DRBL come un server NAT? In caso contrario, il vostro client DRBL non sarà in grado di accedere a Internet.",
    drbl_server_is_NOT_NAT_server => " Questo server DRBL non può fornire il servizio NAT, perciò il vostro client DRBL non sarà in grado di accedere a Internet.",
-   both_drbl_clonezilla_are_none => " Le modalità drbl e clonezilla non sono disponibili. In questo sistema sono disponibili solo alcune funzioni molto limitate (come netinstall, se voi installate i file necessari, e drbl-SL.sh)!",
+   both_drbl_clonezilla_are_none => " Le modalità drbl e clonezilla non sono disponibili. In questo sistema sono disponibili solo alcune funzioni molto limitate (come netinstall, se voi installate i file necessari, e drbl-sl)!",
    only_one_network_card_in_system => "///ATTENZIONE/// In questo sistema è stata trovata una sola scheda di rete configurata, e questo non è raccomandato in quanto il server DRBL fornirà un servizio DHCP che potrebbe perturbare il vostro ambiente di rete se già esiste un altro servizio DHCP! Per evitare questo problema, si raccomanda di usare almeno 2 schede di rete in questo server.",
    are_you_sure_you_want_to_continue => "Siete sicuro di voler continuare?" ,
    # Tag on 2010/12/13

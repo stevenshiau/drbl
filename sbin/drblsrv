@@ -94,7 +94,7 @@ do_some_cleanup_before_uninstall() {
   read SL_remove_answer
   case "$SL_remove_answer" in 
      n|N|[nN][oO]) continue ;;
-     *) drbl-SL.sh -l $lang_answer -u all ;;
+     *) drbl-sl -l $lang_answer -u all ;;
   esac
   echo "$msg_delimiter_star_line"
 }
