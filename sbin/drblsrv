@@ -407,9 +407,9 @@ else
      [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
      echo "No yum repository setting found!" 
      echo "You must set the yum repository in /etc/yum.repos.d/!"
-     echo "Program terminated!!!"
      [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
      echo "$msg_delimiter_star_line"
+     echo "$msg_program_stop"
      exit 1
   fi
   echo "Use the $OS_Version repository settings in /etc/yum.repos.d/."
@@ -661,9 +661,9 @@ if [ -n "$(LC_ALL=C ls /sbin/udev* 2>/dev/null)" ]; then
   if ! rpm -q --quiet udev; then
     # actually this should not happen, but who knows ?
     [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
-    echo "udev programs are found in the server, but unable to install a complete udev rpm!"
-    echo "Program terminated!"
+    echo "Program udev was found in the server, but unable to install a complete udev rpm!"
     [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+    echo "$msg_program_stop"
     exit 1
   fi
 else
@@ -704,8 +704,9 @@ else
       echo "done!"
     else
       [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
-      echo "No udev, and no pre-packaged devices file!!! Program terminated!"
+      echo "No udev, and no pre-packaged devices file!"
       [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+      echo "$msg_program_stop"
       exit 1
     fi
   )
@@ -1049,7 +1050,10 @@ else
     echo "done!"
   fi
   if ! rpm -q --quiet udev; then
-    echo "No udev, and no pre-packaged devices file!!! Program terminated!"
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+    echo "No udev, and no pre-packaged devices file!"
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+    echo "$msg_program_stop"
     exit 1
   fi
 fi
@@ -1672,8 +1676,9 @@ case "$client_kernel_install_mode" in
     done
     if [ "$rc" -ne 0 ]; then
       [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
-      echo "$chosen_kernel_for_client is NOT found in the repository! Something went wrong! Program terminated!"
+      echo "$chosen_kernel_for_client is NOT found in the repository!"
       [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+      echo "$msg_program_stop"
       exit 1
     fi
 esac
@@ -3123,7 +3128,10 @@ apt_extra_opt="--force-yes"
 case "$OS_Version" in
   DBN3.1)
     if [ -n "$(uname -r | grep -E "^2\.4\.*")" ]; then
-      echo "Kernel 2.4 is too old in DRBL environment for Debian Sarge, you have to run kernel 2.6. Please install kernel 2.6 and use it. Program terminated!"
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+      echo "Kernel 2.4 is too old in DRBL environment for Debian Sarge, you have to run kernel 2.6. Please install kernel 2.6 and use it."
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+      echo "$msg_program_stop"
       exit 1
     fi
     ;;
@@ -3295,8 +3303,9 @@ if ! chk_deb_installed udev; then
     cp -f $drbl_setup_path/files/${OS_type}/${OS_Version}/dev.$OS_Version.tgz $drbl_pkgdir/dev.tgz
   else
     [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
-    echo "No udev, and no pre-packaged device files!!! Program terminated!"
+    echo "No udev, and no pre-packaged device files!"
     [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+    echo "$msg_program_stop"
     exit 1
   fi
 fi
@@ -3556,10 +3565,10 @@ case "$use_kernel_from" in
     drbl_kernel_ver="$(echo $latest_drbl_kernel_in_rep | sed -e s/$kernel_img_name-//g)"
     if [ -z "$drbl_kernel_ver" ]; then
       [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
-      echo "NO kernel $kernel_img_name is available!!! Something went wrong!"
+      echo "Linux kernel $kernel_img_name not available!"
       echo "You can run this program $0 again, and try to choose different CPU architecture (such as i386, i686, no SMP...)!"
-      echo "Program terminated!!!"
       [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+      echo "$msg_program_stop"
       exit 1
     fi
     
@@ -3568,10 +3577,10 @@ case "$use_kernel_from" in
     rc_get_kernel=$?
     if [ $rc_get_kernel -gt 0 ]; then
       [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
-      echo "$latest_drbl_kernel_in_rep can NOT be downloaded!!! Something went wrong!"
+      echo "Failed to download $latest_drbl_kernel_in_rep."
       echo "Maybe you should check /etc/apt/sources.list or remove the unnecessary kernel block in /var/lib/dpkg/status so that "apt-cache pkgnames $kernel_img_name" can get the downloadable kernel! Then try to run this program again."
-      echo "Program terminated!!!"
       [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+      echo "$msg_program_stop"
       exit 1
     fi
     # Download the restricted modules for Ubuntu, here we assume if server use that, then client should use that.
@@ -3753,7 +3762,7 @@ if [ "$installer" = "yum" ]; then
       echo "$DRBL_SCRIPT_PATH/setup/yum-repos/opensuse-${OS_VER_NO}.repo does NOT exist!"
       echo "Maybe this is NOT a supported version!"
       [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
-      echo "Program terminated!!!"
+      echo "$msg_program_stop"
       exit 1
     fi
     cp -f $DRBL_SCRIPT_PATH/setup/yum-repos/{drbl*.repo,opensuse*-${OS_VER_NO}.repo} $yum_conf_dir_path/
@@ -4130,7 +4139,10 @@ if ! rpm -q --quiet udev; then
   echo "done!"
 fi
 if ! rpm -q --quiet udev; then
-  echo "No udev, and no pre-packaged devices file!!! Program terminated!"
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+  echo "No udev, and no pre-packaged devices file!"
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+  echo "$msg_program_stop"
   exit 1
 fi
 
@@ -4378,10 +4390,10 @@ case "$use_kernel_from" in
       RC=$?
       if [ $RC -gt 0 ]; then
         [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
-        echo "$latest_drbl_kernel_in_rep can NOT be downloaded!!! Something went wrong!"
+        echo "Failed to download $latest_drbl_kernel_in_rep"
         echo "Maybe you should check /etc/apt/sources.list so that "apt-cache pkgnames $kernel_img_name" can get the downloadable kernel! Then try to run this program again."
-        echo "Program terminated!!!"
         [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+        echo "$msg_program_stop"
         exit 1
       fi
       
@@ -4677,7 +4689,10 @@ case "$OS_Version" in
       esac
       ;;
    *)
-      echo "This version in this distribution is NOT supported by DRBL, maybe you can try to use the drbl in testing or unstable repository. Program terminated!"
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+      echo "This version in this distribution is NOT supported by DRBL, maybe you can try to use the drbl in testing or unstable repository."
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+      echo "$msg_program_stop"
       exit 1 
 esac
 
@@ -4688,7 +4703,10 @@ case "$installer" in
   "urpmi") inst_prog="urpmi" ;;
   "zypper") inst_prog="zypper" ;;
   *)
-     echo "Unknown installer!!! Program terminated!"
+     [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+     echo "Unknown installer!"
+     [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+     echo "$msg_program_stop"
      exit 1
      ;;
 esac

@@ -85,7 +85,7 @@ start() {
     
      if [ -z "$eth_ports_list" ]; then
        [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
-       echo "Something went wrong! No ethernet port on the server connecting to client $mac_address_normal was found!"
+       echo "No ethernet port on the server connecting to client $mac_address_normal was found!"
        [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
        echo "$msg_program_stop!!"
      fi
@@ -96,7 +96,7 @@ start() {
        rc=$?
        if [ "$rc" -gt 0 ]; then
          [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
-         echo "Something went wrong when starting vbladed by: vbladed ${shelf_no} ${slot_no} $j $i"
+         echo "Error when starting vbladed by: vbladed ${shelf_no} ${slot_no} $j $i"
          [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
          continue
        fi

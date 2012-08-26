@@ -72,11 +72,11 @@ select_image() {
   # check if we can find any target menu
   if [ -z "$MENU" ]; then
     [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
-    echo "Error!!! We can not find any unhidden menu!!!"
-    echo "Maybe they are all unhidden! or Something went wrong!"
-    echo "Program terminated!!!"
+    echo "Error!!! No any unhidden menu was found!"
+    echo "Maybe they are all unhidden!"
     [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
     clean_tmp
+    echo "$msg_program_stop"
     exit 1
   fi
   

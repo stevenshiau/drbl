@@ -1,3 +1,10 @@
+drbl (2.1.1-drbl1) unstable; urgency=low
+
+  * Bug fixed: /usr/share/drbl/{sbin,bin} was not in the PATH in init.drbl.
+  * Removing the vague "Something went wrong" prompts.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sun, 26 Aug 2012 10:19:44 +0800
+
 drbl (2.1.0-drbl1) unstable; urgency=low
 
   * Updating files in dir debian so less lintian warnings.
