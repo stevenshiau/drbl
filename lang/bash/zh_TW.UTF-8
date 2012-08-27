@@ -895,3 +895,4 @@ msg_autohostname_is_reserved_for_save_mode='"autohostname"是保留的名稱，�
 msg_no_partition_table_need_to_create='在這台機器找不到硬碟分割區。要還原印象擋到分割區，目的碟必須要有分割區才行。'
 # Tag on 2012/08/20
 msg_client_job_are_logged_in='用戶端clonezilla執行的結果記錄於此DRBL伺服器的這個檔案'
+msg_autoproductname_is_a_reserved='"autoproductname"是保留的名稱，請改用其他名字!'

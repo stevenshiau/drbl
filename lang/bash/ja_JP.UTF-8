@@ -912,3 +912,4 @@ msg_autohostname_is_reserved_for_save_mode='「autohostname」は予約された
 msg_no_partition_table_need_to_create='このマシンにはパーティションがありません。パーティションイメージをリストアする為には、復元先ディスクにパーティションが必要です。'
 # Tag on 2012/08/20
 msg_client_job_are_logged_in='Client jobs are recoreded in this file'
+msg_autoproductname_is_a_reserved='「autoproductname」は予約されたイメージ名です。別の名前を使用して下さい!'

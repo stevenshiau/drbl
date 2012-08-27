@@ -1,3 +1,10 @@
+drbl (2.1.2-drbl1) unstable; urgency=low
+
+  * Language files were updated. Variable "msg_autoproductname_is_a_reserved" 
+    was added, and a typo en en_US was fixed.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 27 Aug 2012 14:20:58 +0800
+
 drbl (2.1.1-drbl1) unstable; urgency=low
 
   * Bug fixed: /usr/share/drbl/{sbin,bin} was not in the PATH in init.drbl.

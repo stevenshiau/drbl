@@ -892,3 +892,4 @@ msg_autohostname_is_reserved_for_save_mode='"autohostname" é um nome de imagem 
 msg_no_partition_table_need_to_create='No partition is found in this machine. To restore an image of patitions, partition(s) must exist on the destination disk.'
 # Tag on 2012/08/20
 msg_client_job_are_logged_in='Client jobs are recoreded in this file'
+msg_autoproductname_is_a_reserved='"autoproductname" é um nome de imagem reservado, por favor use outro nome!'

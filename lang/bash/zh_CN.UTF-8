@@ -895,3 +895,4 @@ msg_autohostname_is_reserved_for_save_mode='"autohostname"是保留来的名称�
 msg_no_partition_table_need_to_create='在这台机器上找不到磁盘分区。要还原镜像到分区，目的磁盘必须要有分区才行。'
 # Tag on 2012/08/20
 msg_client_job_are_logged_in='Client jobs are recoreded in this file'
+msg_autoproductname_is_a_reserved='"autoproductname"是保留来的名称，请改用其他名字!'
