@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.1.2
+Version:	2.1.3
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,10 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Wed Sep 05 2012 Steven Shiau <steven _at_ nchc org tw> 2.1.3-drbl1
+- A shell script "drbl-run-parts" was added.
+- Package "crontabs" is no more required for Fedora as now we use drbl-run-parts.
+
 * Mon Aug 27 2012 Steven Shiau <steven _at_ nchc org tw> 2.1.2-drbl1
 - Language files were updated. Variable "msg_autoproductname_is_a_reserved" was added, and a typo en en_US was fixed.
 

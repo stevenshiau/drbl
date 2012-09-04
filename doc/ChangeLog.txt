@@ -5,6 +5,14 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.1.3-drbl1) unstable; urgency=low
+
+  * A shell script "drbl-run-parts" was added.
+  * Package "crontabs" is no more required for Fedora as now we use 
+    drbl-run-parts.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 05 Sep 2012 07:25:38 +0800
+
 drbl (2.1.2-drbl1) unstable; urgency=low
 
   * Language files were updated. Variable "msg_autoproductname_is_a_reserved" 

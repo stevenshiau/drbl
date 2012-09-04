@@ -1867,7 +1867,7 @@ mkdir -p $DRBLPUSH_PRERUN_DIR $DRBLPUSH_POSTRUN_DIR
 # pre run
 if [ -n "$(unalias ls 2>/dev/null; ls $DRBLPUSH_PRERUN_DIR/ 2>/dev/null)" ]; then
   echo "Some files are found in $DRBLPUSH_PRERUN_DIR. Run them first..."
-  run-parts $DRBLPUSH_PRERUN_DIR
+  drbl-run-parts $DRBLPUSH_PRERUN_DIR
 fi
 # check if the space is enough to setup DRBL
 echo -n "Checking the necessary disk space... "
@@ -4129,7 +4129,7 @@ fi
 # post run
 if [ -n "$(unalias ls 2>/dev/null; ls $DRBLPUSH_POSTRUN_DIR/ 2>/dev/null)" ]; then
   echo "Some files are found in $DRBLPUSH_POSTRUN_DIR. Run them now..."
-  run-parts $DRBLPUSH_POSTRUN_DIR
+  drbl-run-parts $DRBLPUSH_POSTRUN_DIR
 fi
 
 #

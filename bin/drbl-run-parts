@@ -1,0 +1,54 @@
+#!/bin/bash
+# drbl-run-parts - modified from Fedora 17's run-parts in crontabs package. License is GPLv2.
+# The reason we do not use run-parts from Debian is people are always confused:
+# http://drbl.sourceforge.net/faq/fine-print.php?path=./2_System/31_prerun_postrun_not_working.faq#31_prerun_postrun_not_working.faq
+
+# keep going when something fails
+set +e
+
+if [ $# -lt 1 ]; then
+	echo "Usage: run-parts [--list | --test] <dir>"
+	exit 1
+fi
+
+while [ $# -gt 1 ]; do
+	case $1 in
+		--list)
+			list=1
+			shift
+			break
+			;;
+		--test)
+			test=1
+			shift
+			break
+			;;
+		--)
+			# -- end of options
+			shift
+			break
+			;;
+		*)
+			# directory
+			break
+			;;
+	esac
+done
+
+if [ ! -d $1 ]; then
+	echo "Not a directory: $1"
+	exit 1
+fi
+
+# Ignore *~ and *, scripts
+for i in $(LC_ALL=C; echo ${1%/}/*[^~,]) ; do
+	[ -d $i ] && continue
+	if [ -e $i ]; then
+		if [ -x $i ]; then
+			# run executable files
+			$i
+		fi
+	fi
+done
+
+exit 0
