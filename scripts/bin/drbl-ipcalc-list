@@ -4,7 +4,7 @@
 # Author:	Ceasar Sun Chen-kai <ceasar@nchc.org.tw>
 # License:	GPL
 # Description: 	Give a legal ip lists from a set of given subnet and count  
-# Usage:	ipcalc-list.sh 192.168.21.13/24 -n 10 # to list ip from 192.168.21.13 ~ 192.168.21.22
+# Usage:	ipcalc-list 192.168.21.13/24 -n 10 # to list ip from 192.168.21.13 ~ 192.168.21.22
 # ChangeLog:	
 #	* 20100603	First version
 #	* 20100604	Fix fisrt character of binary type ip address is 0 within first ip session

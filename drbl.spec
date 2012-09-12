@@ -45,6 +45,8 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+- Comments in drbl-ipcalc-list were updated.
+
 * Wed Sep 05 2012 Steven Shiau <steven _at_ nchc org tw> 2.1.3-drbl1
 - A shell script "drbl-run-parts" was added.
 - Package "crontabs" is no more required for Fedora as now we use drbl-run-parts.
