@@ -27,10 +27,10 @@ DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/usr/share/drbl}"
 # Print usage
 Usage(){
 	echo "$0 : Give a legal ip list from a given start ip/subnet and count";
-	echo "Usage: $0 <ipcalc_parameters> -c <count> [-b] [-v] ";
-	echo " -b, --binary		Binary output for ip address"
-	echo " -c, --count		amount of ip, positive number for ascending order,negative for descending , ex: 10, -5"
-	echo " -v, --verbose	verbose mode, if not enough ip , show what we have "
+	echo "Usage: $0 <ipcalc_parameters> -c <count> [-b] [-v]";
+	echo " -b, --binary		   Binary output for ip address"
+	echo " -c, --count		   Amount of IP address, positive number for ascending order, negative for descending, ex: 10, -5"
+	echo " -v, --verbose	           Verbose mode, if not enough IP address, show what we have"
 	echo ""
 	echo "Help options:";
 	echo " -h, --help		Show this help message"
@@ -70,7 +70,7 @@ while [ $# -gt 0 ]; do
 	case "$1" in
 		-b|--binary)
 			shift; _OUTPUT_MODE="b";
-		;;
+		        ;;
 		-c|--count)
 			shift;
 			if [[ $1 =~ ^-*[[:digit:]]+$ ]]; then
@@ -80,18 +80,18 @@ while [ $# -gt 0 ]; do
 				Usage; exit 1;
 			fi
 			shift;
-		;;
+		        ;;
 		-h|--help)
 			Usage;
 			exit;
-		;;
+		        ;;
 		-v|--verbose)
 			shift; _VERBOSE=1;
-		;;
+		        ;;
 		*)
 			[ -n "$_IPCALC_PARM" ] && _IPCALC_PARM="$_IPCALC_PARM $1" || _IPCALC_PARM="$1";
 			shift;
-		;;
+		        ;;
 	esac
 done
 
@@ -103,20 +103,24 @@ fi
 
 # Add "1" on first string for solve if the fisrt session of ip is 0xxxxxxx.~
 # 
-bin_start_ip=1$(drbl-ipcalc $_IPCALC_PARM  | grep Address: | awk -F" " '{print $3 $4 }'| sed -e "s/\.//g")
-dec_start_ip=$(echo "ibase=2; obase=A; $bin_start_ip" | bc)
-bin_max_ip=1$(drbl-ipcalc $_IPCALC_PARM  | grep HostMax: | awk -F" " '{print $3 $4 }'| sed -e "s/\.//g")
-dec_max_ip=$(echo "ibase=2; obase=A; $bin_max_ip" | bc)
-bin_min_ip=1$(drbl-ipcalc $_IPCALC_PARM  | grep HostMin: | awk -F" " '{print $3 $4 }'| sed -e "s/\.//g")
-dec_min_ip=$(echo "ibase=2; obase=A; $bin_min_ip" | bc)
+bin_start_ip=1"$(LC_ALL=C drbl-ipcalc $_IPCALC_PARM  | grep -E "^Address:" | awk -F" " '{print $3 $4 }'| sed -e "s/\.//g")"
+dec_start_ip="$(LC_ALL=C echo "ibase=2; obase=A; $bin_start_ip" | bc)"
+bin_max_ip=1"$(LC_ALL=C drbl-ipcalc $_IPCALC_PARM  | grep -E "^HostMax:" | awk -F" " '{print $3 $4 }'| sed -e "s/\.//g")"
+dec_max_ip="$(LC_ALL=C echo "ibase=2; obase=A; $bin_max_ip" | bc)"
+bin_min_ip=1"$(LC_ALL=C drbl-ipcalc $_IPCALC_PARM  | grep -E "^HostMin:" | awk -F" " '{print $3 $4 }'| sed -e "s/\.//g")"
+dec_min_ip="$(LC_ALL=C echo "ibase=2; obase=A; $bin_min_ip" | bc)"
 
 #echo "$_OUTPUT_MODE, $_VERBOSE, $_COUNT, '$_IPCALC_PARM', $dec_start_ip, $dec_max_ip, $dec_min_ip";
+
+# Since in the IPv4, the netwwork (*.*.*.0) and broadcast (*.*.*.255) can not be used, plus the server's IP address, we'd better to add 3 more IP address in the output.
+sections="$(LC_ALL=C echo "scale=0; $_COUNT/256" | bc -l)"
+_COUNT="$(LC_ALL=C echo "scale=0; $_COUNT + ($sections + 1)*3" | bc -l)"
 
 if [[ $_COUNT =~ ^[[:digit:]]+$ ]]; then
 	for ((i=0; i<$_COUNT; i++)) ;do
 		dec_current_ip=$(expr $dec_start_ip + $i)
 		if [ $dec_max_ip -ge $dec_current_ip ] && [ $dec_min_ip -le $dec_current_ip ] ; then
-			_tmp_bin_ip=`echo "ibase=A; obase=2; $dec_current_ip" | bc`
+			_tmp_bin_ip="$(LC_ALL=C echo "ibase=A; obase=2; $dec_current_ip" | bc)"
 			_IP_ARRAY[${#_IP_ARRAY[*]}]=${_tmp_bin_ip:1:32}
 		elif [ $_VERBOSE = 0 ] ; then
 			_IP_ARRAY=()
@@ -137,13 +141,17 @@ else
 fi 
 
 for ((i=0; i<${#_IP_ARRAY[*]}; i++)) ;do
-	[ $_OUTPUT_MODE = 'b' ] && p1=${_IP_ARRAY[$i]:0:8} ||  p1=$(echo "ibase=2; obase=A; ${_IP_ARRAY[$i]:0:8}" | bc )
-	[ $_OUTPUT_MODE = 'b' ] && p2=${_IP_ARRAY[$i]:8:8} ||  p2=$(echo "ibase=2; obase=A; ${_IP_ARRAY[$i]:8:8}" | bc )
-	[ $_OUTPUT_MODE = 'b' ] && p3=${_IP_ARRAY[$i]:16:8} ||  p3=$(echo "ibase=2; obase=A; ${_IP_ARRAY[$i]:16:8}" | bc )
-	[ $_OUTPUT_MODE = 'b' ] && p4=${_IP_ARRAY[$i]:24:8} ||  p4=$(echo "ibase=2; obase=A; ${_IP_ARRAY[$i]:24:8}" | bc )
-	echo $p1.$p2.$p3.$p4
+	[ $_OUTPUT_MODE = 'b' ] && p1=${_IP_ARRAY[$i]:0:8} ||  p1="$(echo "ibase=2; obase=A; ${_IP_ARRAY[$i]:0:8}" | bc )"
+	[ $_OUTPUT_MODE = 'b' ] && p2=${_IP_ARRAY[$i]:8:8} ||  p2="$(echo "ibase=2; obase=A; ${_IP_ARRAY[$i]:8:8}" | bc )"
+	[ $_OUTPUT_MODE = 'b' ] && p3=${_IP_ARRAY[$i]:16:8} ||  p3="$(echo "ibase=2; obase=A; ${_IP_ARRAY[$i]:16:8}" | bc )"
+	[ $_OUTPUT_MODE = 'b' ] && p4=${_IP_ARRAY[$i]:24:8} ||  p4="$(echo "ibase=2; obase=A; ${_IP_ARRAY[$i]:24:8}" | bc )"
+	# Skip the last digit is 0 and 255
+	# //WRONG// For the netmask is not 24, this is wrong.
+	if [ "$p4" = "0" -o "$p4" = "255" ]; then
+		continue
+	else
+		echo $p1.$p2.$p3.$p4
+	fi
 done
 
-exit;
-
-
+exit 0;
