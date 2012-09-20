@@ -3360,11 +3360,13 @@ else
     cp -f $drbl_setup_path/files/${OS_type}/${OS_Version}/halt.$OS_Version.drbl $drbl_common_root/etc/init.d/halt
   else
     # not Debian, it's RH-like (BSD style), so show warning.
+    OS_Version_Major="${OS_Version:0:3}"
     [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
-    echo "Warning! Unable to find the fine-tune file ${drbl_setup_path}/files/${OS_type}/${OS_Version}/halt.${OS_Version}.drbl, use ${drbl_setup_path}/files/${OS_type}/halt.default-${OS_type}.drbl as /etc/init.d/halt for DRBL clients!"
+    most_related_ver="$(LC_ALL=C find /usr/share/drbl/setup/files/$OS_type/${OS_Version_Major}* -type d -exec basename {} \; | sort | uniq | tail -n 1)"
+    echo "Warning! Unable to find the fine-tune file ${drbl_setup_path}/files/${OS_type}/${OS_Version}/halt.${OS_Version}.drbl, use $drbl_setup_path/files/${OS_type}/${most_related_ver}/halt.$most_related_ver.drbl as /etc/init.d/halt for DRBL clients!"
     echo "This may cause some problems to DRBL clients!"
     [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
-    cp -f $drbl_setup_path/files/${OS_type}/halt.default-${OS_type}.drbl $drbl_common_root/etc/init.d/halt
+    cp -f $drbl_setup_path/files/${OS_type}/${most_related_ver}/halt.$most_related_ver.drbl $drbl_common_root/etc/init.d/halt
   fi
   # From Fedora 9, upstart is used, and the post script of rc1 will force to terminate all programs after S19ocs-run is run in the end of rc1. i.e. when client finishes cloning in Clonezilla SE, a reboot or shutdown command (e.g. ocs-sr -p reboot...) will be killed by the post-stop script of rc1. Therefore we comment it.
   # The post script in /etc/event.d/rc1 is:

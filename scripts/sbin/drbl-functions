@@ -50,7 +50,7 @@ get_os_type() {
         echo "This version in this distribution is NOT supported by DRBL, maybe you can try to use the drbl in testing or unstable repository. Program terminated!"
         exit 1 
   esac
-}
+} # end of get OS type
 
 #
 check_distribution_name() {
@@ -150,14 +150,15 @@ check_distribution_name() {
     exit 1
   fi
   # If not assigned, assign it
-  [ -z "$OS_Version" ] && OS_Version=${DIST}${VER}
+  [ -z "$OS_Version" ] && OS_Version="${DIST}${VER}"
+  [ -z "$OS_DIST" ] && OS_DIST="${DIST}"
   [ -z "$FULL_OS_Version" ] && FULL_OS_Version="${FULL_DIST} ${VER}"
 
   # get the OS_type variable
   get_os_type
   #
   # echo $OS_Version
-}
+} # end of check_distribution_name
 
 # create the shared library program runtime env.
 # ldd might give these 3 type results:
