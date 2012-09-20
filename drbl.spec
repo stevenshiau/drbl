@@ -47,6 +47,7 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 %changelog
 - Comments in drbl-ipcalc-list were updated.
 - Bug fixed: drbl-ipcalc-list should skip network and broadcast IP address.
+- Bug fixed: when OS_Version does not match, drblpush should use the most related rc.sysinit and halt files for clients. Othereise the possibility that clients fail to boot will be high.
 
 * Wed Sep 05 2012 Steven Shiau <steven _at_ nchc org tw> 2.1.3-drbl1
 - A shell script "drbl-run-parts" was added.
