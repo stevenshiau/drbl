@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.1.3
+Version:	2.1.5
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,10 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Mon Oct 01 2012 Steven Shiau <steven _at_ nchc org tw> 2.1.5-drbl1
+- Avoiding the warning messages when running Debian 6.0.6.
+
+* Mon Sep 24 2012 Steven Shiau <steven _at_ nchc org tw> 2.1.4-drbl1
 - Comments in drbl-ipcalc-list were updated.
 - Bug fixed: drbl-ipcalc-list should skip network and broadcast IP address.
 - Bug fixed: when OS_Version does not match, drblpush should use the most related rc.sysinit and halt files for clients. Othereise the possibility that clients fail to boot will be high.

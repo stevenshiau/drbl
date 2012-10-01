@@ -1,3 +1,17 @@
+drbl (2.1.5-drbl1) unstable; urgency=low
+
+  * Avoiding the warning messages when running Debian 6.0.6.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 01 Oct 2012 09:13:07 +0800
+
+drbl (2.1.4-drbl1) unstable; urgency=low
+
+  * Comments in drbl-ipcalc-list were updated.
+  * Bug fixed: drbl-ipcalc-list should skip network and broadcast IP address.
+  * Bug fixed: when OS_Version does not match, drblpush should use the most related rc.sysinit and halt files for clients. Othereise the possibility that clients fail to boot will be high.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 24 Sep 2012 14:48:11 +0800
+
 drbl (2.1.3-drbl1) unstable; urgency=low
 
   * A shell script "drbl-run-parts" was added.
