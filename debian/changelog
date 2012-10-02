@@ -1,3 +1,9 @@
+drbl (2.1.6-drbl1) unstable; urgency=low
+
+  * Ubuntu Quantal netinstall was enabled in drbl.conf.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 02 Oct 2012 20:04:45 +0800
+
 drbl (2.1.5-drbl1) unstable; urgency=low
 
   * Avoiding the warning messages when running Debian 6.0.6.

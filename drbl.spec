@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.1.5
+Version:	2.1.6
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Tue Oct 02 2012 Steven Shiau <steven _at_ nchc org tw> 2.1.6-drbl1
+- Ubuntu Quantal netinstall was enabled in drbl.conf.
+
 * Mon Oct 01 2012 Steven Shiau <steven _at_ nchc org tw> 2.1.5-drbl1
 - Avoiding the warning messages when running Debian 6.0.6.
 
