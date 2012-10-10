@@ -1,5 +1,5 @@
 #!/bin/bash
-# Author: Steven Shiau <steven _at_ nchc org tw>
+# Authors: Steven Shiau <steven _at_ nchc org tw>, Ceasar Sun <ceasar _at_ nchc org tw>
 # License: GPL
 # Description: Get the IP address of network card interface
 
@@ -18,9 +18,23 @@ Usage() {
   echo "Ex: $(basename $0) eth0"
 }
 
+# For physical NIC, the output of "ifconfig -a" (Debian, Ubuntu and Fedora <=14) is like:
+# eth0      Link encap:Ethernet  HWaddr 00:11:aa:bb:cc:dd  
+# For ppp0 NIC, it's like:
+# ppp0 Link encap:Point-to-Point Protocol
+# Ref: http://sourceforge.net/projects/drbl/forums/forum/394008/topic/3855959
+# For Fedora 17, the output of "ifconfig -a" is like (//Note// An extra ":"):
+# eth0: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+#       inet 192.168.120.192  netmask 255.255.255.0  broadcast 192.168.120.255
+#       inet6 fe80::20c:29ff:fe97:5d0f  prefixlen 64  scopeid 0x20<link>
+#       ether 00:0c:29:97:5d:0f  txqueuelen 1000  (Ethernet)
+#       RX packets 1998  bytes 179313 (175.1 KiB)
+#       RX errors 0  dropped 0  overruns 0  frame 0
+#       TX packets 1305  bytes 198243 (193.5 KiB)
+#       TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
 [ -z "$ethx" ] && Usage && exit 1
 if ! LC_ALL=C ifconfig -a 2>/dev/null | grep -i -q "\<$ethx\>"; then
    exit 1
 fi
-LC_ALL=C ifconfig $ethx | grep -A1 $ethx | grep -v $ethx | grep "inet addr" | sed -e 's/^.*inet addr:\([0-9\.]\+\).*$/\1/'
+LC_ALL=C ifconfig $ethx | grep -A1 $ethx | grep -v $ethx | grep "inet" |sed -e 's/addr://'|  sed -e 's/^.*inet \([0-9\.]\+\).*$/\1/'
 exit 0

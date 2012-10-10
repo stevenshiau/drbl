@@ -1,5 +1,5 @@
 #!/bin/bash
-# Steven Shiau <steven _at_ nchc org tw>
+# Authors: Steven Shiau <steven _at_ nchc org tw>, Ceasar Sun <ceasar _at_ nchc org tw>
 # License: GPL
 
 # Load DRBL setting and functions
@@ -92,6 +92,11 @@ drbl_startup_service() {
 	echo " done!"
       fi
     fi
+  elif [ -n "$(which systemctl 2>/dev/null)" -a -e "/lib/systemd/system/$srv.service" ]; then
+    # FC 17
+    echo "Start '$srv' service in systemd-like environemnt..."
+    systemctl $act $srv.service
+    ret=$?
   else
     /etc/init.d/$srv $act
     ret=$?
@@ -110,7 +115,7 @@ for iser in $drbl_server_service_chklist; do
    # For SuSE, the NFS server name is nfsserver, not nfs (which is nfs client).
    # Exclude nfs.
    [ -e /etc/SuSE-release -a "$iser" = "nfs" ] && continue
-   [ -e "/etc/init.d/$iser" ] && drbl_service="$drbl_service $iser"
+   [ -e "/etc/init.d/$iser" -o -e "/lib/systemd/system/$iser.service" ] && drbl_service="$drbl_service $iser"
 done
 #
 check_if_root
@@ -226,6 +231,10 @@ case "$switch" in
            # SuSE
            echo "Force to add $serv service in this SuSE DRBL server..."
            insserv $serv &>/dev/null
+        elif [ -n "$(which systemctl 2>/dev/null)" -a -e "/lib/systemd/system/$serv.service" ]; then
+           # FC 17
+           echo "Force to add $serv service via systemd-like DRBL server..."
+           systemctl enable $serv.service
         else
             # RH-like
            echo "Force to add $serv service in this RH-like DRBL server..."
@@ -253,6 +262,10 @@ case "$switch" in
           # SuSE
           echo "Force to delete $serv service in this SuSE DRBL server..."
           insserv -f -r $serv &>/dev/null
+        elif [ -n "$(which systemctl 2>/dev/null)" -a -e "/lib/systemd/system/$serv.service" ]; then
+           # FC 17
+           echo "Force to add $serv service via systemd-like DRBL server..."
+           systemctl disable $serv.service
         else
           # RH-like
           echo "Force to delete $serv service in this RH-like DRBL server..."

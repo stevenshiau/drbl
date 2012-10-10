@@ -1,7 +1,7 @@
 #!/bin/bash
 #
-# Copyright (C) 2002-2003 by NCHC, Steven Shiau, K. L. Huang
-# (steven _at_ nchc org tw, klhaung _at_ gmail com)
+# Copyright (C) 2002-2012 by NCHC, Steven Shiau, K. L. Huang, and Ceasar Sun
+# (steven _at nchc org tw, klhaung _at_ gmail com, ceasar _at_ nchc org tw)
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -4598,7 +4598,7 @@ case "$OS_Version" in
       # Yum is better is FC3 then that in FC2/FC1, we can use it as one of our
       # installer.
       case "$OS_Version" in
-        FC[3-9]|FC1[01234]|CO*)
+        FC[3-9]|FC1[01234567]|CO*)
          # TODO x86_64: CPU arch -> rpm package, which one is real ?
          # "uname -m" or "rpm -q --qf '%{arch\n}' kernel..."
          if [ "$(uname -m)" = "x86_64" ]; then

@@ -1,5 +1,5 @@
 #!/bin/bash
-# Author: Steven Shiau <steven _at_ nchc org tw> and Blake, Kuo-Lien Huang <klhaung _at_ gmail.com>. 
+# Authors: Steven Shiau <steven _at_ nchc org tw> and Blake, Kuo-Lien Huang <klhaung _at_ gmail.com>, and Ceasar Sun <ceasar _at_ nchc org tw>
 # License: GPL 
 # Description: DRBL utitilty to switch the mode for clients.
 
@@ -898,6 +898,10 @@ case "$MODE" in
 	   if [ -e "$host/etc/inittab" ]; then
              perl -p -i -e "s/^id:[0-9]:initdefault:/id:$CLIENT_INIT:initdefault:/g" $host/etc/inittab
            fi
+	   # For systemd-like
+           if [ -e "$host/etc/systemd/system/default.target" ]; then
+             ln -fsv /lib/systemd/system/runlevel${CLIENT_INIT}.target $host/etc/systemd/system/default.target
+           fi
          done
 	 echo "done!"
          #
@@ -952,6 +956,10 @@ case "$MODE" in
            fi
 	   if [ -e "$host/etc/inittab" ]; then
              perl -p -i -e "s/^id:[0-9]:initdefault:/id:$CLIENT_INIT:initdefault:/g" $host/etc/inittab
+           fi
+	   # For systemd-like
+           if [ -e "$host/etc/systemd/system/default.target" ]; then
+             ln -fsv /lib/systemd/system/runlevel${CLIENT_INIT}.target $host/etc/systemd/system/default.target
            fi
          done
 	 echo "done!"

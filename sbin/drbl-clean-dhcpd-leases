@@ -15,8 +15,8 @@ check_if_root
 get_dhcpdlease_dir
 
 # drcp_srv_name is loaded from conf/drbl.conf
-/etc/init.d/$DHCP_SRV_NAME stop
+[ -x "/bin/systemctl" ] && /bin/systemctl stop $DHCP_SRV_NAME.service || /etc/init.d/$DHCP_SRV_NAME stop
 [ -f "$DHCPDLEASE_DIR/dhcpd.leases" ] && rm -f $DHCPDLEASE_DIR/dhcpd.leases
 [ -f "$DHCPDLEASE_DIR/dhcpd.leases~" ] && rm -f $DHCPDLEASE_DIR/dhcpd.leases~
 touch $DHCPDLEASE_DIR/dhcpd.leases
-/etc/init.d/$DHCP_SRV_NAME start
+[ -x "/bin/systemctl" ] && /bin/systemctl start $DHCP_SRV_NAME.service || /etc/init.d/$DHCP_SRV_NAME start

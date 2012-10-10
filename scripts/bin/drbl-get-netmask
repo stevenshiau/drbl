@@ -1,5 +1,5 @@
 #!/bin/bash
-# Author: Steven Shiau <steven _at_ nchc org tw>
+# Authors: Steven Shiau <steven _at_ nchc org tw>, Ceasar Sun <ceasar _at_ nchc org tw>
 # License: GPL
 # Description: Get the netmask of network card interface
 
@@ -23,5 +23,5 @@ Usage() {
 if ! ifconfig -a 2>/dev/null | grep -i -q "\<$ethx\>"; then
    exit 1
 fi
-ifconfig $ethx | grep -o "Mask:.*" | sed -e 's/^Mask://g'
+LC_ALL=C ifconfig $ethx | grep -oE "(Mask:.*|netmask .+)" | sed -e 's/^Mask://g' -e 's/netmask //g' | awk '{print $1}'
 exit 0

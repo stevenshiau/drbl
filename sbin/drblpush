@@ -1,7 +1,7 @@
 #!/usr/bin/perl -X
 #
-# Copyright (C) 2002-2003 by NCHC, Steven Shiau, K. L. Huang
-# (steven _at nchc org tw, klhaung _at_ gmail com)
+# Copyright (C) 2002-2012 by NCHC, Steven Shiau, K. L. Huang, and Ceasar Sun
+# (steven _at nchc org tw, klhaung _at_ gmail com, ceasar _at_ nchc org tw)
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -2094,15 +2094,19 @@ mknod -m 666 $drbl_common_root/dev/null c 1 3
 #
 echo -n "."
 # copy /sbin, /bin to node_root
+# For FC17, since /sbin is linked to /usr/sbin, we have to create /sbin, /bin first
+[ -L "/sbin" ] && (rm -rf $drbl_common_root/sbin ; mkdir $drbl_common_root/sbin)
+[ -L "/bin" ] && (rm -rf $drbl_common_root/bin ; mkdir $drbl_common_root/bin)
+
 # Note!!! For rsync, do NOT to append "/" in the /sbin, .i.e. NO /sbin/
-rsync -a $RSYNC_OPT_EXTRA /sbin $drbl_common_root/
+rsync -a $RSYNC_OPT_EXTRA /sbin/* $drbl_common_root/sbin/
 # put the real init into common root as init.orig, DRBL client will have 
 # an "init" to run before this init.orig
 rsync -aL $RSYNC_OPT_EXTRA /sbin/init $drbl_common_root/sbin/init.orig
 
 #
 echo -n "."
-rsync -a $RSYNC_OPT_EXTRA /bin $drbl_common_root/
+rsync -a $RSYNC_OPT_EXTRA /bin/* $drbl_common_root/bin/
 # We need awk and cut in init.drbl.
 # For RH-like, awk and cut are in /bin, however, in Debian, they are in /usr/bin, which is not mounted when trying to get IP address of NFS server in running init.drbl. So we have to copy them.
 # Note!!! In Debian, we need the gawk, not awk, so we already installed gawk
@@ -2154,26 +2158,32 @@ echo -n "."
 #   rsync -a $RSYNC_OPT_EXTRA --exclude=modules/ /lib $drbl_common_root/
 # fi
 # 2006/6/1 Just sync it, otherwise /lib/security will not be updated, some files will be missing.
-rsync -a $RSYNC_OPT_EXTRA --exclude=modules/ /lib $drbl_common_root/
+# 2012/9/26 For FC17 since /lib is linked as /usr/lib, we have to copy files, not the linked dir.
+rsync -a $RSYNC_OPT_EXTRA --exclude=modules/ /lib/ $drbl_common_root/lib/
 
 # For x86_64
 # For FC3 or later: /lib64 is a directory, not /lib32, only dir /lib
 # For Ubuntu breezy amd64: /lib64 is a symbolic to /lib, /lib32 is a directory
 for d in lib32 lib64; do
  if [ -L "/$d" ]; then
-   # First, we copy the symbolic file itself (not followed the dir)
-   echo -n "Copying symbolic link dir /$d to $drbl_common_root/..."
-   rsync -a /$d $drbl_common_root/
-   # 2nd, we copy the source file, e.g. "/emul" in the following.
-   # E.g. For amd64 Debian Lenny 
-   # ls -alFh /lib32
-   # lrwxrwxrwx 1 root root 20 2008-11-11 22:49 /lib32 -> /emul/ia32-linux/lib/
-   # ls -alFh /lib64
-   # lrwxrwxrwx 1 root root 4 2008-10-31 19:58 /lib64 -> /lib/
-   dir_top="$(LANG=C file -hs /$d | sed -e "s/symbolic link to//g" -e "s/'//g" | sed -e "s/\`//g" | awk -F":" '{print $2}')"  # dir_top e.g. /emul/ia32-linux/lib/
-   dir_top="$(LANG=C echo $dir_top | awk -F"/" '{print $2}')"  # e.g. emul
-   echo -n "Copying the source dir of symbolic link dir source by: rsync -a /$dir_top $drbl_common_root/"
-   rsync -a /$dir_top $drbl_common_root/
+   if [ -d "$drbl_common_root/$d" ]; then
+     # For FC17, /lib64 is a symbolic link, but $drbl_common_root/lib64 is a folder on current step, so we have to sync /lib64/* to $drbl_common_root/lib64/
+     rsync -a /$d/* $drbl_common_root/$d/
+   else
+     # First, we copy the symbolic file itself (not followed the dir)
+     echo -n "Copying symbolic link dir /$d to $drbl_common_root/..."
+     rsync -a /$d $drbl_common_root/
+     # 2nd, we copy the source file, e.g. "/emul" in the following.
+     # E.g. For amd64 Debian Lenny 
+     # ls -alFh /lib32
+     # lrwxrwxrwx 1 root root 20 2008-11-11 22:49 /lib32 -> /emul/ia32-linux/lib/
+     # ls -alFh /lib64
+     # lrwxrwxrwx 1 root root 4 2008-10-31 19:58 /lib64 -> /lib/
+     dir_top="$(LANG=C file -hs /$d | sed -e "s/symbolic link to//g" -e "s/'//g" | sed -e "s/\`//g" | awk -F":" '{print $2}')"  # dir_top e.g. /emul/ia32-linux/lib/
+     dir_top="$(LANG=C echo $dir_top | awk -F"/" '{print $2}')"  # e.g. emul
+     echo -n "Copying the source dir of symbolic link dir source by: rsync -a /$dir_top $drbl_common_root/"
+     rsync -a /$dir_top $drbl_common_root/
+   fi
  elif [ -d "/$d" ]; then
    echo -n "Copying normal dir /$d to $drbl_common_root/..."
    rsync -a $RSYNC_OPT_EXTRA /$d $drbl_common_root/
@@ -2340,12 +2350,17 @@ fi
 # Skip those do not support chkconfig, or actually, they are not services.
 # reboot/halt are necessary for all dists.
 service_to_be_kept="dualconf functions reboot halt killall single mandrake_consmap mandrake_everytime mandrake_firstime usb"
-for isrv in /etc/init.d/*; do
+
+# For normal service in init.d
+isrv_list="$(cd $drbl_common_root/etc/init.d; ls *)"
+# For systemd-like , E.g. FC17
+[ -x "/bin/systemctl" -a -d "/lib/systemd/system" ] && isrv_list="$isrv_list $(find $drbl_common_root/lib/systemd/system -name "*.service" -type f -exec basename {} \;|  sed -e "s/\.service$//g")"	
+
+for isrv in $isrv_list ; do
   # Skip directory
-  [ -d "$isrv" ] && continue
-  i="$(basename $isrv)"
+  [ -d "$drbl_common_root/etc/init.d/$isrv" -o -d "$drbl_common_root/lib/systemd/system/$isrv.service" ] && continue
   # keep some services.
-  [ -n "$(echo $service_to_be_kept | grep -w $i)" ] && continue
+  [ -n "$(echo $service_to_be_kept | grep -w $isrv)" ] && continue
   if [ -e /etc/debian_version ]; then
     # For Debian
     # We should keep the services in rcS.d, but "update-rc.d remove" does
@@ -2354,9 +2369,9 @@ for isrv in /etc/init.d/*; do
     # after this. NOTE! This can only be done after all updata-rc.d 
     # finished. Otherwise it will affect the update-rc.d
     if [ "$dbn_ubn_serv_control_prog" = "use-insserv" ]; then
-      chroot $drbl_common_root/ insserv -f -r $i &> /dev/null
+      chroot $drbl_common_root/ insserv -f -r $isrv &> /dev/null
     else
-      chroot $drbl_common_root/ /usr/sbin/update-rc.d -f $i remove &> /dev/null
+      chroot $drbl_common_root/ /usr/sbin/update-rc.d -f $isrv remove &> /dev/null
     fi
   elif [ -e /etc/SuSE-release ]; then
     # For SuSE
@@ -2364,16 +2379,26 @@ for isrv in /etc/init.d/*; do
     # Special case: boot.udev, which only starts in boot, 2, 3, 5, but we need 
     # it to start in 1 also. So we remove boot.udev here, then modify it, then
     # add it later.
-    [ "$i" = "boot.udev" ] && chroot $drbl_common_root/ /sbin/insserv -f -r $i
-    [ -n "$(echo $i | grep "^boot.*")" ] && continue
+    [ "$isrv" = "boot.udev" ] && chroot $drbl_common_root/ /sbin/insserv -f -r $isrv
+    [ -n "$(echo $isrv | grep "^boot.*")" ] && continue
 
-    [ "$i" = "Makefile" ] && continue
-    [ "$i" = "README" ] && continue
-    [ "$i" = "rc" ] && continue
-    chroot $drbl_common_root/ /sbin/insserv -f -r $i
+    [ "$isrv" = "Makefile" ] && continue
+    [ "$isrv" = "README" ] && continue
+    [ "$isrv" = "rc" ] && continue
+    chroot $drbl_common_root/ /sbin/insserv -f -r $isrv
+  elif [ -x "/bin/systemctl" ]; then
+    # For systemd-like, E.g. FC17
+    echo "Delete '$isrv' service in systemd-like environment ..."
+    if [ -e "$drbl_common_root/etc/init.d/$isrv" ]; then
+      chroot $drbl_common_root/ /sbin/chkconfig --del $isrv
+      find $drbl_common_root/etc/rc*.d -regex ".*[SK][-0-9][0-9]$isrv" -exec rm -f {} \;
+    fi
+    if [ -e "$drbl_common_root/lib/systemd/system/$isrv.service" ]; then
+      find $drbl_common_root/etc/systemd/ -type l -lname "*/$isrv.service" -exec rm -f {} \;
+    fi
   else
     # For RH-like
-    chroot $drbl_common_root/ /sbin/chkconfig --del $i
+    chroot $drbl_common_root/ /sbin/chkconfig --del $isrv
     # Maybe it will fail to delete the service, so try to delete brutely. 
     # This happens in Mandriva 2007.0. Bugs report:
     # http://qa.mandriva.com/show_bug.cgi?id=24409
@@ -2382,7 +2407,7 @@ for isrv in /etc/init.d/*; do
     # ./rc.d/rc3.d/S-1nfs-common,  ./rc.d/rc3.d/S-1nfs-server
     # Therefore it's not "[SK][0-9][0-9]$i", it's "[SK][-0-9][0-9]$i" here.
     ( cd $drbl_common_root/etc
-      find ./rc*.d -regex ".*[SK][-0-9][0-9]$i" -exec rm -f {} \;
+      find ./rc*.d -regex ".*[SK][-0-9][0-9]$isrv" -exec rm -f {} \;
     )
   fi
 done
@@ -2452,7 +2477,8 @@ client_services="$client_services firstboot"
 
 # check if the service listed exists
 for iser in $client_services_chklist; do
-   [ -e "/etc/init.d/$iser" ] && client_services="$client_services $iser"
+   # For FC17, chcek /lib/systemd/system/*.service
+   [ -e "/etc/init.d/$iser" -o -f "/lib/systemd/system/$iser.service" ] && client_services="$client_services $iser"
 done
 
 # add the services only exist in DRBL client.
@@ -2583,6 +2609,34 @@ for i in $client_services; do
   elif [ -e /etc/SuSE-release ]; then
     # SuSE
     chroot $drbl_common_root/ /sbin/insserv -f $i
+  elif [ -x "/bin/systemctl" -a -d "/lib/systemd/system/" ]; then
+    # FC17: ststemd like
+    # Note by Ceasar Sun on 2012/9/18
+    echo -n "Add '$i':"
+    case "$i" in
+      ypbind)
+        # remove ypserv
+        sed -i -e "s/[[:space:]]*ypserv.service//" $drbl_common_root/lib/systemd/system/$i.service
+        ;;
+      dm)
+        # start drblthincli before dm.
+        ;;
+      netfs)
+        #
+        ;;
+    esac
+    if [ -e "$drbl_common_root/etc/init.d/$i" ]; then
+      chroot $drbl_common_root/ /sbin/chkconfig --add $i
+      echo "'chroot $drbl_common_root/ /sbin/chkconfig --add $i'"
+    elif [ -e "$drbl_common_root/lib/systemd/system/$i.service" ]; then
+      # systemctl can't work in chroot environment :`chroot $drbl_common_root/ /sbin/chkconfig --add $i`
+      _systemctl_target=$(grep -e "^WantedBy=" $drbl_common_root/lib/systemd/system/$i.service | sed -e "s/WantedBy=//")
+	  [ -z "$_systemctl_target" ] && echo "Skip ..." && continue;
+      echo "to target: '$_systemctl_target'";
+      for ti in $_systemctl_target; do
+        ln -s -v /lib/systemd/system/$i.service $drbl_common_root/etc/systemd/system/$ti.wants/$i.service
+      done
+    fi
   else
     # RH-like
     # Note by Steven Shiau on 2006/9/26
@@ -2863,7 +2917,7 @@ chown 755 $drbl_common_root/sbin/init
 mkdir -p $drbl_common_root/etc/diskless-image
 
 # copy dev tarball to $drbl_common_root/etc/diskless-image
-if [ -x "$drbl_common_root/sbin/udevd" ]; then
+if [ -x "$drbl_common_root/sbin/udevadm" ]; then
   echo -n "Using udev for clients... " 
 elif [ -f "$drbl_pkgdir/dev.tgz" ]; then
   echo -n "Using old-style dev for clients... " 
@@ -2889,7 +2943,8 @@ RH|MDK|SUSE)
           CLIENT_INIT_RL=5
           ;;
   esac
-  perl -p -i -e "s/^id:[1-5]:initdefault:/id:$CLIENT_INIT_RL:initdefault:/g" $drbl_common_root/etc/inittab
+  # systemd-liked use /etc/systemd/system/default.target link to default runlevel
+  [ -L "$drbl_common_root/etc/systemd/system/default.target" ] && ln -fsv /lib/systemd/system/runlevel${CLIENT_INIT_RL}.target $drbl_common_root/etc/systemd/system/default.target || perl -p -i -e "s/^id:[1-5]:initdefault:/id:$CLIENT_INIT_RL:initdefault:/g" $drbl_common_root/etc/inittab
   ;;
 DBN)
   default_dm="$(drbl-check-dm 2> /dev/null)"
@@ -2964,6 +3019,12 @@ else
 fi
 
 # (2) for server
+if [ -n "$(getenforce 2>/dev/null)" -a "$(getenforce 2>/dev/null)" = "Enforcing" ]; then
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+  echo "SELinux is 'Enabled' !! Please disable it or make it to work with DRBL relative service "
+  sleep 10
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+fi 
 # set the tftp to on when xinetd/inted starts and portmap or rpcbind settings in server.
 if [ -e /etc/debian_version ]; then
   # Debian

@@ -172,9 +172,9 @@ if [ "$TMPFS_RUN" = "true" ]; then
 fi
 
 # find my IP address
-NETDEVICES="$(cat /proc/net/dev | awk -F: '/eth.:|tr.:/{print $1}')"
+NETDEVICES="$(cat /proc/net/dev | awk -F: '/eth.:|tr.:|p.p.:/{print $1}')"
 for DEVICE in $NETDEVICES; do
-  IP_tmp="$(ifconfig $DEVICE | grep -A1 $DEVICE | grep -v $DEVICE | grep "inet addr" | sed -e 's/^.*inet addr:\([0-9\.]\+\).*$/\1/')"
+  IP_tmp="$(ifconfig $DEVICE | grep -A1 $DEVICE | grep -v $DEVICE | grep "inet" | sed -e 's/addr://'| sed -e 's/^.*inet \([0-9\.]\+\).*$/\1/')"
   if [ -n "$IP_tmp" ]; then
     # Got the IP address, stop to get from other port, so break
     IP=$IP_tmp

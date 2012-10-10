@@ -1,5 +1,5 @@
 #!/bin/bash
-# Author: Steven Shiau <steven _at_ nchc org tw>
+# Authors: Steven Shiau <steven _at_ nchc org tw>, Ceasar Sun <ceasar _at_ nchc org tw>
 # License: GPL
 #
 # generate the NFS exports or clean the old one.
@@ -79,6 +79,9 @@ NFSRPC_END
 NFSDCOUNT=$total_nfsd
 NFSRPC_END
       fi
+    elif grep -q "\<RPCNFSDCOUNT=.*" /etc/sysconfig/$NFS_SRV_NAME 2>/dev/null; then
+      # For systemd-like, E.g. FC17
+      perl -p -i -e "s/^.*RPCNFSDCOUNT=.*/RPCNFSDCOUNT=$total_nfsd/g" /etc/sysconfig/$NFS_SRV_NAME
     else
       [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
       echo "Warning!!! Unable to determine the NFS daemon number parameter (Not RPCNFSDCOUNT or NFSDCOUNT)! This NFS service will not be good enough when there is heavy client traffic!!!"
