@@ -5,6 +5,15 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.1.7-drbl1) unstable; urgency=low
+
+  * Bug fixed: Failed to serve Fedora 17. The patches from 
+    Ceasar Sun were merged. Some minor bugs still have to be fixed later.
+  * Bug fixed: Files for Ubuntu 12.10 were added. It should be able 
+    to serve ubuntu 12.10.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 11 Oct 2012 08:28:35 +0800
+
 drbl (2.1.6-drbl1) unstable; urgency=low
 
   * Ubuntu Quantal netinstall was enabled in drbl.conf.
@@ -50,7 +59,6 @@ drbl (2.1.1-drbl1) unstable; urgency=low
 drbl (2.1.0-drbl1) unstable; urgency=low
 
   * Updating files in dir debian so less lintian warnings.
-  * 
 
  -- Steven Shiau <steven@nchc.org.tw>  Sat, 25 Aug 2012 11:21:58 +0800
 
