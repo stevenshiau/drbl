@@ -1,6 +1,6 @@
 [drbl-legacy]
 name=DRBL legacy packages
-baseurl=http://free.nchc.org.tw/drbl-core/$ARCH/RPMS.drbl-legacy
+baseurl=http://free.nchc.org.tw/drbl-core/$basearch/RPMS.drbl-legacy
 # Note: Due to quota limit in drbl.sf.net, legacy programs are only available in those mirror site in nchc.org.tw.
 # mirrorlist=http://free.nchc.org.tw/drbl-core/drbl-legacy-mirror-list
 enabled=0

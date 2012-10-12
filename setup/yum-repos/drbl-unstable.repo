@@ -1,6 +1,6 @@
 [drbl-unstable]
 name=DRBL unstable packages
-# baseurl=http://free.nchc.org.tw/drbl-core/$ARCH/RPMS.drbl-unstable
+# baseurl=http://free.nchc.org.tw/drbl-core/$basearch/RPMS.drbl-unstable
 mirrorlist=http://free.nchc.org.tw/drbl-core/drbl-unstable-mirror-list
 enabled=0
 gpgcheck=1

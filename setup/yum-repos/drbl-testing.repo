@@ -1,6 +1,6 @@
 [drbl-testing]
 name=DRBL testing packages
-# baseurl=http://free.nchc.org.tw/drbl-core/$ARCH/RPMS.drbl-testing
+# baseurl=http://free.nchc.org.tw/drbl-core/$basearch/RPMS.drbl-testing
 mirrorlist=http://free.nchc.org.tw/drbl-core/drbl-testing-mirror-list
 enabled=0
 gpgcheck=1

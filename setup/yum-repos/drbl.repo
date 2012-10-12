@@ -1,6 +1,6 @@
 [drbl]
 name=DRBL stable packages
-# baseurl=http://free.nchc.org.tw/drbl-core/$ARCH/RPMS.drbl-stable
+# baseurl=http://free.nchc.org.tw/drbl-core/$basearch/RPMS.drbl-stable
 mirrorlist=http://free.nchc.org.tw/drbl-core/drbl-mirror-list
 enabled=1
 gpgcheck=1

@@ -1,6 +1,6 @@
 [drbl-extra]
 name=DRBL extra packages
-# baseurl=http://free.nchc.org.tw/drbl-core/$ARCH/RPMS.drbl-extra
+# baseurl=http://free.nchc.org.tw/drbl-core/$basearch/RPMS.drbl-extra
 mirrorlist=http://free.nchc.org.tw/drbl-core/drbl-extra-mirror-list
 enabled=0
 gpgcheck=1

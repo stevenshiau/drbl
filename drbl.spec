@@ -45,6 +45,8 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+- Bug fixed: yum repository files drbl-*-list should use "$basearch" instead of "$ARCH" so that the architecture could be correct.
+
 * Fri Oct 12 2012 Steven Shiau <steven _at_ nchc org tw> 2.1.9-drbl1
 - Bug fixed: YP update command for Fedora 17 was added.
 
