@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.1.8
+Version:	2.1.9
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Fri Oct 12 2012 Steven Shiau <steven _at_ nchc org tw> 2.1.9-drbl1
+- Bug fixed: YP update command for Fedora 17 was added.
+
 * Fri Oct 12 2012 Steven Shiau <steven _at_ nchc org tw> 2.1.8-drbl1
 - Bug fixed: Some bugs for Fedora 17 were fixed.
 

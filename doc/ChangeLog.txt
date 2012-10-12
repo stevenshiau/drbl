@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.1.9-drbl1) unstable; urgency=low
+
+  * Bug fixed: YP update command for Fedora 17 was added.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 12 Oct 2012 10:57:35 +0800
+
 drbl (2.1.8-drbl1) unstable; urgency=low
 
   * Bug fixed: Some bugs for Fedora 17 were fixed.

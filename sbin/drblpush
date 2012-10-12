@@ -4088,6 +4088,8 @@ fi
 # Ref: http://www.usenetlinux.com/archive/topic.php/t-224905.html
 # We need to update hosts.byname, hosts.byaddr...
 [ -e /var/yp/Makefile ] && touch /var/yp/Makefile
+# For FC17, it seems it won't work with "all" in the beginning. Therefore we addd the command without all.
+make -C /var/yp &> /dev/null
 make -C /var/yp all &> /dev/null
 
 # Clean those pseudo clients (empty directories)
