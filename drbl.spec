@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.1.10
+Version:	2.1.11
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,10 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Fri Oct 12 2012 Steven Shiau <steven _at_ nchc org tw> 2.1.11-drbl1
+- Bug fixed: typos in drbl-all-service were fixed.
+- Bug fixed: the warning about fine-tune rc.sysinit and halt should not be given for Fedora 17 since there is no such files exist.
+
 * Fri Oct 12 2012 Steven Shiau <steven _at_ nchc org tw> 2.1.10-drbl1
 - Bug fixed: yum repository files drbl-*-list should use "$basearch" instead of "$ARCH" so that the architecture could be correct.
 - Bug fixed: for CentOS/RHEL 6 or Fedora 17, dracut instead of mkinitrd is required. Therefore using PKG_TO_QUERY="mkinitrd dracut" in drbl.conf.

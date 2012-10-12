@@ -1,3 +1,10 @@
+drbl (2.1.11-drbl1) unstable; urgency=low
+
+  * Bug fixed: typos in drbl-all-service were fixed.
+  * Bug fixed: the warning about fine-tune rc.sysinit and halt should not be given for Fedora 17 since there is no such files exist.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 12 Oct 2012 20:37:01 +0800
+
 drbl (2.1.10-drbl1) unstable; urgency=low
 
   * Bug fixed: yum repository files drbl-*-list should use "$basearch" instead of "$ARCH" so that the architecture could be correct.

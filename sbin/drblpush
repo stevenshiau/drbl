@@ -3113,14 +3113,18 @@ case "$OS_type" in
     if [ -f "${drbl_setup_path}/files/${OS_type}/${OS_Version}/rc.sysinit.${OS_Version}.drbl" ]; then
       cp -f ${drbl_setup_path}/files/${OS_type}/${OS_Version}/rc.sysinit.${OS_Version}.drbl $drbl_common_root/etc/rc.d/rc.sysinit
     else
-      # Can not find fine-tune file, show warning.
+      # Can not find fine-tune file, show warning. This is only necessary for CentOS, since for Fedora, when >= version 17, no required. //NOTE// From drbl 2.x, only CentOS and Fedora are supported.
       OS_Version_Major="${OS_Version:0:3}"  # E.g. CO5.8 -> CO5
-      most_related_ver="$(LC_ALL=C find $drbl_setup_path/files/$OS_type/${OS_Version_Major}* -type d -exec basename {} \; | sort | uniq | tail -n 1)"
-      [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
-      echo "Warning! The fine-tune file ${drbl_setup_path}/files/${OS_type}/${OS_Version}/rc.sysinit.${OS_Version}.drbl was not found. Using ${drbl_setup_path}/files/${OS_type}/${most_related_ver}/rc.sysinit.${most_related_ver}.drbl as /etc/rc.d/rc.sysinit for DRBL clients!"
-      echo "This may cause some problems to DRBL clients!"
-      [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
-      cp -f ${drbl_setup_path}/files/${OS_type}/${most_related_ver}/rc.sysinit.${most_related_ver}.drbl $drbl_common_root/etc/rc.d/rc.sysinit
+      case "$OS_Version" in
+        CO*)
+        most_related_ver="$(LC_ALL=C find $drbl_setup_path/files/$OS_type/${OS_Version_Major}* -type d -exec basename {} \; | sort | uniq | tail -n 1)"
+        [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+        echo "Warning! The fine-tune file ${drbl_setup_path}/files/${OS_type}/${OS_Version}/rc.sysinit.${OS_Version}.drbl was not found. Using ${drbl_setup_path}/files/${OS_type}/${most_related_ver}/rc.sysinit.${most_related_ver}.drbl as /etc/rc.d/rc.sysinit for DRBL clients!"
+        echo "This may cause some problems to DRBL clients!"
+        [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+        cp -f ${drbl_setup_path}/files/${OS_type}/${most_related_ver}/rc.sysinit.${most_related_ver}.drbl $drbl_common_root/etc/rc.d/rc.sysinit
+	;;
+      esac
     fi
     ;;
 esac
@@ -3423,14 +3427,18 @@ else
   if [ -f "$drbl_setup_path/files/${OS_type}/${OS_Version}/halt.$OS_Version.drbl" ]; then
     cp -f $drbl_setup_path/files/${OS_type}/${OS_Version}/halt.$OS_Version.drbl $drbl_common_root/etc/init.d/halt
   else
-    # not Debian, it's RH-like (BSD style), so show warning.
+    # not Debian, it's RH-like (BSD style), so show warning. This is only necessary for CentOS, since for Fedora, when >= version 17, no required. //NOTE// From drbl 2.x, only CentOS and Fedora are supported.
     OS_Version_Major="${OS_Version:0:3}"  # E.g. CO5.8 -> CO5
-    most_related_ver="$(LC_ALL=C find $drbl_setup_path/files/$OS_type/${OS_Version_Major}* -type d -exec basename {} \; | sort | uniq | tail -n 1)"
-    [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
-    echo "Warning! The fine-tune file ${drbl_setup_path}/files/${OS_type}/${OS_Version}/halt.${OS_Version}.drbl was not found. Using $drbl_setup_path/files/${OS_type}/${most_related_ver}/halt.${most_related_ver}.drbl as /etc/init.d/halt for DRBL clients!"
-    echo "This may cause some problems to DRBL clients!"
-    [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
-    cp -f $drbl_setup_path/files/${OS_type}/${most_related_ver}/halt.${most_related_ver}.drbl $drbl_common_root/etc/init.d/halt
+    case "$OS_Version" in
+    CO*)
+      most_related_ver="$(LC_ALL=C find $drbl_setup_path/files/$OS_type/${OS_Version_Major}* -type d -exec basename {} \; | sort | uniq | tail -n 1)"
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+      echo "Warning! The fine-tune file ${drbl_setup_path}/files/${OS_type}/${OS_Version}/halt.${OS_Version}.drbl was not found. Using $drbl_setup_path/files/${OS_type}/${most_related_ver}/halt.${most_related_ver}.drbl as /etc/init.d/halt for DRBL clients!"
+      echo "This may cause some problems to DRBL clients!"
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+      cp -f $drbl_setup_path/files/${OS_type}/${most_related_ver}/halt.${most_related_ver}.drbl $drbl_common_root/etc/init.d/halt
+      ;;
+    esac
   fi
   # From Fedora 9, upstart is used, and the post script of rc1 will force to terminate all programs after S19ocs-run is run in the end of rc1. i.e. when client finishes cloning in Clonezilla SE, a reboot or shutdown command (e.g. ocs-sr -p reboot...) will be killed by the post-stop script of rc1. Therefore we comment it.
   # The post script in /etc/event.d/rc1 is:

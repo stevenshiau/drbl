@@ -94,7 +94,7 @@ drbl_startup_service() {
     fi
   elif [ -n "$(which systemctl 2>/dev/null)" -a -e "/lib/systemd/system/$srv.service" ]; then
     # FC 17
-    echo "Start '$srv' service in systemd-like environemnt..."
+    echo "Now $act '$srv' service in systemd-like environment..."
     systemctl $act $srv.service
     ret=$?
   else
