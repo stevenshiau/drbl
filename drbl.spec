@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.1.7
+Version:	2.1.8
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Fri Oct 12 2012 Steven Shiau <steven _at_ nchc org tw> 2.1.8-drbl1
+- Bug fixed: Some bugs for Fedora 17 were fixed.
+
 * Thu Oct 11 2012 Steven Shiau <steven _at_ nchc org tw> 2.1.7-drbl1
 - Bug fixed: Failed to serve Fedora 17. The patches from Ceasar Sun were merged. Some minor bugs still have to be fixed later.
 - Bug fixed: Files for Ubuntu 12.10 were added. It should be able to serve ubuntu 12.10.

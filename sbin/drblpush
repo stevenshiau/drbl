@@ -2349,7 +2349,8 @@ else
 fi
 # Skip those do not support chkconfig, or actually, they are not services.
 # reboot/halt are necessary for all dists.
-service_to_be_kept="dualconf functions reboot halt killall single mandrake_consmap mandrake_everytime mandrake_firstime usb"
+# For FC17, getty@ is required.
+service_to_be_kept="dualconf functions reboot halt killall single mandrake_consmap mandrake_everytime mandrake_firstime usb getty@"
 
 # For normal service in init.d
 isrv_list="$(cd $drbl_common_root/etc/init.d; ls *)"
