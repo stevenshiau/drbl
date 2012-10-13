@@ -1,3 +1,9 @@
+drbl (2.1.12-drbl1) unstable; urgency=low
+
+  * Bug fixed: kernel package of FC17 on repository could not be found.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sat, 13 Oct 2012 22:16:43 +0800
+
 drbl (2.1.11-drbl1) unstable; urgency=low
 
   * Bug fixed: typos in drbl-all-service were fixed.

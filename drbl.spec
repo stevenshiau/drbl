@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.1.11
+Version:	2.1.12
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,7 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Sat Oct 13 2012 Steven Shiau <steven _at_ nchc org tw> 2.1.12-drbl1
 - Bug fixed: kernel package of FC17 on repository could not be found.
 
 * Fri Oct 12 2012 Steven Shiau <steven _at_ nchc org tw> 2.1.11-drbl1
