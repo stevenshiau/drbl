@@ -1426,7 +1426,7 @@ case "$OS_Version" in
        SMP_OPTION=""
      fi
      ;;
-   FC[6-9]|FC1[01234])
+   FC[6-9]|FC1[0123456789])
      # From Fedora Core 6, one kernel fits single processor and SMP (including 
      # i386 and x86_64 distributions).
      SMP_OPTION=""
@@ -1496,6 +1496,13 @@ case "$OS_Version" in
        fi
        ;;
     esac
+    ;;
+   FC*)
+     # For Fedora 17, kernel package availables:
+     # kernel-3.3.4-5.fc17.i686.rpm
+     # kernel-PAE-3.3.4-5.fc17.i686.rpm
+     # This is regular expression, we will put it in as parameters of "grep -E"
+     KEXTRA="(|-PAE)"
     ;;
 esac
 
@@ -1602,7 +1609,7 @@ while [ -z "$chosen_kernel_for_client" ]; do
   # 2: kernel-2.6.8.1.25mdk-1-1mdk (in updates repository)
   # 3: kernel-2.4.27.0.pre2.1mdk-1-1mdk (in release repository)
   # 4: kernel-2.6.8.1.12mdk-1-1mdk (in release repository)
-  latest_krn_in_release="$(awk -F" " '/in release repository/ {print $2}' $LATEST_KTMP | pkg-ver-latest)"
+  latest_krn_in_release="$(awk -F" " '/in release repository/ {print $2}' $LATEST_KTMP | pkg-ver-latest| head -n 1)"
   # Maybe we can not find the desired kernel in release. For example, in RH8.0/RH9/FC1, if we want to use i586 smp kernel, in FC1, there is no kernel-smp-2.4.22-1.2115.nptl.i586.rpm, only kernel-smp-2.4.22-1.2115.nptl.athlon.rpm, kernel-smp-2.4.22-1.2115.nptl.i686.rpm in http://opensource.nchc.org.tw/fedora/linux/core/1/i386/os/Fedora/RPMS/. However, i586 smp kernel exists in Rh8.0/RH9/FC1 updates dir. When this happens, we default to use the one in updates.
   if [ -n "$latest_krn_in_release" ]; then
     default_release="$(awk -F":" "/$latest_krn_in_release/ {print \$1}" $LATEST_KTMP)"
@@ -2070,7 +2077,7 @@ case "$OS_Version" in
      # http://opensource.nchc.org.tw/fedora/linux/releases/8/Fedora/i386/os/Packages/
      # http://opensource.nchc.org.tw/fedora/linux/releases/8/Everything/i386/os/Packages/
      # http://opensource.nchc.org.tw/fedora/linux/updates/8/i386/
-     RH_RPMS_os_update_dir="../updates/$FC_VER/$ARCH/ $FC_VER/Fedora/$ARCH/os/Packages/ $FC_VER/Fedora/$ARCH/os/Fedora/ $FC_VER/Everything/$ARCH/os/Packages/ $FC_VER/Everything/$ARCH/os/Fedora/ updates/$FC_VER/$ARCH/ $FC_VER/$ARCH/os/Fedora/RPMS/ $FC_VER/$ARCH/updates/RPMS/ $FC_VER/$ARCH/os/RPMS/"
+     RH_RPMS_os_update_dir="../updates/$FC_VER/$ARCH/ $FC_VER/Fedora/$ARCH/os/Packages/k/ $FC_VER/Fedora/$ARCH/os/Packages/ $FC_VER/Fedora/$ARCH/os/Fedora/ $FC_VER/Everything/$ARCH/os/Packages/ $FC_VER/Everything/$ARCH/os/Fedora/ updates/$FC_VER/$ARCH/ $FC_VER/$ARCH/os/Fedora/RPMS/ $FC_VER/$ARCH/updates/RPMS/ $FC_VER/$ARCH/os/RPMS/"
      ;;
    CO*)
      CO_VER=${OS_Version:2}
@@ -2207,6 +2214,10 @@ preset_client_archi_ans() {
       read 
       return 0
       ;;
+    FC*)
+      client_archi_ans="2"
+      return 0
+      ;;
   esac
 
   [ -e /etc/lsb-release ] && . /etc/lsb-release
@@ -2287,9 +2298,9 @@ parse_client_archi_setting() {
           ;;
     esac
   fi
-  # For FC12/13/14, only one archi for x86 is available, i.e. i686.
+  # For FC12/13/14/17..., only one archi for x86 is available, i.e. i686.
   case "$OS_Version" in
-  FC1[234])
+  FC1[23456789])
         [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
         echo "$msg_change_cpu_level_to_i686"
         [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL

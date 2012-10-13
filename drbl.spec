@@ -45,6 +45,8 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+- Bug fixed: kernel package of FC17 on repository could not be found.
+
 * Fri Oct 12 2012 Steven Shiau <steven _at_ nchc org tw> 2.1.11-drbl1
 - Bug fixed: typos in drbl-all-service were fixed.
 - Bug fixed: the warning about fine-tune rc.sysinit and halt should not be given for Fedora 17 since there is no such files exist.
