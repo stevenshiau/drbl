@@ -36,5 +36,5 @@ Usage() {
 if ! LC_ALL=C ifconfig -a 2>/dev/null | grep -i -q "\<$ethx\>"; then
    exit 1
 fi
-LC_ALL=C ifconfig $ethx | grep -A1 $ethx | grep -v $ethx | grep "inet" |sed -e 's/addr://'|  sed -e 's/^.*inet \([0-9\.]\+\).*$/\1/'
+LC_ALL=C ifconfig $ethx | grep -w -A1 $ethx | grep -w -v $ethx | grep -w "inet" |sed -e 's/addr://'|  sed -e 's/^.*inet \([0-9\.]\+\).*$/\1/'
 exit 0
