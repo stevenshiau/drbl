@@ -45,6 +45,8 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+- More comments were added for not getting IPv6 in drbl-get-ipadd and init.drbl.
+
 * Sun Oct 14 2012 Steven Shiau <steven _at_ nchc org tw> 2.1.13-drbl1
 - Bug fixed: IPv6 address should not be gotten since for the NFS of DRBL only IPv4 is supported.
 

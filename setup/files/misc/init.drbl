@@ -172,9 +172,14 @@ if [ "$TMPFS_RUN" = "true" ]; then
 fi
 
 # find my IP address
-NETDEVICES="$(cat /proc/net/dev | awk -F: '/eth.:|tr.:|p.p.:/{print $1}' | sort | uniq)"
+NETDEVICES="$(LC_ALL=C cat /proc/net/dev | awk -F: '/eth.:|tr.:|p.p.:/{print $1}' | sort | uniq)"
 for DEVICE in $NETDEVICES; do
-  IP_tmp="$(ifconfig $DEVICE | grep -w -A1 $DEVICE | grep -w -v $DEVICE | grep -w "inet" | sed -e 's/addr://'| sed -e 's/^.*inet \([0-9\.]\+\).*$/\1/')"
+  # //NOTE// Here we have to use grep "-w" to grep the IPv4 address, avoding getting IPv6 address. 
+  # E.g.:
+  # eth1: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+  #        inet 192.168.77.254  netmask 255.255.255.0  broadcast 192.168.77.255
+  #        inet6 fe80::20c:29ff:fee9:f24e  prefixlen 64  scopeid 0x20<link>
+  IP_tmp="$(LC_ALL=C ifconfig $DEVICE | grep -w -A1 $DEVICE | grep -w -v $DEVICE | grep -w "inet" | sed -e 's/addr://'| sed -e 's/^.*inet \([0-9\.]\+\).*$/\1/')"
   if [ -n "$IP_tmp" ]; then
     # Got the IP address, stop to get from other port, so break
     IP=$IP_tmp

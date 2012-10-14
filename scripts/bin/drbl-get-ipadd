@@ -36,5 +36,9 @@ Usage() {
 if ! LC_ALL=C ifconfig -a 2>/dev/null | grep -i -q "\<$ethx\>"; then
    exit 1
 fi
+# //NOTE// Here we have to use grep "-w" to grep the IPv4 address, avoding getting IPv6 address. E.g.:
+# eth1: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+#        inet 192.168.77.254  netmask 255.255.255.0  broadcast 192.168.77.255
+#        inet6 fe80::20c:29ff:fee9:f24e  prefixlen 64  scopeid 0x20<link>
 LC_ALL=C ifconfig $ethx | grep -w -A1 $ethx | grep -w -v $ethx | grep -w "inet" |sed -e 's/addr://'|  sed -e 's/^.*inet \([0-9\.]\+\).*$/\1/'
 exit 0
