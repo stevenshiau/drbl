@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.1.14-drbl1) unstable; urgency=low
+
+  * More comments were added for not getting IPv6 in drbl-get-ipadd and init.drbl.
+  * Bug fixed: Linked files /var/run and /var/lock were not copied in client's /var/.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 16 Oct 2012 20:40:13 +0800
+
 drbl (2.1.13-drbl1) unstable; urgency=low
 
   * Bug fixed: IPv6 address should not be gotten since for the NFS of DRBL only IPv4 is supported.

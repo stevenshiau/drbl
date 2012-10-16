@@ -3576,14 +3576,22 @@ fi
 #fi
 
 echo -n "."
-# create the /var in template, only directory 
-# Other directory in /var/lib/ is important for some applications.
-# but /var/lib/rpm/* is necessary for rpm database,
+# Create the /var in template, only directory 
+# Other directories in /var/lib/ are important for some applications.
+# /var/lib/rpm/* is necessary for rpm database,
 # /var/spool/mail is necessary for each user.
 # It's better to export /var/lib all.
 
-# use rsync will be easier....Thanks to Wayne Davison wayned@samba.org
+# Use rsync will be easier....Thanks to Wayne Davison wayned@samba.org
 rsync -a $RSYNC_OPT_EXTRA --include="*/" --exclude="*" /var $drbl_common_root/
+
+# symbolic_files_in_var_chklist is loaded in drbl.conf.
+# On Ubuntu 11.10, FC17, /var/run is linked to /run, and /var/lock is linked to /run/lock.
+for i in $symbolic_files_in_var_chklist; do
+  if [ -L /var/$i ]; then
+    rsync -al /var/$i $drbl_common_root/var/
+  fi
+done
 
 echo -n "."
 

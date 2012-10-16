@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.1.13
+Version:	2.1.14
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,7 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Tue Oct 16 2012 Steven Shiau <steven _at_ nchc org tw> 2.1.14-drbl1
 - More comments were added for not getting IPv6 in drbl-get-ipadd and init.drbl.
+- Bug fixed: Linked files /var/run and /var/lock were not copied in client's /var/.
 
 * Sun Oct 14 2012 Steven Shiau <steven _at_ nchc org tw> 2.1.13-drbl1
 - Bug fixed: IPv6 address should not be gotten since for the NFS of DRBL only IPv4 is supported.

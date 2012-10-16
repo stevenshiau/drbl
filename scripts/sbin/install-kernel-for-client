@@ -121,7 +121,13 @@ case "$mode" in
       client_kernel_ver="$(rpm -qpl $client_kernel_pkg | awk -F" " '{print $NF}' | awk -F"/" '/\/lib\/modules/ {print $4}' | sort | uniq)"
     fi
     # we might need /tftpboot/node_root/var/lock/rpm/ for locking in some dist (like CentOS 4.4).
-    mkdir -p $drbl_common_root/var/lock/rpm/
+    if [ -L /var/lock ]; then
+      # For FC17, /var/lock is linked to /run/lock, a tmpfs dir.
+      # Here we do thing here. The /var/lock file will be copied in drblpush later.
+      true
+    else
+      mkdir -p $drbl_common_root/var/lock/rpm/
+    fi
     echo "Installing $client_kernel_pkg for clients... "
     echo "$msg_install_kernel_might_take_several_minutes "
     # We do not care about those files put into $drbl_common_root/usr/
