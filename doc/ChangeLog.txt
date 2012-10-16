@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.1.15-drbl1) unstable; urgency=low
+
+  * Bug fixed: Some problem for linking /var/run and /var/lock on Fedora 17. Reverted to the previous status.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 16 Oct 2012 21:17:54 +0800
+
 drbl (2.1.14-drbl1) unstable; urgency=low
 
   * More comments were added for not getting IPv6 in drbl-get-ipadd and init.drbl.

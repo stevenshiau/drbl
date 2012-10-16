@@ -3587,11 +3587,11 @@ rsync -a $RSYNC_OPT_EXTRA --include="*/" --exclude="*" /var $drbl_common_root/
 
 # symbolic_files_in_var_chklist is loaded in drbl.conf.
 # On Ubuntu 11.10, FC17, /var/run is linked to /run, and /var/lock is linked to /run/lock.
-for i in $symbolic_files_in_var_chklist; do
-  if [ -L /var/$i ]; then
-    rsync -al /var/$i $drbl_common_root/var/
-  fi
-done
+# for i in $symbolic_files_in_var_chklist; do
+#   if [ -L /var/$i ]; then
+#     rsync -al /var/$i $drbl_common_root/var/
+#   fi
+# done
 
 echo -n "."
 
