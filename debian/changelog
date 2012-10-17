@@ -1,3 +1,9 @@
+drbl (2.1.17-drbl1) unstable; urgency=low
+
+  * Bug fixed: dracut should not be listed in PKG_TO_QUERY, we have to put it in PKG_TO_QUERY_RH otherwise it will cause Ubuntu or Debian fail to finish drblsrv.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 17 Oct 2012 20:33:20 +0800
+
 drbl (2.1.16-drbl1) unstable; urgency=low
 
   * Bug fixed: Some more minor bugs fixed for Fedora 17 were applied.
