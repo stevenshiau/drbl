@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+- Bug fixed: For Ubuntu 12.04 and 12.10, linux-image-extra should be installed to. So we can support more hardware for DRBL clients.
+- Changed the default option for client's kernel arch to the same as server for Debian.
+
 * Thu Oct 18 2012 Steven Shiau <steven _at_ nchc org tw> 2.1.17-drbl1
 - Bug fixed: dracut should not be listed in PKG_TO_QUERY, we have to put it in PKG_TO_QUERY_RH otherwise it will cause Ubuntu or Debian fail to finish drblsrv.
 
