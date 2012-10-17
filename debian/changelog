@@ -1,3 +1,9 @@
+drbl (2.1.16-drbl1) unstable; urgency=low
+
+  * Bug fixed: Some more minor bugs fixed for Fedora 17 were applied.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 17 Oct 2012 10:32:53 +0800
+
 drbl (2.1.15-drbl1) unstable; urgency=low
 
   * Bug fixed: Some problem for linking /var/run and /var/lock on Fedora 17. Reverted to the previous status.
