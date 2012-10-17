@@ -787,6 +787,7 @@ read drbl_remove_answer
 case "$drbl_remove_answer" in 
    y|Y|[yY][eE][sS])
       $inst_prog remove drbl
+      drbl_remove_answer=y
       ;;
 esac
 if [ "$installer" = "apt" ]; then
@@ -1961,7 +1962,7 @@ clean_tftpboot_and_misc() {
   find /tftpboot/nbi_img/ ! -name "*netinstall*" ! -type d -exec rm -f {} \;
   [ -d "/tftpboot/nodes/" ] && rm -rf /tftpboot/nodes
   [ -d "/tftpboot/node_root/" ] && rm -rf /tftpboot/node_root
-  [ -d "$drbl_syscfg" ] && rm -rf $drbl_syscfg
+  [ -d "$drbl_syscfg" -a "$drbl_remove_answer" = "y" ] && rm -rf $drbl_syscfg 
   [ -f "$ocs_lock_dir/clonezilla.lock" ] && rm -f $ocs_lock_dir/clonezilla.lock
   # For old version, we have to remove the old tag, now we use $ocs_lock_dir/clonezilla.lock instead of $ocsroot/clonezilla.lock
   [ -f "$ocsroot/clonezilla.lock" ] && rm -f $ocsroot/clonezilla.lock

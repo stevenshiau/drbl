@@ -1,9 +1,8 @@
 #!/bin/bash
-# Author: Steven Shiau <steven _at_ nchc org tw>
+# Author: Steven Shiau <steven _at_ nchc org tw>, Ceasar Sun <ceasar _at_ nchc org tw>
 # License: GPL
 #
-# set the iptables NAT
-# clean the old tables
+# To generate or clean NIS/YP securenets setting for DRBL clients to access
 
 # Load DRBL setting and functions
 DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/usr/share/drbl}"
@@ -114,7 +113,8 @@ EOF
       if [ "$restart_yp" = "yes" ]; then
          echo "Stopping NIS service..."
 	 echo "$msg_delimiter_star_line"
-         /etc/init.d/$YP_SRV_NAME stop
+         [ -n "$(which systemctl 2>/dev/null)" -a -e "/lib/systemd/system/$YP_SRV_NAME.service" ] && systemctl stop $YP_SRV_NAME.service  # For systemd
+         [ -x "/etc/init.d/$YP_SRV_NAME" ] && /etc/init.d/$YP_SRV_NAME stop  # For  SysV service
 	 echo "$msg_delimiter_star_line"
       fi
       echo "done!"

@@ -94,8 +94,9 @@ drbl_startup_service() {
     fi
   elif [ -n "$(which systemctl 2>/dev/null)" -a -e "/lib/systemd/system/$srv.service" ]; then
     # FC 17
-    echo "Now $act '$srv' service in systemd-like environment..."
-    systemctl $act $srv.service
+    _real_service_name=$(basename $(readlink -f  /usr/lib/systemd/system/$srv.service) ".service")
+    echo "Now $act '$_real_service_name' service in systemd-like environment..."
+    systemctl $act $_real_service_name.service
     ret=$?
   else
     /etc/init.d/$srv $act
@@ -152,9 +153,9 @@ case "$switch" in
             nfslock) serv_st_d="rpc.statd";;
             *) serv_st_d="$serv_st";;
           esac
-	  # NOT debian, it's RH-like, we can use the /var/lock/subsys/$serv_st
-	  if [ -e /var/lock/subsys/$serv_st_d -o -e /var/run/$serv_st_d.pid ]; then
-	     to_restart=yes
+	     # NOT debian, it's RH-like, we can use the /var/lock/subsys/$serv_st
+	     if [ -e /var/lock/subsys/$serv_st_d -o -e /var/run/$serv_st_d.pid ]; then
+	       to_restart=yes
           else
 	     to_restart=no
           fi
@@ -232,9 +233,10 @@ case "$switch" in
            echo "Force to add $serv service in this SuSE DRBL server..."
            insserv $serv &>/dev/null
         elif [ -n "$(which systemctl 2>/dev/null)" -a -e "/lib/systemd/system/$serv.service" ]; then
-           # FC 17
-           echo "Force to add $serv service via systemd-like DRBL server..."
-           systemctl enable $serv.service
+           # For systemd, systemctl can't en/disable if service name be a alias name, ex: nfslock, due to 'nfslock' -> 'nfs-lock'
+           _real_service_name=$(basename $(readlink -f  /usr/lib/systemd/system/$serv.service) ".service")
+           echo "Force to add $_real_service_name service via systemd-like DRBL server..."
+           systemctl enable $_real_service_name.service
         else
             # RH-like
            echo "Force to add $serv service in this RH-like DRBL server..."
@@ -263,9 +265,10 @@ case "$switch" in
           echo "Force to delete $serv service in this SuSE DRBL server..."
           insserv -f -r $serv &>/dev/null
         elif [ -n "$(which systemctl 2>/dev/null)" -a -e "/lib/systemd/system/$serv.service" ]; then
-           # FC 17
-           echo "Force to add $serv service via systemd-like DRBL server..."
-           systemctl disable $serv.service
+           # For systemd, systemctl can't en/disable if service name be a alias name, ex: nfslock, due to 'nfslock' -> 'nfs-lock'
+           _real_service_name=$(basename $(readlink -f  /usr/lib/systemd/system/$serv.service) ".service")
+           echo "Force to del $_real_service_name service via systemd-like DRBL server..."
+           systemctl disable $_real_service_name.service
         else
           # RH-like
           echo "Force to delete $serv service in this RH-like DRBL server..."

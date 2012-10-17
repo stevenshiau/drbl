@@ -1,5 +1,5 @@
 #!/bin/bash
-# Steven Shiau <steven _at_ nchc org tw>
+# Steven Shiau <steven _at_ nchc org tw>, Ceasar Sun <ceasar _at_ nchc org tw>
 # License: GPL
 #
 # Loading setting
@@ -222,7 +222,6 @@ $nfsserver:$drblroot/$ip/etc      /etc    nfs     $FSTAB_NFS_RW_OPT
 $nfsserver:$drblroot/$ip/var      /var    nfs     $FSTAB_NFS_RW_OPT
 $nfsserver:$drblroot/$ip/root     /root   nfs     $FSTAB_NFS_RW_OPT
 $nfsserver:/usr             /usr        nfs    $FSTAB_NFS_RO_OPT
-$nfsserver:/opt             /opt        nfs    $FSTAB_NFS_RO_OPT
 $nfsserver:/home            /home       nfs    $FSTAB_NFS_RW_OPT
 $nfsserver:/var/spool/mail /var/spool/mail       nfs     $FSTAB_NFS_RW_OPT
 none                    /proc           proc    defaults        0 0
