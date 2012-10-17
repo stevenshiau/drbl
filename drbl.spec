@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.1.17
+Version:	2.1.18
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,7 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Thu Oct 18 2012 Steven Shiau <steven _at_ nchc org tw> 2.1.18-drbl1
 - Bug fixed: For Ubuntu 12.04 and 12.10, linux-image-extra should be installed to. So we can support more hardware for DRBL clients.
 - Changed the default option for client's kernel arch to the same as server for Debian.
 
