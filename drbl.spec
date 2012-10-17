@@ -45,6 +45,8 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+- Bug fixed: dracut should not be listed in PKG_TO_QUERY, we have to put it in PKG_TO_QUERY_RH otherwise it will cause Ubuntu or Debian fail to finish drblsrv.
+
 * Wed Oct 17 2012 Steven Shiau <steven _at_ nchc org tw> 2.1.16-drbl1
 - Bug fixed: Some more minor bugs fixed for Fedora 17 were applied.
 

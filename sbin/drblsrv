@@ -594,7 +594,8 @@ echo "$msg_install_dhcp_tftp_etc"
 
 # wget maybe not installed, we will check it is installed only when apt is not installed, so if apt/yum is installed while wget is not installed, get_inst_rpm() will failed! Add wget here.
 
-# $PKG_FROM_RH, $PKG_TO_QUERY and $PKG_FROM_DRBL are loaded from conf/drbl.conf
+# $PKG_FROM_RH, $PKG_TO_QUERY, $PKG_TO_QUERY_RH and $PKG_FROM_DRBL are loaded from conf/drbl.conf
+PKG_TO_QUERY="$PKG_TO_QUERY $PKG_TO_QUERY_RH"
 echo "Searching if $PKG_TO_QUERY available... "
 case "$installer" in
   yum)
