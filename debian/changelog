@@ -1,3 +1,9 @@
+drbl (2.1.19-drbl1) unstable; urgency=low
+
+  * Bug fixed: sort and uniq should not be used in init.drbl since these programs are not in /bin instead they are in /usr/bin. This will cause Debian and Ubuntu drbl client fail to boot.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 18 Oct 2012 09:12:30 +0800
+
 drbl (2.1.18-drbl1) unstable; urgency=low
 
   * Bug fixed: For Ubuntu 12.04 and 12.10, linux-image-extra should be 
