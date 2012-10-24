@@ -45,6 +45,8 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+- Bug fixed: version sorting option "-V" should be used with sort in function find_next_release_version_number.
+
 * Wed Oct 24 2012 Steven Shiau <steven _at_ nchc org tw> 2.1.20-drbl1
 - A function find_next_release_version_number was added for using in creating Clonezilla/DRBL/GParted live.
 

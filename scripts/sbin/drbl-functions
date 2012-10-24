@@ -2879,7 +2879,7 @@ find_next_release_version_number() {
   # zip-dest/
   # zip-src/
   # Find the last version, i.e. 2.0.0-30
-  version_now="$(LC_ALL=C find ./$release_dir/ -maxdepth 1 -type d -print 2>/dev/null | awk -F"/" '{print $3}' | grep -E "^[[:digit:]].*" | sort -r | uniq | head -n 1)"
+  version_now="$(LC_ALL=C find ./$release_dir/ -maxdepth 1 -type d -print 2>/dev/null | awk -F"/" '{print $3}' | grep -E "^[[:digit:]].*" | sort -r -V | uniq | head -n 1)"
   # Increase the minor # (i.e. 30) by 1
   if [ -n "$version_now" ]; then
     next_v_major="$(LC_ALL=C echo "$version_now" | awk -F "-" '{print $1}')"
