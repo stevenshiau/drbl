@@ -1,12 +1,22 @@
+drbl (2.1.21-drbl1) unstable; urgency=low
+
+  * Bug fixed: version sorting option "-V" should be used with sort in 
+    function find_next_release_version_number.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 24 Oct 2012 22:22:42 +0800
+
 drbl (2.1.20-drbl1) unstable; urgency=low
 
-  * A function find_next_release_version_number was added for using in creating Clonezilla/DRBL/GParted live.
+  * A function find_next_release_version_number was added for using in 
+    creating Clonezilla/DRBL/GParted live.
 
  -- Steven Shiau <steven@nchc.org.tw>  Wed, 24 Oct 2012 15:17:14 +0800
 
 drbl (2.1.19-drbl1) unstable; urgency=low
 
-  * Bug fixed: sort and uniq should not be used in init.drbl since these programs are not in /bin instead they are in /usr/bin. This will cause Debian and Ubuntu drbl client fail to boot.
+  * Bug fixed: sort and uniq should not be used in init.drbl since these 
+    programs are not in /bin instead they are in /usr/bin. This will cause 
+    Debian and Ubuntu drbl client fail to boot.
 
  -- Steven Shiau <steven@nchc.org.tw>  Thu, 18 Oct 2012 09:12:30 +0800
 
