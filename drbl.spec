@@ -45,6 +45,8 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+- A function find_next_release_version_number was added for using in creating Clonezilla/DRBL/GParted live.
+
 * Thu Oct 18 2012 Steven Shiau <steven _at_ nchc org tw> 2.1.19-drbl1
 - Bug fixed: sort and uniq should not be used in init.drbl since these programs are not in /bin instead they are in /usr/bin. This will cause Debian and Ubuntu drbl client fail to boot.
 

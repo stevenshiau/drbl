@@ -2865,3 +2865,32 @@ gen_CDG_checksums() {
   cat SHA1SUMS >> $sum_file
   txt2html $sum_file > $sum_file_html
 } # end of gen_CDG_checksums
+#
+find_next_release_version_number() {
+  # Function to find the next release number in dir "$release_dir". This is used only for creating Clonezilla/DRBL/GParted live.
+  local release_dir="$1"
+  local next_v_major next_v_minor next_v_full
+  # Default release dir is "release"
+  [ -z "$release_dir" ] && release_dir="release"  
+  # The dirs in release dir are like:
+  # 2.0.0-28/
+  # 2.0.0-29/
+  # 2.0.0-30/
+  # zip-dest/
+  # zip-src/
+  # Find the last version, i.e. 2.0.0-30
+  version_now="$(LC_ALL=C find ./$release_dir/ -maxdepth 1 -type d -print 2>/dev/null | awk -F"/" '{print $3}' | grep -E "^[[:digit:]].*" | sort -r | uniq | head -n 1)"
+  # Increase the minor # (i.e. 30) by 1
+  if [ -n "$version_now" ]; then
+    next_v_major="$(LC_ALL=C echo "$version_now" | awk -F "-" '{print $1}')"
+    next_v_minor="$(LC_ALL=C echo "$version_now" | awk -F "-" '{print $2}')"
+    next_v_minor="$((next_v_minor + 1))"
+    next_v_full="$next_v_major-$next_v_minor"
+  fi
+  if [ -n "$next_v_major" -a -n "$next_v_minor" ]; then
+    echo "$next_v_full"
+    return 0
+  else
+    return 1
+  fi
+} # end of find_next_release_version_number
