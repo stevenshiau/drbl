@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.1.21
+Version:	2.1.22
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Fri Oct 26 2012 Steven Shiau <steven _at_ nchc org tw> 2.1.22-drbl1
+- Bug fixed: /opt dir should be exported for NFS clients since some packages (e.g. google-chrome) will be installed in that dir. Thanks to Odin Nøsen <odin _at_ gnuskole no> for reporting this issue.
+
 * Wed Oct 24 2012 Steven Shiau <steven _at_ nchc org tw> 2.1.21-drbl1
 - Bug fixed: version sorting option "-V" should be used with sort in function find_next_release_version_number.
 

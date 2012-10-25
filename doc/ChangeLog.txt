@@ -5,6 +5,14 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.1.22-drbl1) unstable; urgency=low
+
+  * Bug fixed: /opt dir should be exported for NFS clients since some 
+    packages (e.g. google-chrome) will be installed in that dir. 
+    Thanks to Odin Nøsen <odin _at_ gnuskole no> for reporting this issue.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 26 Oct 2012 07:53:46 +0800
+
 drbl (2.1.21-drbl1) unstable; urgency=low
 
   * Bug fixed: version sorting option "-V" should be used with sort in 
