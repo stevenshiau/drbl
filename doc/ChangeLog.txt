@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.1.24-drbl1) unstable; urgency=low
+
+  * Bug fixed: drbl clients should mount server's /opt/ when it 
+    is exported on server.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 26 Oct 2012 08:52:46 +0800
+
 drbl (2.1.23-drbl1) unstable; urgency=low
 
   * Only when dir /opt exists, drbl-nfs-export will export that dir.
