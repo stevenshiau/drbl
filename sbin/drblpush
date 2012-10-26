@@ -2524,8 +2524,8 @@ else
 fi
 
 # add the services specified by user
-if [ -f $drbl_setup_cfg/client-extra-service ]; then
-  . $drbl_setup_cfg/client-extra-service
+if [ -e "$drbl_syscfg/client-extra-service" ]; then
+  . $drbl_syscfg/client-extra-service
   client_services="$client_services $service_extra_added"
 fi
 

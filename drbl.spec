@@ -45,6 +45,8 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+- Bug fixed: "drbl_syscfg" instead of "drbl_setup_cfg" should be used, and drbl_setup_cfg was removed from drbl.conf. Thanks to Odin Nøsen <odin _at_ gnuskole no> for reporting this issue.
+
 * Fri Oct 26 2012 Steven Shiau <steven _at_ nchc org tw> 2.1.25-drbl1
 - Bug fixed: exporting /opt/ should be appended, not overwritten the previous exported dir.
 

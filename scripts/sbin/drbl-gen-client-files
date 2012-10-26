@@ -294,11 +294,11 @@ done
 
 # append user assigned local dir
 # only when there is setting, we will append the fstab
-if [ -n "$(grep -vE "^[[:space:]]*#" $drbl_setup_cfg/client-append-fstab 2>/dev/null)" ]; then
+if [ -n "$(grep -vE "^[[:space:]]*#" $drbl_syscfg/client-append-fstab 2>/dev/null)" ]; then
   echo "" >> $drblroot/$ip/etc/fstab
-  echo "# Extra mount point specified in $drbl_setup_cfg/client-append-fstab" >> $drblroot/$ip/etc/fstab
+  echo "# Extra mount point specified in $drbl_syscfg/client-append-fstab" >> $drblroot/$ip/etc/fstab
   # filter the comment lines
-  (grep -vE "^[[:space:]]*#" $drbl_setup_cfg/client-append-fstab; echo) | # make sure there is a LF at the end
+  (grep -vE "^[[:space:]]*#" $drbl_syscfg/client-append-fstab; echo) | # make sure there is a LF at the end
   while read dev mnt_pnt others; do
     # create the mount point
     [ ! -d "$drbl_common_root/$mnt_pnt" ] && mkdir -p $drbl_common_root/$mnt_pnt
