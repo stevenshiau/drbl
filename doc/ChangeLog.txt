@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.1.23-drbl1) unstable; urgency=low
+
+  * Only when dir /opt exists, drbl-nfs-export will export that dir.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 26 Oct 2012 08:21:54 +0800
+
 drbl (2.1.22-drbl1) unstable; urgency=low
 
   * Bug fixed: /opt dir should be exported for NFS clients since some 
