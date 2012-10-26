@@ -1,3 +1,11 @@
+drbl (2.1.26-drbl1) unstable; urgency=low
+
+  * Bug fixed: "drbl_syscfg" instead of "drbl_setup_cfg" should be used, and 
+    drbl_setup_cfg was removed from drbl.conf. Thanks to 
+    Odin Nøsen <odin _at_ gnuskole no> for reporting this issue.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 26 Oct 2012 20:46:54 +0800
+
 drbl (2.1.25-drbl1) unstable; urgency=low
 
   * Bug fixed: exporting /opt/ should be appended, not overwritten 
