@@ -231,7 +231,7 @@ tmpfs                   /tmp            tmpfs   defaults        0 0
 FSTAB
 # Only when dir /opt/ exists, drbl-nfs-export will export it, then client should mount it, too.
 if [ -d /opt/ ]; then
-  cat <<-FSTAB > $drblroot/$ip/etc/fstab
+  cat <<-FSTAB >> $drblroot/$ip/etc/fstab
 $nfsserver:/opt             /opt        nfs    $FSTAB_NFS_RO_OPT
 FSTAB
 fi

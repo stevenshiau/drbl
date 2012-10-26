@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.1.24
+Version:	2.1.25
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Fri Oct 26 2012 Steven Shiau <steven _at_ nchc org tw> 2.1.25-drbl1
+- Bug fixed: exporting /opt/ should be appended, not overwritten the previous exported dir.
+
 * Fri Oct 26 2012 Steven Shiau <steven _at_ nchc org tw> 2.1.24-drbl1
 - Bug fixed: drbl clients should mount server's /opt/ when it is exported on server.
 
