@@ -229,6 +229,12 @@ tmpfs                   /tmp            tmpfs   defaults        0 0
 #/dev/fd0                /mnt/floppy     auto    noauto,owner,kudzu 0 0
 #/dev/sr0          	/mnt/cdrom      iso9660 iocharset=cp950,noauto,owner,kudzu,ro 0 0
 FSTAB
+# Only when dir /opt/ exists, drbl-nfs-export will export it, then client should mount it, too.
+if [ -d /opt/ ]; then
+  cat <<-FSTAB > $drblroot/$ip/etc/fstab
+$nfsserver:/opt             /opt        nfs    $FSTAB_NFS_RO_OPT
+FSTAB
+fi
 # if $ocsroot is not under /home, or if $ocsroot is a mount point, client must mount it.
 if [ -z "$(echo $ocsroot | grep -Ew "^/home")" -o \
      -n "$(awk -F" " '{print $2}' /proc/mounts | grep -Ew "$ocsroot")" ]; then
