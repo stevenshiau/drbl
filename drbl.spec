@@ -1,7 +1,7 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
 Version:	2.1.26
-Release:	drbl1
+Release:	drbl2
 License:	GPL
 Group:		Development/DRBL
 Source0:	drbl-%{version}.tar.bz2
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Fri Oct 26 2012 Steven Shiau <steven _at_ nchc org tw> 2.1.26-drbl2
+- Files halt.CO6.3.drbl and rc.sysinit.CO6.3.drbl were added.
+
 * Fri Oct 26 2012 Steven Shiau <steven _at_ nchc org tw> 2.1.26-drbl1
 - Bug fixed: "drbl_syscfg" instead of "drbl_setup_cfg" should be used, and drbl_setup_cfg was removed from drbl.conf. Thanks to Odin Nøsen <odin _at_ gnuskole no> for reporting this issue.
 

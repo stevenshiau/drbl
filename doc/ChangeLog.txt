@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.1.26-drbl2) unstable; urgency=low
+
+  * Files halt.CO6.3.drbl and rc.sysinit.CO6.3.drbl were added.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 26 Oct 2012 20:55:19 +0800
+
 drbl (2.1.26-drbl1) unstable; urgency=low
 
   * Bug fixed: "drbl_syscfg" instead of "drbl_setup_cfg" should be used, and 
