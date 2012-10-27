@@ -2612,7 +2612,6 @@ for i in $client_services; do
     chroot $drbl_common_root/ /sbin/insserv -f $i
   elif [ -x "/bin/systemctl" -a -d "/lib/systemd/system/" ]; then
     # FC17: ststemd like
-    # Note by Ceasar Sun on 2012/9/18
     echo -n "Add '$i':"
     case "$i" in
       ypbind)
@@ -2620,10 +2619,12 @@ for i in $client_services; do
         sed -i -e "s/[[:space:]]*ypserv.service//" $drbl_common_root/lib/systemd/system/$i.service
         ;;
       dm)
-        # start drblthincli before dm.
+        # TODO: start drblthincli before dm.
+        true
         ;;
       netfs)
-        #
+        # TODO
+        true
         ;;
     esac
     if [ -e "$drbl_common_root/etc/init.d/$i" ]; then
@@ -2661,18 +2662,21 @@ for i in $client_services; do
         ;;
     esac
     chroot $drbl_common_root/ /sbin/chkconfig --add $i
-    case "$i" in
-      ypbind)
-      # When using chkconfig --add ypbind, client do not put in rcx.d, since on
-      # RH/FC it is:
-      # chkconfig: - 27 73
-      # Hence we use chkconfig ypbind to turn on it.
-      # For Mandriva 2010.0, "chkconfig ypbind on" will also make ypbind on in rc7.d (although it's "# chkconfig: 345 17 83" in mandriva's /etc/init.d/ypbind, but since mandriva 2007 it has used LSB service config instead of honor the chkconfig tag), but it will fail when running graphic mode since rpcbind is not on in rc7.d. Here we can not force to turn on it.
-      if [ -n "$(grep -E "^# chkconfig: - " $drbl_common_root/etc/init.d/$i)" ]; then
-        # For RH/FC case
-        chroot $drbl_common_root/ /sbin/chkconfig $i on
-      fi
-    esac
+    # case "$i" in
+    #   ypbind)
+    #   # When using chkconfig --add ypbind, client do not put in rcx.d, since on
+    #   # RH/FC it is:
+    #   # chkconfig: - 27 73
+    #   # Hence we use chkconfig ypbind to turn on it.
+    #   # For Mandriva 2010.0, "chkconfig ypbind on" will also make ypbind on in rc7.d (although it's "# chkconfig: 345 17 83" in mandriva's /etc/init.d/ypbind, but since mandriva 2007 it has used LSB service config instead of honor the chkconfig tag), but it will fail when running graphic mode since rpcbind is not on in rc7.d. Here we can not force to turn on it.
+    #   if [ -n "$(grep -E "^# chkconfig: - " $drbl_common_root/etc/init.d/$i)" ]; then
+    #     # For RH/FC case
+    #     chroot $drbl_common_root/ /sbin/chkconfig $i on
+    #   fi
+    # esac
+    # 10/27/2012 Force to turn on the service. If only using "chkconfig --add", the service might not be in the "on" status. It will only make those services "on" on the server to be "on" on the client. Thanks to Odin Nøsen for reporting this.
+    # Ref: http://sourceforge.net/mailarchive/forum.php?thread_name=CANCtYmUJYn5XNx6RS-sP9xVWqctjHYahn0egWY_Bxc-%2BTGnMiA%40mail.gmail.com&forum_name=drbl-user
+    chroot $drbl_common_root/ /sbin/chkconfig $i on
   fi
 done
 
