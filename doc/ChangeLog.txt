@@ -5,6 +5,14 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.1.27-drbl1) unstable; urgency=low
+
+  * Bug fixed: the service listed in /etc/drbl/client-extra-service was not on 
+    on the client if it's not on on the server. Thanks to 
+    Odin Nøsen <odin _at_ gnuskole no> for reporting this issue.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sat, 27 Oct 2012 10:15:30 +0800
+
 drbl (2.1.26-drbl2) unstable; urgency=low
 
   * Files halt.CO6.3.drbl and rc.sysinit.CO6.3.drbl were added.

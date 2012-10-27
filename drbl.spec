@@ -1,7 +1,7 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
 Version:	2.1.27
-Release:	drbl2
+Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
 Source0:	drbl-%{version}.tar.bz2
@@ -45,7 +45,7 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
-* Sat Oct 27 2012 Steven Shiau <steven _at_ nchc org tw> 2.1.27-drbl2
+* Sat Oct 27 2012 Steven Shiau <steven _at_ nchc org tw> 2.1.27-drbl1
 - Bug fixed: the service listed in /etc/drbl/client-extra-service was not on on the client if it's not on on the server. Thanks to Odin Nøsen <odin _at_ gnuskole no> for reporting this issue.
 
 * Fri Oct 26 2012 Steven Shiau <steven _at_ nchc org tw> 2.1.26-drbl2
