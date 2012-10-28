@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.1.27
+Version:	2.1.28
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,7 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Sun Oct 28 2012 Steven Shiau <steven _at_ nchc org tw> 2.1.28-drbl1
 - Bug fixed: typo of msg_autohostname_is_reserved_for_save_mode in en_US was fixed.
 
 * Sat Oct 27 2012 Steven Shiau <steven _at_ nchc org tw> 2.1.27-drbl1

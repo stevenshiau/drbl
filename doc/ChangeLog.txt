@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.1.28-drbl1) unstable; urgency=low
+
+  * Bug fixed: typo of msg_autohostname_is_reserved_for_save_mode in en_US was fixed.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sun, 28 Oct 2012 10:41:50 +0800
+
 drbl (2.1.27-drbl1) unstable; urgency=low
 
   * Bug fixed: the service listed in /etc/drbl/client-extra-service was not on 
