@@ -45,6 +45,8 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+- Bug fixed: typo of msg_autohostname_is_reserved_for_save_mode in en_US was fixed.
+
 * Sat Oct 27 2012 Steven Shiau <steven _at_ nchc org tw> 2.1.27-drbl1
 - Bug fixed: the service listed in /etc/drbl/client-extra-service was not on on the client if it's not on on the server. Thanks to Odin Nøsen <odin _at_ gnuskole no> for reporting this issue.
 
