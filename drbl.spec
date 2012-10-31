@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.1.28
+Version:	2.1.29
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Thu Nov 01 2012 Steven Shiau <steven _at_ nchc org tw> 2.1.29-drbl1
+- Bug fixed: no more removing ip=frommedia for PXE client as live-boot 2.0.15-1.drbl15 and 3.x have no issue to use that. If it's removed, Ubuntu-based Clonezilla live won't enter rc-sysinit.conf until failsafe.
+
 * Sun Oct 28 2012 Steven Shiau <steven _at_ nchc org tw> 2.1.28-drbl1
 - Bug fixed: typo of msg_autohostname_is_reserved_for_save_mode in en_US was fixed.
 

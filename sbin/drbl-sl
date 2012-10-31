@@ -646,7 +646,8 @@ install_SL(){
       # The append line e.g.:
       # append initrd=/live/initrd1.img boot=live union=aufs    ocs_live_run="ocs-live-general" ocs_live_extra_param="" ocs_live_keymap="" ocs_live_batch="no" ocs_lang="" vga=791 nolocales
       # We have to remove ip=frommedia because the /etc/resolv.conf got in live-boot (actually this program scripts/live-bottom/23networking) won't be copied to /etc/resolv.conf if ip=frommedia exists in boot parameters.
-      cl_gp_boot_param="$(LC_ALL=C grep -Eiw "append" $isomnt/isolinux/isolinux.cfg  | grep -Eiw $initrd_filename | head -n 1 | sed -r -e "s/append//g" -e "s/initrd=.*$initrd_filename[[:space:]]+//g" | sed -e "s/^[[:space:]]*//g" | sed -e "s/ip=frommedia//g")"
+      # 2012/Nov/1 The patched live-boot 2.0.15-1.drbl15 has fixed this issue, and live-boot 3.x has no such issue. Therefore no more removing ip=frommedia.
+      cl_gp_boot_param="$(LC_ALL=C grep -Eiw "append" $isomnt/isolinux/isolinux.cfg  | grep -Eiw $initrd_filename | head -n 1 | sed -r -e "s/append//g" -e "s/initrd=.*$initrd_filename[[:space:]]+//g" | sed -e "s/^[[:space:]]*//g")"
       ;;
   esac
   
