@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.1.30-drbl1) unstable; urgency=low
+
+  * Adding mpg123 for Clonezilla live. It might be useful to play sound
+    when Clonezilla job is done. Thanks to FlyFox for this idea.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 02 Nov 2012 14:58:34 +0800
+
 drbl (2.1.29-drbl1) unstable; urgency=low
 
   * Bug fixed: no more removing ip=frommedia for PXE client as live-boot
