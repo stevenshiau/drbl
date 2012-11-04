@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.1.30
+Version:	2.1.31
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Sun Nov 04 2012 Steven Shiau <steven _at_ nchc org tw> 2.1.31-drbl1
+- Using syslinux/pxelinux 4.06 in drbl/clonezilla.
+
 * Fri Nov 02 2012 Steven Shiau <steven _at_ nchc org tw> 2.1.30-drbl1
 - Adding mpg123 for Clonezilla live. It might be useful to play sound when Clonezilla job is done. Thanks to FlyFox for this idea.
 

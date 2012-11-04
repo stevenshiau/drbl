@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.1.31-drbl1) unstable; urgency=low
+
+  * Using syslinux/pxelinux 4.06 in drbl/clonezilla.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sun, 04 Nov 2012 14:04:43 +0800
+
 drbl (2.1.30-drbl1) unstable; urgency=low
 
   * Adding mpg123 for Clonezilla live. It might be useful to play sound
