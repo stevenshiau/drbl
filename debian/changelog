@@ -1,3 +1,10 @@
+drbl (2.1.32-drbl1) unstable; urgency=low
+
+  * Bug fixed: DRBL_SCRIPT_PATH was not set in drbl-conf-functions. 
+    Thanks to explosions for reporting this issue.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 06 Nov 2012 19:37:20 +0800
+
 drbl (2.1.31-drbl1) unstable; urgency=low
 
   * Using syslinux/pxelinux 4.06 in drbl/clonezilla.
