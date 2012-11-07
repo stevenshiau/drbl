@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.1.32
+Version:	2.1.33
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Wed Nov 07 2012 Steven Shiau <steven _at_ nchc org tw> 2.1.33-drbl1
+- Bug fixed: A workaround to identify initrd on CentOS 5 was added in drbl-sl.
+
 * Tue Nov 06 2012 Steven Shiau <steven _at_ nchc org tw> 2.1.32-drbl1
 - Bug fixed: DRBL_SCRIPT_PATH was not set in drbl-conf-functions. Thanks to explosions for reporting this issue.
 

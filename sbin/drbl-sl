@@ -587,10 +587,21 @@ install_SL(){
   # Find initrd
   # UGLY! Here we assume only one gzip/cpio file exists, and it's initrd.
   for i in $isomnt/$bootfiles_path/* $isomnt/$rootfile_path/*; do
-    if [ -n "$(LC_ALL=C file -Ls $i | grep -iE "(gzip compressed data|XZ compressed data)")" ]; then
+    if [ -n "$(LC_ALL=C file -Ls $i | grep -iE "gzip compressed data")" ]; then
       oldinitrd="$i"
       uncompress_to_stdout="gunzip -c"
       compress_to_stdout="gzip -c"
+      break
+    elif [ -n "$(LC_ALL=C file -Ls $i | grep -iE "XZ compressed data")" ]; then
+      oldinitrd="$i"
+      uncompress_to_stdout="xzcat"
+      compress_to_stdout="xz -c"
+      break
+    elif [ -e "$(dirname $i)/../Clonezilla-Live-Version" -a -n "$(echo $i | grep -iE "initrd.img")" ]; then
+      # This is a workaround for CentOS 5, since its "file" command won't tell XZ format. For Clonezilla live 2.x, we have used XZ format for initrd.
+      oldinitrd="$i"
+      uncompress_to_stdout="xzcat"
+      compress_to_stdout="xz -c"
       break
     elif [ -n "$(LC_ALL=C echo $i | grep -iE "\/miniroot.lz$")" ]; then
     # For INSERT, the initrd is miniroot.lz, which is lzma format. Most of the program file does not have the magic for that.
