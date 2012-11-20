@@ -1,5 +1,5 @@
 #!/bin/bash
-# Written by Steven Shiau <steven _at_ nchc org tw> to use in DRBL. 
+# Written by Steven Shiau <steven _at_ nchc org tw> to use in DRBL.
 # Translated by Juan Ramón Martínez <jrmc77 _at_ terra es> and Alex Ibáñez López <alex.ibanez _at_ gmail com>.
 # License: GPL
 
@@ -67,7 +67,7 @@ msg_no_wget_get_it='¿No wget? Intentando instalar wget...'
 msg_wget_installed_failure='¡Error al instalar wget!!! ¡Es necesario para instalar automáticamente apt! ¡Deberá instalarlo usted mismo!'
 msg_wget_installed_successful='¡Paquete wget instalado correctamente!'
 msg_no_apt_get_it='¿No apt? Intentando instalar apt...'
-msg_apt_already_installed='apt ya está instalado. ¡Maravilloso! ¡Es usted magnífico!'  
+msg_apt_already_installed='apt ya está instalado. ¡Maravilloso! ¡Es usted magnífico!'
 msg_backup_apt_sources='Realizando copia de seguridad de apt sources.list ...'
 msg_setup_apt_sources_MDK='Configurando apt sources.list para Mandrake'
 msg_serial_console_parameter='El parámetro de salida de la consola serie: '
@@ -114,9 +114,9 @@ msg_apt_optimization_question='¿Qué arquitectura kernel de CPU quiere que asig
 msg_optimization_level_0='0 -> i386 nivel CPU '
 msg_optimization_level_1='1 -> i586 nivel CPU'
 msg_optimization_level_2='2 -> Usar el mismo nivel de CPU con este servidor DRBL'
-msg_N_note='¡Nota! ¡Nota ¡Nota!  ¡Nota!  ¡Nota!  ¡Nota!  Nota!' 
+msg_N_note='¡Nota! ¡Nota ¡Nota!  ¡Nota!  ¡Nota!  ¡Nota!  Nota!'
 msg_different_level_machine_prompt='Si su(s) máquina(s) cliente no son del mismo nivel que el servidor, por favor responda "0" ó "1", en caso contrario su(s) máquina(s) cliente NO iniciarán.'
-msg_diff_arch_explain='Si utiliza un nivel kernel de CPU incorrecto, los paquetes glibc y openssl usarán i686 o i386, el kernel usará i686, i586 o i386, lo cual puede no ser adecuado para sus equipos.' 
+msg_diff_arch_explain='Si utiliza un nivel kernel de CPU incorrecto, los paquetes glibc y openssl usarán i686 o i386, el kernel usará i686, i586 o i386, lo cual puede no ser adecuado para sus equipos.'
 msg_not_sure_better_1='Si no está seguro, "1" es lo recomendado, esto todavía proporciona buenas prestaciones y compatibilidad.'
 msg_same_optimization='La optimización de su sistema está activada, el nivel es el mismo que el del servidor.'
 msg_i586_optimization='La optimización de su sistema es "i586".'
@@ -419,7 +419,7 @@ msg_hosts_allow_deny_is_set='¡Atención! Ya configuró /etc/hosts.allow o /etc/
 msg_you_must_make_sure_these_clients='Debe ASEGURARSE que estos clientes:'
 msg_can_access_this_DRBL_server='pueden acceder a su servidor DRBL!'
 msg_otherwise_client_fail_to_boot='De otra forma, su cliente no iniciará, y mostrará mensajes de error como:'
-msg_if_you_like_you_can_reboot_to_make_sure_everthing='Si lo desea, puede reiniciar el servidor DRBL ahora para asegurarse de que todo está listo...(No es necesario, es opcional.).' 
+msg_if_you_like_you_can_reboot_to_make_sure_everthing='Si lo desea, puede reiniciar el servidor DRBL ahora para asegurarse de que todo está listo...(No es necesario, es opcional.).'
 msg_do_not_create_part='¡No crear tabla de particiones en el disco duro del cliente!'
 msg_do_not_restore_mbr='¡No restaurar el MBR en el cliente!'
 msg_you_have_to_input_image_names_in_client='¡Elija la imagen a restaurar  en la máquina cliente!'
@@ -435,12 +435,12 @@ msg_partition_table_for_target_dev='La tabla de particiones a escribir en el dis
 msg_if_go_on_the_data_will_be_erased_then_confirm='Si continua, ¡los datos originales del dispositivo de destino serán destruidos!!! Tenga cuidado!!! ¿Está seguro?'
 msg_should_not_run_ocs_onthefly_in_server='¡No debe ejecutar este programa en el servidor DRBL!!! ¡Debe ejecutarlo en el cliente DRBL!!!'
 msg_ok_we_will_keep_old_partition_table='OK, se mantendrá su tabla de particiones.'
-msg_fail_to_create_partition_table_in_target_dev='Error al crear la tabla de particiones en el dispositivo de destino' 
+msg_fail_to_create_partition_table_in_target_dev='Error al crear la tabla de particiones en el dispositivo de destino'
 msg_my_IP_in_drbl_env='Mi dirección IP en el entorno DRBL'
 msg_are_u_sure_u_want_to_continue='¿Está seguro que quiere continuar?'
 msg_really_dangerous_then_continue='¡Es realmente peligroso! De todas formas, continuamos...'
 msg_src_target_r_same_dev='¡Origen y destino son el mismo dispositivo!'
-msg_is_not_valid_grub_root='¡NO es una partición grub root válida!' 
+msg_is_not_valid_grub_root='¡NO es una partición grub root válida!'
 msg_different_type_of_input_devs='Tipos diferentes de dispositivos de entrada'
 msg_a_partition_table_already_exist='Ya existe una tabla de particiones en el dispositivo destino'
 msg_do_u_want_to_duplicate_the_partition_layout_to='Quiere duplicar el diseño de particiones a'
@@ -662,7 +662,7 @@ msg_now_continue_to_run_drblpush='Ahora se continua ejecutando drblpush para hac
 msg_partimage_not_support_block_per_group_non_32768='Lo sentimos, Partimage, el cual usa Clonezilla para grabar particiones ext2/ext3, NO soporta particiones non-32768 ext2/ext3.'
 msg_for_more_info_check='Para más información, consulte'
 msg_the_partition_table_in_disk_is_illegal='La tabla de particiones en este disco es ilegal'
-msg_parted_detect_as_wrong="No está soportado por parted. Parted se usa en Clonezilla para analizar el sistema de ficheros en la tabla de particiones. Esta tabla de particiones es detectada como ERRÓNEA por parted!" 
+msg_parted_detect_as_wrong="No está soportado por parted. Parted se usa en Clonezilla para analizar el sistema de ficheros en la tabla de particiones. Esta tabla de particiones es detectada como ERRÓNEA por parted!"
 msg_error_messages_from_parted_are='Los mensajes de error de parted son'
 msg_continue_with_weried_partition_table='Si continua, algo extraño puede ocurrir (Ej. se usa dd, pero no partimage o ntfsclone, para salvar el sistema de archivos soportado), y la imagen que se salva puede no estar completa!'
 msg_does_this_part_table_file_fit_disk='Se ajusta la tabla de particiones a este disco'
@@ -890,7 +890,7 @@ msg_run_clonezilla_live_again="Empezar de nuevo (imagen del repositorio $ocsroot
 msg_run_clonezilla_live_again_but_keep_mounted_repository="Empezar de nuevo (dejar imagen del repositorio $ocsroot montada)"
 # Tag on 2012/04/09
 msg_autohostname_is_reserved_for_save_mode='"autohostname" es un nombre de imagen reservado, por favor use otro nombre!'
-msg_no_partition_table_need_to_create='No se ha encontrado ninguna partición en este equipo. Para restaurar la imagen de particines, la partición(es) deben existir en el disco destino.'
+msg_no_partition_table_need_to_create='No se ha encontrado ninguna partición en este equipo. Para restaurar la imagen de particiones, la(s) partición(es) deben existir en el disco destino.'
 # Tag on 2012/08/20
-msg_client_job_are_logged_in='Client jobs are recoreded in this file'
+msg_client_job_are_logged_in='Los trabajos del cliente se guardan en este archivo'
 msg_autoproductname_is_a_reserved='"autoproductname" es un nombre de imagen reservado, por favor use otro nombre!'
