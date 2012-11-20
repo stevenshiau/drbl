@@ -45,6 +45,8 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+- Language file es_ES of bash was updated and a typo in language file en_US was fixed. Thanks to Juan Ramón Martínez (JRMC77 _at_ terra es).
+
 * Wed Nov 07 2012 Steven Shiau <steven _at_ nchc org tw> 2.1.33-drbl1
 - Bug fixed: A workaround to identify initrd on CentOS 5 was added in drbl-sl.
 
