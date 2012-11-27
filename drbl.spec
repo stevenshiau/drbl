@@ -45,6 +45,8 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+- Language file ca_ES was added. Thanks to René Mérou and Innocent De Marchi.
+
 * Tue Nov 20 2012 Steven Shiau <steven _at_ nchc org tw> 2.1.34-drbl1
 - Language file es_ES of bash was updated and a typo in language file en_US was fixed. Thanks to Juan Ramón Martínez (JRMC77 _at_ terra es).
 
