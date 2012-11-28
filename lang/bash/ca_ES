@@ -895,3 +895,7 @@ msg_run_clonezilla_live_again_but_keep_mounted_repository="Començar de nou (dei
 # Tag on 2012/04/09
 msg_autonhostame_is_reserved_for_save_mode="\"autohostname\" és un nom de imatge reservat, ¡per favor usi un altre nom!"
 msg_no_partition_table_need_to_create="No s'ha trobat cap partició en aquesta màquina. Per restaurar imatges de particions, han d'existir particions en el disc destinació."
+# Tag on 2012/08/20
+msg_client_job_are_logged_in="Els treballs dels clients seran desats en aquest fitxer"
+msg_autoproductname_is_a_reserved="\"autoproductname\" és un nom de imatge reservat, per favor utilitzeu un altre nom!"
+

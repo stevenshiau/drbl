@@ -893,5 +893,5 @@ msg_run_clonezilla_live_again_but_keep_mounted_repository="Recommencer (laisser 
 msg_autohostname_is_reserved_for_save_mode='"autohostname" est un nom d'\''image réservé. Veuillez choisir un autre nom !'
 msg_no_partition_table_need_to_create='Aucune partition trouvée sur cette machine. Une partition doit exister sur le disque cible pour pouvoir restaurer une image de partition.'
 # Tag on 2012/08/20
-msg_client_job_are_logged_in='Client jobs are recoreded in this file'
+msg_client_job_are_logged_in='Les tâches du client sont enregistrées dans ce fichier'
 msg_autoproductname_is_a_reserved='"autoproductname" est un nom d'\''image réservé. Veuillez choisir un autre nom !'
