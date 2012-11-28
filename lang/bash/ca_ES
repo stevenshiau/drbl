@@ -36,7 +36,7 @@ msg_unknown="Desconegut"
 msg_experimental="Experimental"
 msg_failed="Ha fallat"
 #
-msg_delimiter_star_line="*****************************************************"
+msg_delimiter_star_line="*****************************************************".
 msg_install_RH="Instal·lant DRBL per a RedHat/Fedora Linux..."
 msg_install_MDK="Instal·lant DRBL per a Mandriva Linux..."
 msg_install_DBN="Instal·lant DRBL per a Debian Linux..."
