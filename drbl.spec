@@ -46,6 +46,10 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 
 %changelog
 - Language file ca_ES was added. Thanks to René Mérou and Innocent De Marchi.
+- Language file it_IT was updated. Thanks to Gianfranco Gentili.
+- Language file fr_FR was updated. Thanks to Jean-Francois Nifenecker.
+- Language file de_DE was updated. Thanks to Michael Vinzenz.
+- Language file ja_JP.UTF-8 was updated. Thanks to Akira YOSHIYAMA.
 
 * Tue Nov 20 2012 Steven Shiau <steven _at_ nchc org tw> 2.1.34-drbl1
 - Language file es_ES of bash was updated and a typo in language file en_US was fixed. Thanks to Juan Ramón Martínez (JRMC77 _at_ terra es).
