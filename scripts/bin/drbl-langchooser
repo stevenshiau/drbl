@@ -30,6 +30,7 @@ while [ "$ASK_LANG" -ne 0 ]; do
   $DIA --default-item "en_US.UTF-8" --nocancel --backtitle "Free Software Labs, NCHC, Taiwan" --title  \
   "Choose language" --menu "Which language do you prefer:" \
   0 0 0 \
+  ca_ES.UTF-8 "Catalonia | Catalunya" \
   de_DE.UTF-8 "German | Deutsch" \
   en_US.UTF-8 "English" \
   es_ES.UTF-8 "Spanish | Español" \
