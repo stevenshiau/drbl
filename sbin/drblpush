@@ -990,7 +990,7 @@ sub interactive_mode {
               last SWITCH;
           };
             /^[[:space:]]*1[[:space:]]*$/ && do {
-              $live_client_cpu_mode="i686";
+              $live_client_cpu_mode="i686-pae";
               last SWITCH;
           };
             /^[[:space:]]*2[[:space:]]*$/ && do {

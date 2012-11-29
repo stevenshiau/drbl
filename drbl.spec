@@ -45,6 +45,8 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+- Bug fixed: drbl ocs-live mode failed to download i686 version of Clonezilla live in drblpush, because the file name should use *-i686-pae*.
+
 * Wed Nov 28 2012 Steven Shiau <steven _at_ nchc org tw> 2.1.35-drbl1
 - Language file ca_ES was added. Thanks to René Mérou and Innocent De Marchi.
 - Language file it_IT was updated. Thanks to Gianfranco Gentili.
