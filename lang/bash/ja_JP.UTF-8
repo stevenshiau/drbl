@@ -747,7 +747,6 @@ msg_create_recovery_clonezilla_live_iso='CD/DVD用のISOファイルを作成'
 msg_create_recovery_clonezilla_live_zip='USBメモリ用のZIPファイルを作成'
 msg_create_recovery_clonezilla_live_iso_and_zip='CD/DVD用のISOファイルとUSBメモリ用のZIPファイルを作成'
 msg_choose_the_language_in_recovery_iso_zip='リカバリ Clonezilla Live 使用時の言語を選択'
-keymap_file_prompt_and_example='リカバリ CLonezilla Live で使用する keymap ファイルを入力してください。「NONE」と入力すると英語キーボードになります。他の keymap ファイルを探す場合，Debian GNU/Linux の /usr/share/keymaps/i386/ ディレクトリを探して下さい（Debian にないといけません。Clonezilla Live は Debian ベースです）。 例えば、フランスの keymap を使用したい場合、「/usr/share/keymaps/i386/azerty/fr-latin9.kmap.gz」を入力して下さい。”'
 msg_you_must_input_keymap_file='keymap ファイルを入力して下さい'
 msg_the_output_file_is_in_dir='出力された ISO/ZIP ファイルは次のディレクトリに保存されます:'
 msg_enter_digits_only='数字のみ入力して下さい'
@@ -913,3 +912,6 @@ msg_no_partition_table_need_to_create='このマシンにはパーティショ�
 # Tag on 2012/08/20
 msg_client_job_are_logged_in='クライアントジョブはこのファイルに記録されます'
 msg_autoproductname_is_a_reserved='「autoproductname」は予約されたイメージ名です。別の名前を使用して下さい!'
+# Tag on 2012/11/30
+msg_locale_ca_ES='Catalonia'
+keymap_file_prompt_and_example='Enter the keyboard layout to be used in the recovery Clonezilla live. If you input it as "NONE", the keymap will be US keyboard. You can find the keyboard layout in /usr/share/X11/xkb/rules/base.lst. e.g. "fr" for French keyboard layout. For more info, please check the live manual on Debian Live website.'

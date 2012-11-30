@@ -728,7 +728,6 @@ msg_create_recovery_clonezilla_live_iso='Создать ISO файл для ис
 msg_create_recovery_clonezilla_live_zip='Создание архив для использования USB флэш-накопителя'
 msg_create_recovery_clonezilla_live_iso_and_zip='Создать оба iso и zip файла для использования на CD/DVD и USB флэш-накопителе'
 msg_choose_the_language_in_recovery_iso_zip='Выберите язык, который будет использоваться при использовании восстановительного диска Clonezilla live'
-keymap_file_prompt_and_example='Введите файл раскладки клавиатур, который будет использоваться при использовании Clonezilla live. Если вы введете "NONE", будет американская раскладка клавиатуры. Дополнительные файлы раскладки клавиатуры, вы можете найти на каталоге /usr/share/keymaps/i386/ в Debian Linux (должен быть в Debian Linux, так как Clonezilla live основан на Debian). Например, если вы хотите использовать французский раскладку, введите "/usr/share/keymaps/i386/azerty/fr-latin9.kmap.gz".'
 msg_you_must_input_keymap_file='Вы должны указать файл раскладки'
 msg_the_output_file_is_in_dir='Выходной ISO/ZIP файл будет находится в этой директории'
 msg_enter_digits_only='Пожалуйста, введите только цифры'
@@ -892,3 +891,6 @@ msg_no_partition_table_need_to_create='No partition is found in this machine. To
 # Tag on 2012/08/20
 msg_client_job_are_logged_in='Client jobs are recoreded in this file'
 msg_autoproductname_is_a_reserved='"autoproductname" является зарезервированным именем образа, пожалуйста, используйте другое имя!'
+# Tag on 2012/11/30
+msg_locale_ca_ES='Catalonia'
+keymap_file_prompt_and_example='Enter the keyboard layout to be used in the recovery Clonezilla live. If you input it as "NONE", the keymap will be US keyboard. You can find the keyboard layout in /usr/share/X11/xkb/rules/base.lst. e.g. "fr" for French keyboard layout. For more info, please check the live manual on Debian Live website.'

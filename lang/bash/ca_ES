@@ -733,7 +733,6 @@ msg_create_recovery_clonezilla_live_iso="Crear arxiu iso per a ús amb CD/DVD"
 msg_create_recovery_clonezilla_live_zip="Crear arxiu zip per a ús amb dispositiu flaix USB"
 msg_create_recovery_clonezilla_live_iso_and_zip="Crear tots dos arxius iso i zip per a ús amb CD/DVD i dispositiu flaix USB"
 msg_choose_the_language_in_recovery_iso_zip="Triar l'idioma que s'utilitzarà en la recuperació de Clonezilla live"
-keymap_file_prompt_and_example="Posar arxiu keymap (mapa de teclat) que s'utilitzarà en la recuperació de Clonezilla live. Si posa 'NONE', el keymap serà el teclat US. Per a més arxius keymap, pot consultar a /usr/share/keymaps/i386/ a Debian Linux (Ha de fer-ho a Debian linux, perquè Clonezilla live es basa en Debian). Per exemple, si desitja usar el keymap Español, introdueixi \"/usr/share/keymaps/i386/qwerty/es.kmap.gz\"."
 msg_you_must_input_keymap_file="Ha de posar un arxiu keymap (mapa de teclat) !"
 msg_the_output_file_is_in_dir="L'arxiu de sortida iso/zip ha d'estar en aquest directori"
 msg_enter_digits_only="Per favor introdueixi només dígits"
@@ -898,4 +897,6 @@ msg_no_partition_table_need_to_create="No s'ha trobat cap partició en aquesta m
 # Tag on 2012/08/20
 msg_client_job_are_logged_in="Els treballs dels clients seran desats en aquest fitxer"
 msg_autoproductname_is_a_reserved="\"autoproductname\" és un nom de imatge reservat, per favor utilitzeu un altre nom!"
-
+# Tag on 2012/11/30
+msg_locale_ca_ES='Catalunya'
+keymap_file_prompt_and_example='Enter the keyboard layout to be used in the recovery Clonezilla live. If you input it as "NONE", the keymap will be US keyboard. You can find the keyboard layout in /usr/share/X11/xkb/rules/base.lst. e.g. "fr" for French keyboard layout. For more info, please check the live manual on Debian Live website.'

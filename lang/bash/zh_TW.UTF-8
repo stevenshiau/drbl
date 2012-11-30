@@ -733,7 +733,6 @@ msg_create_recovery_clonezilla_live_iso='產生CD/DVD用的iso檔'
 msg_create_recovery_clonezilla_live_zip='產生USB隨身碟用的zip檔'
 msg_create_recovery_clonezilla_live_iso_and_zip='產生CD/DVD用的iso檔以及USB隨身碟用的zip檔'
 msg_choose_the_language_in_recovery_iso_zip='選擇這個回復專用的再生龍使用時的語言'
-keymap_file_prompt_and_example='請輸入鍵盤對應的檔案以便之後操作這個回復專用的Clonezilla live中使用。如果你輸入的是"NONE"，代表使用美式鍵盤。更多的鍵盤對應表，你可以查詢Debian Linux(一定要是Debian Linux，因為Clonezilla live是基於Debian所產生的)中的這個目錄/usr/share/keymaps/i386/。舉例，如果你要使用法國鍵盤對應的話，可以輸入"/usr/share/keymaps/i386/azerty/fr-latin9.kmap.gz"。'
 msg_you_must_input_keymap_file='你必須輸入一個鍵盤對應的檔案!'
 msg_the_output_file_is_in_dir='產生的iso/zip檔案會放在這個目錄'
 msg_enter_digits_only='這裡你只能輸入數字'
@@ -896,3 +895,6 @@ msg_no_partition_table_need_to_create='在這台機器找不到硬碟分割區�
 # Tag on 2012/08/20
 msg_client_job_are_logged_in='用戶端clonezilla執行的結果記錄於此DRBL伺服器的這個檔案'
 msg_autoproductname_is_a_reserved='"autoproductname"是保留的名稱，請改用其他名字!'
+# Tag on 2012/11/30
+msg_locale_ca_ES='加泰隆尼亞語'
+keymap_file_prompt_and_example='請輸入鍵盤對應的檔案以便之後操作這個回復專用的Clonezilla live中使用。如果你輸入的是"NONE"，代表不更換，亦即使用預設的美式鍵盤。更多的鍵盤對應表，你可以在/usr/share/X11/xkb/rules/base.lst裡面找到。舉例，如果你要使用法國鍵盤對應的話，可以輸入"fr"。更多的資訊可以查詢Debian Live網頁上的使用手冊。'
