@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.1.38
+Version:	2.1.39
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Fri Nov 30 2012 Steven Shiau <steven _at_ nchc org tw> 2.1.39-drbl1
+- Language files were updated. Using "Catalan | català" instead of "Catalonia | Catalunya". 
+
 * Fri Nov 30 2012 Steven Shiau <steven _at_ nchc org tw> 2.1.38-drbl1
 - Language files were updated.
 

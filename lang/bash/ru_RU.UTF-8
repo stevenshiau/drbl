@@ -892,5 +892,5 @@ msg_no_partition_table_need_to_create='No partition is found in this machine. To
 msg_client_job_are_logged_in='Client jobs are recoreded in this file'
 msg_autoproductname_is_a_reserved='"autoproductname" является зарезервированным именем образа, пожалуйста, используйте другое имя!'
 # Tag on 2012/11/30
-msg_locale_ca_ES='Catalonia'
+msg_locale_ca_ES='Catalan'
 keymap_file_prompt_and_example='Enter the keyboard layout to be used in the recovery Clonezilla live. If you input it as "NONE", the keymap will be US keyboard. You can find the keyboard layout in /usr/share/X11/xkb/rules/base.lst. e.g. "fr" for French keyboard layout. For more info, please check the live manual on Debian Live website.'

@@ -896,5 +896,5 @@ msg_no_partition_table_need_to_create='在這台機器找不到硬碟分割區�
 msg_client_job_are_logged_in='用戶端clonezilla執行的結果記錄於此DRBL伺服器的這個檔案'
 msg_autoproductname_is_a_reserved='"autoproductname"是保留的名稱，請改用其他名字!'
 # Tag on 2012/11/30
-msg_locale_ca_ES='加泰隆尼亞語'
+msg_locale_ca_ES='加泰隆尼亞文'
 keymap_file_prompt_and_example='請輸入鍵盤對應的檔案以便之後操作這個回復專用的Clonezilla live中使用。如果你輸入的是"NONE"，代表不更換，亦即使用預設的美式鍵盤。更多的鍵盤對應表，你可以在/usr/share/X11/xkb/rules/base.lst裡面找到。舉例，如果你要使用法國鍵盤對應的話，可以輸入"fr"。更多的資訊可以查詢Debian Live網頁上的使用手冊。'
