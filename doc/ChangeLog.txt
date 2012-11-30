@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.1.37-drbl1) unstable; urgency=low
+
+  * Language file zh_CN was updated. Thanks to Zhiqiang Zhang.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 30 Nov 2012 09:27:55 +0800
+
 drbl (2.1.36-drbl1) unstable; urgency=low
 
   * Bug fixed: drbl ocs-live mode failed to download i686 version of 
