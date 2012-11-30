@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+- Language file de_DE was updated. Thanks to Michael Vinzenz.
+- Language file it_IT was updated. Thanks to Gianfranco Gentili.
+
 * Fri Nov 30 2012 Steven Shiau <steven _at_ nchc org tw> 2.1.39-drbl1
 - Language files were updated. Using "Catalan | català" instead of "Catalonia | Catalunya". 
 

@@ -895,5 +895,5 @@ msg_no_partition_table_need_to_create='In questa macchina non trovo nessuna part
 msg_client_job_are_logged_in='I jobs Client sono registrati in questo file'
 msg_autoproductname_is_a_reserved='"autoproductname" è un nome di immagine riservato, si prega di utilizzare un altro nome!'
 # Tag on 2012/11/30
-msg_locale_ca_ES='Catalan'
-keymap_file_prompt_and_example='Enter the keyboard layout to be used in the recovery Clonezilla live. If you input it as "NONE", the keymap will be US keyboard. You can find the keyboard layout in /usr/share/X11/xkb/rules/base.lst. e.g. "fr" for French keyboard layout. For more info, please check the live manual on Debian Live website.'
+msg_locale_ca_ES='Catalano'
+keymap_file_prompt_and_example='Immetti il layout della tastiera da usarenel ripristino con Clonezilla live. Se il tuo input è "NONE", verrà usata la tastiera US. Puoi trovare il layout di tastiera in /usr/share/X11/xkb/rules/base.lst. dove "fr" è per il layout della tastiera francese. Per ulteriori informazioni, controlla il manuale live sul sito web di Debian Live.'
