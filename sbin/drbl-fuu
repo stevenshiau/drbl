@@ -130,7 +130,8 @@ if  [ $chosen_group = "all" ]; then
     grp_member=""
     while read uname x uid gid x x x; do
         # nfs user create a user called "nfsnobody", skip it.
-        if [ "$uid" -ge "$UID_BEGIN_DEFAULT" -a "$uname" != "nfsnobody" ]; then
+        if [ "$uid" -ge "$UID_BEGIN_DEFAULT" -a "$uname" != "nfsnobody" -a \
+             "$uname" != "nobody" ]; then
            grp_member="$grp_member $uname"
         fi
     done </etc/passwd
@@ -202,15 +203,23 @@ for imember in $grp_member; do
            usrname="$iuser"
         fi
       done
+      # 2 special cases, (1) with white space, (2) with * (or actually normal cases)
+      # For (1) we have to use "", for (2), no "" should be used.
+      # (1)
+      for ifile in $USER_HOME_DIR/"$sub_dir/$source_file"; do
+        [ -e "$ifile" ] && cp -rv "$ifile" ${usrname}_"$(basename "${ifile}")"
+      done
+      # (2)
       for ifile in $USER_HOME_DIR/$sub_dir/$source_file; do
-        [ -f "$ifile" ] && cp -rv $ifile ${usrname}_"$(basename ${ifile})"
+        [ -e "$ifile" ] && cp -rv "$ifile" ${usrname}_"$(basename "${ifile}")"
       done
       ;;
     "put")
       [ ! -e "$source_file" ] && echo "$source_file does not exist!" && exit 1
-      if [ -n "$sub_dir" ]; then mkdir -p $USER_HOME_DIR/$sub_dir; fi
-      cp -rv $source_file $USER_HOME_DIR/$sub_dir/$target_file
-      chown -R $uid.$gid $USER_HOME_DIR/$sub_dir/$target_file
+      # Remember to use "" for the file name, since it might contain white space
+      if [ -n "$sub_dir" ]; then mkdir -p "$USER_HOME_DIR/$sub_dir"; fi
+      cp -rv "$source_file" "$USER_HOME_DIR/$sub_dir/$target_file"
+      chown -R $uid.$gid "$USER_HOME_DIR/$sub_dir/$target_file"
       ;;
     *)
       usage
