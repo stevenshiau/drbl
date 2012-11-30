@@ -896,4 +896,4 @@ msg_client_job_are_logged_in='Les tâches du client sont enregistrées dans ce f
 msg_autoproductname_is_a_reserved='"autoproductname" est un nom d'\''image réservé. Veuillez choisir un autre nom !'
 # Tag on 2012/11/30
 msg_locale_ca_ES='Catalan'
-keymap_file_prompt_and_example='Enter the keyboard layout to be used in the recovery Clonezilla live. If you input it as "NONE", the keymap will be US keyboard. You can find the keyboard layout in /usr/share/X11/xkb/rules/base.lst. e.g. "fr" for French keyboard layout. For more info, please check the live manual on Debian Live website.'
+keymap_file_prompt_and_example='Saisissez la configuration clavier à utiliser pendant la restauration. La valeur "NONE" implique un clavier américain. Les configurations disponibles se trouvent dans /usr/share/X11/xkb/rules/base.lst. Par ex. "fr" pour un clavier français. Pour plus d'\''informations, reportez-vous au manuel en ligne sur le site web de Debian Live.'
