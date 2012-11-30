@@ -47,7 +47,7 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 %changelog
 * Fri Nov 30 2012 Steven Shiau <steven _at_ nchc org tw> 2.1.36-drbl1
 - Bug fixed: drbl ocs-live mode failed to download i686 version of Clonezilla live in drblpush, because the file name should use *-i686-pae*.
-- Bug fixed: drbl-fuu failed to deal with file name with white space.
+- Bug fixed: drbl-fuu failed to deal with file name with white space. Thanks to <himaboy826 _at_ gmail com> for reporting this bug.
 
 * Wed Nov 28 2012 Steven Shiau <steven _at_ nchc org tw> 2.1.35-drbl1
 - Language file ca_ES was added. Thanks to René Mérou and Innocent De Marchi.

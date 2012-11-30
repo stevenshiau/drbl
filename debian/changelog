@@ -1,9 +1,11 @@
 drbl (2.1.36-drbl1) unstable; urgency=low
 
-  * Bug fixed: drbl ocs-live mode failed to download i686 version of Clonezilla live in drblpush, because the file name should use *-i686-pae*.
-  * Bug fixed: drbl-fuu failed to deal with file name with white space.
+  * Bug fixed: drbl ocs-live mode failed to download i686 version of 
+    Clonezilla live in drblpush, because the file name should use *-i686-pae*.
+  * Bug fixed: drbl-fuu failed to deal with file name with white space. 
+    Thanks to <himaboy826 _at_ gmail com> for reporting this bug.
 
- -- Steven Shiau <steven@nchc.org.tw>  Fri, 30 Nov 2012 09:10:59 +0800
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 30 Nov 2012 09:20:37 +0800
 
 drbl (2.1.35-drbl1) unstable; urgency=low
 
