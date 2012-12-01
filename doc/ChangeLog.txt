@@ -5,6 +5,19 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.1.40-drbl1) unstable; urgency=low
+
+  * Language file de_DE was updated. Thanks to Michael Vinzenz.
+  * Language file it_IT was updated. Thanks to Gianfranco Gentili.
+  * Language file fr_FR was updated. Thanks to Jean-Francois Nifenecker.
+  * Language file ca_ES was updated. Thanks to René Mérou.
+  * Bug fixed: no more using cdebootstrap when creating 
+    Clonezilla/DRBL/GParted live, therefore the function 
+    create_live_required_debian_based_prompt in drbl-functions should 
+    check debootstrap, not cdebootstrap.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sat, 01 Dec 2012 11:31:47 +0800
+
 drbl (2.1.39-drbl1) unstable; urgency=low
 
   * Language files were updated. Using "Catalan | català" 

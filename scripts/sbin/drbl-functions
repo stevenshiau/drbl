@@ -2516,14 +2516,14 @@ put_syslinux_makeboot_for_usb_flash() {
 #
 create_live_required_debian_based_prompt() {
   # lh_ver_required is global varible from drbl-ocs.conf
-  local lh_ver cdebootstrap_ver
+  local lh_ver debootstrap_ver
   # live-helper package name was changed to be live-build after 2.0~a20
   lh_ver="$(LC_ALL=C dpkg-query -W -f='${Version}\n' live-build)"
   if [ -z "$lh_ver" ]; then
     # Try to find the old package name.
     lh_ver="$(LC_ALL=C dpkg-query -W -f='${Version}\n' live-helper)"
   fi
-  cdebootstrap_ver="$(LC_ALL=C cdebootstrap --version | grep -iEw "^cdebootstrap" | awk -F" " '{print $2}')"
+  debootstrap_ver="$(LC_ALL=C debootstrap --version | grep -iEw "^debootstrap" | awk -F" " '{print $2}')"
   if dpkg --compare-versions "$lh_ver" "<<" "$lh_ver_required"; then
     [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
     echo "Required live helper or live build version: $lh_ver_required"
@@ -2533,11 +2533,11 @@ create_live_required_debian_based_prompt() {
     echo "Program terminated!"
     exit 1
   fi
-  if dpkg --compare-versions "$cdebootstrap_ver" "<<" "$cdebootstrap_ver_required"; then
+  if dpkg --compare-versions "$debootstrap_ver" "<<" "$debootstrap_ver_required"; then
     [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
-    echo "Required cdebootstrap version: $cdebootstrap_ver_required"
-    echo "Installed cdebootstrap version: $cdebootstrap_ver"
-    echo "You have to install cdebootstrap (version $cdebootstrap_ver_required or later)."
+    echo "Required debootstrap version: $debootstrap_ver_required"
+    echo "Installed debootstrap version: $debootstrap_ver"
+    echo "You have to install debootstrap (version $debootstrap_ver_required or later)."
     [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
     echo "Program terminated!"
     exit 1

@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.1.39
+Version:	2.1.40
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,10 +45,12 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Sat Dec 01 2012 Steven Shiau <steven _at_ nchc org tw> 2.1.40-drbl1
 - Language file de_DE was updated. Thanks to Michael Vinzenz.
 - Language file it_IT was updated. Thanks to Gianfranco Gentili.
 - Language file fr_FR was updated. Thanks to Jean-Francois Nifenecker.
 - Language file ca_ES was updated. Thanks to René Mérou.
+- Bug fixed: no more using cdebootstrap when creating Clonezilla/DRBL/GParted live, therefore the function create_live_required_debian_based_prompt in drbl-functions should check debootstrap, not cdebootstrap.
 
 * Fri Nov 30 2012 Steven Shiau <steven _at_ nchc org tw> 2.1.39-drbl1
 - Language files were updated. Using "Catalan | català" instead of "Catalonia | Catalunya". 
