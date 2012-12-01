@@ -46,6 +46,7 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 
 %changelog
 - Language file ca_ES was updated. Thanks to René Mérou.
+- Language file ja_JP.UTF-8 was updated. Thanks to Akira YOSHIYAMA.
 
 * Sat Dec 01 2012 Steven Shiau <steven _at_ nchc org tw> 2.1.40-drbl1
 - Language file de_DE was updated. Thanks to Michael Vinzenz.

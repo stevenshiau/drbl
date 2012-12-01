@@ -913,5 +913,5 @@ msg_no_partition_table_need_to_create='このマシンにはパーティショ�
 msg_client_job_are_logged_in='クライアントジョブはこのファイルに記録されます'
 msg_autoproductname_is_a_reserved='「autoproductname」は予約されたイメージ名です。別の名前を使用して下さい!'
 # Tag on 2012/11/30
-msg_locale_ca_ES='Catalan'
-keymap_file_prompt_and_example='Enter the keyboard layout to be used in the recovery Clonezilla live. If you input it as "NONE", the keymap will be US keyboard. You can find the keyboard layout in /usr/share/X11/xkb/rules/base.lst. e.g. "fr" for French keyboard layout. For more info, please check the live manual on Debian Live website.'
+msg_locale_ca_ES='カタルーニャ語'
+keymap_file_prompt_and_example='Clonezilla Live の復元で使用するキー配列を入力して下さい。「NONE」と入力した場合、キー配列は英語キーボードになります。キー配列は /usr/share/X11/xkb/rules/base.lst 中で探せます（例：fr=フランス語キー配列）。詳細は、Debian Live Web サイト上のマニュアルを確認して下さい。'
