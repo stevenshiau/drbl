@@ -898,5 +898,5 @@ msg_no_partition_table_need_to_create="No s'ha trobat cap partició en aquesta m
 msg_client_job_are_logged_in="Els treballs dels clients seran desats en aquest fitxer"
 msg_autoproductname_is_a_reserved="\"autoproductname\" és un nom de imatge reservat, per favor utilitzeu un altre nom!"
 # Tag on 2012/11/30
-msg_locale_ca_ES='català'
-keymap_file_prompt_and_example='Enter the keyboard layout to be used in the recovery Clonezilla live. If you input it as "NONE", the keymap will be US keyboard. You can find the keyboard layout in /usr/share/X11/xkb/rules/base.lst. e.g. "fr" for French keyboard layout. For more info, please check the live manual on Debian Live website.'
+msg_locale_ca_ES="català"
+keymap_file_prompt_and_example="Introdueixi la distribució del teclat que hem d'utilitzar en la restauració amb el Clonezilla live. Si introdueix \"NONE\", El teclat serà el US. Pot trobar el la distribució del teclar en /usr/share/X11/xkb/rules/base.lst. p.ej. \"fr\" per a la distribució del teclat francesa. Si vol més informació, per favor, doni una ullada al manual en el lloc de Debian Live."

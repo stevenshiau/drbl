@@ -48,6 +48,7 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 - Language file de_DE was updated. Thanks to Michael Vinzenz.
 - Language file it_IT was updated. Thanks to Gianfranco Gentili.
 - Language file fr_FR was updated. Thanks to Jean-Francois Nifenecker.
+- Language file ca_ES was updated. Thanks to René Mérou.
 
 * Fri Nov 30 2012 Steven Shiau <steven _at_ nchc org tw> 2.1.39-drbl1
 - Language files were updated. Using "Catalan | català" instead of "Catalonia | Catalunya". 
