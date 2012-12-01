@@ -898,5 +898,5 @@ msg_no_partition_table_need_to_create="No s'ha trobat cap partició en aquesta m
 msg_client_job_are_logged_in="Els treballs dels clients seran desats en aquest fitxer"
 msg_autoproductname_is_a_reserved="\"autoproductname\" és un nom de imatge reservat, per favor utilitzeu un altre nom!"
 # Tag on 2012/11/30
-msg_locale_ca_ES="català"
+msg_locale_ca_ES="Català"
 keymap_file_prompt_and_example="Introdueixi la distribució del teclat que hem d'utilitzar en la restauració amb el Clonezilla live. Si introdueix \"NONE\", El teclat serà el US. Pot trobar el la distribució del teclar en /usr/share/X11/xkb/rules/base.lst. p.ej. \"fr\" per a la distribució del teclat francesa. Si vol més informació, per favor, doni una ullada al manual en el lloc de Debian Live."
