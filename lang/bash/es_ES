@@ -895,4 +895,4 @@ msg_client_job_are_logged_in='Los trabajos del cliente se guardan en este archiv
 msg_autoproductname_is_a_reserved='"autoproductname" es un nombre de imagen reservado, por favor use otro nombre!'
 # Tag on 2012/11/30
 msg_locale_ca_ES='Catalan'
-keymap_file_prompt_and_example='Enter the keyboard layout to be used in the recovery Clonezilla live. If you input it as "NONE", the keymap will be US keyboard. You can find the keyboard layout in /usr/share/X11/xkb/rules/base.lst. e.g. "fr" for French keyboard layout. For more info, please check the live manual on Debian Live website.'
+keymap_file_prompt_and_example='Introduzca la distribución de teclado a usar en la recuperación de Clonezilla live. Si escribe "NONE", el mapa de teclado será el de US. Puede encontrar las distribuciones de teclado en /usr/share/X11/xkb/rules/base.lst. ej. "fr" para distribución de teclado Francés. Para mas información, por favor consulte el manual en la web de Debian Live.'
