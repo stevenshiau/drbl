@@ -327,7 +327,7 @@ do_clonezilla_save_dev() {
     [ "$BOOTUP" = "color" ] && $SETCOLOR_SUCCESS
     # NOTE: For prompt, we use \" to show ", but actually run it without \
     echo PS. $msg_run_drbl_ocs_again_cmd 
-    echo $DRBL_SCRIPT_PATH/sbin/drbl-ocs -b $OCS_OPTS $dcs_save_extra_opt -h \"$IP_LIST\" -l $lang start${dev} save $input_save_img_name $input_device_name | tee $run_again_fname
+    echo drbl-ocs -b $OCS_OPTS $dcs_save_extra_opt -h \"$IP_LIST\" -l $lang start${dev} save $input_save_img_name $input_device_name | tee $run_again_fname
     echo "$msg_ocs_sr_again_command_saved_filename: $run_again_fname"
     [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
   else
@@ -335,7 +335,7 @@ do_clonezilla_save_dev() {
     deploy_pxecfg_files
     [ "$BOOTUP" = "color" ] && $SETCOLOR_SUCCESS
     echo PS. $msg_run_drbl_ocs_again_cmd 
-    echo $DRBL_SCRIPT_PATH/sbin/drbl-ocs -b $OCS_OPTS $dcs_save_extra_opt -l $lang start${dev} save $input_save_img_name $input_device_name | tee $run_again_fname
+    echo drbl-ocs -b $OCS_OPTS $dcs_save_extra_opt -l $lang start${dev} save $input_save_img_name $input_device_name | tee $run_again_fname
     echo "$msg_ocs_sr_again_command_saved_filename: $run_again_fname"
     [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
   fi
@@ -452,7 +452,7 @@ do_clonezilla_restore_dev() {
       [ "$BOOTUP" = "color" ] && $SETCOLOR_SUCCESS
       echo PS. $msg_run_drbl_ocs_again_cmd 
       # NOTE: For prompt, we use \" to show ", but actually run it without \
-      echo $DRBL_SCRIPT_PATH/sbin/drbl-ocs -b $OCS_OPTS $dcs_restore_extra_opt -h \"$IP_LIST\" -l $lang start${dev} restore $target_image $target_dev | tee $run_again_fname
+      echo drbl-ocs -b $OCS_OPTS $dcs_restore_extra_opt -h \"$IP_LIST\" -l $lang start${dev} restore $target_image $target_dev | tee $run_again_fname
       echo "$msg_ocs_sr_again_command_saved_filename: $run_again_fname"
       [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
     else
@@ -460,7 +460,7 @@ do_clonezilla_restore_dev() {
       deploy_pxecfg_files
       [ "$BOOTUP" = "color" ] && $SETCOLOR_SUCCESS
       echo PS. $msg_run_drbl_ocs_again_cmd 
-      echo $DRBL_SCRIPT_PATH/sbin/drbl-ocs -b $OCS_OPTS $dcs_restore_extra_opt -l $lang start${dev} restore $target_image $target_dev | tee $run_again_fname
+      echo drbl-ocs -b $OCS_OPTS $dcs_restore_extra_opt -l $lang start${dev} restore $target_image $target_dev | tee $run_again_fname
       echo "$msg_ocs_sr_again_command_saved_filename: $run_again_fname"
       [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
     fi
@@ -493,7 +493,7 @@ do_clonezilla_restore_dev() {
       [ "$BOOTUP" = "color" ] && $SETCOLOR_SUCCESS
       echo PS. $msg_run_drbl_ocs_again_cmd 
       # NOTE: For prompt, we use \" to show ", but actually run it without \
-      echo $DRBL_SCRIPT_PATH/sbin/drbl-ocs -b $OCS_OPTS $dcs_restore_extra_opt $mcast_mode_opt -h \"$IP_LIST\" -l $lang start${dev} multicast_restore $target_image $target_dev | tee $run_again_fname
+      echo drbl-ocs -b $OCS_OPTS $dcs_restore_extra_opt $mcast_mode_opt -h \"$IP_LIST\" -l $lang start${dev} multicast_restore $target_image $target_dev | tee $run_again_fname
       echo "$msg_ocs_sr_again_command_saved_filename: $run_again_fname"
       [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
     else
@@ -501,7 +501,7 @@ do_clonezilla_restore_dev() {
       deploy_pxecfg_files
       [ "$BOOTUP" = "color" ] && $SETCOLOR_SUCCESS
       echo PS. $msg_run_drbl_ocs_again_cmd 
-      echo $DRBL_SCRIPT_PATH/sbin/drbl-ocs -b $OCS_OPTS $dcs_restore_extra_opt $mcast_mode_opt -l $lang start${dev} multicast_restore $target_image $target_dev | tee $run_again_fname
+      echo sbin/drbl-ocs -b $OCS_OPTS $dcs_restore_extra_opt $mcast_mode_opt -l $lang start${dev} multicast_restore $target_image $target_dev | tee $run_again_fname
       echo "$msg_ocs_sr_again_command_saved_filename: $run_again_fname"
       [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
     fi
@@ -540,7 +540,7 @@ do_clonezilla_select_in_client() {
     echo "$msg_authentication_pxe_linux_info"
     [ "$BOOTUP" = "color" ] && $SETCOLOR_SUCCESS
     echo PS. $msg_run_drbl_ocs_again_cmd 
-    echo $DRBL_SCRIPT_PATH/sbin/drbl-ocs -b -h \"$IP_LIST\" -l $lang $OCS_OPTS select_in_client | tee $run_again_fname
+    echo drbl-ocs -b -h \"$IP_LIST\" -l $lang $OCS_OPTS select_in_client | tee $run_again_fname
     echo "$msg_ocs_sr_again_command_saved_filename: $run_again_fname"
     [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
   else
@@ -550,7 +550,7 @@ do_clonezilla_select_in_client() {
     echo "$msg_authentication_pxe_linux_info"
     [ "$BOOTUP" = "color" ] && $SETCOLOR_SUCCESS
     echo PS. $msg_run_drbl_ocs_again_cmd 
-    echo $DRBL_SCRIPT_PATH/sbin/drbl-ocs -b -l $lang $OCS_OPTS select_in_client | tee $run_again_fname
+    echo drbl-ocs -b -l $lang $OCS_OPTS select_in_client | tee $run_again_fname
     echo "$msg_ocs_sr_again_command_saved_filename: $run_again_fname"
     [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
   fi
