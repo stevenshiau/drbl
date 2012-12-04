@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.1.45-drbl1) unstable; urgency=low
+
+  * Language file zh_TW was updated.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 04 Dec 2012 09:51:30 +0800
+
 drbl (2.1.44-drbl1) unstable; urgency=low
 
   * Bug fixed: Wrong path for the rerun command of drbl-ocs.
