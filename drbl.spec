@@ -45,6 +45,8 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+- Adding package tree in Clonezilla live packages list.
+
 * Tue Dec 04 2012 Steven Shiau <steven _at_ nchc org tw> 2.1.46-drbl1
 - Language file es_ES of bash was updated. Thanks to Juan Ramón Martínez
 
