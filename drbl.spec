@@ -45,6 +45,8 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+- Bug fixed: Program makeboot.sh should check the destination disk is MBR or not.
+
 * Sun Dec 23 2012 Steven Shiau <steven _at_ nchc org tw> 2.1.48-drbl1
 - Adding package exfat-utils and exfat-fuse in Clonezilla live packages list.
 

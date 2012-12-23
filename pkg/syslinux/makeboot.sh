@@ -78,12 +78,16 @@ target_part="$1"
 
 #
 if [ -z "$target_part" ]; then
-  echo "No target partition was assigned!"
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+  echo "No destination partition was assigned!"
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
   USAGE
   exit 1
 fi
 if ! type parted &>/dev/null; then
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
   echo "Parted was not found on this GNU/Linux system. Please install it."
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
   echo "Program terminated!"
   exit 1
 fi
@@ -102,6 +106,17 @@ pt_dev="$(basename $target_part)"  # e.g. sdc1
 hd_dev="${pt_dev:0:3}"   # e.g. sdc
 target_disk="/dev/$hd_dev"  # e.g. /dev/sdc
 pt_dev_no="${pt_dev/$hd_dev}"  # e.g. 1
+
+# If the destination disk is not MBR partition table (e.g. it's GPT), exit. This program only works for MBR disk.
+if [ -z "$(LC_ALL=C parted -s $target_disk print | grep -iE "^Partition Table:" | grep -iE "msdos")" ]; then
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+  echo "The partition table of $target_disk is not for MBR (Master Boot Record). Its layout is:"
+  LC_ALL=C parted -s $target_disk print
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+  echo "This program is for making a bootable disk with MBR partition table."
+  echo "Program terminated!"
+  exit 1
+fi
 
 # Get machine info:
 on_this_machine=""
