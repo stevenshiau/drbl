@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.1.47
+Version:	2.1.48
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Sun Dec 23 2012 Steven Shiau <steven _at_ nchc org tw> 2.1.48-drbl1
+- Adding package exfat-utils and exfat-fuse in Clonezilla live packages list.
+
 * Sat Dec 22 2012 Steven Shiau <steven _at_ nchc org tw> 2.1.47-drbl1
 - Adding package tree in Clonezilla live packages list.
 
