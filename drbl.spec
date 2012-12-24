@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.1.48
+Version:	2.1.49
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,7 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Mon Dec 24 2012 Steven Shiau <steven _at_ nchc org tw> 2.1.49-drbl1
 - Bug fixed: Program makeboot.sh should check the destination disk is MBR or not.
 
 * Sun Dec 23 2012 Steven Shiau <steven _at_ nchc org tw> 2.1.48-drbl1

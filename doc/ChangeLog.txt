@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.1.49-drbl1) unstable; urgency=low
+
+  * Bug fixed: Program makeboot.sh should check the destination disk
+    is MBR or not.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 24 Dec 2012 16:22:05 +0800
+
 drbl (2.1.48-drbl1) unstable; urgency=low
 
   * Adding package exfat-utils and exfat-fuse in Clonezilla live packages list.
