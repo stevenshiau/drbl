@@ -45,6 +45,8 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+- Bug fixed: parse_cmdline_option in drbl-function failed to parse boot parameter containing "$" character.
+
 * Mon Dec 24 2012 Steven Shiau <steven _at_ nchc org tw> 2.1.49-drbl1
 - Bug fixed: Program makeboot.sh should check the destination disk is MBR or not.
 

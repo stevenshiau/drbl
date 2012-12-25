@@ -2255,6 +2255,13 @@ parse_cmdline_option() {
       LC_ALL=C grep -oE -- "$ik=([[:alnum:]]|_|-|\.|\/|:)*([[:space:]]|$)+" $cmdl_file > $parse_tmp
     fi
     # now we can get the variables
+    # . $parse_tmp <--- One more thing to do.
+    # In we just read the variable using ". $parse_tmp", and it happends to have "$" in the variable, then the way will go wrong. E.g. the output file "/tmp/cmdtmp.XXXXX" contains this line:
+    # ocs_prerun3="mount -t cifs -o user=steven,domain=ABC.COM,password=12$ABC34 //netserv/tmp/stevenyang/images /home/partimag"
+    # By running ". /tmp/cmdtmp.XXXXX", the ocs_prerun3 will be:
+    # mount -t cifs -o user=steven,domain=ABC.COM,password=12 //netserv/tmp/stevenyang/images /home/partimag
+    # It's because $ABC34 is nothing here. Therefore we have to protect "$" in the temp file.
+    perl -pi -e 's|\$|\\\$|g' $parse_tmp
     . $parse_tmp
   done
   [ -f "$parse_tmp" ] && rm -f $parse_tmp
