@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.1.49
+Version:	2.1.51
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,7 +45,11 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
-- Bug fixed: parse_cmdline_option in drbl-function failed to parse boot parameter containing "$" character.
+* Wed Dec 26 2012 Steven Shiau <steven _at_ nchc org tw> 2.1.51-drbl1
+- Comments in drbl-functions were updated.
+
+* Tue Dec 25 2012 Steven Shiau <steven _at_ nchc org tw> 2.1.50-drbl1
+- Bug fixed: parse_cmdline_option in drbl-function failed to parse boot parameter containing "$" character. Thanks to kuen-shieh yang <kuenshieh _at_ gmail com> for reporting this issue.
 
 * Mon Dec 24 2012 Steven Shiau <steven _at_ nchc org tw> 2.1.49-drbl1
 - Bug fixed: Program makeboot.sh should check the destination disk is MBR or not.
