@@ -5,6 +5,14 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.1.52-drbl1) unstable; urgency=low
+
+  * Package extlinux was added in the packages list for DRBL so then Clonezilla.
+  * Program extlinux now will be put in dir util/linux/ 
+    in Clonezilla/DRBL/GParted live.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 26 Dec 2012 20:55:00 +0800
+
 drbl (2.1.51-drbl1) unstable; urgency=low
 
   * Comments in drbl-functions were updated.

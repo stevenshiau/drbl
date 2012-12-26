@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.1.51
+Version:	2.1.52
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,7 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Wed Dec 26 2012 Steven Shiau <steven _at_ nchc org tw> 2.1.52-drbl1
 - Package extlinux was added in the packages list for DRBL so then Clonezilla.
 - Program extlinux now will be put in dir util/linux/ in Clonezilla/DRBL/GParted live.
 
