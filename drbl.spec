@@ -45,7 +45,7 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
-- Package extlinux was added in the packages list for Clonezilla live.
+- Package extlinux was added in the packages list for DRBL so then Clonezilla.
 
 * Wed Dec 26 2012 Steven Shiau <steven _at_ nchc org tw> 2.1.51-drbl1
 - Comments in drbl-functions were updated.
