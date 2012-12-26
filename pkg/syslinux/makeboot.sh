@@ -68,6 +68,26 @@ to_continue_or_not() {
     esac
   done
 } # end of to_continue_or_not
+#
+get_diskname() {
+  local disk=${1#/dev/*}
+
+  if [ -n "$disk" ]; then
+    echo "$disk" | sed -e 's/^\([^0-9]*\)[0-9]*$/\1/g' \
+                       -e 's/^\(.*[0-9]\{1,\}\)p[0-9]\{1,\}$/\1/g'
+  fi
+}
+get_part_number() {
+  local disk=${1#/dev/*}
+  local num=""
+
+  if [ -n "$disk" ]; then
+    num=$(echo "$disk" | sed -e 's/^[^0-9]*\([0-9]*\)$/\1/g' \
+                             -e 's/^.*[0-9]\{1,\}\(p[0-9]\{1,\}\)$/\1/g')
+  fi
+
+  echo $num
+}
 
 #
 export LANG=C
@@ -103,9 +123,9 @@ fi
 
 #
 pt_dev="$(basename $target_part)"  # e.g. sdc1
-hd_dev="${pt_dev:0:3}"   # e.g. sdc
+hd_dev="$(get_diskname $target_part)"   # e.g. sdc
 target_disk="/dev/$hd_dev"  # e.g. /dev/sdc
-pt_dev_no="${pt_dev/$hd_dev}"  # e.g. 1
+pt_dev_no="$(get_part_number $target_part)"  # e.g. 1
 
 # If the destination disk is not MBR partition table (e.g. it's GPT), exit. This program only works for MBR disk.
 if [ -z "$(LC_ALL=C parted -s $target_disk print | grep -iE "^Partition Table:" | grep -iE "msdos")" ]; then
@@ -157,7 +177,7 @@ echo "--------------------------------------------"
 to_continue_or_not "$msg_are_u_sure_u_want_to_continue"
 echo "--------------------------------------------"
 
-# 0. Check if partition is a FAT partition
+# 0. Check if partition is a FAT partition or NTFS partition
 # parted -s /dev/hda1 print
 # Disk /dev/hda1: 8590MB
 # Sector size (logical/physical): 512B/512B
@@ -165,14 +185,26 @@ echo "--------------------------------------------"
 # 
 # Number  Start   End     Size    File system  Flags
 #  1      0.00kB  8590MB  8590MB  fat32           
-if [ -z "$(LANG=C parted -s $target_disk print | grep -E "^[[:space:]]*${pt_dev_no}\>" |  grep -iE "(fat16|fat32|vfat)")" ]; then
-  [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
-  echo "$target_part: this doesn't look like a valid FAT filesystem"
-  [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
-  echo "Program terminated!"
-  exit 1
-fi
+# part_fs="$(LC_ALL=C parted -s $target_disk print | grep -E "^[[:space:]]*${pt_dev_no}\>" | awk -F" " '{print $6}')"
+blkinfo="$(mktemp /tmp/blkinfo.XXXXXX)"
+LC_ALL=C blkid -c /dev/null $target_part | grep -o -E '\<TYPE="[^[:space:]]*"($|[[:space:]]+)' > $blkinfo
+TYPE=""
+. $blkinfo
 
+echo "File system of $target_part: $TYPE"
+case "$TYPE" in
+  fat16|fat32|vfat)    mode="syslinux";;
+  ntfs|ext[2-4]|btrfs) mode="extlinux";;
+  *)                   
+     [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+     echo "$target_part: this doesn't look like a valid FAT, NTFS, ext2/3/4 or btrfs file system."
+     [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+     echo "Program terminated!"
+     exit 1
+     ;;
+esac
+
+echo "--------------------------------------------"
 # 1. Check if partition start/end on cylinder boundary
 # //NOTE// This is not really required. Comment it on Sep/21/2010.
 #if [ -n "$(LANG=C fdisk -l $target_disk | grep -iE "(not start on cylinder boundary|not end on cylinder boundary)")" ]; then
@@ -207,13 +239,47 @@ echo "--------------------------------------------"
 to_continue_or_not "Do you want to install the SYSLINUX bootloader on $target_part $on_this_machine ?"
 # Since most of the cases when makeboot.sh is run, all the files are in FAT (USB flash drive normally uses FAT), we have to make syslinux executable.
 echo "We need a filesystem supporting Unix file mode for syslinux. Copying syslinux from FAT to /tmp/..."
-syslinux_tmpd="$(mktemp -d /tmp/syslinux_tmp.XXXXXX)"
-cp -fv $path_of_prog/utils/linux/syslinux $syslinux_tmpd
-chmod u+x $syslinux_tmpd/syslinux
-echo "Running: $syslinux_tmpd/syslinux -f -i $target_part "
-$syslinux_tmpd/syslinux -f -i $target_part
-echo "done!"
-[ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
-echo "//NOTE// If your USB flash drive fails to boot (maybe buggy BIOS), try to use \"syslinux -fs $target_part\", i.e. running with \"-s\"."
-[ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
-[ -d "$syslinux_tmpd" -a -n "$(echo $syslinux_tmpd | grep "syslinux_tmp" )" ] && rm -rf $syslinux_tmpd
+case "$mode" in
+  syslinux)
+     syslinux_tmpd="$(mktemp -d /tmp/syslinux_tmp.XXXXXX)"
+     cp -fv $path_of_prog/utils/linux/syslinux $syslinux_tmpd
+     chmod u+x $syslinux_tmpd/syslinux
+     echo "Running: $syslinux_tmpd/syslinux -f -i $target_part "
+     $syslinux_tmpd/syslinux -f -i $target_part
+     echo "done!"
+     [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+     echo "//NOTE// If your USB flash drive fails to boot (maybe buggy BIOS), try to use \"syslinux -fs $target_part\", i.e. running with \"-s\"."
+     [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+     [ -d "$syslinux_tmpd" -a -n "$(echo $syslinux_tmpd | grep "syslinux_tmp" )" ] && rm -rf $syslinux_tmpd
+     ;;
+  extlinux)
+     extlinux_tmpd="$(mktemp -d /tmp/extlinux_tmp.XXXXXX)"
+     cp -fv $path_of_prog/utils/linux/extlinux $extlinux_tmpd
+     chmod u+x $extlinux_tmpd/extlinux
+     # Check if $target_part is mounted or not
+     mnt_pnt="$(LC_ALL=C df $target_part | grep -Ew $target_part | awk -F" " '{print $6}')"
+     if [ -z "$mnt_pnt" ]; then
+       # Not mounted. Mount it.
+       ntfs_tmpd="$(mktemp -d /tmp/ntfs_tmp.XXXXXX)"
+       mount $target_part $ntfs_tmpd
+       rc=$?
+     else
+       # Already mounted. 
+       ntfs_tmpd=$mnt_pnt
+       rc=0
+     fi
+     if [ $rc -eq 0 ]; then
+       echo "Running: $extlinux_tmpd/extlinux -i $ntfs_tmpd "
+       $extlinux_tmpd/extlinux -i $ntfs_tmpd
+       echo "done!"
+     else
+       [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+       echo "Failed to mount NTFS partition $target_part!"
+       [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+       echo "Program terminated!"
+       exit 1
+     fi
+     [ -d "$extlinux_tmpd" -a -n "$(echo $extlinux_tmpd | grep "extlinux_tmp" )" ] && rm -rf $extlinux_tmpd
+     [ -d "$ntfs_tmpd" -a -n "$(echo $ntfs_tmpd | grep "ntfs_tmp" )" ] && rm -rf $ntfs_tmpd
+     ;;
+esac

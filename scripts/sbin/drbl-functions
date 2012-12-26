@@ -2487,11 +2487,12 @@ get_syslinux_binary_for_dos_linux() {
   (
    cd $sysl_dir
    # From syslinux 3.73, linux/syslinux is hardlink to linux/syslinux-nomtools, therefore we have to use --wildcards to extract it. Otherwise it will fail.
-   tar --wildcards -xvjf syslinux-${syslinux_ver}.tar.bz2 syslinux-${syslinux_ver}/win32/syslinux.exe syslinux-${syslinux_ver}/win64/syslinux64.exe syslinux-${syslinux_ver}/linux/syslinux* syslinux-${syslinux_ver}/mbr/mbr.bin
+   tar --wildcards -xvjf syslinux-${syslinux_ver}.tar.bz2 syslinux-${syslinux_ver}/win32/syslinux.exe syslinux-${syslinux_ver}/win64/syslinux64.exe syslinux-${syslinux_ver}/linux/syslinux* syslinux-${syslinux_ver}/extlinux/extlinux* syslinux-${syslinux_ver}/mbr/mbr.bin 
    mv -f syslinux-${syslinux_ver}/win32/syslinux.exe . 
    mv -f syslinux-${syslinux_ver}/win64/syslinux64.exe . 
-   mv -f syslinux-${syslinux_ver}/linux/syslinux .
    mv -f syslinux-${syslinux_ver}/mbr/mbr.bin .
+   mv -f syslinux-${syslinux_ver}/linux/syslinux .
+   mv -f syslinux-${syslinux_ver}/extlinux/extlinux .
   )
 } # end of get_syslinux_binary_for_dos_linux
 #
@@ -2516,7 +2517,9 @@ put_syslinux_makeboot_for_usb_flash() {
   echo "SYSLINUX version: $SYSLINUX_VER" > $t_dir/utils/linux/VERSION.txt
   echo "Precompiled binary syslinux files were extracted from $syslinux_binsrc_url/syslinux-${syslinux_ver}.tar.bz2" > $t_dir/utils/README.txt
   cp -af $sysl_dir/syslinux.exe $t_dir/utils/win32/
+  cp -af $sysl_dir/syslinux64.exe $t_dir/utils/win32/
   cp -af $sysl_dir/syslinux $t_dir/utils/linux/
+  cp -af $sysl_dir/extlinux $t_dir/utils/linux/
   cp -af $sysl_dir/mbr.bin $t_dir/utils/mbr/
   [ -d "$sysl_dir" -a -n "$(echo $sysl_dir | grep "sysl_dir")" ] && rm -rf $sysl_dir
 } # end of put_syslinux_makeboot_for_usb_flash

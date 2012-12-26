@@ -46,6 +46,7 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 
 %changelog
 - Package extlinux was added in the packages list for DRBL so then Clonezilla.
+- Program extlinux now will be put in dir util/linux/ in Clonezilla/DRBL/GParted live.
 
 * Wed Dec 26 2012 Steven Shiau <steven _at_ nchc org tw> 2.1.51-drbl1
 - Comments in drbl-functions were updated.
