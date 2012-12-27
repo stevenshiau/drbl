@@ -30,7 +30,7 @@ msg_do_you_want_to_make_it_bootable="Do you want to mark it as bootable ?"
 USAGE() {
    echo "Usage: $prog partition_device"
    echo "Ex:" 
-   echo "To make /dev/sde1 bootable on Linux:"
+   echo "To make /dev/sde1 bootable on GNU/Linux:"
    echo "  $prog /dev/sde1"
 }
 # Check if root or not
@@ -106,7 +106,14 @@ if [ -z "$target_part" ]; then
 fi
 if ! type parted &>/dev/null; then
   [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
-  echo "Parted was not found on this GNU/Linux system. Please install it."
+  echo 'Program "parted" was not found on this GNU/Linux system. Please install it.'
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+  echo "Program terminated!"
+  exit 1
+fi
+if ! type blkid &>/dev/null; then
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+  echo 'Program "blkid" was not found on this GNU/Linux system. Please install it.'
   [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
   echo "Program terminated!"
   exit 1
