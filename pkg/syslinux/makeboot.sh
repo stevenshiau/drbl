@@ -1,11 +1,11 @@
 #!/bin/bash
 # Author: Steven Shiau <steven _at_ nchc org tw>
 # License: GPL
-# Description: Program to make USB flash drive (FAT format) bootable by syslinux
+# Description: Program to make USB flash drive (FAT, EXT, BTRFS or NTFS) bootable by syslinux or extlinux
 
 # 1. Checking if partition table correct (on boundary, bootable)
 # 2. cat mbr
-# 3. syslinux -fs
+# 3. "syslinux -f -i" or "extlinux -i"
 #
 # Append PATH
 export PATH=/sbin:/usr/sbin:/bin:/usr/bin:$PATH
@@ -141,6 +141,7 @@ if [ -z "$(LC_ALL=C parted -s $target_disk print | grep -iE "^Partition Table:" 
   LC_ALL=C parted -s $target_disk print
   [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
   echo "This program is for making a bootable disk with MBR partition table."
+  echo "For GPT disk, there is no need to run this program. Just make sure the partition is FAT32 with ID=ef00 and all the files are copied on that. That's all."
   echo "Program terminated!"
   exit 1
 fi
