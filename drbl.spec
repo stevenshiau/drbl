@@ -46,6 +46,7 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 
 %changelog
 - Checking if blkid exists in makeboot.sh. Adding a prompt about GPT disk.
+- Package libdata-validate-ip-perl was added in the packages list for Clonezilla live.
 
 * Wed Dec 26 2012 Steven Shiau <steven _at_ nchc org tw> 2.1.52-drbl1
 - Package extlinux was added in the packages list for DRBL so then Clonezilla.
