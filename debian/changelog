@@ -1,3 +1,11 @@
+drbl (2.2.0-drbl1) unstable; urgency=low
+
+  * Checking if blkid exists in makeboot.sh. Adding a prompt about GPT disk.
+  * Package libdata-validate-ip-perl was added in the packages list for Clonezilla live.
+  * Some big changes in the Clonezilla codes, therefore increase the 2nd major version number.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 03 Jan 2013 14:12:42 +0800
+
 drbl (2.1.52-drbl1) unstable; urgency=low
 
   * Package extlinux was added in the packages list for DRBL so then Clonezilla.
