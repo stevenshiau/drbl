@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.2.0
+Version:	2.2.1
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Tue Jan 08 2013 Steven Shiau <steven _at_ nchc org tw> 2.2.1-drbl1
+- Put option "-nogui" in the higher position of the menu.
+
 * Thu Jan 03 2013 Steven Shiau <steven _at_ nchc org tw> 2.2.0-drbl1
 - Checking if blkid exists in makeboot.sh. Adding a prompt about GPT disk.
 - Package libdata-validate-ip-perl was added in the packages list for Clonezilla live.

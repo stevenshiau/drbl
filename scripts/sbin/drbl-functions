@@ -1411,10 +1411,10 @@ if [ "$mode" = "restore" ]; then
     "-e1 auto" "$msg_ocs_param_e1_auto" on \
     "-e2"      "$msg_ocs_param_e2" on \
     "-x"       "$msg_ocs_param_x" on \
+    "-nogui"   "$msg_ocs_param_nogui" off \
     "-hn0 $WIN_HOSTNAME_PREFIX"  "$msg_ocs_param_hn0" off \
     "-hn1 $WIN_HOSTNAME_PREFIX"  "$msg_ocs_param_hn1" off \
     "-v"       "$msg_ocs_param_v" off \
-    "-nogui"   "$msg_ocs_param_nogui" off \
     "-c"       "$msg_ocs_param_c" off \
     "-u"       "$msg_ocs_param_u" off \
     "-t"       "$msg_ocs_param_t" off \
@@ -1656,10 +1656,10 @@ if [ "$mode" = "restore" ]; then
     "-g auto"  "$msg_ocs_param_g_auto" on \
     "-e1 auto" "$msg_ocs_param_e1_auto" on \
     "-e2"      "$msg_ocs_param_e2" on \
+    "-nogui"   "$msg_ocs_param_nogui" off \
     "-hn0 $WIN_HOSTNAME_PREFIX"  "$msg_ocs_param_hn0" off \
     "-hn1 $WIN_HOSTNAME_PREFIX"  "$msg_ocs_param_hn1" off \
     "-v"       "$msg_ocs_param_v" off \
-    "-nogui"   "$msg_ocs_param_nogui" off \
     "-batch"   "$msg_ocs_param_b" off \
     "-c"       "$msg_ocs_param_c" on \
     "-t"       "$msg_ocs_param_t" off \

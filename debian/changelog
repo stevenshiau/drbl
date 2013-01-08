@@ -1,3 +1,9 @@
+drbl (2.2.1-drbl1) unstable; urgency=low
+
+  * Put option "-nogui" in the higher position of the menu.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 08 Jan 2013 22:13:30 +0800
+
 drbl (2.2.0-drbl1) unstable; urgency=low
 
   * Checking if blkid exists in makeboot.sh. Adding a prompt about GPT disk.
