@@ -45,6 +45,8 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+- Function active_proc_partitions was moved to ocs-functions from drbl-functions.
+
 * Tue Jan 08 2013 Steven Shiau <steven _at_ nchc org tw> 2.2.1-drbl1
 - Put option "-nogui" in the higher position of the menu.
 

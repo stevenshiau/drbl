@@ -689,19 +689,6 @@ EOF
     fi
   done
 }
-
-# function to active the /proc/partitions. For SCSI devices, even when device
-# modules is loaded, the device is not shown in /proc/partitions if no program
-# like fdisk or sg_map runs... We also do it for /dev/hdx.
-active_proc_partitions() {
-   local disk_proc
-   disk_proc="$(LC_ALL=C awk '/[hsv]d[a-z]+($| )/ { print $4; }' /proc/partitions)"
-   echo -n "Activating the partition info in /proc... "
-   for ihd in $disk_proc; do
-      fdisk -l /dev/$ihd &> /dev/null
-   done
-   echo "done!"
-}
 #
 get_lang_index() {
    local lang=$1
