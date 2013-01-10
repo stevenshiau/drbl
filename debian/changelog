@@ -1,3 +1,10 @@
+drbl (2.2.2-drbl1) unstable; urgency=low
+
+  * Function active_proc_partitions was moved to ocs-functions from drbl-functions.
+  * An option "-s" to assign syslinux version was added to drbl-syslinux-netinstall.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 10 Jan 2013 15:34:11 +0800
+
 drbl (2.2.1-drbl1) unstable; urgency=low
 
   * Put option "-nogui" in the higher position of the menu.
