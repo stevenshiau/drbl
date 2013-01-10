@@ -12,6 +12,7 @@ DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/usr/share/drbl}"
 #
 supported_dists="$(LC_ALL=C set | grep -i "_netinstall_ver" | awk -F"_" '{print $1}' | sort | uniq)"
 supported_dists="$(echo $supported_dists)" # To make it one line
+supported_dists_with_comma="$(echo $supported_dists | sed -e "s/ /, /g")"
 
 USAGE() {
   echo "Download GNU/Linux netinstall kernel and initrd and package them as a zip file for USB flash drive to boot and install GNU/Linux."
@@ -19,7 +20,8 @@ USAGE() {
   echo "OPTION:"
   echo "-a, --file-name-prefix NAME    Assign the output file name as NAME.zip. $0 will auto append '.zip' in the end of filename."
   echo "-d, --dist DIST:       Create GNU/Linux DIST netinstall zip. DIST is one of these: $supported_dists_with_comma. If this option is not assigned, all the supported GNU/Linux netinstall files will be included."
-  echo "-i, --assign-version-no NO  Assign the version no as NO instead of date."
+  echo "-i, --assign-version-no NO  Assign the version number as NO instead of date."
+  echo "-s, --syslinux-ver NO  Assign the syslinux version number to be used as NO ."
 }
 
 #############
@@ -56,6 +58,15 @@ while [ $# -gt 0 ]; do
             fi
 	    [ -z "$version_no" ] && USAGE && exit 1
             ;;
+    -s|--syslinux-ver)
+            shift
+            if [ -z "$(echo $1 |grep ^-.)" ]; then
+              # skip the -xx option, in case 
+              syslinux_ver_no="$1"
+              shift
+            fi
+	    [ -z "$syslinux_ver_no" ] && USAGE && exit 1
+            ;;
     -*)     echo "${0}: ${1}: invalid option" >&2
             USAGE >& 2
             exit 2 ;;
@@ -73,11 +84,13 @@ if [ -z "$GL_INST" ]; then
   GL_INST="all"
 else
   # Check if it is in the supported distributions.
-  if [ -z "$(echo $supported_dists | grep -w $GL_INST)" ]; then
-   echo "\"$GL_INST\" is not a supported distribution."
-   echo "Supported ones are (case sensitive): $supported_dists."
-   exit 1
-  fi
+  for i in $GL_INST; do
+    if [ -z "$(echo $supported_dists | grep -Ew $i)" ]; then
+     echo "\"$GL_INST\" is not a supported distribution."
+     echo "Supported ones are (case sensitive): $supported_dists."
+     exit 1
+    fi
+  done
 fi
 
 [ -z "$version_no" ] && version_no="$(date +%Y%m%d)"
@@ -137,9 +150,9 @@ output_netinstall_syslinux_pxelinux_menu $target_d/syslinux/ $target_d/syslinux/
 perl -pi -e "s/^(#|[[:space:]])*MENU HIDE.*/  # MENU HIDE/i" $target_d/syslinux/syslinux.cfg
 
 echo "Preparing syslinux.exe, syslinux, makeboot.bat and makeboot.sh... "
-put_syslinux_makeboot_for_usb_flash $target_d/
+put_syslinux_makeboot_for_usb_flash $target_d/ "$syslinux_ver_no"
 
-cp -af $DRBL_SCRIPT_PATH/doc/COPYING $target_d/
+cp -af $DRBL_SCRIPT_PATH/doc/GPL $target_d/
 
 (cd $target_d; zip -r $WD/$output_filename *)
 echo "The netinstall file $output_filename was created."
