@@ -5,6 +5,14 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.2.3-drbl1) unstable; urgency=low
+
+  * Bug fixed: drblpush failed to identify the new, different arch of iso for 
+    the alternative testing Clonezilla live on the repository.
+  * Language files (perl) were updated. 
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 11 Jan 2013 11:00:39 +0800
+
 drbl (2.2.2-drbl1) unstable; urgency=low
 
   * Function active_proc_partitions was moved to ocs-functions from drbl-functions.

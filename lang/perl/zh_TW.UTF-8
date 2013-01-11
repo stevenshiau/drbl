@@ -254,6 +254,7 @@
    clonezilla_live_mode_is_set => "使用Clonezilla live當作用戶端執行Clonezilla工作的作業系統。",
    which_clonezilla_live_branch => "使用來那哪個分類的Clonezilla live?\n[0]: 穩定版 (Debian-based)\n[1]: 測試版 (Debian-based)\n[2]: 穩定替代版 (Ubuntu-based)\n[3]: 測試的替代版 (Ubuntu-based)\n若不確認, 選 [2]: 穩定替代版",
    which_live_client_cpu_mode => "當使用Clonezilla live來執行Clonezilla的工作時，用戶端的CPU架構要選用那一種?\n[0]: i486\n[1]: i686\n[2]: amd64\n如果不確認，請選用i486.",
+   which_live_client_cpu_mode_for_ubuntu => "當使用Clonezilla live來執行Clonezilla的工作時，用戶端的CPU架構要選用那一種?\n[0]: i386\n[1]: amd64\n如果不確認，請選用i386.",
    live_client_branch_set=> "Clonezilla live分類選定為",
    live_client_cpu_arch_is_set => "用戶端執行Clonezilla的工作時，選用的CPU架構是",
    mark_the_end_of_lang =>"."

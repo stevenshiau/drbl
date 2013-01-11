@@ -955,8 +955,11 @@ sub interactive_mode {
   	             "[0] ";
   	       chomp($live_client_cpu_mode=<STDIN>);
                }else{
-                   # For Ubuntu-based Clonezilla live, only generic is available.
-  	         $live_client_cpu_mode="generic";
+                   # For Ubuntu-based Clonezilla live, different arch
+  	       print "$delimiter{\"star_line\"}\n".
+  	             "$lang_deploy{\"which_live_client_cpu_mode_for_ubuntu\"}\n".
+  	             "[0] ";
+  	       chomp($live_client_cpu_mode=<STDIN>);
   	     }
              }
   	}
@@ -984,6 +987,8 @@ sub interactive_mode {
   	  print "$lang_deploy{\"live_client_branch_set\"}: $live_client_branch\n";
   	}
   	# Format the input number as text
+         if ( "$live_client_branch" eq "0" || "$live_client_branch" eq "1" ) {
+          # Normal Clonezilla live, i486, i686-pae and amd64 exist
           SWITCH: for ($live_client_cpu_mode) {
             /^[[:space:]]*0[[:space:]]*$/ && do {
               $live_client_cpu_mode="i486";
@@ -998,10 +1003,27 @@ sub interactive_mode {
               last SWITCH;
           };
             /.*/ && do {
-              $live_client_cpu_mode="generic";
+              $live_client_cpu_mode="i686-pae";
               last SWITCH;
             };
           }
+         }else{
+          # Alternative Clonezilla live, only i386 and amd64 exist
+          SWITCH: for ($live_client_cpu_mode) {
+            /^[[:space:]]*0[[:space:]]*$/ && do {
+              $live_client_cpu_mode="i386";
+              last SWITCH;
+          };
+            /^[[:space:]]*1[[:space:]]*$/ && do {
+              $live_client_cpu_mode="amd64";
+              last SWITCH;
+          };
+            /.*/ && do {
+              $live_client_cpu_mode="i386";
+              last SWITCH;
+            };
+          }
+         }
           if ( $live_client_cpu_mode ) {
             print "$delimiter{\"star_line\"}\n";
             print "$lang_deploy{\"live_client_cpu_arch_is_set\"}: $live_client_cpu_mode\n";

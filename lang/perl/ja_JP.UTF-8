@@ -264,6 +264,7 @@ $lang_charset = 'UTF-8';
    clonezilla_live_mode_is_set => "Clonezilla ジョブ実行時のクライアント OS として Clonezilla Live を使用する",
    which_clonezilla_live_branch => "クライアント用の Clonezilla Live のリリースブランチはどれですか？\n[0]: 安定版 (Debian ベース)\n[1]: テスト版 (Debian ベース)\n[2]: 別の安定版 (Ubuntu ベース)\n[3]: 別のテスト版 (Ubuntu ベース)\nよく分からなければ、[2]: 別の安定版 を選択して下さい。",
    which_live_client_cpu_mode => "Clonezilla ジョブ実行時のクライアント用の CPU アーキテクチャはどれですか？\n[0]: i486\n[1]: i686\n[2]: amd64\nよく分からなければ、i486 を選択して下さい。",
+   which_live_client_cpu_mode_for_ubuntu => "Clonezilla ジョブ実行時のクライアント用の CPU アーキテクチャはどれですか？\n[0]: i386\n[1]: amd64\nよく分からなければ、i386 を選択して下さい。",
    live_client_branch_set=> "選択されたClonezilla Live ブランチ：",
    live_client_cpu_arch_is_set => "Clonezilla ジョブ実行時のクライアント用 CPU アーキテクチャ：",
    mark_the_end_of_lang =>"。"

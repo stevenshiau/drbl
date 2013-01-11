@@ -249,6 +249,7 @@ $lang_charset = 'iso-8859-1';
    clonezilla_live_mode_is_set => "Usar Clonezilla live como el S.O. (Sistema Operativo) de clientes cuando se ejecuta una tarea Clonezilla.",
    which_clonezilla_live_branch => "Qué versión/rama de Clonezilla live quiere que usen los clientes?\n[0]: stable (Debian-based)\n[1]: testing (Debian-based)\n[2]: alternative stable (Ubuntu-based)\n[3]: alternative testing (Ubuntu-based)\nSi no está seguro escoja [2]: alternative stable.",
    which_live_client_cpu_mode => "Cúal es la arquitectura de CPU de los clientes cuando se ejecuta una tarea Clonezilla con Clonezilla live?\n[0]: i486\n[1]: i686\n[2]: amd64\nSi no está seguro, elija i486.",
+   which_live_client_cpu_mode_for_ubuntu => "Cúal es la arquitectura de CPU de los clientes cuando se ejecuta una tarea Clonezilla con Clonezilla live?\n[0]: i386\n[1]: amd64\nSi no está seguro, elija i386.",
    live_client_branch_set=> "La rama establecida para Clonezilla live es",
    live_client_cpu_arch_is_set => "La arquitectura de CPU para clientes cuando se ejecuta una tarea Clonezilla",
    mark_the_end_of_lang =>"."

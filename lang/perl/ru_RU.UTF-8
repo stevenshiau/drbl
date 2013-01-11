@@ -246,6 +246,7 @@ $lang_charset = 'iso-8859-1';
    clonezilla_live_mode_is_set => "Использовать Clonezilla live как ОС для клиентов при выполнении Clonezilla своей задачи.",
    which_clonezilla_live_branch => "Какой вариант Clonezilla live использовать для клиентов ? \n[0]: стабильный (основан на Debian)\n[1]: тестовый (основан на Debian)\n[2]: альтернативный стабильный (основан на Ubuntu)\n[3]: альтернативный тестовый (основан на Ubuntu)\nЕсли не уверены, выбирайте [2]: альтернативный стабильный.",
    which_live_client_cpu_mode => "Архитектура процессора для клиентов при выполнении задач Clonezilla с Clonezilla live? \n[0]: i486 \n[1]: i686 \n[2]: amd64 \nЕсли не уверены, выбирайте i486.",
+   which_live_client_cpu_mode_for_ubuntu => "Архитектура процессора для клиентов при выполнении задач Clonezilla с Clonezilla live? \n[0]: i386 \n[1]: amd64 \nЕсли не уверены, выбирайте i386.",
    live_client_branch_set=> "Выбранный вариант Clonezilla live - ",
    live_client_cpu_arch_is_set => "Архитектура процессора для клиентов при работе Clonezilla",
    mark_the_end_of_lang =>"."
