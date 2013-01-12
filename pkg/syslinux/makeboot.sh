@@ -12,7 +12,7 @@ export PATH=/sbin:/usr/sbin:/bin:/usr/bin:$PATH
 
 #
 prog="$(basename $0)"
-path_of_prog="$(LC_ALL=C cd $(dirname $0)/../../ ; pwd)"
+path_of_prog="$(LC_ALL=C cd "$(dirname "$0")/../../"; pwd)"
 
 #
 [ -z "$SETCOLOR_SUCCESS" ] && SETCOLOR_SUCCESS="echo -en \\033[1;32m"
@@ -239,8 +239,8 @@ fi
 
 # 3. MBR
 to_continue_or_not "Do you want to install mbr on $target_disk $on_this_machine ?"
-echo "Running: cat $path_of_prog/utils/mbr/mbr.bin > $target_disk"
-cat $path_of_prog/utils/mbr/mbr.bin > $target_disk
+echo Running: cat "$path_of_prog/utils/mbr/mbr.bin" > $target_disk
+cat "$path_of_prog/utils/mbr/mbr.bin" > $target_disk
 
 echo "--------------------------------------------"
 # 4.
@@ -250,7 +250,7 @@ echo "We need a filesystem supporting Unix file mode for syslinux. Copying sysli
 case "$mode" in
   syslinux)
      syslinux_tmpd="$(mktemp -d /tmp/syslinux_tmp.XXXXXX)"
-     cp -fv $path_of_prog/utils/linux/syslinux $syslinux_tmpd
+     cp -fv "$path_of_prog/utils/linux/syslinux" $syslinux_tmpd
      chmod u+x $syslinux_tmpd/syslinux
      echo "Running: $syslinux_tmpd/syslinux -f -i $target_part "
      $syslinux_tmpd/syslinux -f -i $target_part
@@ -262,7 +262,7 @@ case "$mode" in
      ;;
   extlinux)
      extlinux_tmpd="$(mktemp -d /tmp/extlinux_tmp.XXXXXX)"
-     cp -fv $path_of_prog/utils/linux/extlinux $extlinux_tmpd
+     cp -fv "$path_of_prog/utils/linux/extlinux" $extlinux_tmpd
      chmod u+x $extlinux_tmpd/extlinux
      # Check if $target_part is mounted or not
      mnt_pnt="$(LC_ALL=C df $target_part | grep -Ew $target_part | awk -F" " '{print $6}')"

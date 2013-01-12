@@ -45,6 +45,8 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+- Bug fixed: makeboot.sh failed to run with path name containing white space.
+
 * Fri Jan 11 2013 Steven Shiau <steven _at_ nchc org tw> 2.2.3-drbl1
 - Bug fixed: drblpush failed to identify the new, different arch of iso for the alternative testing Clonezilla live on the repository.
 - Language files (perl) were updated. 
