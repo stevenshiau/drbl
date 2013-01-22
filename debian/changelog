@@ -1,3 +1,10 @@
+drbl (2.2.4-drbl1) unstable; urgency=low
+
+  * Bug fixed: makeboot.sh failed to run with path name containing white space.
+  * Lucid netinstall was removed from drbl.conf since another LTS (precise) is available already.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 14 Jan 2013 23:15:47 +0800
+
 drbl (2.2.3-drbl1) unstable; urgency=low
 
   * Bug fixed: drblpush failed to identify the new, different arch of iso for 

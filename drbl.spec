@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.2.3
+Version:	2.2.4
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,7 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Mon Jan 14 2013 Steven Shiau <steven _at_ nchc org tw> 2.2.4-drbl1
 - Bug fixed: makeboot.sh failed to run with path name containing white space.
 - Lucid netinstall was removed from drbl.conf since another LTS (precise) is available already.
 
