@@ -1,3 +1,10 @@
+drbl (2.2.5-drbl1) unstable; urgency=low
+
+  * Files about fail-mbr.bin have been removed since 
+    now Partclone (>=0.2.58) has included that.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 22 Jan 2013 11:36:15 +0800
+
 drbl (2.2.4-drbl1) unstable; urgency=low
 
   * Bug fixed: makeboot.sh failed to run with path name containing white space.
