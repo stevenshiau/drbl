@@ -46,6 +46,7 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 
 %changelog
 - Netinstall version for Fedora was changed to 18 in drbl.conf.
+- Language file ca_ES for perl script was added. Thanks to René Mérou.
 
 * Tue Jan 22 2013 Steven Shiau <steven _at_ nchc org tw> 2.2.5-drbl1
 - Files about fail-mbr.bin have been removed since now Partclone (>=0.2.58) has included that.
