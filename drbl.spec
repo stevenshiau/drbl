@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.2.4
+Version:	2.2.5
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,11 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+- Netinstall version for Fedora was changed to 18 in drbl.conf.
+
+* Tue Jan 22 2013 Steven Shiau <steven _at_ nchc org tw> 2.2.5-drbl1
+- Files about fail-mbr.bin have been removed since now Partclone (>=0.2.58) has included that.
+
 * Mon Jan 14 2013 Steven Shiau <steven _at_ nchc org tw> 2.2.4-drbl1
 - Bug fixed: makeboot.sh failed to run with path name containing white space.
 - Lucid netinstall was removed from drbl.conf since another LTS (precise) is available already.
