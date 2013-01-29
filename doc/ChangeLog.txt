@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.2.6-drbl1) unstable; urgency=low
+
+  * Netinstall version for Fedora was changed to 18 in drbl.conf.
+  * Language file ca_ES for perl script was added. Thanks to René Mérou.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 29 Jan 2013 08:43:26 +0800
+
 drbl (2.2.5-drbl1) unstable; urgency=low
 
   * Files about fail-mbr.bin have been removed since 

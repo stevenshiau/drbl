@@ -159,7 +159,7 @@ $lang_charset = 'iso-8859-1';
 	      "Ha d'executar un altre script (drblsrv -i) per configurar el servidor DRBL primer!!!, En cas contrari el sistema NO funcionarà!!!\n".
 	      "Segur que desitja continuar? Introdueixi \"yes\" o \"y\" per continuar, o una altra lletra per detenir!",
    but_you_will_see_errors => "Però veurà molts de missatges d'error...!!!",
-   smart_decision => "OK, sàvia decisió, Es llevarà ara mateix!"
+   smart_decision => "OK, sàvia decisió, Es llevarà ara mateix!",
    finished_searching_installed_drbl_packages => "Va acabar la cerca dels paquets instal·lats del servidor DRBL.",
    note_for_keep_client_setting => "Nota! Està intentant mantenir la configuració dels clients DRBL si existeixen, algunes vegades els clients DRBL funcionen malament quan acaba aquest script! Llavors, reiniciar els clients DRBL farà que funcionin!",
    press_enter_to_continue => "Premi Intro per continuar... ",
@@ -229,7 +229,7 @@ $lang_charset = 'iso-8859-1';
    clonezilla_box_mode_is_set => "El mode Clonezilla esta configurat, un mode elegant de clonezilla està en camí!",
    full_clonezilla_mode_is_set => "Mode clonezilla complet configurat!",
    clonezilla_box_mode_not_set =>  "El mode Clonezilla box NO està configurat, tindrà les funcions completes del DRBL box!",
-   no_clonezilla_in_system =>"El seu sistema no és Clonezilla!"
+   no_clonezilla_in_system =>"El seu sistema no és Clonezilla!",
    class_c_IP_for_multicast_clonezilla => "Si desitja usar clonezilla multicast, ha d'usar una classe C privada (192.168.*.)! En cas contrari les prestacions de clonació multicast seran terriblement pitjors!",
    drbl_ssi_mode_for_client => "Desitja usar el mode DRBL SSI (Single system image)? Si és així, la càrrega i l'espai de disc del servidor serà més lleuger. NOTA! En aquest mode, (1) La memòria de la màquina client ha de ser d'almenys 256 MB. (2) La configuració i els arxius de configuració del client no se salvaran en el servidor DRBL! Seran usats una vegada i descartats quan la màquina s'apagui! A més, si modifica qualque arxiu en la plantilla client (situada en $drblroot), ha d'executar drbl-gen-ssi-files per crear la plantilla tarball en $drbl_common_root/drbl_ssi/. (3) Si desitja proporcionar algun arxiu per sobreescriure la configuració en la plantilla tarball quan el client iniciï, consulti $drbl_common_root/drbl_ssi/clients/00_README per a més detalls.",
    which_drbl_mode_for_client => "En el sistema, hi ha 3 modes per als serveis linux diskless:\n[0] Mode DRBL complet, cada client té el seu propi NFS basat en /etc i /var.\n[1] Mode DRBL SSI (Single system image), cada client usa tmpfs basat en /etc i /var. En aquest mode, la càrrega i l'espai de disc necessari del servidor serà més lleuger. NOTA! (a) Es recomana almenys 256 MB de memòria en la màquina client. (b) La configuració i els arxius de configuració del client no se salvaran en el servidor DRBL! Seran usats una vegada i descartats quan la màquina s'apagui! A més, si modifica qualque arxiu de la plantilla client (situada en $drblroot), ha d'executar drbl-gen-ssi-files per crear la plantilla tarball en $drbl_common_root/drbl_ssi/. (c) Si desitja proporcionar qualque arxiu per sobreescriure la configuració en la plantilla tarball quan el client iniciï, consulti $drbl_common_root/drbl_ssi/clients/00_README para més detalls.\n[2] No desitjo proporcionar servei Linux diskless al client.\nQuin mode prefereix?",
