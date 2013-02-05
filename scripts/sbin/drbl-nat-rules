@@ -1,5 +1,5 @@
 #!/bin/bash
-# Author: Steven Shiau <steven _at_ nchc org tw>
+# Authors: Steven Shiau <steven _at_ nchc org tw>, Ceasar Sun <ceasar _at_ nchc org tw>
 # License: GPL
 #
 # set the iptables NAT
@@ -94,7 +94,11 @@ do_stop_iptables() {
       # Now this seems to do nothing.
       /etc/init.d/SuSEfirewall2_setup stop
    elif [ -n "$(which systemctl 2>/dev/null)" -a -e "/lib/systemd/system/iptables.service" ]; then
-     # for FC 17, add by Ceasar
+     # for FC 17/18, add by Ceasar
+	 if [ -e "/lib/systemd/system/firewalld.service" ]; then
+       echo "Stop firewalld service ,run :systemctl stop firewalld.service"
+       systemctl stop firewalld.service
+     fi
      echo "Stop iptables service ,run :systemctl stop iptables.service"
      systemctl stop iptables.service
    else
@@ -185,22 +189,11 @@ case "$switch" in
         fi
         
         echo "Stop the NAT service first..."
-        if [ -e /etc/debian_version ]; then
-          # Debian
-          # We have to use the code borrowed from RH.
-          flush_n_delete
-        elif [ -n "$(which systemctl 2>/dev/null)" -a -e "/lib/systemd/system/iptables.service" ]; then
-          # for FC 17, add by Ceasar
-          echo "Stop iptables service ,run :systemctl stop iptables.service"
-          systemctl stop iptables.service
-        else
-          # RH-like, we use its service
-          /etc/init.d/iptables stop
-        fi
+        do_stop_iptables
         
         iptables -P FORWARD ACCEPT
         iptables -P INPUT ACCEPT
-	iptables -P OUTPUT ACCEPT
+        iptables -P OUTPUT ACCEPT
         
         if [ "$all_subnet" = "yes" ]; then
 	  # Exporting whole subnet to clients

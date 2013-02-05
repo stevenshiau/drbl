@@ -1,6 +1,7 @@
 #!/bin/bash
 # -*-Shell-script-*-
 # Steven Shiau <steven _at_ nchc org tw>
+# Ceasar Sun <ceasar dot sun _at_ gmail com>
 # License: GPL
 #
 # Functions:	This file contains functions to be used by most or all	shell scripts in the DRBL environment
@@ -617,7 +618,7 @@ get_dhcpd_interface() {
     # collect those interface, filter out other options, such as -p 60
     INTERFACES=""
     for ieth in $DHCPDARGS; do
-       INTERFACES_TMP="$(echo $ieth |grep -o eth.*)"
+       INTERFACES_TMP="$(echo $ieth | grep -Eo 'eth[[:digit:]]+|p[[:digit:]]+p[[:digit:]]+')"
        INTERFACES="$INTERFACES $INTERFACES_TMP"
     done
   fi

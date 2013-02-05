@@ -5,7 +5,7 @@
 # Corey Satten, corey @ cac.washington.edu, 06/26/03, release 1.8
 # For the latest version visit: http://staff.washington.edu/corey/tools.html
 #
-# Modified by Blake Huang and Steven Shiau to use in DRBL
+# Modified by: Blake Huang, Steven Shiau and Ceasar Sun for DRBL
 #
 # Find all installed packages with patches
 # "$NEWER" is in drbl-functions
@@ -42,9 +42,9 @@ DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/usr/share/drbl}"
 		  # Ex. linux-image-2.6.8-2-686
 		  # R1: 2.6.8-2-686
 		  # R2: linux-image
-		  R1=$0; sub(/^(kernel|linux)(|-smp|-image)[#-]/,"",R1)  # pkg version
+		  R1=$0; sub(/^(kernel|linux)(|-smp|-image|-PAE)[#-]/,"",R1)  # pkg version
 		  R2=$0; sub(/[#-]+[0-9]+.*$/,"",R2) 	  # pkg name
-		  #printf("before newer: %s %s %s %s\n",R1,R2,L1,L2);
+		  #printf("before newer: '%s':'%s':'%s':'%s':'%s'\n",R0,R1,R2,L1,L2);
 		  if ((R2 == L2) && newer(R1, L1)) {R0=L0; R1=L1}
 		  if ((R2 != L2) && L0) {print L0}
 		}

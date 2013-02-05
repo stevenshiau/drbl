@@ -1,5 +1,5 @@
 #!/bin/bash
-# Author: Steven Shiau <steven _at_ nchc org tw>
+# Authors: Steven Shiau <steven _at_ nchc org tw>, Ceasar Sun <ceasar_dot_sun_at_gmail com>
 # License: GPL
 # Description: Get the MAC address of network card interface
 
@@ -24,5 +24,12 @@ if ! ifconfig -a 2>/dev/null | grep -i -q "\<$ethx\>"; then
    exit 1
 fi
 # Ex: eth0      Link encap:Ethernet  HWaddr 00:0C:29:81:A0:D5
-ifconfig $ethx | grep $ethx | grep "HWaddr" | sed -e 's/^.*HWaddr \([0-9a-zA-Z\:]\+\).*$/\1/' | tr '[A-Z]' '[a-z]'
+# for FC17: ether 08:00:27:d2:9b:bc  txqueuelen 1000  (Ethernet) 
+
+_nic_mac=$(LC_ALL=C ifconfig $ethx | grep $ethx | grep "HWaddr" | sed -e 's/^.*HWaddr \([0-9a-zA-Z\:]\+\).*$/\1/' | tr '[A-Z]' '[a-z]')
+if [ -n "$_nic_mac" ]; then 
+  echo $_nic_mac
+else
+  LC_ALL=C ifconfig $ethx | grep ether | sed -e 's/^.*ether \([0-9a-zA-Z\:]\+\).*$/\1/' | tr '[A-Z]' '[a-z]'
+fi
 exit 0

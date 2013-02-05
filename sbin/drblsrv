@@ -657,9 +657,10 @@ if [ -n "$(LC_ALL=C ls /sbin/udev* 2>/dev/null)" ]; then
   if ! rpm -q --quiet udev; then
     echo -n "Try to install udev..."
     $inst_prog -y install udev
+    _install_udev_result=$?
     echo "done!"
   fi
-  if ! rpm -q --quiet udev; then
+  if [ "$_install_udev_result" -ne 0 ]; then
     # actually this should not happen, but who knows ?
     [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
     echo "Program udev was found in the server, but unable to install a complete udev rpm!"
@@ -1618,7 +1619,7 @@ while [ -z "$chosen_kernel_for_client" ]; do
     default_release_ker_name="$(awk -F":" "/$latest_krn_in_release/ {print \$2}" $LATEST_KTMP)"
   else
     # default to use the one in updates.
-    latest_krn_in_updates="$(awk -F" " '/in updates repository/ {print $2}' $LATEST_KTMP | pkg-ver-latest)"
+    latest_krn_in_updates="$(awk -F" " '/in updates repository/ {print $2}' $LATEST_KTMP | pkg-ver-latest| head -n 1)"
     default_release="$(awk -F":" "/$latest_krn_in_updates/ {print \$1}" $LATEST_KTMP)"
     default_release_ker_name="$(awk -F":" "/$latest_krn_in_updates/ {print \$2}" $LATEST_KTMP)"
   fi
@@ -4626,7 +4627,7 @@ case "$OS_Version" in
       # Yum is better is FC3 then that in FC2/FC1, we can use it as one of our
       # installer.
       case "$OS_Version" in
-        FC[3-9]|FC1[01234567]|CO*)
+        FC[3-9]|FC1[0123456789]|CO*)
          # TODO x86_64: CPU arch -> rpm package, which one is real ?
          # "uname -m" or "rpm -q --qf '%{arch\n}' kernel..."
          if [ "$(uname -m)" = "x86_64" ]; then

@@ -2702,6 +2702,18 @@ for i in $client_services; do
   fi
 done
 
+# deal with ocs-run service in systemd environemnt on Fedora 17 and later
+#	1. create rescue.target and services files
+#	2. make a link of rescue.service to ocsd-rescue.service 
+#	3. remove /etc/rc*.d/S*ocs-run to avoid ocs-run service competition
+if [ -x "/bin/systemctl" -a -d "/lib/systemd/system/" ]; then
+	[ ! -d "$drbl_common_root/etc/systemd/system/rescue.target.wants" ] && mkdir "$drbl_common_root/etc/systemd/system/rescue.target.wants"
+	cp -P $drbl_common_root/etc/systemd/system/multi-user.target.wants/* $drbl_common_root/etc/systemd/system/rescue.target.wants/
+	cp $drbl_setup_path/files/${OS_type}/${OS_Version}/systemd/system/ocsd-*.service $drbl_common_root/etc/systemd/system
+	ln -sf ocsd-rescue.service $drbl_common_root/etc/systemd/system/rescue.service
+	rm -rf  $drbl_common_root/etc/rc*.d/S*ocs-run
+fi
+
 # copy those rcS.d services for Debian, this can only be done after all updata-rc.d finished. Otherwise it will affect the update-rc.d
 if [ -e /etc/debian_version ]; then
    # exclude those not necessary:
@@ -3613,11 +3625,14 @@ rsync -a $RSYNC_OPT_EXTRA --include="*/" --exclude="*" /var $drbl_common_root/
 
 # symbolic_files_in_var_chklist is loaded in drbl.conf.
 # On Ubuntu 11.10, FC17, /var/run is linked to /run, and /var/lock is linked to /run/lock.
-# for i in $symbolic_files_in_var_chklist; do
-#   if [ -L /var/$i ]; then
-#     rsync -al /var/$i $drbl_common_root/var/
-#   fi
-# done
+# On Fedora 17, /var/run and /var/lock have to create as a link to "/run" and "/run/lock" before client booting. Have to use absolute not relative path
+
+for i in $symbolic_files_in_var_chklist; do
+  if [ -L /var/$i ]; then
+    _tmp_absolute="$(readlink -f /var/$i)"
+    ln -s $_tmp_absolute $drbl_common_root/var/$i
+  fi
+done
 
 echo -n "."
 
