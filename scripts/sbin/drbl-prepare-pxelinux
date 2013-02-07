@@ -12,7 +12,8 @@ DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/usr/share/drbl}"
 # Not existing in ubuntu syslinux package: gpxelinux.0 sanboot.c32 README.menu hdt.c32
 # The files are in /usr/lib/syslinux/ on Ubuntu 10.04 syslinux 3.63.
 # Debian has syslinux-common, and the above files are in syslinux-common, but ubuntu 10.04 does not, and ubuntu 11.04 does.
-DRBL_NEED_PXELINUX="isolinux.bin memdisk menu.c32 vesamenu.c32 pxelinux.0 gpxelinux.0 chain.c32 mboot.c32 sanboot.c32 README.menu mbr.bin hdt.c32"
+# For Syslinux 5, new .c32 are required: ldlinux.c32, libcom32.c32, libutil.c32
+DRBL_NEED_PXELINUX="isolinux.bin memdisk menu.c32 vesamenu.c32 pxelinux.0 gpxelinux.0 chain.c32 mboot.c32 sanboot.c32 README.menu mbr.bin hdt.c32 ldlinux.c32 libcom32.c32 libutil.c32"
 # By default we only copy the required files to $pxelinux_binsrc_dir. This option will allow us to copy files to dir $pxecfg_pd.
 deploy_to_system_too="no"
 
