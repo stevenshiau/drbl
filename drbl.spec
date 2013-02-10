@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.3.1
+Version:	2.3.2
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,7 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Sun Feb 10 2013 Steven Shiau <steven _at_ nchc org tw> 2.3.2-drbl1
 - Package udisks was added the packages list for Clonezilla live.  Thanks to fusi1939 for this suggestion.
 
 * Thu Feb 07 2013 Steven Shiau <steven _at_ nchc org tw> 2.3.1-drbl1

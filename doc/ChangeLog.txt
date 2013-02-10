@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.3.2-drbl1) unstable; urgency=low
+
+  * Package udisks was added the packages list for Clonezilla live.  
+    Thanks to fusi1939 for this suggestion.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sun, 10 Feb 2013 22:41:44 +0800
+
 drbl (2.3.1-drbl1) unstable; urgency=low
 
   * Bug fixed: for Syslinux 5, 3 more files are required, i.e. 
