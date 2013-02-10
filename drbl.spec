@@ -45,6 +45,8 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+- Package udisks was added the packages list for Clonezilla live.  Thanks to fusi1939 for this suggestion.
+
 * Thu Feb 07 2013 Steven Shiau <steven _at_ nchc org tw> 2.3.1-drbl1
 - Bug fixed: for Syslinux 5, 3 more files are required, i.e. ldlinux.c32, libcom32.c32, libutil.c32
 
