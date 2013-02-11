@@ -144,7 +144,7 @@ fi
 # For Syslinux 5, new .c32 are required: ldlinux.c32, libcom32.c32, libutil.c32
 for i in $pxelinux_mboot_file $pxelinux_sanboot_file $sys_pxelinux_required_c32; do
   if [ -e "$pxelinux_binsrc_dir/$i" ]; then
-    cp -af $pxelinux_sanboot_file/$i $pxecfg_pd/
+    cp -af $pxelinux_binsrc_dir/$i $pxecfg_pd/
   fi
 done
 

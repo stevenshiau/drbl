@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.3.4-drbl1) unstable; urgency=low
+
+  * Bug fixed: typo in prepare-files-for-PXE-client.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 11 Feb 2013 20:20:34 +0800
+
 drbl (2.3.3-drbl1) unstable; urgency=low
 
   * Excluding linux kernel with name "-dbg" for Debian-based DRBL.
