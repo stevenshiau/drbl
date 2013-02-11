@@ -141,8 +141,12 @@ else
 fi
 
 # mboot.c32, sanboot.c32
-[ -f "$pxelinux_mboot_file" ] && cp -af $pxelinux_mboot_file $pxecfg_pd
-[ -f "$pxelinux_sanboot_file" ] && cp -af $pxelinux_sanboot_file $pxecfg_pd
+# For Syslinux 5, new .c32 are required: ldlinux.c32, libcom32.c32, libutil.c32
+for i in $pxelinux_mboot_file $pxelinux_sanboot_file $sys_pxelinux_required_c32; do
+  if [ -e "$pxelinux_binsrc_dir/$i" ]; then
+    cp -af $pxelinux_sanboot_file/$i $pxecfg_pd/
+  fi
+done
 
 # memtest86+
 # make a version tag in $pxecfg_pd

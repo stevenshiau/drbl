@@ -5,6 +5,14 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.3.3-drbl1) unstable; urgency=low
+
+  * Excluding linux kernel with name "-dbg" for Debian-based DRBL.
+  * Bug fixed: for Syslinux 5, 3 more files are required to be put in /tftpboot/nbi_img/, 
+    i.e. ldlinux.c32, libcom32.c32, libutil.c32.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 11 Feb 2013 20:10:54 +0800
+
 drbl (2.3.2-drbl1) unstable; urgency=low
 
   * Package udisks was added the packages list for Clonezilla live.  

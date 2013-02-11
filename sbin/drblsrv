@@ -3485,8 +3485,8 @@ fi
 # linux-image-2.6.17-2-xen-k7       <--
 # For Lenny, openvz:
 # linux-image-2.6.26-2-openvz-686   <-- 
-# i.e. exclude: xen, vserver, openvz, rt...
-seldom_kernel_filter="grep -Ev (xen|vserver|openvz|rt)"
+# i.e. exclude: xen, vserver, openvz, rt, dbg...
+seldom_kernel_filter="grep -Ev (xen|vserver|openvz|rt|dbg)"
 
 # Ugly!!!
 # There is no SMP tag kernel image from Ubuntu Dapper (6.06), so we force to set not smp
