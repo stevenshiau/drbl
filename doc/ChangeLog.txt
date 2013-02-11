@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.3.5-drbl1) unstable; urgency=low
+
+  * Adding firstboot.DBN7.0.drbl for Debian 7.0.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 11 Feb 2013 22:40:30 +0800
+
 drbl (2.3.4-drbl1) unstable; urgency=low
 
   * Bug fixed: typo in prepare-files-for-PXE-client.

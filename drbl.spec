@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.3.4
+Version:	2.3.5
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Mon Feb 11 2013 Steven Shiau <steven _at_ nchc org tw> 2.3.5-drbl1
+- Adding firstboot.DBN7.0.drbl for Debian 7.0.
+
 * Mon Feb 11 2013 Steven Shiau <steven _at_ nchc org tw> 2.3.4-drbl1
 - Bug fixed: typo in prepare-files-for-PXE-client.
 
