@@ -1423,6 +1423,7 @@ if [ "$mode" = "restore" ]; then
     "-a"       "$msg_ocs_param_a" off \
     "-o0"      "$msg_ocs_param_o0" off \
     "-o1"      "$msg_ocs_param_o1" off \
+    "-srel"    "$msg_ocs_param_srel" off \
   2> $OCS_PARAM_TMP
   else
     echo "-g auto" "-e1 auto" "-e2" "-r" "-x" "-j2" > $OCS_PARAM_TMP
@@ -1665,6 +1666,7 @@ if [ "$mode" = "restore" ]; then
     "-a"       "$msg_ocs_param_a" off \
     "-o0"      "$msg_ocs_param_o0" off \
     "-o1"      "$msg_ocs_param_o1" off \
+    "-srel"    "$msg_ocs_param_srel" off \
     2> $OCS_PARAM_TMP
   else
     echo "-g auto" "-e1 auto" "-e2" "-c" "-r" "-j2" > $OCS_PARAM_TMP

@@ -897,3 +897,5 @@ msg_autoproductname_is_a_reserved='"autoproductname" est un nom d'\''image rése
 # Tag on 2012/11/30
 msg_locale_ca_ES='Catalan'
 keymap_file_prompt_and_example='Saisissez la configuration clavier à utiliser pendant la restauration. La valeur "NONE" implique un clavier américain. Les configurations disponibles se trouvent dans /usr/share/X11/xkb/rules/base.lst. Par ex. "fr" pour un clavier français. Pour plus d'\''informations, reportez-vous au manuel en ligne sur le site web de Debian Live.'
+# Tag on 2013/02/17
+msg_ocs_param_srel='Save restoring error log in image dir'

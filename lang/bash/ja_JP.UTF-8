@@ -915,3 +915,5 @@ msg_autoproductname_is_a_reserved='「autoproductname」は予約されたイメ
 # Tag on 2012/11/30
 msg_locale_ca_ES='カタルーニャ語'
 keymap_file_prompt_and_example='Clonezilla Live の復元で使用するキー配列を入力して下さい。「NONE」と入力した場合、キー配列は英語キーボードになります。キー配列は /usr/share/X11/xkb/rules/base.lst 中で探せます（例：fr=フランス語キー配列）。詳細は、Debian Live Web サイト上のマニュアルを確認して下さい。'
+# Tag on 2013/02/17
+msg_ocs_param_srel='Save restoring error log in image dir'

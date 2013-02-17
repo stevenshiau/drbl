@@ -895,3 +895,5 @@ msg_autoproductname_is_a_reserved='"autoproductname" is a reserved image name, p
 # Tag on 2012/11/30
 msg_locale_ca_ES='Catalan'
 keymap_file_prompt_and_example='Enter the keyboard layout to be used in the recovery Clonezilla live. If you input it as "NONE", the keymap will be US keyboard. You can find a list of keyboard layouts in /usr/share/X11/xkb/rules/base.lst. e.g. "fr" for French keyboard layout. For more info, please check the live manual on Debian Live website.'
+# Tag on 2013/02/17
+msg_ocs_param_srel='Save restoring error log in image dir'
