@@ -5,6 +5,14 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.3.6-drbl1) unstable; urgency=low
+
+  * Variable msg_ocs_param_srel was added in language files.
+  * An option -srel|--save-restore-error-log to force saving error log in the 
+    image dir was added in clonezilla SE related menu.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sun, 17 Feb 2013 14:44:15 +0800
+
 drbl (2.3.5-drbl1) unstable; urgency=low
 
   * Adding firstboot.DBN7.0.drbl for Debian 7.0.
