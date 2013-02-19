@@ -45,6 +45,11 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+- Language file ca_ES was updated. Thanks to René Mérou.
+- Language file fr_FR was updated. Thanks to Jean-Francois Nifenecker.
+- Language file it_IT was updated. Thanks to Gianfranco Gentili.
+- Language file de_DE was updated. Thanks to Michael Vinzenz.
+
 * Sun Feb 17 2013 Steven Shiau <steven _at_ nchc org tw> 2.3.6-drbl1
 - Variable msg_ocs_param_srel was added in language files.
 - An option -srel|--save-restore-error-log to force saving error log in the image dir was added in clonezilla SE related menu.

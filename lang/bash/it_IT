@@ -898,4 +898,4 @@ msg_autoproductname_is_a_reserved='"autoproductname" è un nome di immagine rise
 msg_locale_ca_ES='Catalano'
 keymap_file_prompt_and_example='Immetti il layout della tastiera da usarenel ripristino con Clonezilla live. Se il tuo input è "NONE", verrà usata la tastiera US. Puoi trovare il layout di tastiera in /usr/share/X11/xkb/rules/base.lst. dove "fr" è per il layout della tastiera francese. Per ulteriori informazioni, controlla il manuale live sul sito web di Debian Live.'
 # Tag on 2013/02/17
-msg_ocs_param_srel='Save restoring error log in image dir'
+msg_ocs_param_srel='Salva ripristinando il log degli errori nella image dir'

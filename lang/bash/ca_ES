@@ -900,4 +900,4 @@ msg_autoproductname_is_a_reserved="\"autoproductname\" és un nom de imatge rese
 msg_locale_ca_ES="Català"
 keymap_file_prompt_and_example="Introdueixi la distribució del teclat que hem d'utilitzar en la restauració amb el Clonezilla live. Si introdueix \"NONE\", El teclat serà el US. Pot trobar el la distribució del teclar en /usr/share/X11/xkb/rules/base.lst. p.ej. \"fr\" per a la distribució del teclat francesa. Si vol més informació, per favor, doni una ullada al manual en el lloc de Debian Live."
 # Tag on 2013/02/17
-msg_ocs_param_srel='Save restoring error log in image dir'
+msg_ocs_param_srel='Desar el registre de error de la restauració en el directory imatge'
