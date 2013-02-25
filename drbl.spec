@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+- Language file ja_JP.UTF-8 was updated. Thanks to Akira YOSHIYAMA.
+- Language file es_ES was updated. Thanks to Alex Ibáñez López.
+
 * Thu Feb 21 2013 Steven Shiau <steven _at_ nchc org tw> 2.3.8-drbl1
 - Language file zh_CN was updated. Thanks to Zhiqiang Zhang.
 
