@@ -1,3 +1,9 @@
+drbl (2.3.10-drbl1) unstable; urgency=low
+
+  * Bug fixed: extlinux should be required for Clonezilla live, not DRBL.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 28 Feb 2013 11:00:16 +0800
+
 drbl (2.3.9-drbl2) unstable; urgency=low
 
   * Updated control, removing syslinux-common required since syslinux is
