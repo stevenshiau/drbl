@@ -3,14 +3,14 @@ Section: admin
 Priority: extra
 Maintainer: Steven Shiau <steven@nchc.org.tw>
 Uploaders: Georges Khaznadar <georgesk@ofset.org>
-Build-Depends: debhelper (>= 9), quilt, vim-common
+Build-Depends: debhelper (>= 9), quilt
 Standards-Version: 3.9.3
 Homepage: http://drbl.org/
 
 Package: drbl
 Architecture: all
 Depends: ${misc:Depends}, perl, bash (>= 4.0.0), ipcalc, wakeonlan,
- syslinux, syslinux-common
+ syslinux
 Description: diskless remote boot, and a disk cloning utility
  DRBL (Diskless Remote Boot in Linux) provides a diskless or
  systemless environment for client machines. It works on Debian,
