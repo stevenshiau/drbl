@@ -45,6 +45,8 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+- File firstboot.DBN6.0.7.drbl for Debian 6.0.7 was added.
+
 * Thu Feb 28 2013 Steven Shiau <steven _at_ nchc org tw> 2.3.10-drbl1
 - Bug fixed: extlinux should be required for Clonezilla live, not DRBL.
 
