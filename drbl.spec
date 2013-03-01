@@ -45,7 +45,8 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
-- Bug fixed: we should also test udevd since the udev on CentOS 5.9 is older version.
+- Bug fixed: we should also test udevd since the udev on CentOS 5.9 is older version. Thanks to Aaron for reporting this issue.
+- Files halt and rc.sysinit for CentOS 5.9's client were added.
 
 * Fri Mar 01 2013 Steven Shiau <steven _at_ nchc org tw> 2.3.11-drbl1
 - File firstboot.DBN6.0.7.drbl for Debian 6.0.7 was added.
