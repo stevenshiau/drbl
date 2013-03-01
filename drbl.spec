@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.3.11
+Version:	2.3.12
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,7 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Fri Mar 01 2013 Steven Shiau <steven _at_ nchc org tw> 2.3.12-drbl1
 - Bug fixed: we should also test udevd since the udev on CentOS 5.9 is older version. Thanks to Aaron for reporting this issue.
 - Files halt and rc.sysinit for CentOS 5.9's client were added.
 

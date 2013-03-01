@@ -5,6 +5,14 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.3.12-drbl1) unstable; urgency=low
+
+  * Bug fixed: we should also test udevd since the udev on CentOS 5.9
+    is older version. Thanks to Aaron for reporting this issue.
+  * Files halt and rc.sysinit for CentOS 5.9's client were added.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 01 Mar 2013 13:41:24 +0800
+
 drbl (2.3.11-drbl1) unstable; urgency=low
 
   * File firstboot.DBN6.0.7.drbl for Debian 6.0.7 was added.
