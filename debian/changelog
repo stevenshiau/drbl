@@ -1,3 +1,10 @@
+drbl (2.3.13-drbl1) unstable; urgency=low
+
+  * Bug fixed: alias network card configuration can not be parsed. 
+    Thanks to Pat Gilbert <pat.gilbert _at_ gmail com> for reporting this issue.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 04 Mar 2013 13:47:34 +0800
+
 drbl (2.3.12-drbl1) unstable; urgency=low
 
   * Bug fixed: we should also test udevd since the udev on CentOS 5.9

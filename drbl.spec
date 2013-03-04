@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.3.12
+Version:	2.3.13
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,7 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Mon Mar 04 2013 Steven Shiau <steven _at_ nchc org tw> 2.3.13-drbl1
 - Adding keyutils in Clonezilla live packages lists. Thanks to Joe M. for this suggestion.
 - Bug fixed: alias network card configuration can not be parsed. Thanks to Pat Gilbert <pat.gilbert _at_ gmail com> for reporting this issue.
 
