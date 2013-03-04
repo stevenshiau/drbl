@@ -81,8 +81,20 @@ done
 #       RX errors 0  dropped 0  overruns 0  frame 0
 #       TX packets 1305  bytes 198243 (193.5 KiB)
 #       TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
+# //NOTE// for alias NIC, it's like:
+# For traditional one (e.g. Ubuntu 12.10):
+# eth1:1   Link encap:Ethernet  HWaddr 00:0c:29:12:72:60
+#          inet addr:192.168.37.254  Bcast:192.168.37.255  Mask:255.255.255.0
+#          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+# For Fedora 17:
+# eth1:1: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
+#        inet 192.168.61.254  netmask 255.255.255.0  broadcast 192.168.61.255
+#        ether 00:0c:29:e9:f2:4e  txqueuelen 1000  (Ethernet)
+#        device interrupt 16  base 0x2080
+# Therefore we have to put [[:space:]]+ after ^[[:alnum:]]+[[:digit:]]+\:.
+
 NDVS="$(LC_ALL=C ifconfig -a | grep -iE '(HWaddr|encap:Point-to-Point Protocol)'| awk -F' ' '{print $1}')"
-NDVS="$NDVS $(LC_ALL=C ifconfig -a | grep -iE '(^[[:alnum:]]+[[:digit:]]+\:)'| awk -F': ' '{print $1}')"
+NDVS="$NDVS $(LC_ALL=C ifconfig -a | grep -iE '(^[[:alnum:]]+[[:digit:]]+(:[[:digit:]]+|)\:[[:space:]]+)'| awk -F': ' '{print $1}')"
 i=0
 for idev in $NDVS; do
   # physical network device IP

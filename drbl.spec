@@ -46,6 +46,7 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 
 %changelog
 - Adding keyutils in Clonezilla live packages lists. Thanks to Joe M. for this suggestion.
+- Bug fixed: alias network card configuration can not be parsed. Thanks to Pat Gilbert <pat.gilbert _at_ gmail com> for reporting this issue.
 
 * Fri Mar 01 2013 Steven Shiau <steven _at_ nchc org tw> 2.3.12-drbl1
 - Bug fixed: we should also test udevd since the udev on CentOS 5.9 is older version. Thanks to Aaron for reporting this issue.
