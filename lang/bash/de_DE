@@ -222,7 +222,7 @@ msg_drbl_ayo_repository_0='0 -> free.nchc.org.tw '
 msg_drbl_ayo_repository_1='1 -> ftp.twaren.net '
 msg_drbl_ayo_repository_2='2 -> drbl.sourceforge.net '
 msg_drbl_server_is_ready='Der DRBL-Server ist bereit!'
-msg_all_set_you_can_turn_on_clients='Stellen Sie nun die Clients so ein, dass sie von PXE oder Etherboot starten. (siehe http://drbl.sourceforge.net für weitere Einzelheiten)'
+msg_all_set_you_can_turn_on_clients='Stellen Sie nun die Clients so ein, dass sie von PXE starten. (siehe http://drbl.sourceforge.net für weitere Einzelheiten)'
 msg_etherboot_5_4_is_required='Wenn Sie Etherboot auf Ihren Clients nutzen, ist mindestens Version 5.4.0 (oder neuer) erforderlich!'
 msg_win_fail_with_Missing_OS='Wenn das geklonte System MS-Windows ist und der Start mit einem Fehler "Missing Operating System" oder "Invalid System Disk" fehlschlägt, können Sie entweder (1) die IDE-Einstellungen im BIOS auf LBA anstatt AUTO konfigurieren oder (2) versuchen, den Parameter -t1 beim Zurückspielen verwenden.'
 

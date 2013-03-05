@@ -222,7 +222,7 @@ msg_drbl_ayo_repository_0='0 -> free.nchc.org.tw'
 msg_drbl_ayo_repository_1='1 -> ftp.twaren.net'
 msg_drbl_ayo_repository_2='2 -> drbl.sourceforge.net'
 msg_drbl_server_is_ready='Сервер DRBL готов!'
-msg_all_set_you_can_turn_on_clients='Теперь настройте клиентские машины для загрузки с PXE или Etherboot. (См. http://drbl.sourceforge.net для более подробной информации)'
+msg_all_set_you_can_turn_on_clients='Теперь настройте клиентские машины для загрузки с PXE (См. http://drbl.sourceforge.net для более подробной информации).'
 msg_etherboot_5_4_is_required='Если на клиентских компьютерах используется Etherboot, то требуется версия 5.4.0 или новее!'
 msg_win_fail_with_Missing_OS='Если клонировалась ОС MS Windows и теперь она не загружается с сообщением об ошибке, таким как "Missing Operating System" или "Неверный System Disk", то вы можете попробовать следующее: (1) изменить в настройках IDE жесткого диска в BIOS использовать режим LBA, а не AUTO. (2) Или вы можете попробовать использовать параметр -t1 при восстановлении образа.'
 

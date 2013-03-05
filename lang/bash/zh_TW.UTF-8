@@ -224,7 +224,7 @@ msg_drbl_ayo_repository_0='0 -> free.nchc.org.tw,'
 msg_drbl_ayo_repository_1='1 -> ftp.twaren.net,'
 msg_drbl_ayo_repository_2='2 -> drbl.sourceforge.net,'
 msg_drbl_server_is_ready='DRBL伺服器已經就緒!'
-msg_all_set_you_can_turn_on_clients='現在請設定用戶端電腦由PXE或是Etherboot開機(參考4步安裝法的第四步驟)。打開用戶端電腦，然後開始享用DRBL吧！'
+msg_all_set_you_can_turn_on_clients='現在請設定用戶端電腦由PXE開機(參考4步安裝法的第四步驟)。打開用戶端電腦，然後開始享用DRBL吧！'
 msg_etherboot_5_4_is_required='如果你的用戶端電腦使用Etherboot開機，Etherboot版本必須使用5.4.0或是之後的版本!'
 msg_win_fail_with_Missing_OS='如果你還原的是MS Windows系統，還原後使用MS Windows開機卻失敗，出現"Missing Operating System"或是"Invalid System Disk"訊息，你可以嘗試(1)調整一下用戶端電腦的IDE硬碟參數，改成LBA模式，不要使用AUTO模式。(2)或者在還原的時候，選用-t1參數。'
 

@@ -222,7 +222,7 @@ msg_drbl_ayo_repository_0='0 -> free.nchc.org.tw,'
 msg_drbl_ayo_repository_1='1 -> ftp.twaren.net,'
 msg_drbl_ayo_repository_2='2 -> drbl.sourceforge.net,'
 msg_drbl_server_is_ready='Il server DRBL è pronto!'
-msg_all_set_you_can_turn_on_clients='Ora impostate le macchine client per fare il boot da PXE o Etherboot (per maggiori dettagli fate riferimento a http://drbl.sourceforge.net).'
+msg_all_set_you_can_turn_on_clients='Ora impostate le macchine client per fare il boot da PXE (per maggiori dettagli fate riferimento a http://drbl.sourceforge.net).'
 msg_etherboot_5_4_is_required='Se nella macchina client viene usato Etherboot, è necessaria la versione 5.4.0 o successive!'
 msg_win_fail_with_Missing_OS='Se il sistema operativo è un clone di MS Windows, e non riesce a fare il boot ed emette un messaggio di errore tipo "Sistema operativo mancante" o "disco di sistema non valido", allora potete provare a: (1) modificare l'\''impostazione dischi fissi IDE nel BIOS affinché usino la modalità LBA invece di AUTO. (2) Oppure, potete provare a utilizzare il parametro -t1 quando fate il ripristino.'
 

@@ -224,7 +224,7 @@ msg_drbl_ayo_repository_0='0 -> free.nchc.org.tw,'
 msg_drbl_ayo_repository_1='1 -> ftp.twaren.net,'
 msg_drbl_ayo_repository_2='2 -> drbl.sourceforge.net,'
 msg_drbl_server_is_ready='DRBL サーバは準備出来ています!!'
-msg_all_set_you_can_turn_on_clients='PXE か Etherboot から起動するよう、クライアントマシンをセットして下さい(詳細は http://drbl.sourceforge.net を参照)'
+msg_all_set_you_can_turn_on_clients='PXE から起動するよう、クライアントマシンをセットして下さい(詳細は http://drbl.sourceforge.net を参照)'
 msg_etherboot_5_4_is_required='Etherboot がクライアントマシンで使用される場合、バージョン 5.4.0 以降が必要です!!'
 msg_win_fail_with_Missing_OS='コピーされる OS が MS Windows で、「Missing Operating System」か「Invalid System Disk」のようなエラーメッセージ付きで起動に失敗する場合、BIOS の IDE ハードディスクの設定を AUTO モードではなく LBA モードを使用するよう変更してみて下さい。'
 

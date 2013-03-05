@@ -224,7 +224,7 @@ msg_drbl_ayo_repository_0="0 -> free.nchc.org.tw "
 msg_drbl_ayo_repository_1="1 -> ftp.twaren.net "
 msg_drbl_ayo_repository_2="2 -> drbl.sourceforge.net "
 msg_drbl_server_is_ready="El servidor DRBL està preparat!"
-msg_all_set_you_can_turn_on_clients=="Ara configuri les màquines client per iniciar des de PXE o Etherboot (visiti http://drbl.sourceforge.net per a més detalls)."
+msg_all_set_you_can_turn_on_clients=="Ara configuri les màquines client per iniciar des de PXE (visiti http://drbl.sourceforge.net per a més detalls)."
 msg_etherboot_5_4_is_required="Si utilitza Etherboot en una màquina client, es requereix la versió 5.4.0 o superior."
 msg_win_fail_with_Missing_OS="Si el S.O. clonat és MS Windows, i falla en iniciar amb un missatge d'error com 'No es troba cap Sistema Operatiu (Missing Operating System)' o 'El disc del sistema no és vàlid (Invalid System Disk)', pot intentar amb (1) canviar la configuració IDE a LBA del seu disc dur en la BIOS en comptes d'AUTO. (2) Pot intentar usar el paràmetre -t1 quan restauri."
 

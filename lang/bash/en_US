@@ -222,7 +222,7 @@ msg_drbl_ayo_repository_0='0 -> free.nchc.org.tw '
 msg_drbl_ayo_repository_1='1 -> ftp.twaren.net '
 msg_drbl_ayo_repository_2='2 -> drbl.sourceforge.net '
 msg_drbl_server_is_ready='The DRBL server is ready!'
-msg_all_set_you_can_turn_on_clients='Now set the client machines to boot from PXE or Etherboot. (refer to http://drbl.sourceforge.net for more details)'
+msg_all_set_you_can_turn_on_clients='Now set the client machines to boot from PXE. (refer to http://drbl.sourceforge.net for more details)'
 msg_etherboot_5_4_is_required='If Etherboot is used on client computers, version 5.4.0 or newer is required!'
 msg_win_fail_with_Missing_OS='If the cloned OS is MS windows, and it fails to boot with an error message like "Missing Operating System" or "Invalid System Disk", then you can try to (1) change the IDE hard drive settings in the BIOS to use LBA mode instead of AUTO mode. (2) Or you can try to use parameter -t1 when restoring.'
 

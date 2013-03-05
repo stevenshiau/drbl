@@ -222,7 +222,7 @@ msg_drbl_ayo_repository_0='0 -> free.nchc.org.tw,'
 msg_drbl_ayo_repository_1='1 -> ftp.twaren.net,'
 msg_drbl_ayo_repository_2='2 -> drbl.sourceforge.net,'
 msg_drbl_server_is_ready='O servidor DRBL está preparado!'
-msg_all_set_you_can_turn_on_clients='Agora configure as máquinas clientes para iniciar a partir do PXE ou Etherboot (visite http://drbl.sourceforge.net para mais detalhes).'
+msg_all_set_you_can_turn_on_clients='Agora configure as máquinas clientes para iniciar a partir do PXE (visite http://drbl.sourceforge.net para mais detalhes).'
 msg_etherboot_5_4_is_required='Se você utilizar Etherboot numa máquina cliente, a versão deve ser 5.4.0 ou superior.'
 msg_win_fail_with_Missing_OS='Se o S.O. clonado é MS windows, e falha ao iniciar com uma mensagem de erro como "Sistema Operacional não encontrado (Missing Operating System)" ou "Disco de Sistema Inválido (Invalid System Disk)", então você pode tentar (1) mudar a configuração de seu disco rígido de IDE para LBA na BIOS em vez de AUTO. (2) Ou usar o parâmetro -t1 ao restaurar.'
 

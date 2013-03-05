@@ -222,7 +222,7 @@ msg_drbl_ayo_repository_0='0 -> free.nchc.org.tw,'
 msg_drbl_ayo_repository_1='1 -> ftp.twaren.net,'
 msg_drbl_ayo_repository_2='2 -> drbl.sourceforge.net,'
 msg_drbl_server_is_ready='Le serveur DRBL est prêt !'
-msg_all_set_you_can_turn_on_clients='Configurez maintenant les clients pour qu'\''ils amorcent sous PXE ou Etherboot (voir http://drbl.sourceforge.net pour plus d'\''informations [en anglais]).'
+msg_all_set_you_can_turn_on_clients='Configurez maintenant les clients pour qu'\''ils amorcent sous PXE (voir http://drbl.sourceforge.net pour plus d'\''informations [en anglais]).'
 msg_etherboot_5_4_is_required='Si Etherboot est utilisé sur le client, alors la version 5.4.0 ou supérieure est requise !'
 msg_win_fail_with_Missing_OS='Si le système cloné est MS Windows et que l'\''amorçage échoue avec un message "Système d'\''exploitation manquant" ou "Disque système incorrect", alors essayez de changer le paramètre IDE pour le disque dur dans le BIOS de manière à utiliser LBA plutôt que AUTO.'
 
