@@ -4327,7 +4327,7 @@ echo "$msg_delimiter_star_line"
 if [ "$add_start_drbl_services_after_cfg" != "no" ]; then
   [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
   echo "$msg_drbl_server_is_ready $msg_all_set_you_can_turn_on_clients"
-  echo "$msg_note! $msg_etherboot_5_4_is_required"
+  #echo "$msg_note! $msg_etherboot_5_4_is_required"
   echo "$msg_run_drblpush_with_config_again"
   [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
 else

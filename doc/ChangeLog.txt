@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.3.14-drbl1) unstable; urgency=low
+
+  * Language files were updated. Words about Etherboot were removed.
+  * The prompt about etherboot required was removed from drblpush.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 06 Mar 2013 09:45:35 +0800
+
 drbl (2.3.13-drbl1) unstable; urgency=low
 
   * Bug fixed: alias network card configuration can not be parsed. 

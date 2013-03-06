@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.3.13
+Version:	2.3.14
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,7 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Wed Mar 06 2013 Steven Shiau <steven _at_ nchc org tw> 2.3.14-drbl1
 - Language files were updated. Words about Etherboot were removed.
+- The prompt about etherboot required was removed from drblpush.
 
 * Mon Mar 04 2013 Steven Shiau <steven _at_ nchc org tw> 2.3.13-drbl1
 - Adding keyutils in Clonezilla live packages lists. Thanks to Joe M. for this suggestion.
