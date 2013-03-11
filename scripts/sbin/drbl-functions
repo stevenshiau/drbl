@@ -1388,14 +1388,21 @@ OCS_PARAM_TMP="$2"
 local dev_="$3"
 local vol_size_tmp
 local ASK_VOL_SIZE=1
+local inst_grub_opt
 vol_size_tmp="$(mktemp /tmp/vol_size_tmp.XXXXXX)"
+
+# If the mode is only for parts, we won't turn on "-g auto" option by default
+case "$dev_" in
+  parts) inst_grub_opt="off";;
+      *) inst_grub_opt="on";;
+esac
 
 if [ "$mode" = "restore" ]; then
   if [ "$ocs_user_mode" = "expert" ]; then
     $DIA --separate-output --backtitle "$msg_nchc_free_software_labs" --title  \
     "$msg_clonezilla_advanced_extra_param | $msg_mode: $ocs_mode_prompt" --checklist "$msg_choose_param_to_set_multiple_choices ($msg_press_space_to_mark_selection)" \
     0 0 0 $DIA_ESC \
-    "-g auto"  "$msg_ocs_param_g_auto" on \
+    "-g auto"  "$msg_ocs_param_g_auto" $inst_grub_opt \
     "-e1 auto" "$msg_ocs_param_e1_auto" on \
     "-e2"      "$msg_ocs_param_e2" on \
     "-x"       "$msg_ocs_param_x" on \
@@ -1426,7 +1433,11 @@ if [ "$mode" = "restore" ]; then
     "-srel"    "$msg_ocs_param_srel" off \
   2> $OCS_PARAM_TMP
   else
-    echo "-g auto" "-e1 auto" "-e2" "-r" "-x" "-j2" > $OCS_PARAM_TMP
+    if [ "$inst_grub_opt" = "on" ]; then
+      echo "-g auto" "-e1 auto" "-e2" "-r" "-x" "-j2" > $OCS_PARAM_TMP
+    else
+      echo "-e1 auto" "-e2" "-r" "-x" "-j2" > $OCS_PARAM_TMP
+    fi
   fi
 
   # About partition table
@@ -1631,7 +1642,14 @@ local mode2_="$3"
 local cpu_no
 local vol_size_tmp
 local ASK_VOL_SIZE=1
+local inst_grub_opt
 vol_size_tmp="$(mktemp /tmp/vol_size_tmp.XXXXXX)"
+
+# If the mode is only for parts, we won't turn on "-g auto" option by default
+case "$mode2_" in
+  *parts) inst_grub_opt="off";;
+       *) inst_grub_opt="on";;
+esac
 
 if [ "$mode" = "restore" ]; then
   # Although -u/-y0/-y1 is shown in ocs-sr, but actually they are used to
@@ -1642,7 +1660,7 @@ if [ "$mode" = "restore" ]; then
     $DIA --separate-output --backtitle "$msg_nchc_free_software_labs" --title  \
     "$msg_clonezilla_advanced_extra_param | $msg_mode: $ocs_mode_prompt" --checklist "$msg_choose_param_to_set_multiple_choices ($msg_press_space_to_mark_selection)" \
     0 0 0 $DIA_ESC \
-    "-g auto"  "$msg_ocs_param_g_auto" on \
+    "-g auto"  "$msg_ocs_param_g_auto" $inst_grub_opt \
     "-e1 auto" "$msg_ocs_param_e1_auto" on \
     "-e2"      "$msg_ocs_param_e2" on \
     "-nogui"   "$msg_ocs_param_nogui" off \
@@ -1669,7 +1687,11 @@ if [ "$mode" = "restore" ]; then
     "-srel"    "$msg_ocs_param_srel" off \
     2> $OCS_PARAM_TMP
   else
-    echo "-g auto" "-e1 auto" "-e2" "-c" "-r" "-j2" > $OCS_PARAM_TMP
+    if [ "$inst_grub_opt" = "on" ]; then
+      echo "-g auto" "-e1 auto" "-e2" "-c" "-r" "-j2" > $OCS_PARAM_TMP
+    else
+      echo "-e1 auto" "-e2" "-c" "-r" "-j2" > $OCS_PARAM_TMP
+    fi
   fi
 
   # About partition table

@@ -45,6 +45,8 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+- Bug fixed: for restoreparts mode, we should not turn on "-g auto" option by default. 
+
 * Wed Mar 06 2013 Steven Shiau <steven _at_ nchc org tw> 2.3.14-drbl1
 - Language files were updated. Words about Etherboot were removed.
 - The prompt about etherboot requirement was removed from drblpush.
