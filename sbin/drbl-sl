@@ -22,8 +22,9 @@ force_to_update_pxecfg="yes"
 
 # List all supported SL_NAME
 # // On 2009/05/25, we remove the support for PLD, INSERT, PUD, since those projects are not developed any more. As for GeeXbox, since we do not have time, it's removed, too.
+# // 2013/03/13, DSL and PuppyLinux were removed. Not so useful to provide this.
 #supported_SL_dists="DSL PuppyLinux INSERT PLD Debian-live GeeXbox PUD-Linux"
-supported_SL_dists="DSL PuppyLinux Clonezilla-live GParted-live"
+supported_SL_dists="Clonezilla-live GParted-live"
 
 # The buffer ratio for iso to container
 buffer_ratio_for_iso_to_container="1.25"
@@ -55,9 +56,7 @@ USAGE() {
   echo "-v, --verbose:     Verbose mode."
   echo "SL-ISO is one of $supported_SL_dists ISO file, used with installation."
   echo "S-L-INDEX is one of $supported_SL_dists, used with uninstallation."
-  echo "Ex: To load DSL Linux, run '$0 -i dsl-4.4.10.iso'"
-  echo "    To load PuppyLinux, run '$0 -i puppy-4.2.1-k2.6.25.16-seamonkey.iso'"
-  echo "    To load Clonezilla live, run '$0 -i clonezilla-live-1.2.2-26.iso'"
+  echo "Ex: To load Clonezilla live, run '$0 -i clonezilla-live-1.2.2-26.iso'"
   echo "    To load GParted live, run '$0 -i gparted-live-0.4.5-2.iso'"
   for isl in $supported_SL_dists; do
     echo "    To remove $isl, run '$0 -u $isl'"
@@ -386,17 +385,7 @@ umount_and_clean_tmp_working_dirs(){
 } # end of umount_and_clean_tmp_working_dirs
 #
 get_SL_OS_NAME(){
-if [ "$(echo $SL_ISO | grep -i "dsl")" ]; then
-  [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
-  echo "This ISO file $SL_ISO is for Damn Small Linux (DSL)."
-  [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
-  SL_OS="DSL"
-elif [ "$(echo $SL_ISO | grep -i "puppy")" ]; then
-  [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
-  echo "This ISO file $SL_ISO is for Puppy Linux."
-  [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
-  SL_OS="Puppy"
-elif [ "$(echo $SL_ISO | grep -i "clonezilla-live")" ]; then
+if [ "$(echo $SL_ISO | grep -i "clonezilla-live")" ]; then
   [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
   echo "This ISO file $SL_ISO is for Clonezilla live."
   [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
@@ -408,7 +397,7 @@ elif [ "$(echo $SL_ISO | grep -i "gparted-live")" ]; then
   SL_OS="gparted-live"
 else
   [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
-  echo "Unknown Small Linux distribution! This script only works with Damn Small Linux or Puppy Linux! Program terminated!!!"
+  echo "Unknown Small Linux distribution! This script only works with $supported_SL_dists! Program terminated!!!"
   [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
   exit 1
 fi

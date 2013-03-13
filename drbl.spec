@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.3.15
+Version:	2.3.16
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Wed Mar 13 2013 Steven Shiau <steven _at_ nchc org tw> 2.3.16-drbl1
+- DSL and Puppylinux were removed from the supporting list in drbl-sl.
+
 * Mon Mar 11 2013 Steven Shiau <steven _at_ nchc org tw> 2.3.15-drbl1
 - Bug fixed: for restoreparts mode, we should not turn on "-g auto" option by default. 
 
