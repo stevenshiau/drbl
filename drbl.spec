@@ -45,6 +45,8 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+- SHA256SUMS will be created by function gen_CDG_checksums.
+
 * Wed Mar 13 2013 Steven Shiau <steven _at_ nchc org tw> 2.3.16-drbl1
 - DSL and Puppylinux were removed from the supporting list in drbl-sl.
 

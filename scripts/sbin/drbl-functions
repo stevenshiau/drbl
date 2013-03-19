@@ -2868,13 +2868,15 @@ gen_CDG_checksums() {
   local sum_file_html="CHECKSUMS.php"
   local filetype="iso zip tar.gz"
   echo -n "Creating checksums..."
-  rm -f MD5SUMS SHA1SUMS
+  rm -f MD5SUMS SHA1SUMS SHA256SUMS
   for i in $filetype; do
     if [ -n "$(ls *.$i 2>/dev/null)" ]; then
       echo -n "."
       LC_ALL=C md5sum *.$i  >> MD5SUMS
       echo -n "."
       LC_ALL=C sha1sum *.$i >> SHA1SUMS 
+      echo -n "."
+      LC_ALL=C sha256sum *.$i >> SHA256SUMS 
     fi
   done
   echo " Done!"
@@ -2885,6 +2887,11 @@ gen_CDG_checksums() {
   echo >> $sum_file
   echo "SHA1SUMS" >> $sum_file
   cat SHA1SUMS >> $sum_file
+
+  echo >> $sum_file
+  echo "SHA256SUMS" >> $sum_file
+  cat SHA256SUMS >> $sum_file
+
   txt2html $sum_file > $sum_file_html
 } # end of gen_CDG_checksums
 #
