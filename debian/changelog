@@ -1,3 +1,9 @@
+drbl (2.3.17-drbl1) unstable; urgency=low
+
+  * SHA256SUMS will be created by function gen_CDG_checksums.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 20 Mar 2013 15:29:55 +0800
+
 drbl (2.3.16-drbl1) unstable; urgency=low
 
   * DSL and Puppylinux were removed from the supporting list in drbl-sl.

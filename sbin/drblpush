@@ -1584,6 +1584,11 @@ sub drbl_server_parse {
   my $nameserver_sys=`LC_ALL=C grep ^nameserver $DNS_sys | awk -F\" \" '{print \$2}'`;
   chomp $nameserver_sys;  # clean the last \n before substitute them as ","
   $nameserver_sys =~ s/\n/,/g;
+  if ( "$nameserver_sys" eq "127.0.0.1" ) {
+    # On Ubuntu, dnsmasq with network-manager, the result might 127.0.0.1. We use nm-tool to get the real one
+    $nameserver_sys=`LC_ALL=C nm-tool -v | grep -i "DNS:" | awk -F " " '{print \$2}'`;
+    $nameserver_sys =~ s/\n/,/g;
+  }
   print "nameserver in system is $nameserver_sys\n" if $verbosity >= 2;
 
   # get some setting in this server so that if some parameters are not set,
