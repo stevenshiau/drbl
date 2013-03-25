@@ -701,7 +701,7 @@ SL_INFO_PXE
   if [ "$booting_messages" = "on" ]; then
     [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
     echo "$msg_all_set_you_can_turn_on_clients"
-    echo "$msg_note! $msg_etherboot_5_4_is_required"
+    #echo "$msg_note! $msg_etherboot_5_4_is_required"
     [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
   fi
 } # end of install_SL
