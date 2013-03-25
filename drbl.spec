@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.3.17
+Version:	2.3.18
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,7 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Mon Mar 25 2013 Steven Shiau <steven _at_ nchc org tw> 2.3.18-drbl1
 - When the DNS server in /etc/resolv.conf is 127.0.0.1 from network-manager, the real DNS got from nm-tool will be used for DRBL clients. 
+- Excluding LXC network deivce lxc* because they won't be DRBL clients.
 
 * Wed Mar 20 2013 Steven Shiau <steven _at_ nchc org tw> 2.3.17-drbl1
 - SHA256SUMS will be created by function gen_CDG_checksums.

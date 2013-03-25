@@ -5,8 +5,9 @@
 # Append a default search path.
 PATH="$PATH:/sbin:/usr/sbin:/bin:/usr/bin:/usr/X11R6/bin"
 export PATH
-# Exclude some devices, like lo, sit0... It's regular expression.
-exluding_dev="(lo|sit[0-9]+)"
+# Exclude some devices, like lo, sit0, lxc*... 
+# This is regular expression format.
+exluding_dev="(lo|sit[0-9]+|lxc.*)"
 export LC_ALL=C
 if [ -d /sys/class/net/ ]; then
   # kernel support sysfs, so get the NIC devices from /sys

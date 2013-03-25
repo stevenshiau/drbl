@@ -5,6 +5,14 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.3.18-drbl1) unstable; urgency=low
+
+  * When the DNS server in /etc/resolv.conf is 127.0.0.1 from network-manager,
+    the real DNS got from nm-tool will be used for DRBL clients. 
+  * Excluding LXC network deivce lxc* because they won't be DRBL clients.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 25 Mar 2013 14:56:08 +0800
+
 drbl (2.3.17-drbl1) unstable; urgency=low
 
   * SHA256SUMS will be created by function gen_CDG_checksums.
