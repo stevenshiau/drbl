@@ -45,6 +45,8 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+- Bug fixed: i386 version of Clonezilla live was used when running drblpush with clonezilla_live_mode option 0. Thanks to Yitzon Belandria <yitzon _at_ gmail com> for this bug report.
+
 * Mon Mar 25 2013 Steven Shiau <steven _at_ nchc org tw> 2.3.19-drbl1
 - Message msg_etherboot_5_4_is_required in drbl-sl was disabled.
 

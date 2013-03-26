@@ -952,7 +952,7 @@ sub interactive_mode {
                if ( "$live_client_branch" eq "0" || "$live_client_branch" eq "1" ) {
   	       print "$delimiter{\"star_line\"}\n".
   	             "$lang_deploy{\"which_live_client_cpu_mode\"}\n".
-  	             "[0] ";
+  	             "[1] ";
   	       chomp($live_client_cpu_mode=<STDIN>);
                }else{
                    # For Ubuntu-based Clonezilla live, different arch
@@ -987,7 +987,7 @@ sub interactive_mode {
   	  print "$lang_deploy{\"live_client_branch_set\"}: $live_client_branch\n";
   	}
   	# Format the input number as text
-         if ( "$live_client_branch" eq "0" || "$live_client_branch" eq "1" ) {
+         if ( "$live_client_branch" eq "stable" || "$live_client_branch" eq "testing" ) {
           # Normal Clonezilla live, i486, i686-pae and amd64 exist
           SWITCH: for ($live_client_cpu_mode) {
             /^[[:space:]]*0[[:space:]]*$/ && do {
