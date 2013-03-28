@@ -45,6 +45,8 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+- Juan Ramón Martínez's email address in the language files were updated.
+
 * Tue Mar 26 2013 Steven Shiau <steven _at_ nchc org tw> 2.3.20-drbl1
 - Bug fixed: i386 version of Clonezilla live was used when running drblpush with clonezilla_live_mode option 0. Thanks to Yitzon Belandria <yitzon _at_ gmail com> for this bug report.
 
