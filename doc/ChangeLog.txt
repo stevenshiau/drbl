@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.3.21-drbl1) unstable; urgency=low
+
+  * Juan Ramón Martínez's email address in the language files were updated.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 29 Mar 2013 08:32:41 +0800
+
 drbl (2.3.20-drbl1) unstable; urgency=low
 
   * Bug fixed: i386 version of Clonezilla live was used when running drblpush
