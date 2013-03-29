@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.3.21
+Version:	2.3.22
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Fri Mar 29 2013 Steven Shiau <steven _at_ nchc org tw> 2.3.22-drbl1
+- Bug fixed: function set_ocs_sr_extra_param in drbl-functions has been improved. If postrun action is assigned, we should not ask it.
+
 * Fri Mar 29 2013 Steven Shiau <steven _at_ nchc org tw> 2.3.21-drbl1
 - Juan Ramón Martínez's email address in the language files were updated.
 

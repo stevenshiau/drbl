@@ -1,3 +1,10 @@
+drbl (2.3.22-drbl1) unstable; urgency=low
+
+  * Bug fixed: function set_ocs_sr_extra_param in drbl-functions has been 
+    improved. If postrun action is assigned, we should not ask it.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 29 Mar 2013 17:12:33 +0800
+
 drbl (2.3.21-drbl1) unstable; urgency=low
 
   * Juan Ramón Martínez's email address in the language files were updated.
