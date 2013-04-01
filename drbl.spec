@@ -45,6 +45,8 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+- If display manager is not found, skip the rest with different prompt in drbl-login-switch.
+
 * Fri Mar 29 2013 Steven Shiau <steven _at_ nchc org tw> 2.3.22-drbl1
 - Bug fixed: function set_ocs_sr_extra_param in drbl-functions has been improved. If postrun action is assigned, we should not ask it.
 

@@ -466,6 +466,12 @@ RC=$?
 
 [ $RC -eq 0 ] && echo "Display manager:\"$preferred\"..."
 
+if [ -z "$preferred" ]; then
+    echo "No display manager was found!"
+    echo "Skip changing client's login mode of graphical interface."
+    exit 3
+fi
+
 #
 case "$preferred" in
    gdm*)
