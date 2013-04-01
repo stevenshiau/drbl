@@ -1,3 +1,10 @@
+drbl (2.3.23-drbl1) unstable; urgency=low
+
+  * If display manager is not found, skip the rest with different prompt
+    in drbl-login-switch.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 01 Apr 2013 14:13:24 +0800
+
 drbl (2.3.22-drbl1) unstable; urgency=low
 
   * Bug fixed: function set_ocs_sr_extra_param in drbl-functions has been 
