@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.3.23
+Version:	2.3.24
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Tue Apr 02 2013 Steven Shiau <steven _at_ nchc org tw> 2.3.24-drbl1
+- Suppress nm-tool stderr in drblpush in case the program is not installed.
+
 * Mon Apr 01 2013 Steven Shiau <steven _at_ nchc org tw> 2.3.23-drbl1
 - If display manager is not found, skip the rest with different prompt in drbl-login-switch.
 
