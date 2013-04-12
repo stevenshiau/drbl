@@ -45,6 +45,8 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+- Function put_syslinux_makeboot_for_usb_flash in drbl-functions was updated for Syslinux 5.x. Three more c32 modules are required.
+
 * Tue Apr 02 2013 Steven Shiau <steven _at_ nchc org tw> 2.3.24-drbl1
 - Suppress nm-tool stderr in drblpush in case the program is not installed.
 
