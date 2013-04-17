@@ -22,7 +22,7 @@
 # Description: Start the swapfile
 ### END INIT INFO
 
-# Modified by Steven Shiau <steven _at_ nchc org tw> to use it in DRBL
+# Modified by Steven Shiau <steven _at_ nchc org tw>, Ceasar Sun <ceasar _at_ nchc org tw> to use it in DRBL
 # This file is borrowed from Knoppix (http://www.knoppix.org).
 
 # Setting
@@ -52,7 +52,7 @@ newswapfile() {
   # Find exist swap partitions
   for p in `fdisk -l | grep "Linux swap" | cut -d" " -f1`; do
     echo "Using the existing swap partition in $p"
-    swapon $p &
+    swapon $p
     exist_swap_size=`cat /proc/swaps | grep $p | awk -F" " '{print $3}'`
     exist_swap_size_in_MB=`expr $exist_swap_size / 1000`
     echo "$p with size $exist_swap_size_in_MB (MB)."
@@ -139,8 +139,8 @@ rmswapfile() {
     if [ "$(mount | grep "$d")" != "" ]; then
       umount $d
     fi
-    swapoff -a
   done
+  swapoff -a
 }
 
 ###

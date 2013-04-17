@@ -1,3 +1,12 @@
+drbl (2.3.25-drbl1) unstable; urgency=low
+
+  * Function put_syslinux_makeboot_for_usb_flash in drbl-functions 
+    was updated for Syslinux 5.x. Three more c32 modules are required.
+  * Bug fixed: swapon command should not be run in background in mkswapfile,
+    otherwise swap size might be not counted immediately.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 17 Apr 2013 16:02:10 +0800
+
 drbl (2.3.24-drbl1) unstable; urgency=low
 
   * Suppress nm-tool stderr in drblpush in case the program is not installed.
