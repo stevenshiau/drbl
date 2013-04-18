@@ -45,6 +45,8 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+- Package f2fs-tools was added in the live CD packages list in drbl.conf.
+
 * Wed Apr 17 2013 Steven Shiau <steven _at_ nchc org tw> 2.3.25-drbl1
 - Function put_syslinux_makeboot_for_usb_flash in drbl-functions was updated for Syslinux 5.x. Three more c32 modules are required.
 - Bug fixed: swapon command should not be run in background in mkswapfile, otherwise swap size might be not counted immediately.
