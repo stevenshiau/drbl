@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.3.26-drbl1) unstable; urgency=low
+
+  * Package f2fs-tools was added in the live CD packages list in drbl.conf.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sat, 20 Apr 2013 09:14:09 +0800
+
 drbl (2.3.25-drbl1) unstable; urgency=low
 
   * Function put_syslinux_makeboot_for_usb_flash in drbl-functions 
