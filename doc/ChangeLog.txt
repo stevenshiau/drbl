@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.3.28-drbl1) unstable; urgency=low
+
+  * Putting OpenSuSe netinstall version as 12.3 in drbl.conf.
+ 
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 24 Apr 2013 21:38:04 +0800
+
 drbl (2.3.27-drbl1) unstable; urgency=low
 
   * Making ldlinux.c32, libcom32.c32, libutil.c32 downloaded from tarball mode 

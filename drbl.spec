@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.3.27
+Version:	2.3.28
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Wed Apr 24 2013 Steven Shiau <steven _at_ nchc org tw> 2.3.28-drbl1
+- Putting OpenSuSe netinstall version as 12.3 in drbl.conf.
+
 * Wed Apr 24 2013 Steven Shiau <steven _at_ nchc org tw> 2.3.27-drbl1
 - Making ldlinux.c32, libcom32.c32, libutil.c32 downloaded from tarball mode as 644, not vfat's 755.
 
