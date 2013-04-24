@@ -2521,6 +2521,7 @@ get_syslinux_binary_for_dos_linux() {
       mv -f syslinux-${syslinux_ver}/com32/elflink/ldlinux/ldlinux.c32 .
       mv -f syslinux-${syslinux_ver}/com32/lib/libcom32.c32 .
       mv -f syslinux-${syslinux_ver}/com32/libutil/libutil.c32 .
+      chmod 644 $sys_pxelinux_required_c32
    fi
   )
 } # end of get_syslinux_binary_for_dos_linux

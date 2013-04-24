@@ -1,3 +1,10 @@
+drbl (2.3.27-drbl1) unstable; urgency=low
+
+  * Making ldlinux.c32, libcom32.c32, libutil.c32 downloaded from tarball mode 
+    as 644, not vfat's 755.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 24 Apr 2013 21:26:09 +0800
+
 drbl (2.3.26-drbl1) unstable; urgency=low
 
   * Package f2fs-tools was added in the live CD packages list in drbl.conf.
