@@ -45,6 +45,8 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+- Minor typo in en_US was fixed.
+
 * Wed Apr 24 2013 Steven Shiau <steven _at_ nchc org tw> 2.3.28-drbl1
 - Putting OpenSuSe netinstall version as 12.3 in drbl.conf.
 
