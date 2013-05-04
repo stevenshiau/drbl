@@ -3626,7 +3626,7 @@ case "$use_kernel_from" in
       fi
     fi
 
-    # Download the linux-image-extra package from Ubuntu. This is for Ubuntu 12.04 and 12.10
+    # Download the linux-image-extra package from Ubuntu. This is for Ubuntu 12.04 or later (12.10, 13.04...)
     # Ref: https://lists.ubuntu.com/archives/kernel-team/2012-May/020448.html
     if [ -n "$(apt-cache search linux-image-extra-$drbl_kernel_ver)" ]; then
       apt-get $inst_opt --reinstall --download-only install linux-image-extra-$drbl_kernel_ver
