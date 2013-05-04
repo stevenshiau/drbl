@@ -5,6 +5,14 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.4.1-drbl1) unstable; urgency=low
+
+  * Minor typo in en_US was fixed.
+  * Package lziprecover was added.
+  * Adding Ubuntu 13.04 in this release. Not well tested yet.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sat, 04 May 2013 16:21:39 +0800
+
 drbl (2.3.28-drbl1) unstable; urgency=low
 
   * Putting OpenSuSe netinstall version as 12.3 in drbl.conf.
