@@ -251,6 +251,8 @@ set_lightdm_timed_login() {
     sub_cmd="if ($((end_line+1))..$((end_line+1))) {s/^$/autologin-user=$iauto_login_id/gi}"
     perl -pi -e "$sub_cmd" $inode/$LIGHTDM_CFG
   fi
+  # Append greeter-show-manual-login=true
+  tune_lightdm_manual_login $inode true
 } # end of set_lightdm_timed_login
 #
 tune_lightdm_manual_login() {
