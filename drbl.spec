@@ -45,6 +45,8 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+- Set "greeter-show-manual-login=true" for lightdm of DRBL client in drbl-login-switch.
+
 * Sat May 04 2013 Steven Shiau <steven _at_ nchc org tw> 2.4.1-drbl1
 - Minor typo in en_US was fixed.
 - Package lziprecover was added.

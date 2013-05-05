@@ -87,8 +87,8 @@ set_gdm_auto_login() {
     sub_cmd="if ($((end_line+1))..$((end_line+1))) {s/^$/AutomaticLogin=$iauto_login_id/gi}"
     perl -pi -e "$sub_cmd" $inode/$GDM_CFG
   fi
-}
-
+} # end of set_gdm_auto_login
+#
 set_gdm_timed_login() {
   local inode="$1"
   local iauto_login_id="$2"
@@ -153,8 +153,8 @@ set_gdm_timed_login() {
     sub_cmd="if ($((end_line+1))..$((end_line+1))) {s/^$/TimedLogin=$iauto_login_id/gi}"
     perl -pi -e "$sub_cmd" $inode/$GDM_CFG
   fi
-}
-
+} # end of set_gdm_timed_login
+#
 set_gdm_normal_login() {
     local inode="$1"
     if [ ! -f $inode/$GDM_CFG ]; then
@@ -169,7 +169,7 @@ set_gdm_normal_login() {
     perl -p -i -e "s/^[[:space:]]*#*[[:space:]]*TimedLoginEnable=.*/TimedLoginEnable=false/" $inode/$GDM_CFG
     perl -p -i -e "s/^[[:space:]]*#*[[:space:]]*TimedLogin=.*/TimedLogin=/" $inode/$GDM_CFG
     perl -p -i -e "s/^[[:space:]]*#*[[:space:]]*TimedLoginDelay=.*/TimedLoginDelay=/" $inode/$GDM_CFG
-}
+} # end of set_gdm_normal_login
 #
 set_lightdm_auto_login() {
   # To config these two parameters:
@@ -202,7 +202,7 @@ set_lightdm_auto_login() {
     sub_cmd="if ($((end_line+1))..$((end_line+1))) {s/^$/autologin-user=$iauto_login_id/gi}"
     perl -pi -e "$sub_cmd" $inode/$LIGHTDM_CFG
   fi
-}
+} # end of set_lightdm_auto_login
 #
 set_lightdm_timed_login() {
   # //NOTE// Due to a bug, this /autologin-user-timeout=* actually won't work on Ubuntu 11.10 and 12.04.
@@ -251,7 +251,37 @@ set_lightdm_timed_login() {
     sub_cmd="if ($((end_line+1))..$((end_line+1))) {s/^$/autologin-user=$iauto_login_id/gi}"
     perl -pi -e "$sub_cmd" $inode/$LIGHTDM_CFG
   fi
-}
+} # end of set_lightdm_timed_login
+#
+tune_lightdm_manual_login() {
+  local inode="$1" # Path to $LIGHTDM_CFG
+  local manual_login_mode="$2"  # true or false
+  # To config greeter-show-manual-login=true
+  if [ ! -f "$inode/$LIGHTDM_CFG" ]; then
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING 
+    echo "LightDM config in $inode NOT found, assume it's DRBL SSI mode!"  
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+    return 1
+  fi
+
+  # put the greeter-show-manual-login 
+  lines="$(get_block_line_in_gdm_kdm SeatDefaults $inode/$LIGHTDM_CFG)"
+  begin_line=$(echo $lines | awk -F" " '{print $1}')
+  end_line=$(echo $lines | awk -F" " '{print $2}')
+  chk_cmd="if ($begin_line..$end_line) {print}"
+  if [ -n "$(perl -n -e "$chk_cmd" $inode/$LIGHTDM_CFG | grep -i "^greeter-show-manual-login=")" ]; then
+    sub_cmd="if ($begin_line..$end_line) {s/^greeter-show-manual-login=.*/greeter-show-manual-login=$manual_login_mode/}"
+    perl -pi -e "$sub_cmd" $inode/$LIGHTDM_CFG
+  else
+    # insert 1 blank line
+    sub_cmd="if ($((end_line))..$((end_line))) {s/^(.*)$/\$1\n/gi}"
+    perl -pi -e "$sub_cmd" $inode/$LIGHTDM_CFG
+    # replace the one we want in the added blank line
+    sub_cmd="if ($((end_line+1))..$((end_line+1))) {s/^$/greeter-show-manual-login=$manual_login_mode/gi}"
+    perl -pi -e "$sub_cmd" $inode/$LIGHTDM_CFG
+  fi
+} # end of tune_lightdm_manual_login
+#
 set_lightdm_normal_login() {
     local inode="$1"
     if [ ! -f $inode/$LIGHTDM_CFG ]; then
@@ -263,8 +293,10 @@ set_lightdm_normal_login() {
     # disable auto and timed login, then it will be normal login since this is the default setting.
     perl -p -i -e "s/^[[:space:]]*#*[[:space:]]*autologin-user=.*/#autologin-user=/" $inode/$LIGHTDM_CFG
     perl -p -i -e "s/^[[:space:]]*#*[[:space:]]*autologin-user-timeout=.*/#autologin-user-timeout=/" $inode/$LIGHTDM_CFG
-}
-
+    # Append greeter-show-manual-login=true
+    tune_lightdm_manual_login $inode true
+} # end of set_lightdm_normal_login
+#
 set_kdm_auto_login() {
     local inode="$1"
     if [ ! -f "$inode/$KDM_CFG" ]; then
@@ -275,8 +307,7 @@ set_kdm_auto_login() {
     fi
     perl -p -i -e "s/^[[:space:]]*#*[[:space:]]*AutoLoginEnable=.*/AutoLoginEnable=true/" $inode/$KDM_CFG
     perl -p -i -e "s/^[[:space:]]*#*[[:space:]]*AutoLoginUser=.*/AutoLoginUser=$auto_login_id/" $inode/$KDM_CFG
-}
-
+} # end of set_kdm_auto_login
 #
 create_autologin_account() {
     # $create_account, $auto_login_id and $echo_no_digit_0_1 are global variables
@@ -330,8 +361,7 @@ create_autologin_account() {
       esac  
       echo "$auto_login_id $passwd_now" >> $AUTO_LOGIN_ID_PASSWD
     fi
-}
-
+} # end of create_autologin_account
 #
 clean_old_auto_login_id_passwd_file() {
     local local_autologin_id_pwd_file="$1"
@@ -346,8 +376,7 @@ clean_old_auto_login_id_passwd_file() {
 	mv -f $local_autologin_id_pwd_file ${local_autologin_id_pwd_file}.drblsave
       fi
     fi
-}
-
+} # end of clean_old_auto_login_id_passwd_file
 #
 output_result_and_update_yp() {
   # $create_account, $no_nis_update and $set_client_autologin_passwd are global variables
@@ -359,9 +388,11 @@ output_result_and_update_yp() {
     # update the NIS
     [ "$no_nis_update" != "on" ] && make -C /var/yp
   fi
-}
+} # end of output_result_and_update_yp
      
-# main
+##############
+###  MAIN  ###
+##############
 # set the flag for create account and echo prompt
 # $create_account, $auto_login_id, $no_nis_update, $set_client_autologin_passwd and $echo_no_digit_0_1 are global variables
 create_account=0
