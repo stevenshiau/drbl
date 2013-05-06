@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.4.1
+Version:	2.4.2
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,7 +45,10 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Mon May 06 2013 Steven Shiau <steven _at_ nchc org tw> 2.4.2-drbl1
 - Set "greeter-show-manual-login=true" for lightdm of DRBL client in drbl-login-switch.
+- Function restore_lvm2_udevd_rules was moved from ocs-functions to drbl-functions because it's required for Clonezilla SE.
+- Function disable_lvm2_udevd_rules was added in drbl-functions because it will be used in drblpush and ocs-lvm2-stop.
 
 * Sat May 04 2013 Steven Shiau <steven _at_ nchc org tw> 2.4.1-drbl1
 - Minor typo in en_US was fixed.

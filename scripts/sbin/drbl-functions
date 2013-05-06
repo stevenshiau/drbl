@@ -2950,3 +2950,38 @@ find_next_release_version_number() {
     return 1
   fi
 } # end of find_next_release_version_number
+#
+restore_lvm2_udevd_rules() {
+  local new_fname reload_flag=false
+  # Restore the udevd rules, which are disabled by ocs-lvm2-stop.
+  echo "Checking if udevd rules have to be restored..."
+  for i in /lib/udev/rules.d/*.drblsave; do
+    [ ! -e "$i" ] && continue
+    new_fname="$(echo $i | sed -r -e "s/\.drblsave$//g")"
+    mv -v "$i" "$new_fname"
+    reload_flag="true"
+  done
+  # Reload the rules for udevd
+  if [ "$reload_flag" = "true" ]; then
+    echo "Running 'udevadm control --reload-rules' to reload udevd rules..."
+    udevadm control --reload-rules
+  fi
+} # End of restore_lvm2_udevd_rules
+
+#
+disable_lvm2_udevd_rules() {
+  local node_rt="$1"  # E.g. /tftpboot/node_root/. If $node_rt is not assigned, it's for the running system. E.g. Clonezilla live. If assigned, it's for Clonezilla SE used normally.
+  # 2012/Nov/20 Ubuntu's lvm2 has a udevd rules will automatically active VG, therefore before using "vgchange -an" to deactive the VG, we have to disable it, then restore it later.
+  auto_active_rules="$(LC_ALL=C grep -Ew "^[^#].*vgchange -a y" $node_rt/lib/udev/rules.d/*.rules 2>/dev/null | awk -F":" '{print $1}')"
+  if [ -n "$auto_active_rules" ]; then
+    echo "Found udevd rule causes block devices with LVM signatures to be automatically added to their volume group."
+    echo "Temporarily disable it otherwise the partition tool won't be able to inform the kernel the changes of partition table..."
+    for i in $auto_active_rules; do
+      mv -v "${i}" "${i}.drblsave"
+    done
+    # Reload the rules for udevd for running system, i.e. Clonezilla live. For Clonezilla SE, since it's in /tftpboot/node_root/, during the booting it won't be started.
+    if [ -z "$node_root" ]; then
+      udevadm control --reload-rules
+    fi
+  fi
+} # end of disable_lvm2_udevd_rules

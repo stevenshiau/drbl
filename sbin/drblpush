@@ -2326,6 +2326,8 @@ if [ -e /etc/debian_version ]; then
   perl -pi -e 's|^([[:space:]]*)(umount -r -d \$DIRS*)|$1 [ -n "\$DIRS" ] && $2 # Modified by DRBL|g' $drbl_common_root/etc/init.d/umountfs
   # For Debian Squeeze, by default it uses parallel start service "startpar" (i.e. CONCURRENCY=makefile). We disable it in the client so that we won't have to modify the services. E.g. /etc/rc1.d/*ssh when running clonezilla SE job. 
   LC_ALL=C perl -pi -e "s|^CONCURRENCY=.*|CONCURRENCY=none # Mofified by DRBL|g" $drbl_common_root/etc/init.d/rc
+  # Disable the lvm udevd, otherwise this rule file will be read-only in the client, and it will be auto-run during booting. Then the disk will be always busy. Clonezilla will fail to create partition table.
+  disable_lvm2_udevd_rules $drbl_common_root
 
 elif [ -e /etc/SuSE-release ]; then
   # For SuSE
