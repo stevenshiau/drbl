@@ -5,6 +5,16 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.4.3-drbl1) unstable; urgency=low
+
+  * The variable sys_pxelinux_required_c32 of drbl.conf was changed to 
+    sys_pxelinux_v5p_required_c32.
+  * Updating function put_syslinux_makeboot_for_usb_flash so that the 
+    menu.c32/vesamenu.c32/chain.c32 will always the same version with 
+    those downloaded c32 files.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 06 May 2013 21:04:53 +0800
+
 drbl (2.4.2-drbl1) unstable; urgency=low
 
   * Set "greeter-show-manual-login=true" for lightdm of DRBL client in drbl-login-switch.
