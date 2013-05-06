@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+- The variable sys_pxelinux_required_c32 of drbl.conf was changed to sys_pxelinux_v5_required_c32.
+- Updating function put_syslinux_makeboot_for_usb_flash so that the menu.c32/vesamenu.c32/chain.c32 will always the same version with those downloaded c32 files.
+
 * Mon May 06 2013 Steven Shiau <steven _at_ nchc org tw> 2.4.2-drbl1
 - Set "greeter-show-manual-login=true" for lightdm of DRBL client in drbl-login-switch.
 - Function restore_lvm2_udevd_rules was moved from ocs-functions to drbl-functions because it's required for Clonezilla SE.

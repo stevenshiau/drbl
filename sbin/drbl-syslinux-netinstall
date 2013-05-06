@@ -104,7 +104,7 @@ echo "The output file name is: $output_filename."
 
 WD="$(pwd)"
 mkdir -p $target_d/syslinux/
-cp -af $pxelinux_simple_vesamenu $pxelinux_simple_menu $pxelinux_bg_img $pxelinux_chain_file $target_d/syslinux/
+cp -af $pxelinux_bg_img $target_d/syslinux/
 
 echo "The following action will download a lot of network install packages, including these distributions: $GL_INST. This might take a long time..."
 echo 'If you want to assign the url, check "netinstall image settings" in drbl.conf.'

@@ -2483,7 +2483,7 @@ get_syslinux_binary_for_dos_linux() {
   local sysl_dir="$1"
   # syslinux_ver is not required. If it's not assigned, the latest one on the web will be used.
   local syslinux_ver="$2"
-  local syslinux_tarball syslinux_ver_subdir syslinux_extra_c32
+  local syslinux_tarball syslinux_ver_subdir syslinux_required_c32 syslinux_extra_c32
   [ -z "$sysl_dir" -o ! -d "$sysl_dir" ] && echo "No sysl_dir!" && exit 1
   # syslinux_binsrc_url is like:
   # http://www.kernel.org/pub/linux/utils/boot/syslinux/
@@ -2499,8 +2499,10 @@ get_syslinux_binary_for_dos_linux() {
   syslinux_ver_subdir="$(LC_ALL=C echo "$syslinux_ver" | sed -r -e "s/\.[[:digit:]]*$/\.xx/g")"
   echo "Downloading $syslinux_binsrc_url/$syslinux_ver_subdir/$syslinux_tarball..."
   wget $wget_opt -P $sysl_dir $syslinux_binsrc_url/$syslinux_ver_subdir/$syslinux_tarball
+  # Those required c32 files (menu.c32, vesamenu.c32 and chain.c2). We force to copy this again to avoid the version on DRBL server does not match the downloaded on.
+  syslinux_required_c32="syslinux-${syslinux_ver}/com32/menu/menu.c32 syslinux-${syslinux_ver}/com32/menu/vesamenu.c32 syslinux-${syslinux_ver}/com32/chain/chain.c32"
   # For syslinux 5.x, ./com32/elflink/ldlinux/ldlinux.c32, ./com32/lib/libcom32.c32, and ./com32/libutil/libutil.c32 are required.
-  for i in $sys_pxelinux_required_c32; do
+  for i in $sys_pxelinux_v5_required_c32; do
     if [ -n "$(LC_ALL=C tar -tvjf $sysl_dir/syslinux-${syslinux_ver}.tar.bz2 | grep -Ew $i)" ]; then
       syslinux_extra_c32="syslinux-${syslinux_ver}/com32/elflink/ldlinux/ldlinux.c32 syslinux-${syslinux_ver}/com32/lib/libcom32.c32 syslinux-${syslinux_ver}/com32/libutil/libutil.c32" 
       break
@@ -2511,7 +2513,10 @@ get_syslinux_binary_for_dos_linux() {
   (
    cd $sysl_dir
    # From syslinux 3.73, linux/syslinux is hardlink to linux/syslinux-nomtools, therefore we have to use --wildcards to extract it. Otherwise it will fail.
-   tar --wildcards -xvjf syslinux-${syslinux_ver}.tar.bz2 syslinux-${syslinux_ver}/win32/syslinux.exe syslinux-${syslinux_ver}/win64/syslinux64.exe syslinux-${syslinux_ver}/linux/syslinux* syslinux-${syslinux_ver}/extlinux/extlinux* syslinux-${syslinux_ver}/mbr/mbr.bin $syslinux_extra_c32
+   tar --wildcards -xvjf syslinux-${syslinux_ver}.tar.bz2 syslinux-${syslinux_ver}/com32/menu/menu.c32 syslinux-${syslinux_ver}/com32/menu/vesamenu.c32 syslinux-${syslinux_ver}/com32/chain/chain.c32 syslinux-${syslinux_ver}/win32/syslinux.exe syslinux-${syslinux_ver}/win64/syslinux64.exe syslinux-${syslinux_ver}/linux/syslinux* syslinux-${syslinux_ver}/extlinux/extlinux* syslinux-${syslinux_ver}/mbr/mbr.bin $syslinux_extra_c32
+   mv -f syslinux-${syslinux_ver}/com32/menu/menu.c32 .
+   mv -f syslinux-${syslinux_ver}/com32/menu/vesamenu.c32 .
+   mv -f syslinux-${syslinux_ver}/com32/chain/chain.c32 .
    mv -f syslinux-${syslinux_ver}/win32/syslinux.exe . 
    mv -f syslinux-${syslinux_ver}/win64/syslinux64.exe . 
    mv -f syslinux-${syslinux_ver}/mbr/mbr.bin .
@@ -2521,7 +2526,7 @@ get_syslinux_binary_for_dos_linux() {
       mv -f syslinux-${syslinux_ver}/com32/elflink/ldlinux/ldlinux.c32 .
       mv -f syslinux-${syslinux_ver}/com32/lib/libcom32.c32 .
       mv -f syslinux-${syslinux_ver}/com32/libutil/libutil.c32 .
-      chmod 644 $sys_pxelinux_required_c32
+      chmod 644 $sys_pxelinux_v5_required_c32
    fi
   )
 } # end of get_syslinux_binary_for_dos_linux
@@ -2530,7 +2535,8 @@ put_syslinux_makeboot_for_usb_flash() {
   local t_dir="$1"
   # syslinux_ver is not required. If it's not assigned, the latest one on the web will be used.
   local syslinux_ver="$2"  
-  local sysl_dir
+  local sysl_dir sysl_extra_c32_chklist
+  sysl_extra_c32_chklist="ldlinux.c32 libcom32.c32 libutil.c32"
   [ -z "$t_dir" -o ! -d "$t_dir" ] && echo "No t_dir!" && exit 1
   # Function to put syslinux.exe and syslinux (linux ELF 32-bit LSB executable) in dir t_dir 
   mkdir -p $t_dir/utils/{win32,linux,mbr}
@@ -2542,24 +2548,19 @@ put_syslinux_makeboot_for_usb_flash() {
   # Try to find the version of syslinux
   # Use strings to find the version, the output is like:
   # SYSLINUX 3.71 Debian-2008-08-04
-  SYSLINUX_VER="$(strings $sysl_dir/syslinux | grep -iE "^SYSLINUX.*[[:digit:]]+" | awk -F" " '{print $2}')"
+  SYSLINUX_VER="$(LC_ALL=C strings $sysl_dir/syslinux | grep -iE "^SYSLINUX.*[[:digit:]]+" | awk -F" " '{print $2}')"
   echo "SYSLINUX version: $SYSLINUX_VER" > $t_dir/utils/win32/VERSION.txt
   echo "SYSLINUX version: $SYSLINUX_VER" > $t_dir/utils/linux/VERSION.txt
   echo "Precompiled binary syslinux files were extracted from $syslinux_binsrc_url/syslinux-${syslinux_ver}.tar.bz2" > $t_dir/utils/README.txt
-  cp -af $sysl_dir/syslinux.exe $t_dir/utils/win32/
-  cp -af $sysl_dir/syslinux64.exe $t_dir/utils/win32/
-  cp -af $sysl_dir/syslinux $t_dir/utils/linux/
-  cp -af $sysl_dir/extlinux $t_dir/utils/linux/
+  cp -af $sysl_dir/{menu.c32,vesamenu.c32,chain.c32} $t_dir/syslinux/
+  cp -af $sysl_dir/{syslinux.exe,syslinux64.exe} $t_dir/utils/win32/
+  cp -af $sysl_dir/{syslinux,extlinux} $t_dir/utils/linux/
   cp -af $sysl_dir/mbr.bin $t_dir/utils/mbr/
-  if [ -e $sysl_dir/ldlinux.c32 ]; then
-    cp -af $sysl_dir/ldlinux.c32 $t_dir/syslinux/
-  fi
-  if [ -e $sysl_dir/libcom32.c32 ]; then
-    cp -af $sysl_dir/libcom32.c32 $t_dir/syslinux/
-  fi
-  if [ -e $sysl_dir/libutil.c32 ]; then
-    cp -af $sysl_dir/libutil.c32 $t_dir/syslinux/
-  fi
+  for i in $sysl_extra_c32_chklist; do
+    if [ -e $sysl_dir/$i ]; then
+      cp -af $sysl_dir/$i $t_dir/syslinux/
+    fi
+  done
   [ -d "$sysl_dir" -a -n "$(echo $sysl_dir | grep "sysl_dir")" ] && rm -rf $sysl_dir
 } # end of put_syslinux_makeboot_for_usb_flash
 #
