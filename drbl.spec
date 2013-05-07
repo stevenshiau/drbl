@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.4.3
+Version:	2.4.4
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Tue May 07 2013 Steven Shiau <steven _at_ nchc org tw> 2.4.4-drbl1
+- Adding package nwipe in the packages list of Clonezilla live.
+
 * Mon May 06 2013 Steven Shiau <steven _at_ nchc org tw> 2.4.3-drbl1
 - The variable sys_pxelinux_required_c32 of drbl.conf was changed to sys_pxelinux_v5p_required_c32.
 - Updating function put_syslinux_makeboot_for_usb_flash so that the menu.c32/vesamenu.c32/chain.c32 will always the same version with those downloaded c32 files.
