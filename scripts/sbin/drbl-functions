@@ -17,7 +17,7 @@ DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/usr/share/drbl}"
 # PATH="$PATH:$DRBL_SCRIPT_PATH/sbin:$DRBL_SCRIPT_PATH/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/X11R6/bin"
 path_to_add="$DRBL_SCRIPT_PATH/sbin $DRBL_SCRIPT_PATH/bin /usr/sbin /usr/bin /sbin"
 for i in $path_to_add; do
-  if [ -z "$(echo $PATH | grep -F $i)" ]; then
+  if [ -z "$(echo $PATH | grep -Fw $i)" ]; then
     PATH="$PATH:$i"
   fi
 done

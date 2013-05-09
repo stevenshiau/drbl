@@ -1,3 +1,9 @@
+drbl (2.4.5-drbl1) unstable; urgency=low
+
+  * Bug fixed: function drbl-functions failed to append /sbin/ in the PATH.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 09 May 2013 14:32:48 +0800
+
 drbl (2.4.4-drbl1) unstable; urgency=low
 
   * Adding package nwipe in the packages list of Clonezilla live.
