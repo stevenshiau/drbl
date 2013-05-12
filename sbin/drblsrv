@@ -3499,8 +3499,10 @@ if [ -n "$SMP_OPTION" -a "$DISTRIB_ID" = "Ubuntu" ]; then
 fi
 
 # The kernel image name: linux-iamge (such as Etch) or kernel-image (such as Sarge)
+# Kernel package name before (<=) Debian Wheezy (7.0) is like: linux-image-3.2.0-4-amd64
+# While for >= Debian jessie (8.0) is like: linux-image-3.8-1-amd64
 for ikmg in linux-image kernel-image; do
-  latest_drbl_kernel_in_rep="$(apt-cache pkgnames $ikmg | grep -E "$ikmg-[0-9]+\.[0-9]+\.[0-9]+-.*" | $cpu_filter | $smp_filter | $seldom_kernel_filter | pkg-ver-latest)"
+  latest_drbl_kernel_in_rep="$(apt-cache pkgnames $ikmg | grep -E "$ikmg-[0-9]+\.[0-9]+(\.[0-9]+|)-.*" | $cpu_filter | $smp_filter | $seldom_kernel_filter | pkg-ver-latest)"
   if [ -n "$latest_drbl_kernel_in_rep" ]; then
      kernel_img_name="$ikmg"
      break

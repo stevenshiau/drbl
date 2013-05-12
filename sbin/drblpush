@@ -2723,14 +2723,16 @@ fi
 
 # copy those rcS.d services for Debian, this can only be done after all updata-rc.d finished. Otherwise it will affect the update-rc.d
 if [ -e /etc/debian_version ]; then
-   # exclude those not necessary:
-   # network is already done in initrd of client
+   # Exclude those not necessary.
+   # Put the service to be removed in $unnecessary_rcsd_srv if you have.
    RCS_D_EXCLUDE=""
-   unnecessary_rcsd_srv="networking"
+   unnecessary_rcsd_srv=""
    for isv in $unnecessary_rcsd_srv; do
      RCS_D_EXCLUDE="$RCS_D_EXCLUDE --exclude=S*${isv} "
    done
    rsync -a $RCS_D_EXCLUDE /etc/rcS.d/* $drbl_common_root/etc/rcS.d/
+   # Force to put the modified networking service
+   cp -af $drbl_setup_path/files/misc/networking $drbl_common_root/etc/init.d/
    # force to link some necessary services, since Knoppix or B2D won't have
    # them, but in DRBL, it's a must!!!
    (
@@ -3294,7 +3296,7 @@ if [ -e /etc/debian_version ]; then
   fi
   if [ "$use_start_srv_after_ifup" = "yes" ]; then
     # mountnfs.sh is called in start-srv-after-ifup
-    cp -f $drbl_setup_path/files/misc/start-srv-after-ifup $drbl_common_root/etc/init.d/
+    cp -af $drbl_setup_path/files/misc/start-srv-after-ifup $drbl_common_root/etc/init.d/
     for infsf in waitnfs.sh mountnfs.sh; do
      if [ -e $drbl_common_root/etc/init.d/$infsf ]; then
       # Here we also insert a line to create a dir /tmp/boot (/tmp is tmpfs so we have to use a service to do that everytime client boots) so the /boot link to /tmp/boot/ will work.

@@ -45,6 +45,8 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+- Adding support for Debian Sid (ATM it's Jessie). The networking service for DRBL clients was added so that it's easier to deal with network status file.
+
 * Thu May 09 2013 Steven Shiau <steven _at_ nchc org tw> 2.4.5-drbl1
 - Bug fixed: function drbl-functions failed to append /sbin/ in the PATH.
 

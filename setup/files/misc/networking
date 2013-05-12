@@ -1,0 +1,23 @@
+#!/bin/bash
+# Steven Shiau <steven _at_ nchc org tw>
+# License: GPL
+# This program is used to replace the original networking service. Because in DRBL client, we do not have to start network by service since it's done in initrd. However, some action still need networking to finish some setting, e.g. /etc/network/if-up.d/mountnfs will check if all the network service is configured by ifup, which will write status in /run/network/ifstate. This service is used to similate networking service, create some required status file, but do not actually run ifup/ifdown for the network deivce. 
+# Ref: /etc/init.d/networking on Debian system.
+
+#
+DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/usr/share/drbl}"
+. $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
+
+# /etc/init.d/networking will create /run/network, and /run/network/ifstate so that ifup and ifdown can write files.
+RUN_DIR="/run/network"
+IFSTATE="$RUN_DIR/ifstate"
+
+mkdir -p "$RUN_DIR"
+:> "$IFSTATE"
+
+#
+all_dev="$(get-nic-devs)"
+echo "lo=lo" > "$IFSTATE"
+for i in $all_dev; do
+  echo "$i=$i" >> "$IFSTATE"
+done
