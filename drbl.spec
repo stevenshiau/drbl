@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.4.5
+Version:	2.4.6
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,7 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Sun May 12 2013 Steven Shiau <steven _at_ nchc org tw> 2.4.6-drbl1
 - Adding support for Debian Sid (ATM it's Jessie). The networking service for DRBL clients was added so that it's easier to deal with network status file.
 
 * Thu May 09 2013 Steven Shiau <steven _at_ nchc org tw> 2.4.5-drbl1

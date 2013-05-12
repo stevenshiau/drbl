@@ -1,3 +1,11 @@
+drbl (2.4.6-drbl1) unstable; urgency=low
+
+  * Adding support for Debian Sid (ATM it's Jessie). The networking service
+    for DRBL clients was added so that it's easier to deal with network 
+    status file.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sun, 12 May 2013 19:08:12 +0800
+
 drbl (2.4.5-drbl1) unstable; urgency=low
 
   * Bug fixed: function drbl-functions failed to append /sbin/ in the PATH.
