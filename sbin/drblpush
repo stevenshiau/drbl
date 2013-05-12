@@ -2731,8 +2731,10 @@ if [ -e /etc/debian_version ]; then
      RCS_D_EXCLUDE="$RCS_D_EXCLUDE --exclude=S*${isv} "
    done
    rsync -a $RCS_D_EXCLUDE /etc/rcS.d/* $drbl_common_root/etc/rcS.d/
-   # Force to put the modified networking service
-   cp -af $drbl_setup_path/files/misc/networking $drbl_common_root/etc/init.d/
+   # Force to overwrite the modified networking service. We should not overwrite the symbolic link file for Ubuntu's client. It's linked to /lib/init/upstart-job
+   if [ ! -L $drbl_common_root/etc/init.d/networking ]; then
+     cp -af $drbl_setup_path/files/misc/networking $drbl_common_root/etc/init.d/
+   fi
    # force to link some necessary services, since Knoppix or B2D won't have
    # them, but in DRBL, it's a must!!!
    (
