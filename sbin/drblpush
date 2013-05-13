@@ -3515,9 +3515,12 @@ echo -n "Deleting the accounts (except root) in the clients common root template
 usrdel_file_need="/usr/sbin/userdel"
 cp --parents $usrdel_file_need $drbl_common_root
 if ldd $usrdel_file_need &>/dev/null; then
-  usrdel_lib_need=$(ldd /usr/sbin/userdel | sed -e "s/.*=> //g" -e "s/(0x.*)//g" | awk '{print $1}')
+  usrdel_lib_need=$(LC_ALL=C ldd /usr/sbin/userdel | sed -e "s/.*=> //g" -e "s/(0x.*)//g" | awk '{print $1}')
   for imod in $usrdel_lib_need; do
-      cp --parents $imod $drbl_common_root
+    # Skip linux-vdso.so.1 and linux-gate.so.1, the virtual DSO, a shared object exposed by the kernel. They do not exist on the file system. Ref: http://ilivetoseek.wordpress.com/2011/10/24/linux-gate-so-1-or-linux-vdso-so-1/ 
+    [ "$imod" = "linux-vdso.so.1" ] && continue
+    [ "$imod" = "linux-gate.so.1" ] && continue
+    cp --parents $imod $drbl_common_root
   done
 fi
 # UGLY... For SuSE, we need to copy /usr/lib/pwdutils/ to $drbl_common_root, 
