@@ -1,3 +1,9 @@
+drbl (2.4.9-drbl1) unstable; urgency=low
+
+  * Adding zfs-fuse in the Clonezilla/DRBL live CD packages list.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 14 May 2013 14:38:53 +0800
+
 drbl (2.4.8-drbl1) unstable; urgency=low
 
   * Bug fixed: the shared object exposed by the kernel, i.e. linux-vdso.so.1 
