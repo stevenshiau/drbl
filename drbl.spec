@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.4.7
+Version:	2.4.8
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,7 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Tue May 14 2013 Steven Shiau <steven _at_ nchc org tw> 2.4.8-drbl1
 - Bug fixed: the shared object exposed by the kernel, i.e. linux-vdso.so.1 and linux-gate.so.1, should be skipped when copying shared objects to /tftpboot/node_root/ since they do not exist on the file system. 
+- Package sysklogd was replaced by rsyslog in the Clonezilla/DRBL live CD packages list.
 
 * Sun May 12 2013 Steven Shiau <steven _at_ nchc org tw> 2.4.7-drbl1
 - Bug fixed: We should not overwrite the /etc/init.d/networking of Ubuntu's DRBL client. Since it's linked to /lib/init/upstart-job. 
