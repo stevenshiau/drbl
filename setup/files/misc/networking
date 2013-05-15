@@ -1,4 +1,13 @@
 #!/bin/bash
+### BEGIN INIT INFO
+# Provides:          networking ifupdown
+# Required-Start:    mountkernfs $local_fs urandom
+# Required-Stop:     $local_fs
+# Default-Start:     S
+# Default-Stop:      0 6
+# Short-Description: Raise network interfaces.
+# Description:       Prepare /run/network directory, ifstate file.
+### END INIT INFO
 # Steven Shiau <steven _at_ nchc org tw>
 # License: GPL
 # This program is used to replace the original networking service. Because in DRBL client, we do not have to start network by service since it's done in initrd. However, some action still need networking to finish some setting, e.g. /etc/network/if-up.d/mountnfs will check if all the network service is configured by ifup, which will write status in /run/network/ifstate. This service is used to similate networking service, create some required status file, but do not actually run ifup/ifdown for the network deivce. 
