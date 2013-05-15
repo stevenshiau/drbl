@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.4.10-drbl1) unstable; urgency=low
+
+  * Adding LSB info in modified service networking of DRBL clients.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 15 May 2013 11:19:40 +0800
+
 drbl (2.4.9-drbl1) unstable; urgency=low
 
   * Adding zfs-fuse in the Clonezilla/DRBL live CD packages list.
