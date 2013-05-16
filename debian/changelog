@@ -1,3 +1,10 @@
+drbl (2.4.11-drbl1) unstable; urgency=low
+
+  * Program makeboot.bat was updated with a better mechanism to prevent
+    run program on wrong disk.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 16 May 2013 10:12:49 +0800
+
 drbl (2.4.10-drbl1) unstable; urgency=low
 
   * Adding LSB info in modified service networking of DRBL clients.
