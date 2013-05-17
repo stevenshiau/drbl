@@ -1,3 +1,10 @@
+drbl (2.4.12-drbl1) unstable; urgency=low
+
+  * Bug fixed: the dhcpd.conf created on Ubuntu 12.04 won't be started 
+    due to an extra "," in the end of name server list.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 17 May 2013 14:57:40 +0800
+
 drbl (2.4.11-drbl1) unstable; urgency=low
 
   * Program makeboot.bat was updated with a better mechanism to prevent
