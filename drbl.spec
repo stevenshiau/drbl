@@ -45,7 +45,7 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
-- Bug fixed: for expert mode, the postrun action for Clonezilla live should be asked, not be skipped.
+- Bug fixed: for expert mode, the postrun action for Clonezilla live should be asked, not be skipped. Thanks to SourceJo for reporting this issue (https://sourceforge.net/p/clonezilla/discussion/Open_discussion/thread/3f3bb67d/?limit=25#5973).
 
 * Fri May 17 2013 Steven Shiau <steven _at_ nchc org tw> 2.4.12-drbl1
 - Bug fixed: the dhcpd.conf created on Ubuntu 12.04 won't be started due to an extra "," in the end of name server list.
