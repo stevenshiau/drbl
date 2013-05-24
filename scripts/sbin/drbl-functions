@@ -1927,11 +1927,16 @@ if [ "$mode" = "save" ]; then
   2>> $OCS_PARAM_TMP
 fi
 
-# If user has specified postrun, then we do not have to set it. Otherwise, ask it.
-if [ -n "$postrun" ]; then
-  echo "-p $postrun " >> $OCS_PARAM_TMP
-else
+# For expert mode, we always ask it.
+# For beginner mode, if user has specified postrun, then we do not have to set it. Otherwise, ask it.
+if [ "$ocs_user_mode" = "expert" ]; then
   ocs_sr_advanced_param_post_mode_after_clone $OCS_PARAM_TMP
+else
+  if [ -n "$postrun" ]; then
+    echo "-p $postrun " >> $OCS_PARAM_TMP
+  else
+    ocs_sr_advanced_param_post_mode_after_clone $OCS_PARAM_TMP
+  fi
 fi
 
 # Force to strip the unnecessary quotation ', this is specially for dialog (from cdialog) in Mandriva and same reason to strip the unnecessary double quotation ", this is sepcially for dialog in OpenSuSE 11.1. Otherwise it will cause -p reboot become (containing space) '-p reboot', which is wrong option in dcs.
