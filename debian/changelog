@@ -1,3 +1,11 @@
+drbl (2.4.13-drbl1) unstable; urgency=low
+
+  * Bug fixed: for expert mode, the postrun action for Clonezilla live should be asked, 
+    not be skipped. Thanks to SourceJo for reporting this issue 
+    (https://sourceforge.net/p/clonezilla/discussion/Open_discussion/thread/3f3bb67d/?limit=25#5973).
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sat, 25 May 2013 17:12:35 +0800
+
 drbl (2.4.12-drbl1) unstable; urgency=low
 
   * Bug fixed: the dhcpd.conf created on Ubuntu 12.04 won't be started 
