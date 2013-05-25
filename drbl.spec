@@ -45,6 +45,8 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+- Bug fixed: "-r" option for Clonezilla might be duplicated when "-k1" option is enabled.
+
 * Sat May 25 2013 Steven Shiau <steven _at_ nchc org tw> 2.4.13-drbl1
 - Bug fixed: for expert mode, the postrun action for Clonezilla live should be asked, not be skipped. Thanks to SourceJo for reporting this issue (https://sourceforge.net/p/clonezilla/discussion/Open_discussion/thread/3f3bb67d/?limit=25#5973).
 

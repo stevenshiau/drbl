@@ -1507,9 +1507,9 @@ if [ "$mode" = "restore" ]; then
     echo "$msg_program_stop"
     exit 1
   fi
-  if grep -Ew "(-k1|k2)" $OCS_PARAM_TMP &>/dev/null; then
-    # k1-2 is different partition size, turn on -r by default
-    if [ -z "$(grep -w "\-r" $OCS_PARAM_TMP)" ]; then
+  if LC_ALL=C grep -Ew -- "(-k1|-k2)" $OCS_PARAM_TMP &>/dev/null; then
+    # Option -k1 or -k2 is for different partition size, turn on -r by default
+    if [ -z "$(LC_ALL=C grep -Ew -- "-r" $OCS_PARAM_TMP)" ]; then
       echo "Since the mode you choose might resize partition size, we turn on file system resize funtion automatically (-r)..."
       echo " -r " >> $OCS_PARAM_TMP
     fi
@@ -1761,10 +1761,12 @@ if [ "$mode" = "restore" ]; then
     echo "$msg_program_stop"
     exit 1
   fi
-  if grep -Ew "(-k1|k2)" $OCS_PARAM_TMP &>/dev/null; then
-    # k1-2 is different partition size, turn on -r by default
-    echo "Since the mode you choose might resize partition size, we turn on file system resize funtion automatically (-r)..."
-    echo " -r " >> $OCS_PARAM_TMP
+  if LC_ALL=C grep -Ew -- "(-k1|-k2)" $OCS_PARAM_TMP &>/dev/null; then
+    # Option -k1 or -k2 is for different partition size, turn on -r by default
+    if [ -z "$(LC_ALL=C grep -Ew -- "-r" $OCS_PARAM_TMP)" ]; then
+      echo "Since the mode you choose might resize partition size, we turn on file system resize funtion automatically (-r)..."
+      echo " -r " >> $OCS_PARAM_TMP
+    fi
   fi
 else
   # save
