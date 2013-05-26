@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.4.13
+Version:	2.4.14
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,7 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Sun May 26 2013 Steven Shiau <steven _at_ nchc org tw> 2.4.14-drbl1
 - Bug fixed: "-r" option for Clonezilla might be duplicated when "-k1" option is enabled.
 
 * Sat May 25 2013 Steven Shiau <steven _at_ nchc org tw> 2.4.13-drbl1

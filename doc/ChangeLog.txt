@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.4.14-drbl1) unstable; urgency=low
+
+  * Bug fixed: "-r" option for Clonezilla might be duplicated when
+    "-k1" option is enabled.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sun, 26 May 2013 15:07:53 +0800
+
 drbl (2.4.13-drbl1) unstable; urgency=low
 
   * Bug fixed: for expert mode, the postrun action for Clonezilla live should be asked, 
