@@ -1,3 +1,10 @@
+drbl (2.4.15-drbl1) unstable; urgency=low
+
+  * Bug fixed: drbl-client-boot.conf for Ubuntu 12.04 and 12.10 should be improved 
+    as that for Ubuntu 13.04. Otherwise lightdm won't start in DRBL client.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 06 Jun 2013 23:12:39 +0800
+
 drbl (2.4.14-drbl1) unstable; urgency=low
 
   * Bug fixed: "-r" option for Clonezilla might be duplicated when

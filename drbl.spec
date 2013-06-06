@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.4.14
+Version:	2.4.15
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Thu Jun 06 2013 Steven Shiau <steven _at_ nchc org tw> 2.4.15-drbl1
+- Bug fixed: drbl-client-boot.conf for Ubuntu 12.04 and 12.10 should be improved as that for Ubuntu 13.04. Otherwise lightdm won't start in DRBL client.
+
 * Sun May 26 2013 Steven Shiau <steven _at_ nchc org tw> 2.4.14-drbl1
 - Bug fixed: "-r" option for Clonezilla might be duplicated when "-k1" option is enabled.
 
