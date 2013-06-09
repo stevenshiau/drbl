@@ -1,7 +1,7 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
 Version:	2.4.15
-Release:	drbl1
+Release:	drbl2
 License:	GPL
 Group:		Development/DRBL
 Source0:	drbl-%{version}.tar.bz2
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Sun Jun 09 2013 Steven Shiau <steven _at_ nchc org tw> 2.4.15-drbl2
+- Making the desktop icon files of drbl live as executable.
+
 * Thu Jun 06 2013 Steven Shiau <steven _at_ nchc org tw> 2.4.15-drbl1
 - Bug fixed: drbl-client-boot.conf for Ubuntu 12.04 and 12.10 should be improved as that for Ubuntu 13.04. Otherwise lightdm won't start in DRBL client.
 

@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.4.15-drbl2) unstable; urgency=low
+
+  * Making the desktop icon files of drbl live as executable.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sun, 09 Jun 2013 12:05:27 +0800
+
 drbl (2.4.15-drbl1) unstable; urgency=low
 
   * Bug fixed: drbl-client-boot.conf for Ubuntu 12.04 and 12.10 should be improved 
