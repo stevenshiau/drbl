@@ -2187,7 +2187,11 @@ echo -n "."
 # fi
 # 2006/6/1 Just sync it, otherwise /lib/security will not be updated, some files will be missing.
 # 2012/9/26 For FC17 since /lib is linked as /usr/lib, we have to copy files, not the linked dir.
-rsync -a $RSYNC_OPT_EXTRA --exclude=modules/ /lib/ $drbl_common_root/lib/
+lib_opts_common_to_common=""
+for iv in $lib_NOT_2_be_copied_2_common_root; do
+  lib_opts_common_to_common="$lib_opts_common_to_common --exclude=$iv/ "
+done
+rsync -a $lib_opts_common_to_common /lib/ $drbl_common_root/lib/
 
 # For x86_64
 # For FC3 or later: /lib64 is a directory, not /lib32, only dir /lib

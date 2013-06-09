@@ -5,6 +5,14 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.4.16-drbl1) unstable; urgency=low
+
+  * Bug fixed: a variable lib_NOT_2_be_copied_2_common_root in drbl.conf 
+    was added so that it's easier to exclude the /lib/live/mount dir, 
+    the mounting point of Debian live 3.x, when running drblpush.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sun, 09 Jun 2013 16:28:44 +0800
+
 drbl (2.4.15-drbl2) unstable; urgency=low
 
   * Making the desktop icon files of drbl live as executable.
