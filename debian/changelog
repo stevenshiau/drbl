@@ -1,3 +1,9 @@
+drbl (2.4.17-drbl1) unstable; urgency=low
+
+  * CentOS 6.4 support was added.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 11 Jun 2013 10:05:24 +0800
+
 drbl (2.4.16-drbl1) unstable; urgency=low
 
   * Bug fixed: a variable lib_NOT_2_be_copied_2_common_root in drbl.conf 
