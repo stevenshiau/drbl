@@ -1,7 +1,7 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.4.16
-Release:	drbl2
+Version:	2.4.17
+Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
 Source0:	drbl-%{version}.tar.bz2
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Tue Jun 11 2013 Steven Shiau <steven _at_ nchc org tw> 2.4.17-drbl1
+- CentOS 6.4 support was added.
+
 * Sun Jun 09 2013 Steven Shiau <steven _at_ nchc org tw> 2.4.16-drbl1
 - Bug fixed: a variable lib_NOT_2_be_copied_2_common_root in drbl.conf was added so that it's easier to exclude the /lib/live/mount dir, the mounting point of Debian live 3.x, when running drblpush.
 
