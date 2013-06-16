@@ -45,6 +45,8 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+- Package efibootmgr was added in Clonezilla live packages list.
+
 * Tue Jun 11 2013 Steven Shiau <steven _at_ nchc org tw> 2.4.17-drbl1
 - CentOS 6.4 support was added.
 
