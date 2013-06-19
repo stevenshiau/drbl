@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.4.18-drbl1) unstable; urgency=low
+
+  * Package efibootmgr was added in Clonezilla live packages list.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 19 Jun 2013 14:57:30 +0800
+
 drbl (2.4.17-drbl1) unstable; urgency=low
 
   * CentOS 6.4 support was added.
