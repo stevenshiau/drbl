@@ -898,3 +898,6 @@ msg_locale_ca_ES='加泰隆尼亞文'
 keymap_file_prompt_and_example='請輸入鍵盤對應的檔案以便之後操作這個回復專用的Clonezilla live中使用。如果你輸入的是"NONE"，代表不更換，亦即使用預設的美式鍵盤。更多的鍵盤對應表，你可以在/usr/share/X11/xkb/rules/base.lst裡面找到。舉例，如果你要使用法國鍵盤對應的話，可以輸入"fr"。更多的資訊可以查詢Debian Live網頁上的使用手冊。'
 # Tag on 2013/02/17
 msg_ocs_param_srel='還原時將錯誤訊息存於印象檔目錄中'
+# Tag on 2013/07/23
+msg_ocs_param_iefi='還原後略去更新EFI NVRAM中的開機項目'
+msg_ocs_onthefly_param_iefi='還原後略去更新EFI NVRAM中的開機項目'

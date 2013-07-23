@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.4.20-drbl1) unstable; urgency=low
+
+  * Language files were updated. Words about updating EFI NVRAM were added.
+  * An option "-iefi" was added in in the restoring dialog menu.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 23 Jul 2013 16:36:10 +0800
+
 drbl (2.4.19-drbl1) unstable; urgency=low
 
   * Package "lsof" was added in the packages list of Clonezilla live.

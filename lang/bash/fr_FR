@@ -899,3 +899,6 @@ msg_locale_ca_ES='Catalan'
 keymap_file_prompt_and_example='Saisissez la configuration clavier à utiliser pendant la restauration. La valeur "NONE" implique un clavier américain. Les configurations disponibles se trouvent dans /usr/share/X11/xkb/rules/base.lst. Par ex. "fr" pour un clavier français. Pour plus d'\''informations, reportez-vous au manuel en ligne sur le site web de Debian Live.'
 # Tag on 2013/02/17
 msg_ocs_param_srel='Sauvegarder en enregistrant le journal dans le répertoire de l'\''image'
+# Tag on 2013/07/23
+msg_ocs_param_iefi='Skip updating boot entries in EFI NVRAM after restoring'
+msg_ocs_onthefly_param_iefi='Skip updating boot entries in EFI NVRAM after cloning'

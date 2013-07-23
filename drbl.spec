@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.4.19
+Version:	2.4.20
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,10 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Tue Jul 23 2013 Steven Shiau <steven _at_ nchc org tw> 2.4.20-drbl1
+- Language files were updated. Words about updating EFI NVRAM were added.
+- An option "-iefi" was added in in the restoring dialog menu.
+
 * Tue Jul 23 2013 Steven Shiau <steven _at_ nchc org tw> 2.4.19-drbl1
 - Package "lsof" was added in the packages list of Clonezilla live.
 

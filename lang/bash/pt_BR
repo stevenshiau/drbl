@@ -897,3 +897,6 @@ msg_locale_ca_ES='Catalan'
 keymap_file_prompt_and_example='Enter the keyboard layout to be used in the recovery Clonezilla live. If you input it as "NONE", the keymap will be US keyboard. You can find the keyboard layout in /usr/share/X11/xkb/rules/base.lst. e.g. "fr" for French keyboard layout. For more info, please check the live manual on Debian Live website.'
 # Tag on 2013/02/17
 msg_ocs_param_srel='Save restoring error log in image dir'
+# Tag on 2013/07/23
+msg_ocs_param_iefi='Skip updating boot entries in EFI NVRAM after restoring'
+msg_ocs_onthefly_param_iefi='Skip updating boot entries in EFI NVRAM after cloning'

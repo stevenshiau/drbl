@@ -900,3 +900,6 @@ msg_locale_ca_ES='加泰罗尼亚文'
 keymap_file_prompt_and_example='输入键盘布局以便在恢复Clonezilla live中使用。如果你输入的是"NONE"，代表不更换，亦即使用默认的美式键盘。更多的键盘映射表，你可以在/usr/share/X11/xkb/rules/base.lst中找到。例如，如果你要使用法式键盘映射，可以输入"fr"。更多的信息可以查询Debian Live网页上的使用手册。'
 # Tag on 2013/02/17
 msg_ocs_param_srel='还原时将错误日志保存到镜像文件目录中'
+# Tag on 2013/07/23
+msg_ocs_param_iefi='Skip updating boot entries in EFI NVRAM after restoring'
+msg_ocs_onthefly_param_iefi='Skip updating boot entries in EFI NVRAM after cloning'

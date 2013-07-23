@@ -898,3 +898,6 @@ msg_locale_ca_ES='Catalan'
 keymap_file_prompt_and_example='Introduzca la distribución de teclado a usar en la recuperación de Clonezilla live. Si escribe "NONE", el mapa de teclado será el de US. Puede encontrar las distribuciones de teclado en /usr/share/X11/xkb/rules/base.lst. ej. "fr" para distribución de teclado Francés. Para mas información, por favor consulte el manual en la web de Debian Live.'
 # Tag on 2013/02/17
 msg_ocs_param_srel='Grabar el registro de error en la restauración en el directorio de la imagen'
+# Tag on 2013/07/23
+msg_ocs_param_iefi='Skip updating boot entries in EFI NVRAM after restoring'
+msg_ocs_onthefly_param_iefi='Skip updating boot entries in EFI NVRAM after cloning'

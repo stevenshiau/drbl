@@ -897,3 +897,6 @@ msg_locale_ca_ES='Katalanisch'
 keymap_file_prompt_and_example='Geben Sie die Tastaturbelegung (Layout) an, die von "Clonezilla live" beim Restore verwendet wird. Wenn Sie "NONE" angeben, wird als Layout US verwendet. Sie können die Layout-Bezeichnungen in /usr/share/X11/xkb/rules/base.lst finden, z.B. "fr" für das französische Layout. Für weitere Informationen sehen Sie im Online-Manual auf der Debian-Live Website nach.'
 # Tag on 2013/02/17
 msg_ocs_param_srel='Das Restore-Fehlerprotokoll wird im Imageverzeichnis gesichert'
+# Tag on 2013/07/23
+msg_ocs_param_iefi='Skip updating boot entries in EFI NVRAM after restoring'
+msg_ocs_onthefly_param_iefi='Skip updating boot entries in EFI NVRAM after cloning'

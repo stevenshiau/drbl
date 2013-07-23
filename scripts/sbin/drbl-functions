@@ -1447,6 +1447,7 @@ if [ "$mode" = "restore" ]; then
     "-irhr"    "$msg_ocs_param_irhr" off \
     "-ius"     "$msg_ocs_param_ius" off \
     "-icds"    "$msg_ocs_param_icds" off \
+    "-iefi"    "$msg_ocs_param_iefi" off \
     "-j1"      "$msg_ocs_param_j1" off \
     "-j2"      "$msg_ocs_param_j2" on \
     "-cm"      "$msg_ocs_param_cm" off \
@@ -1703,6 +1704,7 @@ if [ "$mode" = "restore" ]; then
     "-irhr"    "$msg_ocs_param_irhr" off \
     "-ius"     "$msg_ocs_param_ius" off \
     "-icds"    "$msg_ocs_param_icds" off \
+    "-iefi"    "$msg_ocs_param_iefi" off \
     "-j1"      "$msg_ocs_param_j1" off \
     "-j2"      "$msg_ocs_param_j2" on \
     "-cm"      "$msg_ocs_param_cm" off \
