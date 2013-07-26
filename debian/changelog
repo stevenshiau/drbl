@@ -1,3 +1,9 @@
+drbl (2.4.21-drbl1) unstable; urgency=low
+
+  * Adding efibootmgr in the packages list for quering in drbl.conf.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 26 Jul 2013 21:05:58 +0800
+
 drbl (2.4.20-drbl1) unstable; urgency=low
 
   * Language files were updated. Words about updating EFI NVRAM were added.

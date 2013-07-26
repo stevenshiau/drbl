@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.4.20
+Version:	2.4.21
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Fri Jul 26 2013 Steven Shiau <steven _at_ nchc org tw> 2.4.21-drbl1
+- Adding efibootmgr in the packages list for quering in drbl.conf.
+
 * Tue Jul 23 2013 Steven Shiau <steven _at_ nchc org tw> 2.4.20-drbl1
 - Language files were updated. Words about updating EFI NVRAM were added.
 - An option "-iefi" was added in in the restoring dialog menu.
