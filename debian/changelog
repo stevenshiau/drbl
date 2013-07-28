@@ -1,3 +1,10 @@
+drbl (2.4.22-drbl1) unstable; urgency=low
+
+  * Language files were updated by adding some sentences related
+    to prep-ocsroot.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sun, 28 Jul 2013 11:12:10 +0800
+
 drbl (2.4.21-drbl1) unstable; urgency=low
 
   * Adding efibootmgr in the packages list for quering in drbl.conf.
