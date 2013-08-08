@@ -45,6 +45,8 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+- The netinstall for Ubuntu in drbl.conf was updated as precise and raring.
+
 * Wed Aug 07 2013 Steven Shiau <steven _at_ nchc org tw> 2.4.23-drbl1
 - Language file es_ES of bash was updated. Thanks to Juan Ramón Martínez.
 
