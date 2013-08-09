@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.4.23
+Version:	2.4.24
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,9 +45,11 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Fri Aug 09 2013 Steven Shiau <steven _at_ nchc org tw> 2.4.24-drbl1
 - The netinstall for Ubuntu in drbl.conf was updated as precise and raring.
 - Language file it_IT was updated. Thanks to Gianfranco Gentili.
 - Language file de_DE was updated. Thanks to Michael Vinzenz.
+- Language file fr_FR was updated. Thanks to Jean-Francois Nifenecker.
 
 * Wed Aug 07 2013 Steven Shiau <steven _at_ nchc org tw> 2.4.23-drbl1
 - Language file es_ES of bash was updated. Thanks to Juan Ramón Martínez.

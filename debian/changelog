@@ -1,3 +1,12 @@
+drbl (2.4.24-drbl) unstable; urgency=low
+
+  * The netinstall for Ubuntu in drbl.conf was updated as precise and raring.
+  * Language file it_IT was updated. Thanks to Gianfranco Gentili.
+  * Language file de_DE was updated. Thanks to Michael Vinzenz.
+  * Language file fr_FR was updated. Thanks to Jean-Francois Nifenecker.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 09 Aug 2013 09:38:28 +0800
+
 drbl (2.4.23-drbl1) unstable; urgency=low
 
   * Language file es_ES of bash was updated. Thanks to Juan Ramón Martínez.
