@@ -45,6 +45,8 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+- Language file ca_ES was updated. Thanks to René Mérou.
+
 * Fri Aug 09 2013 Steven Shiau <steven _at_ nchc org tw> 2.4.24-drbl1
 - The netinstall for Ubuntu in drbl.conf was updated as precise and raring.
 - Language file it_IT was updated. Thanks to Gianfranco Gentili.

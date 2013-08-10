@@ -900,7 +900,15 @@ msg_autoproductname_is_a_reserved="\"autoproductname\" és un nom de imatge rese
 msg_locale_ca_ES="Català"
 keymap_file_prompt_and_example="Introdueixi la distribució del teclat que hem d'utilitzar en la restauració amb el Clonezilla live. Si introdueix \"NONE\", El teclat serà el US. Pot trobar el la distribució del teclar en /usr/share/X11/xkb/rules/base.lst. p.ej. \"fr\" per a la distribució del teclat francesa. Si vol més informació, per favor, doni una ullada al manual en el lloc de Debian Live."
 # Tag on 2013/02/17
-msg_ocs_param_srel='Desar el registre de error de la restauració en el directory imatge'
+msg_ocs_param_srel="Desar el registre de error de la restauració en el directory imatge"
 # Tag on 2013/07/23
-msg_ocs_param_iefi='Skip updating boot entries in EFI NVRAM after restoring'
-msg_ocs_onthefly_param_iefi='Skip updating boot entries in EFI NVRAM after cloning'
+msg_ocs_param_iefi="Saltar-se l'actulització de les entrades de l'arrencada de l'EFI NVRAM després de restaurar"
+msg_ocs_onthefly_param_iefi="Saltar-se l'actulització de les entrades de l'arrencada de l'EFI NVRAM després de la clonació"
+msg_you_must_select_a_mode="Ha de seleccionar un mòdul!"
+msg_you_must_input_a_server="Ha d'introduir un servidor!"
+msg_you_must_input_an_account="Ha d'introduir un compte!"
+msg_you_must_input_the_path_to_image="Ha d'introduir una ruta cap al repositori imatge!"
+msg_ocs_live_mount_smb_security_mod="Quin mode de seguretat desitja?"
+msg_ocs_use_system_default="Usar el sistema per defecte"
+msg_ocs_use_ntlm_mode="Usar el hash de contrasenyes NTLM (antic, mode dèbil, per a alguns NAS)"
+msg_you_must_input_the_ssh_port="Ha d'introduir el nombre del port del servei SSH!"
