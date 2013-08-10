@@ -1,3 +1,9 @@
+drbl (2.4.25-drbl) unstable; urgency=low
+
+  * Language file ca_ES was updated. Thanks to René Mérou.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sat, 10 Aug 2013 15:06:14 +0800
+
 drbl (2.4.24-drbl) unstable; urgency=low
 
   * The netinstall for Ubuntu in drbl.conf was updated as precise and raring.
