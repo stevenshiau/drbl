@@ -1,3 +1,9 @@
+drbl (2.4.26-drb1) unstable; urgency=low
+
+  * Language file zh_CN was updated. Thanks to Zhiqiang Zhang.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sat, 10 Aug 2013 23:45:05 +0800
+
 drbl (2.4.25-drbl) unstable; urgency=low
 
   * Language file ca_ES was updated. Thanks to René Mérou.
