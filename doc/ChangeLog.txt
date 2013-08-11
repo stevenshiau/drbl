@@ -5,7 +5,14 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
-drbl (2.4.26-drb1) unstable; urgency=low
+drbl (2.4.27-drbl) unstable; urgency=low
+
+  * Using gdisk-noicu in the packages list of Clonezilla live instead
+    of gdisk (drbl.conf).
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sun, 11 Aug 2013 10:18:48 +0800
+
+drbl (2.4.26-drbl) unstable; urgency=low
 
   * Language file zh_CN was updated. Thanks to Zhiqiang Zhang.
 

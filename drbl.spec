@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.4.26
+Version:	2.4.27
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Sun Aug 11 2013 Steven Shiau <steven _at_ nchc org tw> 2.4.27-drbl1
+- Using gdisk-noicu in the packages list of Clonezilla live instead of gdisk (drbl.conf).
+
 * Sat Aug 10 2013 Steven Shiau <steven _at_ nchc org tw> 2.4.26-drbl1
 - Language file zh_CN was updated. Thanks to Zhiqiang Zhang.
 
