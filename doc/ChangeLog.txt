@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.4.29-drbl1) unstable; urgency=low
+
+  * Usage of drbl-client-switch was updated.
+  * Two contral variables, ocs_fsck_src_part and ocs_chk_img, were added in drbl-functions.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sat, 24 Aug 2013 18:11:32 +0800
+
 drbl (2.4.28-drbl) unstable; urgency=low
 
   * Language file ja_JP.UTF-8 was updated. Thanks to Akira YOSHIYAMA.

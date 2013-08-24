@@ -65,6 +65,7 @@ USAGE() {
    echo "restore-disk: Clonezilla restore disk Mode"
    echo "save-parts: Clonezilla save partitions mode"
    echo "restore-parts: Clonezilla restore partitions mode"
+   echo "select-in-client: Select mode in client"
    echo "For MODE=more, available MODE2:"
    echo "switch-pxe-menu       Switch DRBL client menus"
    echo "switch-pxe-bg-mode    Switch PXE Linux background"
