@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.4.29
+Version:	2.4.30
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,7 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Sun Aug 25 2013 Steven Shiau <steven _at_ nchc org tw> 2.4.30-drbl1
 - Bug fixed: option of switch-pxe-menu was changed to avoid confusion.
+- Variable clonezilla_client_menu_label_prefix was added in drbl.conf.
 
 * Sat Aug 24 2013 Steven Shiau <steven _at_ nchc org tw> 2.4.29-drbl1
 - Usage of drbl-client-switch was updated.

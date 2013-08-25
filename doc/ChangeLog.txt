@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.4.30-drbl1) unstable; urgency=low
+
+  * Bug fixed: option of switch-pxe-menu was changed to avoid confusion.
+  * Variable clonezilla_client_menu_label_prefix was added in drbl.conf.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sun, 25 Aug 2013 16:40:47 +0800
+
 drbl (2.4.29-drbl1) unstable; urgency=low
 
   * Usage of drbl-client-switch was updated.
