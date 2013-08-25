@@ -25,7 +25,7 @@ USAGE() {
     echo "`basename $0` [OPTION] [hide|reveal|setdefault]"
     echo "Options:"
     language_help_prompt_by_idx_no
-    echo "-i, --image IMG   set IMG as the default one"
+    echo "-i, --menu MENU   Assign MENU to be processed"
     echo "-c, --config CONF use the CONF file instead of default one ($PXE_CONF_DEF)"
     dialog_like_prog_help_prompt
     echo "-v, --verbose     show verbose messages"
