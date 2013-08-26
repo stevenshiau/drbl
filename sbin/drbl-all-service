@@ -147,9 +147,17 @@ case "$switch" in
           # It's Debian/SuSE... no /var/lock/subsys/$serv_st tag, so we just restart it always.
           to_restart=yes
         else
+          # CentOS...
           # Since not all the tag file in /var/lock/subsys is the same with service name, we have to convert it here.
+          # Ref: http://bugs.centos.org/view.php?id=5604
           case "$serv_st" in
-            nfs) serv_st_d="nfsd";;
+            nfs) 
+                 if [ -n "$(grep -Ew /var/lock/subsys/nfsd /etc/init.d/nfs 2>/dev/null)" ]; then
+                   serv_st_d="nfsd"
+                 else
+                   serv_st_d="nfs"
+                 fi
+                 ;;
             nfslock) serv_st_d="rpc.statd";;
             *) serv_st_d="$serv_st";;
           esac
@@ -290,11 +298,18 @@ case "$switch" in
 	  # (or SuSE ? not sure... since SuSE uses lock file differs from that service name).
           to_stop=yes
         else
-	  # NOT debian, it's RH-like
+	  # CentOS...
 	  # We can use the /var/lock/subsys/$serv_st
           # Since not all the tag file in /var/lock/subsys is the same with service name, we have to convert it here.
+          # Ref: http://bugs.centos.org/view.php?id=5604
           case "$serv_st" in
-            nfs) serv_st_d="nfsd";;
+            nfs) 
+                 if [ -n "$(grep -Ew /var/lock/subsys/nfsd /etc/init.d/nfs 2>/dev/null)" ]; then
+                   serv_st_d="nfsd"
+                 else
+                   serv_st_d="nfs"
+                 fi
+                 ;;
             nfslock) serv_st_d="rpc.statd";;
             *) serv_st_d="$serv_st";;
           esac

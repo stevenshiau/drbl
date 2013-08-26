@@ -45,6 +45,8 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+- Bug fixed: nfs service was not started or stopped by drbl-all-service in CentOS 6. Thanks to hihcheng Huang (shihcheng0527 _at_ gmail com) for reporting this issue.
+
 * Sun Aug 25 2013 Steven Shiau <steven _at_ nchc org tw> 2.4.30-drbl1
 - Bug fixed: option of switch-pxe-menu was changed to avoid confusion.
 - Variable clonezilla_client_menu_label_prefix was added in drbl.conf.
