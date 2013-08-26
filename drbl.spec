@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.4.30
+Version:	2.4.31
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,7 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Mon Aug 26 2013 Steven Shiau <steven _at_ nchc org tw> 2.4.31-drbl1
 - Bug fixed: nfs service was not started or stopped by drbl-all-service in CentOS 6. Thanks to hihcheng Huang (shihcheng0527 _at_ gmail com) for reporting this issue.
 
 * Sun Aug 25 2013 Steven Shiau <steven _at_ nchc org tw> 2.4.30-drbl1

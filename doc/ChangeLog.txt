@@ -5,6 +5,14 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.4.31-drbl1) unstable; urgency=low
+
+  * Bug fixed: nfs service was not started or stopped by drbl-all-service
+    in CentOS 6. Thanks to hihcheng Huang (shihcheng0527 _at_ gmail com) 
+    for reporting this issue.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 26 Aug 2013 16:47:45 +0800
+
 drbl (2.4.30-drbl1) unstable; urgency=low
 
   * Bug fixed: option of switch-pxe-menu was changed to avoid confusion.
