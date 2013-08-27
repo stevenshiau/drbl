@@ -45,6 +45,8 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+- Bug fixed: drbl-all-service failed to stop or restart nfs-server in Fedora 17.
+
 * Mon Aug 26 2013 Steven Shiau <steven _at_ nchc org tw> 2.4.31-drbl1
 - Bug fixed: nfs service was not started or stopped by drbl-all-service in CentOS 6. Thanks to hihcheng Huang (shihcheng0527 _at_ gmail com) for reporting this issue.
 

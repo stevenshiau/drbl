@@ -161,9 +161,11 @@ case "$switch" in
             nfslock) serv_st_d="rpc.statd";;
             *) serv_st_d="$serv_st";;
           esac
-	     # NOT debian, it's RH-like, we can use the /var/lock/subsys/$serv_st
-	     if [ -e /var/lock/subsys/$serv_st_d -o -e /var/run/$serv_st_d.pid ]; then
-	       to_restart=yes
+	  # NOT debian, it's RH-like, we can use the /var/lock/subsys/$serv_st
+	  if [ -e /var/lock/subsys/$serv_st_d -o -e /var/run/$serv_st_d.pid ]; then
+	     to_restart=yes
+	  elif [ "$serv_st_d" = "nfs-server"  ] ; then
+	     to_restart=yes
           else
 	     to_restart=no
           fi
@@ -314,6 +316,8 @@ case "$switch" in
             *) serv_st_d="$serv_st";;
           esac
 	  if [ -e /var/lock/subsys/$serv_st_d -o -e /var/run/$serv_st_d.pid ]; then
+	     to_stop=yes
+	  elif [ "$serv_st_d" = "nfs-server"  ] ; then
 	     to_stop=yes
           else
 	     to_stop=no
