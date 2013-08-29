@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.4.31
+Version:	2.4.32
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+- Netinstall for Debian Squeeze was removed in drbl.conf, while wheezy is kept.
+
+* Tue Aug 27 2013 Steven Shiau <steven _at_ nchc org tw> 2.4.32-drbl1
 - Bug fixed: drbl-all-service failed to stop or restart nfs-server in Fedora 17.
 
 * Mon Aug 26 2013 Steven Shiau <steven _at_ nchc org tw> 2.4.31-drbl1

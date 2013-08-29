@@ -1,3 +1,10 @@
+drbl (2.4.32-drbl1) unstable; urgency=low
+
+  * Bug fixed: drbl-all-service failed to stop or restart nfs-server in 
+    Fedora 17.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 27 Aug 2013 15:03:40 +0800
+
 drbl (2.4.31-drbl1) unstable; urgency=low
 
   * Bug fixed: nfs service was not started or stopped by drbl-all-service
