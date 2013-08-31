@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.4.34-drbl1) unstable; urgency=low
+
+  * Changed messages_shown_preference="cmd" in drbl.conf.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sat, 31 Aug 2013 20:07:25 +0800
+
 drbl (2.4.33-drbl1) unstable; urgency=low
 
   * Netinstall for Debian Squeeze was removed in drbl.conf, while wheezy
