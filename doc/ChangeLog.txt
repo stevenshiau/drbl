@@ -5,6 +5,17 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.4.33-drbl1) unstable; urgency=low
+
+  * Netinstall for Debian Squeeze was removed in drbl.conf, while wheezy
+    is kept.
+  * Variable msg_prompt_for_insert_USB_dev_if_necessary and 
+    msg_do_not_close_window_until_clone_finish in language files were 
+    updated.
+  * A variable messages_shown_preference was added in drbl.conf.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sat, 31 Aug 2013 19:54:34 +0800
+
 drbl (2.4.32-drbl1) unstable; urgency=low
 
   * Bug fixed: drbl-all-service failed to stop or restart nfs-server in 

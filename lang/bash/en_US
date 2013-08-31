@@ -676,7 +676,6 @@ msg_one_NIC_one_IP_limitation_prompt="///NOTE/// There is only one network card 
 msg_if_lease_IP_add_to_pxe_etherboot_only="Do you want to lease IP address to PXE/Etherboot client only? ///NOTE/// If you say no, any machine connected with eth0 might lease IP address from this DRBL server. THIS IS VERY ANNOYING if you have other machines you do not want them to join DRBL environment! They might lease IP address from this DRBL server! Therefore, it's ONLY when you are SURE all the machines connected with eth0 are used as DRBL/Clonezilla clients, you can say 'no' here."
 msg_drbl_env_is_not_ready_now_config='The DRBL environment is not ready. Now you have to input some information, including (1) network configuration and (2) Clonezilla image home dir, to setup such an environment.'
 msg_drbl_env_is_ready='The DRBL environment is ready, so we can start the Clonezilla server now.'
-msg_do_not_close_window_until_clone_finish='///NOTE/// DO NOT CLOSE THIS WINDOW UNTIL CLIENTS FINISH THE CLONE! This window must remain so that the clone services spawned by Clonezilla can work and show results.'
 msg_ntfs_in_this_part_is_corrupt='The NTFS in this partition is corrupted'
 msg_two_options_for_you_now='Two options for you now'
 msg_boot_win_run_chkdsk="Try to boot the template machine into MS Windows, and run 'chkdsk /f', or 'chkdsk /p /r' (for MS XP Recovery Console and others), then reboot it TWICE! Important, don't forget the /f or /p /r parameter(s)! This option is recommended!"
@@ -909,3 +908,4 @@ msg_ocs_use_ntlm_mode='Use NTLM password hashing (older, weak mode, for some NAS
 msg_you_must_input_the_ssh_port='You must input the SSH service port number!'
 # Tag on 2013/08/31
 msg_prompt_for_insert_USB_dev_if_necessary="If you want to use USB device as a Clonezilla image repository, please\n * Insert USB device into this machine *now*\n * Wait for about 5 secs \n * Press Enter key \nso that the OS can detect the USB device and later we can mount it as $ocsroot."
+msg_do_not_close_window_until_clone_finish='///NOTE/// \nDO NOT CLOSE THIS WINDOW UNTIL CLIENTS FINISH THE CLONE! \nThis window must remain so that the clone services spawned by Clonezilla can work and show results.'

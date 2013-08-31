@@ -676,7 +676,6 @@ msg_one_NIC_one_IP_limitation_prompt="///HINWEIS/// Auf diesem System gibt es nu
 msg_if_lease_IP_add_to_pxe_etherboot_only="Wollen Sie IP-Adressen nur für PXE/Etherboot-Clients vergeben? ///HINWEIS/// Wenn Sie 'No' antworten, bekommt jedes System, das mit eth0 verbunden ist, eine IP-Adresse vom DHCP-Server. DIES IST SEHR STÖREND, wenn fremde Systeme plötzlich in der DRBL-Umgebung auftauchen!  Sie sollten nur mit "No" antworten, wenn Sie sicher sind, dass alle Systeme an eth0 DRBL/Clonezilla-Clients sind!"
 msg_drbl_env_is_not_ready_now_config='Die DRBL-Umgebung ist nicht bereit. Sie müssen jetzt einige Daten wie (1) Netzwerk-Konfiguration und (2) das Clonezilla-Verzeichnis angeben, um eine solche Umgebung zu konfigurieren.'
 msg_drbl_env_is_ready='Die DRBL-Umgebung ist bereit, wir starten jetzt den Clonezilla-Server.'
-msg_do_not_close_window_until_clone_finish='///HINWEIS/// SCHLIESSEN SIE DIESES FENSTER NICHT, BEVOR DAS KLONEN DER CLIENTS BEENDET IST! Dieses Fenster muss geöffnet bleiben, damit die Klon-Services von Clonezilla funktionieren und Meldungen anzeigen können.'
 msg_ntfs_in_this_part_is_corrupt='Das NTFS-Dateisystem auf dieser Partition ist defekt'
 msg_two_options_for_you_now='Sie haben zwei Möglichkeiten'
 msg_boot_win_run_chkdsk="Empfohlen: Versuchen Sie, das Original-System mit MS Windows zu starten und dort 'chkdsk /f' oder 'chkdsk /p /r' aufzurufen (in der XP-Recovery-Console oder im System), und booten Sie anschließen ZWEIMAL! Es ist wichtig, die Parameter /f oder /p und /r anzugeben!"
@@ -909,3 +908,4 @@ msg_ocs_use_ntlm_mode='NTLM Password-Hashing verwenden (älteres, schwaches Verf
 msg_you_must_input_the_ssh_port='Sie müssen die Portnummer des SSH-Dienstes angeben!'
 # Tag on 2013/08/31
 msg_prompt_for_insert_USB_dev_if_necessary="Wenn Sie ein USB-Gerät als Clonezilla-Image-Repository verwenden wollen,\n * verbinden Sie das Gerät *jetzt*.\n * Warten Sie dann ca. 5 Sek. \n * und drücken Sie dann Enter \ndamit das Betriebssystem das USB-Gerät erkennen kann und wir es später als $ocsroot mounten können."
+msg_do_not_close_window_until_clone_finish='///HINWEIS/// \nSCHLIESSEN SIE DIESES FENSTER NICHT, BEVOR DAS KLONEN DER CLIENTS BEENDET IST! \nDieses Fenster muss geöffnet bleiben, damit die Klon-Services von Clonezilla funktionieren und Meldungen anzeigen können.'

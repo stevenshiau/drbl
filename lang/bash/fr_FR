@@ -677,7 +677,6 @@ msg_one_NIC_one_IP_limitation_prompt="///NOTE/// Il n'y a qu'une seule carte ré
 msg_if_lease_IP_add_to_pxe_etherboot_only="Voulez-vous n'attribuer d'adresse IP qu'aux seuls clients PXE/Etherboot ? ///NOTE/// Si vous répondez 'no', toute machine connectée à eth0 pourra recevoir une adresse IP de ce serveur DRBL. Ceci est TRES GÊNANT si vous avez d'autres machines que vous ne voulez pas joindre à l'environnement DRBL car elles pourraient malgré tout recevoir leur adresse IP du serveur DRBL ! Par conséquent, la réponse 'no' ne doit être fournie QUE lorsque vous êtes SÛR que toutes les machines connectées à eth0 sont des clients DRBL."
 msg_drbl_env_is_not_ready_now_config='L'\''environnement DRBL n'\''est pas prêt. Afin de mettre en place cet environnement, vous devez entrer des informations à propos (1) de la configuration du réseau et (2) du répertoire image de Clonezilla.'
 msg_drbl_env_is_ready='L'\''environnement DRBL est prêt. Nous pouvons démarrer le serveur Clonezilla maintenant.'
-msg_do_not_close_window_until_clone_finish='///NOTE/// NE FERMEZ PAS CETTE FENÊTRE TANT QUE LES CLIENTS N'\''ONT PAS ACHEVÉ LE CLONAGE ! Cette fenêtre doit rester présente afin que les services de clonage lancés par Clonezilla fonctionnent correctement et affichent leurs résultats.'
 msg_ntfs_in_this_part_is_corrupt='Le système NTFS sur cette partition est endommagé'
 msg_two_options_for_you_now='Vous avez deux options'
 msg_boot_win_run_chkdsk="Essayez de démarrer la machine modèle sous MS Windows puis lancez 'chkdsk /f' ou 'chkdsk /p /r' (appel de la console de récupération WindowsXP), enfin redémarrez la machine DEUX FOIS ! Important, n'oubliez pas les paramètres /f ou /p /r ! Cette option est recommandée !"
@@ -911,3 +910,4 @@ msg_ocs_use_ntlm_mode='Utiliser le hachage de mot de passe NTLM (ancien, faible,
 msg_you_must_input_the_ssh_port='Vous devez donner le numéro de port du service SSH !'
 # Tag on 2013/08/31
 msg_prompt_for_insert_USB_dev_if_necessary="Si vous désirez utiliser un périphérique USB pour le répertoire image de Clonezilla,\n * insérez ce périphérique *maintenant*.\n * Attendez env. 5 sec.\n * puis appuyez sur Entrée \npour laisser le temps de la détection au système. Ce périphérique sera alors monté sous $ocsroot."
+msg_do_not_close_window_until_clone_finish='///NOTE/// \nNE FERMEZ PAS CETTE FENÊTRE TANT QUE LES CLIENTS N'\''ONT PAS ACHEVÉ LE CLONAGE ! \nCette fenêtre doit rester présente afin que les services de clonage lancés par Clonezilla fonctionnent correctement et affichent leurs résultats.'

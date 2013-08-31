@@ -678,7 +678,6 @@ msg_one_NIC_one_IP_limitation_prompt="///注意/// 這台伺服器目前有一�
 msg_if_lease_IP_add_to_pxe_etherboot_only="你是否要限制只有使用PXE/Etherboot機制的用戶端才能從這台DRBL伺服器租用IP位址? ///注意/// 如果你回答'no', 任何和這台機器的eth0有連通的機器，都會可以租用到這台DRBL伺服器提供的IP位址。如果你有用戶端機器不要加入這個DRBL環境的話，而你選擇不要限制，這將會非常困擾。因為任何機器都會有可能可以租用到IP位址。因此，只有在你**確認**所有和這台DRBL伺服器eth0連接的機器，都是要當DRBL/Clonezilla的用戶端，你才可以在這裡回答'no'。"
 msg_drbl_env_is_not_ready_now_config='DRBL環境還沒有就緒，現在你必須提供一些資訊，包含 (1) 網路的設定，(2) Clonezilla印象檔的家目錄，以便設定好DRBL環境。'
 msg_drbl_env_is_ready='DRBL環境已經就緒，現在我們可以啟用Clonezilla伺服器功能。'
-msg_do_not_close_window_until_clone_finish='///注意/// 在用戶端完成所有儲存或是還原動作之前,**不要**關閉這個視窗!要不然有些等待中的程式會因為視窗的關閉而被停止作用。'
 msg_ntfs_in_this_part_is_corrupt='這個分割區的檔案系統毀損或是不完整'
 msg_two_options_for_you_now='你有兩個選擇'
 msg_boot_win_run_chkdsk="試著把範本機開機進入微軟Windows，然後執行 'chkdsk /f', 或者 'chkdsk /p /r' (M$ XP Recovery Console和其他的版本), 然後重新開機**兩次**! ///重要/// 不要忘記 /f 或者 /p /r 這些參數。 建議你選用這個選項!"
@@ -910,3 +909,4 @@ msg_ocs_use_ntlm_mode='使用NTLM password hashing模式(較舊較不安全,使�
 msg_you_must_input_the_ssh_port='你必須輸入SSH服務的埠數值!'
 # Tag on 2013/08/31
 msg_prompt_for_insert_USB_dev_if_necessary="如果你的印象檔是要存在USB裝置(如隨身碟)，或者從USB裝置讀出，請\n * 現在*插入USB裝置，\n * 然後等待約5秒鐘後，\n * 再按Enter鍵繼續，\n以便系統可以偵測到USB裝置然後待會我們才可以把它掛載成$ocsroot。"
+msg_do_not_close_window_until_clone_finish='///注意/// \n在用戶端完成所有儲存或是還原動作之前,**不要**關閉這個視窗!\n要不然有些等待中的程式會因為視窗的關閉而被停止作用。'

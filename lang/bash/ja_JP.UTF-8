@@ -695,7 +695,6 @@ msg_one_NIC_one_IP_limitation_prompt="【注意】このサーバには単一の
 msg_if_lease_IP_add_to_pxe_etherboot_only="PXE/Etherboot クライアントのみ IP アドレスをリースしますか?【注意】no を回答した場合、eth0 に接続されたどのマシンもこの DRBL サーバから IP アドレスがリースされるでしょう。DRBL 環境に接続したくない他のマシンがある場合、これは非常に迷惑です!!これらはこの DRBL サーバから IP アドレスをリースされてしまいます。従って、eth0 で接続されたマシンが全て DRBL/Clonezilla クライアントとして使用される事が確認されている場合のみ、ここで「no」を回答して下さい。"
 msg_drbl_env_is_not_ready_now_config='DRBL 環境は準備されていません。これから、このような環境をセットアップする為、(1)ネットワーク設定 (2)Clonezilla イメージのホームディレクトリ を含むいくつかの情報を入力しなければなりません。'
 msg_drbl_env_is_ready='DRBL 環境が準備できましたので、ここで Clonezilla サーバを開始できます。'
-msg_do_not_close_window_until_clone_finish='【注意】クライアントの複製が終わるまでこのウインドウを閉じないで下さい!!このウインドウを残して、Clonezilla によって何度も実行される複製サービスが動作し、結果を表示しなければなりません。'
 msg_ntfs_in_this_part_is_corrupt='このパーティションの NTFS は障害があります'
 msg_two_options_for_you_now='ここで２つのオプションがあります'
 msg_boot_win_run_chkdsk="M$ Windows で一時マシンを起動してみて、(M$ XP リカバリコンソールあるいは他のもの用に)'chkdsk /f' または 'chkdsk /p /r' を実行し、２回再起動します!!重要：/f と /p /r パラメータを忘れないで下さい!!これらのオプションはお薦めです!!"
@@ -929,3 +928,4 @@ msg_ocs_use_ntlm_mode='NTLM パスワードハッシュを使用(旧式・脆弱
 msg_you_must_input_the_ssh_port='SSH サービスのポート番号を入力して下さい!'
 # Tag on 2013/08/31
 msg_prompt_for_insert_USB_dev_if_necessary="Clonezilla イメージリポジトリとして USB デバイスを使用したい場合、\n * 「今」USB デバイスをこのマシンに挿入して下さい。\n * 5 秒待って、\n * [Enter]キーを押すと、\nOS が USB デバイスを検知して、後で $ocsroot としてマウントできます。"
+msg_do_not_close_window_until_clone_finish='【注意】\nクライアントの複製が終わるまでこのウインドウを閉じないで下さい!!\nこのウインドウを残して、Clonezilla によって何度も実行される複製サービスが動作し、結果を表示しなければなりません。'

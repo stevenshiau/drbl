@@ -680,7 +680,6 @@ msg_one_NIC_one_IP_limitation_prompt="///NOTA/// Només hi ha una targeta de xar
 msg_if_lease_IP_add_to_pxe_etherboot_only="Desitja assignar l'adreça IP a clients PXE/Etherboot únicament? ///NOTA/// Si respon no, a qualsevol màquina connectada amb eth0 se li pot assignar una adreça IP des d'aquest servidor DRBL. AIXÒ ÉS MOLT MOLEST si posseeix altres màquines que no vol que estiguin en l'entorn DRBL! Se'ls assignarà adreça IP des d'aquest servidor DRBL! Per tant, NOMÉS quan estigui SEGUR que totes les màquines connectades amb eth0 s'usaran com a clients DRBL/Clonezilla, pot respondre 'no' aquí."
 msg_drbl_env_is_not_ready_now_config="L'entorn DRBL no està llest. Cal introduir alguna informació, incloent (1) configuració de xarxa i (2) directori home d'imatge Clonezilla, per configurar un entorn d'aquest tipus."
 msg_drbl_env_is_ready="L'entorn DRBL està llest, es pot iniciar el servidor Clonezilla ara."
-msg_do_not_close_window_until_clone_finish="///NOTA/// NO TANQUI AQUESTA FINESTRA FINS QUE ELS CLIENTS ACABIN DE CLONAR! Aquesta finestra ha de romandre perquè els serveis generats per Clonezilla puguin funcionar i mostrar resultats."
 msg_ntfs_in_this_part_is_corrupt="El NTFS en aquesta partició està corrupte "
 msg_two_options_for_you_now="Dues opcions per a vostè ara"
 msg_boot_win_run_chkdsk="Intenti iniciar la plantilla de la màquina dins de MS Windows, i executi 'chkdsk /f', o 'chkdsk /p /r' (per a MS XP Consola de Recuperació i uns altres), i reiniciï-la DUES VEGADES! Important, no oblidi el/s paràmetre/s  /f o /p /r ! Aquesta opció és recomanada!"
@@ -913,3 +912,4 @@ msg_ocs_use_ntlm_mode="Usar el hash de contrasenyes NTLM (antic, mode dèbil, pe
 msg_you_must_input_the_ssh_port="Ha d'introduir el nombre del port del servei SSH!"
 # Tag on 2013/07/23
 msg_prompt_for_insert_USB_dev_if_necessary="Si desitja usar un dispositiu USB com a repositori imatge de Clonezilla, per favor\n * insereixi el dispositiu USB en aquesta màquina *ara*.\n * Esperi uns 5 segons\n * i premi \nIntro perquè el S.O. detecti el dispositiu USB i pugui muntar-se com $ocsroot."
+msg_do_not_close_window_until_clone_finish="///NOTA/// \nNO TANQUI AQUESTA FINESTRA FINS QUE ELS CLIENTS ACABIN DE CLONAR! \nAquesta finestra ha de romandre perquè els serveis generats per Clonezilla puguin funcionar i mostrar resultats."
