@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.4.33
+Version:	2.4.34
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Sat Aug 31 2013 Steven Shiau <steven _at_ nchc org tw> 2.4.34-drbl1
+- Changed messages_shown_preference="cmd" in drbl.conf.
+
 * Sat Aug 31 2013 Steven Shiau <steven _at_ nchc org tw> 2.4.33-drbl1
 - Netinstall for Debian Squeeze was removed in drbl.conf, while wheezy is kept.
 - Variable msg_prompt_for_insert_USB_dev_if_necessary and msg_do_not_close_window_until_clone_finish in language files were updated.
