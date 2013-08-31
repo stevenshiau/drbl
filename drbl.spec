@@ -47,6 +47,7 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 %changelog
 - Netinstall for Debian Squeeze was removed in drbl.conf, while wheezy is kept.
 - Variable msg_prompt_for_insert_USB_dev_if_necessary in language files was updated.
+- A variable messages_shown_preference was added in drbl.conf.
 
 * Tue Aug 27 2013 Steven Shiau <steven _at_ nchc org tw> 2.4.32-drbl1
 - Bug fixed: drbl-all-service failed to stop or restart nfs-server in Fedora 17.
