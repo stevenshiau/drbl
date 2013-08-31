@@ -709,7 +709,6 @@ msg_option_k_is_not_chosen_part_table_will_be_recreated='拡張パラメータ -
 msg_failed_to_find_this_partition='このシステムでこのパーティションが見つかりませんでした'
 msg_the_partition_table_does_not_exist='もしかしてパーティションテーブルが存在しないのでしょうか? Clonezilla 実行時に -k オプションをチェックしましたか? もしそうなら、-k をチェックしないで下さい。これにより Clonezilla がパーティションテーブルを作成できます。'
 msg_linux_disk_naming='ディスク名は GNU/Linux でのデバイス名です。１番めのディスクが hda か sda、２番めのディスクが hdb か sdb …'
-msg_prompt_for_insert_USB_dev_if_necessary="Clonezilla イメージリポジトリとして USB デバイスを使用したい場合、「今」USB デバイスをこのマシンに挿入して下さい。5 秒待って、[Enter]キーを押すと、OS が USB デバイスを検知して、後で $ocsroot としてマウントできます。"
 msg_unable_to_find_target_hd='コピー先 HDD が見つかりません'
 msg_check_if_this_hd_exists_and_more='本当に HDD があるか確認して下さい、あるいは(1)カーネルが古すぎる(2)イメージはこのディスクから保存されなかった(P.S.cnvt-ocs-dev を使用してイメージを別のディスク名に変換できます。詳細は「cnvt-ocs-dev --help」参照)'
 msg_the_partition_in_the_system_now='現在このシステムにあるディスクとパーティション'
@@ -928,3 +927,5 @@ msg_ocs_live_mount_smb_security_mod='どのセキュリティモードを使い�
 msg_ocs_use_system_default='システムのデフォルトを使用'
 msg_ocs_use_ntlm_mode='NTLM パスワードハッシュを使用(旧式・脆弱なモード。幾つかの NAS 用)'
 msg_you_must_input_the_ssh_port='SSH サービスのポート番号を入力して下さい!'
+# Tag on 2013/08/31
+msg_prompt_for_insert_USB_dev_if_necessary="Clonezilla イメージリポジトリとして USB デバイスを使用したい場合、\n * 「今」USB デバイスをこのマシンに挿入して下さい。\n * 5 秒待って、\n * [Enter]キーを押すと、\nOS が USB デバイスを検知して、後で $ocsroot としてマウントできます。"

@@ -691,7 +691,6 @@ msg_option_k_is_not_chosen_part_table_will_be_recreated='Negli extra parametri a
 msg_failed_to_find_this_partition='Impossibile trovare questa partizione in questo sistema'
 msg_the_partition_table_does_not_exist='Forse la tabella delle partizioni non esiste? Avete selezionato l'\''opzione "-k" quando avete eseguito Clonezilla? Se è così, NON selezionate "-k" in modo che Clonezilla possa creare la tabella delle partizioni per voi.'
 msg_linux_disk_naming='Il nome del disco è il nome del dispositivo in GNU/Linux. Il primo disco nel sistema è "hda" o "sda", il secondo disco è "hdb" o "sdb "...'
-msg_prompt_for_insert_USB_dev_if_necessary="Se volete usare un dispositivo USB come repository delle immagini di Clonezilla, vi preghiamo di inserire tale dispositivo USB in questa macchina *adesso*. Attendete circa 5 secondi, quindi premete il tasto di Invio in modo che il sistema operativo sia in grado di rilevare il dispositivo USB e successivamente lo possa montare come $ocsroot."
 msg_unable_to_find_target_hd='Non trovo l'\''HD di destinazione'
 msg_check_if_this_hd_exists_and_more='Controllate se questo HD esiste davvero, o se (1) Il kernel è troppo vecchio (2) L'\''immagine non è stata salvata da questo disco (PS. Potete usare cnvt-ocs-dev per convertire l'\''immagine in un diverso nome di disco. Per maggiori informazioni, controllate "cnvt-ocs-dev --help")'
 msg_the_partition_in_the_system_now='Il disco e le partizioni in questo sistema adesso'
@@ -910,3 +909,5 @@ msg_ocs_live_mount_smb_security_mod='Quale modo di sicurezza volete?'
 msg_ocs_use_system_default='Usa i default di sistema'
 msg_ocs_use_ntlm_mode='Usa l'\''hashing della password NTLM (la più vecchia, modo debole, per qualche NAS)'
 msg_you_must_input_the_ssh_port='Dovete immettere il numero della porta del servizio SSH !'
+# Tag on 2013/08/31
+msg_prompt_for_insert_USB_dev_if_necessary="Se volete usare un dispositivo USB come repository delle immagini di Clonezilla, \n * vi preghiamo di inserire tale dispositivo USB in questa macchina *adesso*.\n * Attendete circa 5 secondi,\n * quindi premete il tasto di \nInvio in modo che il sistema operativo sia in grado di rilevare il dispositivo USB e successivamente lo possa montare come $ocsroot."

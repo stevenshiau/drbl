@@ -694,7 +694,6 @@ msg_option_k_is_not_chosen_part_table_will_be_recreated="L'opció '-k' en els pa
 msg_failed_to_find_this_partition="Error al cercar aquesta partició en aquest sistema"
 msg_the_partition_table_does_not_exist="Pot ser que la taula de particions no existeixi? Va marcar l'opció '-k' quan executava Clonezilla? Si és així, NO marqui '-k' perquè Clonezilla pugui crear una taula de particions per vostè."
 msg_linux_disk_naming="El nom del disc és el nom del dispositiu en GNU/Linux. El primer disc en el sistema és 'hda' o 'sda', el 2º disc és 'hdb' o 'sdb'..."
-msg_prompt_for_insert_USB_dev_if_necessary="Si desitja usar un dispositiu USB com a repositori imatge de Clonezilla, per favor insereixi el dispositiu USB en aquesta màquina *ara*. Esperi uns 5 segons i premi Intro perquè el S.O. detecti el dispositiu USB i pugui muntar-se com $ocsroot."
 msg_unable_to_find_target_hd="No és possible trobar l'HD desti"
 msg_check_if_this_hd_exists_and_more="Comprovi si aquest HD realment existeix, o potser (1) El kernel és molt antic (2) La imatge no va ser salvada des d'aquest disc (P.S. Pot usar cnvt-ocs-dev per convertir la imatge a un nom de dispositiu de disc diferent. Per a més informació, consulti 'cnvt-ocs-dev --help')"
 msg_the_partition_in_the_system_now="El disc i les particions d'aquest sistema actual"
@@ -912,3 +911,5 @@ msg_ocs_live_mount_smb_security_mod="Quin mode de seguretat desitja?"
 msg_ocs_use_system_default="Usar el sistema per defecte"
 msg_ocs_use_ntlm_mode="Usar el hash de contrasenyes NTLM (antic, mode dèbil, per a alguns NAS)"
 msg_you_must_input_the_ssh_port="Ha d'introduir el nombre del port del servei SSH!"
+# Tag on 2013/07/23
+msg_prompt_for_insert_USB_dev_if_necessary="Si desitja usar un dispositiu USB com a repositori imatge de Clonezilla, per favor\n * insereixi el dispositiu USB en aquesta màquina *ara*.\n * Esperi uns 5 segons\n * i premi \nIntro perquè el S.O. detecti el dispositiu USB i pugui muntar-se com $ocsroot."

@@ -690,7 +690,6 @@ msg_option_k_is_not_chosen_part_table_will_be_recreated='A opção "-k" dos par�
 msg_failed_to_find_this_partition='Erro ao procurar esta partição neste sistema'
 msg_the_partition_table_does_not_exist='Pode ser que a tabela de particionamento não exista? Marcou a opção "-k" quando executava Clonezilla? Se sim, NÃO marque "-k" para que Clonezilla possa criar uma tabela de particionamento para você.'
 msg_linux_disk_naming='O nome do disco é o nome do dispositivo no GNU/Linux. O primeiro disco no sistema é "hda" ou "sda", o 2º disco é "hdb" o "sdb"...'
-msg_prompt_for_insert_USB_dev_if_necessary="Se deseja usar um dispositivo USB como repositório de imagem Clonezilla, por favor insira o dispositivo USB nesta máquina *AGORA*. Espere uns 5 segundos e pressione Enter para que o S.O. detecte o dispositivo USB e possa montá-lo como $ocsroot."
 msg_unable_to_find_target_hd='Não foi possível encontrar o HD de destino'
 msg_check_if_this_hd_exists_and_more='Verifique se este HD realmente existe, ou talvez (1) O kernel seja muito antigo (2) A imagem não foi salva a partir deste disco (PS. Pode usar cnvt-ocs-dev para converter a imagem para um nome de dispositivo de disco diferente. Para mais informações, consulte "cnvt-ocs-dev --help")'
 msg_the_partition_in_the_system_now='O disco e as partições deste sistema agora'
@@ -908,3 +907,5 @@ msg_ocs_live_mount_smb_security_mod='Which security mode do you want?'
 msg_ocs_use_system_default='Use system default'
 msg_ocs_use_ntlm_mode='Use NTLM password hashing (older, weak mode, for some NAS)'
 msg_you_must_input_the_ssh_port='You must input the SSH service port number!'
+# Tag on 2013/08/31
+msg_prompt_for_insert_USB_dev_if_necessary="Se deseja usar um dispositivo USB como repositório de imagem Clonezilla, por favor\n * insira o dispositivo USB nesta máquina *AGORA*.\n * Espere uns 5 segundos e \n * pressione Enter \npara que o S.O. detecte o dispositivo USB e possa montá-lo como $ocsroot."

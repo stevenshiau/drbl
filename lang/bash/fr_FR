@@ -691,7 +691,6 @@ msg_option_k_is_not_chosen_part_table_will_be_recreated='L'\''option "-k"  des p
 msg_failed_to_find_this_partition='Partition introuvable sur ce système'
 msg_the_partition_table_does_not_exist='Peut-être la table de partitions n'\''existe-t-elle pas ? Avez-vous coché l'\''option "-k" sous Clonezilla ? Si oui, ne la cochez pas, de manière que Clonezilla puisse recréer la table des partitions.'
 msg_linux_disk_naming='Le nom du disque est le nom du périphérique sous GNU/Linux. Le premier disque du système se nomme "hda" ou "sda", le 2è est "hdb" ou "sdb", etc.'
-msg_prompt_for_insert_USB_dev_if_necessary="Si vous désirez utiliser un périphérique USB pour le répertoire image de Clonezilla, insérez ce périphérique *maintenant*. Attendez env. 5 sec. puis appuyez sur Entrée pour laisser le temps de la détection au système. Ce périphérique sera alors monté sous $ocsroot."
 msg_unable_to_find_target_hd='Disque cible introuvable'
 msg_check_if_this_hd_exists_and_more='Vérifiez que ce disque existe réellement. Peut être (1) le noyau est trop ancien (2) l'\''image n'\''a pas été enregistrée à partir de ce disque (PS. Vous pouvez lancer cnvt-ocs-dev afin d'\''adapter l'\''image à un autre nom de périphérique. Pour plus de détails, voir "cnvt-ocs-dev --help")'
 msg_the_partition_in_the_system_now='Le disque et les partitions de ce système maintenant'
@@ -910,3 +909,5 @@ msg_ocs_live_mount_smb_security_mod='Choisissez le mode de sécurité'
 msg_ocs_use_system_default='Utiliser le choix par défaut du système'
 msg_ocs_use_ntlm_mode='Utiliser le hachage de mot de passe NTLM (ancien, faible, concerne certains NAS)'
 msg_you_must_input_the_ssh_port='Vous devez donner le numéro de port du service SSH !'
+# Tag on 2013/08/31
+msg_prompt_for_insert_USB_dev_if_necessary="Si vous désirez utiliser un périphérique USB pour le répertoire image de Clonezilla,\n * insérez ce périphérique *maintenant*.\n * Attendez env. 5 sec.\n * puis appuyez sur Entrée \npour laisser le temps de la détection au système. Ce périphérique sera alors monté sous $ocsroot."

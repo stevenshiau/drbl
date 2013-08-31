@@ -690,7 +690,6 @@ msg_option_k_is_not_chosen_part_table_will_be_recreated='Option "-k" in den Expe
 msg_failed_to_find_this_partition='Die Partition wurde auf diesem System nicht gefunden'
 msg_the_partition_table_does_not_exist='Möglicherweise gibt es keine Partiton-Tabelle? Haben Sie die Option "-k" angegeben, als Sie Clonezilla gestartet haben? Wenn ja, dürfen Sie "-k" nicht wählen, dann wird Clonezilla eine Partiton-Tabelle für Sie erstellen.'
 msg_linux_disk_naming='Der Name der Platte ist der Gerätename in GNU/Linux. Die erste Platte im System ist "hda" oder "sda", die zweite Platte ist "hdb" oder "sdb"...'
-msg_prompt_for_insert_USB_dev_if_necessary="Wenn Sie ein USB-Gerät als Clonezilla-Image-Repository verwenden wollen, verbinden Sie das Gerät *jetzt*. Warten Sie dann ca. 5 Sek. und drücken Sie dann Enter damit das Betriebssystem das USB-Gerät erkennen kann und wir es später als $ocsroot mounten können."
 msg_unable_to_find_target_hd='Kann die Ziel-Festplatte nicht finden'
 msg_check_if_this_hd_exists_and_more='Überprüfen Sie, ob diese Festplatte existiert, es könnte aber auch sein, dass (1) der Kernel zu alt ist oder (2) das Image nicht von dieser Platte erstellt wurde (P.S. Mit cnvt-ocs-dev können Sie das Image auf einen anderen Festplatten-Namen ändern. Weitere Informationen bekommen Sie durch den Aufruf von "cnvt-ocs-dev --help")'
 msg_the_partition_in_the_system_now='Platten und Partitionen auf diesem System sind'
@@ -908,3 +907,5 @@ msg_ocs_live_mount_smb_security_mod='Welches Sicherheitsverfahren soll verwendet
 msg_ocs_use_system_default='Systemstandard verwenden'
 msg_ocs_use_ntlm_mode='NTLM Password-Hashing verwenden (älteres, schwaches Verfahren - für einige NAS)'
 msg_you_must_input_the_ssh_port='Sie müssen die Portnummer des SSH-Dienstes angeben!'
+# Tag on 2013/08/31
+msg_prompt_for_insert_USB_dev_if_necessary="Wenn Sie ein USB-Gerät als Clonezilla-Image-Repository verwenden wollen,\n * verbinden Sie das Gerät *jetzt*.\n * Warten Sie dann ca. 5 Sek. \n * und drücken Sie dann Enter \ndamit das Betriebssystem das USB-Gerät erkennen kann und wir es später als $ocsroot mounten können."
