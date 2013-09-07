@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.4.34
+Version:	2.4.35
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Sat Sep 07 2013 Steven Shiau <steven _at_ nchc org tw> 2.4.35-drbl1
+- Minor updates about the the question mark after $msg_are_u_sure_u_want_to_continue for language files.
+
 * Sat Aug 31 2013 Steven Shiau <steven _at_ nchc org tw> 2.4.34-drbl1
 - Changed messages_shown_preference="cmd" in drbl.conf.
 

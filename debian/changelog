@@ -1,3 +1,10 @@
+drbl (2.4.35-drbl1) unstable; urgency=low
+
+  * Minor updates about the the question mark after 
+    $msg_are_u_sure_u_want_to_continue for language files.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sat, 07 Sep 2013 09:10:00 +0800
+
 drbl (2.4.34-drbl1) unstable; urgency=low
 
   * Changed messages_shown_preference="cmd" in drbl.conf.
