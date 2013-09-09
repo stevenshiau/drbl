@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.4.36-drbl1) unstable; urgency=low
+
+  * Removing hal from live system packages list in drbl.conf.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 09 Sep 2013 13:33:30 +0800
+
 drbl (2.4.35-drbl1) unstable; urgency=low
 
   * Minor updates about the the question mark after 
