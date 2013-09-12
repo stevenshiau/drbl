@@ -227,14 +227,14 @@ MENU COLOR HELP 7;32;41 #c0000090 #00000000
 say **********************************************
 say Welcome to DRBL.
 say NCHC Free Software Labs, Taiwan.
-say http://drbl.nchc.org.tw; http://drbl.sf.net
+say http://drbl.org; http://drbl.nchc.org.tw
 say **********************************************
 
 # Allow client to edit boot parameters
 ALLOWOPTIONS 1
 
 # simple menu title
-MENU TITLE DRBL (http://drbl.nchc.org.tw, http://drbl.sf.net)
+MENU TITLE DRBL (http://drbl.org)
 
 label drbl
   MENU DEFAULT

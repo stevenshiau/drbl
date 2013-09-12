@@ -1,8 +1,8 @@
 #!/bin/bash
 if [ -n "$DISPLAY" ]; then
-  kfmclient exec http://drbl.sf.net
+  kfmclient exec http://drbl.org
   kfmclient exec http://drbl.nchc.org.tw
 else
-  lynx http://drbl.sf.net
+  lynx http://drbl.org
 fi
 

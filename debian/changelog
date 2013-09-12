@@ -1,3 +1,10 @@
+drbl (2.4.38-drbl1) unstable; urgency=low
+
+  * The DRBL URL was changed as http://drbl.org from http://drbl.sf.net
+    in drbl-syslinux-netinstall and generate-pxe-menu.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 12 Sep 2013 11:05:55 +0800
+
 drbl (2.4.37-drbl1) unstable; urgency=low
 
   * Removing hwinfo from live system packages list in drbl.conf 

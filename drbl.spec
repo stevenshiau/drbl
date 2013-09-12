@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.4.37
+Version:	2.4.38
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Thu Sep 12 2013 Steven Shiau <steven _at_ nchc org tw> 2.4.38-drbl1
+- The DRBL URL was changed as http://drbl.org from http://drbl.sf.net in drbl-syslinux-netinstall and generate-pxe-menu.
+
 * Mon Sep 09 2013 Steven Shiau <steven _at_ nchc org tw> 2.4.37-drbl1
 - Removing hwinfo from live system packages list in drbl.conf because it's removed from Ubuntu Saucy and we use lshw instead.
 
