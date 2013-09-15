@@ -45,6 +45,8 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+- The unnecessary variables wget* in drbl.conf were removed.
+
 * Thu Sep 12 2013 Steven Shiau <steven _at_ nchc org tw> 2.4.38-drbl1
 - The DRBL URL was changed as http://drbl.org from http://drbl.sf.net in drbl-syslinux-netinstall and generate-pxe-menu.
 
