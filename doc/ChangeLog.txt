@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.5.0-drbl1) unstable; urgency=low
+
+  * Adding support for Ubuntu 13.10.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sun, 22 Sep 2013 15:48:59 +0800
+
 drbl (2.4.39-drbl1) unstable; urgency=low
 
   * The unnecessary variables wget* in drbl.conf were removed.
