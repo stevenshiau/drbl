@@ -45,6 +45,8 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+- Removing those not supported release in drbl/setup/files/Ubuntu/, only 12.04, 12.10, 13.04, and 13.10 were kept now.
+
 * Sun Sep 22 2013 Steven Shiau <steven _at_ nchc org tw> 2.5.0-drbl1
 - Adding support for Ubuntu 13.10.
 
