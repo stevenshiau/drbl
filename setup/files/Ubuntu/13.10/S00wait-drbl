@@ -1,0 +1,18 @@
+#!/bin/bash
+# This "service" is due to "start on runlevel S and started drbl-client-boot" in /etc/init/rcS.conf failing to wait for drbl-client-boot, here we have a workaround for that.
+TIMEOUT=200
+echo "Waiting for drbl-client-boot to be finished..."
+to_wait=""
+while [ -z "$to_wait" ]; do
+  if [ -e "/var/run/drbl-client-boot" ]; then
+    echo "drbl-client-boot is finished. Starting rcS..."
+    to_wait="no"
+  else
+    sleep 0.1
+    TIMEOUT="$(( $TIMEOUT - 1 ))"
+    if [ "$TIMEOUT" -le 0 ]; then
+      echo "Timeout in $0. Starting the rcS services..."
+      break
+    fi
+  fi
+done

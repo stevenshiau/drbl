@@ -3421,7 +3421,7 @@ if [ -e /etc/debian_version ]; then
     # 2nd group: drbl-client-boot (which contains virtual fs, dubs, hal, nfs...)
     # 3rd group: after drbl-client-boot -> rc-sysinit.conf
     # For Ubuntu 11.10, (1) Make mounted-var.conf start on startup since /var/run need to be linked to /run so it's writable for other daemons. (2) Commented dbus.conf since it will be started in drbl-client-boot.conf. Otherwise drbl-client-boot.conf will exit with error code.
-    upstart_conf_2_be_startup="udev.conf portmap.conf mounted-var.conf"
+    upstart_conf_2_be_startup="udev.conf rpcbind.conf portmap.conf mounted-var.conf"
     upstart_conf_2_be_after_drbl_client_boot="rc-sysinit.conf"
     upstart_conf_2_be_commented="dbus.conf mountall.conf mountall-net.conf resolvconf.conf"
     for i in $upstart_conf_2_be_startup; do
