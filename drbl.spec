@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.5.0
+Version:	2.5.1
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,7 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Mon Sep 23 2013 Steven Shiau <steven _at_ nchc org tw> 2.5.1-drbl1
 - Removing those not supported release in drbl/setup/files/Ubuntu/, only 12.04, 12.10, 13.04, and 13.10 were kept now.
+- Adding firstboot for Debian 7.1 DRBL client.
 
 * Sun Sep 22 2013 Steven Shiau <steven _at_ nchc org tw> 2.5.0-drbl1
 - Adding support for Ubuntu 13.10.

@@ -5,6 +5,14 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.5.1-drbl2) unstable; urgency=low
+
+  * Removing those not supported release in drbl/setup/files/Ubuntu/, 
+    only 12.04, 12.10, 13.04, and 13.10 were kept now.
+  * Adding firstboot for Debian 7.1 DRBL client.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 23 Sep 2013 21:25:23 +0800
+
 drbl (2.5.0-drbl1) unstable; urgency=low
 
   * Adding support for Ubuntu 13.10.
