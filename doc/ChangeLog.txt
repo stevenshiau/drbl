@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.5.2-drbl1) unstable; urgency=low
+
+  * Adding debconf-utils in the required packages list in drbl.conf 
+    due to the need for debconf-set-selections.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 25 Sep 2013 15:36:44 +0800
+
 drbl (2.5.1-drbl2) unstable; urgency=low
 
   * Removing those not supported release in drbl/setup/files/Ubuntu/, 
