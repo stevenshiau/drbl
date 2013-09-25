@@ -1,3 +1,12 @@
+drbl (2.5.3-drbl1) unstable; urgency=low
+
+  * Removing localepurge in the Clonezilla live packages list. We have to 
+    install that in live-hook because localepurge >= 0.7.3 the preseeding 
+    has to be done before localepurge is installed 
+    (http://bugs.debian.org/724491).
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 25 Sep 2013 19:22:18 +0800
+
 drbl (2.5.2-drbl1) unstable; urgency=low
 
   * Adding debconf-utils in the required packages list in drbl.conf 
