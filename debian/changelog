@@ -1,3 +1,11 @@
+drbl (2.5.4-drbl1) unstable; urgency=low
+
+  * Bug fixed: Making mountkernfs.sh and mountdevsubfs.sh start with
+    updating /etc/mtab, otherwise when it's run 2nd time with reload
+    (e.g. mountkernfs.sh reload), it will complain. 
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 02 Oct 2013 15:36:49 +0800
+
 drbl (2.5.3-drbl1) unstable; urgency=low
 
   * Removing localepurge in the Clonezilla live packages list. We have to 

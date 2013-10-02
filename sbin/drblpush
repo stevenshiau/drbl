@@ -3272,7 +3272,7 @@ if [ -e /etc/debian_version ]; then
     perl -pi -e 's|^([[:space:]]*rm -f \${MTAB_PATH}~.*)|#$1 # Modified by DRBL|' $drbl_common_root/etc/init.d/checkroot.sh
     perl -pi -e 's|^([[:space:]]*)INIT_MTAB_FILE=yes|$1 INIT_MTAB_FILE=no # Modified by DRBL|' $drbl_common_root/etc/init.d/checkroot.sh
   fi
-  if [ -e $drbl_common_root/etc/init.d/checkfs.s ]; then
+  if [ -e $drbl_common_root/etc/init.d/checkfs.sh ]; then
     # Do not remove /fastboot, DRBL client is always fastboot
     perl -pi -e 's|^([[:space:]]*rm -f )(/fastboot)(.*)|$1 $3 # modified by DRBL|' $drbl_common_root/etc/init.d/checkfs.sh
   fi
@@ -3291,6 +3291,18 @@ if [ -e /etc/debian_version ]; then
   # Debian Etch has NetworkManager/NetworkManagerDispatcher under dbus, we can not let it start in client. Otherwise the network in client will be reset.
   rm -f $drbl_common_root/etc/dbus-1/event.d/[0-9][0-9]NetworkManager*
 
+  # Making mountkernfs.sh and mountdevsubfs.sh start with updating /etc/mtab, otherwise when it's run 2nd time with reload (mountkernfs.sh reload), it will complain that
+  # mount: can't find /run/lock in /etc/fstab or /etc/mtab
+  # mount: can't find /run/shm in /etc/fstab or /etc/mtab
+  # This is for Debian Jessie because mountkernfs.sh and mountdevsubfs.sh use different flag than that in Wheezy and Squeeze.
+  # start)
+  #       mount_filesystems mount_noupdate -> mount_filesystems mount
+  #       ;;
+  for i in mountkernfs.sh mountdevsubfs.sh; do
+    if [ -e $drbl_common_root/etc/init.d/$i ]; then
+      perl -pi -e 's|^([[:space:]]*)mount_filesystems mount_noupdate|$1mount_filesystems mount # modified by DRBL|' $drbl_common_root/etc/init.d/$i
+    fi
+  done
   # For Ubuntu dapper, /etc/init.d/mountnfs.sh is no more, and moved to /etc/network/if-up.d/mountnfs.sh. It will be run when ifup starts successfully in networking service. However, in DRBL client, network is actually started in initrd.
   # For Debian testing (on 2006/09/15), the mountnfs.sh from initscripts 2.86.ds1-19 or later use the same skill with waitnfs.sh, but it's name is mountnfs.sh. Hence we have to use the keyword "Wait for network file systems" to judge that, since in the mountnfs.sh, there is:
 # Short-Description: Wait for network file systems to be mounted

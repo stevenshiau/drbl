@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.5.3
+Version:	2.5.4
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Wed Oct 02 2013 Steven Shiau <steven _at_ nchc org tw> 2.5.4-drbl1
+- Bug fixed: Making mountkernfs.sh and mountdevsubfs.sh start with updating /etc/mtab, otherwise when it's run 2nd time with reload (e.g. mountkernfs.sh reload), it will complain. 
+
 * Wed Sep 25 2013 Steven Shiau <steven _at_ nchc org tw> 2.5.3-drbl1
 - Removing localepurge in the Clonezilla live packages list. We have to install that in live-hook because localepurge >= 0.7.3 the preseeding has to be done before localepurge is installed (http://bugs.debian.org/724491).
 
