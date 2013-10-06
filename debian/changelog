@@ -1,3 +1,9 @@
+drbl (2.5.5-drbl1) unstable; urgency=low
+
+  * Adding txt2html in the packages list of drbl.conf for Debian system.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sun, 06 Oct 2013 11:58:15 +0800
+
 drbl (2.5.4-drbl1) unstable; urgency=low
 
   * Bug fixed: Making mountkernfs.sh and mountdevsubfs.sh start with
