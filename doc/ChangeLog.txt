@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.5.7-drbl1) unstable; urgency=low
+
+  * Bug fixed: package name is dosfstools instead of mkdosfs
+    in drbl.conf.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 07 Oct 2013 09:45:35 +0800
+
 drbl (2.5.6-drbl1) unstable; urgency=low
 
   * Adding mkdosfs in the packages list of drbl.conf for Debian system.
