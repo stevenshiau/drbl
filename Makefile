@@ -6,7 +6,7 @@
 # even the implied warranty of MERCHANTABILITY or FITNESS FOR A
 # PARTICULAR PURPOSE.
 #
-SHELL := sh -e
+SHELL := bash -e
 DESTDIR =
 SHAREDIR = /usr/share/drbl/
 
