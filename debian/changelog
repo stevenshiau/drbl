@@ -1,3 +1,9 @@
+drbl (2.5.8-drbl1) unstable; urgency=low
+
+  * Adding makeboot64.bat which run syslinux64.ext.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 08 Oct 2013 13:21:16 +0800
+
 drbl (2.5.7-drbl1) unstable; urgency=low
 
   * Bug fixed: package name is dosfstools instead of mkdosfs

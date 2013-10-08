@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.5.7
+Version:	2.5.8
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Tue Oct 08 2013 Steven Shiau <steven _at_ nchc org tw> 2.5.8-drbl1
+- Adding makeboot64.bat which run syslinux64.ext.
+
 * Mon Oct 07 2013 Steven Shiau <steven _at_ nchc org tw> 2.5.7-drbl1
 - Bug fixed: package name is dosfstools instead of mkdosfs in drbl.conf.
 
