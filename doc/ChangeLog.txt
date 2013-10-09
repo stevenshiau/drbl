@@ -5,6 +5,17 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.5.9-drbl1) unstable; urgency=low
+
+  * Bug fixed: mknic-nbi should be run in drbl-live. Because it is 
+    run in chroot when DRBL live is created. However, the variable 
+    use_run_in_initrd and use_dev_pts_in_initrd in initramfs' /etc/linuxrc.conf
+    (i.e. "/usr/lib/mkpxeinitrd-net/initrd-skel/etc/linuxrc.conf") need to be 
+    updated in the run time. Otherwise it might cause some modules fail to 
+    be loaded.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 09 Oct 2013 15:54:12 +0800
+
 drbl (2.5.8-drbl1) unstable; urgency=low
 
   * Adding makeboot64.bat which run syslinux64.ext.
