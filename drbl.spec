@@ -45,6 +45,8 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+- Adding a line feed before running mknic-nbi in drbl-live.
+
 * Wed Oct 09 2013 Steven Shiau <steven _at_ nchc org tw> 2.5.9-drbl1
 - Bug fixed: mknic-nbi should be run in drbl-live. Because it is run in chroot when DRBL live is created. However, the variable use_run_in_initrd and use_dev_pts_in_initrd in initramfs' /etc/linuxrc.conf (i.e. "/usr/lib/mkpxeinitrd-net/initrd-skel/etc/linuxrc.conf") need to be updated in the run time. Otherwise it might cause some modules fail to be loaded.
 

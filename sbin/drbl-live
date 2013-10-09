@@ -157,6 +157,7 @@ case "$switch" in
      fi
 
      # Run mknic-nbi again. Because we run mknic-nbi in the chroot when creating DRBL live. However, the variable use_run_in_initrd and use_dev_pts_in_initrd in initramfs' /etc/linuxrc.conf (i.e. "/usr/lib/mkpxeinitrd-net/initrd-skel/etc/linuxrc.conf") need to be updated in the run time.
+     echo
      echo "Updating the initramfs for PXE clients..."
      mknic-nbi
 
