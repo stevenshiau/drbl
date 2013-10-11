@@ -3108,7 +3108,7 @@ if [ -e /etc/debian_version ]; then
 TFTP_USERNAME="tftp"
 TFTP_DIRECTORY="/tftpboot/nbi_img"
 TFTP_ADDRESS="0.0.0.0:69"
-TFTP_OPTIONS="--secure"
+TFTP_OPTIONS="--secure --ipv4"
 TFTP_END
     else
       # Version 0.49 or before.

@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.5.9
+Version:	2.5.11
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,10 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Thu Oct 10 2013 Steven Shiau <steven _at_ nchc org tw> 2.5.11-drbl1
+- Adding option --ipv4 for tftpd-hpa because DRBL now does not support IPv6, and if we force to disable it by adding "ipv6.disable=1" in boot parameter, without using option --ipv4 the tftpd-hpa won't start (http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=544089).
+
+* Thu Oct 10 2013 Steven Shiau <steven _at_ nchc org tw> 2.5.10-drbl1
 - Adding a line feed before running mknic-nbi in drbl-live.
 
 * Wed Oct 09 2013 Steven Shiau <steven _at_ nchc org tw> 2.5.9-drbl1
