@@ -125,6 +125,13 @@ case "$HN" in
         # change auto login account
         perl -p -i -e "s/^[[:space:]]*#*[[:space:]]*AutoLoginUser=.*/AutoLoginUser=$auto_login_id/" $KDM_CFG
       fi
+      if [ -e "$LIGHTDM_CFG" ]; then
+        # To config these two parameters:
+        # autologin-user=<YOUR USER>
+        # autologin-user-timeout=0
+        perl -pi -e "s/^[[:space:]]*#*[[:space:]]*autologin-user=.*/autologin-user=$auto_login_id/" $LIGHTDM_CFG
+        perl -pi -e "s/^[[:space:]]*#*[[:space:]]*autologin-user-timeout=.*/autologin-user-timeout=0/" $LIGHTDM_CFG
+      fi
       ;;
 esac
 

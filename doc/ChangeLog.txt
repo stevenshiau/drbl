@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.5.12-drbl1) unstable; urgency=low
+
+  * Bug fixed: drbl-ssi-client-prepare failed to set the autologin account
+    for lightdm.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 14 Oct 2013 19:59:24 +0800
+
 drbl (2.5.11-drbl1) unstable; urgency=low
 
   * Adding option --ipv4 for tftpd-hpa because DRBL now does not support IPv6, 

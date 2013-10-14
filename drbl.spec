@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.5.11
+Version:	2.5.12
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Mon Oct 14 2013 Steven Shiau <steven _at_ nchc org tw> 2.5.12-drbl1
+- Bug fixed: drbl-ssi-client-prepare failed to set the autologin account for lightdm.
+
 * Thu Oct 10 2013 Steven Shiau <steven _at_ nchc org tw> 2.5.11-drbl1
 - Adding option --ipv4 for tftpd-hpa because DRBL now does not support IPv6, and if we force to disable it by adding "ipv6.disable=1" in boot parameter, without using option --ipv4 the tftpd-hpa won't start (http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=544089).
 
