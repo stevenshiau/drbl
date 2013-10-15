@@ -3,7 +3,7 @@ drbl (2.5.12-drbl1) unstable; urgency=low
   * Bug fixed: drbl-ssi-client-prepare failed to set the autologin account
     for lightdm.
 
- -- Steven Shiau <steven@nchc.org.tw>  Mon, 14 Oct 2013 19:59:24 +0800
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 15 Oct 2013 08:49:08 +0800
 
 drbl (2.5.11-drbl1) unstable; urgency=low
 
@@ -33,7 +33,7 @@ drbl (2.5.9-drbl1) unstable; urgency=low
 
 drbl (2.5.8-drbl1) unstable; urgency=low
 
-  * Adding makeboot64.bat which run syslinux64.ext.
+  * Adding makeboot64.bat which runs syslinux64.exe.
 
  -- Steven Shiau <steven@nchc.org.tw>  Tue, 08 Oct 2013 13:21:16 +0800
 
