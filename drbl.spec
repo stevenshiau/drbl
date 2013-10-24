@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.5.13
+Version:	2.5.14
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,11 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+- Adding firstboot.DBN7.2.drbl for Debian 7.2.
+
+* Wed Oct 23 2013 Steven Shiau <steven _at_ nchc org tw> 2.5.14-drbl1
+- Updating netinstall versions of Ubuntu and Fedora in drbl.conf.
+
 * Wed Oct 16 2013 Steven Shiau <steven _at_ nchc org tw> 2.5.13-drbl1
 - Adding pause 1 sec in drbl-live.
 
