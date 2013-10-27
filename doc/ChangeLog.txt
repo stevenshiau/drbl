@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.6.2-drbl1) unstable; urgency=low
+
+  * Files bootia32.efi and bootx64.efi should be prepared in
+    /tftpboot/nbi_img/ in prepare-files-for-PXE-client.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sun, 27 Oct 2013 20:32:34 +0800
+
 drbl (2.6.1-drbl1) unstable; urgency=low
 
   * Adding firstboot.DBN7.2.drbl for Debian 7.2.

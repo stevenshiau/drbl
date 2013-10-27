@@ -94,8 +94,14 @@ fi
 if [ -e "$pxecfg_pd/efi32/ldlinux.e32" ]; then
   mv $pxecfg_pd/efi32/ldlinux.e32 $pxecfg_pd/ldlinux.e32
 fi
+if [ -e "$pxecfg_pd/efi32/syslinux.efi" ]; then
+  mv $pxecfg_pd/efi32/syslinux.efi $pxecfg_pd/bootia32.efi
+fi
 if [ -e "$pxecfg_pd/efi64/ldlinux.e64" ]; then
   mv $pxecfg_pd/efi64/ldlinux.e64 $pxecfg_pd/ldlinux.e64
+fi
+if [ -e "$pxecfg_pd/efi64/syslinux.efi" ]; then
+  mv $pxecfg_pd/efi64/syslinux.efi $pxecfg_pd/bootx64.efi
 fi
 
 # memdisk, only for $pxecfg_pd/bios/
