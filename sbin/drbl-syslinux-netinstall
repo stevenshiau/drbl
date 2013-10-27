@@ -2,12 +2,16 @@
 # Author: Steven Shiau <steven _at_ nchc org tw>
 # License: GPL
 # Description: Download the netinstall kernel & initrd and package them as a zip file for USB flash drive to boot and install GNU/Linux.
+# This program only works for syslinux >= 6.0 because the EFI boot is supported from syslinux >= 6.0.
 
 DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/usr/share/drbl}"
 
 . $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
 [ -e /etc/drbl/drbl-ocs.conf ] && . /etc/drbl/drbl-ocs.conf
 [ -e $DRBL_SCRIPT_PATH/sbin/ocs-functions ] && . $DRBL_SCRIPT_PATH/sbin/ocs-functions
+
+# Force to use boot loader "syslinux" although it's defined in /etc/drbl/drbl.conf. We swtiched to use syslinux 6.x EFI boot
+live_efi_boot_loader="syslinux"
 
 #
 supported_dists="$(LC_ALL=C set | grep -i "_netinstall_ver" | awk -F"_" '{print $1}' | sort | uniq)"
@@ -103,12 +107,13 @@ fi
 echo "The output file name is: $output_filename."
 
 WD="$(pwd)"
-mkdir -p $target_d/syslinux/
+mkdir -p $target_d/syslinux/ $target_d/live/ $target_d/EFI/boot/
 cp -af $pxelinux_bg_img $target_d/syslinux/
+cp -af $pxelinux_bg_img $target_d/EFI/boot/
 
 echo "The following action will download a lot of network install packages, including these distributions: $GL_INST. This might take a long time..."
 echo 'If you want to assign the url, check "netinstall image settings" in drbl.conf.'
-drbl-netinstall -w --skip-rerun-gen -i "$GL_INST" -d $target_d/syslinux/
+drbl-netinstall -w --skip-rerun-gen -i "$GL_INST" -d $target_d/live/
 
 echo "Generating default pxelinux config $target_d/syslinux/syslinux.cfg..."
 echo "Adding menus..."
@@ -144,10 +149,20 @@ MENU TITLE DRBL (http://drbl.org)
 
 PXE_END
 
-output_netinstall_syslinux_pxelinux_menu $target_d/syslinux/ $target_d/syslinux/syslinux.cfg
+# Creating the boot menu, 2 types: for BIOS and EFI
+# 1. The boot menu for BIOS machine
+# //NOTE// the / in the end of /live/ for -p option is important. Do not remove it. 
+# Because we use that in syslinux.cfg like:
+# kernel $boot_file_dir$kernel
+# append initrd=$boot_file_dir$img $ramdisk_size_opt $extra_append
+output_netinstall_syslinux_pxelinux_menu -p /live/ $target_d/live/ $target_d/syslinux/syslinux.cfg
 
-# Turn on all menus
+# Turn on all menus before copying to EFI dir
 perl -pi -e "s/^(#|[[:space:]])*MENU HIDE.*/  # MENU HIDE/i" $target_d/syslinux/syslinux.cfg
+
+# 2. The boot menu for EFI machine
+cp -a $target_d/syslinux/syslinux.cfg $target_d/EFI/boot/
+perl -pi -e "s/Boot menu for BIOS machine/Boot menu for EFI machinie/g" $target_d/EFI/boot/syslinux.cfg
 
 echo "Preparing syslinux.exe, syslinux, makeboot.bat and makeboot.sh... "
 put_syslinux_makeboot_for_usb_flash $target_d/ "$syslinux_ver_no"

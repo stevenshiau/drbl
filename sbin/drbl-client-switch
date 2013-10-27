@@ -609,7 +609,11 @@ clean_stale_node_pxe_cfg(){
   # These files maybe look like: 01-MAC address (with ":" -> "-"), something like C0A8XXXX (only for 192.168.x), default_skeleton
   echo -n "Clean all the previous saved PXELINUX config file if they exist..."
   for ifile in $PXELINUX_DIR/*; do
-    [ "$ifile" != "$PXE_CONF" -a -f "$ifile" ] && rm -f $ifile
+    [  "$ifile" != "$PXE_CONF" -a \
+       "$ifile" != "$PXELINUX_DIR/bios" -a \
+       "$ifile" != "$PXELINUX_DIR/efi32" -a \
+       "$ifile" != "$PXELINUX_DIR/efi64" -a \
+       -f "$ifile" ] && rm -f $ifile
   done
   echo "done!"
 } # end of clean_stale_node_pxe_cfg

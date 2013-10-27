@@ -63,62 +63,11 @@ echo "Copying pxelinux.0, gpxelinux.0, menu.c32, vesamenu.c32, chain.c32, mboot.
 [ ! -d $pxecfg_pd/pxelinux.cfg ] && mkdir -p $pxecfg_pd/pxelinux.cfg
 
 # make a version tag in $pxecfg_pd
-pxelinux_src_path="$(dirname $pxelinux_file)"
-cp -af $pxelinux_src_path/VERSION $pxecfg_pd/PXELINUX_VERSION
+cp -af $pxelinux_binsrc_dir/VERSION $pxecfg_pd/PXELINUX_VERSION
 
 # These files (pxelinux.0, gpxelinux.0, menu.c32, vesamenu.c32, chain.c32, memdisk...) are very important.
 # Hence we process here separately.
 
-# pxelinux.0
-if [ -f $pxelinux_file ]; then
-   cp -af $pxelinux_file $pxecfg_pd
-else
-   [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
-   echo "$msg_Warning! $pxelinux_file $msg_NOT_found!!! $msg_PXE_NOT_work"
-   echo "$msg_press_enter_to_continue"
-   [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
-   read
-fi
-# gpxelinux.0
-if [ -f $gpxelinux_file ]; then
-   cp -af $gpxelinux_file $pxecfg_pd
-else
-   [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
-   echo "$msg_Warning! $gpxelinux_file $msg_NOT_found!!! $msg_PXE_NOT_work"
-   echo "$msg_press_enter_to_continue"
-   [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
-   read
-fi
-# for simple menu
-if [ -f $pxelinux_simple_menu ]; then
-   cp -af $pxelinux_simple_menu $pxecfg_pd
-else
-   [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
-   echo "$msg_Warning! $pxelinux_simple_menu $msg_NOT_found!!! $msg_PXE_NOT_work"
-   echo "$msg_press_enter_to_continue"
-   [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
-   read
-fi
-# for simple vesamenu
-if [ -f $pxelinux_simple_vesamenu ]; then
-   cp -af $pxelinux_simple_vesamenu $pxecfg_pd
-else
-   [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
-   echo "$msg_Warning! $pxelinux_simple_vesamenu $msg_NOT_found!!! $msg_PXE_NOT_work"
-   echo "$msg_press_enter_to_continue"
-   [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
-   read
-fi
-# for chain loader
-if [ -f $pxelinux_chain_file ]; then
-   cp -af $pxelinux_chain_file $pxecfg_pd
-else
-   [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
-   echo "$msg_Warning! $pxelinux_chain_file $msg_NOT_found!!! $msg_PXE_NOT_work"
-   echo "$msg_press_enter_to_continue"
-   [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
-   read
-fi
 # the background img in pxelinux
 if [ -f $pxelinux_bg_img ]; then
    cp -af $pxelinux_bg_img $pxecfg_pd
@@ -129,9 +78,29 @@ else
    [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
    read
 fi
-# memdisk
+
+# For those files will be copied to $pxecfg_pd/{bios,efi32,efi64}
+for iarch in bios efi32 efi64; do
+  if [ -d "$pxelinux_binsrc_dir/$iarch" ]; then
+    cp -af $pxelinux_binsrc_dir/$iarch $pxecfg_pd/
+  fi
+done
+# Move the files to appropriate path.
+# pxelinux.0, gpxelinux.0, and lpxelinux.0
+mv $pxecfg_pd/bios/*pxelinux.0 $pxecfg_pd/
+if [ -e "$pxecfg_pd/bios/ldlinux.c32" ]; then
+  mv $pxecfg_pd/bios/ldlinux.c32 $pxecfg_pd/ldlinux.c32
+fi
+if [ -e "$pxecfg_pd/efi32/ldlinux.e32" ]; then
+  mv $pxecfg_pd/efi32/ldlinux.e32 $pxecfg_pd/ldlinux.e32
+fi
+if [ -e "$pxecfg_pd/efi64/ldlinux.e64" ]; then
+  mv $pxecfg_pd/efi64/ldlinux.e64 $pxecfg_pd/ldlinux.e64
+fi
+
+# memdisk, only for $pxecfg_pd/bios/
 if [ -f $pxelinux_memdisk_file ]; then
-   cp -af $pxelinux_memdisk_file $pxecfg_pd
+   cp -af $pxelinux_memdisk_file $pxecfg_pd/bios/
 else
    [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
    echo "$msg_Warning! $pxelinux_memdisk_file $msg_NOT_found!!! $msg_PXE_NOT_work"
@@ -139,14 +108,6 @@ else
    [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
    read
 fi
-
-# mboot.c32, sanboot.c32
-# For Syslinux 5, new .c32 are required: ldlinux.c32, libcom32.c32, libutil.c32
-for i in $pxelinux_mboot_file $pxelinux_sanboot_file $sys_pxelinux_v5p_required_c32; do
-  if [ -e "$pxelinux_binsrc_dir/$i" ]; then
-    cp -af $pxelinux_binsrc_dir/$i $pxecfg_pd/
-  fi
-done
 
 # memtest86+
 # make a version tag in $pxecfg_pd

@@ -233,6 +233,9 @@ say **********************************************
 # Allow client to edit boot parameters
 ALLOWOPTIONS 1
 
+# Set PATH to bios/, which is relative to PXE root dir ($PXELINUX_DIR).
+PATH bios/
+
 # simple menu title
 MENU TITLE DRBL (http://drbl.org)
 
