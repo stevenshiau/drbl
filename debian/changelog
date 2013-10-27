@@ -1,3 +1,10 @@
+drbl (2.6.1-drbl1) unstable; urgency=low
+
+  * Adding firstboot.DBN7.2.drbl for Debian 7.2.
+  * Supporting pxelinux 6.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sun, 27 Oct 2013 19:33:25 +0800
+
 drbl (2.5.14-drbl1) unstable; urgency=low
 
   * Updating netinstall versions of Ubuntu and Fedora in drbl.conf.
