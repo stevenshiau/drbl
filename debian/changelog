@@ -1,3 +1,9 @@
+drbl (2.6.3-drbl1) unstable; urgency=low
+
+  * The extlinux won't be installed when "drblsrv -i" is run.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sun, 27 Oct 2013 20:47:51 +0800
+
 drbl (2.6.2-drbl1) unstable; urgency=low
 
   * Files bootia32.efi and bootx64.efi should be prepared in
