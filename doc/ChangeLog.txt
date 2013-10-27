@@ -5,6 +5,15 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.6.4-drbl1) unstable; urgency=low
+
+  * Bug fixed: drbl-gen-pxe-nbi should not remove
+    /tftpboot/nbi_img/{bootx64.efi,bootia32.efi}
+  * Adding more general network booting settings in dhcpd.conf for PXE 
+    and EFI clients. However, the config for EFI clients are not ready yet.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sun, 27 Oct 2013 21:31:16 +0800
+
 drbl (2.6.3-drbl1) unstable; urgency=low
 
   * The extlinux won't be installed when "drblsrv -i" is run.

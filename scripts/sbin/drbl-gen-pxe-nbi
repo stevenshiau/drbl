@@ -54,14 +54,7 @@ check_if_root
 #
 ask_and_load_lang_set $specified_lang
 
-# make the nbi/pxe files
-# 1st, clean the old nbi/pxe files
-if [ "$(ls -alF $pxecfg_pd/boot* 2> /dev/null)" != "" ]; then
-   echo "$msg_delimiter_star_line"
-   echo "$msg_remove_old_nbi"
-   rm -f $pxecfg_pd/boot*
-fi
-
+#
 echo "$msg_delimiter_star_line"
 echo "$msg_create_nbi_files"
 # put and create the kernel and initrd for DRBL clients, this will be done by
