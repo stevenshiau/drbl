@@ -1,3 +1,12 @@
+drbl (2.6.5-drbl1) unstable; urgency=low
+
+  * Bug fixed: drbl-prepare-pxelinux failed to put the efi part of upstream
+    syslinux 6.
+  * Bug fixed: ldlinux.e32 and ldlinux.e64 should not be put in 
+    sys_pxelinux_v5p_required_c32 of drbl.conf.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 28 Oct 2013 09:52:20 +0800
+
 drbl (2.6.4-drbl1) unstable; urgency=low
 
   * Bug fixed: drbl-gen-pxe-nbi should not remove

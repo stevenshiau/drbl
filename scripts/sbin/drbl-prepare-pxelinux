@@ -72,7 +72,7 @@ put_upstream_pxelinux(){
   mkdir -p $tmp_wd/extracted/syslinux
   echo "Extracting the required files for DRBL..."
   # Check if the tarball contains multiple arch (bios, efi32, and efi64) support.
-  if [ -n "$(find $tmp_wd/upstream -iname "efi64" -type d >/dev/null)" ]; then
+  if [ -n "$(find $tmp_wd/upstream -iname "efi64" -type d 2>/dev/null)" ]; then
     syslinux_arch="multiple"
   else
     syslinux_arch="single"
