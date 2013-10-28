@@ -115,6 +115,19 @@ else
    read
 fi
 
+# If only $pxecfg_pd/bios/, no $pxecfg_pd/{efi32,efi64}, we'd better to link files from $pxecfg_pd/bios/ to $pxecfg_pd/, otherwise for CentOS 5 with syslinux 4.x, the "PATH" option is not supported.
+if [ -d $pxecfg_pd/bios -a \
+     ! -d $pxecfg_pd/efi32 -a \
+     ! -d $pxecfg_pd/efi64 ]; then
+  for i in $pxecfg_pd/bios/*; do
+    [ ! -e "$i" ] && continue
+    fn="$(basename $i)"
+    (
+      ln -t $pxecfg_pd -fs bios/$fn
+    )
+  done
+fi
+
 # memtest86+
 # make a version tag in $pxecfg_pd
 echo "Copying memtest86+ to $pxecfg_pd..."

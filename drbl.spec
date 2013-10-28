@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.6.5
+Version:	2.6.6
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Mon Oct 28 2013 Steven Shiau <steven _at_ nchc org tw> 2.6.6-drbl1
+- Linking pxelinux module files in /tftpboot/nbi_img so it could be compatible with older version.
+
 * Mon Oct 28 2013 Steven Shiau <steven _at_ nchc org tw> 2.6.5-drbl1
 - Bug fixed: drbl-prepare-pxelinux failed to put the efi part of upstream syslinux 6.
 - Bug fixed: ldlinux.e32 and ldlinux.e64 should not be put in sys_pxelinux_v5p_required_c32 of drbl.conf.
