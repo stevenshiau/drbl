@@ -45,6 +45,8 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+- Adding CentOS 5.10 support.
+
 * Mon Oct 28 2013 Steven Shiau <steven _at_ nchc org tw> 2.6.6-drbl1
 - Linking pxelinux module files in /tftpboot/nbi_img so it could be compatible with older version.
 
