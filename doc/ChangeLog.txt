@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.6.7-drbl1) unstable; urgency=low
+
+  * Adding CentOS 5.10 support.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 28 Oct 2013 17:00:38 +0800
+
 drbl (2.6.6-drbl1) unstable; urgency=low
 
   * Linking pxelinux module files in /tftpboot/nbi_img so it could be
