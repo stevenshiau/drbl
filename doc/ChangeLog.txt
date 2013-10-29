@@ -5,6 +5,16 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.6.8-drbl1) unstable; urgency=low
+
+  * Minor bug about udev if block in drblsrv was fixed.
+  * Temporarily removing isolinux and pxelinux from 
+    PKG_FROM_DBN_MINIMAL_NEED in drbl.conf due to the 
+    local boot issue for pxelinux 6.2
+    (http://www.syslinux.org/archives/2013-October/021010.html).
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 29 Oct 2013 11:50:01 +0800
+
 drbl (2.6.7-drbl1) unstable; urgency=low
 
   * Adding CentOS 5.10 support.

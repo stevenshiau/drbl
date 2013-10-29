@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.6.7
+Version:	2.6.8
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,7 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Tue Oct 29 2013 Steven Shiau <steven _at_ nchc org tw> 2.6.8-drbl1
 - Minor bug about udev if block in drblsrv was fixed.
+- Temporarily removing isolinux and pxelinux from PKG_FROM_DBN_MINIMAL_NEED in drbl.conf due to the local boot issue for pxelinux 6.2 (http://www.syslinux.org/archives/2013-October/021010.html).
 
 * Mon Oct 28 2013 Steven Shiau <steven _at_ nchc org tw> 2.6.7-drbl1
 - Adding CentOS 5.10 support.
