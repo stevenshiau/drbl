@@ -659,14 +659,14 @@ if [ -n "$(LC_ALL=C ls /sbin/udev* 2>/dev/null)" ]; then
     $inst_prog -y install udev
     _install_udev_result=$?
     echo "done!"
-  fi
-  if [ "$_install_udev_result" -ne 0 ]; then
-    # actually this should not happen, but who knows ?
-    [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
-    echo "Program udev was found in the server, but unable to install a complete udev rpm!"
-    [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
-    echo "$msg_program_stop"
-    exit 1
+    if [ "$_install_udev_result" -ne 0 ]; then
+      # actually this should not happen, but who knows ?
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+      echo "Program udev was found in the server, but unable to install a complete udev rpm!"
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+      echo "$msg_program_stop"
+      exit 1
+    fi
   fi
 else
   echo "$msg_get_dev"

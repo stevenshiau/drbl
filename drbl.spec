@@ -45,6 +45,8 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+- Minor bug about udev if block in drblsrv was fixed.
+
 * Mon Oct 28 2013 Steven Shiau <steven _at_ nchc org tw> 2.6.7-drbl1
 - Adding CentOS 5.10 support.
 
