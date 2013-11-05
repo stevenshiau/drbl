@@ -1,3 +1,10 @@
+drbl (2.6.9-drbl1) unstable; urgency=low
+
+  * Bug fixed: mbr.bin of syslinux was not put in
+    /usr/share/drbl/syslinux/bios/.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 05 Nov 2013 14:42:03 +0800
+
 drbl (2.6.8-drbl1) unstable; urgency=low
 
   * Minor bug about udev if block in drblsrv was fixed.

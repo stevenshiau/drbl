@@ -13,7 +13,7 @@ DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/usr/share/drbl}"
 # The files are in /usr/lib/syslinux/ on Ubuntu 10.04 syslinux 3.63.
 # Debian has syslinux-common, and the above files are in syslinux-common, but ubuntu 10.04 does not, and ubuntu 11.04 does.
 # For Syslinux 5, new .c32 are required: ldlinux.c32, libcom32.c32, libutil.c32
-DRBL_NEED_PXELINUX_common="isolinux.bin memdisk pxelinux.0 lpxelinux.0 gpxelinux.0"
+DRBL_NEED_PXELINUX_common="isolinux.bin memdisk pxelinux.0 lpxelinux.0 gpxelinux.0 mbr.bin"
 DRBL_NEED_PXELINUX_modules="menu.c32 vesamenu.c32 chain.c32 mboot.c32 sanboot.c32 hdt.c32 $sys_pxelinux_v5p_required_c32"
 DRBL_NEED_PXELINUX="$DRBL_NEED_PXELINUX_common $DRBL_NEED_PXELINUX_modules"
 # By default we only copy the required files to $pxelinux_binsrc_dir. This option will allow us to copy files to dir $pxecfg_pd.
