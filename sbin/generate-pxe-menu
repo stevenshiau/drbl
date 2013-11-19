@@ -204,6 +204,7 @@ else
 fi
 
 now_year="$(LC_ALL=C date +%Y)"
+pxe_ver="$(LC_ALL=C awk -F" " '{print $2}' $pxecfg_pd/PXELINUX_VERSION)"
 echo "Adding menus for DRBL, local boot, memtest86+, FreeDOS..."
 cat <<-PXE_END > $PXECFG_DIR/default
 # Created by generate-pxe-menu! Do NOT edit unless you know what you are doing! 
@@ -233,9 +234,18 @@ say **********************************************
 # Allow client to edit boot parameters
 ALLOWOPTIONS 1
 
+PXE_END
+
+# PATH is supported after syslinux/pxelinux >=5
+if [ "$pxe_ver" \> 5.0 ]; then
+  cat <<-PXE_END >> $PXECFG_DIR/default
 # Set PATH to bios/, which is relative to PXE root dir ($PXELINUX_DIR).
 PATH bios/
 
+PXE_END
+fi
+
+cat <<-PXE_END >> $PXECFG_DIR/default
 # simple menu title
 MENU TITLE DRBL (http://drbl.org)
 
