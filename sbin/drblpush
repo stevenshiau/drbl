@@ -3436,9 +3436,11 @@ if [ -e /etc/debian_version ]; then
 	if [ -e "$drbl_setup_path/files/Ubuntu/$DISTRIB_RELEASE/plymouth.conf" ]; then
           cp -af $drbl_setup_path/files/Ubuntu/$DISTRIB_RELEASE/plymouth.conf $drbl_common_root/etc/init/plymouth.conf
 	else
-          perl -pi -e 's|^([[:space:]]*)(exec /sbin/plymouthd --mode=shutdown)|$1true #$2 # Commented by DRBL to avoid no Clonezilla SE output messages on console 1|g' $drbl_common_root/etc/init/plymouth.conf
-          perl -pi -e 's|^([[:space:]]*)(exec /sbin/plymouthd --mode=boot --attach-to-session)|$1true #$2 # Commented by DRBL to avoid no Clonezilla SE output messages on console 1|g' $drbl_common_root/etc/init/plymouth.conf
-          perl -pi -e 's|^([[:space:]]*)(exec /bin/plymouth show-splash)|$1true #$2 # Commented by DRBL to avoid no Clonezilla SE output messages on console 1|g' $drbl_common_root/etc/init/plymouth.conf
+          # For upstart (>1.3) service, we can use override file (Ref: http://upstart.ubuntu.com/cookbook/#override-files)
+	  #perl -pi -e 's|^([[:space:]]*)(exec /sbin/plymouthd --mode=shutdown)|$1true #$2 # Commented by DRBL to avoid no Clonezilla SE output messages on console 1|g' $drbl_common_root/etc/init/plymouth.conf
+	  #perl -pi -e 's|^([[:space:]]*)(exec /sbin/plymouthd --mode=boot --attach-to-session)|$1true #$2 # Commented by DRBL to avoid no Clonezilla SE output messages on console 1|g' $drbl_common_root/etc/init/plymouth.conf
+	  #perl -pi -e 's|^([[:space:]]*)(exec /bin/plymouth show-splash)|$1true #$2 # Commented by DRBL to avoid no Clonezilla SE output messages on console 1|g' $drbl_common_root/etc/init/plymouth.conf
+          echo "manual" > $drbl_common_root/etc/init/plymouth.override
 	fi
 	;;
     esac
