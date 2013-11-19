@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.6.9
+Version:	2.6.10
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Tue Nov 19 2013 Steven Shiau <steven _at_ nchc org tw> 2.6.10-drbl1
+- Bug fixed: plymouth should not be started for DRBL clients on Ubuntu 13.10 when Clonezilla job is run.
+
 * Tue Nov 05 2013 Steven Shiau <steven _at_ nchc org tw> 2.6.9-drbl1
 - Bug fixed: mbr.bin of syslinux was not put in /usr/share/drbl/syslinux/bios/.
 

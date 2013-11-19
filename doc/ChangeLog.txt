@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.6.10-drbl1) unstable; urgency=low
+
+  * Bug fixed: plymouth should not be started for DRBL clients on
+    Ubuntu 13.10 when Clonezilla job is run.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 19 Nov 2013 16:44:44 +0800
+
 drbl (2.6.9-drbl1) unstable; urgency=low
 
   * Bug fixed: mbr.bin of syslinux was not put in
