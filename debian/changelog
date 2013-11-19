@@ -1,3 +1,11 @@
+drbl (2.6.11-drbl1) unstable; urgency=low
+
+  * A better method to disable plymouth service was added for DRBL 
+    Ubuntu client.
+  * "quiet" was added in the boot parameters of DRBL clients.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 19 Nov 2013 20:28:25 +0800
+
 drbl (2.6.10-drbl1) unstable; urgency=low
 
   * Bug fixed: plymouth should not be started for DRBL clients on

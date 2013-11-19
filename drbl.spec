@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.6.10
+Version:	2.6.11
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,10 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Tue Nov 19 2013 Steven Shiau <steven _at_ nchc org tw> 2.6.11-drbl1
+- A better method to disable plymouth service was added for DRBL Ubuntu client.
+- "quiet" was added in the boot parameters of DRBL clients.
+
 * Tue Nov 19 2013 Steven Shiau <steven _at_ nchc org tw> 2.6.10-drbl1
 - Bug fixed: plymouth should not be started for DRBL clients on Ubuntu 13.10 when Clonezilla job is run.
 
