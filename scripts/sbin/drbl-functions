@@ -1238,6 +1238,11 @@ get_gdm_kdm_conf_filename() {
   # For lightdm
   if [ -e "/etc/lightdm/lightdm.conf" ]; then
     LIGHTDM_CFG=/etc/lightdm/lightdm.conf
+  elif [ -d "/etc/lightdm/lightdm.conf.d" ]; then
+    # For Ubuntu 13.10, lightdm 1.8.4 has different initial configration file. 
+    # "/etc/lightdm/lightdm.conf" does not exist in the initial installation. 
+    # While it will exist when a user configures that in the GUI.
+    LIGHTDM_CFG=/etc/lightdm/lightdm.conf
   fi
 } # end of get_gdm_kdm_conf_filename
 #

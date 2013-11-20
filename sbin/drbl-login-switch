@@ -177,6 +177,14 @@ set_lightdm_auto_login() {
   # autologin-user-timeout=0
   local inode="$1"
   local iauto_login_id="$2"
+  if [ ! -f "$inode/$LIGHTDM_CFG" -a \
+         -d "$inode/etc/lightdm/lightdm.conf.d" ]; then
+    # For Ubuntu 13.10, lightdm 1.8.4 has different initial configration file. 
+    # "/etc/lightdm/lightdm.conf" does not exist in the initial installation. 
+    # While it will exist when a user configures that in the GUI.
+    # We create one here.
+    echo "[SeatDefaults]" > $inode/$LIGHTDM_CFG
+  fi
   if [ ! -f "$inode/$LIGHTDM_CFG" ]; then
     [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING 
     echo "LightDM config in $inode NOT found, assume it's DRBL SSI mode!"  
@@ -210,6 +218,14 @@ set_lightdm_timed_login() {
   local inode="$1"
   local iauto_login_id="$2"
   local tlogin_time="$3"
+  if [ ! -f "$inode/$LIGHTDM_CFG" -a \
+         -d "$inode/etc/lightdm/lightdm.conf.d" ]; then
+    # For Ubuntu 13.10, lightdm 1.8.4 has different initial configration file. 
+    # "/etc/lightdm/lightdm.conf" does not exist in the initial installation. 
+    # While it will exist when a user configures that in the GUI.
+    # We create one here.
+    echo "[SeatDefaults]" > $inode/$LIGHTDM_CFG
+  fi
   if [ ! -f $inode/$LIGHTDM_CFG ]; then
     [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING 
     echo "$inode/$LIGHTDM_CFG is NOT found!!! Assume it's DRBL SSI mode!"  
@@ -286,6 +302,14 @@ tune_lightdm_manual_login() {
 #
 set_lightdm_normal_login() {
     local inode="$1"
+    if [ ! -f "$inode/$LIGHTDM_CFG" -a \
+           -d "$inode/etc/lightdm/lightdm.conf.d" ]; then
+      # For Ubuntu 13.10, lightdm 1.8.4 has different initial configration file. 
+      # "/etc/lightdm/lightdm.conf" does not exist in the initial installation. 
+      # While it will exist when a user configures that in the GUI.
+      # We create one here.
+      echo "[SeatDefaults]" > $inode/$LIGHTDM_CFG
+    fi
     if [ ! -f $inode/$LIGHTDM_CFG ]; then
       [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING 
       echo "$inode/$LIGHTDM_CFG is NOT found!!! Assume it's DRBL SSI mode!"  
