@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.6.13-drbl1) unstable; urgency=low
+
+  * Package htop was added in the Clonezilla live packaegs list.
+  * Auto-login for Ubuntu 13.10 client did not work.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 20 Nov 2013 14:15:17 +0800
+
 drbl (2.6.12-drbl1) unstable; urgency=low
 
   * "PATH" configuration of pxelinux only exists when version >= 5, so 

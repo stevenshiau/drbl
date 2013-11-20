@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.6.12
+Version:	2.6.13
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,7 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Wed Nov 20 2013 Steven Shiau <steven _at_ nchc org tw> 2.6.13-drbl1
 - Package htop was added in the Clonezilla live packaegs list.
 - Auto-login for Ubuntu 13.10 client did not work.
 
