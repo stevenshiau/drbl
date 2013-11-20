@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.6.14-drbl1) unstable; urgency=low
+
+  * Bug fixed: plymouth.override for Ubuntu <= 13.10 will cause 
+    lightdm not starting. Therefore it's only used for Ubuntu >= 13.10.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 20 Nov 2013 18:22:03 +0800
+
 drbl (2.6.13-drbl1) unstable; urgency=low
 
   * Package htop was added in the Clonezilla live packaegs list.
