@@ -45,6 +45,8 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+- Package htop was added in the Clonezilla live packaegs list.
+
 * Tue Nov 19 2013 Steven Shiau <steven _at_ nchc org tw> 2.6.12-drbl1
 - "PATH" configuration of pxelinux only exists when version >= 5, so program generate-pxe-men should not add it when pxelinux version is < 5.
 
