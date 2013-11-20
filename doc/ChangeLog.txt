@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.6.15-drbl1) unstable; urgency=low
+
+  * The "quiet" parameter will only be put for Debian or Ubuntu clients. 
+    Not for other distributions.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 20 Nov 2013 21:31:31 +0800
+
 drbl (2.6.14-drbl1) unstable; urgency=low
 
   * Bug fixed: plymouth.override for Ubuntu <= 13.10 will cause 

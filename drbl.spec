@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.6.14
+Version:	2.6.15
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Wed Nov 20 2013 Steven Shiau <steven _at_ nchc org tw> 2.6.15-drbl1
+- The "quiet" parameter will only be put for Debian or Ubuntu clients. Not for other distributions.
+
 * Wed Nov 20 2013 Steven Shiau <steven _at_ nchc org tw> 2.6.14-drbl1
 - Bug fixed: plymouth.override for Ubuntu <= 13.10 will cause lightdm not starting. Therefore it's only used for Ubuntu >= 13.10.
 

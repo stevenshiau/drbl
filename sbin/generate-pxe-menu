@@ -144,6 +144,16 @@ case "$graphical_boot" in
     drbl_dist_append=""
     ;;
 esac
+case "$OS_Version" in
+  DBN*) 
+    # Put quiet for Debian and Ubuntu clients.
+    quiet_opt="quiet"
+    ;;
+  *)
+    # Do not put quiet since for centos 6 clients since it seems after pxelinux booting, no output on screen.
+    quiet_opt=""
+    ;;
+  esac
 #
 # PXE Linux menu mode
 case "$pxe_mode" in
@@ -255,7 +265,7 @@ label drbl
   MENU LABEL $FULL_OS_Version $powerful_client_menu_label
   # MENU PASSWD
   kernel vmlinuz-pxe
-  append initrd=initrd-pxe.img devfs=nomount drblthincli=off selinux=0 quiet $edd_opt $CONSOLE_OUTPUT $drbl_mode_opt $drbl_dist_append
+  append initrd=initrd-pxe.img devfs=nomount drblthincli=off selinux=0 $quiet_opt $edd_opt $CONSOLE_OUTPUT $drbl_mode_opt $drbl_dist_append
   TEXT HELP
   * DRBL version: $drbl_ver. (C) 2003-${now_year}, NCHC, Taiwan
   * Disclaimer: DRBL comes with ABSOLUTELY NO WARRANTY
@@ -267,7 +277,7 @@ label clonezilla
   MENU LABEL Clonezilla
   # MENU PASSWD
   kernel vmlinuz-pxe
-  append initrd=initrd-pxe.img devfs=nomount drblthincli=off selinux=0 quiet text 1 $edd_opt $CONSOLE_OUTPUT $clonezilla_mode_opt $drbl_dist_append
+  append initrd=initrd-pxe.img devfs=nomount drblthincli=off selinux=0 $quiet_opt text 1 $edd_opt $CONSOLE_OUTPUT $clonezilla_mode_opt $drbl_dist_append
   TEXT HELP
   * Clonezilla version: $ocs_ver. (C) 2003-${now_year}, NCHC, Taiwan
   * Disclaimer: Clonezilla comes with ABSOLUTELY NO WARRANTY
@@ -326,7 +336,7 @@ label drbl-terminal
   MENU LABEL $FULL_OS_Version $thin_client_menu_label
   # MENU PASSWD
   kernel vmlinuz-pxe
-  append initrd=initrd-pxe.img devfs=nomount drblthincli=on quiet
+  append initrd=initrd-pxe.img devfs=nomount drblthincli=on $quiet_opt
   TEXT HELP
   Run DRBL in terminal mode.
   ENDTEXT
