@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.7.1-drbl1) unstable; urgency=low
+
+  * Adding isolinux and pxelinux in PKG_FROM_DBN_MINIMAL_NEED of drbl.conf.
+    This is used for live system with syslinux version 6.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 26 Nov 2013 10:15:50 +0800
+
 drbl (2.6.15-drbl1) unstable; urgency=low
 
   * The "quiet" parameter will only be put for Debian or Ubuntu clients. 

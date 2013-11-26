@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.6.15
+Version:	2.7.1
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Tue Nov 26 2013 Steven Shiau <steven _at_ nchc org tw> 2.7.1-drbl1
+- Adding isolinux and pxelinux in PKG_FROM_DBN_MINIMAL_NEED of drbl.conf. This is used for live system with syslinux version 6.
+
 * Wed Nov 20 2013 Steven Shiau <steven _at_ nchc org tw> 2.6.15-drbl1
 - The "quiet" parameter will only be put for Debian or Ubuntu clients. Not for other distributions.
 
