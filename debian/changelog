@@ -1,3 +1,9 @@
+drbl (2.7.2-drbl1) unstable; urgency=low
+
+  * Adding pixz in in PKG_FROM_DBN_MINIMAL_NEED of drbl.conf.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sat, 07 Dec 2013 11:43:21 +0800
+
 drbl (2.7.1-drbl1) unstable; urgency=low
 
   * Adding isolinux and pxelinux in PKG_FROM_DBN_MINIMAL_NEED of drbl.conf.

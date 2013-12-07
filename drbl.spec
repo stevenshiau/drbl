@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.7.1
+Version:	2.7.2
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Sat Dec 07 2013 Steven Shiau <steven _at_ nchc org tw> 2.7.2-drbl1
+- Adding pixz in in PKG_FROM_DBN_MINIMAL_NEED of drbl.conf.
+
 * Tue Nov 26 2013 Steven Shiau <steven _at_ nchc org tw> 2.7.1-drbl1
 - Adding isolinux and pxelinux in PKG_FROM_DBN_MINIMAL_NEED of drbl.conf. This is used for live system with syslinux version 6.
 
