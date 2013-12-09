@@ -917,3 +917,5 @@ msg_choose_the_image_to_be_converted='Choose the image to convert the compressio
 msg_failed_to_convert_the_img_compression='Failed to convert the compression format for this image'
 msg_succeeded_convert_the_img_compression='Succeeded converting the compression format for this image'
 msg_choose_if_converted_image_restorable='Check if the converted image restorable'
+msg_check_converted_img_restorable='Yes, check the converted image'
+msg_skip_check_converted_img_restorable='No, skip checking the converted image'

@@ -1,3 +1,10 @@
+drbl (2.7.5-drbl1) unstable; urgency=low
+
+  * Language files were updated by adding some sentences related to 
+    ocs-cvtimg-comp.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 09 Dec 2013 22:53:42 +0800
+
 drbl (2.7.4-drbl1) unstable; urgency=low
 
   * Language files were updated by adding some sentences related to ocs-cvtimg-comp.
