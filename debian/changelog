@@ -1,3 +1,10 @@
+drbl (2.7.3-drbl1) unstable; urgency=low
+
+  * Language files were updated by adding some sentences related
+    to ocs-cvtimg-comp.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 09 Dec 2013 11:05:33 +0800
+
 drbl (2.7.2-drbl1) unstable; urgency=low
 
   * Adding pixz in in PKG_FROM_DBN_MINIMAL_NEED of drbl.conf.

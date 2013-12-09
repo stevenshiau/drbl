@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.7.2
+Version:	2.7.3
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Mon Dec 08 2013 Steven Shiau <steven _at_ nchc org tw> 2.7.3-drbl1
+- Language files were updated by adding some sentences related to ocs-cvtimg-comp.
+
 * Sat Dec 07 2013 Steven Shiau <steven _at_ nchc org tw> 2.7.2-drbl1
 - Adding pixz in in PKG_FROM_DBN_MINIMAL_NEED of drbl.conf.
 

@@ -913,3 +913,10 @@ msg_you_must_input_the_ssh_port="Ha d'introduir el nombre del port del servei SS
 # Tag on 2013/07/23
 msg_prompt_for_insert_USB_dev_if_necessary="Si desitja usar un dispositiu USB com a repositori imatge de Clonezilla, per favor\n * insereixi el dispositiu USB en aquesta màquina *ara*.\n * Esperi uns 5 segons\n * i premi \nIntro perquè el S.O. detecti el dispositiu USB i pugui muntar-se com $ocsroot."
 msg_do_not_close_window_until_clone_finish="///NOTA/// \nNO TANQUI AQUESTA FINESTRA FINS QUE ELS CLIENTS ACABIN DE CLONAR! \nAquesta finestra ha de romandre perquè els serveis generats per Clonezilla puguin funcionar i mostrar resultats."
+# Tag on 2013/08/31
+msg_prompt_for_insert_USB_dev_if_necessary="If you want to use USB device as a Clonezilla image repository, please\n * Insert USB device into this machine *now*\n * Wait for about 5 secs \n * Press Enter key \nso that the OS can detect the USB device and later we can mount it as $ocsroot."
+msg_do_not_close_window_until_clone_finish='///NOTE/// \nDO NOT CLOSE THIS WINDOW UNTIL CLIENTS FINISH THE CLONE! \nThis window must remain so that the clone services spawned by Clonezilla can work and show results.'
+# Tag on 2013/12/08
+msg_the_image_to_be_convert='The image to be converted'
+msg_the_part_image_to_be_convert='The images of partition to be converted'
+msg_choose_the_image_to_be_converted='Choose the image to convert the compression'

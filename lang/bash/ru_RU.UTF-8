@@ -908,3 +908,7 @@ msg_you_must_input_the_ssh_port='You must input the SSH service port number!'
 # Tag on 2013/08/31
 msg_prompt_for_insert_USB_dev_if_necessary="Если вы хотите использовать USB устройство в качестве хранилища образа Clonezilla, пожалуйста, вставитьте это USB устройство в компьютер *сейчас*.  Подождите 5 секунд и нажмите клавишу Enter, чтобы ОС cмогла обнаружить USB устройство, а затем смогла смонтировать как $ocsroot."
 msg_do_not_close_window_until_clone_finish='/// Примечание /// \nНЕ ЗАКРЫВАЙТЕ ЭТО ОКНО, ПОКА КЛИЕНТЫ НЕ ЗАВЕРШИЛИ КЛОНИРОВАНИЕ! \nЭто окно должно оставаться открытым, потому что служба клонирования, порожденная Clonezilla, может работать и показывать результаты.'
+# Tag on 2013/12/08
+msg_the_image_to_be_convert='The image to be converted'
+msg_the_part_image_to_be_convert='The images of partition to be converted'
+msg_choose_the_image_to_be_converted='Choose the image to convert the compression'
