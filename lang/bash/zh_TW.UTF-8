@@ -914,3 +914,6 @@ msg_do_not_close_window_until_clone_finish='///注意/// \n在用戶端完成所
 msg_the_image_to_be_convert='要轉換的印象檔'
 msg_the_part_image_to_be_convert='要轉換的分割區印象檔'
 msg_choose_the_image_to_be_converted='選擇印象檔來做轉換'
+msg_failed_to_convert_the_img_compression='無法轉換這個印象檔的壓縮格式'
+msg_succeeded_convert_the_img_compression='成功轉換這個印象檔的壓縮格式'
+msg_choose_if_converted_image_restorable='檢查是否轉換過的印象檔可以還原'

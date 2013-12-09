@@ -914,3 +914,6 @@ msg_do_not_close_window_until_clone_finish='///NOTA/// \n¡NO CIERRE ESTA VENTAN
 msg_the_image_to_be_convert='The image to be converted'
 msg_the_part_image_to_be_convert='The images of partition to be converted'
 msg_choose_the_image_to_be_converted='Choose the image to convert the compression'
+msg_failed_to_convert_the_img_compression='Failed to convert the compression format for this image'
+msg_succeeded_convert_the_img_compression='Succeeded converting the compression format for this image'
+msg_choose_if_converted_image_restorable='Check if the converted image restorable'

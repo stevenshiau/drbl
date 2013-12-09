@@ -1589,6 +1589,7 @@ else
 
   # Question about checking the image is restorable or not. By default, no matter it's beginner or advanced mode, 
   # we will ask. However, for some customized case, it it could be set via parameter ocs_chk_img.
+  # ocs_chk_img is from /etc/ocs/ocs-live.conf
   if [ -z "$ocs_chk_img" ]; then
     $DIA --backtitle "$msg_nchc_free_software_labs" --title  \
     "$msg_clonezilla_advanced_extra_param | $msg_mode: $ocs_mode_prompt" --menu "$msg_choose_if_checking_image_restorable" \
@@ -1950,6 +1951,7 @@ if [ "$mode" = "save" ]; then
   
   # Question about checking the image is restorable or not. By default, no matter it's beginner or advanced mode, 
   # we will ask. However, for some customized case, it it could be set via parameter ocs_chk_img.
+  # ocs_chk_img is from /etc/ocs/ocs-live.conf
   if [ -z "$ocs_chk_img" ]; then
     $DIA --backtitle "$msg_nchc_free_software_labs" --title  \
     "$msg_clonezilla_advanced_extra_param | $msg_mode: $ocs_mode_prompt" --menu "$msg_choose_if_checking_image_restorable" \
