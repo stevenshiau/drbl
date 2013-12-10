@@ -1,3 +1,9 @@
+drbl (2.7.7-drbl1) unstable; urgency=low
+
+  * Package pv was added in PKG_TO_QUERY of drbl.conf.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 10 Dec 2013 20:30:53 +0800
+
 drbl (2.7.6-drbl1) unstable; urgency=low
 
   * One more sentence about ocs-cvtimg-comp was added in language files.
