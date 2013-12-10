@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.7.6-drbl1) unstable; urgency=low
+
+  * One more sentence about ocs-cvtimg-comp was added in language files.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 10 Dec 2013 14:10:25 +0800
+
 drbl (2.7.5-drbl1) unstable; urgency=low
 
   * Language files were updated by adding some sentences related to 

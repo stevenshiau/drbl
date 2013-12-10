@@ -919,3 +919,4 @@ msg_succeeded_convert_the_img_compression='成功轉換這個印象檔的壓縮�
 msg_choose_if_converted_image_restorable='檢查是否轉換過的印象檔可以還原'
 msg_check_converted_img_restorable='是，請檢查轉換過的印象檔是否可還原'
 msg_skip_check_converted_img_restorable='否, 請略去檢查轉換過的印象檔是否可還原'
+msg_convert_img_compression='轉換印象檔的壓縮格式'

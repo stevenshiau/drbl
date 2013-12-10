@@ -925,3 +925,4 @@ msg_succeeded_convert_the_img_compression='Succeeded converting the compression 
 msg_choose_if_converted_image_restorable='Check if the converted image restorable'
 msg_check_converted_img_restorable='Yes, check the converted image'
 msg_skip_check_converted_img_restorable='No, skip checking the converted image'
+msg_convert_img_compression='Convert the image compression format'
