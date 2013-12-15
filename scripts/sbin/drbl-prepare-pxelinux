@@ -168,6 +168,9 @@ put_distribution_pxelinux() {
             find $pxelinux_bin_dir/../syslinux/modules/$iarch/ -name "$iprog" \
 		 -type f -exec cp -af {} $tmp_wd/ \;
           fi
+	  # mbr.bin is located in /usr/lib/syslinux/mbr/mbr.bin. Therefore we need to find /usr/lib/syslinux/mbr/, too.
+          find $pxelinux_bin_dir/../syslinux/mbr/ -name "$iprog" \
+               -type f -exec cp -af {} $tmp_wd/ \;
         done
 	if [ -n "$(ls $tmp_wd/* 2>/dev/null)" ]; then
           put_pxelinux_bin_2_drbl_repo $tmp_wd $pxelinux_binsrc_dir/$iarch/

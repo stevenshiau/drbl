@@ -1,3 +1,10 @@
+drbl (2.7.10-drbl1) unstable; urgency=low
+
+  * Bug fixed: drbl-prepare-pxelinux failed to prepare mbr.bin from 
+    syslinux 6 on Debian system.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sun, 15 Dec 2013 16:16:53 +0800
+
 drbl (2.7.9-drbl1) unstable; urgency=low
 
   * One more sentence about ocs-cvtimg-comp was added in language files.
