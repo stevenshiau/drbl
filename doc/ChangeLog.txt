@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.7.12-drbl1) unstable; urgency=low
+
+  * Bug fixed: mbr.bin should not be put in efi32 or efi64 dirs 
+    by drbl-prepare-pxelinux.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sun, 15 Dec 2013 19:38:46 +0800
+
 drbl (2.7.11-drbl1) unstable; urgency=low
 
   * Adding firstboot.DBN7.3.drbl for Debian 7.3.
