@@ -1,3 +1,9 @@
+drbl (2.7.11-drbl1) unstable; urgency=low
+
+  * Adding firstboot.DBN7.3.drbl for Debian 7.3.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sun, 15 Dec 2013 16:23:05 +0800
+
 drbl (2.7.10-drbl1) unstable; urgency=low
 
   * Bug fixed: drbl-prepare-pxelinux failed to prepare mbr.bin from 
