@@ -45,6 +45,8 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+- Removing the testing words for options z5p and z6p in language files.
+
 * Sun Dec 15 2013 Steven Shiau <steven _at_ nchc org tw> 2.7.12-drbl1
 - Bug fixed: mbr.bin should not be put in efi32 or efi64 dirs by drbl-prepare-pxelinux.
 
