@@ -1,3 +1,10 @@
+drbl (2.7.13-drbl1) unstable; urgency=low
+
+  * Removing the testing words for options z5p and z6p in 
+    language files.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 18 Dec 2013 14:57:31 +0800
+
 drbl (2.7.12-drbl1) unstable; urgency=low
 
   * Bug fixed: mbr.bin should not be put in efi32 or efi64 dirs 
