@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.7.14-drbl1) unstable; urgency=low
+
+  * Spanish language file was updated. 
+    Thanks to Juan Ramón Martínez <jrmc77 _at_ terra es>.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 23 Dec 2013 15:50:20 +0800
+
 drbl (2.7.13-drbl1) unstable; urgency=low
 
   * Removing the testing words for options z5p and z6p in 
