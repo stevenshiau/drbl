@@ -54,7 +54,7 @@ put_pxelinux_bin_2_drbl_repo() {
 put_upstream_pxelinux(){
   # Function to use the upstream binary directly
   local ver="$1"
-  local tmp_wd syslinux_tarball
+  local tmp_wd syslinux_tarball syslinux_ver_subdir
   if [ -z "$ver" ]; then
     [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
     echo "No upstream syslinux/pxelinux version was assigned. Program terminated."
@@ -65,8 +65,20 @@ put_upstream_pxelinux(){
   syslinux_tarball="syslinux-${ver}.tar.bz2"
   tmp_wd="$(LC_ALL=C mktemp -d /tmp/syslinux_tmp.XXXXXXX)"
   mkdir -p $tmp_wd/upstream
-  echo -n "Downloading ${ver} syslinux/pxelinux files from $syslinux_binsrc_url... "
-  LC_ALL=C wget $wget_opt -P $tmp_wd $syslinux_binsrc_url/$branch_path/$syslinux_tarball
+  if [ -z "$(echo $ver | grep -iE -- "-pre[[:digit:]]+")" ]; then
+    # Stable release, not testing version.
+    # Convert the version number to subdir name, e..g 4.04 -> 4.xx
+    syslinux_ver_subdir="$(LC_ALL=C echo "$ver" | sed -r -e "s/\.[[:digit:]]*$/\.xx/g")"
+  else
+    # Testing release. File name is like: syslinux-6.02-pre16.tar.bz2	
+    # The URL for such a testing version is like: http://free.nchc.org.tw/syslinux/Testing/6.02/
+    syslinux_ver_subdir="$(LC_ALL=C echo "$ver" | sed -r -e "s/-pre[[:digit:]]+$//g")"
+    syslinux_ver_subdir="Testing/$syslinux_ver_subdir"
+  fi
+  #echo -n "Downloading ${ver} syslinux/pxelinux files from $syslinux_binsrc_url... "
+  #LC_ALL=C wget $wget_opt -P $tmp_wd $syslinux_binsrc_url/$branch_path/$syslinux_tarball
+  echo "Downloading $syslinux_binsrc_url/$syslinux_ver_subdir/$syslinux_tarball..."
+  LC_ALL=C wget $wget_opt -P $tmp_wd $syslinux_binsrc_url/$syslinux_ver_subdir/$syslinux_tarball
   echo "done!"
   LC_ALL=C tar -xjf $tmp_wd/$syslinux_tarball -C $tmp_wd/upstream
   mkdir -p $tmp_wd/extracted/syslinux

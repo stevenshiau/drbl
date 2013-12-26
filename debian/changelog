@@ -1,3 +1,12 @@
+drbl (2.7.15-drbl1) unstable; urgency=low
+
+  * Program drbl-prepare-pxelinux supports the path for testing 
+    version of syslinux.
+  * Program put_syslinux_makeboot_for_usb_flash put both files 
+    for syslinux and isolinux, in order to make versions consistent.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 26 Dec 2013 11:06:40 +0800
+
 drbl (2.7.14-drbl1) unstable; urgency=low
 
   * Spanish language file was updated. 
