@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.7.15
+Version:	2.7.16
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Fri Jan 03 2014 Steven Shiau <steven _at_ nchc org tw> 2.7.16-drbl1
+- Adding package bcache-tools in the packages list for Clonezilla live.
+
 * Thu Dec 26 2013 Steven Shiau <steven _at_ nchc org tw> 2.7.15-drbl1
 - Program drbl-prepare-pxelinux supports the path for testing version of syslinux.
 - Program put_syslinux_makeboot_for_usb_flash put both files for syslinux and isolinux, in order to make versions consistent.
