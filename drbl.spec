@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+- Language file it_IT was updated. Thanks to Gianfranco Gentili.
+- Language file fr_FR was updated. Thanks to Jean-Francois Nifenecker.
+
 * Fri Jan 03 2014 Steven Shiau <steven _at_ nchc org tw> 2.7.16-drbl1
 - Adding package bcache-tools in the packages list for Clonezilla live.
 
