@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.7.17-drbl1) unstable; urgency=low
+
+  * Adding package chntpw in the packages list for Clonezilla live.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 06 Jan 2014 17:09:47 +0800
+
 drbl (2.7.16-drbl1) unstable; urgency=low
 
   * Adding package bcache-tools in the packages list for 
