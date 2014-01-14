@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.7.19-drbl1) unstable; urgency=low
+
+  * Language file zh_CN was updated. Thanks to Zhiqiang Zhang.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 14 Jan 2014 21:02:45 +0800
+
 drbl (2.7.18-drbl1) unstable; urgency=low
 
   * Language file it_IT was updated. Thanks to Gianfranco Gentili.
