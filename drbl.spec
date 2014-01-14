@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.7.18
+Version:	2.7.19
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Tue Jan 14 2014 Steven Shiau <steven _at_ nchc org tw> 2.7.19-drbl1
+- Language file zh_CN was updated. Thanks to Zhiqiang Zhang.
+
 * Thu Jan 09 2014 Steven Shiau <steven _at_ nchc org tw> 2.7.18-drbl1
 - Language file it_IT was updated. Thanks to Gianfranco Gentili.
 - Language file fr_FR was updated. Thanks to Jean-Francois Nifenecker.
