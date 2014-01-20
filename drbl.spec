@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.7.20
+Version:	2.7.21
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,7 +45,12 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
-* Sat Jan 16 2014 Steven Shiau <steven _at_ nchc org tw> 2.7.20-drbl1
+* Sun Jan 20 2014 Steven Shiau <steven _at_ nchc org tw> 2.7.21-drbl1
+- Function put_syslinux_makeboot_for_usb_flash in drbl-functions and drbl-sl have been updated corresponding to the unification of syslinux and isolinux dirs in the Clonezilla/DRBL/GParted live iso and zip.
+- A dir "/utils/win64" was added to be used to run syslinux in Win64 env.
+- An option "-d syslinux" was added when running syslinux in makeboot.sh/makeboot.bat/makeboot64.bat. Thanks to Ady (ady-sf _at_ hotmail com) for this suggestion.
+
+* Thu Jan 16 2014 Steven Shiau <steven _at_ nchc org tw> 2.7.20-drbl1
 - Language file ca_ES was updated. Thanks to René Mérou.
 
 * Tue Jan 14 2014 Steven Shiau <steven _at_ nchc org tw> 2.7.19-drbl1

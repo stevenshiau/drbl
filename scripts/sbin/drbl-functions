@@ -2688,9 +2688,10 @@ put_syslinux_makeboot_for_usb_flash() {
   sysl_extra_c32_chklist="ldlinux.c32 libcom32.c32 libutil.c32"
   [ -z "$t_dir" -o ! -d "$t_dir" ] && echo "No t_dir!" && exit 1
   # Function to put syslinux.exe and syslinux (linux ELF 32-bit LSB executable) in dir t_dir 
-  mkdir -p $t_dir/utils/{win32,linux,mbr}
-  cp -a $pxelinux_binsrc_dir/makeboot.bat $t_dir/utils/win32/
+  mkdir -p $t_dir/utils/{linux,win32,win64,mbr}
   cp -a $pxelinux_binsrc_dir/makeboot.sh $t_dir/utils/linux/
+  cp -a $pxelinux_binsrc_dir/makeboot.bat $t_dir/utils/win32/
+  cp -a $pxelinux_binsrc_dir/makeboot64.bat $t_dir/utils/win64/
   sysl_dir="$(mktemp -d /tmp/sysl_dir.XXXXXX)"
   get_syslinux_binary_for_dos_linux $sysl_dir $syslinux_ver
   # syslinux does not provide any option to find the version number.
@@ -2702,21 +2703,25 @@ put_syslinux_makeboot_for_usb_flash() {
   else
     SYSLINUX_VER="$syslinux_ver"
   fi
-  echo "SYSLINUX version: $SYSLINUX_VER" > $t_dir/utils/win32/VERSION.txt
   echo "SYSLINUX version: $SYSLINUX_VER" > $t_dir/utils/linux/VERSION.txt
+  cp -a $t_dir/utils/linux/VERSION.txt $t_dir/utils/win32/
+  cp -a $t_dir/utils/linux/VERSION.txt $t_dir/utils/win64/
   echo "Precompiled binary syslinux files were extracted from $syslinux_binsrc_url/syslinux-${syslinux_ver}.tar.bz2" > $t_dir/utils/README.txt
   # For BIOS machine
   cp -af $sysl_dir/bios/{menu.c32,vesamenu.c32,chain.c32} $t_dir/syslinux/
   # To make the version consistent, put them to isolinux dir, too.
-  cp -af $sysl_dir/bios/{menu.c32,vesamenu.c32,chain.c32} $t_dir/isolinux/
-  cp -af $sysl_dir/bios/{syslinux.exe,syslinux64.exe} $t_dir/utils/win32/
+  # Jan/19/2014 We have unified isolinux and syslinux dir as one dir syslinux only.
+  # cp -af $sysl_dir/bios/{menu.c32,vesamenu.c32,chain.c32} $t_dir/isolinux/
+  cp -af $sysl_dir/bios/syslinux.exe $t_dir/utils/win32/
+  cp -af $sysl_dir/bios/syslinux64.exe $t_dir/utils/win64/
   cp -af $sysl_dir/bios/{syslinux,extlinux} $t_dir/utils/linux/
   cp -af $sysl_dir/bios/mbr.bin $t_dir/utils/mbr/
   for i in $sysl_extra_c32_chklist; do
     if [ -e $sysl_dir/bios/$i ]; then
       cp -af $sysl_dir/bios/$i $t_dir/syslinux/
       # To make the version consistent, put them to isolinux dir, too.
-      cp -af $sysl_dir/bios/$i $t_dir/isolinux/
+      # Jan/19/2014 We have unified isolinux and syslinux dir as one dir syslinux only.
+      # cp -af $sysl_dir/bios/$i $t_dir/isolinux/
     fi
   done
   # For EFI machine

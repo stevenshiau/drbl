@@ -28,13 +28,13 @@ echo or close this window to abort...
 pause > nul
 cls
 
-syslinux.exe -mafi %~d0
+syslinux.exe -d syslinux -mafi %~d0
 echo.
 echo ~~~~~~~~ Congratulations ~~~~~~~
 echo.
 echo The hidden file ldlinux.sys has been installed
 echo Your %~d0 drive should now be bootable.
-echo //NOTE// If your USB flash drive fails to boot (maybe buggy BIOS), try to use "syslinux -sfmar %~d0".
+echo //NOTE// If your USB flash drive fails to boot (maybe buggy BIOS), try to use "syslinux -d syslinux -sfmar %~d0".
 echo.
 echo.
 :end

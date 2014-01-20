@@ -252,8 +252,8 @@ case "$mode" in
      syslinux_tmpd="$(mktemp -d /tmp/syslinux_tmp.XXXXXX)"
      cp -fv "$path_of_prog/utils/linux/syslinux" $syslinux_tmpd
      chmod u+x $syslinux_tmpd/syslinux
-     echo "Running: $syslinux_tmpd/syslinux -f -i $target_part "
-     $syslinux_tmpd/syslinux -f -i $target_part
+     echo "Running: $syslinux_tmpd/syslinux -d syslinux -f -i $target_part "
+     $syslinux_tmpd/syslinux -d syslinux -f -i $target_part
      echo "done!"
      [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
      echo "//NOTE// If your USB flash drive fails to boot (maybe buggy BIOS), try to use \"syslinux -fs $target_part\", i.e. running with \"-s\"."
@@ -266,19 +266,21 @@ case "$mode" in
      chmod u+x $extlinux_tmpd/extlinux
      # Check if $target_part is mounted or not
      mnt_pnt="$(LC_ALL=C df $target_part | grep -Ew $target_part | awk -F" " '{print $6}')"
+     flag_mount=""
      if [ -z "$mnt_pnt" ]; then
        # Not mounted. Mount it.
        ntfs_tmpd="$(mktemp -d /tmp/ntfs_tmp.XXXXXX)"
        mount $target_part $ntfs_tmpd
        rc=$?
+       flag_mount="mounted"
      else
        # Already mounted. 
        ntfs_tmpd=$mnt_pnt
        rc=0
      fi
      if [ $rc -eq 0 ]; then
-       echo "Running: $extlinux_tmpd/extlinux -i $ntfs_tmpd "
-       $extlinux_tmpd/extlinux -i $ntfs_tmpd
+       echo "Running: $extlinux_tmpd/extlinux -i $ntfs_tmpd/syslinux "
+       $extlinux_tmpd/extlinux -i $ntfs_tmpd/syslinux
        echo "done!"
      else
        [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
@@ -286,6 +288,12 @@ case "$mode" in
        [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
        echo "Program terminated!"
        exit 1
+     fi
+     if mountpoint $ntfs_tmpd >/dev/null 2>&1; then
+       if [ "$flag_mount" = "mounted" ]; then
+         # mounted by this program. We unmount it.
+         umount $ntfs_tmpd
+       fi
      fi
      [ -d "$extlinux_tmpd" -a -n "$(echo $extlinux_tmpd | grep "extlinux_tmp" )" ] && rm -rf $extlinux_tmpd
      [ -d "$ntfs_tmpd" -a -n "$(echo $ntfs_tmpd | grep "ntfs_tmp" )" ] && rm -rf $ntfs_tmpd

@@ -1,3 +1,17 @@
+drbl (2.7.21-drbl1) unstable; urgency=low
+
+  * Function put_syslinux_makeboot_for_usb_flash in drbl-functions
+    and drbl-sl have been updated corresponding to the unification
+    of syslinux and isolinux dirs in the Clonezilla/DRBL/GParted live
+    iso and zip.
+  * A dir "/utils/win64" was added to be used to run syslinux in 
+    Win64 env.
+  * An option "-d syslinux" was added when running syslinux in 
+    makeboot.sh/makeboot.bat/makeboot64.bat. Thanks to 
+    Ady (ady-sf _at_ hotmail com) for this suggestion.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 20 Jan 2014 15:15:07 +0800
+
 drbl (2.7.20-drbl1) unstable; urgency=low
 
   * Language file ca_ES was updated. Thanks to René Mérou.
