@@ -246,41 +246,58 @@ echo "--------------------------------------------"
 # 4.
 to_continue_or_not "Do you want to install the SYSLINUX bootloader on $target_part $on_this_machine ?"
 # Since most of the cases when makeboot.sh is run, all the files are in FAT (USB flash drive normally uses FAT), we have to make syslinux executable.
-echo "We need a filesystem supporting Unix file mode for syslinux. Copying syslinux from FAT to /tmp/..."
+#
+# Check if $target_part is mounted or not
+mnt_pnt="$(LC_ALL=C df $target_part | grep -Ew $target_part | awk -F" " '{print $6}')"
+flag_mount=""
+if [ -z "$mnt_pnt" ]; then
+  # Not mounted. Mount it.
+  destfs_tmpd="$(mktemp -d /tmp/destfs_tmpd.XXXXXX)"
+  mount $target_part $destfs_tmpd
+  rc=$?
+  flag_mount="mounted"
+else
+  # Already mounted. 
+  destfs_tmpd=$mnt_pnt
+  rc=0
+fi
+# Create the syslinux in the destination partition
+if [ $rc -eq 0 ]; then
+  mkdir -p "$destfs_tmpd/syslinux"
+fi
+
 case "$mode" in
   syslinux)
      syslinux_tmpd="$(mktemp -d /tmp/syslinux_tmp.XXXXXX)"
+     echo "A filesystem supporting Unix file mode for syslinux is required. Copying syslinux from FAT to /tmp/..."
      cp -fv "$path_of_prog/utils/linux/syslinux" $syslinux_tmpd
      chmod u+x $syslinux_tmpd/syslinux
-     echo "Running: $syslinux_tmpd/syslinux -d syslinux -f -i $target_part "
-     $syslinux_tmpd/syslinux -d syslinux -f -i $target_part
-     echo "done!"
+     if [ $rc -eq 0 ]; then
+       echo "Running: $syslinux_tmpd/syslinux -d syslinux -f -i $target_part "
+       $syslinux_tmpd/syslinux -d syslinux -f -i $target_part
+       echo "done!"
+     else
+       [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+       echo "Failed to mount FAT partition $target_part!"
+       [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+       echo "Program terminated!"
+       exit 1
+     fi
      [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
      echo "//NOTE// If your USB flash drive fails to boot (maybe buggy BIOS), try to use \"syslinux -fs $target_part\", i.e. running with \"-s\"."
      [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
-     [ -d "$syslinux_tmpd" -a -n "$(echo $syslinux_tmpd | grep "syslinux_tmp" )" ] && rm -rf $syslinux_tmpd
+     if [ -d "$syslinux_tmpd" -a -n "$(echo $syslinux_tmpd | grep "syslinux_tmp" )" ]; then
+       rm -rf $syslinux_tmpd
+     fi
      ;;
   extlinux)
      extlinux_tmpd="$(mktemp -d /tmp/extlinux_tmp.XXXXXX)"
+     echo "A filesystem supporting Unix file mode for extlinux is required. Copying extlinux from FAT to /tmp/..."
      cp -fv "$path_of_prog/utils/linux/extlinux" $extlinux_tmpd
      chmod u+x $extlinux_tmpd/extlinux
-     # Check if $target_part is mounted or not
-     mnt_pnt="$(LC_ALL=C df $target_part | grep -Ew $target_part | awk -F" " '{print $6}')"
-     flag_mount=""
-     if [ -z "$mnt_pnt" ]; then
-       # Not mounted. Mount it.
-       ntfs_tmpd="$(mktemp -d /tmp/ntfs_tmp.XXXXXX)"
-       mount $target_part $ntfs_tmpd
-       rc=$?
-       flag_mount="mounted"
-     else
-       # Already mounted. 
-       ntfs_tmpd=$mnt_pnt
-       rc=0
-     fi
      if [ $rc -eq 0 ]; then
-       echo "Running: $extlinux_tmpd/extlinux -i $ntfs_tmpd/syslinux "
-       $extlinux_tmpd/extlinux -i $ntfs_tmpd/syslinux
+       echo "Running: $extlinux_tmpd/extlinux -i $destfs_tmpd/syslinux "
+       $extlinux_tmpd/extlinux -i $destfs_tmpd/syslinux
        echo "done!"
      else
        [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
@@ -289,13 +306,18 @@ case "$mode" in
        echo "Program terminated!"
        exit 1
      fi
-     if mountpoint $ntfs_tmpd >/dev/null 2>&1; then
-       if [ "$flag_mount" = "mounted" ]; then
-         # mounted by this program. We unmount it.
-         umount $ntfs_tmpd
-       fi
+     if [ -d "$extlinux_tmpd" -a -n "$(echo $extlinux_tmpd | grep "extlinux_tmp" )" ]; then
+       rm -rf $extlinux_tmpd
      fi
-     [ -d "$extlinux_tmpd" -a -n "$(echo $extlinux_tmpd | grep "extlinux_tmp" )" ] && rm -rf $extlinux_tmpd
-     [ -d "$ntfs_tmpd" -a -n "$(echo $ntfs_tmpd | grep "ntfs_tmp" )" ] && rm -rf $ntfs_tmpd
      ;;
 esac
+#
+if mountpoint $destfs_tmpd >/dev/null 2>&1; then
+  if [ "$flag_mount" = "mounted" ]; then
+    # mounted by this program. We unmount it.
+    umount $destfs_tmpd
+  fi
+fi
+if [ -d "$destfs_tmpd" -a -n "$(echo $destfs_tmpd | grep "destfs_tmpd" )" ]; then
+  rm -rf $destfs_tmpd
+fi
