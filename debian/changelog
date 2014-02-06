@@ -1,3 +1,11 @@
+drbl (2.7.23-drbl1) unstable; urgency=low
+
+  * Function parse_cmdline_option of drbl-functions was updated to 
+    accept pipe sign (|). Thanks to Fuchs (fusi1939 _at_ users sf net)
+    for this suggestion.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 06 Feb 2014 20:00:42 +0800
+
 drbl (2.7.22-drbl1) unstable; urgency=low
 
   * Program makeboot.sh was improved. The directory "/syslinux" on

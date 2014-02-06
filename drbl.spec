@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.7.22
+Version:	2.7.23
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Thu Feb 06 2014 Steven Shiau <steven _at_ nchc org tw> 2.7.23-drbl1
+- Function parse_cmdline_option of drbl-functions was updated to accept pipe sign (|). Thanks to Fuchs (fusi1939 _at_ users sf net) for this suggestion.
+
 * Tue Jan 28 2014 Steven Shiau <steven _at_ nchc org tw> 2.7.22-drbl1
 - Program makeboot.sh was improved. The directory "/syslinux" on the destination partition should be checked. If it does not exist, we should create it. Thanks to Ady (ady-sf _at_ hotmail com) for this suggestion.
 
