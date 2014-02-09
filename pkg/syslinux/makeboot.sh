@@ -179,7 +179,7 @@ echo "--------------------------------------------"
 [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
 echo "Machine: $dev_model_shown:"
 [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
-fdisk -l $target_disk
+parted -s $target_disk print
 echo "--------------------------------------------"
 
 to_continue_or_not "$msg_are_u_sure_u_want_to_continue"
@@ -229,7 +229,7 @@ if [ "$bootable" != "*" ]; then
   echo "$pt_dev is not marked as bootable! The partition table of $target_disk:"
   echo "--------------------------------------------"
   echo $dev_model_shown:
-  fdisk -l $target_disk
+  parted -s $target_disk print
   echo "--------------------------------------------"
   to_continue_or_not "$msg_do_you_want_to_make_it_bootable"
   echo "Running: parted -s $target_disk set $pt_dev_no boot on"

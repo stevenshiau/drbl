@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.7.23
+Version:	2.7.24
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,10 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Sun Feb 09 2014 Steven Shiau <steven _at_ nchc org tw> 2.7.24-drbl1
+- Function parse_cmdline_option of drbl-functions was updated to accept more characters, including "[", "]", and ";".
+- Program parted instead of fdisk is used in makeboot.sh to show the destination disk partition layout. Thanks to Ady (ady-sf _at_ hotmail com) for this suggestion.
+
 * Thu Feb 06 2014 Steven Shiau <steven _at_ nchc org tw> 2.7.23-drbl1
 - Function parse_cmdline_option of drbl-functions was updated to accept pipe sign (|). Thanks to Fuchs (fusi1939 _at_ users sf net) for this suggestion.
 

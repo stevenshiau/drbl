@@ -5,6 +5,16 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.7.24-drbl1) unstable; urgency=low
+
+  * Function parse_cmdline_option of drbl-functions was updated to
+    accept more characters, including "[", "]", and ";".
+  * Program parted instead of fdisk is used in makeboot.sh to show
+    the destination disk partition layout. 
+    Thanks to Ady (ady-sf _at_ hotmail com) for this suggestion.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sun, 09 Feb 2014 12:13:37 +0800
+
 drbl (2.7.23-drbl1) unstable; urgency=low
 
   * Function parse_cmdline_option of drbl-functions was updated to 
