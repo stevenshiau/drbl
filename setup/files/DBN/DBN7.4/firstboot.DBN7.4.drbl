@@ -1,0 +1,133 @@
+#!/bin/bash
+#
+# firstboot:         Starts the firstboot druid if it hasn't been run before
+#                    If /etc/reconfigSys exists, run the reconfiguration
+#		     program and remove /etc/reconfigSys when done.
+#                    Also will run if 'reconfig' is on the kernel cmdline.
+#
+# Modified by Steven Shiau <steven _at_ nchc org tw> to use this in
+# DRBL for Debian/Ubuntu.
+# 
+# To avoid there is no input output in rc running, we add this one:
+#exec </dev/console >/dev/console 2>&1
+
+# Load DRBL setting and functions
+DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/usr/share/drbl}"
+
+. $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
+
+# We can not use runlevel to get the runlevel, since this service is still in
+# rcS.d
+#RL="$(runlevel | awk -F" " '{print $2}')"
+# We have to filter the ocs_opt in /proc/cmdline to avoid some options, like -b or 1 inside it, which init will think it's emergency mode or other mode
+pure_cmdline="$(sed -e "s/ocs_opt=\".*\"//g" /proc/cmdline)"
+if [ -n "$(echo $pure_cmdline | grep -w -- "-s\|single\|S\|1")" ]; then
+   echo "We will be in runlevel 1, skip firstboot!"
+   exit 0
+fi
+#
+if [ ! -e /etc/X11/X ]; then
+  echo "No X program! Skip firstboot!"
+  exit 0
+elif [ ! -e /etc/init.d/gdm -a \
+       ! -e /etc/init.d/kdm -a \
+       ! -e /etc/init.d/xdm ]
+then
+  echo "No gdm/kdm/xdm! Skip firstboot!"
+  exit 0
+fi
+
+# functions
+set_priority() {
+  echo '*****************************************************'
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+  echo "Which mode do you want when configuring X ?"
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+  echo "0: Beginner mode, use whatever the default priority of question is."
+  echo "1: Medium mode."
+  echo "2: Expert mode, very verbose."
+  echo "NOTE: If X-window fails to start, you can run \"/etc/init.d/firstboot restart\" to configure it again."
+  echo -n "[0] "
+  read ans_ver
+  case "$ans_ver" in
+    # Beginner means only ask high priority question
+    # Expert means ask low priority question
+    1) PRIORITY="medium" ;;
+    2) PRIORITY="low"    ;;
+    *) PRIORITY="high"   ;;
+  esac
+} # end of set_prority
+#
+reconfig_XF86() {
+  echo "X is not configured.  Running dpkg-reconfigure xserver-xfree86"
+  set_priority
+  # We need /etc/X11/XF86Config-4 so that dpkg-reconfigure can create
+  # /etc/X11/XF86Config-4.
+  # /etc/X11/XF86Config-4.drbl.template is prepared by drblpush.
+  cp -af /etc/X11/XF86Config-4.drbl.template /etc/X11/XF86Config-4
+  md5sum /etc/X11/XF86Config-4 > /var/lib/xfree86/XF86Config-4.md5sum
+  LC_ALL=C dpkg-reconfigure --priority=$PRIORITY xserver-xfree86
+  echo "X is now configured."
+} # end of reconfig_XF86
+#
+reconfig_Xorg() {
+  echo "X is not configured.  Running dpkg-reconfigure xserver-xorg"
+  set_priority
+  # We need /etc/X11/xorg.conf so that dpkg-reconfigure can create
+  # /etc/X11/xorg.conf.
+  # /etc/X11/xorg.conf.drbl.template is prepared by drblpush.
+  cp -af /etc/X11/xorg.conf.drbl.template /etc/X11/xorg.conf
+  # For Sarge, Breezy, the xorg.conf.md5sum is in /var/lib/xfree86/
+  # For Dapper, the xorg.conf.md5sum is in /var/lib/x11/
+  if [ -d /var/lib/xfree86 ]; then
+    varx11=xfree86
+  elif [ -d /var/lib/x11 ]; then
+    varx11=x11
+  fi
+  md5sum /etc/X11/xorg.conf > /var/lib/$varx11/xorg.conf.md5sum
+  LC_ALL=C dpkg-reconfigure --priority=$PRIORITY xserver-xorg
+  echo "X is now configured."
+} # end of reconfig_Xorg
+#
+run_config() {
+        if grep -i reconfig /proc/cmdline >/dev/null || [ -f /etc/reconfigSys ]; then
+
+	  echo -n "Forced to re-configure X.  Running dpkg-reconfigure..."
+	  if [ -f /etc/X11/XF86Config-4.drbl.template ]; then
+            reconfig_XF86
+          elif [ -f /etc/X11/xorg.conf.drbl.template ]; then
+            reconfig_Xorg
+          fi
+	  rm -f /etc/reconfigSys
+	  exit 0
+	fi
+
+	if [ -n "$(ls /etc/rc2.d/S[0-9][0-9][kgx]dm 2>/dev/null)" ]; then
+	  if [ ! -f /etc/X11/XF86Config-4 -a -f /etc/X11/XF86Config-4.drbl.template ] ; then
+            reconfig_XF86
+	  elif [ ! -f /etc/X11/xorg.conf -a -f /etc/X11/xorg.conf.drbl.template ] ; then
+            reconfig_Xorg
+	  fi
+        else
+          echo "No gdm, kdm, or xdm was found in /etc/rc2.d/. Skip X configure."
+	fi
+
+	exit 0
+} # end of run_config
+
+#
+case "$1" in
+ start)
+        if [ -f /etc/X11/xorg.conf.drbl.template ]; then
+          # Ex: ii  xserver-xorg   1:7.3+10       the X.Org X server
+          xserver_ver="$(LANG=C dpkg -l xserver-xorg | tail -n 1 | grep "^ii" | awk -F" " '{print $3}' | sed -e "s/^[[:digit:]]*://g")"
+	  dpkg --compare-versions "$xserver_ver" ">" "7.2" && echo "X.org is 7.2 or later, skip configuring!" && exit 5
+        fi
+        run_config
+	;;
+ restart)
+        # Clean the old config first before reconfigure
+        rm -f /etc/X11/xorg.conf /etc/X11/XF86Config-4
+        run_config
+	;;
+esac
