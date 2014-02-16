@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.7.25-drbl1) unstable; urgency=low
+
+  * Adding firstboot.DBN7.4.drbl for Debian 7.4.
+  * Adding unattended option (-b) to makeboot.sh.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sun, 16 Feb 2014 19:32:08 +0800
+
 drbl (2.7.24-drbl1) unstable; urgency=low
 
   * Function parse_cmdline_option of drbl-functions was updated to

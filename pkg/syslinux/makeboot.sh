@@ -10,6 +10,9 @@
 # Append PATH
 export PATH=/sbin:/usr/sbin:/bin:/usr/bin:$PATH
 
+# Settings
+ocs_batch_mode="false"
+
 #
 prog="$(basename $0)"
 path_of_prog="$(LC_ALL=C cd "$(dirname "$0")/../../"; pwd)"
@@ -28,10 +31,13 @@ msg_do_you_want_to_make_it_bootable="Do you want to mark it as bootable ?"
 
 #
 USAGE() {
-   echo "Usage: $prog partition_device"
+   echo "$prog - To make the device bootable with syslinux"
+   echo "Usage: $prog [OPTION] partition_device"
+   echo "Options:"
+   echo "-b, --batch-mode  batch, unattended mode. Use carefully! DANGEROUS!!!"
    echo "Ex:" 
-   echo "To make /dev/sde1 bootable on GNU/Linux:"
-   echo "  $prog /dev/sde1"
+   echo "To make /dev/sdg1 bootable on GNU/Linux:"
+   echo "  $prog /dev/sdg1"
 }
 # Check if root or not
 check_if_root() {
@@ -91,6 +97,17 @@ get_part_number() {
 
 #
 export LANG=C
+
+#
+while [ $# -gt 0 ]; do
+ case "$1" in
+   -b|--batch) ocs_batch_mode="true"; shift;;
+   -*)     echo "${0}: ${1}: invalid option" >&2
+           USAGE >& 2
+           exit 2 ;;
+   *)      break ;;
+ esac
+done
 
 #
 check_if_root
@@ -182,8 +199,10 @@ echo "Machine: $dev_model_shown:"
 parted -s $target_disk print
 echo "--------------------------------------------"
 
-to_continue_or_not "$msg_are_u_sure_u_want_to_continue"
-echo "--------------------------------------------"
+if [ "$ocs_batch_mode" = "false" ]; then
+  to_continue_or_not "$msg_are_u_sure_u_want_to_continue"
+  echo "--------------------------------------------"
+fi
 
 # 0. Check if partition is a FAT partition or NTFS partition
 # parted -s /dev/hda1 print
@@ -231,20 +250,26 @@ if [ "$bootable" != "*" ]; then
   echo $dev_model_shown:
   parted -s $target_disk print
   echo "--------------------------------------------"
-  to_continue_or_not "$msg_do_you_want_to_make_it_bootable"
+  if [ "$ocs_batch_mode" = "false" ]; then
+    to_continue_or_not "$msg_do_you_want_to_make_it_bootable"
+  fi
   echo "Running: parted -s $target_disk set $pt_dev_no boot on"
   parted -s $target_disk set $pt_dev_no boot on
   echo "--------------------------------------------"
 fi
 
 # 3. MBR
-to_continue_or_not "Do you want to install mbr on $target_disk $on_this_machine ?"
+if [ "$ocs_batch_mode" = "false" ]; then
+  to_continue_or_not "Do you want to install mbr on $target_disk $on_this_machine ?"
+fi
 echo Running: cat "$path_of_prog/utils/mbr/mbr.bin" > $target_disk
 cat "$path_of_prog/utils/mbr/mbr.bin" > $target_disk
 
 echo "--------------------------------------------"
 # 4.
-to_continue_or_not "Do you want to install the SYSLINUX bootloader on $target_part $on_this_machine ?"
+if [ "$ocs_batch_mode" = "false" ]; then
+  to_continue_or_not "Do you want to install the SYSLINUX bootloader on $target_part $on_this_machine ?"
+fi
 # Since most of the cases when makeboot.sh is run, all the files are in FAT (USB flash drive normally uses FAT), we have to make syslinux executable.
 #
 # Check if $target_part is mounted or not
