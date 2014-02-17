@@ -1,3 +1,9 @@
+drbl (2.7.26-drbl1) unstable; urgency=low
+
+  * Return status of syslinux/extlinux in makeboot.sh will be checked.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 17 Feb 2014 16:48:15 +0800
+
 drbl (2.7.25-drbl1) unstable; urgency=low
 
   * Adding firstboot.DBN7.4.drbl for Debian 7.4.

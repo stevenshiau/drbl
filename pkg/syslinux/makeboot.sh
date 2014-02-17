@@ -300,6 +300,14 @@ case "$mode" in
      if [ $rc -eq 0 ]; then
        echo "Running: $syslinux_tmpd/syslinux -d syslinux -f -i $target_part "
        $syslinux_tmpd/syslinux -d syslinux -f -i $target_part
+       s_rc="$?"
+       if [ "$s_rc" -ne 0 ]; then
+         [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+         echo "Failed to run syslinux!"
+         [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+         echo "Program terminated!"
+         exit 1
+       fi
        echo "done!"
      else
        [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
@@ -323,6 +331,14 @@ case "$mode" in
      if [ $rc -eq 0 ]; then
        echo "Running: $extlinux_tmpd/extlinux -i $destfs_tmpd/syslinux "
        $extlinux_tmpd/extlinux -i $destfs_tmpd/syslinux
+       s_rc="$?"
+       if [ "$s_rc" -ne 0 ]; then
+         [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+         echo "Failed to run extlinux!"
+         [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+         echo "Program terminated!"
+         exit 1
+       fi
        echo "done!"
      else
        [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
