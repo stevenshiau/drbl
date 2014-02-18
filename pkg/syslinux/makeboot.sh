@@ -317,7 +317,7 @@ case "$mode" in
        exit 1
      fi
      [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
-     echo "//NOTE// If your USB flash drive fails to boot (maybe buggy BIOS), try to use \"syslinux -fs $target_part\", i.e. running with \"-s\"."
+     echo "//NOTE// If your USB flash drive fails to boot (maybe buggy BIOS), try to use \"syslinux -d syslinux -fs $target_part\", i.e. running with \"-fs\"."
      [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
      if [ -d "$syslinux_tmpd" -a -n "$(echo $syslinux_tmpd | grep "syslinux_tmp" )" ]; then
        rm -rf $syslinux_tmpd

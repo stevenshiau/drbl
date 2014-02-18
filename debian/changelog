@@ -1,3 +1,10 @@
+drbl (2.7.27-drbl1) unstable; urgency=low
+
+  * The prompt about running syslinux in stupid mode in makeboot.sh
+    has been updated by adding "-d syslinux".
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 18 Feb 2014 21:16:33 +0800
+
 drbl (2.7.26-drbl1) unstable; urgency=low
 
   * Return status of syslinux/extlinux in makeboot.sh will be checked.
