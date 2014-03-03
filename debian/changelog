@@ -1,3 +1,11 @@
+drbl (2.7.29-drbl1) unstable; urgency=low
+
+  * The variable msg_remember_poweroff_reboot_when_ocs_sr_is_done in
+    language file ja_JP.UTF-8 was updated to avoid triggering 
+    jfbterm crash.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 03 Mar 2014 08:27:09 +0800
+
 drbl (2.7.28-drbl1) unstable; urgency=low
 
   * Function parse_cmdline_option of drbl-functions was updated to accept

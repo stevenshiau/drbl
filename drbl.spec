@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.7.28
+Version:	2.7.29
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Mon Mar 03 2014 Steven Shiau <steven _at_ nchc org tw> 2.7.29-drbl1
+- The variable msg_remember_poweroff_reboot_when_ocs_sr_is_done in language file ja_JP.UTF-8 was updated to avoid triggering jfbterm crash.
+
 * Fri Feb 21 2014 Steven Shiau <steven _at_ nchc org tw> 2.7.28-drbl1
 - Function parse_cmdline_option of drbl-functions was updated to accept all print characters ([[:print:]]) since now we use eval to run it.
 
