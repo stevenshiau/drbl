@@ -3491,6 +3491,10 @@ if [ -e /etc/debian_version ]; then
         perl -pi -e "s/^(start on.*)/# \$1 # Modified by DRBL/g" $drbl_common_root/etc/init/$i
       fi
     done
+    # Force to disable client's network-manager 
+    if [ -e "$drbl_common_root/etc/init/network-manager.conf" ]; then
+      mv $drbl_common_root/etc/init/network-manager.conf $drbl_common_root/etc/init/network-manager.conf.drbl-disabled
+    fi
     # Disable the recovery-menu, use sulogin, otherwise the error messages of Clonezilla will be overwritten.
     if [ -e "$drbl_common_root/etc/init/rcS.conf" ]; then
       perl -pi -e "s|(^[[:space:]]*exec) /usr/share/recovery-mode/recovery-menu.*|\$1 /sbin/sulogin # Modified by DRBL. Force to use sulogin!|g" $drbl_common_root/etc/init/rcS.conf
