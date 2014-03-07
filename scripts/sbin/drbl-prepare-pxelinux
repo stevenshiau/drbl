@@ -62,7 +62,7 @@ put_upstream_pxelinux(){
     USAGE
     exit 1
   fi
-  syslinux_tarball="syslinux-${ver}.tar.bz2"
+  syslinux_tarball="syslinux-${ver}.tar.xz"
   tmp_wd="$(LC_ALL=C mktemp -d /tmp/syslinux_tmp.XXXXXXX)"
   mkdir -p $tmp_wd/upstream
   if [ -z "$(echo $ver | grep -iE -- "-pre[[:digit:]]+")" ]; then
@@ -70,7 +70,7 @@ put_upstream_pxelinux(){
     # Convert the version number to subdir name, e..g 4.04 -> 4.xx
     syslinux_ver_subdir="$(LC_ALL=C echo "$ver" | sed -r -e "s/\.[[:digit:]]*$/\.xx/g")"
   else
-    # Testing release. File name is like: syslinux-6.02-pre16.tar.bz2	
+    # Testing release. File name is like: syslinux-6.02-pre16.tar.xz
     # The URL for such a testing version is like: http://free.nchc.org.tw/syslinux/Testing/6.02/
     syslinux_ver_subdir="$(LC_ALL=C echo "$ver" | sed -r -e "s/-pre[[:digit:]]+$//g")"
     syslinux_ver_subdir="Testing/$syslinux_ver_subdir"
@@ -80,7 +80,7 @@ put_upstream_pxelinux(){
   echo "Downloading $syslinux_binsrc_url/$syslinux_ver_subdir/$syslinux_tarball..."
   LC_ALL=C wget $wget_opt -P $tmp_wd $syslinux_binsrc_url/$syslinux_ver_subdir/$syslinux_tarball
   echo "done!"
-  LC_ALL=C tar -xjf $tmp_wd/$syslinux_tarball -C $tmp_wd/upstream
+  LC_ALL=C tar -xJf $tmp_wd/$syslinux_tarball -C $tmp_wd/upstream
   mkdir -p $tmp_wd/extracted/syslinux
   echo "Extracting the required files for DRBL..."
   # Check if the tarball contains multiple arch (bios, efi32, and efi64) support.

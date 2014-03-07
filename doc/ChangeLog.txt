@@ -5,6 +5,17 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.7.31-drbl1) unstable; urgency=low
+
+  * Program drbl-list-tarball was added to replace list_available_tbz2
+    and list_latest_tbz2.
+  * Program drbl-prepare-pxelinux and the function 
+    get_syslinux_binary_for_dos_linux of drbl-functions was modified
+    to use syslinux xz tarball instead of bz2 tarball because the
+    latest testing one does not provide bz2 format anymore.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 07 Mar 2014 15:19:52 +0800
+
 drbl (2.7.30-drbl1) unstable; urgency=low
 
   * The network-manager service of DRBL Ubuntu client is disabled.
