@@ -7,12 +7,154 @@ DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/usr/share/drbl}"
 
 . $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
 
+# Settings
+# By default we put all the files for clients. 
+# If put pxelinux-related files (*.0, *.c32, *.efi...) only, set as "true"
+put_pxelinux_related_only="false"
+
 USAGE() {
    echo "Usage: $0 [OPTION]"
    echo "OPTION"
    language_help_prompt_by_idx_no
    echo "-o, --console-output OPT: Set the console output parameters."
    echo "-i, --pxe-serial-output OPT:  Set the PXE menu to work with serial console output."
+   echo "-p, --only-pxelinux-related:  Only put the PXELINUX related files. Skip the memtest, freedos, and not to create the PXELINUX boot menu file."
+}
+#
+put_drbl_background_img() {
+  # the background img in pxelinux
+  if [ -f "$pxelinux_bg_img" ]; then
+     cp -af $pxelinux_bg_img $pxecfg_pd
+  else
+     [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+     echo "$msg_Warning! $pxelinux_bg_img $msg_NOT_found!!! $msg_PXE_NOT_work"
+     echo "$msg_press_enter_to_continue"
+     [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+     read
+  fi
+}
+#
+put_pxelinux_multi_arch_files() {
+  # For those files will be copied to $pxecfg_pd/{bios,efi32,efi64}
+  for iarch in bios efi32 efi64; do
+    if [ -d "$pxelinux_binsrc_dir/$iarch" ]; then
+      cp -af $pxelinux_binsrc_dir/$iarch $pxecfg_pd/
+    fi
+  done
+  # Move the files to appropriate path.
+  # pxelinux.0, gpxelinux.0, and lpxelinux.0
+  mv $pxecfg_pd/bios/*pxelinux.0 $pxecfg_pd/
+  if [ -e "$pxecfg_pd/bios/ldlinux.c32" ]; then
+    mv $pxecfg_pd/bios/ldlinux.c32 $pxecfg_pd/ldlinux.c32
+  fi
+  if [ -e "$pxecfg_pd/efi32/ldlinux.e32" ]; then
+    mv $pxecfg_pd/efi32/ldlinux.e32 $pxecfg_pd/ldlinux.e32
+  fi
+  if [ -e "$pxecfg_pd/efi32/syslinux.efi" ]; then
+    mv $pxecfg_pd/efi32/syslinux.efi $pxecfg_pd/bootia32.efi
+  fi
+  if [ -e "$pxecfg_pd/efi64/ldlinux.e64" ]; then
+    mv $pxecfg_pd/efi64/ldlinux.e64 $pxecfg_pd/ldlinux.e64
+  fi
+  if [ -e "$pxecfg_pd/efi64/syslinux.efi" ]; then
+    mv $pxecfg_pd/efi64/syslinux.efi $pxecfg_pd/bootx64.efi
+  fi
+}
+#
+put_pxelinux_memdisk() {
+  # memdisk, only for $pxecfg_pd/bios/
+  if [ -f "$pxelinux_memdisk_file" ]; then
+     cp -af $pxelinux_memdisk_file $pxecfg_pd/bios/
+  else
+     [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+     echo "$msg_Warning! $pxelinux_memdisk_file $msg_NOT_found!!! $msg_PXE_NOT_work"
+     echo "$msg_press_enter_to_continue"
+     [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+     read
+  fi
+}
+#
+link_pxelinux_bios_arch_files() {
+  # If only $pxecfg_pd/bios/, no $pxecfg_pd/{efi32,efi64}, we'd better to link files from $pxecfg_pd/bios/ to $pxecfg_pd/, otherwise for CentOS 5 with syslinux 4.x, the "PATH" option is not supported.
+  if [ -d $pxecfg_pd/bios -a \
+       ! -d $pxecfg_pd/efi32 -a \
+       ! -d $pxecfg_pd/efi64 ]; then
+    for i in $pxecfg_pd/bios/*; do
+      [ ! -e "$i" ] && continue
+      fn="$(basename $i)"
+      (
+        ln -t $pxecfg_pd -fs bios/$fn
+      )
+    done
+  fi
+}
+#
+put_memtest86_img() {
+  # memtest86+
+  # make a version tag in $pxecfg_pd
+  echo "Copying memtest86+ to $pxecfg_pd..."
+  if [ -f "$memtest86_file" ]; then
+     cp -af $memtest86_file $pxecfg_pd
+     memtest86_src_path="$(dirname $memtest86_file)"
+     cp -af $memtest86_src_path/VERSION $pxecfg_pd/MEMTEST86+_VERSION
+  else
+     [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+     echo "$msg_Warning! $memtest86_file $msg_NOT_found!!!"
+     echo "$msg_press_enter_to_continue"
+     [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+     read
+  fi
+}
+#
+put_etherboot_and_sis900_pxe() {
+  # This function is deprecated since we do not maintain drbl-etherboot package anymore.
+  # For etherboot PXE image (Especially necessary for sis900 NIC)
+  # clean the old ones
+  rm -f $pxecfg_pd/eb-*-etherboot-pci.zpxe $pxecfg_pd/sis900.zpxe
+  # get the all-in-one etherboot zpxe and sis900 zpxe filename, we use sort and head to choose only one.
+  etherboot_pxe="$($query_pkglist_cmd drbl-etherboot 2>/dev/null | grep -E "eb-.*-etherboot-pci.zpxe$")"
+  [ -e "$etherboot_pxe" ] && cp -af $etherboot_pxe $pxecfg_pd/
+  
+  sis900_pxe="$($query_pkglist_cmd drbl-etherboot 2>/dev/null | grep -E "sis900.zpxe$")"
+  [ -e "$sis900_pxe" ] && cp -af $sis900_pxe $pxecfg_pd/
+}
+#
+put_free_dos_img() {
+  # create the freedos image, which a clean one.
+  # if user wants to insert files, use 
+  # the script insert-file-fdos.sh
+  # [ -f kernel.sys ] && rm -f kernel.sys
+  if [ -f "$fdos_img_src" ]; then
+     # 2005/4/4 since etherboot 5.4.0 is released, no more NBI.
+     # img_mt=`mktemp -d fdos_img.XXXXXX`
+     # mount -t vfat -o loop $fdos_img_src $img_mt
+     # cp -f $img_mt/kernel.sys .
+     # umount $img_mt
+     # mknbi-fdos --output=/tftpboot/nbi_img/$fdos_nbi_output kernel.sys $fdos_img_src
+     echo "Copying FreeDOS files to $pxecfg_pd/... "
+     cp -f $fdos_img_src $pxecfg_pd/$fdos_img_output
+     # [ -d "$img_mt" ] && rm -rf $img_mt
+     # clean the unnecessary file
+     # [ -f kernel.sys ] && rm -f kernel.sys
+  else
+     [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+     echo "$msg_Warning! $fdos_img_src $msg_NOT_found!!! $msg_FreeDOS_NOT_work"
+     echo "$msg_press_enter_to_continue"
+     [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+  fi
+}
+#
+gen_pxe_boot_menu() {
+  # create the pxelinux default
+  if [ -n "$CONSOLE_OUTPUT" ]; then
+   console_opt1="--console"
+   console_opt2="$CONSOLE_OUTPUT"
+  fi
+  if [ -n "$PXE_SERIAL_OUTPUT" ]; then
+   pxe_serial_opt1="--serial"
+   pxe_serial_opt2="$PXE_SERIAL_OUTPUT"
+  fi
+  generate-pxe-menu $console_opt1 "$console_opt2" $pxe_serial_opt1 "$pxe_serial_opt2"
 }
 
 # Parse command-line options
@@ -45,6 +187,10 @@ while [ $# -gt 0 ]; do
         fi
 	[ -z "$PXE_SERIAL_OUTPUT" ] && USAGE && exit 1
 	;;
+    -p|--only-pxelinux-related)
+	shift
+        put_pxelinux_related_only="true"
+	;;
     -*)     echo "${0}: ${1}: invalid option" >&2
             USAGE >& 2
             exit 2 ;;
@@ -68,121 +214,19 @@ cp -af $pxelinux_binsrc_dir/VERSION $pxecfg_pd/PXELINUX_VERSION
 # These files (pxelinux.0, gpxelinux.0, menu.c32, vesamenu.c32, chain.c32, memdisk...) are very important.
 # Hence we process here separately.
 
-# the background img in pxelinux
-if [ -f $pxelinux_bg_img ]; then
-   cp -af $pxelinux_bg_img $pxecfg_pd
+if [ "$put_pxelinux_related_only" = "true" ]; then
+  put_pxelinux_multi_arch_files
+  link_pxelinux_bios_arch_files
+  put_pxelinux_memdisk
 else
-   [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
-   echo "$msg_Warning! $pxelinux_bg_img $msg_NOT_found!!! $msg_PXE_NOT_work"
-   echo "$msg_press_enter_to_continue"
-   [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
-   read
+  put_drbl_background_img
+  put_memtest86_img
+  put_etherboot_and_sis900_pxe
+  put_free_dos_img
+  #
+  put_pxelinux_multi_arch_files
+  link_pxelinux_bios_arch_files
+  put_pxelinux_memdisk
+  #
+  gen_pxe_boot_menu
 fi
-
-# For those files will be copied to $pxecfg_pd/{bios,efi32,efi64}
-for iarch in bios efi32 efi64; do
-  if [ -d "$pxelinux_binsrc_dir/$iarch" ]; then
-    cp -af $pxelinux_binsrc_dir/$iarch $pxecfg_pd/
-  fi
-done
-# Move the files to appropriate path.
-# pxelinux.0, gpxelinux.0, and lpxelinux.0
-mv $pxecfg_pd/bios/*pxelinux.0 $pxecfg_pd/
-if [ -e "$pxecfg_pd/bios/ldlinux.c32" ]; then
-  mv $pxecfg_pd/bios/ldlinux.c32 $pxecfg_pd/ldlinux.c32
-fi
-if [ -e "$pxecfg_pd/efi32/ldlinux.e32" ]; then
-  mv $pxecfg_pd/efi32/ldlinux.e32 $pxecfg_pd/ldlinux.e32
-fi
-if [ -e "$pxecfg_pd/efi32/syslinux.efi" ]; then
-  mv $pxecfg_pd/efi32/syslinux.efi $pxecfg_pd/bootia32.efi
-fi
-if [ -e "$pxecfg_pd/efi64/ldlinux.e64" ]; then
-  mv $pxecfg_pd/efi64/ldlinux.e64 $pxecfg_pd/ldlinux.e64
-fi
-if [ -e "$pxecfg_pd/efi64/syslinux.efi" ]; then
-  mv $pxecfg_pd/efi64/syslinux.efi $pxecfg_pd/bootx64.efi
-fi
-
-# memdisk, only for $pxecfg_pd/bios/
-if [ -f $pxelinux_memdisk_file ]; then
-   cp -af $pxelinux_memdisk_file $pxecfg_pd/bios/
-else
-   [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
-   echo "$msg_Warning! $pxelinux_memdisk_file $msg_NOT_found!!! $msg_PXE_NOT_work"
-   echo "$msg_press_enter_to_continue"
-   [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
-   read
-fi
-
-# If only $pxecfg_pd/bios/, no $pxecfg_pd/{efi32,efi64}, we'd better to link files from $pxecfg_pd/bios/ to $pxecfg_pd/, otherwise for CentOS 5 with syslinux 4.x, the "PATH" option is not supported.
-if [ -d $pxecfg_pd/bios -a \
-     ! -d $pxecfg_pd/efi32 -a \
-     ! -d $pxecfg_pd/efi64 ]; then
-  for i in $pxecfg_pd/bios/*; do
-    [ ! -e "$i" ] && continue
-    fn="$(basename $i)"
-    (
-      ln -t $pxecfg_pd -fs bios/$fn
-    )
-  done
-fi
-
-# memtest86+
-# make a version tag in $pxecfg_pd
-echo "Copying memtest86+ to $pxecfg_pd..."
-memtest86_src_path="$(dirname $memtest86_file)"
-cp -af $memtest86_src_path/VERSION $pxecfg_pd/MEMTEST86+_VERSION
-
-if [ -f "$memtest86_file" ]; then
-   cp -af $memtest86_file $pxecfg_pd
-else
-   [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
-   echo "$msg_Warning! $memtest86_file $msg_NOT_found!!!"
-   echo "$msg_press_enter_to_continue"
-   [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
-   read
-fi
-
-# For etherboot PXE image (Especially necessary for sis900 NIC)
-# clean the old ones
-rm -f $pxecfg_pd/eb-*-etherboot-pci.zpxe $pxecfg_pd/sis900.zpxe
-# get the all-in-one etherboot zpxe and sis900 zpxe filename, we use sort and head to choose only one.
-etherboot_pxe="$($query_pkglist_cmd drbl-etherboot 2>/dev/null | grep -E "eb-.*-etherboot-pci.zpxe$")"
-sis900_pxe="$($query_pkglist_cmd drbl-etherboot 2>/dev/null | grep -E "sis900.zpxe$")"
-[ -e "$etherboot_pxe" ] && cp -af $etherboot_pxe $pxecfg_pd/
-[ -e "$sis900_pxe" ] && cp -af $sis900_pxe $pxecfg_pd/
-
-# create the freedos image, which a clean one.
-# if user wants to insert files, use 
-# the script insert-file-fdos.sh
-# [ -f kernel.sys ] && rm -f kernel.sys
-if [ -f "$fdos_img_src" ]; then
-   # 2005/4/4 since etherboot 5.4.0 is released, no more NBI.
-   # img_mt=`mktemp -d fdos_img.XXXXXX`
-   # mount -t vfat -o loop $fdos_img_src $img_mt
-   # cp -f $img_mt/kernel.sys .
-   # umount $img_mt
-   # mknbi-fdos --output=/tftpboot/nbi_img/$fdos_nbi_output kernel.sys $fdos_img_src
-   echo "Copying FreeDOS files to $pxecfg_pd/... "
-   cp -f $fdos_img_src $pxecfg_pd/$fdos_img_output
-   # [ -d "$img_mt" ] && rm -rf $img_mt
-   # clean the unnecessary file
-   # [ -f kernel.sys ] && rm -f kernel.sys
-else
-   [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
-   echo "$msg_Warning! $fdos_img_src $msg_NOT_found!!! $msg_FreeDOS_NOT_work"
-   echo "$msg_press_enter_to_continue"
-   [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
-fi
-
-# create the pxelinux default
-if [ -n "$CONSOLE_OUTPUT" ]; then
- console_opt1="--console"
- console_opt2="$CONSOLE_OUTPUT"
-fi
-if [ -n "$PXE_SERIAL_OUTPUT" ]; then
- pxe_serial_opt1="--serial"
- pxe_serial_opt2="$PXE_SERIAL_OUTPUT"
-fi
-generate-pxe-menu $console_opt1 "$console_opt2" $pxe_serial_opt1 "$pxe_serial_opt2"

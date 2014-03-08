@@ -1,3 +1,13 @@
+drbl (2.7.32-drbl1) unstable; urgency=low
+
+  * The codes of prepare-files-for-PXE-client were rewritten so that
+    it's can be reused for drbl-prepare-pxelinux. 
+    An option "-p" was added to put pxelinux-related files only. 
+  * Bug fixed: the "-d" option of drbl-prepare-pxelinux failed to
+    process EFI files of syslinux.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sat, 08 Mar 2014 20:22:11 +0800
+
 drbl (2.7.31-drbl1) unstable; urgency=low
 
   * Program drbl-list-tarball was added to replace list_available_tbz2

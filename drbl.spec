@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.7.31
+Version:	2.7.32
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,10 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Sat Mar 08 2014 Steven Shiau <steven _at_ nchc org tw> 2.7.32-drbl1
+- The codes of prepare-files-for-PXE-client were rewritten so that it's can be reused for drbl-prepare-pxelinux. An option "-p" was added to put pxelinux-related files only. 
+- Bug fixed: the "-d" option of drbl-prepare-pxelinux failed to process EFI files of syslinux.
+
 * Fri Mar 07 2014 Steven Shiau <steven _at_ nchc org tw> 2.7.31-drbl1
 - Program drbl-list-tarball was added to replace list_available_tbz2 and list_latest_tbz2.
 - Program drbl-prepare-pxelinux and the function get_syslinux_binary_for_dos_linux of drbl-functions was modified to use syslinux xz tarball instead of bz2 tarball because the latest testing one does not provide bz2 format anymore.

@@ -42,12 +42,6 @@ put_pxelinux_bin_2_drbl_repo() {
   pxelinux_v="$(LC_ALL=C strings $pxelinux_file | grep "^PXELINUX")"
   echo $pxelinux_v > $pxelinux_binsrc_dir/VERSION
   echo "done!"
-  if [ "$deploy_to_system_too" = "yes" ]; then
-    echo -n "Putting required pxelinux files in DRBL system dir $pxecfg_pd... "
-    cp -a $pxelinux_extracted_bin_abs_path/* $pxecfg_pd/
-    echo $pxelinux_v > $pxecfg_pd/PXELINUX_VERSION
-    echo "done!"
-  fi
 } # end of put_pxelinux_bin_2_drbl_repo
 
 #
@@ -293,5 +287,11 @@ case "$mode" in
   from-distribution) put_distribution_pxelinux ;;
   from-upstream)     put_upstream_pxelinux $pxelinux_ver_requested ;;
 esac
+
+if [ "$deploy_to_system_too" = "yes" ]; then
+  echo "Putting required pxelinux files in DRBL system dir $pxecfg_pd... "
+  prepare-files-for-PXE-client -p
+  echo "done!"
+fi
 
 exit 0
