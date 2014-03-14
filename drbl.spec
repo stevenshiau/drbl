@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.7.32
+Version:	2.7.33
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Fri Mar 14 2014 Steven Shiau <steven _at_ nchc org tw> 2.7.33-drbl1
+- Variable "messages_shown_preference" in drbl.conf was moved to drbl-ocs.conf and renamed as "ocs_prompt_mode".
+
 * Sat Mar 08 2014 Steven Shiau <steven _at_ nchc org tw> 2.7.32-drbl1
 - The codes of prepare-files-for-PXE-client were rewritten so that it's can be reused for drbl-prepare-pxelinux. An option "-p" was added to put pxelinux-related files only. 
 - Bug fixed: the "-d" option of drbl-prepare-pxelinux failed to process EFI files of syslinux.
