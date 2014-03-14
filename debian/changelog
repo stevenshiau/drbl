@@ -1,3 +1,10 @@
+drbl (2.7.34-drbl1) unstable; urgency=low
+
+  * Function parse_cmdline_option was improved to avoid some
+    runtime error.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 14 Mar 2014 17:32:38 +0800
+
 drbl (2.7.33-drbl1) unstable; urgency=low
 
   * Variable "messages_shown_preference" in drbl.conf was moved to

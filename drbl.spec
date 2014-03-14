@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.7.33
+Version:	2.7.34
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Fri Mar 14 2014 Steven Shiau <steven _at_ nchc org tw> 2.7.34-drbl1
+- Function parse_cmdline_option was improved to avoid some runtime error.
+
 * Fri Mar 14 2014 Steven Shiau <steven _at_ nchc org tw> 2.7.33-drbl1
 - Variable "messages_shown_preference" in drbl.conf was moved to drbl-ocs.conf and renamed as "ocs_prompt_mode".
 
