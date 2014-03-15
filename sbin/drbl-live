@@ -54,6 +54,183 @@ set_locale_for_clients() {
   echo "Since some config files are modified in template client, recreating template tarball for DRBL SSI..."
   drbl-gen-ssi-files
 } # end of set_locale_for_clients
+#
+start_drbl_live() {
+  if [ "$prompt_drbl_live" = "yes" ]; then
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+    echo "$msg_this_is_for_drbl_server_not_for_clonezilla_server_edition"
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+    echo "$msg_are_u_sure_u_want_to_continue"
+    echo -n "[Y/n] "
+    read drbl_live_ans
+    case "$drbl_live_ans" in
+       n|N|[nN][oO]) echo "$msg_program_stop" 
+                     exit 1 ;;
+       *) echo "$msg_ok_let_do_it" ;;
+    esac
+  fi
+  
+  # config network first:
+  config_drbl_live_network
+  
+  #
+  if  [ "$prepare_ocsroot" = "yes" ]; then
+     echo "Preparing clonezilla image home dir..."
+     prep-ocsroot --skip-ocsroot-mountpoint-chk  # will check later to avoid the exit is only for prep-ocsroot program, not for this $0.
+     check_if_ocsroot_a_mountpoint
+  fi
+  
+  #
+  echo "$msg_delimiter_star_line"
+  echo $msg_now_continue_to_run_drblpush
+  echo $msg_this_might_take_several_minutes
+  echo -n $msg_press_enter_to_continue
+  read
+  
+  # Before we run drblpush, we have to remove the services we put only for DRBL live server when creating drbl live. This will avoide those to be copied to SSI template tarball. Since these services are one-time use only for server during booting.
+  rm -f /etc/rcS.d/*kbd-conf
+  rm -f /etc/rcS.d/*Forcevideo-drbl-live 
+  
+  # Before running drblpush, first we add a group for the autologin accounts
+  if [ -z "$(grep -E "^$autologin_group:" /etc/group)" ]; then
+    groupadd "$autologin_group"
+  fi
+  
+  # Now we can add the group "$autologin_group" to sudo
+  if [ -e /etc/sudoers -a -x /usr/sbin/xfsm-shutdown-helper ]; then
+    if [ -z "$(grep -E "^%$autologin_group ALL=NOPASSWD:.*xfsm-shutdown-helper" /etc/sudoers)" ]; then
+      chmod u+w /etc/sudoers
+      echo "# Added by DRBL" >> /etc/sudoers
+      echo "%$autologin_group ALL=NOPASSWD:/usr/sbin/xfsm-shutdown-helper" >> /etc/sudoers
+      chmod u-w /etc/sudoers
+    fi
+  fi
+  
+  # Run mknic-nbi again. Because we run mknic-nbi in the chroot when creating DRBL live. However, the variable use_run_in_initrd and use_dev_pts_in_initrd in initramfs' /etc/linuxrc.conf (i.e. "/usr/lib/mkpxeinitrd-net/initrd-skel/etc/linuxrc.conf") need to be updated in the run time.
+  echo
+  echo "Updating the initramfs for PXE clients..."
+  mknic-nbi -p 1
+  
+  # ocs_client_no_per_NIC is read from /etc/ocs/ocs-live.conf, which might be from boot parameter.
+  if [ -n "$ocs_client_no_per_NIC" ]; then
+    LC_ALL=C perl -pi -e "s/^client_no_per_NIC=.*/client_no_per_NIC=$ocs_client_no_per_NIC/g" $drbl_setup_path/files/ocs/live-hook/ocs-live-hook.conf
+  fi
+  # load $client_no_per_NIC and $autologin_passwd_opt for later use
+  . $drbl_setup_path/files/ocs/live-hook/ocs-live-hook.conf
+  
+  # run drblpush again so that the network interface can be updated. Maybe there is new ethx.
+  yes "" | drblpush -i -r 1 -z 1 --not-add-start-drbl-srvi --skip-drbl-ocs-live-prep -p $client_no_per_NIC
+
+  # 2014/03/15 Somehow in DRBL live, lightdm of the client's services in /tftpboot/node_root/ are not after nis.
+  # It's weird if we run "drbl-client-service lightdm on", then in /tftpboot/nodes/$IP/ the lightdm are after nis.
+  # Fighted for more than 3 days, but still can not find why this only happens in DRBL live. Not in the Sid installed on the harddrive. Anyway, this is a workaround.
+  default_dm="$(drbl-check-dm 2> /dev/null)"
+  drbl-client-service $default_dm on
+  
+  echo "$msg_delimiter_star_line"
+  if [ "$limit_pxe_drbl_client" = "yes" ]; then
+    # modify dhcpd.conf, provide IP address to PXE/Etherboot/DRBL client only
+    echo "Modifying dhcpd.conf, now only PXE/Etherboot/DRBL client can lease IP address from this server..."
+    perl -pi -e 's/^([[:space:]]*)#[[:space:]]*(allow members of "DRBL-Client";)/$1$2/g' $DHCPDCONF_DIR/dhcpd.conf
+  else
+    echo "Modifying dhcpd.conf, now ANY client, not only PXE/Etherboot/DRBL client, can lease IP address from this server..."
+    perl -pi -e 's/^([[:space:]]*)#*[[:space:]]*(allow members of "DRBL-Client";)/$1#$2/g' $DHCPDCONF_DIR/dhcpd.conf
+  fi
+  
+  echo "$msg_delimiter_star_line"
+  echo "Enable auto login for drbl clients..."
+  # enable autologin
+  case "$autologin_passwd_opt" in
+    "random")
+      make_random_password $password_opt
+      passwd_autologin="$random_password"
+      ;;
+    *)
+      passwd_autologin="$passwd_autologin_def"
+      ;;
+  esac
+  drbl-login-switch -a --no_nis_update -p "${passwd_autologin}"
+  
+  # Add the auto login accounts in every client so that we can add them to the group "autologin"
+  echo -n "Adding the auto login accounts to the group $autologin_group..."
+  for ihost in `get-client-ip-list`; do
+    iaccount="$(get_existing_autologin_account $ihost)"
+    adduser $iaccount $autologin_group &>/dev/null
+    echo -n "."
+  done
+  echo " done!"
+  
+  echo "$msg_delimiter_star_line"
+  # turn on tcpwrapper
+  echo "Setting /etc/hosts.allow..."
+  mv -f /etc/hosts.allow /etc/hosts.allow.orig
+  client_IP_list="$(get-client-ip-list)"
+  client_IP_list="$(echo $client_IP_list)"   # convert to 1 line
+  client_IP_list_ar=( $client_IP_list )  # put it in an array
+  # We can not list too long in hosts.allow, so put 20 elements in a line.
+  nloop="$(echo "scale=0; ${#client_IP_list_ar[@]}/20" | bc -l )"
+  echo "# Created by drbl-live" > /etc/hosts.allow
+  for i in `seq 1 $nloop`; do
+    istart="$(echo "scale=0; 20*$((i-1))" | bc -l)"
+    iend="$(echo "scale=0; 20*$((i-1))+19" | bc -l)"
+    echo -n "ALL: " >> /etc/hosts.allow
+    for j in `seq $istart $iend`; do
+      echo -n "${client_IP_list_ar[j]} " >> /etc/hosts.allow
+    done
+    echo >> /etc/hosts.allow
+  done
+  
+  # set locales for clients.
+  set_locale_for_clients
+  
+  #
+  echo "Start all DRBL related services by running 'drbl-all-service start'..."
+  drbl-all-service start
+  
+  # Now the YP service is up, we can update YP data.
+  make -C /var/yp
+  
+  #
+  echo "$msg_delimiter_star_line"
+  echo "$msg_done!"
+  
+  if  [ "$pause_in_the_end" = "yes" ]; then
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+    echo "$msg_all_set_you_can_turn_on_clients"
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+    echo -n $msg_press_enter_to_continue
+    # This is a weird problem about tftpd-hpa when it is restared in 'drbl-all-service start' in the above. It's:
+    # -------
+    # /etc/init.d/tftpd-hpa restart
+    # echo -n "press key... "
+    # read
+    # -------
+    # and we always get such an error when running it:
+    # -------
+    # Restarting HPA's tftpd: in.tftpd.
+    # press key... ./td: line 4: read: read error: 0: Resource temporarily unavailable
+    # -------
+    # Therefore we use < /dev/stdin to avoid tihs.
+    read dummy_var < /dev/stdin
+  fi
+} # end of start_drbl_live
+#
+stop_drbl_live() {
+  # block all the clients.
+  mv -f /etc/hosts.allow /etc/hosts.allow.orig2
+  echo "# Disabled by drbl-live" > /etc/hosts.allow
+  
+  # stop and remove all services
+  echo "Stop DRBL service.."
+  drbl-all-service stop
+  echo "Removing DRBL-related services..."
+  drbl-all-service del
+  #
+  echo "$msg_delimiter_star_line"
+  echo "$msg_done!"
+  echo -n $msg_press_enter_to_continue
+  read
+} # end of stop_drbl_live
 
 
 #################
@@ -105,173 +282,6 @@ if ! is_boot_from_live; then
 fi
 
 case "$switch" in
-   "start"|"restart")
-     if [ "$prompt_drbl_live" = "yes" ]; then
-       [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
-       echo "$msg_this_is_for_drbl_server_not_for_clonezilla_server_edition"
-       [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
-       echo "$msg_are_u_sure_u_want_to_continue"
-       echo -n "[Y/n] "
-       read drbl_live_ans
-       case "$drbl_live_ans" in
-          n|N|[nN][oO]) echo "$msg_program_stop" 
-                        exit 1 ;;
-          *) echo "$msg_ok_let_do_it" ;;
-       esac
-     fi
-
-     # config network first:
-     config_drbl_live_network
-
-     #
-     if  [ "$prepare_ocsroot" = "yes" ]; then
-        echo "Preparing clonezilla image home dir..."
-	prep-ocsroot --skip-ocsroot-mountpoint-chk  # will check later to avoid the exit is only for prep-ocsroot program, not for this $0.
-        check_if_ocsroot_a_mountpoint
-     fi
-
-     #
-     echo "$msg_delimiter_star_line"
-     echo $msg_now_continue_to_run_drblpush
-     echo $msg_this_might_take_several_minutes
-     echo -n $msg_press_enter_to_continue
-     read
-
-     # Before we run drblpush, we have to remove the services we put only for DRBL live server when creating drbl live. This will avoide those to be copied to SSI template tarball. Since these services are one-time use only for server during booting.
-     rm -f /etc/rcS.d/*kbd-conf
-     rm -f /etc/rcS.d/*Forcevideo-drbl-live 
-
-     # Before running drblpush, first we add a group for the autologin accounts
-     if [ -z "$(grep -E "^$autologin_group:" /etc/group)" ]; then
-       groupadd "$autologin_group"
-     fi
-
-     # Now we can add the group "$autologin_group" to sudo
-     if [ -e /etc/sudoers -a -x /usr/sbin/xfsm-shutdown-helper ]; then
-       if [ -z "$(grep -E "^%$autologin_group ALL=NOPASSWD:.*xfsm-shutdown-helper" /etc/sudoers)" ]; then
-         chmod u+w /etc/sudoers
-         echo "# Added by DRBL" >> /etc/sudoers
-         echo "%$autologin_group ALL=NOPASSWD:/usr/sbin/xfsm-shutdown-helper" >> /etc/sudoers
-         chmod u-w /etc/sudoers
-       fi
-     fi
-
-     # Run mknic-nbi again. Because we run mknic-nbi in the chroot when creating DRBL live. However, the variable use_run_in_initrd and use_dev_pts_in_initrd in initramfs' /etc/linuxrc.conf (i.e. "/usr/lib/mkpxeinitrd-net/initrd-skel/etc/linuxrc.conf") need to be updated in the run time.
-     echo
-     echo "Updating the initramfs for PXE clients..."
-     mknic-nbi -p 1
-
-     # ocs_client_no_per_NIC is read from /etc/ocs/ocs-live.conf, which might be from boot parameter.
-     if [ -n "$ocs_client_no_per_NIC" ]; then
-       LC_ALL=C perl -pi -e "s/^client_no_per_NIC=.*/client_no_per_NIC=$ocs_client_no_per_NIC/g" $drbl_setup_path/files/ocs/live-hook/ocs-live-hook.conf
-     fi
-     # load $client_no_per_NIC and $autologin_passwd_opt for later use
-     . $drbl_setup_path/files/ocs/live-hook/ocs-live-hook.conf
-
-     # run drblpush again so that the network interface can be updated. Maybe there is new ethx.
-     yes "" | drblpush -i -r 1 -z 1 --not-add-start-drbl-srvi --skip-drbl-ocs-live-prep -p $client_no_per_NIC
-
-     echo "$msg_delimiter_star_line"
-     if [ "$limit_pxe_drbl_client" = "yes" ]; then
-       # modify dhcpd.conf, provide IP address to PXE/Etherboot/DRBL client only
-       echo "Modifying dhcpd.conf, now only PXE/Etherboot/DRBL client can lease IP address from this server..."
-       perl -pi -e 's/^([[:space:]]*)#[[:space:]]*(allow members of "DRBL-Client";)/$1$2/g' $DHCPDCONF_DIR/dhcpd.conf
-     else
-       echo "Modifying dhcpd.conf, now ANY client, not only PXE/Etherboot/DRBL client, can lease IP address from this server..."
-       perl -pi -e 's/^([[:space:]]*)#*[[:space:]]*(allow members of "DRBL-Client";)/$1#$2/g' $DHCPDCONF_DIR/dhcpd.conf
-     fi
-
-     echo "$msg_delimiter_star_line"
-     echo "Enable auto login for drbl clients..."
-     # enable autologin
-     case "$autologin_passwd_opt" in
-       "random")
-         make_random_password $password_opt
-         passwd_autologin="$random_password"
-         ;;
-       *)
-         passwd_autologin="$passwd_autologin_def"
-         ;;
-     esac
-     drbl-login-switch -a --no_nis_update -p "${passwd_autologin}"
-
-     # Add the auto login accounts in every client so that we can add them to the group "autologin"
-     echo -n "Adding the auto login accounts to the group $autologin_group..."
-     for ihost in `get-client-ip-list`; do
-       iaccount="$(get_existing_autologin_account $ihost)"
-       adduser $iaccount $autologin_group &>/dev/null
-       echo -n "."
-     done
-     echo " done!"
-
-     echo "$msg_delimiter_star_line"
-     # turn on tcpwrapper
-     echo "Setting /etc/hosts.allow..."
-     mv -f /etc/hosts.allow /etc/hosts.allow.orig
-     client_IP_list="$(get-client-ip-list)"
-     client_IP_list="$(echo $client_IP_list)"   # convert to 1 line
-     client_IP_list_ar=( $client_IP_list )  # put it in an array
-     # We can not list too long in hosts.allow, so put 20 elements in a line.
-     nloop="$(echo "scale=0; ${#client_IP_list_ar[@]}/20" | bc -l )"
-     echo "# Created by drbl-live" > /etc/hosts.allow
-     for i in `seq 1 $nloop`; do
-       istart="$(echo "scale=0; 20*$((i-1))" | bc -l)"
-       iend="$(echo "scale=0; 20*$((i-1))+19" | bc -l)"
-       echo -n "ALL: " >> /etc/hosts.allow
-       for j in `seq $istart $iend`; do
-         echo -n "${client_IP_list_ar[j]} " >> /etc/hosts.allow
-       done
-       echo >> /etc/hosts.allow
-     done
-
-     # set locales for clients.
-     set_locale_for_clients
-
-     #
-     echo "Start all DRBL related services by running 'drbl-all-service start'..."
-     drbl-all-service start
-
-     # Now the YP service is up, we can update YP data.
-     make -C /var/yp
-
-     #
-     echo "$msg_delimiter_star_line"
-     echo "$msg_done!"
-
-     if  [ "$pause_in_the_end" = "yes" ]; then
-       [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
-       echo "$msg_all_set_you_can_turn_on_clients"
-       [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
-       echo -n $msg_press_enter_to_continue
-       # This is a weird problem about tftpd-hpa when it is restared in 'drbl-all-service start' in the above. It's:
-       # -------
-       # /etc/init.d/tftpd-hpa restart
-       # echo -n "press key... "
-       # read
-       # -------
-       # and we always get such an error when running it:
-       # -------
-       # Restarting HPA's tftpd: in.tftpd.
-       # press key... ./td: line 4: read: read error: 0: Resource temporarily unavailable
-       # -------
-       # Therefore we use < /dev/stdin to avoid tihs.
-       read dummy_var < /dev/stdin
-     fi
-     ;;
-   "stop")
-     # block all the clients.
-     mv -f /etc/hosts.allow /etc/hosts.allow.orig2
-     echo "# Disabled by drbl-live" > /etc/hosts.allow
-
-     # stop and remove all services
-     echo "Stop DRBL service.."
-     drbl-all-service stop
-     echo "Removing DRBL-related services..."
-     drbl-all-service del
-     #
-     echo "$msg_delimiter_star_line"
-     echo "$msg_done!"
-     echo -n $msg_press_enter_to_continue
-     read
-     ;;
+   "start"|"restart") start_drbl_live ;;
+   "stop")            stop_drbl_live ;;
 esac

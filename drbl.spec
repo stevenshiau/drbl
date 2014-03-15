@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.7.34
+Version:	2.7.35
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,11 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Sat Mar 15 2014 Steven Shiau <steven _at_ nchc org tw> 2.7.35-drbl1
+- A workaround to let DRBL live client start lightdm after nis was added in drbl-live.
+- Program drbl-live was rewritten with more functions so it's easier to read.
+- Usage message of drbl-ipcalc-list was updated.
+
 * Fri Mar 14 2014 Steven Shiau <steven _at_ nchc org tw> 2.7.34-drbl1
 - Function parse_cmdline_option was improved to avoid some runtime error.
 

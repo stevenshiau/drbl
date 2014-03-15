@@ -26,14 +26,14 @@ DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/usr/share/drbl}"
 
 # Print usage
 Usage(){
-	echo "$0 : Give a legal ip list from a given start ip/subnet and count";
+	echo "$0 : Give a legal IP addresses list from a given start IP/subnet and count";
 	echo "Usage: $0 <ipcalc_parameters> -c <count> [-b] [-v]";
-	echo " -b, --binary		   Binary output for ip address"
-	echo " -c, --count		   Amount of IP address, positive number for ascending order, negative for descending, ex: 10, -5"
-	echo " -v, --verbose	           Verbose mode, if not enough IP address, show what we have"
+	echo " -b, --binary	Binary output for IP address"
+	echo " -c, --count	Amount of IP address, positive number for ascending order, negative for descending, ex: 10, -5"
+	echo " -v, --verbose	Verbose mode, if not enough IP address, show what we have"
 	echo ""
 	echo "Help options:";
-	echo " -h, --help		Show this help message"
+	echo " -h, --help	Show this help message"
 	echo "	"
 	echo "Example:"
 	echo "To list 20 ascending legal ip form 192.168.121.1/24 . Output: '192.168.121.1 ~ 192.168.1.31 192.168.1.20' "
