@@ -9,35 +9,69 @@ DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/usr/share/drbl}"
 
 . $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
 
-IPLIST="$(mktemp /tmp/iplist.XXXXXX)"
-hn_ip_mac="$(mktemp /tmp/hn_ip_mac.XXXXXX)"
-ip_range="$(mktemp /tmp/ip_range.XXXXXX)"
-
 # Settings
 sort_output="yes"
+dhcpd_conf_def="$DHCPDCONF_DIR/dhcpd.conf"
 
+#
+USAGE() {
+    echo "$ocs - To get the DRBL clients' IP addresses list from dhcpd.conf"
+    echo "Usage:"
+    echo "To run $ocs:"
+    echo "$ocs [OPTION]"
+    echo "Options:"
+    echo "-w, --without-sorting    List the clients' IP addresses list without sorting"
+    echo "-c, --dhcpd-config FILE  Assign the DHCPD config file. By default $dhcpd_conf_def is used"
+    echo "-v, --verbose            Run in verbose mode"
+    echo
+} # end of USAGE
+
+####################
+### Main program ###
+####################
+
+ocs_file="$0"
+ocs=`basename $ocs_file`
 # Parse command-line options
 while [ $# -gt 0 ]; do
   case "$1" in
     -w|--without-sorting)
             shift; sort_output="no"
             ;;
+    -c|--dhcpd-config)
+           shift; 
+           if [ -z "$(echo $1 |grep ^-.)" ]; then
+             # skip the -xx option, in case 
+             dhcpd_conf="$1"
+             shift;
+           fi
+           [ -z "$dhcpd_conf" ] && USAGE && exit 1
+           ;;
     -v|--verbose)
-		shift; VERBOSE="on"
-                ;;
+            shift; VERBOSE="on"
+            ;;
     -*)     echo "${0}: ${1}: invalid option" >&2
-            usage >& 2
+            USAGE >& 2
             exit 2 ;;
     *)      break ;;
   esac
 done
 
+#
+if [ -z "$dhcpd_conf" ]; then
+  dhcpd_conf="$dhcpd_conf_def"
+fi
+#
+IPLIST="$(mktemp /tmp/iplist.XXXXXX)"
+hn_ip_mac="$(mktemp /tmp/hn_ip_mac.XXXXXX)"
+ip_range="$(mktemp /tmp/ip_range.XXXXXX)"
+
 # (1) for MAC address part
 parse_dhcpd_conf $hn_ip_mac
-grep "^[[:space:]]*[^#]" $hn_ip_mac | awk -F" " '{print $2}' | cat > $IPLIST
+LC_ALL=C grep -E "^[[:space:]]*[^#]" $hn_ip_mac | awk -F" " '{print $2}' | cat > $IPLIST
 
 # (2) For range part
-grep -iE "^[[:space:]]*range.*;" $DHCPDCONF_DIR/dhcpd.conf | tr -d ";" | awk -F" " '{print $2 " " $3}' > $ip_range
+LC_ALL=C grep -iE "^[[:space:]]*range.*;" $dhcpd_conf | tr -d ";" | awk -F" " '{print $2 " " $3}' > $ip_range
 (cat $ip_range; echo ) | # make sure there is a LF at the end
 while read range_start range_end; do
   [ -z "$range_start" ] && break

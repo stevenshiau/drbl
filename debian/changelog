@@ -1,3 +1,11 @@
+drbl (2.7.36-drbl1) unstable; urgency=low
+
+  * Program get-client-ip-list was updated with missing function "USAGE", 
+    and the codes were revised, too.
+  * Language files were updated.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 17 Mar 2014 14:30:53 +0800
+
 drbl (2.7.35-drbl1) unstable; urgency=low
 
   * A workaround to let DRBL live client start lightdm after

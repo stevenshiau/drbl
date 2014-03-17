@@ -925,3 +925,5 @@ msg_convert_img_compression='转换镜像的压缩格式成为另外一个镜像
 msg_this_incomplete_image_will_be_removed='这个未完成的镜像目录将被移除'
 msg_new_compression_format_image_created_successfully='已经成功创建新的压缩格式镜像'
 msg_failed_to_convert_new_compression_as_another_image='无法转换出新的压缩格式镜像'
+# Tag on 2014/03/17
+msg_img_created_time='The image was created at'

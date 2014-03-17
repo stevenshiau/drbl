@@ -924,3 +924,5 @@ msg_convert_img_compression='Convertir le format de compression de l'\''image en
 msg_this_incomplete_image_will_be_removed='Ce répertoire d'\''image incomplète va être supprimé'
 msg_new_compression_format_image_created_successfully='Le nouveau format de compression a été appliqué avec succès'
 msg_failed_to_convert_new_compression_as_another_image='Échec de la conversion vers un nouveau format de compression'
+# Tag on 2014/03/17
+msg_img_created_time='The image was created at'

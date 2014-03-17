@@ -922,3 +922,5 @@ msg_convert_img_compression='Ändere das Komprimierungs-Format des Images (als n
 msg_this_incomplete_image_will_be_removed='Dieses unvollständige Image wird gelöscht'
 msg_new_compression_format_image_created_successfully='Umkomprimierung des Images war erfolgreich'
 msg_failed_to_convert_new_compression_as_another_image='Fehler bei der Umkomprimierung des Images'
+# Tag on 2014/03/17
+msg_img_created_time='The image was created at'

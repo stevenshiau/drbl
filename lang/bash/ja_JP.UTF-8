@@ -942,3 +942,5 @@ msg_convert_img_compression='イメージ圧縮形式を別イメージとして
 msg_this_incomplete_image_will_be_removed='この不完全なイメージディレクトリは削除されます'
 msg_new_compression_format_image_created_successfully='新しい圧縮形式のイメージが無事作成されました'
 msg_failed_to_convert_new_compression_as_another_image='イメージの新しい圧縮形式への変換に失敗しました'
+# Tag on 2014/03/17
+msg_img_created_time='The image was created at'
