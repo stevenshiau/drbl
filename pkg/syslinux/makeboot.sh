@@ -1,5 +1,5 @@
 #!/bin/bash
-# Author: Steven Shiau <steven _at_ nchc org tw>
+# Author: Steven Shiau <steven _at_ nchc org tw>, Ceasar Sun <ceasar _at_ nchc org tw>
 # License: GPL
 # Description: Program to make USB flash drive (FAT, EXT, BTRFS or NTFS) bootable by syslinux or extlinux
 
@@ -34,10 +34,18 @@ USAGE() {
    echo "$prog - To make the device bootable with syslinux"
    echo "Usage: $prog [OPTION] partition_device"
    echo "Options:"
-   echo "-b, --batch-mode  batch, unattended mode. Use carefully! DANGEROUS!!!"
+   echo "-b, --batch-mode 	batch, unattended mode. Use carefully! DANGEROUS!!!"
+   echo "-L, --LABEL STRING 	set device via LABEL if LABEL exists"
+   echo "-U, --UUID STRING	set device via UUID"
+   echo "Note:"
+   echo "  Device assignment priority: Partition name > UUID > LABEL (if not only one NAME-TYPE is assigned)"
    echo "Ex:" 
-   echo "To make /dev/sdg1 bootable on GNU/Linux:"
+   echo "To make \"/dev/sdg1\" bootable on GNU/Linux:"
    echo "  $prog /dev/sdg1"
+   echo "To make device label \"LABEL_STRING\" bootable on GNU/Linux:"
+   echo "  $prog -L LABEL_STRING" 
+   echo "To make device with UUID \"UUID_STRING\" bootable on GNU/Linux:"
+   echo "  $prog -U UUID_STRING"
 }
 # Check if root or not
 check_if_root() {
@@ -102,6 +110,22 @@ export LANG=C
 while [ $# -gt 0 ]; do
  case "$1" in
    -b|--batch) ocs_batch_mode="true"; shift;;
+   -L|--LABLE) shift
+           if [ -z "$(echo $1 |grep ^-.)" ]; then
+             # skip the -xx option, in case 
+	     target_part_label=$1
+             shift;
+           fi
+           [ -z "$target_part_label" ] && USAGE && exit 1
+           ;;
+   -U|--UUID) shift
+           if [ -z "$(echo $1 |grep ^-.)" ]; then
+             # skip the -xx option, in case 
+	     target_part_uuid=$1
+             shift;
+           fi
+           [ -z "$target_part_uuid" ] && USAGE && exit 1
+           ;;
    -*)     echo "${0}: ${1}: invalid option" >&2
            USAGE >& 2
            exit 2 ;;
@@ -113,14 +137,6 @@ done
 check_if_root
 target_part="$1"
 
-#
-if [ -z "$target_part" ]; then
-  [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
-  echo "No destination partition was assigned!"
-  [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
-  USAGE
-  exit 1
-fi
 if ! type parted &>/dev/null; then
   [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
   echo 'Program "parted" was not found on this GNU/Linux system. Please install it.'
@@ -136,6 +152,28 @@ if ! type blkid &>/dev/null; then
   exit 1
 fi
 
+if [ -n "$target_part_label" -a -z "$target_part" ] ; then
+  target_part_via_label="$(LC_ALL=C blkid | grep -iE "^/dev/[hsu][bd][a-z]+[[:digit:]]+.+LABEL=\"$target_part_label\".*" | grep -oE -w '^/dev/[hsu][bd][a-z]+[[:digit:]]+'| head -n 1)"
+fi 
+
+if [ -n "$target_part_uuid" -a -z "$target_part" ] ; then 
+  target_part_via_uuid="$(LC_ALL=C blkid | grep -iE "^/dev/[hsu][bd][a-z]+[[:digit:]]+.+UUID=\"$target_part_uuid\".*" | grep -oE -w '^/dev/[hsu][bd][a-z]+[[:digit:]]+'| head -n 1)"
+fi
+
+if [ -z "$target_part" ] ; then 
+  [ -z "$target_part_via_label" -a -n "$target_part_via_uuid" ] && target_part=$target_part_via_uuid
+  [ -n "$target_part_via_label" -a -z "$target_part_via_uuid" ] && target_part=$target_part_via_label
+  [ -n "$target_part_via_label" -a -n "$target_part_via_uuid" -a "$target_part_via_label" != "$target_part_via_uuid" ] && target_part=$target_part_via_uuid
+fi
+
+#
+if [ -z "$target_part" ]; then
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+  echo "No destination partition was assigned!"
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+  USAGE
+  exit 1
+fi
 # Make sure target_part is partition device name, not disk device name
 if [ -z "$(echo $target_part | grep -iE "/dev/[hsu][bd][a-z]+[[:digit:]]+")" ]; then
   [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE

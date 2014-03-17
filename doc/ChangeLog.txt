@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.7.37-drbl1) unstable; urgency=low
+
+  * Two options were added to makeboot.sh: -L and -U. 
+    Patch provided by Ceasar Sun.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 17 Mar 2014 17:43:00 +0800
+
 drbl (2.7.36-drbl1) unstable; urgency=low
 
   * Program get-client-ip-list was updated with missing function "USAGE", 
