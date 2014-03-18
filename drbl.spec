@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.7.32
+Version:	2.7.37
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -46,6 +46,24 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 
 %changelog
 - Description of drbl-ipcalc-list was updated.
+
+* Mon Mar 17 2014 Steven Shiau <steven _at_ nchc org tw> 2.7.37-drbl1
+- Two options were added to makeboot.sh: -L and -U. Patch provided by Ceasar Sun.
+
+* Mon Mar 17 2014 Steven Shiau <steven _at_ nchc org tw> 2.7.36-drbl1
+- Program get-client-ip-list was updated with missing function "USAGE", and the codes were revised, too.
+- Language files were updated.
+
+* Sat Mar 15 2014 Steven Shiau <steven _at_ nchc org tw> 2.7.35-drbl1
+- A workaround to let DRBL live client start lightdm after nis was added in drbl-live.
+- Program drbl-live was rewritten with more functions so it's easier to read.
+- Usage message of drbl-ipcalc-list was updated.
+
+* Fri Mar 14 2014 Steven Shiau <steven _at_ nchc org tw> 2.7.34-drbl1
+- Function parse_cmdline_option was improved to avoid some runtime error.
+
+* Fri Mar 14 2014 Steven Shiau <steven _at_ nchc org tw> 2.7.33-drbl1
+- Variable "messages_shown_preference" in drbl.conf was moved to drbl-ocs.conf and renamed as "ocs_prompt_mode".
 
 * Sat Mar 08 2014 Steven Shiau <steven _at_ nchc org tw> 2.7.32-drbl1
 - The codes of prepare-files-for-PXE-client were rewritten so that it's can be reused for drbl-prepare-pxelinux. An option "-p" was added to put pxelinux-related files only. 

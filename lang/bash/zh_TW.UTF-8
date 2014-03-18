@@ -923,3 +923,5 @@ msg_convert_img_compression='轉換印象檔的壓縮格式成為另外一個印
 msg_this_incomplete_image_will_be_removed='這個未完成的印象檔目錄將被移除'
 msg_new_compression_format_image_created_successfully='已經成功產生新的壓縮格式印象檔'
 msg_failed_to_convert_new_compression_as_another_image='無法轉換出新的壓縮格式印象檔'
+# Tag on 2014/03/17
+msg_img_created_time='該印象檔產生時間'

@@ -5,6 +5,45 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.7.37-drbl1) unstable; urgency=low
+
+  * Two options were added to makeboot.sh: -L and -U. 
+    Patch provided by Ceasar Sun.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 17 Mar 2014 17:43:00 +0800
+
+drbl (2.7.36-drbl1) unstable; urgency=low
+
+  * Program get-client-ip-list was updated with missing function "USAGE", 
+    and the codes were revised, too.
+  * Language files were updated.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 17 Mar 2014 14:30:53 +0800
+
+drbl (2.7.35-drbl1) unstable; urgency=low
+
+  * A workaround to let DRBL live client start lightdm after
+    nis was added in drbl-live.
+  * Program drbl-live was rewritten with more functions so 
+    it's easier to read.
+  * Usage message of drbl-ipcalc-list was updated.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sat, 15 Mar 2014 22:24:19 +0800
+
+drbl (2.7.34-drbl1) unstable; urgency=low
+
+  * Function parse_cmdline_option was improved to avoid some
+    runtime error.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 14 Mar 2014 17:32:38 +0800
+
+drbl (2.7.33-drbl1) unstable; urgency=low
+
+  * Variable "messages_shown_preference" in drbl.conf was moved to
+    drbl-ocs.conf and renamed as "ocs_prompt_mode".
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 14 Mar 2014 10:53:49 +0800
+
 drbl (2.7.32-drbl1) unstable; urgency=low
 
   * The codes of prepare-files-for-PXE-client were rewritten so that
