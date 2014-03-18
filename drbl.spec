@@ -45,6 +45,8 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+- Description of drbl-ipcalc-list was updated.
+
 * Sat Mar 08 2014 Steven Shiau <steven _at_ nchc org tw> 2.7.32-drbl1
 - The codes of prepare-files-for-PXE-client were rewritten so that it's can be reused for drbl-prepare-pxelinux. An option "-p" was added to put pxelinux-related files only. 
 - Bug fixed: the "-d" option of drbl-prepare-pxelinux failed to process EFI files of syslinux.

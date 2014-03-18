@@ -76,7 +76,7 @@ while [ $# -gt 0 ]; do
 			if [[ $1 =~ ^-*[[:digit:]]+$ ]]; then
 				_COUNT=$1
 			else
-				echo "Illegal value for -n option !!" ;
+				echo "Illegal value for option \"-c\"." ;
 				Usage; exit 1;
 			fi
 			shift;
