@@ -1,0 +1,33 @@
+#!/usr/bin/perl -w
+# Steven Shiau <steven _at_ nchc org tw>
+# License: GPL
+# Description: To list all available IP addresses in a range
+# Ref: http://search.cpan.org/dist/Net-IP/IP.pm
+use strict;
+use Net::IP;
+
+if (! defined ($ARGV[0])) {
+   usage();
+   exit();
+}
+
+my $ip_start = shift(@ARGV);
+my $ip_end = shift(@ARGV);
+my $ip_n;
+my $ip = new Net::IP ("$ip_start - $ip_end") || die (Net::IP::Error());
+do {
+  # Skip those x.y.z.255 and x.y.z.0
+  #print $ip->ip(), "\n";
+  $ip_n = $ip->ip();
+  print $ip_n, "\n" if ( $ip_n !~ /(\.255|\.0)$/);
+} while (++$ip);
+
+# ------- documentation ----------------------------------------
+
+sub usage {
+    print << "EOF";
+Usage: drbl-ipcalc-range <ADDRESS1> <ADDRESS2>
+Examples:
+drbl-ipcalc-range 192.168.0.1 192.168.0.120
+EOF
+}
