@@ -45,7 +45,8 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
-- Description of drbl-ipcalc-list was updated.
+- Program drbl-ipcalc-list was tuned so it's easier to read.
+- A program drbl-ipcalc-range was added, and is used in get-client-ip-list to get correct DRBL class A or B layout's clients.
 
 * Mon Mar 17 2014 Steven Shiau <steven _at_ nchc org tw> 2.7.37-drbl1
 - Two options were added to makeboot.sh: -L and -U. Patch provided by Ceasar Sun.

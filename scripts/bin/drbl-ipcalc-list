@@ -116,7 +116,7 @@ dec_min_ip="$(LC_ALL=C echo "ibase=2; obase=A; $bin_min_ip" | bc)"
 sections="$(LC_ALL=C echo "scale=0; $_COUNT/256" | bc -l)"
 _COUNT="$(LC_ALL=C echo "scale=0; $_COUNT + ($sections + 1)*3" | bc -l)"
 
-if [[ $_COUNT =~ ^[[:digit:]]+$ ]]; then
+if [[ "$_COUNT" =~ ^[[:digit:]]+$ ]]; then
 	for ((i=0; i<$_COUNT; i++)) ;do
 		dec_current_ip=$(expr $dec_start_ip + $i)
 		if [ $dec_max_ip -ge $dec_current_ip ] && [ $dec_min_ip -le $dec_current_ip ] ; then
@@ -141,10 +141,17 @@ else
 fi 
 
 for ((i=0; i<${#_IP_ARRAY[*]}; i++)) ;do
-	[ $_OUTPUT_MODE = 'b' ] && p1=${_IP_ARRAY[$i]:0:8} ||  p1="$(echo "ibase=2; obase=A; ${_IP_ARRAY[$i]:0:8}" | bc )"
-	[ $_OUTPUT_MODE = 'b' ] && p2=${_IP_ARRAY[$i]:8:8} ||  p2="$(echo "ibase=2; obase=A; ${_IP_ARRAY[$i]:8:8}" | bc )"
-	[ $_OUTPUT_MODE = 'b' ] && p3=${_IP_ARRAY[$i]:16:8} ||  p3="$(echo "ibase=2; obase=A; ${_IP_ARRAY[$i]:16:8}" | bc )"
-	[ $_OUTPUT_MODE = 'b' ] && p4=${_IP_ARRAY[$i]:24:8} ||  p4="$(echo "ibase=2; obase=A; ${_IP_ARRAY[$i]:24:8}" | bc )"
+	if [ $_OUTPUT_MODE = 'b' ]; then
+	  p1="${_IP_ARRAY[$i]:0:8}"
+	  p2="${_IP_ARRAY[$i]:8:8}"
+	  p3="${_IP_ARRAY[$i]:16:8}"
+	  p4="${_IP_ARRAY[$i]:24:8}"
+        else
+	  p1="$(echo "ibase=2; obase=A; ${_IP_ARRAY[$i]:0:8}" | bc )"
+	  p2="$(echo "ibase=2; obase=A; ${_IP_ARRAY[$i]:8:8}" | bc )"
+       	  p3="$(echo "ibase=2; obase=A; ${_IP_ARRAY[$i]:16:8}" | bc )"
+       	  p4="$(echo "ibase=2; obase=A; ${_IP_ARRAY[$i]:24:8}" | bc )"
+        fi
 	# Skip the last digit is 0 and 255
 	# //WRONG// For the netmask is not 24, this is wrong.
 	if [ "$p4" = "0" -o "$p4" = "255" ]; then

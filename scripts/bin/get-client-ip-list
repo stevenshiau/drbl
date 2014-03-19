@@ -75,14 +75,7 @@ LC_ALL=C grep -iE "^[[:space:]]*range.*;" $dhcpd_conf | tr -d ";" | awk -F" " '{
 (cat $ip_range; echo ) | # make sure there is a LF at the end
 while read range_start range_end; do
   [ -z "$range_start" ] && break
-  ip_prefix=$(echo $range_start |cut -d"." -f1-3)
-  start_ip=$(echo $range_start |cut -d"." -f4)
-  end_ip=$(echo $range_end |cut -d"." -f4)
-  ip=$start_ip
-  while [ $ip -le $end_ip ]; do
-    echo "${ip_prefix}.${ip}" >> $IPLIST
-    ip=$((ip+1))
-  done
+  drbl-ipcalc-range $range_start $range_end >> $IPLIST
 done
 # We need to remove the DRBL server's IP address if they are in $IPLIST. In the dhcpd.conf, the range option contains a range, but any IP address of DRBL server might contain that, and we should not show that as the IP addresses of DRBL clients.
 srv_IPs="$(LC_ALL=C get-all-nic-ip -b)"
