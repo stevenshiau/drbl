@@ -1,3 +1,12 @@
+drbl (2.7.38-drbl1) unstable; urgency=low
+
+  * Program drbl-ipcalc-list was tuned so it's easier to read.
+  * A program drbl-ipcalc-range was added, and is used in 
+    get-client-ip-list to get correct DRBL class A or B
+    layout's clients.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 19 Mar 2014 10:11:32 +0800
+
 drbl (2.7.37-drbl1) unstable; urgency=low
 
   * Two options were added to makeboot.sh: -L and -U. 
