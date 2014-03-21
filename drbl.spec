@@ -45,6 +45,8 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+- Language file es_ES of bash was updated. Thanks to Juan Ramón Martínez.
+
 * Wed Mar 19 2014 Steven Shiau <steven _at_ nchc org tw> 2.7.38-drbl1
 - Program drbl-ipcalc-list was tuned so it's easier to read.
 - A program drbl-ipcalc-range was added, and is used in get-client-ip-list to get correct DRBL class A or B layout's clients.

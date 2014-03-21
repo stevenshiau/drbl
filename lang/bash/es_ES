@@ -924,4 +924,4 @@ msg_this_incomplete_image_will_be_removed='Este directorio de imagen incompleto 
 msg_new_compression_format_image_created_successfully='El nuevo formato de compresión de imagen se ha creado satisfactoriamente'
 msg_failed_to_convert_new_compression_as_another_image='Fallo al convertir el nuevo formato de compresión de imagen'
 # Tag on 2014/03/17
-msg_img_created_time='The image was created at'
+msg_img_created_time='La imagen fue creada en'
