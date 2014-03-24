@@ -5,6 +5,25 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.7.40-drbl1) unstable; urgency=low
+
+  * Language file es_ES of bash was updated. Thanks to 
+    Juan Ramón Martínez.
+  * Program drbl-ipcalc-list was updated by Ceasar Sun
+    to support option "-r".
+  * Program drbl-ipcalc-range was removed because
+    drbl-ipcalc-list has same feature.
+  * Program get-client-ip-list uses drbl-ipcalc-list,
+    not drbl-ipcalc-range anymore.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 24 Mar 2014 18:06:08 +0800
+
+drbl (2.7.39-drbl2) unstable; urgency=low
+
+  * Adding libnet-ip-perl in the dependence. 
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 21 Mar 2014 11:02:51 +0800
+
 drbl (2.7.39-drbl1) unstable; urgency=low
 
   * Bug fixed: drbl-ipcalc-range was missing.
