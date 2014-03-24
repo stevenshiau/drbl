@@ -48,6 +48,7 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 - Language file es_ES of bash was updated. Thanks to Juan Ramón Martínez.
 - Program drbl-ipcalc-list was updated by Ceasar Sun to support option "-r".
 - Program drbl-ipcalc-range was removed because drbl-ipcalc-list has same feature.
+- Program get-client-ip-list uses drbl-ipcalc-list, not drbl-ipcalc-range anymore.
 
 * Wed Mar 19 2014 Steven Shiau <steven _at_ nchc org tw> 2.7.39-drbl1
 - Bug fixed: drbl-ipcalc-range was missing.
