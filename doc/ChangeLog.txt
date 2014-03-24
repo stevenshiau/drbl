@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.7.39-drbl1) unstable; urgency=low
+
+  * Bug fixed: drbl-ipcalc-range was missing.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 19 Mar 2014 16:55:29 +0800
+
 drbl (2.7.38-drbl1) unstable; urgency=low
 
   * Program drbl-ipcalc-list was tuned so it's easier to read.

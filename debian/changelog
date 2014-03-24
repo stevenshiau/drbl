@@ -1,3 +1,15 @@
+drbl (2.7.39-drbl2) unstable; urgency=low
+
+  * Adding libnet-ip-perl in the dependence. 
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 21 Mar 2014 11:02:51 +0800
+
+drbl (2.7.39-drbl1) unstable; urgency=low
+
+  * Bug fixed: drbl-ipcalc-range was missing.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 19 Mar 2014 16:55:29 +0800
+
 drbl (2.7.38-drbl1) unstable; urgency=low
 
   * Program drbl-ipcalc-list was tuned so it's easier to read.
