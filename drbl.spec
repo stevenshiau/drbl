@@ -45,6 +45,8 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+- Language file es_ES of bash was updated. Thanks to Juan Ramón Martínez.
+
 * Wed Mar 19 2014 Steven Shiau <steven _at_ nchc org tw> 2.7.39-drbl1
 - Bug fixed: drbl-ipcalc-range was missing.
 
