@@ -2002,7 +2002,9 @@ fi
 
 # Backup the old clients-of-$nfsserver.txt
 for i in $drbl_syscfg/clients-of-*.txt; do
-  mv -f $i ${i}.drblsave
+  if [ -f "$i" ]; then
+    mv -f $i ${i}.drblsave
+  fi
 done
 
 # copy some config files (dhcpd.conf, yp.conf...) created
