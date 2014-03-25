@@ -45,6 +45,13 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+- The support for using network class A and B on DRBL server was added.
+- The default rule for hostname of clients was changed to ${prefix}${ip//./-}".
+- The method to disable upstart service of Ubuntu client was improved.
+
+* Tue Mar 24 2014 Steven Shiau <steven _at_ nchc org tw> 2.8.1-drbl1
+- Initial support for using network class A and B on DRBL server.
+
 * Mon Mar 23 2014 Steven Shiau <steven _at_ nchc org tw> 2.7.40-drbl1
 - Language file es_ES of bash was updated. Thanks to Juan Ramón Martínez.
 - Program drbl-ipcalc-list was updated by Ceasar Sun to support option "-r".

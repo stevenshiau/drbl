@@ -80,7 +80,7 @@ chomp($DHCPD_MAX_LEASE_TIME=`LC_ALL=C get-drbl-conf-param DHCPD_MAX_LEASE_TIME`)
 chomp($pxecfg_pd=`LC_ALL=C get-drbl-conf-param pxecfg_pd`);
 chomp($ocs_img_repo_dir_default=`LC_ALL=C get-drbl-conf-param ocsroot`);
 
-# the craeted config filename
+# the created config filename
 our $DRBLPUSH_CONF="drblpush.conf";
 # file to record the hosts
 our $hosts_list="hosts_list.drbl";
@@ -238,8 +238,7 @@ sub get_network_param {
     print "saved_netmask is $saved_netmask\n" if $verbosity >=2;
     
     return $saved_ip, $saved_gw, $saved_netmask, $public_ip, $public_gw, $public_netmask;
-}
-#end of sub get_network_param
+} # end of sub get_network_param
   
   chomp($public_ip_tmp=`LC_ALL=C mktemp /tmp/public_ip_tmp.XXXXXX`);
   chomp($public_ip_guess=`LC_ALL=C mktemp /tmp/public_ip_guess.XXXXXX`);
@@ -325,7 +324,7 @@ END_PUBLIC_IP
   
   unlink ($public_ip_tmp) if -f $public_ip_tmp;
   unlink ($public_ip_guess) if -f $public_ip_guess;
-} #end of sub set_client_public_ip
+} # end of sub set_client_public_ip
 #
 sub set_autologin_passwd{
   print "$lang_deploy{\"use_random_password\"}\n".
@@ -580,11 +579,11 @@ sub interactive_mode {
               # Class A: 10.0.0.0 - 10.255.255.255
               # Class B: 172.16.0.0  - 172.31.255.255 
 	      print "$delimiter{\"star_line\"}\n";
-  	      print "Found class A or B private IP \"$IP\" in $ethx for your DRBL system! ".
-              colored ("$lang_deploy{\"class_c_IP_for_multicast_clonezilla\"}\n", "$color_warn");
-              print "$delimiter{\"star_line\"}\n".
-                    "$lang_deploy{\"press_enter_to_continue\"}";
-                    chomp($line=<STDIN>);
+	      #print "Found class A or B private IP \"$IP\" in $ethx for your DRBL system! ".
+	      #colored ("$lang_deploy{\"class_c_IP_for_multicast_clonezilla\"}\n", "$color_warn");
+	      #print "$delimiter{\"star_line\"}\n".
+	      #      "$lang_deploy{\"press_enter_to_continue\"}";
+	      #      chomp($line=<STDIN>);
             }
 	  };
 	  print "$delimiter{\"star_line\"}\n";
@@ -626,6 +625,9 @@ sub interactive_mode {
           "$delimiter{\"star_line\"}\n";
 
 # ask user to input client no.
+	my @ip_sys_start;
+	my @ip_sys_end;
+        my @total_client_no;
         for($i=0;$i<=$#ethernet_sys;$i++) {
 	 $ethx="$ethernet_sys[$i]";
           # Try to get setting from system also
@@ -642,8 +644,14 @@ sub interactive_mode {
             	  "$lang_deploy{\"program_stop\"}\n";
             exit (1);
           };
+
+	  # Find the available start IP which will not conflict with the server
           my $ip_hostmin = `drbl-ipcalc $ip_sys_tmp $netmask_sys_tmp | awk -F' ' '/^HostMin:/ {print \$2}'`;
 	  chomp($ip_hostmin);
+	  print "Hostmin: $ip_hostmin\n";
+	  # Find the max number of the class
+          my $hostmax_no = `drbl-ipcalc $ip_sys_tmp $netmask_sys_tmp | grep -Ew "^Hosts/Net:" | awk -F":" '{print \$2}' | awk -F" " '{print \$1}'`;
+	  chomp($hostmax_no);
           my @ip_sys_sp=split(/\./,$ip_hostmin);
           $ip_sys_prefix[$i]="$ip_sys_sp[0].$ip_sys_sp[1].$ip_sys_sp[2]";
           $ip_sys[$i]=$ip_sys_tmp;
@@ -655,7 +663,7 @@ sub interactive_mode {
 	  chomp($MAC=<STDIN>);
           my $mac_f_tmp="";
 	  if ($MAC eq "y" || $MAC eq "Y" || $MAC eq "yes" || $MAC eq "YES") {
-            # user want to fix the IP address for DRBL client 
+            # User wants to fix the IP addresses for DRBL clients 
 	    print "$delimiter{\"star_line\"}\n".
 	          "$lang_deploy{\"MAC_file_prompt\"} $ethx.\n".
 		  "[macadr-$ethx.txt] ";
@@ -686,10 +694,6 @@ sub interactive_mode {
               # check MAC address files
               check_MAC_file(".","$MAC_file[$i]");
 
-	      # Find the available start IP which will not conflict with the server
-              my $ip_hostmin = `drbl-ipcalc $ip_sys_tmp $netmask_sys_tmp | awk -F' ' '/^HostMin:/ {print \$2}'`;
-	      chomp($ip_hostmin);
-	      print "Hostmin: $ip_hostmin\n";
               my $range_start_default = `echo $ip_hostmin | awk -F"." '{print \$4}'`;
 	      chomp($range_start_default);
 
@@ -717,22 +721,19 @@ sub interactive_mode {
 	      # use wc -l to count the lines of file user input
               # we use the MAC file in working dir ($MAC_file[$i]) so it been
               # processed by check_MAC_file. Ex. the space line is stripped.
-              $line=`LC_ALL=C cat $MAC_file[$i] 2>/dev/null| wc -l |tr -d \" \" `;
-	      chomp($line);
-	      if ($line >= 254) {
-	       print "The file \"$mac_dir/$MAC_file[$i]\" you set for the clients connected to $ethx is empty or invalid, $lang_word{\"please_enter\"} the filename again, or press \"ctrl-c\" to quit!\n";
+              chomp($line=`LC_ALL=C cat $MAC_file[$i] 2>/dev/null | wc -l |tr -d \" \" `);
+              $range_end[$i]=$range_start[$i] + $line - 1;
+	      if ($line >= $hostmax_no) {
+	        print colored ("The file \"$mac_dir/$MAC_file[$i]\" you set for the clients connected to $ethx is empty or invalid.\nTotal number of clients in file: $line.\nMax number in this subnet: $hostmax_no.\nPlease enter the filename again, or press \"ctrl-c\" to quit!\n", "$color_warn");
               } else {
-               $range_end[$i]=$range_start[$i] + $line - 1;
-	       last;
+                $range_end[$i]=$range_start[$i] + $line - 1;
+	        last;
               }
 	    }
 	  } else {
+            # User wants to use floating IP addresses for DRBL clients 
 	    print "$delimiter{\"star_line\"}\n".
 	          "$lang_deploy{\"range_prompt\"}\n";
-	    # Find the available start IP which will not conflict with the server
-            my $ip_hostmin = `drbl-ipcalc $ip_sys_tmp $netmask_sys_tmp | awk -F' ' '/^HostMin:/ {print \$2}'`;
-	    chomp($ip_hostmin);
-	    print "Hostmin: $ip_hostmin\n";
             my $range_start_default = `echo $ip_hostmin | awk -F"." '{print \$4}'`;
 	    chomp($range_start_default);
 
@@ -775,22 +776,24 @@ sub interactive_mode {
 	      chomp;
 	      my $line=$_;
 	      if ($line eq "") { $line=$client_no;}
-	      if ($line >= 254) {
-	       print "The value \"$line\" you input for the number of clients connected to $ethx is INVALID, please enter a number which is <= 253 again!\n";
+	      if ($line >= $hostmax_no) {
+	        print colored ("Total number of clients in file: $line.\nMax number in this subnet: $hostmax_no.\nPlease enter the filename again, or press \"ctrl-c\" to quit!\n", "$color_warn");
+              } else {
+                $range_end[$i]=$range_start[$i] + $line - 1;
+	        last;
 	      }
-	      else {
-               $range_end[$i]=$range_start[$i] + $line - 1;
-	       last;
-              }
 	    }
 	  }
+	  # List all the IP address, and get the last one.
+	  $total_client[$i]=$range_end[$i]-$range_start[$i]+1;
+	  $ip_sys_start[$i]=$ip_sys_prefix[$i].".".$range_start[$i];
+          chomp($ip_sys_end[$i]=`drbl-ipcalc-list -c $total_client[$i] $ip_sys_start[$i] $netmask_sys_tmp | head -n $total_client[$i] | tail -n 1`);
 
           if ( ! $MAC_file[$i] ){ 
             # use the range for clients.
 	    print "$delimiter{\"star_line\"}\n".
-	          "$lang_deploy{\"the_value_you_set\"} \"$range_end[$i]\".\n".
   	          "$lang_deploy{\"set_the_IP_connected_to_eth\"} ".
-                  colored ("$ethx $lang_text{\"as\"}: $ip_sys_prefix[$i].$range_start[$i] - $ip_sys_prefix[$i].$range_end[$i]\n","$color_warn").
+                  colored ("$ethx $lang_text{\"as\"}: $ip_sys_start[$i] - $ip_sys_end[$i]\n","$color_warn").
                   "$lang_text{\"Accept\"} ? [Y/n] ";
 	  }else{
             # use the fixed IP address for clients.
@@ -798,7 +801,7 @@ sub interactive_mode {
 	          "$lang_deploy{\"filename_you_set\"} \"$MAC_file[$i]\".\n".
 		  "$lang_deploy{\"client_no_in_MAC_file\"} $line.\n".
   	          "$lang_deploy{\"set_the_IP_connected_to_eth\"} $ethx $lang_deploy{\"by_MAC_file\"} ".
-                  colored ("$ethx $lang_text{\"as\"}: $ip_sys_prefix[$i].$range_start[$i] - $ip_sys_prefix[$i].$range_end[$i]\n","$color_warn").
+                  colored ("$ethx $lang_text{\"as\"}: $ip_sys_start[$i] - $ip_sys_end[$i]\n","$color_warn").
                   "$lang_text{\"Accept\"} ? [Y/n] ";
           }
 
@@ -812,7 +815,6 @@ sub interactive_mode {
 	   print "$delimiter{\"star_line\"}\n".
 	         "$lang_deploy{\"ok_let_continue\"}\n";
           }
-  
 	}
 
 	# print the schematic network
@@ -836,8 +838,6 @@ sub interactive_mode {
 "|                             |\n".
 "|    +-- [$PUB_NIC] $IP_PUB_NIC +- to WAN\n".
 "|                             |\n";
-	  my @grp_no;
-          my $total_client_no=0;
           for($i=0;$i<=$#ethernet_sys;$i++) {
 	   $ethx="$ethernet_sys[$i]";
 	   my $grp=$ethx;
@@ -845,14 +845,12 @@ sub interactive_mode {
 	   # For interface like vmnet1, we will not extract that so that the
 	   # hostname will not conflict.
 	   $grp=~ s/eth//;
-	   # calculate the clients number
-	   $grp_no[$i] = $range_end[$i]-$range_start[$i]+1;
-	   # get the total client number
-           $total_client_no += $grp_no[$i];
+	   # get the total client number. total_client[$i] is only for those connecting to ethx
+           $total_client_no += $total_client[$i];
 	   #
            print 
-"|    +-- [$ethx] $ip_sys[$i] +- to clients group $grp [ $grp_no[$i] clients, their IP \n".
-"|                             |            from $ip_sys_prefix[$i].$range_start[$i] - $ip_sys_prefix[$i].$range_end[$i]]\n";
+"|    +-- [$ethx] $ip_sys[$i] +- to clients group $grp [ $total_client[$i] clients, their IP \n".
+"|                             |            from $ip_sys_start[$i] - $ip_sys_end[$i]]\n";
           }
   
 	  print
@@ -2002,6 +2000,11 @@ fi
 # We do not want the old ethers, this will cause lag in network. Thanks to Dave Haakenhout <Dave.Haakenhout _at_ nccw nl>
 [ -e /etc/ethers ] && mv -f /etc/ethers /etc/ethers.orig
 
+# Backup the old clients-of-$nfsserver.txt
+for i in $drbl_syscfg/clients-of-*.txt; do
+  mv -f $i ${i}.drblsave
+done
+
 # copy some config files (dhcpd.conf, yp.conf...) created
 # in the drblpush DRBL server.
 
@@ -2014,6 +2017,9 @@ done
 
 # put the temp hostname to /etc/drbl
 cp -f $CLIENT_IP_HOSTNAME_LIST $IP_HOST_TABLE
+
+# put clients-of-*.txt to /etc/drbl/
+cp -f clients-of-*.txt $drbl_syscfg/
 
 # create /etc/hosts based on drblpush.conf and dhcpd.conf, so must be after dhcpd.conf is copied to system.
 drbl-etc-hosts
@@ -3442,6 +3448,7 @@ if [ -e /etc/debian_version ]; then
 	    # the client won't be able to enter lightdm, only stay in text mode.
 	    # This is OK for Clonezilla mode, but not for DRBL mode. This issue
 	    # is fixed on Ubuntu 13.10.
+	    # //NOTE// Here we can not use function switch_upstart_service because it will stop all, howerver, we only want to disable part of its action for Ubuntu < 13.10 otherwise it won't be able to enter lightdm.
 	    perl -pi -e 's|^([[:space:]]*)(exec /sbin/plymouthd --mode=shutdown)|$1true #$2 # Commented by DRBL to avoid no Clonezilla SE output messages on console 1|g' $drbl_common_root/etc/init/plymouth.conf
 	    #perl -pi -e 's|^([[:space:]]*)(exec /sbin/plymouthd --mode=boot --attach-to-session)|$1true #$2 # Commented by DRBL to avoid no Clonezilla SE output messages on console 1|g' $drbl_common_root/etc/init/plymouth.conf
 	    #perl -pi -e 's|^([[:space:]]*)(exec /bin/plymouth show-splash)|$1true #$2 # Commented by DRBL to avoid no Clonezilla SE output messages on console 1|g' $drbl_common_root/etc/init/plymouth.conf
@@ -3471,7 +3478,7 @@ if [ -e /etc/debian_version ]; then
     # For Ubuntu 11.10, (1) Make mounted-var.conf start on startup since /var/run need to be linked to /run so it's writable for other daemons. (2) Commented dbus.conf since it will be started in drbl-client-boot.conf. Otherwise drbl-client-boot.conf will exit with error code.
     upstart_conf_2_be_startup="udev.conf rpcbind.conf portmap.conf mounted-var.conf"
     upstart_conf_2_be_after_drbl_client_boot="rc-sysinit.conf"
-    upstart_conf_2_be_commented="dbus.conf mountall.conf mountall-net.conf resolvconf.conf"
+    upstart_conf_2_be_manual="dbus.conf mountall.conf mountall-net.conf resolvconf.conf network-manager.conf isc-dhcp-server6.conf isc-dhcp-server.conf tftpd-hpa.conf"
     for i in $upstart_conf_2_be_startup; do
       if [ -e "$drbl_common_root/etc/init/$i" ]; then
         perl -pi -e "s/^start on.*/start on startup # Modified by DRBL/g" $drbl_common_root/etc/init/$i
@@ -3486,15 +3493,12 @@ if [ -e /etc/debian_version ]; then
     if [ -e "$drbl_common_root/etc/init/portmap.conf" ]; then
       perl -pi -e "s/^[[:space:]]*and net-device-up IFACE=lo.*//g" $drbl_common_root/etc/init/portmap.conf
     fi
-    for i in $upstart_conf_2_be_commented; do
+    for i in $upstart_conf_2_be_manual; do
+      # Force to disable client's some services
       if [ -e "$drbl_common_root/etc/init/$i" ]; then
-        perl -pi -e "s/^(start on.*)/# \$1 # Modified by DRBL/g" $drbl_common_root/etc/init/$i
+        switch_upstart_service "$drbl_common_root/etc/init/$i" off
       fi
     done
-    # Force to disable client's network-manager 
-    if [ -e "$drbl_common_root/etc/init/network-manager.conf" ]; then
-      mv $drbl_common_root/etc/init/network-manager.conf $drbl_common_root/etc/init/network-manager.conf.drbl-disabled
-    fi
     # Disable the recovery-menu, use sulogin, otherwise the error messages of Clonezilla will be overwritten.
     if [ -e "$drbl_common_root/etc/init/rcS.conf" ]; then
       perl -pi -e "s|(^[[:space:]]*exec) /usr/share/recovery-mode/recovery-menu.*|\$1 /sbin/sulogin # Modified by DRBL. Force to use sulogin!|g" $drbl_common_root/etc/init/rcS.conf
@@ -3824,17 +3828,6 @@ echo "done!"
       @hostname_sp_sys=split(/\./,$hostname_sys);
       $hostname_prefix="$hostname_sp_sys[0]"; 
     }
-    # Get the interface number (i.e eth1 -> extract "1")
-    # and set it as a part of hostname, it will be like node-1...
-    # For interface like vmnet1, we will not extract that so that the
-    # hostname won't conflict.
-    my $grp_no = $interface;
-    $grp_no =~ s/eth//g;
-    # If IP alias, eth0:1 will be 0:1, which is not a legal name in dhcpd.
-    # so we change 0:1 to 0_1
-    $grp_no =~ s/:/-/g;
-    $hostname = "$hostname_prefix"."$grp_no"; 
-    print "The hostname set for client is: \"$hostname\".\n" if $verbosity >= 2;
 
     unless ( $netmask_sys ) {
        print "Error! NETMASK is unset!\n";
@@ -3848,6 +3841,11 @@ echo "done!"
       $network = `drbl-ipcalc $ipaddr_sys $netmask_sys | awk -F' ' '/Network:/ {print \$2}' | sed -e "s|/.*||g"`;
       chomp($network);
       print colored ("The calculated NETWORK for $interface is $network.\n", "$color_warn");
+    }
+
+    if ( ! $hostname ) { 
+     $hostname = $hostname_sys; 
+     print "* hostname is not set in config file, \nthe one \"$hostname\" got from system will be used.\n" if $verbosity >= 2;   
     }
 
     if ( ! $nfsserver ) { 
@@ -3928,94 +3926,76 @@ subnet $network netmask $netmask_sys {
 EOF
 
     # range option, we have to create the IP table file
+    chomp ( $iplist_tmp = `LC_ALL=C mktemp /tmp/drbl_iprange.XXXXXX` );
+    print "interface: $interface\n" if $verbosity >= 2;
     if( length($mac)==0 && length($range)!=0 ) {
-      chomp ( $temprange = `LC_ALL=C mktemp /tmp/drbl_range.XXXXXX` );
-      open(RANGE_OUT,">$temprange");
-      my($rs,$re)=split(/-/,$range,2);
-      # get the initial value in the last set of digits in the IP address 
-      # from range starting no.
-      $ip_start=$rs;
-      for($i=$rs;$i<=$re;$i++) {
-        my $rg_ip="$networkIp[0].$networkIp[1].$networkIp[2].$i";
-	print "checking IP is same with nfsserver or not, nfsserver is $nfsserver, ip is $rg_ip!\n" if $verbosity >= 2;
-	if ( "$rg_ip" ne "$nfsserver" ) {
-          print RANGE_OUT "$networkIp[0].$networkIp[1].$networkIp[2].$i\n";
-	}
-	else {
-	  # skip the IP same with nfsserver.
-          my $next_ip=$i;
-	  $next_ip++;
-          $next_ip="$networkIp[0].$networkIp[1].$networkIp[2].$next_ip";
-	  print "* The client IP address you assigned is same with nfsserver: $rg_ip, \n ---> the next IP address ($next_ip) will be used for that client!\n";
-	  # increase the end of range by 1 
-	  $re++;
-	}
-      }
-      close(RANGE_OUT);
+        # range case. The config shown in drblpush.conf:
+        # range=1-15
+	# so $rs=1, $re=15
+        ($rs,$re)=split(/-/,$range,2);
+        $total_count=$re-$rs+1;
+        # get the initial value in the last set of digits in the IP address 
+        # from range starting no.
+        $ip_start=$rs;
+    } else {
+        # MAC case. The config shown in drblpush.conf:
+        #[eth1]
+        #interface=eth1
+        #mac=macadr-eth1.txt
+        #ip_start=1
+        chomp($total_count=`LC_ALL=C cat $mac | wc -l`);
     }
+    chomp ($ip_hostmin=`LC_ALL=C drbl-ipcalc $ipaddr_sys $netmask_sys | awk -F' ' '/^HostMin:/ {print \$2}'`);
+    my $total_count_request=$total_count+3;
+    # We want drbl-ipcalc-list to list 3 more IP addresses in case some of them are used, like in the server's ethernet port.
+    system("drbl-ipcalc-list -c $total_count_request $ip_hostmin $netmask_sys > $iplist_tmp");
 
-    # open mac or range file
-    # set the initial IP address in the subnet for fixed IP client (MAC) or range option
-    $i=$ip_start;
-    if( length($mac)!=0 ) { open(MAC_IN,$mac) or die "Can NOT find MAC address file \"$mac\"! \n"; }
-    elsif( length($range)!= 0 ) { open(MAC_IN,"$temprange") or die "Can NOT find IP address range temp file \"$temprange\"! \n"; 
-    }
+    # Remove the nfsserver IP address.
+    system("perl -pi -e \"s/\\b$nfsserver\\b\\n//g\" $iplist_tmp");
+    # Keep exact lines because drbl-ipcalc-list will output extra 3 lines
+    system("LC_ALL=C head -n \"$total_count\" $iplist_tmp > $iplist_tmp.swap");
+    system("cp -a $iplist_tmp.swap $iplist_tmp");
+    unlink ("$iplist_tmp.swap") if -f "$iplist_tmp.swap";
 
-    # MAC_IN is both for MAC and RANGE readin number
-    while(<MAC_IN>) {
-      chop;
-      if($nfsserverIp[0]==$networkIp[0] &&
-         $nfsserverIp[1]==$networkIp[1] &&
-         $nfsserverIp[2]==$networkIp[2] &&
-         $nfsserverIp[3]==$i) { 
-         $i++; 
-      }
+    # Write the output shell script drbl_deploy.sh
+    # Start with index = 1
+    $i=1;
+    while($i <= $total_count) {
+      chomp ($ip=`perl -ne "$i..$i and print" $iplist_tmp`);
+      print "IP address:$ip\n" if $verbosity >=2;
 
       # hostname for client
-      # The default name will like fc101, fc2201...,
-      # i.e. $prefix{ethx}{client no}
+      # The default name will like fc192-168-0-1, fc10-0-0-1...,
+      # i.e. $prefix{IP Address//./-}
       # If the hostname is assigned in /etc/drbl/client-ip-hostname, 
       # we will ust that.
-      $label_default="";
-      if($i<10) { $label_default=$hostname."0".$i; }
-      elsif($i<=254) { $label_default=$hostname.$i; }
-      elsif($i>254) { last; } # minus 2 ip: $network.0 $network.255
-      $label_assigned="";
-      chomp($label_assigned=`LC_ALL=C get-assigned-hn-by-ip $networkIp[0].$networkIp[1].$networkIp[2].$i`);
+      $label_default=$hostname_prefix.($ip =~ s/\./-/rg);
+      chomp($label_assigned=`LC_ALL=C get-assigned-hn-by-ip $ip`);
       if ($label_assigned) {
         $label=$label_assigned;
       }else{
         $label=$label_default;
       }
+      print "label:$label\n" if $verbosity >=2;
 
-      # ip
       if( length($mac)!=0 ) { 
-	# mac 
-        if($nfsserverIp[0]==$networkIp[0] &&
-           $nfsserverIp[1]==$networkIp[1] &&
-           $nfsserverIp[2]==$networkIp[2] &&
-           $nfsserverIp[3]==$i) { 
-           $i++; 
-        }
-        $ip="$networkIp[0].$networkIp[1].$networkIp[2].$i";
-
+	# MAC addresses list 
         # generate dhcpd.conf      
 	# without nbi set in config file
+        chomp (my $macadd=`perl -ne "$i..$i and print" $mac`);
         print DHCPD_OUT <<EOF;
     host $label {
-        hardware ethernet  $_;
+        hardware ethernet  $macadd;
         fixed-address $ip;
 	# option host-name "$label";
     }
 EOF
       } elsif( length($range)!=0 ) { 
-	# range
-        $ip=$_;
+	# range list
+	# do nothing
+        print "In range loop with line $i\n" if $verbosity >=2;
       }
       
-      # clean the temp range file
-      unlink ($temprange) if -f $temprange;
-
       # generate netgroup
       print NETGROUP_OUT "($label,,) ";
 
@@ -4040,9 +4020,9 @@ EOF
       print DISKLESS_OUT q{
       pseudo_flag=on
       };
-
       # next one
       $i++;
+      print "Process line $i\n" if $verbosity >=2;
     }
 
     # generate dhcpd.conf 
@@ -4051,16 +4031,23 @@ EOF
     } 
     elsif( length($range)!=0 ) { # range - generate range & filename
         # without nbi set in config file
-        my($rs,$re)=split(/-/,$range,2);
+	# HERE
+        chomp(my $ipstart=`LC_ALL=C head -n 1 $iplist_tmp`);
+        chomp(my $ipend=`LC_ALL=C tail -n 1 $iplist_tmp`);
         print DHCPD_OUT <<EOF;
     pool {
       # allow members of "DRBL-Client";
-      range $networkIp[0].$networkIp[1].$networkIp[2].$rs $networkIp[0].$networkIp[1].$networkIp[2].$re;
+      range $ipstart $ipend;
     }
 }
 
 EOF
     }
+    # Keep file as ref file for later use.
+    system("cp -a $iplist_tmp clients-of-$nfsserver.txt");
+    # Clean the temp IP addresses list file
+    unlink ($iplist_tmp) if -f $iplist_tmp;
+
     if ( $interface =~ /eth[0-9]+:[0-9]+/ ) {
       my $main_nic = $interface;
       my $main_nic_ip;
@@ -4076,7 +4063,6 @@ subnet $main_nic_subnet netmask $main_nic_netmask { }
 }
 EOF
     }
-    close(MAC_IN);
   }
 
 #

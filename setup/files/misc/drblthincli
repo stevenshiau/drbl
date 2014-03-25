@@ -77,19 +77,14 @@ start() {
     fi
   done
   
-  IP_prefix=`echo $IP |cut -d"." -f1-3`
-  if [ -n "`echo "$NFSSERVER_LIST" |grep -o "$IP_prefix"`" ]; then
-      for i in $NFSSERVER_LIST; do
-  	if [ "`echo $i |cut -d"." -f1-3`" = $IP_prefix ]; then
-  	  nfsserver=$i
-  	  $LOG_CMD $"NFS server is $nfsserver"
-  	fi
-      done 
+  nfsserver="$(drbl-get-nfsserver $IP)"
+  if [ -n "$nfsserver" ]; then
+    $LOG_CMD $"NFS server is $nfsserver"
   else
-      $LOG_CMD $"Can not find the right NFSSERVER, using default one"
-      nfsserver=$nfsserver_default
+    $LOG_CMD $"Can not find the right NFSSERVER, using default one"
+    nfsserver=$nfsserver_default
   fi
-  
+
   # if XF86Config is not available, run firstboot to setup it
   if  [ ! -f "/etc/X11/XF86Config-4" -a ! -f "/etc/X11/XF86Config" -a ! -f "/etc/X11/xorg.conf" ]; then
     # For RedHat 8.0/9 Fedora Core 1

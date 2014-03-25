@@ -39,67 +39,49 @@ if ! grep -q -E "^127.0.0.1[[:space:]]+" $HOSTS_OUT; then
 EOF
 fi
 #
-echo -n "Generate the $HOSTS_OUT for clients connected to "
+# Part I: for server
+echo "Generate the $HOSTS_OUT... "
 for interface in $DEV_INT; do
-    echo -n "$interface... "
-    # I: for server
-    srv_ip="$(drbl-get-ipadd $interface)"
-    if grep -q -E "^$srv_ip[[:space:]]+" $HOSTS_OUT; then
-      # found the old one, replace that	  
-      perl -pi -e "s|^$srv_ip.*|$srv_ip ${hostname_prefix}-$interface|g" $HOSTS_OUT
-    else
-      # old one does not exist, create one
-      cat <<-EOF >> $HOSTS_OUT
+  srv_ip="$(drbl-get-ipadd $interface)"
+  netmask_sys="$(drbl-get-netmask $ethx)"
+  if grep -q -E "^$srv_ip[[:space:]]+" $HOSTS_OUT; then
+    # found the old one, replace that	  
+    perl -pi -e "s|^$srv_ip.*|$srv_ip ${hostname_prefix}-$interface|g" $HOSTS_OUT
+  else
+    # old one does not exist, create one
+    cat <<-EOF >> $HOSTS_OUT
 $srv_ip ${hostname_prefix}-$interface
 EOF
+  fi
+done
+
+# II: for clients
+ALL_IP="$(get-client-ip-list)"
+for ip in $ALL_IP; do
+  # get the hostname from $IP_HOST_TABLE
+  label="$(LC_ALL=C grep -iEw "^[[:space:]]*${ip}" $IP_HOST_TABLE | awk -F" " '{print $2}')"
+  if [ -z "$label" ]; then
+    # Same rules as that in drblpush. i.e. if label is empty, we will use the calculated name based on hostname prefix and IP address.
+    label_default="${hostname_prefix}""${ip//./-}"
+    label_assigned="$(get-assigned-hn-by-ip $ip)"
+    if [ -n "$label_assigned" ]; then
+      label=$label_assigned;
+    else
+      label=$label_default;
     fi
-
-    # II: for clients
-    # Get the interface number (i.e eth1 -> extract "1")
-    # and set it as a part of hostname, it will be like node-1...
-    # For interface like vmnet1, we will not extract that so that the
-    # hostname won't conflict.
-    # If IP alias, eth0:1 will be 0:1, which is not a legal name in dhcpd.
-    # so we change 0:1 to 0-1
-    grp_no="$(echo $interface | sed -e "s/eth//g" -e "s/:/-/g")"
-    hostname="$hostname_prefix""$grp_no";
-    ALL_IP="$(get-client-ip-list)"
-    interface_ip_subnet="$(drbl-get-ipadd $interface | awk -F"." '{print $1"."$2"."$3}')"
-    IP_in_this_sub="$(echo "$ALL_IP" | grep -E "$interface_ip_subnet\>")"
-
-    for ip in $IP_in_this_sub; do
-      # get the hostname from $IP_HOST_TABLE
-      label="$(grep -iEw "^[[:space:]]*${ip}" $IP_HOST_TABLE | awk -F" " '{print $2}')"
-      if [ -z "$label" ]; then
-        # This is the backup plan, same rules as that in drblpush. i.e. if label is empty, we will use the calculated name based on hostname prefix and IP address.
-        label_default=""
-        i="$(echo $ip | awk -F"." '{print $4}')"
-        if [ "$i" -lt 10 ]; then
-          label_default="${hostname}"0"$i"
-        elif [ "$i" -le 254 ]; then
-          label_default="${hostname}$i"
-        fi
-        label_assigned=""
-        label_assigned="$(get-assigned-hn-by-ip $ip)"
-	if [ -n "$label_assigned" ]; then
-          label=$label_assigned;
-        else
-          label=$label_default;
-        fi
-      fi
-      
-      if grep -q -E "^$ip$" $HOSTS_OUT; then
-        # found the old one (only IP with new line ending), replace that
-        perl -pi -e "s|^$ip$|$ip $label|g" $HOSTS_OUT
-      elif grep -q -E "^$ip[[:space:]]" $HOSTS_OUT; then
-        # found the old one, replace that	  
-        perl -pi -e "s|^$ip\s.*|$ip $label|g" $HOSTS_OUT
-      else
-        # old one does not exist, create one
-        cat <<-EOF >> $HOSTS_OUT
+  fi
+  
+  if grep -q -E "^$ip$" $HOSTS_OUT; then
+    # found the old one (only IP with new line ending), replace that
+    perl -pi -e "s|^$ip$|$ip $label|g" $HOSTS_OUT
+  elif grep -q -E "^$ip[[:space:]]" $HOSTS_OUT; then
+    # found the old one, replace that	  
+    perl -pi -e "s|^$ip\s.*|$ip $label|g" $HOSTS_OUT
+  else
+    # old one does not exist, create one
+    cat <<-EOF >> $HOSTS_OUT
 $ip $label
 EOF
-      fi
-    done
+  fi
 done
 echo "done!"

@@ -188,16 +188,16 @@ for DEVICE in $NETDEVICES; do
   fi
 done
 
-IP_prefix="$(echo $IP | cut -d"." -f1-3)"
-if [ -n "$(echo "$NFSSERVER_LIST" | grep -E "$IP_prefix.[0-9]+")" ]; then
-  for i in $NFSSERVER_LIST; do
-    if [ "$(echo $i | cut -d"." -f1-3)" = $IP_prefix ]; then
-      nfsserver=$i
-      break
-    fi
-  done 
-else
-  # Try to use gateway as NFS server
+# Find NFS server
+for i in $NFSSERVER_LIST; do
+  # Use the clients-of-$nfsserver.txt in the common root.
+  if [ -n "$(grep -Ew "$IP" /etc/drbl/clients-of-${i}.txt 2>/dev/null)" ]; then
+    nfsserver="$i"
+    break 
+  fi
+done 
+if [ -z "$nfsserver" ]; then
+  # No NFS server found. Use plan B. Try to use gateway as NFS server
   gateway="$(LANG=C route -n | awk '/^0.0.0.0/ {print $2}')"
   if [ -n "$gateway" ]; then
     nfsserver=$gateway

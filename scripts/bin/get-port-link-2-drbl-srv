@@ -1,7 +1,7 @@
 #!/bin/bash
 # Author: Steven Shiau <steven _at_ nchc org tw>
 # License: GPL
-# This script is used in DRBL client to show the IP Address connected to DRBL server. It can be used for more than one NIC or alias IP addresses.
+# This script is used in DRBL client to show the port of client which is connected to DRBL server. It can be used for more than one NIC or alias IP addresses.
 
 # Load DRBL setting and functions
 DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/usr/share/drbl}"
@@ -23,5 +23,6 @@ for i in $PORT_LISTS; do
   ip="$(drbl-get-ipadd $i)"
   if [ "$ip" = "$IP_link_2_srv" ]; then
     echo "$i"
+    break
   fi
 done

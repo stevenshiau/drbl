@@ -21,7 +21,7 @@ Usage() {
 while [ $# -gt 0 ]; do
   case "$1" in
     -*)	echo "${0}: ${1}: invalid option" >&2
-	Usage >& 2
+	Usage >&2
 	exit 2 ;;
     *)	break ;;
   esac
@@ -30,24 +30,42 @@ done
 # Load config file
 if [ -f /etc/diskless-image/config ]; then
  . /etc/diskless-image/config
+ mode="client"
 elif [ -f $drbl_common_root/etc/diskless-image/config ]; then
  . $drbl_common_root/etc/diskless-image/config
+ mode="server"
 else
  exit 1
 fi
 
 IP=$1
 [ -z "$IP" ] && exit 1
-IP_prefix="$(echo $IP |cut -d"." -f1-3)"
-if [ -n "$(echo "$NFSSERVER_LIST" |grep -E "$IP_prefix.[0-9]+")" ]; then
-  for i in $NFSSERVER_LIST; do
-    if [ "$(echo $i |cut -d"." -f1-3)" = $IP_prefix ]; then
-      nfsserver=$i
+
+# On client side, just use route to get the default gw, and it's nfsserver
+# On server side, get a table to grep.
+case "$mode" in
+  "client")
+    # On client side
+    # Try to use gateway as NFS server
+    # What if the user assigns public IP address and add default gw?
+    gateway="$(LC_ALL=C route -n | awk '/^0.0.0.0/ {print $2}')"
+    if [ -n "$gateway" ]; then
+      nfsserver=$gateway
+    else
+      echo "NFSSERVER is not found, use default one: \"$nfsserver_default\"." 1>&2
+      nfsserver=$nfsserver_default
     fi
-  done 
-else
-    nfsserver=$nfsserver_default
-fi
+    ;;
+  "server")
+    for i in $NFSSERVER_LIST; do
+      if [ -n "$(grep -Ew "$IP" $drbl_syscfg/clients-of-${i}.txt 2>/dev/null)" ]; then
+        nfsserver="$i"
+	break 
+      fi
+    done
+    ;;
+esac
+
 if [ -n "$nfsserver" ]; then
   echo $nfsserver
   exit 0

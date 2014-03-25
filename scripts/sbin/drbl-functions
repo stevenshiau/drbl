@@ -2967,20 +2967,45 @@ switch_upstart_service() {
   local mod_want="$2"  # "on" or "off"
   [ -z "$CFG_F" ] && "No 'CFG_F' assigned in function switch_upstart_service!" && exit 1
   [ -z "$mod_want" ] && "No 'mod_want' assigned in function switch_upstart_service!" && exit 1
-  # If we want to turn on the service, the status now should be commented.
-  case "$mod_want" in
-   on)  status="commented";;
-   off) status="not_commented";;
-  esac
+  [ -e /etc/lsb-release ] && . /etc/lsb-release
+  if [ "$DISTRIB_RELEASE" \< 13.10 ]; then
+    # Ubuntu < 13.10
+    # # Just edit the config file directly, so that it's could only be started manually. We can NOT just rename the *.conf. Otherwise the service can not be started manually in drbl-client-boot.conf.
+    # If we want to turn on the service, the status now should be commented.
+    case "$mod_want" in
+     on)  status="commented";;
+     off) status="not_commented";;
+    esac
+    lines="$(get_block_line_in_upstart_conf $CFG_F $status)"
+    begin_line="$(echo $lines | awk -F" " '{print $1}')"
+    end_line="$(echo $lines | awk -F" " '{print $2}')"
+    case "$mod_want" in
+     off) sub_cmd="if ($((begin_line))..$((end_line))) {s/^(.*)$/# \$1/g}" ;;
+     on)  sub_cmd="if ($((begin_line))..$((end_line))) {s/^#[[:space:]]?(.*)$/\$1/g}" ;;
+    esac
+    perl -pi -e "$sub_cmd" $CFG_F
 
-  lines="$(get_block_line_in_upstart_conf $CFG_F $status)"
-  begin_line="$(echo $lines | awk -F" " '{print $1}')"
-  end_line="$(echo $lines | awk -F" " '{print $2}')"
-  case "$mod_want" in
-   off) sub_cmd="if ($((begin_line))..$((end_line))) {s/^(.*)$/# \$1/g}" ;;
-   on)  sub_cmd="if ($((begin_line))..$((end_line))) {s/^#[[:space:]]?(.*)$/\$1/g}" ;;
-  esac
-  perl -pi -e "$sub_cmd" $CFG_F
+    # XXXXXXXXXXXXXXXXXXX This is wrong! If doing this, some required service could not be manually started in drbl-client-boot.conf.
+    #case "$mod_want" in
+    #  off) 
+    #       if [ -e "${CFG_F}" ]; then
+    #         mv ${CFG_F} ${CFG_F}.drbl-disabled
+    #       fi
+    #       ;;
+    #  on)  
+    #       if [ -e "${CFG_F}.drbl-disabled" ]; then
+    #         mv ${CFG_F}.drbl-disabled ${CFG_F}
+    #       fi
+    #       ;;
+    #esac
+  else
+    # Ubuntu 13.10 or later.
+    # For upstart (>1.3) service, we can use override file (Ref: http://upstart.ubuntu.com/cookbook/#override-files)
+    case "$mod_want" in
+      off) echo "manual" > ${CFG_F/.conf/}.override;;
+      on)  rm -f ${CFG_F/.conf/}.override;;
+    esac
+  fi
 } # end of switch_upstart_service
 #
 canonical_hostname_prep() {

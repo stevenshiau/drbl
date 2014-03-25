@@ -5,6 +5,11 @@
 # Notes: "ipcalc" program is totally different in Debian and RedHat-like distribution.
 # NOTE! We do NOT use this program in drblpush anymore. Just use the perl script ipcalc which is collected in package drbl.
 
+# Load DRBL setting and functions
+DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/usr/share/drbl}"
+
+. $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
+
 export LC_ALL=C
 # Append a default search path.
 PATH="$PATH:/sbin:/usr/sbin:/bin:/usr/bin:/usr/X11R6/bin"
@@ -32,21 +37,8 @@ netmask=$2
 [ -z "$ipaddr" ] && exit 0
 [ -z "$netmask" ] && exit 0
 
-# For ipcalc in RH-like, the output is like:
-# ---
-# ipcalc --network 192.168.10.213 255.255.255.128
-# NETWORK=192.168.10.128
-# ---
-# The "=" is the key, if we can not find the "=" sign, it must be the Debian's ipcalc.
-network="$(ipcalc --network $ipaddr $netmask 2>/dev/null)"
-# 
-if echo $network | grep -q "="; then
-  # It is running in RH-like OS.
-  network="$(ipcalc --network $ipaddr $netmask | cut -d"=" -f2)"
-else
-  # The output of ipcalc without "=", it must be in Debian... we use ipsc.
-  # Debian's ipcalc output like this
-  # Network:   192.168.103.208/28   11000000.10101000.01100111.1101 0000
-  network="$(ipcalc $ipaddr $netmask | awk -F" " '/Network:/ {print $2}' | sed -e "s/\/.*//g")"
-fi
+# The output of ipcalc without "=", it must be in Debian... we use ipsc.
+# Debian's ipcalc output like this
+# Network:   192.168.103.208/28   11000000.10101000.01100111.1101 0000
+network="$(drbl-ipcalc $ipaddr $netmask | awk -F" " '/Network:/ {print $2}' | sed -e "s/\/.*//g")"
 echo $network
