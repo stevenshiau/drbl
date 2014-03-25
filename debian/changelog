@@ -1,3 +1,20 @@
+drbl (2.8.2-drbl1) unstable; urgency=low
+
+  * The support for using network class A and B on DRBL server
+    was added.
+  * The default rule for hostname of clients was changed to
+    ${prefix}${ip//./-}".
+  * The method to disable upstart service of Ubuntu client
+    was improved.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 25 Mar 2014 17:59:16 +0800
+
+drbl (2.8.1-drbl1) unstable; urgency=low
+
+  * Initial support for using network class A and B on DRBL server.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 24 Mar 2014 22:00:16 +0800
+
 drbl (2.7.40-drbl1) unstable; urgency=low
 
   * Language file es_ES of bash was updated. Thanks to 
