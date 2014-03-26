@@ -45,6 +45,8 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+- Bug fixed: the hostname assignment syntax was not working for perl <= 5.14.
+
 * Wed Mar 25 2014 Steven Shiau <steven _at_ nchc org tw> 2.8.3-drbl1
 - Program drbl-ipcalc-list was updated by Ceasar Sun for some more checking.
 - Only when old clients-of-*.txt exists it will be moved.

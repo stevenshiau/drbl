@@ -3971,7 +3971,9 @@ EOF
       # i.e. $prefix{IP Address//./-}
       # If the hostname is assigned in /etc/drbl/client-ip-hostname, 
       # we will ust that.
-      $label_default=$hostname_prefix.($ip =~ s/\./-/rg);
+      my $ip_shown = $ip;
+      $ip_shown =~ s/\./-/g;
+      $label_default=$hostname_prefix.$ip_shown;
       chomp($label_assigned=`LC_ALL=C get-assigned-hn-by-ip $ip`);
       if ($label_assigned) {
         $label=$label_assigned;
