@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.8.5-drbl1) unstable; urgency=low
+
+  * Bug fixed: the hostname assignment syntax was not working
+    for perl <= 5.14.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 26 Mar 2014 15:59:08 +0800
+
 drbl (2.8.4-drbl1) unstable; urgency=low
 
   * The message when searching and copying mbr.bin is suppressed. 
