@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.8.3
+Version:	2.8.4
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,19 +45,22 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
-* Wed Mar 25 2014 Steven Shiau <steven _at_ nchc org tw> 2.8.3-drbl1
+* Wed Mar 26 2014 Steven Shiau <steven _at_ nchc org tw> 2.8.4-drbl1
+- The message when searching and copying mbr.bin is suppressed. 
+ 
+* Tue Mar 25 2014 Steven Shiau <steven _at_ nchc org tw> 2.8.3-drbl1
 - Program drbl-ipcalc-list was updated by Ceasar Sun for some more checking.
 - Only when old clients-of-*.txt exists it will be moved.
 
-* Wed Mar 25 2014 Steven Shiau <steven _at_ nchc org tw> 2.8.2-drbl1
+* Tue Mar 25 2014 Steven Shiau <steven _at_ nchc org tw> 2.8.2-drbl1
 - The support for using network class A and B on DRBL server was added.
 - The default rule for hostname of clients was changed to ${prefix}${ip//./-}".
 - The method to disable upstart service of Ubuntu client was improved.
 
-* Tue Mar 24 2014 Steven Shiau <steven _at_ nchc org tw> 2.8.1-drbl1
+* Mon Mar 24 2014 Steven Shiau <steven _at_ nchc org tw> 2.8.1-drbl1
 - Initial support for using network class A and B on DRBL server.
 
-* Mon Mar 23 2014 Steven Shiau <steven _at_ nchc org tw> 2.7.40-drbl1
+* Sun Mar 23 2014 Steven Shiau <steven _at_ nchc org tw> 2.7.40-drbl1
 - Language file es_ES of bash was updated. Thanks to Juan Ramón Martínez.
 - Program drbl-ipcalc-list was updated by Ceasar Sun to support option "-r".
 - Program drbl-ipcalc-range was removed because drbl-ipcalc-list has same feature.

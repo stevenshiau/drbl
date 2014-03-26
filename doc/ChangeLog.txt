@@ -5,6 +5,14 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.8.4-drbl1) unstable; urgency=low
+
+  * The message when searching and copying mbr.bin is suppressed. 
+  * libnet-ip-perl was removed from control file because drbl-ipcalc-range was
+    removed.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 25 Mar 2014 21:35:59 +0800
+
 drbl (2.8.3-drbl1) unstable; urgency=low
 
   * Program drbl-ipcalc-list was updated by Ceasar Sun for some
