@@ -175,10 +175,12 @@ put_distribution_pxelinux() {
 		 -type f -exec cp -af {} $tmp_wd/ \;
           fi
 	  if [ "$iarch" = "bios" ]; then
-	    # mbr.bin is located in /usr/lib/syslinux/mbr/mbr.bin. Therefore we need to find /usr/lib/syslinux/mbr/, too.
 	    # This is only for bios, not for efi32 or efi64.
-            find $pxelinux_bin_dir/../syslinux/mbr/ -name "$iprog" \
-                 -type f -exec cp -af {} $tmp_wd/ \;
+	    # For Debian/Ubuntu, mbr.bin is located in /usr/lib/syslinux/mbr/mbr.bin. Therefore we need to find /usr/lib/syslinux/mbr/, too.
+            # For Fedora/Centos, mbr.bin is located in /usr/share/syslinux/ while /usr/share/syslinux
+            # pxelinux_bin=/usr/share/syslinux/pxelinux.0 so pxelinux_bin_dir=/usr/share/syslinux
+            find $pxelinux_bin_dir/../syslinux/{,mbr/} -name "$iprog" \
+                 -type f -exec cp -af {} $tmp_wd/ \; &>/dev/null
           fi
         done
 	if [ -n "$(ls $tmp_wd/* 2>/dev/null)" ]; then
