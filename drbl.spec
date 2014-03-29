@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.8.5
+Version:	2.8.6
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Sun  Mar 29 2014 Steven Shiau <steven _at_ nchc org tw> 2.8.6-drbl1
+- Bug fixed: drbl-sl failed to detect iso file for file package >=5.17.
+
 * Wed Mar 26 2014 Steven Shiau <steven _at_ nchc org tw> 2.8.5-drbl1
 - Bug fixed: the hostname assignment syntax was not working for perl <= 5.14.
  

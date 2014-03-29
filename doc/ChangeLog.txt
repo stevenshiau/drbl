@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.8.6-drbl1) unstable; urgency=low
+
+  * Bug fixed: drbl-sl failed to detect iso file for file
+    package >=5.17.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sat, 29 Mar 2014 15:47:34 +0800
+
 drbl (2.8.5-drbl1) unstable; urgency=low
 
   * Bug fixed: the hostname assignment syntax was not working
@@ -15,8 +22,8 @@ drbl (2.8.5-drbl1) unstable; urgency=low
 drbl (2.8.4-drbl1) unstable; urgency=low
 
   * The message when searching and copying mbr.bin is suppressed. 
-  * libnet-ip-perl was removed from control file because drbl-ipcalc-range was
-    removed.
+  * libnet-ip-perl was removed from control file because drbl-ipcalc-range
+    was removed.
 
  -- Steven Shiau <steven@nchc.org.tw>  Tue, 25 Mar 2014 21:35:59 +0800
 
