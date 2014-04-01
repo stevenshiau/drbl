@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+- Bug fixed: drbl-prepare-pxelinux failed to copy correct *.c32 of bios to /tftpboot/nbi_img/. It caused amd64 system failed to boot via pxelinux, isolinux or syslinux.
+- An option "-v" was added to drbl-prepare-pxelinux for verbose output.
+
 * Sun  Mar 29 2014 Steven Shiau <steven _at_ nchc org tw> 2.8.6-drbl1
 - Bug fixed: drbl-sl failed to detect iso file for file package >=5.17.
 

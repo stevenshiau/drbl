@@ -18,6 +18,8 @@ DRBL_NEED_PXELINUX_modules="menu.c32 vesamenu.c32 chain.c32 mboot.c32 sanboot.c3
 DRBL_NEED_PXELINUX="$DRBL_NEED_PXELINUX_common $DRBL_NEED_PXELINUX_modules"
 # By default we only copy the required files to $pxelinux_binsrc_dir. This option will allow us to copy files to dir $pxecfg_pd.
 deploy_to_system_too="no"
+# default not verbose
+verbose="no"
 
 # Functions
 USAGE() {
@@ -27,6 +29,7 @@ USAGE() {
   echo "-u, --from-upstream   Use the binary from upstream ($syslinux_binsrc_url). If this option is not assigned, DRBL will try to use the pxelinux from your GNU/Linux distribution."
   echo "-pv, --pxelinux-version VERSION  The pxelinux version to be used with -u|--from-upstream. If not assigned, the version number specified in drbl.conf will be used."
   echo "-d, --deploy-to-system-too   Deploy the files to DRBL system ($pxecfg_pd), too."
+  echo "-v, --verbose                show verbose messages."
   echo "Ex: To use the pxelinux 4.04 from $syslinux_binsrc_url, run '$0 -u -pv 4.04'"
 }
 
@@ -86,24 +89,24 @@ put_upstream_pxelinux(){
   case "$syslinux_arch" in
   "single")
     for iprog in $DRBL_NEED_PXELINUX; do
-      find $tmp_wd/upstream -name "$iprog" -type f -exec cp -af {} $tmp_wd/extracted/syslinux/ \;
+      find $tmp_wd/upstream -name "$iprog" -type f -exec cp -af $v_opt {} $tmp_wd/extracted/syslinux/ \;
     done
     put_pxelinux_bin_2_drbl_repo $tmp_wd/extracted/syslinux/ $pxelinux_binsrc_dir/bios/
     ;;
   "multiple")
     # For syslinux 6.x, *.c32 modules for different arch are put in bios/, efi32, or efi64/
     for iprog in $DRBL_NEED_PXELINUX_common; do
-      find $tmp_wd/upstream -name "$iprog" -type f -exec cp -af {} $tmp_wd/extracted/syslinux/ \;
+      find $tmp_wd/upstream -name "$iprog" -type f -exec cp -af $v_opt {} $tmp_wd/extracted/syslinux/ \;
     done
     put_pxelinux_bin_2_drbl_repo $tmp_wd/extracted/syslinux/ $pxelinux_binsrc_dir/bios/
-    rm -f $tmp_wd/extracted/syslinux/*
+    rm -f $v_opt $tmp_wd/extracted/syslinux/*
     for iarch in bios efi32 efi64; do
       for iprog in $DRBL_NEED_PXELINUX_modules; do
         # Here we search the files under syslinux/
-        find $tmp_wd/upstream/*/$iarch/ -name "$iprog" -type f -exec cp -af {} $tmp_wd/extracted/syslinux/ \;
+        find $tmp_wd/upstream/*/$iarch/ -name "$iprog" -type f -exec cp -af $v_opt {} $tmp_wd/extracted/syslinux/ \;
       done
       put_pxelinux_bin_2_drbl_repo $tmp_wd/extracted/syslinux/ $pxelinux_binsrc_dir/$iarch/
-      rm -f $tmp_wd/extracted/syslinux/*
+      rm -f $v_opt $tmp_wd/extracted/syslinux/*
     done
     # Some more extra files for efi32 and efi64
     find $tmp_wd/upstream/*/efi32/ -name "syslinux.efi" -type f -exec \
@@ -151,42 +154,47 @@ put_distribution_pxelinux() {
       echo "Copying the PXELinux files to DRBL local repository..."
       # For syslinux 6.x, on Debian another sub-package "pxelinux" from syslinux is separated, and pxelinux.0 is put in /usr/lib/PXELINUX/pxelinux.0, while those *.c32 moduels are in /usr/lib/syslinux/modules/{bios,efi32,efi64}
       pxelinux_bin_dir="$(LC_ALL=C dirname $pxelinux_bin)"
-      # This part works for syslinux <= 5 and >=6
+
+      # This part works for both syslinux <= 5 and >=6
+      # For syslinux >=5, collect and put pxelinux.0, lpxelinux.0, gpxelinux.0, and all *.c32
+      # For syslinux >=6, collect and put only pxelinux.0, lpxelinux.0, and gpxelinux.0 because only these 3 files are under $pxelinux_bin_dir/
       for iprog in $DRBL_NEED_PXELINUX; do
-        find $pxelinux_bin_dir -name "$iprog" -type f -exec cp -af {} $tmp_wd/ \;
+        find $pxelinux_bin_dir -name "$iprog" -type f -exec cp -af $v_opt {} $tmp_wd/ \;
       done
       put_pxelinux_bin_2_drbl_repo $tmp_wd $pxelinux_binsrc_dir/bios/
-      rm -f $tmp_wd/*
+      rm -f $v_opt $tmp_wd/*
+
       # This part works for syslinux >=6
+      # Those *.c32, isolinux.bin, memdisk, and mbr.bin are copied in this part for syslinux >=6
       # The above find command only find /usr/lib/PXELINUX for syslinux >=6, but isolinux.bin and memdisk are required. It will search /usr/lib/syslinux if syslinux <=5
       if [ -d /usr/lib/ISOLINUX/ ]; then
         find /usr/lib/ISOLINUX/ -name "isolinux.bin" -type f -exec \
-	cp -af {} $tmp_wd/ \;
+	cp -af $v_opt {} $tmp_wd/ \;
       fi
       # When syslinux <=6, memdisk will be put by the above find command. No need to copy again.
       if [ -d /usr/lib/syslinux/ -a ! -e $pxelinux_binsrc_dir/bios/memdisk ]; then
         find /usr/lib/syslinux/ -name "memdisk" -type f -exec \
-	cp -af {} $tmp_wd/ \;
+	cp -af $v_opt {} $tmp_wd/ \;
       fi
       for iarch in bios efi32 efi64; do
         for iprog in $DRBL_NEED_PXELINUX; do
           if [ -d $pxelinux_bin_dir/../syslinux/modules/$iarch/ ]; then
             find $pxelinux_bin_dir/../syslinux/modules/$iarch/ -name "$iprog" \
-		 -type f -exec cp -af {} $tmp_wd/ \;
+		 -type f -exec cp -af $v_opt {} $tmp_wd/ \;
           fi
 	  if [ "$iarch" = "bios" ]; then
-	    # This is only for bios, not for efi32 or efi64.
+	    # This part is only for mbr.bin of bios, not for efi32 or efi64.
 	    # For Debian/Ubuntu, mbr.bin is located in /usr/lib/syslinux/mbr/mbr.bin. Therefore we need to find /usr/lib/syslinux/mbr/, too.
-            # For Fedora/Centos, mbr.bin is located in /usr/share/syslinux/ while /usr/share/syslinux
-            # pxelinux_bin=/usr/share/syslinux/pxelinux.0 so pxelinux_bin_dir=/usr/share/syslinux
-            find $pxelinux_bin_dir/../syslinux/{,mbr/} -name "$iprog" \
-                 -type f -exec cp -af {} $tmp_wd/ \; &>/dev/null
+            # For Fedora/Centos, mbr.bin is located in /usr/share/syslinux/
+	    # while since pxelinux_bin=/usr/share/syslinux/pxelinux.0 so pxelinux_bin_dir=/usr/share/syslinux
+            find $pxelinux_bin_dir/../syslinux/{,mbr/} -name "mbr.bin" \
+                 -type f -exec cp -af $v_opt {} $tmp_wd/ \; &>/dev/null
           fi
         done
 	if [ -n "$(ls $tmp_wd/* 2>/dev/null)" ]; then
           put_pxelinux_bin_2_drbl_repo $tmp_wd $pxelinux_binsrc_dir/$iarch/
         fi
-	rm -f $tmp_wd/*
+	rm -f $v_opt $tmp_wd/*
       done
       # Some more extra files for efi32 and efi64
       if  [ -d /usr/lib/SYSLINUX/ ]; then
@@ -226,7 +234,7 @@ put_distribution_pxelinux() {
         LC_ALL=C dpkg --extract /var/cache/apt/archives/${i}_*.deb $tmp_wd/upstream
       done
       for iprog in $DRBL_NEED_PXELINUX; do
-        find $tmp_wd/upstream -name "$iprog" -type f -exec cp -af {} $tmp_wd/extracted \;
+        find $tmp_wd/upstream -name "$iprog" -type f -exec cp -af $v_opt {} $tmp_wd/extracted \;
       done
       put_pxelinux_bin_2_drbl_repo $tmp_wd/extracted $pxelinux_binsrc_dir/bios/
     elif [ -e /etc/SuSE-release ]; then
@@ -240,7 +248,7 @@ put_distribution_pxelinux() {
        LC_ALL=C rpm2cpio "$pxelinux_rpm" | cpio -idm
       )
       for iprog in $DRBL_NEED_PXELINUX; do
-        find $tmp_wd/upstream -name "$iprog" -type f -exec cp -af {} $tmp_wd/extracted \;
+        find $tmp_wd/upstream -name "$iprog" -type f -exec cp -af $v_opt {} $tmp_wd/extracted \;
       done
       put_pxelinux_bin_2_drbl_repo $tmp_wd/extracted $pxelinux_binsrc_dir/bios/
     else
@@ -251,7 +259,7 @@ put_distribution_pxelinux() {
        LC_ALL=C rpm2cpio $tmp_wd/syslinux*.rpm | cpio -idm
       )
       for iprog in $DRBL_NEED_PXELINUX; do
-        find $tmp_wd/upstream -name "$iprog" -type f -exec cp -af {} $tmp_wd/extracted \;
+        find $tmp_wd/upstream -name "$iprog" -type f -exec cp -af $v_opt {} $tmp_wd/extracted \;
       done
       put_pxelinux_bin_2_drbl_repo $tmp_wd/extracted $pxelinux_binsrc_dir/bios/
     fi
@@ -278,12 +286,17 @@ while [ $# -gt 0 ]; do
         fi
 	;;
     -d|--deploy-to-system-too) shift; deploy_to_system_too="yes" ;;
+    -v|--verbose) shift; verbose="yes" ;;
     *)  USAGE && exit 1 ;;
   esac
 done
 # mode is essential
 [ -z "$mode" ] && mode="from-distribution"
 [ -z "$pxelinux_ver_requested" ] && pxelinux_ver_requested="$SYS_PXELINUX_VER_DEF"
+
+if [ "$verbose" = "yes" ]; then
+  v_opt="-v"
+fi
 
 case "$mode" in
   from-distribution) put_distribution_pxelinux ;;
