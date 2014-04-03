@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.8.6
+Version:	2.8.8
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,10 +45,15 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Tue Apr 03 2014 Steven Shiau <steven _at_ nchc org tw> 2.8.8-drbl1
+- Bug fixed: Mageia's path for vmlinuz and initrd were changed. The corresponding changes were done in drbl-netinstall.
+- The version of netinstall in drbl.conf was updated.
+
+* Tue Apr 01 2014 Steven Shiau <steven _at_ nchc org tw> 2.8.7-drbl1
 - Bug fixed: drbl-prepare-pxelinux failed to copy correct *.c32 of bios to /tftpboot/nbi_img/. It caused amd64 system failed to boot via pxelinux, isolinux or syslinux.
 - An option "-v" was added to drbl-prepare-pxelinux for verbose output.
 
-* Sun  Mar 29 2014 Steven Shiau <steven _at_ nchc org tw> 2.8.6-drbl1
+* Sun Mar 29 2014 Steven Shiau <steven _at_ nchc org tw> 2.8.6-drbl1
 - Bug fixed: drbl-sl failed to detect iso file for file package >=5.17.
 
 * Wed Mar 26 2014 Steven Shiau <steven _at_ nchc org tw> 2.8.5-drbl1

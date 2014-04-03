@@ -5,6 +5,24 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.8.8-drbl1) unstable; urgency=low
+
+  * Bug fixed: Mageia's path for vmlinuz and initrd were changed.
+    The corresponding changes were done in drbl-netinstall.
+  * The version of netinstall in drbl.conf was updated.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 03 Apr 2014 11:03:16 +0800
+
+drbl (2.8.7-drbl1) unstable; urgency=low
+
+  * Bug fixed: drbl-prepare-pxelinux failed to copy correct *.c32 of
+    bios to /tftpboot/nbi_img/. It caused amd64 system failed to boot
+    via pxelinux, isolinux or syslinux.
+  * An option "-v" was added to drbl-prepare-pxelinux for verbose
+    output.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 01 Apr 2014 19:39:53 +0800
+
 drbl (2.8.6-drbl1) unstable; urgency=low
 
   * Bug fixed: drbl-sl failed to detect iso file for file

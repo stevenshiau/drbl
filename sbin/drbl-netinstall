@@ -220,12 +220,18 @@ get_mageia_netinstall() {
   # vmlinuz-netinstall-${dist}-${ver}-${arch)
   # initrd-netinstall-${dist}-${ver}-${i386}.img
   #
-  # url ex:
-  # http://free.nchc.org.tw/mageia/distrib/cauldron/i586/isolinux/alt0/
-  # http://free.nchc.org.tw//mageia/distrib/cauldron/i586/isolinux/alt0/
+  # URL ex:
+  # Updated on Apr/03/2014
+  # http://free.nchc.org.tw/mageia/distrib/cauldron/i586/isolinux/i386/
+  # http://free.nchc.org.tw/mageia/distrib/cauldron/x86_64/isolinux/x86_64/
+  local arch_subdir
   for ver in $mageia_netinstall_ver; do
     for arch in $mageia_netinstall_arch; do
-      url=$mageia_url_site/$path_to_mageia/$ver/$arch/isolinux/alt0
+      case "$arch" in
+        i586) arch_subdir="i386";;
+        x86_64) arch_subdir="x86_64";;
+      esac
+      url=$mageia_url_site/$path_to_mageia/$ver/$arch/isolinux/$arch_subdir
       get_and_put_linux_img $url Mageia $ver $arch $mageia_netinstall_kernel $mageia_netinstall_initrd
     done
   done
