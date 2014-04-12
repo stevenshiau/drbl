@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.8.8
+Version:	2.8.9
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Sat Apr 12 2014 Steven Shiau <steven _at_ nchc org tw> 2.8.9-drbl1
+- Unmounting bind directory under /tftpboot/ if it exists. Otherwise when running "drblsrv -u", it might clean the bind source dir on system.
+
 * Tue Apr 03 2014 Steven Shiau <steven _at_ nchc org tw> 2.8.8-drbl1
 - Bug fixed: Mageia's path for vmlinuz and initrd were changed. The corresponding changes were done in drbl-netinstall.
 - The version of netinstall in drbl.conf was updated.

@@ -5,6 +5,14 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.8.9-drbl1) unstable; urgency=low
+
+  * Unmounting bind directory under /tftpboot/ if it exists. 
+    Otherwise when running "drblsrv -u", it might clean the 
+    bind source dir on system.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sat, 12 Apr 2014 16:09:30 +0800
+
 drbl (2.8.8-drbl1) unstable; urgency=low
 
   * Bug fixed: Mageia's path for vmlinuz and initrd were changed.

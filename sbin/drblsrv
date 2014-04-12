@@ -97,7 +97,7 @@ do_some_cleanup_before_uninstall() {
      *) drbl-sl -l $lang_answer -u all ;;
   esac
   echo "$msg_delimiter_star_line"
-}
+} # end of do_some_cleanup_before_uninstall
 #
 run_drblsrv_offline() {
   # To run drblsrv_offline, these depends on distributions
@@ -1955,6 +1955,16 @@ backup_apt_sources_list() {
 
 #
 clean_tftpboot_and_misc() {
+  local bind_dirs
+  # Unmount those "--bind" dir under /tftpboot/
+  # The results of "mount" command is like:
+  # /usr on /tftpboot/node_root/usr type none (rw,bind)
+  bind_dirs="$(LC_ALL=C mount | awk -F" " '{print $3}' | grep -Ew "/tftpboot")"
+  bind_dirs="$(echo $bind_dirs)"  # make it in a line
+  for i in $bind_dirs; do
+    echo "Unmounting binding dir $i..."
+    umount $i
+  done
   echo "$msg_delimiter_star_line"
   echo "$msg_cleaning_tftpboot_and_misc"
   echo "$msg_delimiter_star_line"
