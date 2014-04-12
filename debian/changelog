@@ -1,3 +1,11 @@
+drbl (2.8.10-drbl1) unstable; urgency=low
+
+  * Adding variable drbl_nfs_prot in drbl.conf.
+  * Adding nfs4 support in mknic-nbi. The whole
+    support for nfs4 in drbl is not ready yet.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sat, 12 Apr 2014 23:59:48 +0800
+
 drbl (2.8.9-drbl1) unstable; urgency=low
 
   * Unmounting bind directory under /tftpboot/ if it exists. 
