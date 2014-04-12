@@ -170,6 +170,12 @@ done
 [ -z "$sleep_time_after_NIC_up" ] && sleep_time_after_NIC_up="$sleep_time_after_NIC_up_default"
 [ -z "$link_detect_timeout" ] && link_detect_timeout="$link_detect_timeout_default"
 
+# NFS protocol. Read from "$drbl_nfs_prot" in drbl.conf
+case "$drbl_nfs_prot" in
+  nfs4) nfs_prot_in_initrd="nfs4";;
+     *) nfs_prot_in_initrd="nfs3";;
+esac
+
 # Format the variable in case inputed variable is not we want.
 case "$check_server_name" in
   n|N|[nN][oO])
@@ -229,6 +235,7 @@ echo "Will client check DHCP server name is \"$dhcp_server_name\" or not: $check
 echo "The maximum times to try to get IP address for a client: $iretry_max"
 echo "The pause time after network card is up: $sleep_time_after_NIC_up"
 echo "The timeout to wait for network card linked (Unit: 0.1 secs): $link_detect_timeout"
+echo "The NFS protocol for DRBL system: $nfs_prot_in_initrd"
 perl -p -i -e "s/^check_server_name=.*/check_server_name=\"$check_server_name\"/g" $NETINITRD_CFG
 perl -p -i -e "s/^dhcp_server_name=.*/dhcp_server_name=\"$dhcp_server_name\"/g" $NETINITRD_CFG
 perl -p -i -e "s/^iretry_max=.*/iretry_max=\"$iretry_max\"/g" $NETINITRD_CFG
@@ -236,6 +243,7 @@ perl -p -i -e "s/^sleep_time_after_NIC_up=.*/sleep_time_after_NIC_up=\"$sleep_ti
 perl -p -i -e "s/^link_detect_timeout=.*/link_detect_timeout=\"$link_detect_timeout\"/g" $NETINITRD_CFG
 perl -p -i -e "s/^use_run_in_initrd=.*/use_run_in_initrd=\"$use_run_in_initrd\"/g" $NETINITRD_CFG
 perl -p -i -e "s/^use_dev_pts_in_initrd=.*/use_dev_pts_in_initrd=\"$use_dev_pts_in_initrd\"/g" $NETINITRD_CFG
+perl -p -i -e "s/^nfs_prot_in_initrd=.*/nfs_prot_in_initrd=\"$nfs_prot_in_initrd\"/g" $NETINITRD_CFG
 if [ -n "$udhcpc_port" ]; then
   echo "The port for udhcpc to request is: $udhcpc_port"
   perl -p -i -e "s/^udhcpc_port=.*/udhcpc_port=\"$udhcpc_port\"/g" $NETINITRD_CFG

@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+- Adding variable drbl_nfs_prot in drbl.conf.
+- Adding nfs4 support in mknic-nbi. The whole support for nfs4 in drbl is not ready yet.
+
 * Sat Apr 12 2014 Steven Shiau <steven _at_ nchc org tw> 2.8.9-drbl1
 - Unmounting bind directory under /tftpboot/ if it exists. Otherwise when running "drblsrv -u", it might clean the bind source dir on system.
 
