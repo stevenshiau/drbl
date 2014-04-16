@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.8.10
+Version:	2.8.11
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,7 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Wed Apr 16 2014 Steven Shiau <steven _at_ nchc org tw> 2.8.11-drbl1
 - Adding Ubuntu 14.04 support.
 - The dir /run/rpcbind should be created by init.drbl so that when rpcbind service starts, it can touch the files under the path.
 
