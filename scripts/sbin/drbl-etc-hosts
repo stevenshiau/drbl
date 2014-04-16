@@ -46,11 +46,11 @@ for interface in $DEV_INT; do
   netmask_sys="$(drbl-get-netmask $ethx)"
   if grep -q -E "^$srv_ip[[:space:]]+" $HOSTS_OUT; then
     # found the old one, replace that	  
-    perl -pi -e "s|^$srv_ip.*|$srv_ip ${hostname_prefix}-$interface|g" $HOSTS_OUT
+    perl -pi -e "s|^$srv_ip.*|$srv_ip ${hostname_prefix}${interface}|g" $HOSTS_OUT
   else
     # old one does not exist, create one
     cat <<-EOF >> $HOSTS_OUT
-$srv_ip ${hostname_prefix}-$interface
+$srv_ip ${hostname_prefix}${interface}
 EOF
   fi
 done

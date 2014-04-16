@@ -1243,6 +1243,13 @@ get_gdm_kdm_conf_filename() {
     # "/etc/lightdm/lightdm.conf" does not exist in the initial installation. 
     # While it will exist when a user configures that in the GUI.
     LIGHTDM_CFG=/etc/lightdm/lightdm.conf
+  elif [ -d "/usr/share/lightdm/lightdm.conf.d" -a \
+	 -e "/usr/share/doc/lightdm/lightdm.conf.gz" ]; then
+    # For Ubuntu 14.04, lightdm 1.10 has different way. The /etc/lightdm/lightdm.conf.d has been moved to /usr/share/lightdm/lightdm.conf.d, and /etc/lightdm/lightdm.conf does not exist in the beginning. Only a sample file exists in "/usr/share/doc/lightdm/lightdm.conf.gz".
+    if [ ! -f "$drbl_common_root/etc/lightdm/lightdm.conf" ]; then
+      zcat "/usr/share/doc/lightdm/lightdm.conf.gz" > "$drbl_common_root/etc/lightdm/lightdm.conf"
+    fi
+    LIGHTDM_CFG=/etc/lightdm/lightdm.conf
   fi
 } # end of get_gdm_kdm_conf_filename
 #

@@ -382,6 +382,8 @@ sub interactive_mode {
         chomp($nisdomain_sys=`nisdomainname`);
 	chomp($hostname_sys=`hostname`);
         my @client_hostname_prefix_default=split(/\./,$hostname_sys);
+	# Append "-" so that the hostname for client is like: prefix-192-168-1-1
+	$client_hostname_prefix_default[0]="$client_hostname_prefix_default[0]"."-";
         print "DNSDOMAIN in system is $dnsdomain_sys\n" if $verbosity >= 2;
         print "NISDOMAIN in system is $nisdomain_sys\n" if $verbosity >= 2;
         print "Client hostname prefix default is $client_hostname_prefix_default[0]\n" if $verbosity >= 2;
@@ -2479,6 +2481,7 @@ for isrv in $isrv_list ; do
 done
 
 # Get the gdm or kdm config filename
+# get_gdm_kdm_conf_filename will also process lightdm. For Ubuntu 14.04, /etc/lightdm/lightdm.conf does not exist, and get_gdm_kdm_conf_filename will unzip the one "/usr/share/doc/lightdm/lightdm.conf.gz" and put it in /etc/lightdm/
 get_gdm_kdm_conf_filename
 
 if [ -z "$GDM_CFG" ]; then
