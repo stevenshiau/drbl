@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+- Adding Ubuntu 14.04 support.
+- The dir /run/rpcbind should be created by init.drbl so that when rpcbind service starts, it can touch the files under the path.
+
 * Sat Apr 12 2014 Steven Shiau <steven _at_ nchc org tw> 2.8.10-drbl1
 - Adding variable drbl_nfs_prot in drbl.conf.
 - Adding nfs4 support in mknic-nbi. The whole support for nfs4 in drbl is not ready yet.
