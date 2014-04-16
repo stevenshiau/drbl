@@ -1,3 +1,13 @@
+drbl (2.8.12-drbl1) unstable; urgency=low
+
+  * Appending "-" in the default hostname prefix of drblpush.
+  * Program drbl-etc-hosts was updated to work with the default
+    hostname prefix.
+  * The function get_gdm_kdm_conf_filename of drbl-functions was
+    updated to find and create the lightdm.conf for Ubuntu 14.04.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 16 Apr 2014 16:21:35 +0800
+
 drbl (2.8.11-drbl1) unstable; urgency=low
 
   * Adding Ubuntu 14.04 support.
