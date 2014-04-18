@@ -46,6 +46,7 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 
 %changelog
 - Adding comment when modifying a file in function switch_upstart_service of drbl-functions.
+- customized plymouth.conf for Ubuntu 12.04 drbl clients was added. This is a workaround to https://bugs.launchpad.net/ubuntu/precise/+source/mountall/+bug/1233610
 
 * Wed Apr 16 2014 Steven Shiau <steven _at_ nchc org tw> 2.8.12-drbl1
 - Appending "-" in the default hostname prefix of drblpush.
