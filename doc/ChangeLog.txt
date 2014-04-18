@@ -5,6 +5,24 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.8.14-drbl1) unstable; urgency=low
+
+  * Bug fixed: "service mountall start" in drbl-client-boot.conf of
+    Ubuntu 12.04 drbl client should not be commented. Previous 
+    change should be reverted.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 18 Apr 2014 09:33:57 +0800
+
+drbl (2.8.13-drbl1) unstable; urgency=low
+
+  * Adding comment when modifying a file in function switch_upstart_service
+    of drbl-functions.
+  * customized plymouth.conf for Ubuntu 12.04 drbl clients was added. 
+    This is a workaround to
+    https://bugs.launchpad.net/ubuntu/precise/+source/mountall/+bug/1233610
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 18 Apr 2014 09:22:43 +0800
+
 drbl (2.8.12-drbl1) unstable; urgency=low
 
   * Appending "-" in the default hostname prefix of drblpush.

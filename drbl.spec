@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.8.12
+Version:	2.8.14
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,10 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Fri Apr 18 2014 Steven Shiau <steven _at_ nchc org tw> 2.8.14-drbl1
+- Bug fixed: "service mountall start" in drbl-client-boot.conf of Ubuntu 12.04 drbl client should not be commented. Previous change should be reverted.
+
+* Fri Apr 18 2014 Steven Shiau <steven _at_ nchc org tw> 2.8.13-drbl1
 - Adding comment when modifying a file in function switch_upstart_service of drbl-functions.
 - customized plymouth.conf for Ubuntu 12.04 drbl clients was added. This is a workaround to https://bugs.launchpad.net/ubuntu/precise/+source/mountall/+bug/1233610
 
