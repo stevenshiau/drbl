@@ -3445,6 +3445,7 @@ if [ -e /etc/debian_version ]; then
 	fi
 	# For plymouth.conf, we won't let plymouthd to run in rc=1, even with --mode=shutdown, otherwise when running clonezilla job in the client, the initial screen might be in vt 7, and the clonezilla job is run at vt 1.
 	if [ -e "$drbl_setup_path/files/Ubuntu/$DISTRIB_RELEASE/plymouth.conf" ]; then
+	  # Use the customized plymouth.conf.
           cp -af $drbl_setup_path/files/Ubuntu/$DISTRIB_RELEASE/plymouth.conf $drbl_common_root/etc/init/plymouth.conf
 	else
           if [ "$DISTRIB_RELEASE" \< 13.10 ]; then

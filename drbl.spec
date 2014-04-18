@@ -45,6 +45,8 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+- Adding comment when modifying a file in function switch_upstart_service of drbl-functions.
+
 * Wed Apr 16 2014 Steven Shiau <steven _at_ nchc org tw> 2.8.12-drbl1
 - Appending "-" in the default hostname prefix of drblpush.
 - Program drbl-etc-hosts was updated to work with the default hostname prefix.

@@ -2987,7 +2987,7 @@ switch_upstart_service() {
     begin_line="$(echo $lines | awk -F" " '{print $1}')"
     end_line="$(echo $lines | awk -F" " '{print $2}')"
     case "$mod_want" in
-     off) sub_cmd="if ($((begin_line))..$((end_line))) {s/^(.*)$/# \$1/g}" ;;
+     off) sub_cmd="if ($((begin_line))..$((end_line))) {s/^(.*)$/# \$1 # Modified by DRBL/g}" ;;
      on)  sub_cmd="if ($((begin_line))..$((end_line))) {s/^#[[:space:]]?(.*)$/\$1/g}" ;;
     esac
     perl -pi -e "$sub_cmd" $CFG_F
