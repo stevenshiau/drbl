@@ -168,7 +168,7 @@ create_dev
 if [ "$TMPFS_RUN" = "true" ]; then
   [ ! -d /run ] && mkdir /run
   mount -t tmpfs -o "nosuid,size=20%,mode=0755" tmpfs /run
-  mkdir /run/initramfs /run/rpcbind
+  mkdir /run/initramfs
 fi
 
 # find my IP address
