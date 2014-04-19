@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.8.15
+Version:	2.8.16
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Sat Apr 19 2014 Steven Shiau <steven _at_ nchc org tw> 2.8.16-drbl1
+- Updating network installation list for Ubuntu as "precise and trusty" in drbl.conf.
+
 * Sat Apr 19 2014 Steven Shiau <steven _at_ nchc org tw> 2.8.15-drbl1
 - Removing "mkdir /run/rpcbind" in init.drbl because it's useless.
 - The rpcbind-boot.conf instead of rpcbind.conf for drbl clients is modified to be start on startup. This fixed the issue that when init starts, the dir /run/rpcbind/ does not exist.
