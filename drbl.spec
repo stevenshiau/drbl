@@ -48,6 +48,7 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 - Removing "mkdir /run/rpcbind" in init.drbl because it's useless.
 - The rpcbind-boot.conf instead of rpcbind.conf for drbl clients is modified to be start on startup. This fixed the issue that when init starts, the dir /run/rpcbind/ does not exist.
 - The plymouth related part in /etc/init/rc.conf was disabled otherwise when select-in-client mode of clonezilla is run in vt1, the virtual console will be switched to vt7.
+- Program drbl-client-root-passwd failed on Ubuntu 14.04, so updating the function create_chpasswd_env of drbl-functions.
 
 * Fri Apr 18 2014 Steven Shiau <steven _at_ nchc org tw> 2.8.14-drbl1
 - Bug fixed: "service mountall start" in drbl-client-boot.conf of Ubuntu 12.04 drbl client should not be commented. Previous change should be reverted.
