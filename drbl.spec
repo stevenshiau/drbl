@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.8.17
+Version:	2.8.18
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Wed Apr 23 2014 Steven Shiau <steven _at_ nchc org tw> 2.8.18-drbl1
+- File set-netboot-1st-efi-nvram should be in Clonezilla.
+
 * Wed Apr 23 2014 Steven Shiau <steven _at_ nchc org tw> 2.8.17-drbl1
 - Updating comments in drblpush for dhcpd.conf.
 

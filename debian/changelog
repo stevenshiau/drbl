@@ -1,3 +1,9 @@
+drbl (2.8.18-drbl1) unstable; urgency=low
+
+  * File set-netboot-1st-efi-nvram should be in Clonezilla.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 23 Apr 2014 14:53:04 +0800
+
 drbl (2.8.17-drbl1) unstable; urgency=low
 
   * Updating comments in drblpush for dhcpd.conf.
