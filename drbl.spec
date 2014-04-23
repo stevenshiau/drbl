@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.8.16
+Version:	2.8.17
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Wed Apr 23 2014 Steven Shiau <steven _at_ nchc org tw> 2.8.17-drbl1
+- Updating comments in drblpush for dhcpd.conf.
+
 * Sat Apr 19 2014 Steven Shiau <steven _at_ nchc org tw> 2.8.16-drbl1
 - Updating network installation list for Ubuntu as "precise and trusty" in drbl.conf.
 

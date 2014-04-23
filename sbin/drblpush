@@ -1732,12 +1732,14 @@ option pxelinux.configfile code 209 = text;
 option pxelinux.pathprefix code 210 = text;
 option pxelinux.reboottime code 211 = unsigned integer 32;
 
-#filename = "pxelinux.0";
 site-option-space "pxelinux";
 if exists dhcp-parameter-request-list {
     # Always send the PXELINUX options (specified in hexadecimal)
     option dhcp-parameter-request-list = concat(option dhcp-parameter-request-list,d0,d1,d2,d3);
 }
+# Ref:
+# http://www.syslinux.org/wiki/index.php/PXELINUX
+# https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=720589
 if option arch = 00:06 {
     filename "bootia32.efi";
     # option pxelinux.configfile "pxelinux.cfg/efi32";
