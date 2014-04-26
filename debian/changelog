@@ -1,3 +1,12 @@
+drbl (2.8.20-drbl1) unstable; urgency=low
+
+  * It's rpcbind-boot service only, we do not have to modify
+    portmap.conf for Ubuntu 12.04.
+  * A workround to keep console in vt 1 when booting for Ubuntu
+    12.04 in select-in-client mode.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sat, 26 Apr 2014 20:35:12 +0800
+
 drbl (2.8.19-drbl1) unstable; urgency=low
 
   * Bug fixed: when in restoreparts mode, "-t" option should be set by
