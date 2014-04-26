@@ -1431,8 +1431,14 @@ vol_size_tmp="$(mktemp /tmp/vol_size_tmp.XXXXXX)"
 
 # If the mode is only for parts, we won't turn on "-g auto" option by default
 case "$dev_" in
-  parts) inst_grub_opt="off";;
-      *) inst_grub_opt="on";;
+  parts) inst_grub_opt="off"
+	 # For restoreparts, forget about clean mbr
+	 skip_clean_mbr_opt="on"
+	 ;;
+      *) inst_grub_opt="on"
+	 # For restoredisk, do mbr cleaning
+	 skip_clean_mbr_opt="off"
+         ;;
 esac
 
 if [ "$mode" = "restore" ]; then
@@ -1450,7 +1456,7 @@ if [ "$mode" = "restore" ]; then
     "-v"       "$msg_ocs_param_v" off \
     "-c"       "$msg_ocs_param_c" off \
     "-u"       "$msg_ocs_param_u" off \
-    "-t"       "$msg_ocs_param_t" off \
+    "-t"       "$msg_ocs_param_t" $skip_clean_mbr_opt \
     "-t1"      "$msg_ocs_param_t1" off \
     "-r"       "$msg_ocs_param_r" on \
     "-ns"      "$msg_ocs_param_ns" off \
@@ -1472,10 +1478,15 @@ if [ "$mode" = "restore" ]; then
     "-srel"    "$msg_ocs_param_srel" off \
   2> $OCS_PARAM_TMP
   else
+    # Beginner mode. Use default settings
     if [ "$inst_grub_opt" = "on" ]; then
+      # restoredisk mode.
+      # "$inst_grub_opt" = "on" (-g auto) means skip_clean_mbr_opt="off" (no -t)
       echo "-g auto" "-e1 auto" "-e2" "-r" "-x" "-j2" > $OCS_PARAM_TMP
     else
-      echo "-e1 auto" "-e2" "-r" "-x" "-j2" > $OCS_PARAM_TMP
+      # restoreparts mode.
+      # "$inst_grub_opt" = "off" (no "-g auto") means skip_clean_mbr_opt="on" (-t)
+      echo "-e1 auto" "-e2" "-t" "-r" "-x" "-j2" > $OCS_PARAM_TMP
     fi
   fi
 
@@ -1701,8 +1712,14 @@ vol_size_tmp="$(mktemp /tmp/vol_size_tmp.XXXXXX)"
 
 # If the mode is only for parts, we won't turn on "-g auto" option by default
 case "$mode2_" in
-  *parts) inst_grub_opt="off";;
-       *) inst_grub_opt="on";;
+  *parts) inst_grub_opt="off"
+	  # For restoreparts, forget about clean mbr
+	  skip_clean_mbr_opt="on"
+	  ;;
+       *) inst_grub_opt="on"
+	  # For restoredisk, do mbr cleaning
+	  skip_clean_mbr_opt="off"
+	  ;;
 esac
 
 if [ "$mode" = "restore" ]; then
@@ -1723,7 +1740,7 @@ if [ "$mode" = "restore" ]; then
     "-v"       "$msg_ocs_param_v" off \
     "-batch"   "$msg_ocs_param_b" off \
     "-c"       "$msg_ocs_param_c" on \
-    "-t"       "$msg_ocs_param_t" off \
+    "-t"       "$msg_ocs_param_t" $skip_clean_mbr_opt \
     "-t1"      "$msg_ocs_param_t1" off \
     "-r"       "$msg_ocs_param_r" on \
     "-e"       "$msg_ocs_param_e" off \
@@ -1742,10 +1759,15 @@ if [ "$mode" = "restore" ]; then
     "-srel"    "$msg_ocs_param_srel" off \
     2> $OCS_PARAM_TMP
   else
+    # Beginner mode. Use default settings
     if [ "$inst_grub_opt" = "on" ]; then
+      # restoredisk mode.
+      # "$inst_grub_opt" = "on" (-g auto) means skip_clean_mbr_opt="off" (no -t)
       echo "-g auto" "-e1 auto" "-e2" "-c" "-r" "-j2" > $OCS_PARAM_TMP
     else
-      echo "-e1 auto" "-e2" "-c" "-r" "-j2" > $OCS_PARAM_TMP
+      # restoreparts mode.
+      # "$inst_grub_opt" = "off" (no "-g auto") means skip_clean_mbr_opt="on" (-t)
+      echo "-e1 auto" "-e2" "-c" "-t" "-r" "-j2" > $OCS_PARAM_TMP
     fi
   fi
 
