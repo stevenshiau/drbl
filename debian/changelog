@@ -1,3 +1,9 @@
+drbl (2.8.21-drbl1) unstable; urgency=low
+
+  * Adding firstboot.DBN7.5.drbl for Debian 7.5.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sat, 26 Apr 2014 23:37:48 +0800
+
 drbl (2.8.20-drbl1) unstable; urgency=low
 
   * It's rpcbind-boot service only, we do not have to modify

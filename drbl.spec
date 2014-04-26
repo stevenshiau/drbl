@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.8.20
+Version:	2.8.21
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Sat Apr 26 2014 Steven Shiau <steven _at_ nchc org tw> 2.8.21-drbl1
+- Adding firstboot.DBN7.5.drbl for Debian 7.5.
+
 * Sat Apr 26 2014 Steven Shiau <steven _at_ nchc org tw> 2.8.20-drbl1
 - It's rpcbind-boot service only, we do not have to modify portmap.conf for Ubuntu 12.04.
 - A workround to keep console in vt 1 when booting for Ubuntu 12.04 in select-in-client mode.
