@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.8.22
+Version:	2.8.23
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Thu May 01 2014 Steven Shiau <steven _at_ nchc org tw> 2.8.23-drbl1
+- The doc URL was changed to drbl.org from drbl.sourceforge.net.
+
 * Sun Apr 27 2014 Steven Shiau <steven _at_ nchc org tw> 2.8.22-drbl1
 - Adding modified halt and rc.sysinit for DRBL clients of CentOS 6.5.
 

@@ -1,7 +1,7 @@
 #!/bin/bash
 # drbl-run-parts - modified from Fedora 17's run-parts in crontabs package. License is GPLv2.
 # The reason we do not use run-parts from Debian is people are always confused:
-# http://drbl.sourceforge.net/faq/fine-print.php?path=./2_System/31_prerun_postrun_not_working.faq#31_prerun_postrun_not_working.faq
+# http://drbl.org/faq/fine-print.php?path=./2_System/31_prerun_postrun_not_working.faq#31_prerun_postrun_not_working.faq
 
 # keep going when something fails
 set +e
