@@ -45,6 +45,8 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+- Bug fixed: Starting IP address of the range was not used. Thanks to Andrew Parker for reporting this issue (https://sourceforge.net/p/drbl/bugs/12/).
+
 * Thu May 01 2014 Steven Shiau <steven _at_ nchc org tw> 2.8.23-drbl1
 - The doc URL was changed to drbl.org from drbl.sourceforge.net.
 

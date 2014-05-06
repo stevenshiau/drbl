@@ -3949,16 +3949,21 @@ EOF
         $ip_start=$rs;
     } else {
         # MAC case. The config shown in drblpush.conf:
-        #[eth1]
-        #interface=eth1
-        #mac=macadr-eth1.txt
-        #ip_start=1
+        # [eth1]
+        # interface=eth1
+        # mac=macadr-eth1.txt
+        # ip_start=1
         chomp($total_count=`LC_ALL=C cat $mac | wc -l`);
     }
     chomp ($ip_hostmin=`LC_ALL=C drbl-ipcalc $ipaddr_sys $netmask_sys | awk -F' ' '/^HostMin:/ {print \$2}'`);
     my $total_count_request=$total_count+3;
+    # Todo: What if user assigns a wrong initial number (ip_start)?
+    my @ip_tmp_sp=split(/\./,$ip_hostmin);
+    my $ip_tmp_prefix="$ip_tmp_sp[0].$ip_tmp_sp[1].$ip_tmp_sp[2]";
+    my $ip_tmp_start=$ip_tmp_prefix.".".$ip_start;
+
     # We want drbl-ipcalc-list to list 3 more IP addresses in case some of them are used, like in the server's ethernet port.
-    system("drbl-ipcalc-list -c $total_count_request $ip_hostmin $netmask_sys > $iplist_tmp");
+    system("drbl-ipcalc-list -c $total_count_request $ip_tmp_start $netmask_sys > $iplist_tmp");
 
     # Remove the nfsserver IP address.
     system("perl -pi -e \"s/\\b$nfsserver\\b\\n//g\" $iplist_tmp");
