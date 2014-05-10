@@ -5,6 +5,14 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.8.24-drbl1) unstable; urgency=low
+
+  * Bug fixed: Starting IP address of the range was not used.
+    Thanks to Andrew Parker for reporting this issue
+    (https://sourceforge.net/p/drbl/bugs/12/).
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sat, 10 May 2014 13:06:06 +0800
+
 drbl (2.8.23-drbl1) unstable; urgency=low
 
   * The doc URL was changed to drbl.org from drbl.sourceforge.net.
