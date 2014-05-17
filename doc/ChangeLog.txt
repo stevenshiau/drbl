@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.8.25-drbl1) unstable; urgency=low
+
+  * Package diskscan was added in Clonezilla live packages list.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sat, 17 May 2014 08:53:46 +0800
+
 drbl (2.8.24-drbl1) unstable; urgency=low
 
   * Bug fixed: Starting IP address of the range was not used.

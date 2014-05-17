@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.8.24
+Version:	2.8.25
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Sat May 17 2014 Steven Shiau <steven _at_ nchc org tw> 2.8.25-drbl1
+- Package diskscan was added in Clonezilla live packages list.
+
 * Sat May 10 2014 Steven Shiau <steven _at_ nchc org tw> 2.8.24-drbl1
 - Bug fixed: Starting IP address of the range was not used. Thanks to Andrew Parker for reporting this issue (https://sourceforge.net/p/drbl/bugs/12/).
 
