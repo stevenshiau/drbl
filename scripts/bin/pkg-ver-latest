@@ -8,7 +8,7 @@
 # Modified by: Blake Huang, Steven Shiau and Ceasar Sun for DRBL
 #
 # Find all installed packages with patches
-# "$NEWER" is in drbl-functions
+# "$GREP_NEWER" is in drbl-functions
 
 # Load DRBL setting and functions
 # Setting
@@ -23,7 +23,7 @@ DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/usr/share/drbl}"
 #
 (
     # Note! Here we must use gawk, not awk (mawk which exists in Debian)
-    gawk "$NEWER"'	# omit all but newest of multiple available patches
+    gawk "$GREP_NEWER"'	# omit all but newest of multiple available patches
   		{ L0=R0; L1=R1; L2=R2
 		  R0=$0
                   # For RedHat/Fedora

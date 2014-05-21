@@ -1,3 +1,13 @@
+drbl (2.9.1-drbl1) unstable; urgency=low
+
+  * The grep function "NEWER" was renamed as "GREP_NEWER" and defined
+    only in drbl-functions, used for all related scripts.
+  * Program drbl-list-tarball was renamed as list_available_tarball.
+  * Program list_latest_tarball was added and used in function 
+    get_syslinux_binary_for_dos_linux of drbl-functions.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 21 May 2014 22:43:14 +0800
+
 drbl (2.8.25-drbl1) unstable; urgency=low
 
   * Package diskscan was added in Clonezilla live packages list.

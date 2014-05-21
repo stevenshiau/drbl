@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.8.25
+Version:	2.9.1
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,11 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Wed May 21 2014 Steven Shiau <steven _at_ nchc org tw> 2.9.1-drbl1
+- The grep function "NEWER" was renamed as "GREP_NEWER" and defined only in drbl-functions, used for all related scripts.
+- Program drbl-list-tarball was renamed as list_available_tarball.
+- Program list_latest_tarball was added and used in function get_syslinux_binary_for_dos_linux of drbl-functions.
+
 * Sat May 17 2014 Steven Shiau <steven _at_ nchc org tw> 2.8.25-drbl1
 - Package diskscan was added in Clonezilla live packages list.
 

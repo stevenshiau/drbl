@@ -789,13 +789,13 @@ switch_clients_init() {
    done
 }
 
-# This "NEWER" program is borrowed from http://staff.washington.edu/corey/new-patches.cgi
+# This "GREP_NEWER" program is borrowed from http://staff.washington.edu/corey/new-patches.cgi
 # The original author:
 # Corey Satten, corey @ cac.washington.edu, 06/26/03, release 1.8
 # For the latest version visit: http://staff.washington.edu/corey/tools.html
 #
 # Modified by Blake Huang and Steven Shiau to use in DRBL
-NEWER='
+GREP_NEWER='
     # Function newer:
     # Return 1 if second arg is "newer" than the first arg, else return 0.
     #
@@ -2631,7 +2631,7 @@ get_syslinux_binary_for_dos_linux() {
   # For any version 4.xx, it will be found in http://www.kernel.org/pub/linux/utils/boot/syslinux/4.xx/. However, the latest one is in http://www.kernel.org/pub/linux/utils/boot/syslinux/
   if [ -z "$syslinux_ver" ]; then
     # If no version is assigned, find the latest one.
-    syslinux_tarball="$(LC_ALL=C drbl-list-tarball -f xz -l $syslinux_binsrc_url)" 
+    syslinux_tarball="$(LC_ALL=C list_latest_tarball -f xz $syslinux_binsrc_url)" 
     syslinux_ver="$(LC_ALL=C echo "$syslinux_tarball" | sed -e "s/^syslinux-//g" -e "s/.tar.xz//g")"
   else
     syslinux_tarball="syslinux-${syslinux_ver}.tar.xz"

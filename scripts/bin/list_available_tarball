@@ -13,7 +13,6 @@ DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/usr/share/drbl}"
 
 # Settings
 default_comp="xz"
-latest_only="false"
 
 #
 USAGE() {
@@ -23,7 +22,6 @@ USAGE() {
   echo "$ocs [OPTION] PATH"
   echo "Options:"
   echo "-f, --comp-format FORMAT  Specify the tarball compression format, i.e. gz, bz2, xz. If not assigned, xz will be used."
-  echo "-l, --latest  List the latest version only"
   echo "Ex:"
   echo "$ocs /mirror/apt/RPMS.drbl-test"
   echo "$ocs http://free.nchc.org.tw/syslinux/"
@@ -47,7 +45,6 @@ while [ $# -gt 0 ]; do
            fi
            [ -z "$ocsroot" ] && USAGE && exit 1
            ;;
-   -l|--latest) latest_only="true"; shift;;
    -*)     echo "${0}: ${1}: invalid option" >&2
            USAGE >& 2
            exit 2 ;;
@@ -79,15 +76,6 @@ fi
 case "$SRC" in */);; *) SRC=$SRC/;; esac	# URL must end in slash
 
 #
-if [ "$latest_only" = "true" ]; then
-  sort_opt="sort -r -V"
-  filter_opt="head -n 1"
-else
-  sort_opt="sort"
-  filter_opt="cat"
-fi
-
-#
 if [ -d $SRC ] ;then	# local directory
     (cd $SRC && ls -l)
 else			# ftp directory
@@ -110,4 +98,4 @@ else			# ftp directory
     # In case dir -L fails, we need to add ^[-l] to strip the junk msg.
     # Some repo output DOS (CR/LF), 
     # convert to Unix format: sed 's/[^[:print:]]$//'
-fi | sed 's/[^[:print:]]$//' | sed -r -n "/tar.${suf}$/s/^[-l].* //p" | while read x; do basename $x; done | $sort_opt | $filter_opt
+fi | sed 's/[^[:print:]]$//' | sed -r -n "/tar.${suf}$/s/^[-l].* //p" | while read x; do basename $x; done | sort
