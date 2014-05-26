@@ -1,0 +1,147 @@
+#!/bin/bash
+# version 0.2
+set -e
+
+# TODO
+
+# Pre run
+apt-get update
+apt-get install -y openjdk-7-jdk
+apt-get install -y ntpdate
+service ssh start
+drbl-live start
+echo "please boot drbl client as hadoop cluster right now."
+echo "all cluster ready? Press any key to continue..."
+read
+
+# download something from SF.net here
+wget http://prdownloads.sourceforge.net/drbl-hadoop/drbl-live-hadoop_0.2.tar.gz -O /root/drbl-live-hadoop_0.2.tar.gz
+tar -zxvf /root/drbl-live-hadoop_0.2.tar.gz -C /root/
+
+# basic variables
+HADOOP_TEMP_CONF="/root/drbl-live-hadoop-tmpl-conf"
+HADOOP_RUN_USER="hduser"
+HADOOP_SOURCE="/root/hadoop-2.3.0.tar.gz"
+
+# hadoop related path
+HADOOP_PATH="/usr/local/hadoop/"
+HADOOP_CONF=$(echo -n "$HADOOP_PATH/etc/hadoop/")
+HADOOP_CONF_SERVER=$(echo "$HADOOP_PATH/etc/hadoop_server/")
+HADOOP_TMP_DIR="/media/hadoop_data/tmp/"
+HADOOP_NAMENODE_DIR="/media/hadoop_data/namenode/"
+HADOOP_DFS_DATA_DIR="/media/hadoop_data/data/"
+HADOOP_LOG4J_DIR="/media/hadoop_data/log/"
+JAVAHOME=$(ls -l /etc/alternatives/java | awk {'print $11'} | sed s/jre.*//g)
+
+# drbl net device and ip, and update hostname
+drbl_interface=$(cat /etc/drbl/drblpush.conf | grep interface | sed s/interface=//)
+drbl_ip=$(ifconfig $drbl_interface | grep 'inet addr' | awk '{print $2}' | sed s/addr://)
+nhostname=$(getent hosts $drbl_ip | awk '{print $2}')
+echo $nhostname > /etc/hostname
+hostname $nhostname
+NAMENODE_HOSTNAME=$(hostname)
+SECNODE_HOSTNAME=$(hostname)
+
+# add user to run hadoop
+echo '' | drbl-useradd -s $HADOOP_RUN_USER $HADOOP_RUN_USER
+usermod $HADOOP_RUN_USER -s /bin/bash
+
+# directories and key for hadoop user
+su $HADOOP_RUN_USER -c 'ssh-keygen -t rsa -N "" -f ~/.ssh/id_rsa'
+su $HADOOP_RUN_USER -c 'cp ~/.ssh/id_rsa.pub ~/.ssh/authorized_keys'
+cat << EOF >> /home/$HADOOP_RUN_USER/.ssh/config
+Host *
+    StrictHostKeyChecking no
+    UserKnownHostsFile=/dev/null
+EOF
+rm -rf $HADOOP_TMP_DIR $HADOOP_NAMENODE_DIR $HADOOP_DFS_DATA_DIR
+mkdir -p $HADOOP_TMP_DIR $HADOOP_NAMENODE_DIR $HADOOP_DFS_DATA_DIR $HADOOP_LOG4J_DIR
+chown -R $HADOOP_RUN_USER:$HADOOP_RUN_USER $HADOOP_TMP_DIR $HADOOP_NAMENODE_DIR $HADOOP_LOG4J_DIR $HADOOP_DFS_DATA_DIR /home/$HADOOP_RUN_USER
+
+# extract hadoop source
+rm -rf $HADOOP_PATH
+mkdir -p $HADOOP_PATH
+tar -zxf $HADOOP_SOURCE --strip-components=1 -C $HADOOP_PATH
+
+# log folder config ugly
+mkdir $HADOOP_PATH/logs
+#mount -o bind $HADOOP_LOG4J_DIR $HADOOP_PATH/logs
+
+# create slaves file 
+#grep -v localhost /etc/hosts | grep -v ip6 | awk {'print $2'} > $HADOOP_CONF/slaves
+# NOT WORK, no, try to use 'export HADOOP_SLAVES=${HADOOP_CONF_DIR}/slaves' to assign slaves, strang
+# try to use --config, eg start-dfs.sh --config $path_for_server
+
+# update config
+cp $HADOOP_TEMP_CONF/* $HADOOP_CONF/
+for confile in $(ls $HADOOP_TEMP_CONF/); do
+    sed  -i s/NAMENODE_HOSTNAME/$NAMENODE_HOSTNAME/g $HADOOP_CONF/$confile
+    sed  -i s/SECNODE_HOSTNAME/$SECNODE_HOSTNAME/g $HADOOP_CONF/$confile
+    sed  -i s,HADOOP_NAMENODE_DIR,$HADOOP_NAMENODE_DIR,g  $HADOOP_CONF/$confile
+    sed  -i s,HADOOP_DFS_DATA_DIR,$HADOOP_DFS_DATA_DIR,g $HADOOP_CONF/$confile
+    sed  -i s,HADOOP_TMP_DIR,$HADOOP_TMP_DIR,g $HADOOP_CONF/$confile
+    #sed  -i s,HADOOP_LOG4J_DIR,$HADOOP_LOG4J_DIR,g $HADOOP_CONF/$confile #use tmpfs right now 
+    sed  -i s,JAVAHOME,$JAVAHOME,g $HADOOP_CONF/$confile
+done
+
+# assign environment variables
+
+cat << EVE >> /home/$HADOOP_RUN_USER/.bashrc
+# add for hadoop
+export JAVA_HOME=$JAVAHOME
+export HADOOP_INSTALL=$HADOOP_PATH
+export PATH=$PATH:$HADOOP_PATH/bin:$HADOOP_PATH/sbin
+export HADOOP_MAPRED_HOME=\$HADOOP_INSTALL
+export HADOOP_COMMON_HOME=\$HADOOP_INSTALL
+export HADOOP_HDFS_HOME=\$HADOOP_INSTALL
+export YARN_HOME=\$HADOOP_INSTALL
+# end
+
+EVE
+
+cp -r $HADOOP_CONF $HADOOP_CONF_SERVER
+HADOOP_SLAVES_FILE=$(echo $HADOOP_CONF_SERVER/slaves)
+#echo $NAMENODE_HOSTNAME > $HADOOP_SLAVES_FILE
+#arp 2>&1 | grep ether | grep $drbl_interface  | awk {'print $1'} >> $HADOOP_SLAVES_FILE
+arp 2>&1 | grep ether | grep $drbl_interface  | awk {'print $1'} > $HADOOP_SLAVES_FILE
+chown -R $HADOOP_RUN_USER:$HADOOP_RUN_USER $HADOOP_PATH
+echo "yarn server done"
+
+
+# prepare drbl live client as datanode
+
+for DHOSTS in $(cat $HADOOP_SLAVES_FILE); do
+    if [ "X$DHOSTS" != "X$NAMENODE_HOST" ]; then
+        drbl-doit -h $DHOSTS "rm -rf $HADOOP_TMP_DIR $HADOOP_DFS_DATA_DIR $HADOOP_LOG4J_DIR"
+        drbl-doit -h $DHOSTS "mkdir -p $HADOOP_TMP_DIR $HADOOP_DFS_DATA_DIR $HADOOP_LOG4J_DIR"
+        drbl-doit -h $DHOSTS "chown -R $HADOOP_RUN_USER:$HADOOP_RUN_USER $HADOOP_TMP_DIR $HADOOP_LOG4J_DIR $HADOOP_DFS_DATA_DIR"
+        #drbl-doit -h $DHOSTS "mount -o bind $HADOOP_LOG4J_DIR $HADOOP_PATH/logs"
+        drbl-doit -h $DHOSTS "mount -t tmpfs tmpfs $HADOOP_PATH/logs"
+        echo "slave $DHOSTS done"
+    fi
+done
+
+echo "all done and start hadoop"
+
+set +e
+# format hdfs
+su - $HADOOP_RUN_USER -c "$HADOOP_PATH/bin/hadoop --config $HADOOP_CONF_SERVER namenode -format"
+sleep 5
+su - $HADOOP_RUN_USER -c "$HADOOP_PATH/sbin/start-dfs.sh --config $HADOOP_CONF_SERVER"
+sleep 5
+su - $HADOOP_RUN_USER -c "$HADOOP_PATH/sbin/start-yarn.sh --config $HADOOP_CONF_SERVER"
+sleep 5
+echo "jps on master"
+su - $HADOOP_RUN_USER -c jps
+echo "jps on slaves"
+drbl-doit -h $DHOSTS "su - $HADOOP_RUN_USER -c jps"
+
+# run example
+echo "run hadoop example"
+echo "su - $HADOOP_RUN_USER -c $HADOOP_PATH/bin/hadoop jar /usr/local/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.3.0.jar pi 1 1"
+su - $HADOOP_RUN_USER -c "$HADOOP_PATH/bin/hadoop jar /usr/local/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-examples-2.3.0.jar pi 1 1"
+
+echo "su - $HADOOP_RUN_USER -c $HADOOP_PATH/bin/hadoop jar /usr/local/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-client-jobclient-2.3.0.jar  TestDFSIO -write -nrFiles 2 -size 2MB"
+su - $HADOOP_RUN_USER -c "$HADOOP_PATH/bin/hadoop jar /usr/local/hadoop/share/hadoop/mapreduce/hadoop-mapreduce-client-jobclient-2.3.0.jar  TestDFSIO -write -nrFiles 2 -size 2MB"
+
+echo "enjoy hadoop, su to hduser to run all hadoop related commands."
