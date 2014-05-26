@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.9.1
+Version:	2.9.2
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,7 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Mon May 26 2014 Steven Shiau <steven _at_ nchc org tw> 2.9.2-drbl1
 - A program "drbl-live-hadoop" was added. This is still in testing.
+- Language files were updated for ocs-img-2-vdk.
 
 * Wed May 21 2014 Steven Shiau <steven _at_ nchc org tw> 2.9.1-drbl1
 - The grep function "NEWER" was renamed as "GREP_NEWER" and defined only in drbl-functions, used for all related scripts.

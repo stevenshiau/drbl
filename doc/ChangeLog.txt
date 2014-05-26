@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.9.2-drbl1) unstable; urgency=low
+
+  * A program "drbl-live-hadoop" was added. This is still in testing.
+  * Language files were updated for ocs-img-2-vdk.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 26 May 2014 23:09:41 +0800
+
 drbl (2.9.1-drbl1) unstable; urgency=low
 
   * The grep function "NEWER" was renamed as "GREP_NEWER" and defined

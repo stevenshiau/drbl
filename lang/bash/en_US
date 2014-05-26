@@ -924,3 +924,12 @@ msg_new_compression_format_image_created_successfully='New compression format of
 msg_failed_to_convert_new_compression_as_another_image='Failed to convert new compression format of image'
 # Tag on 2014/03/17
 msg_img_created_time='The image was created at'
+# Tag on 2014/05/26
+msg_kvm_started_for_conversion='Now a virtual machine (KVM) is going to be started to do the conversion, and the process will be shown.'
+msg_do_not_panic_for_booting_msg_of_kvm='///NOTE/// DO NOT PANIC when you see booting message! The ouput is _NOT_ for this real, host machine!'
+msg_only_output_for_kvm_no_input='It is only ouput of virtual machine, and there is no any input. Therefore the keyboad and mouse can not be used to control the virtual machine.'
+msg_press_ctrl_c_to_quit_tail='You can press Ctrl-C to quit the viewing program (tail).'
+msg_choose_if_create_vmdk_format='By default the qcow2 virtual disk format will be created only. If you want to create vmdk format (compat6), choose "-c"'
+msg_not_create_vmdk_format='Do not create vmdk format, either'
+msg_create_vmdk_format='Create vmdk format, too'
+msg_failed_to_start_kvm_to_convert='Failed to start kvm to convert the image!'

@@ -925,3 +925,12 @@ msg_new_compression_format_image_created_successfully='已經成功產生新的�
 msg_failed_to_convert_new_compression_as_another_image='無法轉換出新的壓縮格式印象檔'
 # Tag on 2014/03/17
 msg_img_created_time='該印象檔產生時間'
+# Tag on 2014/05/26
+msg_kvm_started_for_conversion='現在將啟動一個虛擬機器(KVM)來處理這個轉換,並且過程將顯示在螢幕上。'
+msg_do_not_panic_for_booting_msg_of_kvm='///注意/// 當您看到開機畫面請勿驚慌!那個開機過程只是虛擬機器的,並不是實體母機的。'
+msg_only_output_for_kvm_no_input='這是虛擬機器的螢幕輸出而已,並沒有接受任何輸入,因此鍵盤與滑鼠並無法用來控制虛擬機器。'
+msg_press_ctrl_c_to_quit_tail='你可以按Ctrl-C的組合鍵來中斷這個tail的瀏覽程式。'
+msg_choose_if_create_vmdk_format='預設只會產生qcow2格式的虛擬硬碟。如果你要同時產生vmdk格式(compat6),記得選"-c"'
+msg_not_create_vmdk_format='不要同時產生vmdk格式'
+msg_create_vmdk_format='同時也產生vmdk格式'
+msg_failed_to_start_kvm_to_convert='無法啟動KVM來轉換印象檔!'
