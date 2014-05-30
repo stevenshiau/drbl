@@ -45,6 +45,8 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+- Language files for Slovak were added. Thanks to Ondrej Dzivy Balucha <balucha _at_ horizon sk> for providing this.
+
 * Mon May 26 2014 Steven Shiau <steven _at_ nchc org tw> 2.9.2-drbl1
 - A program "drbl-live-hadoop" was added. This is still in testing.
 - Language files were updated for ocs-img-2-vdk.
