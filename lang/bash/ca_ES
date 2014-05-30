@@ -853,6 +853,7 @@ msg_locale_fr_FR="Francès"
 msg_locale_it_IT="Italià"
 msg_locale_ja_JP="Japonès"
 msg_locale_pt_BR="Portuguès (Brasil)"
+msg_locale_sk_SK='Eslovac'
 msg_locale_ru_RU="Rus"
 msg_locale_zh_CN="Xinès simplificat"
 msg_locale_zh_TW="Xinès tradicional"
