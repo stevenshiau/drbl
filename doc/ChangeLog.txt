@@ -5,6 +5,15 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.9.3-drbl1) unstable; urgency=low
+
+  * Language files for Slovak were added. Thanks to Ondrej Dzivy Balucha <balucha _at_ horizon sk> for providing this.
+  * Bug fixed: The ca_ES of perl file linking was missing in 
+    Makefile of language dir.
+  * Switching to use debconf-set-selections to preconfigure settings.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 30 May 2014 13:43:14 +0800
+
 drbl (2.9.2-drbl1) unstable; urgency=low
 
   * A program "drbl-live-hadoop" was added. This is still in testing.

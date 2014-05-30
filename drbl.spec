@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.9.2
+Version:	2.9.3
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,7 +45,10 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Fri May 30 2014 Steven Shiau <steven _at_ nchc org tw> 2.9.3-drbl1
 - Language files for Slovak were added. Thanks to Ondrej Dzivy Balucha <balucha _at_ horizon sk> for providing this.
+- Bug fixed: The ca_ES of perl file linking was missing in Makefile of language dir.
+- Switching to use debconf-set-selections to preconfigure settings.
 
 * Mon May 26 2014 Steven Shiau <steven _at_ nchc org tw> 2.9.2-drbl1
 - A program "drbl-live-hadoop" was added. This is still in testing.
