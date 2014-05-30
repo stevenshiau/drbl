@@ -7,137 +7,34 @@
 
 # dhcp3-server isc-dhcp-server tftpd-hpa nfs-kernel-server nis
 
+# Load DRBL setting and functions
+DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/usr/share/drbl}"
+
+. $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
+
+# Settings
 DEBCONF=/var/cache/debconf/config.dat
 DEFAULT_NIS=/etc/default/nis
 [ ! -f "$DEBCONF" ] && mkdir -p "$(dirname $DEBCONF)"
 
-# dhcp3-server:
-if [ -z "$(LC_ALL=C grep -E "^Name: dhcp3-server/config_warn" $DEBCONF)" ]; then
-  cat << EOF >> $DEBCONF
-Name: dhcp3-server/config_warn
-Template: dhcp3-server/config_warn
-Value: 
-Owners: dhcp3-server
-Flags: seen
-
+# isc-dhcp-server
+debconf-set-selections <<EOF
+isc-dhcp-server	isc-dhcp-server/config_warn	note	
+isc-dhcp-server	isc-dhcp-server/interfaces	string	eth1
 EOF
-fi
-
-if [ -z "$(LC_ALL=C grep -E "^Name: dhcp3-server/interfaces" $DEBCONF)" ]; then
-  cat << EOF >> $DEBCONF
-Name: dhcp3-server/interfaces
-Template: dhcp3-server/interfaces
-Value: eth1
-Owners: dhcp3-server
-Flags: seen
-
-EOF
-fi
-
-if [ -z "$(LC_ALL=C grep -E "^Name: dhcp3-server/new_auth_behavior" $DEBCONF)" ]; then
-  cat << EOF >> $DEBCONF
-Name: dhcp3-server/new_auth_behavior
-Template: dhcp3-server/new_auth_behavior
-Value: 
-Owners: dhcp3-server
-Flags: seen
-
-EOF
-fi
-
-# isc-dhcp-server:
-if [ -z "$(LC_ALL=C grep -E "^Name: isc-dhcp-server/config_warn" $DEBCONF)" ]; then
-  cat << EOF >> $DEBCONF
-Name: isc-dhcp-server/config_warn
-Template: isc-dhcp-server/config_warn
-Owners: isc-dhcp-server
-
-EOF
-fi
-
-if [ -z "$(LC_ALL=C grep -E "^Name: isc-dhcp-server/interfaces" $DEBCONF)" ]; then
-  cat << EOF >> $DEBCONF
-Name: isc-dhcp-server/interfaces
-Template: isc-dhcp-server/interfaces
-Value: eth1
-Owners: isc-dhcp-server
-
-EOF
-fi
 
 # tftpd-hpa
-# For tftpd-hpa version < 5.0
-if [ -z "$(LC_ALL=C grep -E "^Name: tftpd-hpa/use_inetd" $DEBCONF)" ]; then
-  cat << EOF >> $DEBCONF
-Name: tftpd-hpa/use_inetd
-Template: tftpd-hpa/use_inetd
-Value: false
-Owners: tftpd-hpa
-Flags: seen
-
+debconf-set-selections <<EOF
+tftpd-hpa	tftpd-hpa/username	string	tftp
+tftpd-hpa	tftpd-hpa/address	string	0.0.0.0:69
+tftpd-hpa	tftpd-hpa/options	string	--secure
+tftpd-hpa	tftpd-hpa/directory	string	$pxecfg_pd
 EOF
-fi
-
-# For tftpd-hpa version >= 5.0
-if [ -z "$(LC_ALL=C grep -E "^Name: tftpd-hpa/address" $DEBCONF)" ]; then
-  cat << EOF >> $DEBCONF
-Name: tftpd-hpa/address
-Template: tftpd-hpa/address
-Value: 0.0.0.0:69
-Owners: tftpd-hpa
-
-EOF
-fi
-if [ -z "$(LC_ALL=C grep -E "^Name: tftpd-hpa/directory" $DEBCONF)" ]; then
-  cat << EOF >> $DEBCONF
-Name: tftpd-hpa/directory
-Template: tftpd-hpa/directory
-Value: /tftpboot/nbi_img
-Owners: tftpd-hpa
-Flags: seen
-
-EOF
-fi
-if [ -z "$(LC_ALL=C grep -E "^Name: tftpd-hpa/options" $DEBCONF)" ]; then
-  cat << EOF >> $DEBCONF
-Name: tftpd-hpa/options
-Template: tftpd-hpa/options
-Value: --secure
-Owners: tftpd-hpa
-
-EOF
-fi
-if [ -z "$(LC_ALL=C grep -E "^Name: tftpd-hpa/username" $DEBCONF)" ]; then
-  cat << EOF >> $DEBCONF
-Name: tftpd-hpa/username
-Template: tftpd-hpa/username
-Value: tftp
-Owners: tftpd-hpa
-
-EOF
-fi
 
 # nis
-if [ -z "$(LC_ALL=C grep -E "^Name: nis/domain" $DEBCONF)" ]; then
-  cat << EOF >> $DEBCONF
-Name: nis/domain
-Template: nis/domain
-Value: localdomain
-Owners: nis
-Flags: seen
-
+debconf-set-selections <<EOF
+nis     nis/domain      string  localdomain
 EOF
-fi
-
-if [ -z "$(LC_ALL=C grep -E "^Name: nis/not-yet-configured" $DEBCONF)" ]; then
-  cat << EOF >> $DEBCONF
-Name: nis/not-yet-configured
-Template: nis/not-yet-configured
-Owners: nis
-Flags: seen
-
-EOF
-fi
 
 [ -f /etc/default/nis ] && rm -f /etc/default/nis
 cat << EOF >> $DEFAULT_NIS
