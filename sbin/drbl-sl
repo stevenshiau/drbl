@@ -14,7 +14,7 @@ DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/usr/share/drbl}"
 . $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
 
 # Settings
-SL_ISO_URL_EXAMPLE="http://downloads.sourceforge.net/clonezilla/clonezilla-live-1.2.12-67-i686-pae.iso"
+SL_ISO_URL_EXAMPLE="http://downloads.sourceforge.net/clonezilla/clonezilla-live-2.2.3-10-i686-pae.iso"
 # The method for netboot's root file system. "fetch" means the client will download the filesystem.squashfs from tftpd server, "nfsroot" means client will mount the nfs server. By default we use fetch. "nfsroot" only works for Debian-live based system (e.g. Clonezilla live, GParted live...)
 rootfs_location="fetch"
 # Force to update the PXELinux config file
@@ -56,8 +56,8 @@ USAGE() {
   echo "-v, --verbose:     Verbose mode."
   echo "SL-ISO is one of $supported_SL_dists ISO file, used with installation."
   echo "S-L-INDEX is one of $supported_SL_dists, used with uninstallation."
-  echo "Ex: To load Clonezilla live, run '$0 -i clonezilla-live-1.2.2-26.iso'"
-  echo "    To load GParted live, run '$0 -i gparted-live-0.4.5-2.iso'"
+  echo "Ex: To load Clonezilla live, run '$0 -i clonezilla-live-2.2.3-10-i686-pae.iso'"
+  echo "    To load GParted live, run '$0 -i gparted-live-0.18.0-2-i686-pae.iso'"
   for isl in $supported_SL_dists; do
     echo "    To remove $isl, run '$0 -u $isl'"
   done
@@ -491,13 +491,13 @@ install_SL(){
          SL_NAME="Clonezilla-live"
          SL_FULL_NAME="Clonezilla Live"
          # e.g. clonezilla-live-1.2.2-14.iso -> 1.2.2-14
-         SL_VER="$(basename $SL_ISO | sed -e "s/^clonezilla-live-//g" -e "s/.iso$//g")"
+         SL_VER="$(basename $SL_ISO | sed -e "s/^clonezilla-live-//g" -e "s/.iso$//g" -e "s/.zip$//g")"
 	 ;;
        gparted-live)
          SL_NAME="GParted-live"
          SL_FULL_NAME="GParted Live"
          # e.g. gparted-live-0.4.5-2.iso -> 0.4.5-2
-         SL_VER="$(basename $SL_ISO | sed -e "s/^gparted-live-//g" -e "s/.iso$//g")"
+         SL_VER="$(basename $SL_ISO | sed -e "s/^gparted-live-//g" -e "s/.iso$//g" -e "s/.zip$//g")"
 	 ;;
        esac
        # In Clonezilla/GParted live, boot kernel file is vmlinuz1 in /isolinux/
