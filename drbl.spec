@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.9.3
+Version:	2.9.4
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,7 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Sun Jun 01 2014 Steven Shiau <steven _at_ nchc org tw> 2.9.4-drbl1
 - The usage of drbl-sl was updated to latest version number, and the text shown on PXE boot menu for zip should be the same as that of iso one.
 
 * Fri May 30 2014 Steven Shiau <steven _at_ nchc org tw> 2.9.3-drbl1

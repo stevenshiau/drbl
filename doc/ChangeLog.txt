@@ -5,6 +5,14 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.9.4-drbl1) unstable; urgency=low
+
+  * The usage of drbl-sl was updated to latest version number, and
+    the text shown on PXE boot menu for zip should be the same as
+    that of iso one.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sun, 01 Jun 2014 11:23:04 +0800
+
 drbl (2.9.3-drbl1) unstable; urgency=low
 
   * Language files for Slovak were added. Thanks to Ondrej Dzivy Balucha <balucha _at_ horizon sk> for providing this.
