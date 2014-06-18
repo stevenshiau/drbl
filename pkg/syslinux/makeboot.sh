@@ -1,7 +1,7 @@
 #!/bin/bash
 # Author: Steven Shiau <steven _at_ nchc org tw>, Ceasar Sun <ceasar _at_ nchc org tw>
 # License: GPL
-# Description: Program to make USB flash drive (FAT, EXT, BTRFS or NTFS) bootable by syslinux or extlinux
+# Description: Program to make USB flash drive (FAT, EXT, BTRFS , XFS or NTFS) bootable by syslinux or extlinux
 
 # 1. Checking if partition table correct (on boundary, bootable)
 # 2. cat mbr
@@ -259,7 +259,7 @@ TYPE=""
 echo "File system of $target_part: $TYPE"
 case "$TYPE" in
   fat16|fat32|vfat)    mode="syslinux";;
-  ntfs|ext[2-4]|btrfs) mode="extlinux";;
+  ntfs|ext[2-4]|btrfs|xfs|ufs|ffs) mode="extlinux";;
   *)                   
      [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
      echo "$target_part: this doesn't look like a valid FAT, NTFS, ext2/3/4 or btrfs file system."
