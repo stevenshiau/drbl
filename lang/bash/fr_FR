@@ -819,8 +819,6 @@ msg_a_disk_image_saved_from_hd='Ceci est l'\''image d'\''un disque entier, sauve
 msg_a_part_image_saved_from_partitions='Ceci n'\''est pas une image d'\''un disque entier mais une image de partitions, sauvegardée depuis les partitions'
 msg_this_swap_part_info_not_found='L'\''information sur cette partition de swap n'\''a pas pu être trouvée'
 msg_mbr_img_of_this_hd_not_found='L'\''image du MBR de ce disque dur n'\''a pas pu être trouvée'
-msg_this_part_in_the_img_is_broken='Cette partition est défectueuse dans l'\''image'
-msg_this_part_in_the_img_is_ok='Cette partition dans l'\''image peut être restaurée'
 msg_img_check_not_supported='Cette image de partition n'\'' pas été créée par partclone. Ce programme ne supporte que les images de partitions sauvegardées par partclone. Vérification interrompue.'
 msg_this_partition_table_file_not_found='Le fichier de cette table de partition n'\''a pas pu être trouvé'
 msg_broken_partition_img_found='Des partitions endommagées ont été trouvées, ou bien certaines ne sont pas vérifiables dans cette image'
@@ -936,3 +934,6 @@ msg_choose_if_create_vmdk_format='By default the qcow2 virtual disk format will 
 msg_not_create_vmdk_format='Do not create vmdk format, either'
 msg_create_vmdk_format='Create vmdk format, too'
 msg_failed_to_start_kvm_to_convert='Failed to start kvm to convert the image!'
+# Tag on 2014/06/21
+msg_this_part_in_the_img_is_broken='The image of this partition is broken'
+msg_this_part_in_the_img_is_ok='The image of this partition is restorable'

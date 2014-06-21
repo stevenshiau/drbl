@@ -837,8 +837,6 @@ msg_a_disk_image_saved_from_hd='これは HDD からセーブされたディス�
 msg_a_part_image_saved_from_partitions='これはディスク全体のイメージではなく、パーティションからセーブされたパーティションイメージです。'
 msg_this_swap_part_info_not_found='スワップパーティション情報は保存されませんでした'
 msg_mbr_img_of_this_hd_not_found='この HDD の MBR イメージは保存されませんでした'
-msg_this_part_in_the_img_is_broken='本イメージ中のこのパーティションは壊れています'
-msg_this_part_in_the_img_is_ok='本イメージ中のこのパーティションは復元可能です'
 msg_img_check_not_supported='このパーティションイメージは partclone によって保存されたものではありません。本プログラムは partclone によって保存されたパーティションのみ機能します。チェックを省略します。'
 msg_this_partition_table_file_not_found='パーティションテーブルファイルが保存されませんでした'
 msg_broken_partition_img_found='本イメージ中で壊れたパーティションイメージが発見されたか、それらの一部がチェックできない状態です'
@@ -954,3 +952,6 @@ msg_choose_if_create_vmdk_format='By default the qcow2 virtual disk format will 
 msg_not_create_vmdk_format='Do not create vmdk format, either'
 msg_create_vmdk_format='Create vmdk format, too'
 msg_failed_to_start_kvm_to_convert='Failed to start kvm to convert the image!'
+# Tag on 2014/06/21
+msg_this_part_in_the_img_is_broken='The image of this partition is broken'
+msg_this_part_in_the_img_is_ok='The image of this partition is restorable'

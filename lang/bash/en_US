@@ -817,8 +817,6 @@ msg_a_disk_image_saved_from_hd='This is a whole disk image, saved from harddrive
 msg_a_part_image_saved_from_partitions='This is not a whole disk image, it is an image for some of partitions, saved from partitions'
 msg_this_swap_part_info_not_found='This swap partition info was NOT found'
 msg_mbr_img_of_this_hd_not_found='The MBR image of this harddrive was NOT found'
-msg_this_part_in_the_img_is_broken='This partition in the image is broken'
-msg_this_part_in_the_img_is_ok='This partition in the image is restorable'
 msg_img_check_not_supported='This partition image was not saved by partclone. This program only works for the partition image saved by partclone. Skip checking.'
 msg_this_partition_table_file_not_found='This partition table file was NOT found'
 msg_broken_partition_img_found='Broken partition images were found, or some of them are not checkable in this image'
@@ -934,3 +932,6 @@ msg_choose_if_create_vmdk_format='By default the qcow2 virtual disk format will 
 msg_not_create_vmdk_format='Do not create vmdk format, either'
 msg_create_vmdk_format='Create vmdk format, too'
 msg_failed_to_start_kvm_to_convert='Failed to start kvm to convert the image!'
+# Tag on 2014/06/21
+msg_this_part_in_the_img_is_broken='The image of this partition is broken'
+msg_this_part_in_the_img_is_ok='The image of this partition is restorable'

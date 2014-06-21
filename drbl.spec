@@ -46,6 +46,7 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 
 %changelog
 - Program makeboot.sh was patched by Ceasar Sun to support xfs, ufs and ffs.
+- Language files were improved. Thanks to Philippe Prevost <philippe-prevost _at_ hotmail com>.
 
 * Sun Jun 01 2014 Steven Shiau <steven _at_ nchc org tw> 2.9.4-drbl1
 - The usage of drbl-sl was updated to latest version number, and the text shown on PXE boot menu for zip should be the same as that of iso one.

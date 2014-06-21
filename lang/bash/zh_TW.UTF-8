@@ -819,8 +819,6 @@ msg_a_disk_image_saved_from_hd='這是一整個硬碟的印象檔，原本是這
 msg_a_part_image_saved_from_partitions='這不是一整個硬碟的印象檔，是只有分割區的印象檔，原本是從這些分割區存下來的'
 msg_this_swap_part_info_not_found='這個置換分割區資訊找不到'
 msg_mbr_img_of_this_hd_not_found='找不到這個硬碟的開機磁區印象檔'
-msg_this_part_in_the_img_is_broken='這個分割區的印象檔是損壞的'
-msg_this_part_in_the_img_is_ok='這個分割區的印象檔是可還原的'
 msg_img_check_not_supported='這個分割區的印象檔不是由partclone所存的。這個程式只支援分割區印象檔由partclone存的。略去此分割區印象檔的檢查。'
 msg_this_partition_table_file_not_found='未找到這個硬碟分割表的檔案'
 msg_broken_partition_img_found='在這個印象檔中找到毀損或者無法檢查的分割區印象檔'
@@ -935,3 +933,6 @@ msg_choose_if_create_vmdk_format='預設只會產生qcow2格式的虛擬硬碟�
 msg_not_create_vmdk_format='不要同時產生vmdk格式'
 msg_create_vmdk_format='同時也產生vmdk格式'
 msg_failed_to_start_kvm_to_convert='無法啟動KVM來轉換印象檔!'
+# Tag on 2014/06/21
+msg_this_part_in_the_img_is_broken='這個分割區的印象檔是損壞的'
+msg_this_part_in_the_img_is_ok='這個分割區的印象檔是可還原的'

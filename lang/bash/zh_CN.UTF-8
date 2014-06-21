@@ -820,8 +820,6 @@ msg_a_disk_image_saved_from_hd='这是一个完整的磁盘镜像，保存自硬
 msg_a_part_image_saved_from_partitions='这不是一个完整的磁盘镜像，它是某些分区的镜像，保存自某些分区'
 msg_this_swap_part_info_not_found='找不到该交换分区信息'
 msg_mbr_img_of_this_hd_not_found='找不到该硬盘驱动器的主引导扇区'
-msg_this_part_in_the_img_is_broken='该镜像的分区是损坏的'
-msg_this_part_in_the_img_is_ok='该分区的镜像是可还原的'
 msg_img_check_not_supported='该分区的镜像不是由partclone保存的。本程序只支持分区镜像由partclone保存的。跳过检查该分区的镜像。'
 msg_this_partition_table_file_not_found='未找到分区表文件'
 msg_broken_partition_img_found='在该镜像中找到损坏的分区镜像或者无法检查的分区镜像'
@@ -937,3 +935,6 @@ msg_choose_if_create_vmdk_format='By default the qcow2 virtual disk format will 
 msg_not_create_vmdk_format='Do not create vmdk format, either'
 msg_create_vmdk_format='Create vmdk format, too'
 msg_failed_to_start_kvm_to_convert='Failed to start kvm to convert the image!'
+# Tag on 2014/06/21
+msg_this_part_in_the_img_is_broken='该分区的镜像是损坏的'
+msg_this_part_in_the_img_is_ok='该分区的镜像是可还原的'

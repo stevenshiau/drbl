@@ -817,8 +817,6 @@ msg_a_disk_image_saved_from_hd='Dies ist ein Festplattenabzug einer kompletten P
 msg_a_part_image_saved_from_partitions='Dies ist kein Festplattenabzug sondern ein Partitions-Abbild'
 msg_this_swap_part_info_not_found='KEINE Informationen zur Swap-Partition'
 msg_mbr_img_of_this_hd_not_found='Das MBR-Image dieser Festplatte ist NICHT vorhanden'
-msg_this_part_in_the_img_is_broken='Die folgende Partition im Image ist defekt'
-msg_this_part_in_the_img_is_ok='Die folgende Partition des Image ist wiederherstellbar'
 msg_img_check_not_supported='Dieses Partitions-Abbild ist nicht von partclone erstellt. Dieses Programm funktioniert nur mit Partitionsabbildern, die mit partclone erstellt wurden. Überprüfung wird übersprungen'
 msg_this_partition_table_file_not_found='KEINE Partition-Tabellen-Beschreibung gefunden'
 msg_broken_partition_img_found='Defekte oder nicht prüfbare Partitions-Abbilder im Image gefunden'
@@ -934,3 +932,6 @@ msg_choose_if_create_vmdk_format='By default the qcow2 virtual disk format will 
 msg_not_create_vmdk_format='Do not create vmdk format, either'
 msg_create_vmdk_format='Create vmdk format, too'
 msg_failed_to_start_kvm_to_convert='Failed to start kvm to convert the image!'
+# Tag on 2014/06/21
+msg_this_part_in_the_img_is_broken='The image of this partition is broken'
+msg_this_part_in_the_img_is_ok='The image of this partition is restorable'

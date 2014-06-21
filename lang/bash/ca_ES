@@ -821,8 +821,6 @@ msg_a_disk_image_saved_from_hd="Es tracta d'una imatge de disc complet desada de
 msg_a_part_image_saved_from_partitions="No es tracta d'una imatge de disc complet, és una imatge d'algunes particions desades des de particions"
 msg_this_swap_part_info_not_found="No es va trobar la informació d'aquesta partició d'intercanvi"
 msg_mbr_img_of_this_hd_not_found="No es va trobar la imatge del MBR d'aquest disc dur"
-msg_this_part_in_the_img_is_broken="Aquesta partició en la imatge està espatllada"
-msg_this_part_in_the_img_is_ok="Aquesta partició en la imatge és restaurable"
 msg_img_check_not_supported="Aquesta imatge de partició no va ser desada amb partclone. Aquest programa solament funciona amb imatges de particions desades amb partclone. Saltant la comprovació."
 msg_this_partition_table_file_not_found="No es va trobar aquest fitxer de taula de particions"
 msg_broken_partition_img_found="Es van trobar imatges de particions espatllades o algunes d'elles no es poden comprovar"
@@ -941,3 +939,6 @@ msg_choose_if_create_vmdk_format='By default the qcow2 virtual disk format will 
 msg_not_create_vmdk_format='Do not create vmdk format, either'
 msg_create_vmdk_format='Create vmdk format, too'
 msg_failed_to_start_kvm_to_convert='Failed to start kvm to convert the image!'
+# Tag on 2014/06/21
+msg_this_part_in_the_img_is_broken='The image of this partition is broken'
+msg_this_part_in_the_img_is_ok='The image of this partition is restorable'
