@@ -925,14 +925,14 @@ msg_failed_to_convert_new_compression_as_another_image='Fallo al convertir el nu
 # Tag on 2014/03/17
 msg_img_created_time='La imagen fue creada en'
 # Tag on 2014/05/26
-msg_kvm_started_for_conversion='Now a virtual machine (KVM) is going to be started to do the conversion, and the process will be shown.'
-msg_do_not_panic_for_booting_msg_of_kvm='///NOTE/// DO NOT PANIC when you see booting message! The ouput is _NOT_ for this real, host machine!'
-msg_only_output_for_kvm_no_input='It is only ouput of virtual machine, and there is no any input. Therefore the keyboad and mouse can not be used to control the virtual machine.'
-msg_press_ctrl_c_to_quit_tail='You can press Ctrl-C to quit the viewing program (tail).'
-msg_choose_if_create_vmdk_format='By default the qcow2 virtual disk format will be created only. If you want to create vmdk format (compat6), choose "-c"'
-msg_not_create_vmdk_format='Do not create vmdk format, either'
-msg_create_vmdk_format='Create vmdk format, too'
-msg_failed_to_start_kvm_to_convert='Failed to start kvm to convert the image!'
+msg_kvm_started_for_conversion='Ahora la máquina virtual (KVM) se iniciará para hacer la conversión, y el proceso se mostrará.'
+msg_do_not_panic_for_booting_msg_of_kvm='///NOTA/// NO SE ASUSTE cuando vea el mensaje de reinicio! La salida _NO_ es para el real, servidor anfitrion!'
+msg_only_output_for_kvm_no_input='Es sólo la salida de la máquina virtual, y hay no hay ninguna entrada. Por lo tanto el teclado y el ratón no se pueden utilizar para controlar la máquina virtual.'
+msg_press_ctrl_c_to_quit_tail='Puede pulsar Ctrl-C para salir del programa de observación (de la cola).'
+msg_choose_if_create_vmdk_format='Por defecto, el formato de disco virtual qcow2 sólo se creará. Si desea crear el formato vmdk (compat6), elija "-c"'
+msg_not_create_vmdk_format='No crear el formato vmdk, u otro'
+msg_create_vmdk_format='Crear el formato vmdk, también'
+msg_failed_to_start_kvm_to_convert='Error al iniciar kvm para convertir la imagen!'
 # Tag on 2014/06/21
 msg_this_part_in_the_img_is_broken='The image of this partition is broken'
 msg_this_part_in_the_img_is_ok='The image of this partition is restorable'
