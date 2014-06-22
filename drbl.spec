@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.9.4
+Version:	2.9.5
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,7 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Sun Jun 22 2014 Steven Shiau <steven _at_ nchc org tw> 2.9.5-drbl1
 - Program makeboot.sh was patched by Ceasar Sun to support xfs, ufs and ffs.
 - Language files were improved. Thanks to Philippe Prevost <philippe-prevost _at_ hotmail com>.
 
