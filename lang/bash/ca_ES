@@ -929,16 +929,16 @@ msg_this_incomplete_image_will_be_removed="Aquest directory d'imatge incompleta 
 msg_new_compression_format_image_created_successfully="S'ha creat un nou format de compressió d'imatge amb èxit"
 msg_failed_to_convert_new_compression_as_another_image="Fallada en convertir un nou format de compressió de imatge"
 # Tag on 2014/03/17
-msg_img_created_time='The image was created at'
+msg_img_created_time="La imatge va ser creada el"
 # Tag on 2014/05/26
-msg_kvm_started_for_conversion='Now a virtual machine (KVM) is going to be started to do the conversion, and the process will be shown.'
-msg_do_not_panic_for_booting_msg_of_kvm='///NOTE/// DO NOT PANIC when you see booting message! The ouput is _NOT_ for this real, host machine!'
-msg_only_output_for_kvm_no_input='It is only ouput of virtual machine, and there is no any input. Therefore the keyboad and mouse can not be used to control the virtual machine.'
-msg_press_ctrl_c_to_quit_tail='You can press Ctrl-C to quit the viewing program (tail).'
-msg_choose_if_create_vmdk_format='By default the qcow2 virtual disk format will be created only. If you want to create vmdk format (compat6), choose "-c"'
-msg_not_create_vmdk_format='Do not create vmdk format, either'
-msg_create_vmdk_format='Create vmdk format, too'
-msg_failed_to_start_kvm_to_convert='Failed to start kvm to convert the image!'
+msg_kvm_started_for_conversion="Ara una màquina virtual (KVM) Va a possar-se en marxa per a fer la conversió, i el procès será mostrat."
+msg_do_not_panic_for_booting_msg_of_kvm="///NOTA/// EVITI EL PÀNIC quan vegi el missatge de arrencada! La sortida no és d'aqueta màquina real!"
+msg_only_output_for_kvm_no_input="Tan sols és la sortida de la màquina virtual i no hi ha cap entrada de dades.  Per això no es poden utilitzar el teclat o el ratolí per a controlar la maquina virtual."
+msg_press_ctrl_c_to_quit_tail="Pot pulsar Ctrl-C per a sortir de la visualització del programa (la cola)."
+msg_choose_if_create_vmdk_format="Per defecte solament serà creat el format de disk visual qcow2. Si vol crear un format vmdk (compat6), seleccioni '-c'"
+msg_not_create_vmdk_format="Tampoc crear el format vmdk"
+msg_create_vmdk_format="Crear també el format vmdk"
+msg_failed_to_start_kvm_to_convert="Fallada al inici del kvm per a convertir la imatge!"
 # Tag on 2014/06/21
-msg_this_part_in_the_img_is_broken='The image of this partition is broken'
-msg_this_part_in_the_img_is_ok='The image of this partition is restorable'
+msg_this_part_in_the_img_is_broken="La imatge d'aquesta partició està rompuda"
+msg_this_part_in_the_img_is_ok="La imatge d'aquesta partició se pot restaurar"

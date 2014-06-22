@@ -45,6 +45,10 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+- Language file ca_ES was updated. Thanks to René Mérou.
+- Language file it_IT was updated. Thanks to Gianfranco Gentili.
+- Language file fr_FR was updated. Thanks to Jean-Francois Nifenecker.
+
 * Sun Jun 22 2014 Steven Shiau <steven _at_ nchc org tw> 2.9.6-drbl1
 - Language file es_ES was updated by Juan Ramón Martínez.
 
