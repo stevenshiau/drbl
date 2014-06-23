@@ -1,6 +1,6 @@
 #!/bin/bash
 # Written by Steven Shiau <steven _at_ nchc org tw> to use in DRBL 
-# German translation by Michael Vinzenz <michael.vinzenz _at_ scalaris com>
+# German translation by Michael Vinzenz <michael.vinzenz _at_ swisspost com>
 # License: GPL
 # Merged some of those revised by Dylan Pack <sarpulhu _at_ gmail com> on 26/Feb/2009.
 
@@ -922,16 +922,16 @@ msg_this_incomplete_image_will_be_removed='Dieses unvollständige Image wird gel
 msg_new_compression_format_image_created_successfully='Umkomprimierung des Images war erfolgreich'
 msg_failed_to_convert_new_compression_as_another_image='Fehler bei der Umkomprimierung des Images'
 # Tag on 2014/03/17
-msg_img_created_time='The image was created at'
+msg_img_created_time='Das Image wurde erzeugt am'
 # Tag on 2014/05/26
-msg_kvm_started_for_conversion='Now a virtual machine (KVM) is going to be started to do the conversion, and the process will be shown.'
-msg_do_not_panic_for_booting_msg_of_kvm='///NOTE/// DO NOT PANIC when you see booting message! The ouput is _NOT_ for this real, host machine!'
-msg_only_output_for_kvm_no_input='It is only ouput of virtual machine, and there is no any input. Therefore the keyboad and mouse can not be used to control the virtual machine.'
-msg_press_ctrl_c_to_quit_tail='You can press Ctrl-C to quit the viewing program (tail).'
-msg_choose_if_create_vmdk_format='By default the qcow2 virtual disk format will be created only. If you want to create vmdk format (compat6), choose "-c"'
-msg_not_create_vmdk_format='Do not create vmdk format, either'
-msg_create_vmdk_format='Create vmdk format, too'
-msg_failed_to_start_kvm_to_convert='Failed to start kvm to convert the image!'
+msg_kvm_started_for_conversion='Eine virtuelle Maschine (KVM) wird jetzt für die Konvertierung gestartet (mit Forschrittsanzeige).'
+msg_do_not_panic_for_booting_msg_of_kvm='///HINWEIS/// KEINE PANIK wenn ein Bootscreen angezeigt wird! Die Anzeige ist _NICHT_ für die aktuelle (Wirts-)Maschine!'
+msg_only_output_for_kvm_no_input='Nur die Ausgabe der VM wird angezeigt und es gibt keine Eingaben. Deshalb können Tastatur und Maus nicht für die Steuerung der virtuellen Maschine verwendet werden.'
+msg_press_ctrl_c_to_quit_tail='Sie können mit Ctrl-C das Programm für die Anzeige (tail) abbrechen.'
+msg_choose_if_create_vmdk_format='Standardmäßig wird nur das qcow2 Virtual-Disk-Format erstellt. Wenn Sie das vmdk-Format (compat6) wollen, wählen Sie "-c"'
+msg_not_create_vmdk_format='Kein vmdk-Format erstellen'
+msg_create_vmdk_format='vmdk-Format ebenfalls erstellen'
+msg_failed_to_start_kvm_to_convert='Fehler beim Start von kvm zur Konvertierung des Images!'
 # Tag on 2014/06/21
-msg_this_part_in_the_img_is_broken='The image of this partition is broken'
-msg_this_part_in_the_img_is_ok='The image of this partition is restorable'
+msg_this_part_in_the_img_is_broken='Das Image dieser Partition ist defekt'
+msg_this_part_in_the_img_is_ok='Das Image dieser Partition kann wiederhergestellt werden'
