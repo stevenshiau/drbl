@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.9.8-drbl1) unstable; urgency=low
+
+  * Language file de_DE was updated. Thanks to Michael Vinzenz.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 24 Jun 2014 07:15:50 +0800
+
 drbl (2.9.7-drbl1) unstable; urgency=low
 
   * Language file ca_ES was updated. Thanks to René Mérou.
