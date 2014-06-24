@@ -45,6 +45,8 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+- Language files sk_SK was updated. Thanks to Ondrej Dzivy Balucha.
+
 * Tue Jun 24 2014 Steven Shiau <steven _at_ nchc org tw> 2.9.8-drbl1
 - Language file de_DE was updated. Thanks to Michael Vinzenz.
 
