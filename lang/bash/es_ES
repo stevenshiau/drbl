@@ -934,5 +934,5 @@ msg_not_create_vmdk_format='No crear el formato vmdk, u otro'
 msg_create_vmdk_format='Crear el formato vmdk, también'
 msg_failed_to_start_kvm_to_convert='Error al iniciar kvm para convertir la imagen!'
 # Tag on 2014/06/21
-msg_this_part_in_the_img_is_broken='The image of this partition is broken'
-msg_this_part_in_the_img_is_ok='The image of this partition is restorable'
+msg_this_part_in_the_img_is_broken='La imagen de esta partición está no es válida'
+msg_this_part_in_the_img_is_ok='La imagen de esta partición es restaurable'
