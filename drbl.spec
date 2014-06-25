@@ -48,6 +48,7 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 - Language files sk_SK was updated. Thanks to Ondrej Dzivy Balucha.
 - Language file ja_JP.UTF-8 was updated. Thanks to Akira YOSHIYAMA.
 - Language file es_ES was updated. Thanks to Alex Ibáñez López.
+- Bug fixed: file memdisk of pxelinux 6.x should be put in /tftpboot/nbi_img/, not in /tftpboot/nbi_img/bios/.
 
 * Tue Jun 24 2014 Steven Shiau <steven _at_ nchc org tw> 2.9.8-drbl1
 - Language file de_DE was updated. Thanks to Michael Vinzenz.

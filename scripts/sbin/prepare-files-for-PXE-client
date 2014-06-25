@@ -64,7 +64,7 @@ put_pxelinux_multi_arch_files() {
 put_pxelinux_memdisk() {
   # memdisk, only for $pxecfg_pd/bios/
   if [ -f "$pxelinux_memdisk_file" ]; then
-     cp -af $pxelinux_memdisk_file $pxecfg_pd/bios/
+     cp -af $pxelinux_memdisk_file $pxecfg_pd/
   else
      [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
      echo "$msg_Warning! $pxelinux_memdisk_file $msg_NOT_found!!! $msg_PXE_NOT_work"
