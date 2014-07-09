@@ -12,7 +12,7 @@ if (eval {require Digest::SHA;}) {
   $sha1_mod="SHA";
 } else {
   # printf "Use Digest::SHA1;\n";
-  use Digest::SHA1;
+  require Digest::SHA1;
   $sha1_mod="SHA1";
 }
 

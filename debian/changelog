@@ -1,3 +1,11 @@
+drbl (2.9.10-drbl1) unstable; urgency=low
+
+  * Bug fixed: drbl-sha1pass failed due to "use" instead of "require"
+    was used. Thanks to monkeyzilla <monkeyzilla _at_ users sf net>
+    for reporting it.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 09 Jul 2014 17:25:20 +0800
+
 drbl (2.9.9-drbl1) unstable; urgency=low
 
   * Language files sk_SK was updated. Thanks to Ondrej Dzivy Balucha.

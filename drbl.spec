@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.9.9
+Version:	2.9.10
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Wed Jul 09 2014 Steven Shiau <steven _at_ nchc org tw> 2.9.10-drbl1
+- Bug fixed: drbl-sha1pass failed due to "use" instead of "require" was used. Thanks to monkeyzilla <monkeyzilla _at_ users sf net> for reporting it.
+
 * Thu Jun 26 2014 Steven Shiau <steven _at_ nchc org tw> 2.9.9-drbl1
 - Language files sk_SK was updated. Thanks to Ondrej Dzivy Balucha.
 - Language file ja_JP.UTF-8 was updated. Thanks to Akira YOSHIYAMA.
