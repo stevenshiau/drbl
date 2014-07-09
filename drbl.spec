@@ -45,6 +45,8 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+- Package fstransform was added in the packages list of Clonezilla and DRBL live.
+
 * Wed Jul 09 2014 Steven Shiau <steven _at_ nchc org tw> 2.9.10-drbl1
 - Bug fixed: drbl-sha1pass failed due to "use" instead of "require" was used. Thanks to monkeyzilla <monkeyzilla _at_ users sf net> for reporting it.
 
