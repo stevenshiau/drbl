@@ -5,6 +5,14 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.9.11-drbl1) unstable; urgency=low
+
+  * Package fstransform was added in the packages list of
+    Clonezilla and DRBL live.
+  * Language file zh_CN was updated. Thanks to Zhiqiang Zhang.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 06 Aug 2014 10:30:14 +0800
+
 drbl (2.9.10-drbl1) unstable; urgency=low
 
   * Bug fixed: drbl-sha1pass failed due to "use" instead of "require"
