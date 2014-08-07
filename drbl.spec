@@ -45,6 +45,8 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+- Package rfkill was added in the packages list of Clonezilla and DRBL live.
+
 * Wed Aug 06 2014 Steven Shiau <steven _at_ nchc org tw> 2.9.11-drbl1
 - Package fstransform was added in the packages list of Clonezilla and DRBL live.
 - Language file zh_CN was updated. Thanks to Zhiqiang Zhang.
