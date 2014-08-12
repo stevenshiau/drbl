@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.9.12-drbl1) unstable; urgency=low
+
+  * Package rfkill was added in the packages list of Clonezilla
+    and DRBL live.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 12 Aug 2014 09:39:22 +0800
+
 drbl (2.9.11-drbl1) unstable; urgency=low
 
   * Package fstransform was added in the packages list of
