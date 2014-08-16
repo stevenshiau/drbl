@@ -1,3 +1,17 @@
+drbl (2.9.14-drbl1) unstable; urgency=low
+
+  * Adding package syslinux-util in PKG_TO_QUERY of drbl.conf.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sat, 16 Aug 2014 22:41:43 +0800
+
+drbl (2.9.13-drbl1) unstable; urgency=low
+
+  * Package syslinux-utils is now added in the packages list of
+    Clonezilla and DRBL live due to the changes in Debian syslinux
+    6.03-pre19 packaging.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sat, 16 Aug 2014 22:39:24 +0800
+
 drbl (2.9.12-drbl1) unstable; urgency=low
 
   * Package rfkill was added in the packages list of Clonezilla

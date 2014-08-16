@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.9.12
+Version:	2.9.14
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,10 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Sat Aug 16 2014 Steven Shiau <steven _at_ nchc org tw> 2.9.14-drbl1
+- Adding package syslinux-util in PKG_TO_QUERY of drbl.conf.
+
+* Sat Aug 16 2014 Steven Shiau <steven _at_ nchc org tw> 2.9.13-drbl1
 - Package syslinux-utils is now added in the packages list of Clonezilla and DRBL live due to the changes in Debian syslinux 6.03-pre19 packaging.
 
 * Tue Aug 12 2014 Steven Shiau <steven _at_ nchc org tw> 2.9.12-drbl1
