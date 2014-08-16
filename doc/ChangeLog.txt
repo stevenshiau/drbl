@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.9.15-drbl1) unstable; urgency=low
+
+  * Adding firstboot.DBN7.6.drbl for updated Debian Wheezy.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sat, 16 Aug 2014 22:52:34 +0800
+
 drbl (2.9.14-drbl1) unstable; urgency=low
 
   * Adding package syslinux-util in PKG_TO_QUERY of drbl.conf.
