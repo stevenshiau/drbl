@@ -40,6 +40,7 @@ while [ "$ASK_LANG" -ne 0 ]; do
   pt_BR.UTF-8 "Brazilian Portuguese | Português do Brasil" \
   ru_RU.UTF-8 "Russian | Русский" \
   sk_SK.UTF-8 "Slovak | Slovenský" \
+  tr_TR.UTF-8 "Turkish | Türkçe" \
   zh_CN.UTF-8 "Chinese (Simplified) | 简体中文" \
   zh_TW.UTF-8 "Chinese (Traditional) | 正體中文 - 臺灣" \
   2> $TMP

@@ -1,3 +1,10 @@
+drbl (2.9.16-drbl1) unstable; urgency=low
+
+  * Language file tr_TR was added. Thanks to Ömer YILDIZ 
+    <oyildiz _at_ teknoplan.com.tr> for providing that.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 19 Aug 2014 14:00:56 +0800
+
 drbl (2.9.15-drbl1) unstable; urgency=low
 
   * Adding firstboot.DBN7.6.drbl for updated Debian Wheezy.

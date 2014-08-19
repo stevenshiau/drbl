@@ -855,6 +855,7 @@ msg_locale_sk_SK='Eslovac'
 msg_locale_ru_RU="Rus"
 msg_locale_zh_CN="Xinès simplificat"
 msg_locale_zh_TW="Xinès tradicional"
+msg_locale_tr_TR='Turc'
 msg_if_you_want_to_run_in_unattended_mode="Si vols executar-ho en mode desatès:"
 msg_source_disks_more_than_1="La imatge va ser gravada des de més d'un disc. Aquest programa solament pot tractar amb imatges obtingudes d'un disc."
 msg_restore_1_image_to_multiple_local_disks="Restaurar una imatge a múltiples discs locals."
