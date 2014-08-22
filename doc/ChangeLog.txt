@@ -5,6 +5,15 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.9.17-drbl1) unstable; urgency=low
+
+  * Put sysvinit-core in the packages list of clonezilla/debian/gparted
+    live of drbl.conf. This is due to the pacakge init has switched to
+    the default init system to systemd-sysv. We are not ready for
+    that yet.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 22 Aug 2014 22:49:32 +0800
+
 drbl (2.9.16-drbl1) unstable; urgency=low
 
   * Language file tr_TR was added. Thanks to Ömer YILDIZ 

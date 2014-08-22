@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.9.16
+Version:	2.9.17
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Tue Aug 22 2014 Steven Shiau <steven _at_ nchc org tw> 2.9.17-drbl1
+- Put sysvinit-core in the packages list of clonezilla/debian/gparted live of drbl.conf. This is due to the pacakge init has switched to the default init system to systemd-sysv. We are not ready for that yet.
+
 * Tue Aug 19 2014 Steven Shiau <steven _at_ nchc org tw> 2.9.16-drbl1
 - Language file tr_TR was added. Thanks to Ömer YILDIZ <oyildiz _at_ teknoplan.com.tr> for providing that.
 
