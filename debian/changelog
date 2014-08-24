@@ -1,3 +1,12 @@
+drbl (2.9.18-drbl1) unstable; urgency=low
+
+  * A workaround to avoid the bug of dpkg version 1.17.13. It fails to
+    update /var/lib/dpkg/available in bootstrap environment. Therefore
+    the option --print-avail fails. We switched to use "dpkg -L" in
+    function chk_deb_installed of drbl-functions.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sun, 24 Aug 2014 15:14:05 +0800
+
 drbl (2.9.17-drbl1) unstable; urgency=low
 
   * Put sysvinit-core in the packages list of clonezilla/debian/gparted

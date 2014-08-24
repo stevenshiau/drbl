@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.9.17
+Version:	2.9.18
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,7 +45,10 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
-* Tue Aug 22 2014 Steven Shiau <steven _at_ nchc org tw> 2.9.17-drbl1
+* Sun Aug 24 2014 Steven Shiau <steven _at_ nchc org tw> 2.9.18-drbl1
+- A workaround to avoid the bug of dpkg version 1.17.13. It fails to update /var/lib/dpkg/available in bootstrap environment. Therefore the option --print-avail fails. We switched to use "dpkg -L" in function chk_deb_installed of drbl-functions.
+
+* Fri Aug 22 2014 Steven Shiau <steven _at_ nchc org tw> 2.9.17-drbl1
 - Put sysvinit-core in the packages list of clonezilla/debian/gparted live of drbl.conf. This is due to the pacakge init has switched to the default init system to systemd-sysv. We are not ready for that yet.
 
 * Tue Aug 19 2014 Steven Shiau <steven _at_ nchc org tw> 2.9.16-drbl1
