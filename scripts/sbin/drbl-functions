@@ -1112,7 +1112,20 @@ prepare_update_rc_d_env() {
   done
   # Ugly! we need some perl pm...
   mkdir -p $newroot/usr/{share,lib}
-  rsync -a /usr/share/perl /usr/lib/perl $newroot/usr/share/
+  # For perl >=5.20 in Debian, multi-arch is enabled
+  # e.g. /usr/lib/i386-linux-gnu/perl, /usr/lib/x86_64-linux-gnu/perl/
+  rsync -a /usr/share/perl $newroot/usr/share/
+  if [ -d "/usr/lib/perl" ]; then
+    rsync -a /usr/lib/perl $newroot/usr/lib/
+  fi
+  if [ -d "/usr/lib/i386-linux-gnu/perl" ]; then
+    mkdir -p $newroot/usr/lib/i386-linux-gnu/
+    rsync -a /usr/lib/i386-linux-gnu/perl $newroot/usr/lib/i386-linux-gnu/
+  fi
+  if [ -d "/usr/lib/x86_64-linux-gnu/perl" ]; then
+    mkdir -p $newroot/usr/lib/x86_64-linux-gnu/
+    rsync -a /usr/lib/x86_64-linux-gnu/perl $newroot/usr/lib/x86_64-linux-gnu/
+  fi
 
   # for insserv
   if type insserv &>/dev/null; then
@@ -3230,3 +3243,23 @@ disable_lvm2_udevd_rules() {
     fi
   fi
 } # end of disable_lvm2_udevd_rules
+#
+is_systemd_init() {
+  # Function to test if system is really using systemd by checking if /sbin/init is link to /lib/systemd/systemd.
+  local real_init re_code
+  if [ -x "/bin/systemctl" -a -d "/lib/systemd/system/" ]; then
+    real_init="$(LC_ALL=C stat -c "%N" /sbin/init | awk -F"->" '{print $2}' | sed -r -e "s/^[[:space:]]*//g" -e "s/\`//g" -e "s/'//g")"
+    if [ -n "$real_init" ]; then
+      if [ "$(LC_ALL=C basename $real_init)" = "systemd" ]; then
+        re_code=0
+      else
+        re_code=1
+      fi
+    else
+      re_code=1
+    fi
+  else
+    re_code=1
+  fi
+  return $re_code
+} # end of is_systemd_init

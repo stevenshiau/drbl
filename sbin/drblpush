@@ -2424,7 +2424,9 @@ service_to_be_kept="dualconf functions reboot halt killall single mandrake_consm
 # For normal service in init.d
 isrv_list="$(cd $drbl_common_root/etc/init.d; ls *)"
 # For systemd-like , E.g. FC17
-[ -x "/bin/systemctl" -a -d "/lib/systemd/system" ] && isrv_list="$isrv_list $(find $drbl_common_root/lib/systemd/system -name "*.service" -type f -exec basename {} \;|  sed -e "s/\.service$//g")"	
+if is_systemd_init; then
+  isrv_list="$isrv_list $(find $drbl_common_root/lib/systemd/system -name "*.service" -type f -exec basename {} \;| sed -e "s/\.service$//g")"	
+fi
 
 for isrv in $isrv_list ; do
   # Skip directory
@@ -2680,7 +2682,7 @@ for i in $client_services; do
   elif [ -e /etc/SuSE-release ]; then
     # SuSE
     chroot $drbl_common_root/ /sbin/insserv -f $i
-  elif [ -x "/bin/systemctl" -a -d "/lib/systemd/system/" ]; then
+  elif is_systemd_init; then
     # FC17: ststemd like
     echo -n "Add '$i':"
     case "$i" in
@@ -2754,12 +2756,12 @@ done
 #	1. create rescue.target and services files
 #	2. make a link of rescue.service to ocsd-rescue.service 
 #	3. remove /etc/rc*.d/S*ocs-run to avoid ocs-run service competition
-if [ -x "/bin/systemctl" -a -d "/lib/systemd/system/" ]; then
-	[ ! -d "$drbl_common_root/etc/systemd/system/rescue.target.wants" ] && mkdir "$drbl_common_root/etc/systemd/system/rescue.target.wants"
-	cp -P $drbl_common_root/etc/systemd/system/multi-user.target.wants/* $drbl_common_root/etc/systemd/system/rescue.target.wants/
-	cp $drbl_setup_path/files/${OS_type}/${OS_Version}/systemd/system/ocsd-*.service $drbl_common_root/etc/systemd/system
-	ln -sf ocsd-rescue.service $drbl_common_root/etc/systemd/system/rescue.service
-	rm -rf  $drbl_common_root/etc/rc*.d/S*ocs-run
+if is_systemd_init; then
+  [ ! -d "$drbl_common_root/etc/systemd/system/rescue.target.wants" ] && mkdir "$drbl_common_root/etc/systemd/system/rescue.target.wants"
+  cp -P $drbl_common_root/etc/systemd/system/multi-user.target.wants/* $drbl_common_root/etc/systemd/system/rescue.target.wants/
+  cp $drbl_setup_path/files/${OS_type}/${OS_Version}/systemd/system/ocsd-*.service $drbl_common_root/etc/systemd/system
+  ln -sf ocsd-rescue.service $drbl_common_root/etc/systemd/system/rescue.service
+  rm -rf  $drbl_common_root/etc/rc*.d/S*ocs-run
 fi
 
 # copy those rcS.d services for Debian, this can only be done after all updata-rc.d finished. Otherwise it will affect the update-rc.d

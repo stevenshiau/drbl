@@ -45,6 +45,8 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+- A better checking mechaism for sysvinit and systemd packages coexisting on a system is used.
+
 * Sun Aug 24 2014 Steven Shiau <steven _at_ nchc org tw> 2.9.18-drbl1
 - A workaround to avoid the bug of dpkg version 1.17.13. It fails to update /var/lib/dpkg/available in bootstrap environment. Therefore the option --print-avail fails. We switched to use "dpkg -L" in function chk_deb_installed of drbl-functions.
 
