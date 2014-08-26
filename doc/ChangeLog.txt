@@ -5,6 +5,15 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.9.19-drbl1) unstable; urgency=low
+
+  * A better checking mechaism for sysvinit and systemd packages 
+    coexisting on a system is used.
+  * Program drbl-prepare-pxelinux was updated due to new path for
+    new syslinux-efi has syslinux.efi in /usr/lib/SYSLINUX.EFI/.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 26 Aug 2014 20:47:56 +0800
+
 drbl (2.9.18-drbl1) unstable; urgency=low
 
   * A workaround to avoid the bug of dpkg version 1.17.13. It fails to

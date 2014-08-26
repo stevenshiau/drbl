@@ -197,10 +197,10 @@ put_distribution_pxelinux() {
 	rm -f $v_opt $tmp_wd/*
       done
       # Some more extra files for efi32 and efi64
-      if  [ -d /usr/lib/SYSLINUX/ ]; then
-       find /usr/lib/SYSLINUX/efi32/ -name "syslinux.efi" -type f -exec \
+      if  [ -d /usr/lib/SYSLINUX.EFI/ ]; then
+       find /usr/lib/SYSLINUX.EFI/efi32/ -name "syslinux.efi" -type f -exec \
             install -o root -g root -m 644 {} $pxelinux_binsrc_dir/efi32/ \;
-       find /usr/lib/SYSLINUX/efi64/ -name "syslinux.efi" -type f -exec \
+       find /usr/lib/SYSLINUX.EFI/efi64/ -name "syslinux.efi" -type f -exec \
             install -o root -g root -m 644 {} $pxelinux_binsrc_dir/efi64/ \;
       fi
       if [ -d /usr/lib/syslinux/modules/ ]; then
