@@ -1,3 +1,11 @@
+drbl (2.9.20-drbl1) unstable; urgency=low
+
+  * Package sysvinit-core is removed from drbl.conf because Ubuntu
+    does not have it yet. We have to add that in the packages list
+    when creating Debian-based live system.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 27 Aug 2014 08:47:34 +0800
+
 drbl (2.9.19-drbl1) unstable; urgency=low
 
   * A better checking mechaism for sysvinit and systemd packages 

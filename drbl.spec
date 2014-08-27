@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.9.19
+Version:	2.9.20
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Wed Aug 27 2014 Steven Shiau <steven _at_ nchc org tw> 2.9.20-drbl1
+- Package sysvinit-core is removed from drbl.conf because Ubuntu does not have it yet. We have to add that in the packages list when creating Debian-based live system.
+
 * Tue Aug 26 2014 Steven Shiau <steven _at_ nchc org tw> 2.9.19-drbl1
 - A better checking mechaism for sysvinit and systemd packages coexisting on a system is used.
 - Program drbl-prepare-pxelinux was updated due to new path for new syslinux-efi has syslinux.efi in /usr/lib/SYSLINUX.EFI/.
