@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.9.20
+Version:	2.9.21
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,11 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+- Package davfs2 was added in the packages list of DRBL/Clonezilla live.
+
+* Thu Sep 04 2014 Steven Shiau <steven _at_ nchc org tw> 2.9.21-drbl1
+- Adding package iw and list iproute2 instead of iproute in packages list of DRBL/Clonezilla live.
+
 * Wed Aug 27 2014 Steven Shiau <steven _at_ nchc org tw> 2.9.20-drbl1
 - Package sysvinit-core is removed from drbl.conf because Ubuntu does not have it yet. We have to add that in the packages list when creating Debian-based live system.
 
