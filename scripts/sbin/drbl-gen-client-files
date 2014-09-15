@@ -318,6 +318,7 @@ DOMAINNAME=$domain
 GATEWAY=$nfsserver
 NISDOMAIN=$nisdomain
 HOSTNAME_END
+     [ -f "$drblroot/$ip/etc/hostname" ] && echo $label > $drblroot/$ip/etc/hostname
      ;;
   DBN)
      echo $label > $drblroot/$ip/etc/hostname

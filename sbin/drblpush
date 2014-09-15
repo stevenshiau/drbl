@@ -1884,6 +1884,7 @@ system("mkdir -p $drbl_syscfg; cp -f drbl_deploy.conf $drbl_syscfg/");
 # "drblpush" is written by K. L. Huang, klhaung _at_ gmail com,
 # especially for Debian, then modified to use with Redhat by
 # Steven Shiau, steven _at_ nchc org tw.
+# Ceasar Sun, ceasar _at_ nchc org tw
 # **********************************************************************
 
 # Load DRBL setting and functions
@@ -2466,7 +2467,8 @@ for isrv in $isrv_list ; do
       find $drbl_common_root/etc/rc*.d -regex ".*[SK][-0-9][0-9]$isrv" -exec rm -f {} \;
     fi
     if [ -e "$drbl_common_root/lib/systemd/system/$isrv.service" ]; then
-      find $drbl_common_root/etc/systemd/ -type l -lname "*/$isrv.service" -exec rm -f {} \;
+      #find $drbl_common_root/etc/systemd/ -type l -lname "*/$isrv.service" -exec rm -f {} \; # fix by :ceasar
+      find $drbl_common_root/etc/systemd/ -name "$isrv.service" -exec rm -f {} \;
     fi
   else
     # For RH-like
@@ -2683,7 +2685,7 @@ for i in $client_services; do
     # SuSE
     chroot $drbl_common_root/ /sbin/insserv -f $i
   elif is_systemd_init; then
-    # FC17: ststemd like
+    # FC17~,CO7~,..: systemd like
     echo -n "Add '$i':"
     case "$i" in
       ypbind)
@@ -3211,12 +3213,12 @@ case "$OS_type" in
       OS_Version_Major="${OS_Version:0:3}"  # E.g. CO5.8 -> CO5
       case "$OS_Version" in
         CO*)
-        most_related_ver="$(LC_ALL=C find $drbl_setup_path/files/$OS_type/${OS_Version_Major}* -type d -exec basename {} \; | sort | uniq | tail -n 1)"
+        most_related_ver="$(LC_ALL=C find $drbl_setup_path/files/$OS_type/${OS_Version_Major}* -type d -exec basename {} \; 2>/dev/null | sort | uniq | tail -n 1)"
         [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
         echo "Warning! The fine-tune file ${drbl_setup_path}/files/${OS_type}/${OS_Version}/rc.sysinit.${OS_Version}.drbl was not found. Using ${drbl_setup_path}/files/${OS_type}/${most_related_ver}/rc.sysinit.${most_related_ver}.drbl as /etc/rc.d/rc.sysinit for DRBL clients!"
         echo "This may cause some problems to DRBL clients!"
         [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
-        cp -f ${drbl_setup_path}/files/${OS_type}/${most_related_ver}/rc.sysinit.${most_related_ver}.drbl $drbl_common_root/etc/rc.d/rc.sysinit
+        [ -n "$most_related_ver" ] && cp -f ${drbl_setup_path}/files/${OS_type}/${most_related_ver}/rc.sysinit.${most_related_ver}.drbl $drbl_common_root/etc/rc.d/rc.sysinit
 	;;
       esac
     fi
@@ -3555,12 +3557,12 @@ else
     OS_Version_Major="${OS_Version:0:3}"  # E.g. CO5.8 -> CO5
     case "$OS_Version" in
     CO*)
-      most_related_ver="$(LC_ALL=C find $drbl_setup_path/files/$OS_type/${OS_Version_Major}* -type d -exec basename {} \; | sort | uniq | tail -n 1)"
+      most_related_ver="$(LC_ALL=C find $drbl_setup_path/files/$OS_type/${OS_Version_Major}* -type d -exec basename {} \; 2>/dev/null | sort | uniq | tail -n 1)"
       [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
       echo "Warning! The fine-tune file ${drbl_setup_path}/files/${OS_type}/${OS_Version}/halt.${OS_Version}.drbl was not found. Using $drbl_setup_path/files/${OS_type}/${most_related_ver}/halt.${most_related_ver}.drbl as /etc/init.d/halt for DRBL clients!"
       echo "This may cause some problems to DRBL clients!"
       [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
-      cp -f $drbl_setup_path/files/${OS_type}/${most_related_ver}/halt.${most_related_ver}.drbl $drbl_common_root/etc/init.d/halt
+      [ -n "$most_related_ver" ] && cp -f $drbl_setup_path/files/${OS_type}/${most_related_ver}/halt.${most_related_ver}.drbl $drbl_common_root/etc/init.d/halt
       ;;
     esac
   fi
@@ -4507,7 +4509,7 @@ sub usage_details{
   "                      [en_US]: English\n".
   "                      [zh_TW.BIG5]: Traditional Chinese (Big5) - Taiwan\n".
   "                      [zh_TW.UTF-8]: Traditional Chinese (UTF-8, Unicode) - Taiwan\n".
-  ";"
+      "";
 } # end of usage_details
 
 # Must have argument

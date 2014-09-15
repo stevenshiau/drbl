@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.10.1-drbl1) unstable; urgency=low
+
+  * Merging the files supporting systemd for CentOS 7 and Fedora 20
+    from Ceasar Sun.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 15 Sep 2014 16:17:49 +0800
+
 drbl (2.9.22-drbl1) unstable; urgency=low
 
   * Package davfs2 and f2fs-tools were added in the packages list of

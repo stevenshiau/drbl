@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.9.22
+Version:	2.10.1
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Mon Sep 15 2014 Steven Shiau <steven _at_ nchc org tw> 2.10.1-drbl1
+- Merging the files supporting systemd for CentOS 7 and Fedora 20 from Ceasar Sun.
+
 * Fri Sep 05 2014 Steven Shiau <steven _at_ nchc org tw> 2.9.22-drbl1
 - Package davfs2 and f2fs-tools were added in the packages list of DRBL/Clonezilla live.
 

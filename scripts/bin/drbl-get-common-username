@@ -1,14 +1,17 @@
 #!/bin/bash
-# Author: Steven Shiau <steven _at_ nchc org tw>
+# Author: Steven Shiau <steven _at_ nchc org tw>, Ceasar Sun <ceasar _at_ nchc org tw>
 # License: GPL
 # Description: Get the common users name (not system related users name)
 
 export LC_ALL=C
-uid_tmp="$(mktemp /tmp/uid_tmp.XXXXXX)"
+
+#uid_tmp="$(mktemp /tmp/uid_tmp.XXXXXX)"
 # We can get the minum UID of YP from /var/yp/Makefile
-grep -E "^MINUID=" /var/yp/Makefile 2>/dev/null > $uid_tmp
-. $uid_tmp
-[ -f $uid_tmp ] && rm -f $uid_tmp
+#grep -E "^MINUID=" /var/yp/Makefile 2>/dev/null > $uid_tmp
+#. $uid_tmp
+#[ -f $uid_tmp ] && rm -f $uid_tmp
+
+MINUID="$(LC_ALL=C egrep '^UID_MIN\s+[0-9]+' /etc/login.defs | sed -e 's/^UID_MIN//')"
 
 # If we can not find minum UID of YP from /var/yp/Makefile, we use specific rules.
 if [ -z "$MINUID" ]; then
