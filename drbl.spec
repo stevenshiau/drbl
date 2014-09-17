@@ -45,6 +45,8 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+- Comments about uEFI network booting were updaetd in generate-pxe-menu.
+
 * Mon Sep 15 2014 Steven Shiau <steven _at_ nchc org tw> 2.10.1-drbl1
 - Merging the files supporting systemd for CentOS 7 and Fedora 20 from Ceasar Sun.
 
