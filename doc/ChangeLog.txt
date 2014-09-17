@@ -5,6 +5,15 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.10.2-drbl1) unstable; urgency=low
+
+  * Comments about uEFI network booting were updaetd in
+    generate-pxe-menu.
+  * Reverted to use iproute instead of iproute2 so that Wheezy won't
+    fail.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 17 Sep 2014 11:46:10 +0800
+
 drbl (2.10.1-drbl1) unstable; urgency=low
 
   * Merging the files supporting systemd for CentOS 7 and Fedora 20

@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.10.1
+Version:	2.10.2
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,7 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Wed Sep 17 2014 Steven Shiau <steven _at_ nchc org tw> 2.10.2-drbl1
 - Comments about uEFI network booting were updaetd in generate-pxe-menu.
+- Reverted to use iproute instead of iproute2 so that Wheezy won't fail.
 
 * Mon Sep 15 2014 Steven Shiau <steven _at_ nchc org tw> 2.10.1-drbl1
 - Merging the files supporting systemd for CentOS 7 and Fedora 20 from Ceasar Sun.
