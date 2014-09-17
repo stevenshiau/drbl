@@ -251,6 +251,7 @@ if [ "$pxe_ver" \> 5.0 ]; then
   cat <<-PXE_END >> $PXECFG_DIR/default
 # Set PATH to bios/ or efi64/, which is relative to PXE root dir ($PXELINUX_DIR).
 # bios is for legacy PXE booting, while efi64 is for uEFI network booting.
+# This might be improved in syslinux 7.0 using auto detection.
 # For more info, please check:
 # http://www.syslinux.org/archives/2014-April/thread.html#21974
 #PATH efi64/
