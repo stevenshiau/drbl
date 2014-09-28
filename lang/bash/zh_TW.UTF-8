@@ -937,3 +937,6 @@ msg_failed_to_start_kvm_to_convert='無法啟動KVM來轉換印象檔!'
 # Tag on 2014/06/21
 msg_this_part_in_the_img_is_broken='這個分割區的印象檔是損壞的'
 msg_this_part_in_the_img_is_ok='這個分割區的印象檔是可還原的'
+# Tag on 2014/09/28
+msg_2_or_more_parts_only_same_parts_on_dest='選取了印象檔中的兩個或者超過兩個分割區，因此只能還原到目的碟中同樣的分割區中.'
+msg_choose_the_parts_from_img_to_restore='從印象檔中選取要還原的分割區來還原到目的碟中(注意!!!目的碟中分割區現存的資料會被覆蓋)'

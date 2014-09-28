@@ -1,3 +1,10 @@
+drbl (2.10.3-drbl1) unstable; urgency=low
+
+  * Language files were updated for restoring image of a partition
+    to different partition.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sun, 28 Sep 2014 17:22:38 +0800
+
 drbl (2.10.2-drbl1) unstable; urgency=low
 
   * Comments about uEFI network booting were updaetd in

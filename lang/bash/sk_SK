@@ -938,3 +938,6 @@ msg_failed_to_start_kvm_to_convert='Zlyhalo spustenie kvm na konverziu obrazu!'
 # Tag on 2014/06/21
 msg_this_part_in_the_img_is_broken='Obraz tejto partície je poškodený'
 msg_this_part_in_the_img_is_ok='Obraz tejto partície je obnoviteľný'
+# Tag on 2014/09/28
+msg_2_or_more_parts_only_same_parts_on_dest='Two or more partitions from image dir were selected. Only the same partitions on the destination disk could be restored.'
+msg_choose_the_parts_from_img_to_restore='Choose the partition(s) from image to restore to destination disk (ALL DATA ON THE PARTITION WILL BE LOST AND REPLACED!!)'

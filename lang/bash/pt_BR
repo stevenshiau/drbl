@@ -936,3 +936,9 @@ msg_failed_to_start_kvm_to_convert='Failed to start kvm to convert the image!'
 # Tag on 2014/06/21
 msg_this_part_in_the_img_is_broken='The image of this partition is broken'
 msg_this_part_in_the_img_is_ok='The image of this partition is restorable'
+# Tag on 2014/09/28
+msg_2_or_more_parts_only_same_parts_on_dest='Two or more partitions from image dir were selected. Only the same partitions on the destination disk could be restored.'
+msg_choose_the_parts_from_img_to_restore='Choose the partition(s) from image to restore to destination disk (ALL DATA ON THE PARTITION WILL BE LOST AND REPLACED!!)'
+# Tag on 2014/09/28
+msg_2_or_more_parts_only_same_parts_on_dest='Two or more partitions from image dir were selected. Only the same partitions on the destination disk could be restored.'
+msg_choose_the_parts_from_img_to_restore='Choose the partition(s) from image to restore to destination disk (ALL DATA ON THE PARTITION WILL BE LOST AND REPLACED!!)'
