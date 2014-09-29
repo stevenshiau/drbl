@@ -1,3 +1,9 @@
+drbl (2.10.4-drbl1) unstable; urgency=low
+
+  * Updating drbl-live-hadoop to version 0.3 from Thomas Tsai.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 29 Sep 2014 16:57:23 +0800
+
 drbl (2.10.3-drbl1) unstable; urgency=low
 
   * Language files were updated for restoring image of a partition
