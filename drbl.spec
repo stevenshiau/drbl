@@ -45,6 +45,8 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+- Updating scientific_netinstall_ver as 7x, and centos_netinstall_ver as "6 7" in drbl-ocs.conf.
+
 * Mon Sep 29 2014 Steven Shiau <steven _at_ nchc org tw> 2.10.4-drbl1
 - Updating drbl-live-hadoop to version 0.3 from Thomas Tsai.
 
