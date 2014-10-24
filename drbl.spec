@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.10.4
+Version:	2.10.5
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,7 +45,10 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Thu Oct 02 2014 Steven Shiau <steven _at_ nchc org tw> 2.10.5-drbl1
 - Updating scientific_netinstall_ver as 7x, and centos_netinstall_ver as "6 7" in drbl-ocs.conf.
+- Adding syslinux-efi in the required packages for Debian. Otherwise uEFI network booting client won't work.
+- Updating drbl-netinstall for CentOS 7 by adding inst.repo boot parameter.
 
 * Mon Sep 29 2014 Steven Shiau <steven _at_ nchc org tw> 2.10.4-drbl1
 - Updating drbl-live-hadoop to version 0.3 from Thomas Tsai.
