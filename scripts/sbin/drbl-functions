@@ -2523,6 +2523,27 @@ output_netinstall_syslinux_pxelinux_menu() {
       fi
       # For Fedora, enable reiserfs when installing
       menu_hint=""
+   elif [ -n "$(echo $inet | grep -iE "\-centos-" 2>/dev/null)" ]; then
+      # CentOS vmlinuz name e.g. vmlinuz-netinstall-CentOS-7-x86_64
+      ni_ver="$(echo $inet | cut -f 4 -d "-")"
+      ni_arch="$(echo $inet | cut -f 5 -d "-")"
+      # ramdisk_size only necessary for centos 1-4, from 5, it's initramfs, ramdisk_size is not used anymore 
+      if [ -n "$(echo $inet | grep -iE "\-centos-[1-4]-" 2>/dev/null)" ]; then
+        NETINSTALL_RAMDISK_SIZE="$NETINSTALL_RAMDISK_SIZE_DEF"
+      else
+        NETINSTALL_RAMDISK_SIZE=""
+      fi
+      if [ -n "$(echo $inet | grep -iE "\-centos-[5-6]-" 2>/dev/null)" ]; then
+        # For CentOS 5 to 6.
+        extra_append=""
+      else
+        # Ref: https://bugzilla.redhat.com/show_bug.cgi?id=810005
+        echo "Using CentOS installation repository \"$centos_url_site\" from drbl.conf"
+	# http://free.nchc.org.tw/centos/7/os/x86_64/
+        extra_append="inst.repo=$centos_url_site/centos/$ni_ver/os/$ni_arch"
+      fi
+      # For CentOS, enable reiserfs when installing
+      menu_hint=""
    elif [ -n "$(echo $inet | grep -iE "(\-mandrake-|\-mandriva-)" 2>/dev/null)" ]; then
       # For Mandrake/Mandriva
       # use larger ramdisk size for Mandrake, overwrite the default one.

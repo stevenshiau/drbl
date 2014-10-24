@@ -5,6 +5,17 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.10.5-drbl1) unstable; urgency=low
+
+  * Updating scientific_netinstall_ver as 7x, and centos_netinstall_ver
+    as "6 7" in drbl-ocs.conf.
+  * Adding syslinux-efi in the required packages for Debian. Otherwise
+    uEFI network booting client won't work.
+  * Updating drbl-netinstall for CentOS 7 by adding inst.repo boot
+    parameter.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 02 Oct 2014 16:38:44 +0800
+
 drbl (2.10.4-drbl1) unstable; urgency=low
 
   * Updating drbl-live-hadoop to version 0.3 from Thomas Tsai.

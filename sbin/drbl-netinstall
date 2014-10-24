@@ -172,10 +172,22 @@ get_centos_netinstall() {
   # url ex:
   # http://free.nchc.org.tw/centos/4.5/os/i386/images/pxeboot
   # http://free.nchc.org.tw/centos/5.0/os/x86_64/images/pxeboot
+  # From version 7, only x86-64, no i386.
   for ver in $centos_netinstall_ver; do
     for arch in $centos_netinstall_arch; do
-      url=$centos_url_site/$path_to_centos/$ver/os/$arch/images/pxeboot
-      get_and_put_linux_img $url CentOS $ver $arch $centos_netinstall_kernel $centos_netinstall_initrd
+      case $ver in
+        [1-6])
+          url=$centos_url_site/$path_to_centos/$ver/os/$arch/images/pxeboot
+          get_and_put_linux_img $url CentOS $ver $arch $centos_netinstall_kernel $centos_netinstall_initrd
+          ;;
+        *)
+          # For 7 or later... only x86-64 exists.
+	  # Who knows about the future...
+	  [ "$arch" = "i386" ] && continue
+          url=$centos_url_site/$path_to_centos/$ver/os/$arch/images/pxeboot
+          get_and_put_linux_img $url CentOS $ver $arch $centos_netinstall_kernel $centos_netinstall_initrd
+          ;;
+      esac
     done
   done
 } # end of get_centos_netinstall
