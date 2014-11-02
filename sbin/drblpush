@@ -779,7 +779,7 @@ sub interactive_mode {
 	      my $line=$_;
 	      if ($line eq "") { $line=$client_no;}
 	      if ($line >= $hostmax_no) {
-	        print colored ("Total number of clients in file: $line.\nMax number in this subnet: $hostmax_no.\nPlease enter the filename again, or press \"ctrl-c\" to quit!\n", "$color_warn");
+	        print colored ("Total number of clients in file: $line.\nMax number in this subnet: $hostmax_no.\nPlease enter the client number again, or press \"ctrl-c\" to quit!\n", "$color_warn");
               } else {
                 $range_end[$i]=$range_start[$i] + $line - 1;
 	        last;
@@ -3960,14 +3960,22 @@ EOF
         chomp($total_count=`LC_ALL=C cat $mac | wc -l`);
     }
     chomp ($ip_hostmin=`LC_ALL=C drbl-ipcalc $ipaddr_sys $netmask_sys | awk -F' ' '/^HostMin:/ {print \$2}'`);
-    my $total_count_request=$total_count+3;
+    my $total_count_request=$total_count;
     # Todo: What if user assigns a wrong initial number (ip_start)?
     my @ip_tmp_sp=split(/\./,$ip_hostmin);
     my $ip_tmp_prefix="$ip_tmp_sp[0].$ip_tmp_sp[1].$ip_tmp_sp[2]";
     my $ip_tmp_start=$ip_tmp_prefix.".".$ip_start;
 
-    # We want drbl-ipcalc-list to list 3 more IP addresses in case some of them are used, like in the server's ethernet port.
+    # We should not let drbl-ipcalc-list to list 3 more IP addresses in case some of them are used, like in the server's ethernet port. Otherwise for class C, if user assigns total clients as 253, drbl-ipcalc-list won't be able to list 256 clients for class C (e.g. 192.168.1.0/24).
     system("drbl-ipcalc-list -c $total_count_request $ip_tmp_start $netmask_sys > $iplist_tmp");
+    # Check if any IP address in the output file.
+    my $ip_tmp_no="";
+    chomp($ip_tmp_no=`LC_ALL=C wc -l $iplist_tmp | awk -F" " '{print \$1}'`);
+    if ($ip_tmp_no eq "0" ) {
+      print "Wrong configuration for this network card: $interface\n";
+      print "$lang_deploy{\"program_stop\"}\n";
+      exit (1);
+    }
 
     # Remove the nfsserver IP address.
     system("perl -pi -e \"s/\\b$nfsserver\\b\\n//g\" $iplist_tmp");

@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.10.5
+Version:	2.10.6
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,9 +45,11 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Sun Nov 02 2014 Steven Shiau <steven _at_ nchc org tw> 2.10.6-drbl1
 - Language file es_ES was updated. Thanks to Juan Ramón Martínez.
 - Language files tr_TR for bash and perl were updated. Thanks to Volkan.
 - Updating function gen_CDG_checksums of drbl-functions to make more compatible with markdown format.
+- Bug fixed: for class C network, using 253 clients was not working. Thanks to Eric Frost for reporting this issu.
 
 * Thu Oct 02 2014 Steven Shiau <steven _at_ nchc org tw> 2.10.5-drbl1
 - Updating scientific_netinstall_ver as 7x, and centos_netinstall_ver as "6 7" in drbl-ocs.conf.

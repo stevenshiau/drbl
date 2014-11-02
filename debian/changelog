@@ -1,3 +1,10 @@
+drbl (2.10.6-drbl1) unstable; urgency=low
+
+  * Bug fixed: for class C network, using 253 clients was not working.
+    Thanks to Eric Frost for reporting this issu.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sun, 02 Nov 2014 14:58:00 +0800
+
 drbl (2.10.5-drbl1) unstable; urgency=low
 
   * Updating scientific_netinstall_ver as 7x, and centos_netinstall_ver
