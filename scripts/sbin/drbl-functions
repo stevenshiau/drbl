@@ -3187,15 +3187,15 @@ gen_CDG_checksums() {
   done
   echo " Done!"
   
-  echo "MD5SUMS" > $sum_file
+  echo "### MD5SUMS:" > $sum_file
   cat MD5SUMS >> $sum_file
 
   echo >> $sum_file
-  echo "SHA1SUMS" >> $sum_file
+  echo "### SHA1SUMS:" >> $sum_file
   cat SHA1SUMS >> $sum_file
 
   echo >> $sum_file
-  echo "SHA256SUMS" >> $sum_file
+  echo "### SHA256SUMS:" >> $sum_file
   cat SHA256SUMS >> $sum_file
 
   txt2html $sum_file > $sum_file_html

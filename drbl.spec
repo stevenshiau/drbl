@@ -47,6 +47,7 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 %changelog
 - Language file es_ES was updated. Thanks to Juan Ramón Martínez.
 - Language files tr_TR for bash and perl were updated. Thanks to Volkan.
+- Updating function gen_CDG_checksums of drbl-functions to make more compatible with markdown format.
 
 * Thu Oct 02 2014 Steven Shiau <steven _at_ nchc org tw> 2.10.5-drbl1
 - Updating scientific_netinstall_ver as 7x, and centos_netinstall_ver as "6 7" in drbl-ocs.conf.
