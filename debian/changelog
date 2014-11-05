@@ -1,3 +1,11 @@
+drbl (2.10.7-drbl1) unstable; urgency=low
+
+  * Adding initial support for Ubuntu 14.10.
+  * Updating drbl-client-boot-default.conf and S00wait-drbl-default
+    for Ubuntu DRBL clients.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 05 Nov 2014 22:40:27 +0800
+
 drbl (2.10.6-drbl1) unstable; urgency=low
 
   * Bug fixed: for class C network, using 253 clients was not working.
