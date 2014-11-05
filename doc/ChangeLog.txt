@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.11.0-drbl1) unstable; urgency=low
+
+  * Updating network installation of Ubuntu as "trusty utopic".
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 05 Nov 2014 23:07:17 +0800
+
 drbl (2.10.7-drbl1) unstable; urgency=low
 
   * Adding initial support for Ubuntu 14.10.
