@@ -46,6 +46,7 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 
 %changelog
 - Adding support for Ubuntu 14.10.
+- Updating drbl-client-boot-default.conf and S00wait-drbl-default for Ubuntu DRBL clients.
 
 * Sun Nov 02 2014 Steven Shiau <steven _at_ nchc org tw> 2.10.6-drbl1
 - Language file es_ES was updated. Thanks to Juan Ramón Martínez.
