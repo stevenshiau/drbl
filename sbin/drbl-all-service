@@ -99,7 +99,7 @@ drbl_startup_service() {
     systemctl $act $_real_service_name.service
     ret=$?
   else
-    /etc/init.d/$srv $act
+    service $srv $act
     ret=$?
   fi
   return $ret
@@ -115,8 +115,13 @@ drbl_service=""
 for iser in $drbl_server_service_chklist; do
    # For SuSE, the NFS server name is nfsserver, not nfs (which is nfs client).
    # Exclude nfs.
-   [ -e /etc/SuSE-release -a "$iser" = "nfs" ] && continue
-   [ -e "/etc/init.d/$iser" -o -e "/lib/systemd/system/$iser.service" ] && drbl_service="$drbl_service $iser"
+   [ -e /etc/SuSE-release -a "${iser}" = "nfs" ] && continue
+   # 3 types of service path, /etc/init.d/ (sysv-init), /etc/init/ (upstart), and /lib/systemd/system/ (systemd)
+   if [ -e "/etc/init.d/${iser}" -o \
+        -e "/etc/init/${iser}.conf" -o \
+	-e "/lib/systemd/system/${iser}.service" ]; then
+        drbl_service="$drbl_service $iser"
+   fi
 done
 #
 check_if_root
