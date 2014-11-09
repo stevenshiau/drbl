@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.11.1-drbl1) unstable; urgency=low
+
+  * A better mechanism (function is_systemd_init) to detect if systemd
+    used as init was implemented.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sun, 09 Nov 2014 11:40:22 +0800
+
 drbl (2.11.0-drbl1) unstable; urgency=low
 
   * Updating network installation of Ubuntu as "trusty utopic".

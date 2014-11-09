@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.11.0
+Version:	2.11.1
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Sun Nov 09 2014 Steven Shiau <steven _at_ nchc org tw> 2.11.1-drbl1
+- A better mechanism (function is_systemd_init) to detect if systemd used as init was implemented.
+
 * Wed Nov 05 2014 Steven Shiau <steven _at_ nchc org tw> 2.11.0-drbl1
 - Updating network installation of Ubuntu as "trusty utopic".
 

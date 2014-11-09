@@ -2459,7 +2459,7 @@ for isrv in $isrv_list ; do
     [ "$isrv" = "README" ] && continue
     [ "$isrv" = "rc" ] && continue
     chroot $drbl_common_root/ /sbin/insserv -f -r $isrv
-  elif [ -x "/bin/systemctl" ]; then
+  elif is_systemd_init; then
     # For systemd-like, E.g. FC17
     echo "Delete '$isrv' service in systemd-like environment ..."
     if [ -e "$drbl_common_root/etc/init.d/$isrv" ]; then

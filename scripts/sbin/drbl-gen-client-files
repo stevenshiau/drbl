@@ -403,7 +403,9 @@ ocs-related-srv --hw-detect on -n $ip put
 # By Ceasar : 
 # The reason we can not just sync from $common_root is because FC17/18 can't leave ocs-run linking file in rc*.d and it has already been deleted in $common_root
 ( cd $drblroot/$ip/$RCX_ROOTDIR/rc1.d/; ln -fs $RCX_REL_INITD/ocs-run S19ocs-run )
-[ -e "/bin/systemctl"  ] && ( cd $drblroot/$ip/$RCX_ROOTDIR/rc1.d/; rm -rf S*ocs-run )
+if is_systemd_init; then
+  ( cd $drblroot/$ip/$RCX_ROOTDIR/rc1.d/; rm -rf S*ocs-run )
+fi
 
 # set the root's passwd for clients if set client_root_passwd
 [ -n "$client_root_passwd" ] && drbl-client-root-passwd --no-gen-ssi --stdin $client_root_passwd --host $ip
