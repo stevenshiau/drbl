@@ -47,6 +47,7 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 %changelog
 * Sun Nov 09 2014 Steven Shiau <steven _at_ nchc org tw> 2.11.1-drbl1
 - A better mechanism (function is_systemd_init) to detect if systemd used as init was implemented.
+- Bug fixed: for Ubuntu 14.10, there is no corresponding service name in /etc/init.d/. We should use universal way to deal with service start and stop, i.e. using command "service".
 
 * Wed Nov 05 2014 Steven Shiau <steven _at_ nchc org tw> 2.11.0-drbl1
 - Updating network installation of Ubuntu as "trusty utopic".
