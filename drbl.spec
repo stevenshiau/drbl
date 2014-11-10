@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.11.1
+Version:	2.11.2
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Mon Nov 10 2014 Steven Shiau <steven _at_ nchc org tw> 2.11.2-drbl1
+- Bug fixed: missing drbl-all-service was restored.
+
 * Sun Nov 09 2014 Steven Shiau <steven _at_ nchc org tw> 2.11.1-drbl1
 - A better mechanism (function is_systemd_init) to detect if systemd used as init was implemented.
 - Bug fixed: for Ubuntu 14.10, there is no corresponding service name in /etc/init.d/. We should use universal way to deal with service start and stop, i.e. using command "service".

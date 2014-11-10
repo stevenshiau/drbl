@@ -1,3 +1,9 @@
+drbl (2.11.2-drbl1) unstable; urgency=low
+
+  * Bug fixed: missing drbl-all-service was restored.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 10 Nov 2014 09:30:06 +0800
+
 drbl (2.11.1-drbl1) unstable; urgency=low
 
   * A better mechanism (function is_systemd_init) to detect if systemd
