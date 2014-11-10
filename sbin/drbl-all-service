@@ -1,0 +1,356 @@
+#!/bin/bash
+# Authors: Steven Shiau <steven _at_ nchc org tw>, Ceasar Sun <ceasar _at_ nchc org tw>
+# License: GPL
+
+# Load DRBL setting and functions
+DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/usr/share/drbl}"
+
+. $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
+[ -e /etc/drbl/drbl-ocs.conf ] && . /etc/drbl/drbl-ocs.conf
+[ -e $DRBL_SCRIPT_PATH/sbin/ocs-functions ] && . $DRBL_SCRIPT_PATH/sbin/ocs-functions
+
+# main
+USAGE() {
+    echo "Usage:"
+    echo "$0 {start|stop|restart|on|off}"
+    echo "start   Start all DRBL-related services now"
+    echo "stop    Stop all DRBL-related services now"
+    echo "restart Restart all DRBL-related services now"
+    echo "add     Add all DRBL-related services"
+    echo "del     Delete all DRBL-related services"
+    echo "Example: To start all DRBL-related services in this DRBL server"
+    echo "$0 start"
+}
+
+#
+drbl_startup_service() {
+  local srv="$1"
+  local act="$2"
+  local ret
+  [ -z "$srv" ] && echo "No srv in function drbl_startup_service!" && exit 1
+  [ -z "$act" ] && echo "No act in function drbl_startup_service!" && exit 1
+  # Traditional service can be started or restart by "/etc/init.d/$srv (start|restart)
+  # Upstart service (from 0.6.3 in Ubuntu 9.04), we should use: restart $srv
+  if dpkg -L upstart 2>/dev/null | grep -F "/sbin/start" &>/dev/null && \
+     [ -e /etc/init/${srv}.conf ] ; then
+    if [ "$act" = "restart" ]; then
+      # When action is restart, we check the status first, and if it's already stopped, we use "start" instead of "restart", otherwise the service won't be staretd at all. "restart $srv" will just show us: "restart: Unknown instance:"
+      [ -n "$(LC_ALL=C status "$srv" | grep -Ei "stop")" ] && act="start"
+    fi
+    # A workaround to avoid portmap restarting issue. We must make sure portmap is not running. Ref: https://bugs.launchpad.net/ubuntu/+source/portmap/+bug/688550
+    if [ "$srv" = "portmap" -a "$act" = "start" ]; then
+      to_wait=""
+      while [ -z "$to_wait" ]; do
+        if [ -z "$(LC_ALL=C pidof portmap)" ]; then
+          to_wait="no"
+        else
+          sleep 0.5
+        fi
+      done
+    fi
+    initctl $act $srv
+    ret=$?
+    # A workaround to avoid portmap restarting issue. We must make sure portmap is started successfully.
+    # It might due to the "respawn" in /etc/init/portmap.conf, which causes it to be restarted in the background, and the start action we issue might conflict with that. For example in the /var/log/syslog on Ubuntu 11.04 with portmap 6.0.0-2ubuntu5 installed:
+    # May  3 08:24:18 natty portmap[795]: cannot bind tcp: Address already in use
+    # May  3 08:24:18 natty init: portmap main process (795) terminated with status 1
+    # May  3 08:24:18 natty init: portmap main process ended, respawning
+    # May  3 08:24:18 natty portmap: Removing stale lockfile for pid 795
+    # May  3 08:24:18 natty portmap[803]: cannot bind tcp: Address already in use
+    # May  3 08:24:18 natty init: portmap main process (803) terminated with status 1
+    # May  3 08:24:18 natty init: portmap main process ended, respawning
+    # May  3 08:24:18 natty portmap: Removing stale lockfile for pid 803
+    # May  3 08:24:18 natty portmap[811]: cannot bind tcp: Address already in use
+    # May  3 08:24:18 natty init: portmap main process (811) terminated with status 1
+    # May  3 08:24:18 natty init: portmap main process ended, respawning
+    # May  3 08:24:18 natty portmap: Removing stale lockfile for pid 811
+    # May  3 08:24:18 natty portmap[819]: cannot bind tcp: Address already in use
+    # May  3 08:24:18 natty init: portmap main process (819) terminated with status 1
+    # May  3 08:24:18 natty init: portmap main process ended, respawning
+    # May  3 08:24:18 natty portmap: Removing stale lockfile for pid 819
+    # May  3 08:24:18 natty portmap[827]: cannot bind tcp: Address already in use
+    # May  3 08:24:18 natty init: portmap main process (827) terminated with status 1
+    # May  3 08:24:18 natty init: portmap main process ended, respawning
+    # May  3 08:24:18 natty portmap: Removing stale lockfile for pid 827
+    # May  3 08:24:18 natty portmap[835]: cannot bind tcp: Address already in use
+    # May  3 08:24:18 natty init: portmap main process (835) terminated with status 1
+    # May  3 08:24:18 natty init: portmap respawning too fast, stopped
+    if [ "$ret" -ne 0 ]; then
+      if [ "$srv" = "portmap" -a "$act" = "start" ]; then
+        to_wait=""
+	echo -n "Waiting for portmap to be started successfully..."
+        while [ -z "$to_wait" ]; do
+          if [ -z "$(LC_ALL=C pidof portmap)" ]; then
+            initctl start portmap &>/dev/null
+            ret=$?
+	    echo -n "."
+            sleep 0.5
+          else
+            to_wait="no"
+          fi
+        done
+	echo " done!"
+      fi
+    fi
+  elif [ -n "$(which systemctl 2>/dev/null)" -a -e "/lib/systemd/system/$srv.service" ]; then
+    # FC 17
+    _real_service_name=$(basename $(readlink -f  /usr/lib/systemd/system/$srv.service) ".service")
+    echo "Now $act '$_real_service_name' service in systemd-like environment..."
+    systemctl $act $_real_service_name.service
+    ret=$?
+  else
+    service $srv $act
+    ret=$?
+  fi
+  return $ret
+} # end of drbl_startup_service
+
+#
+switch=$1
+
+# 
+# $drbl_server_service_chklist is loaded from conf/drbl.conf
+drbl_service=""
+# check if the service listed exists
+for iser in $drbl_server_service_chklist; do
+   # For SuSE, the NFS server name is nfsserver, not nfs (which is nfs client).
+   # Exclude nfs.
+   [ -e /etc/SuSE-release -a "${iser}" = "nfs" ] && continue
+   # 3 types of service path, /etc/init.d/ (sysv-init), /etc/init/ (upstart), and /lib/systemd/system/ (systemd)
+   if [ -e "/etc/init.d/${iser}" -o \
+        -e "/etc/init/${iser}.conf" -o \
+	-e "/lib/systemd/system/${iser}.service" ]; then
+        drbl_service="$drbl_service $iser"
+   fi
+done
+#
+check_if_root
+
+#
+if [ $# -ne 1 ]; then
+  USAGE
+  exit 1
+fi
+ 
+# store the orig LC_ALL, then set it as C
+LC_ALL_org="$LC_ALL"
+export LC_ALL=C
+
+case "$switch" in
+   "start"|"restart")
+      # add them first
+      $0 add
+      # rm /var/lib/nfs/rmtab to avoid a long time try when restart NFS
+      [ -f /var/lib/nfs/rmtab ] && rm -f /var/lib/nfs/rmtab
+
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+      echo "Now start the service: $drbl_service"
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+      ret=""
+      for serv_st in $drbl_service; do 
+        if [ -e /etc/debian_version -o -e /etc/SuSE-release ] ; then
+          # It's Debian/SuSE... no /var/lock/subsys/$serv_st tag, so we just restart it always.
+          to_restart=yes
+        else
+          # CentOS...
+          # Since not all the tag file in /var/lock/subsys is the same with service name, we have to convert it here.
+          # Ref: http://bugs.centos.org/view.php?id=5604
+          case "$serv_st" in
+            nfs) 
+                 if [ -n "$(grep -Ew /var/lock/subsys/nfsd /etc/init.d/nfs 2>/dev/null)" ]; then
+                   serv_st_d="nfsd"
+                 else
+                   serv_st_d="nfs"
+                 fi
+                 ;;
+            nfslock) serv_st_d="rpc.statd";;
+            *) serv_st_d="$serv_st";;
+          esac
+	  # NOT debian, it's RH-like, we can use the /var/lock/subsys/$serv_st
+	  if [ -e /var/lock/subsys/$serv_st_d -o -e /var/run/$serv_st_d.pid ]; then
+	     to_restart=yes
+	  elif [ "$serv_st_d" = "nfs-server"  ] ; then
+	     to_restart=yes
+          else
+	     to_restart=no
+          fi
+        fi
+
+        if [ "$to_restart" = "yes" ] ; then
+          # service is running
+	  # Better not to use restart:
+	  # drbl_startup_service $serv_st restart
+	  # Otherwise it might give false status. E.g rpcbind 0.2.0-6 on Debian:
+	  # /etc/init.d/rpcbind restart
+	  # Stopping rpcbind daemon....
+	  # Starting rpcbind daemon...Already running.. <--
+	  # root@debian:/tmp# pidof rpcbind
+	  # root@debian:/tmp#               <-- Actually it's not running.
+	  drbl_startup_service $serv_st stop
+          sleep 1
+	  drbl_startup_service $serv_st start
+          RETVAL=$?
+        else
+          # service is stopped
+          #/etc/init.d/$serv_st start
+	  drbl_startup_service $serv_st start
+          RETVAL=$?
+        fi 
+        if [ "$RETVAL" -gt 0 ]; then
+             [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+             echo "XXXXXXX        XXXXXXX       XXXXXXX"
+             echo "Failed to start service $serv_st !!!"
+             [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+        fi
+	ret=$[$ret + $RETVAL]
+      done
+      turn_on_ipv4_forward
+      ;;
+   "add")
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+      echo "Now add the service: $drbl_service"
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+      for serv in $drbl_service; do 
+        if [ -e /etc/debian_version ]; then
+          # Debian-like
+          get_debian_ubuntu_init_serv_control_prog
+          echo "Force to add $serv service in this Debian DRBL server..."
+          if [ "$dbn_ubn_serv_control_prog" = "use-insserv" ]; then
+            insserv $serv &>/dev/null
+	  else
+            case "$serv" in
+             portmap)
+               update-rc.d $serv start 18 2 3 4 5 . start 32 0 6 . stop 32 1 . &> /dev/null
+               ;;
+             nis)
+               update-rc.d $serv start 19 2 3 4 5 . stop 19 0 1 6 . &> /dev/null
+               ;;
+             nfs-common)
+               update-rc.d $serv start 21 2 3 4 5 . stop 79 0 1 6 . &> /dev/null
+               ;;
+             nfs-kernel-server)
+               update-rc.d $serv start 20 2 3 4 5 . stop 80 0 1 6 . &> /dev/null
+               ;;
+             unfs3)
+               update-rc.d $serv start 25 2 3 4 5 . stop 25 0 1 6 . &> /dev/null
+               ;;
+             drbl-clients-nat)
+               update-rc.d drbl-clients-nat start 40 2 3 4 5 . stop 89 0 6 . &>/dev/null
+               ;;
+             *)
+               # such as dhcp3-server, tftpd-hpa
+               update-rc.d $serv defaults &> /dev/null
+               ;;
+            esac
+          fi
+        elif [ -e /etc/SuSE-release ]; then
+           # SuSE
+           echo "Force to add $serv service in this SuSE DRBL server..."
+           insserv $serv &>/dev/null
+        elif [ -n "$(which systemctl 2>/dev/null)" -a -e "/lib/systemd/system/$serv.service" ]; then
+           # For systemd, systemctl can't en/disable if service name be a alias name, ex: nfslock, due to 'nfslock' -> 'nfs-lock'
+           _real_service_name=$(basename $(readlink -f  /usr/lib/systemd/system/$serv.service) ".service")
+           echo "Force to add $_real_service_name service via systemd-like DRBL server..."
+           if [ "$_real_service_name" = 'iptables' -a "$(systemctl is-enabled firewalld.service 2>/dev/null)" = 'enable' ]; then
+             # On FC18, firewalld could conflict with iptables, so disable firewalld from now on
+             echo "Stopping and disabling firewalld service by: 'systemctl stop/disable firewalld.service'..."
+             systemctl stop firewalld.service
+             systemctl disable firewalld.service
+           fi
+           systemctl enable $_real_service_name.service
+        else
+            # RH-like
+           echo "Force to add $serv service in this RH-like DRBL server..."
+           chkconfig $serv on
+        fi
+      done
+      ;;
+   "del")
+      # stop them first
+      $0 stop
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+      echo "Now delete the service: $drbl_service"
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+      for serv in $drbl_service; do 
+        if [ -e /etc/debian_version ]; then
+          # Debian-like
+          get_debian_ubuntu_init_serv_control_prog
+          echo "Force to delete $serv service in this Debian DRBL server..."
+          if [ "$dbn_ubn_serv_control_prog" = "use-insserv" ]; then
+            insserv -r $serv &>/dev/null
+          else
+            update-rc.d -f $serv remove &>/dev/null
+          fi
+        elif [ -e /etc/SuSE-release ]; then
+          # SuSE
+          echo "Force to delete $serv service in this SuSE DRBL server..."
+          insserv -f -r $serv &>/dev/null
+        elif [ -n "$(which systemctl 2>/dev/null)" -a -e "/lib/systemd/system/$serv.service" ]; then
+           # For systemd, systemctl can't en/disable if service name be a alias name, ex: nfslock, due to 'nfslock' -> 'nfs-lock'
+           _real_service_name=$(basename $(readlink -f  /usr/lib/systemd/system/$serv.service) ".service")
+           echo "Force to del $_real_service_name service via systemd-like DRBL server..."
+           systemctl disable $_real_service_name.service
+        else
+          # RH-like
+          echo "Force to delete $serv service in this RH-like DRBL server..."
+          chkconfig --del $serv
+        fi
+      done
+      ;;
+   "stop")
+      ret=""
+      for serv_st in $drbl_service; do 
+        if [ -e /etc/debian_version -o -e /etc/SuSE-release ] ; then
+          # It's Debian... no /var/lock/subsys/$serv_st tag, so we just stop it always.
+	  # (or SuSE ? not sure... since SuSE uses lock file differs from that service name).
+          to_stop=yes
+        else
+	  # CentOS...
+	  # We can use the /var/lock/subsys/$serv_st
+          # Since not all the tag file in /var/lock/subsys is the same with service name, we have to convert it here.
+          # Ref: http://bugs.centos.org/view.php?id=5604
+          case "$serv_st" in
+            nfs) 
+                 if [ -n "$(grep -Ew /var/lock/subsys/nfsd /etc/init.d/nfs 2>/dev/null)" ]; then
+                   serv_st_d="nfsd"
+                 else
+                   serv_st_d="nfs"
+                 fi
+                 ;;
+            nfslock) serv_st_d="rpc.statd";;
+            *) serv_st_d="$serv_st";;
+          esac
+	  if [ -e /var/lock/subsys/$serv_st_d -o -e /var/run/$serv_st_d.pid ]; then
+	     to_stop=yes
+	  elif [ "$serv_st_d" = "nfs-server"  ] ; then
+	     to_stop=yes
+          else
+	     to_stop=no
+          fi
+        fi
+        if [ "$to_stop" = "yes" ] ; then
+          # service is running
+          RETVAL=0
+          #/etc/init.d/$serv_st stop
+	  drbl_startup_service $serv_st stop
+          RETVAL=$?
+          if [ "$RETVAL" -gt 0 ]; then
+               [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+               echo "XXXXXXX        XXXXXXX       XXXXXXX"
+               echo "Failed to stop service $serv_st !!!"
+               [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+          fi
+	  ret=$[$ret + $RETVAL]
+        fi 
+      done
+      ;;
+    *)
+      USAGE
+      ret=1
+      ;;
+esac
+
+#restore the old LC_ALL
+export LC_ALL=$LC_ALL_org
+
+exit $ret
