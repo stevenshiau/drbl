@@ -5,6 +5,15 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.11.3-drbl1) unstable; urgency=low
+
+  * Bug fixed: Service statd in Ubuntu 14.10 was not started for
+    locking files.
+  * The service plymouth should not be set as manual otherwise for
+    DRBL client X won't start.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 10 Nov 2014 20:03:03 +0800
+
 drbl (2.11.2-drbl1) unstable; urgency=low
 
   * Bug fixed: missing drbl-all-service was restored.

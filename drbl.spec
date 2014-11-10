@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.11.2
+Version:	2.11.3
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,10 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Mon Nov 10 2014 Steven Shiau <steven _at_ nchc org tw> 2.11.3-drbl1
+- Bug fixed: Service statd in Ubuntu 14.10 was not started for locking files.
+- The service plymouth should not be set as manual otherwise for DRBL client X won't start.
+
 * Mon Nov 10 2014 Steven Shiau <steven _at_ nchc org tw> 2.11.2-drbl1
 - Bug fixed: missing drbl-all-service was restored.
 
