@@ -1,3 +1,9 @@
+drbl (2.11.4-drbl1) unstable; urgency=low
+
+  * Supporting i586 linux image kernel for clients on Debian Sid.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 12 Nov 2014 11:31:19 +0800
+
 drbl (2.11.3-drbl1) unstable; urgency=low
 
   * Bug fixed: Service statd in Ubuntu 14.10 was not started for

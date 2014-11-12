@@ -3470,7 +3470,7 @@ else
   # For Debian, only i386 is available we decided. Maybe in the future, we 
   # will add K7 ?
   # For Debian Etch/Ubuntu Dapper... the kernel is like linux-image-2.6.15-1-486, only 486
-  KARCH_LIST="i[34]86"
+  KARCH_LIST="i[345]86"
   # skip the leading "i"
   client_archi=${KARCH_LIST:1}
 fi
