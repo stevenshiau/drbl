@@ -90,7 +90,8 @@ get_diskname() {
     echo "$disk" | sed -e 's/^\([^0-9]*\)[0-9]*$/\1/g' \
                        -e 's/^\(.*[0-9]\{1,\}\)p[0-9]\{1,\}$/\1/g'
   fi
-}
+} # end of get_diskname
+#
 get_part_number() {
   local disk=${1#/dev/*}
   local num=""
@@ -101,7 +102,56 @@ get_part_number() {
   fi
 
   echo $num
-}
+} # end of get_part_number
+#
+check_if_syslinux_runs() {
+  local sys_exec="$1"
+  local rc
+  # Check if the libc6-i386 (debian/ubuntu) files exists, which is required
+  # for running 32-bit syslinux
+  # E.g. On Debian AMD64 system without installing libc6-i386,
+  #      $ ldd syslinux
+  #      not a dynamic executable
+  #      If libc6-i386 is installed:
+  #      $ ldd syslinux
+  #      linux-gate.so.1 =>  (0xf77dd000)
+  #	    libc.so.6 => /lib32/libc.so.6 (0xf7661000)
+  #	    /lib/ld-linux.so.2 (0xf77e0000)
+  # It's easier we use "syslinux -h" to test if it runs:
+  # $ ls -alFh ./syslinux
+  # -rwxrwxr-x 1 steven steven 209K Oct  7 00:32 ./syslinux*
+  # $ ./syslinux -h
+  # bash: ./syslinux: No such file or directory
+  # $ echo $?
+  # 127
+  # The above is the case which libc6-i386 is not installed, and the
+  # return code is 127.
+  if [ -z "$sys_exec" ]; then
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+    echo "Variable sys_exec was not assigned!"
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+    echo "Program terminated!"
+    exit 1
+  fi
+  if [ ! -e "$sys_exec" ]; then
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+    echo "File \"$sys_exec\" does not exist!"
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+    echo "Program terminated!"
+    exit 1
+  fi
+  $sys_exec -h 2>/dev/null >/dev/null
+  rc=$?
+  if [ "$rc" -ne 0 ]; then
+   if [ "$(LC_ALL=C uname -m)" = "x86_64" ]; then
+     [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+     echo "On x86-64 system, you should install libc6-i386 (for Debian/Ubuntu) or glibc.i686 (for Fedora/CentOS/OpenSuSE) package so that the required libraries to run 32-bit program $sys_exec exist."
+     [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+     echo "Program terminated!"
+     exit 1
+   fi
+  fi
+} # end of check_if_syslinux_runs
 
 #
 export LANG=C
@@ -335,6 +385,7 @@ case "$mode" in
      echo "A filesystem supporting Unix file mode for syslinux is required. Copying syslinux from FAT to /tmp/..."
      cp -fv "$path_of_prog/utils/linux/syslinux" $syslinux_tmpd
      chmod u+x $syslinux_tmpd/syslinux
+     check_if_syslinux_runs "$syslinux_tmpd/syslinux"
      if [ $rc -eq 0 ]; then
        echo "Running: $syslinux_tmpd/syslinux -d syslinux -f -i $target_part "
        $syslinux_tmpd/syslinux -d syslinux -f -i $target_part
@@ -366,6 +417,7 @@ case "$mode" in
      echo "A filesystem supporting Unix file mode for extlinux is required. Copying extlinux from FAT to /tmp/..."
      cp -fv "$path_of_prog/utils/linux/extlinux" $extlinux_tmpd
      chmod u+x $extlinux_tmpd/extlinux
+     check_if_syslinux_runs "$extlinux_tmpd/extlinux"
      if [ $rc -eq 0 ]; then
        echo "Running: $extlinux_tmpd/extlinux -i $destfs_tmpd/syslinux "
        $extlinux_tmpd/extlinux -i $destfs_tmpd/syslinux

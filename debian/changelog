@@ -1,3 +1,11 @@
+drbl (2.11.5-drbl1) unstable; urgency=low
+
+  * A mechanism to check if i386 library (libc6-i386 or glibc.i686) exists
+    on x86-64 system when running makeboot.sh due to syslinux included in
+    Clonezilla live is 32-bit.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 25 Nov 2014 09:45:52 +0800
+
 drbl (2.11.4-drbl1) unstable; urgency=low
 
   * Supporting i586 linux image kernel for clients on Debian Sid.
