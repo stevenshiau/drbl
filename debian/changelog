@@ -1,3 +1,10 @@
+drbl (2.11.6-drbl1) unstable; urgency=low
+
+  * Bug fixed: when one of the assigned IP addresses for DRBL clients
+    is used by DRBL server, drblpush failed to deploy that completely.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 26 Nov 2014 16:57:10 +0800
+
 drbl (2.11.5-drbl1) unstable; urgency=low
 
   * A mechanism to check if i386 library (libc6-i386 or glibc.i686) exists

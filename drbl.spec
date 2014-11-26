@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.11.5
+Version:	2.11.6
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Wed Nov 26 2014 Steven Shiau <steven _at_ nchc org tw> 2.11.6-drbl1
+- Bug fixed: when one of the assigned IP addresses for DRBL clients is used by DRBL server, drblpush failed to deploy that completely.
+
 * Tue Nov 25 2014 Steven Shiau <steven _at_ nchc org tw> 2.11.5-drbl1
 - A mechanism to check if i386 library (libc6-i386 or glibc.i686) exists on x86-64 system when running makeboot.sh due to syslinux included in Clonezilla live is 32-bit.
 

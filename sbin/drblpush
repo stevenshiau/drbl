@@ -3966,7 +3966,8 @@ EOF
         chomp($total_count=`LC_ALL=C cat $mac | wc -l`);
     }
     chomp ($ip_hostmin=`LC_ALL=C drbl-ipcalc $ipaddr_sys $netmask_sys | awk -F' ' '/^HostMin:/ {print \$2}'`);
-    my $total_count_request=$total_count;
+    # Here we add one more client, in case the IP address is used by server
+    my $total_count_request=$total_count+1;
     # Todo: What if user assigns a wrong initial number (ip_start)?
     my @ip_tmp_sp=split(/\./,$ip_hostmin);
     my $ip_tmp_prefix="$ip_tmp_sp[0].$ip_tmp_sp[1].$ip_tmp_sp[2]";
