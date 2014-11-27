@@ -45,6 +45,8 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+- Bug fixed: drbl-etc-hosts failed to put the correct hostname for drbl clients in some cases.
+
 * Wed Nov 26 2014 Steven Shiau <steven _at_ nchc org tw> 2.11.6-drbl1
 - Bug fixed: when one of the assigned IP addresses for DRBL clients is used by DRBL server, drblpush failed to deploy that completely.
 
