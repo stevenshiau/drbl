@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.11.8-drbl1) unstable; urgency=low
+
+  * Adding support for CentOS 6.6.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 28 Nov 2014 09:57:17 +0800
+
 drbl (2.11.7-drbl1) unstable; urgency=low
 
   * Bug fixed: drbl-etc-hosts failed to put the correct hostname for
