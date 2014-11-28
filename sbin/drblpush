@@ -4142,7 +4142,8 @@ elif [ -e "/etc/SuSE-release" ]; then
    perl -pi -e "s/^[#]*[[:space:]]*[#]*DHCPD_INTERFACE=.*/DHCPD_INTERFACE=\"$dhcp_eths\"/g" $SYSCONF_PATH/$DHCP_SRV_NAME
 else
    # RH-like, use the parameter "DHCPDARGS"
-   echo "DHCPDARGS=\"$dhcp_eths\"" > $SYSCONF_PATH/$DHCP_SRV_NAME
+   echo "# //NOTE from DRBL// This file is not used by Fedora/CentOS which use systemd. This is only for older versions. However, we still need this for the function get_dhcpd_interface in drbl-functions" > $SYSCONF_PATH/$DHCP_SRV_NAME
+   echo "DHCPDARGS=\"$dhcp_eths\"" >> $SYSCONF_PATH/$DHCP_SRV_NAME
 fi
 
 # turn on pxelinux passwd if set
