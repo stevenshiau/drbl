@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.11.9
+Version:	2.11.10
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,10 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Fri Nov 28 2014 Steven Shiau <steven _at_ nchc org tw> 2.11.10-drbl1
+- Bug fixed: failed to get the ethernet card for multicast in CentOS 7.
+- Adding comments in the /etc/sysconfig/dhcpd which is not used anymore for CentOS/Fedora using systemd.
+
 * Fri Nov 28 2014 Steven Shiau <steven _at_ nchc org tw> 2.11.9-drbl1
 - Bug fixed: for CentOS 7, there is no need to copy the modified halt and rc.sysinit files for DRBL client.
 

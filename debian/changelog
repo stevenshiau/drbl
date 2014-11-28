@@ -1,3 +1,12 @@
+drbl (2.11.10-drbl1) unstable; urgency=low
+
+  * Bug fixed: failed to get the ethernet card for multicast in
+    CentOS 7.
+  * Adding comments in the /etc/sysconfig/dhcpd which is not
+    used anymore for CentOS/Fedora using systemd.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 28 Nov 2014 17:00:13 +0800
+
 drbl (2.11.9-drbl1) unstable; urgency=low
 
   * Bug fixed: for CentOS 7, there is no need to copy the modified
