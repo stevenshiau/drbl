@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.11.9-drbl1) unstable; urgency=low
+
+  * Bug fixed: for CentOS 7, there is no need to copy the modified
+    halt and rc.sysinit files for DRBL client.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 28 Nov 2014 14:58:13 +0800
+
 drbl (2.11.8-drbl1) unstable; urgency=low
 
   * Adding support for CentOS 6.6.
