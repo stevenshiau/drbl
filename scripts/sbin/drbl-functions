@@ -634,17 +634,27 @@ get_dhcpd_interface() {
     INTERFACES="$DHCPD_INTERFACE"
   else
     # RH-like
-    # get the setting of dhcp server
+    # The content of /etc/sysconfig/dhcpd file:
+    # E.g. DHCPDARGS="-p 67 eth0 eth1";
+    # //NOTE// Although /etc/sysconfig/dhcpd is not used anymore by CentOS/Fedora which uses systemd, we still can use it as the config file for dhcpd, because it's easier for us to parse compared with dhcpd.conf.
+    # Det the setting of dhcp server
     . $SYSCONF_PATH/$DHCP_SRV_NAME
     # collect those interface, filter out other options, such as -p 60
     INTERFACES=""
     for ieth in $DHCPDARGS; do
-       INTERFACES_TMP="$(echo $ieth | grep -Eo 'eth[[:digit:]]+|p[[:digit:]]+p[[:digit:]]+')"
+       # For CentOS >= 7, NIC device name is changed as "Predictable Network Interface Names".
+       # Ref: http://www.freedesktop.org/wiki/Software/systemd/PredictableNetworkInterfaceNames/
+       # Names incorporating Firmware/BIOS provided index numbers for on-board devices (example: eno1)
+       # Names incorporating Firmware/BIOS provided PCI Express hotplug slot index numbers (example: ens1)
+       # Names incorporating physical/geographical location of the connector of the hardware (example: enp2s0)
+       # Names incorporating the interfaces's MAC address (example: enx78e7d1ea46da)
+       # Classic, unpredictable kernel-native ethX naming (example: eth0)
+       INTERFACES_TMP="$(echo $ieth | grep -Eo '(eth[[:digit:]]+|en[[:print:]]+|p[[:digit:]]+p[[:digit:]]+)')"
        INTERFACES="$INTERFACES $INTERFACES_TMP"
     done
   fi
   echo $INTERFACES
-}
+} # end of get_dhcpd_interface
 
 # HD dma status
 check_hd_dma() {
