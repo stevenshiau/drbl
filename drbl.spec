@@ -45,6 +45,8 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+- Language files tr_TR for bash and perl were updated. Thanks to Volkan.
+
 * Fri Nov 28 2014 Steven Shiau <steven _at_ nchc org tw> 2.11.10-drbl1
 - Bug fixed: failed to get the ethernet card for multicast in CentOS 7.
 - Adding comments in the /etc/sysconfig/dhcpd which is not used anymore for CentOS/Fedora using systemd.

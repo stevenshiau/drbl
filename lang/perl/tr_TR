@@ -57,90 +57,90 @@ $lang_charset = 'utf-8';
 
 %lang_deploy =
    (
-   interactive_mode_prompt => 'İnteraktif kip sizin DRBL ortamınızın bilgisini sağlamanıza izin verir.',
+   interactive_mode_prompt => 'İnteraktif mod sizin DRBL ortamınızın bilgisini sağlamanıza izin verir.',
    domain_unset_prompt => 'DOMAIN ayarlı değil, lütfen domain giriniz:',
    domain_prompt => 'Lütfen DNS domaini giriniz (drbl.sf.net gibi):',
    nisdomain_unset_prompt => 'NISDOMAIN ayarlı değil, lütfen NISDOMAIN giriniz:',
    nisdomain_prompt => 'Lütfen NIS/YP domain adını giriniz:',
    not_allowed_domainname => 'DOMAINNAME olarak kullanılamaz, lütfen tekrar giriniz!',
    not_allowed_nisdomainname => 'NISDOMAINNAME olarak kullanılamaz, tekrar giriniz!',
-   set_domain_as => 'DOMAIN olarak şunu ayarla',
+   set_domain_as => 'Domain olarak şunu',
    enter_client_hostname_prefix => "Lütfen istemci bilgisayar adının ön ekini giriniz:\nBu ön ad istemciler için bilgisayar adı oluşturmak için otomatik olarak kullanılmıştı. Otomatik olarak oluşturulan bazı adları veya hepsini silmek istiyorsanız, bu programdan çıkmak için şimdi Ctrl-C tuşuna basınız, /etc/drbl/client-ip-hostname dosyasını düzenleyiniz, daha sonra bu programı tekrar çalıştırınız.",
    not_allowed_hostname => 'istemci adı ön eki olarak izin verilmedi, tekrar giriniz!',
    set_client_hostname_prefix => 'İstemci adı ön eki olarak ayarla',
    no_NIC_setup =>  ' Internet bağlantı ayarlarını yapmadınız veya bir şeyler yanlış gitti!',
    configured_nic => 'Sisteminizde ayarlanmış ethernet kart ayarları bulundu:',
    we_can_NOT_continue => 'Devam edemeyiz...',
-   but_not_private_IP_or_configured => 'fakat özel bir IP değil, iyi yapılandırılmamış veya şimdi çalışır değil!!!',
-   enter_public_IP_for_the_client => "Bu istemci için herkese açık IP giriniz",
-   its_IP_in_DRBL_is => "DRBL'deki IP",
+   but_not_private_IP_or_configured => 'but it\'s not private IP, not well configured, or not up now!!!',
+   enter_public_IP_for_the_client => "Bu istemci için public IP giriniz",
+   its_IP_in_DRBL_is => "DRBL deki IP",
    wrong_entered_IP => "Girdiğiniz IP hatalı, lütfen tekrar deneyin!",
    enter_gateway_for_client => "Bu istemci için ağ geçidi giriniz",
    enter_netmask_for_client => "Bu istemci için alt ağ maskesi giriniz",
    wrong_entered_netmask => "Alt ağ maskesini hatalı girdiniz. Lütfen tekrar deneyin!",
-   set_client_public_IP_as => "İstemcinin ağ parametrelerini şu şekilde ayarlayacağız: ",
+   set_client_public_IP_as => "İstemcinin network parametrelerini şu şekilde ayarlayacağız: ",
    we_will_skip => 'Geçeceğiz',
-   for_internet_access_prompt => 'DRBL bağlantısı için olmayan, genel internet adresi için olan bu sunucudaki hangi ethernet bağlantı noktası? ',
+   for_internet_access_prompt => 'DRBL bağlantısı için olmayan, genel internet adresi için olan bu sunucudaki hangi ethernet portudur? ',
    drbl_website_prompt => 'Detaylar için http://drbl.nchc.org.tw/redhat veya http://drbl.sf.net/redhat adreslerine bakınız.',
-   ethernet_port_for_internet => 'İnternet erişimi için ethernet bağlantı noktası:',
-   ethernet_port_for_DRBL => 'DRBL ortamı için ethernet bağlantı noktası: ',
+   ethernet_port_for_internet => 'Internet erişimi için ethernet portu:',
+   ethernet_port_for_DRBL => 'DRBL ortamı için ethernet portu: ',
    only_1_IP_for_eth0 => 'eth0 için sadece 1 IP adresi, DRBL ortamı için eth0 kullanmayacağız!',
-   no_DRBL_port => 'DRBL ortamı için uygun ethernet bağlantı noktası yok!',
+   no_DRBL_port => 'DRBL ortamı için uygun ethernet portu yok!',
    saved_mac_address_files_in_etc => "Bu dosyalar $drbl_syscfg dizininde kaydedildi.",
    collect_MAC_prompt => 
           "Şimdi istemcilerin MAC adreslerini toplayabiliriz!\n".
-          "İstemci önyüklendiğinde DRBL sunucudaki DHCP servisinin her zaman aynı ip adresini sunmasını istiyorsanız ve bu prosedürü yapmadıysanız, şimdi yapmalısınız!\n".
-          "İstemcilerin MAC adreslerine sahipseniz, onları farklı grup dosyalarına koyabilirsiniz (DRBL hizmeti için bu dosya numaraları ağ kartlarının numarasıyla aynıdır.). Bu durumda, bu adımı atlayabilirsiniz.\n".
+          "İstemci boot edildiğinde DRBL sunucudaki DHCP servisinin her zaman aynı ip adresini sunmasını istiyorsanız ve bu prosedürü yapmadıysanız, şimdi yapmalısınız!\n".
+          "Eğer istemcilerin MAC adreslerine sahipseniz, onları farklı grup dosyalarına koyabilirsiniz (DRBL hizmeti için bu dosya numaraları network kartlarının numarasıyla aynıdır.). Bu durumda, bu adımı atlayabilirsiniz.\n".
           "Bu adım istemcilerin MAC adresini kaydetmenize yardım eder, daha sonra onları farklı gruplara ayırır. Bu size zaman kazandıracak ve tiplere indirgeyecek.\n".
-	  "MAC adresleri istemcilerin önyüklenmesine göre sırayla kaydedilmiş olacaklar,\n".
-	  "ve sunucudaki ağ kartına göre farklı dosyalara dönüştürülecekler, dosya adı macadr-eth1.txt, macadr-eth2.txt gibi olacak... Onları $drbl_syscfg dizini içinde bulabilirisiniz.\n".
-	  "Lütfen istemcileri sırayla önyükleyiniz, etherboot veya PXE den önyüklendiklerine emin olun!\n". 
+	  "MAC adresleri istemcilerin boot edilmesine göre sırayla kaydedilmiş olacaklar,\n".
+	  "ve sunucudaki network kartına göre farklı dosyalara dönüştürülecekler, dosya adı macadr-eth1.txt, macadr-eth2.txt gibi olacak... Onları $drbl_syscfg dizini içinde bulabilirisiniz.\n".
+     "Lütfen istemcileri sırayla boot ediniz, etherboot veya PXE den boot edildiklerine emin olun!\n". 
           "Onları toplamak istiyor musunuz?",
-   ok_let_do_it => 'Tamam! Hadi yapalım!',
-   you_are_not_root => 'Root değilsiniz',
+   ok_let_do_it => 'Tamam! Hadi yap şunu!',
+   you_are_not_root => 'Root değilsin',
    ok_let_continue => 'TAMAM! Hadi devam et...',
-   fix_eth_IP_prompt => "DRBL sunucusundaki DHCP hizmetinin istemci her önyüklendiğinde aynı IP adresini sunmasını istiyor musunuz (Bu özelliği isterseniz, istemcilerin MAC adreslerini toplamalı ve önceki adımdaki gibi dosyalara kaydetmelisiniz)? Bu, DRBL sunucusunun ethernet ağ arayüzüne bağlı istemciler içindir",
+   fix_eth_IP_prompt => "Do you want to let the DHCP service in DRBL server offer same IP address to the client every time when client boots (If you want this function, you have to collect the MAC addresses of clients, and save them in file(s) (as in the previous procedure)). This is for the clients connected to DRBL server's ethernet network interface",
    MAC_file_prompt => "Tamam! Lütfen bana istemcilerin MAC adreslerini satır satır içeren dosya adını söyle",
-   range_prompt => "Tamam! Devam et, Sabit bir IP yerine ilk önyükleme yapılma sırasına göre IP aldırarak istemcilerin IP'lerini ayarlayacağız!",
-   client_number_connected_to_eth => "DRBL sunucunun ethernet ağ arayüzüne bağlı kaç tane DRBL istemcisi (öğrenciler için PC) var?",
+   range_prompt => "Tamam! Devam et, Sabit bir ip yerine ilk boot yapılırken IP aldırarak istemcilerin IPlerini ayarlayacağız!",
+   client_number_connected_to_eth => "DRBL sunucunun ethernet ağ arayüzüne bağlı kaç tane DRBL istemcisi var?",
    enter_the_no => "Lütfen sayı giriniz",
    the_value_you_set => "İstemcinin IP adresindeki basamakların son kümesindeki final sayısı",
    set_the_IP_connected_to_eth => "DRBL sunucunun ethernet arayüzüne bağlı olan istemciler için IP adresleri ayarlayacağız",
    do_you_want_to_continue => "Devam etmek istiyor musunuz?",
    reenter_or_accept => "tekrar enter tuşuna bas, veya bu değeri kabul etmek için herhangi bir tuşa bas ve devam et!",
    filename_you_set => "Ayarladığınız dosya adı",
-   by_MAC_file => "Ayarladığınız MAC adresi dosyası ile, istemciler DRBL sunucu ethernet ağ arayüzüne bağlanacaklar",
+   by_MAC_file => "MAC adres dosyasını ayarlamanızla birlikte, DRBL sunucusunun ethernet ağ arayüzüne istemcilerin ip adresileri bağlandı.",
    let_restart_it_again => "Tamam! hadi onu tekrar baştan başlat!",
-   layout_for_DRBL => "DRBL ortamınızın düzeni:",
+   layout_for_DRBL => "Sizin DRBL ortamınız için düzen:",
    swap_prompt =>
-              "İstemci makinenizde yerel harddiskle birlikte takas alanı veya yazılabilir dosya sistemi varsa,\n".
-              "takas alanını kullanmak veya yazılabilir dosya sisteminde bir takas alanı oluşturmak ister misiniz böylelikle istemci daha fazla hafızaya sahip olur? (Bu adım sabit diskteki hiçbir bilgiye zarar vermeyecek)",
+              "Sizin istemci makinenizde yerel harddiskle birlikte swap alanı veya yazılabilir dosya sistemi  varsa,\n".
+              "swap alanını kullanmak veya yazılabilir dosya sisteminde bir swap alanı oluşturmak ister misiniz böylelikle istemci daha fazla hafızaya sahip olur? (Bu adım harddiskteki hiçbir bilgiye zarar vermeyecek)",
    try_to_create_swap =>
-                "TAMAM! İstemcinizde yerel sabit diskte varsa takas alanı oluşturmayı deneyeceğiz!",
+                "TAMAM! İstemcinizde yerel harrdisk varsa swap alanı oluşturmayı deneyeceğiz!",
    max_swap_size =>
-                "Takas alanı için azami boyut nedir (Megabyte olarak)\n".
-                "Takas alanı ayırmayı deniyoruz, yeterli değilse, boş alanın \%60'ı kullanılacak.",
+                "Swap alanı için maksimum boyut nedir(Megabyte olarak)\n".
+                "Swap alanı ayırmayı deniyoruz, yeterli değilse, boş alanın %60 ı kullanılacak.",
    mode_for_client_init =>
-              "Önyüklemeden sonra hangi kipi kullanmak istersiniz?\n".
-              "\"1\": Grafik kipi (X pencere sistemi) (varsayılan),\n".
-              "\"2\": Metin kipi.",
-   client_text_mode => "Önyüklemeden, istemciler metin kipi kullanacaklar.",
-   client_graphic_mode => "İstemciler baştan başlatma işleminden sonra grafik kipine girecek.",
+              "Boot edildikten sonra hangi modu kullanmak istersiniz?\n".
+              "\"1\": Grafik mod (X pencere sistemi) (varsayılan),\n".
+              "\"2\": Text mod.",
+   client_text_mode => "Boot edildiğinde, istemciler text modu kullanacaklar.",
+   client_graphic_mode => "İstemciler baştan başlatma işleminden sonra grafik moda girecek.",
    login_mode_for_client =>
-                  "İstemci grafiksel olarak baştan başlatıldıktan sonra hangi kipi istersiniz?\n".
-                  "0: normal oturum, 1: otomatik oturum, 2: zamanlı oturum",
-   auto_login => "İstemciler önyüklendikten sonra otomatik oturum açacaklar.",
+                  "İstemci grafiksel olarak baştan başlatıldıktan sonra hangi modu istersiniz?\n".
+                  "0: normal login, 1: auto login, 2: timed login",
+   auto_login => "İstemciler boot edildiklerinde auto login olacaklar.",
    created_account_for_auto_login =>
-                      "otomatik oturum için istemci makinelerinin hesaplar oluşturulacak.\n".
-		      "otomatik oturum ID istemcinin sunucu ismiyle aynıdır.\n".
+                      "auto login için istemci makinelerinin hesaplar oluşturulacak.\n".
+		      "auto login ID istemcinin host ismiyle aynıdır.\n".
                       "Hesap ve parola bilgileri dosya içinde listelenecek",
    time_for_countdown => "Geri sayımın saniyesi kaç?",
-   timed_login_prompt => "Zaman dolduktan sonra istemciler otomatik oturum yapacaklar.",
-   normal_login_prompt => "İstemciler önyüklemeden sonra kullanıcıların oturum açması için bekleyecekler.",
-   keep_client_setting_question => "Varsa DRBL istemcinin eski ayarlarını korumak ister misiniz?",
-   remove_client_setting => "Varsa DRBL ayarlarının hepsini kaldıracağız.",
+   timed_login_prompt => "Zaman dolduktan sonra istemciler auto login yapacaklar.",
+   normal_login_prompt => "İstemciler boot edildiklerinde kullanıcıların login olması için bekleyecekler.",
+   keep_client_setting_question => "Eğer versa DRBL istemcinin eski ayarlarını korumak ister misiniz?",
+   remove_client_setting => "Eğer çoktan varsa DRBL ayarlarının hepsini kaldıracağız.",
    keep_client_setting => "Eğer varsa DRBL istemcilerinin ayarlarını komayı deneyeceğiz.",
-   set_client_root_passwd => "root parolası ayarlamak yerine sunucudan aynı kopyalanmış root parolası kullanmak ister misiniz? (Daha fazla güvenlik için)",
+   set_client_root_passwd => " root parolası ayarlamak yerine sunucudan aynı kopyalanmış root parolası kullanmak ister misiniz? (Daha fazla güvenlik için)",
    whats_client_root_passwd => "İstemciler için root parolası (Ekranda gösterilmeyecek)?",
    set_client_pxelinux_passwd => "İstemciler için pxelinux parolası ayarlamak ister misiniz? İstemci boot ettiğinde, başlamak için parola girilmelidir.(Daha fazla güvenlik sağlar)",
    whats_client_pxelinux_passwd => "İstemciler için yeni pxelinux parolası nedir?(Ekrana yansıtılmayacaktır)",
@@ -159,14 +159,14 @@ $lang_charset = 'utf-8';
    but_you_will_see_errors => "Çok fazla hata mesajı göreceksiniz...!!!",
    smart_decision => "Tamam, akıllıca bir karar verdiniz, Şimdi çıkıyorum!",
    finished_searching_installed_drbl_packages => "DRBL sunucu için kurulmuş paketleri aramyı bitirdi.",
-   note_for_keep_client_setting => "Note! You are trying to keep the setting of DRBL clients if they exist, sometimes DRBL clients will go wrong when you finish this script! If so, rebooting those DRBL clients should make them work!",
+   note_for_keep_client_setting => "Uyarı! DRBL istemcilerinin ayarlarını korumayı deniyorsunuz eğer mevcutsa DRBL istemcileri script bittiğinde bazen hataya gidebilir! Bu durumda, DRBL istemcilerini baştan başlatmak çalışmalarını sağlayabilir!",
    press_enter_to_continue => "Devam etmek için Enter tuşuna basınız... ",
    no_deploy_prompt =>
 	      "Bütün ayar dosyaları bu çalışma dizininde oluşturulur,\n".
 	      "ama sisteme yerleştirilmezler! \n".
 	      "Eğer sisteme yerleştirmek istiyorsanız, \"-n\" veya \"--no_deploy\" seçeneklerini kullanmayın",
    ready_to_deploy =>
-	      "We are now ready to deploy the files to system! Dosyalarınızı sisteme yerleştirmek için hazırız \n".
+	      "Dosyalarınızı sisteme yerleştirmek için hazırız \n".
 	      "Devam etmek istiyor musunuz?",
    overwrite_firewall_rule => "Uyarı! Eğer devam ederseniz firewall kurallarınız ayarlama sırasında silinecektir!",
    backup_firewall_rule => "Orjinal kurallar iptables.drblsave dosyası olarak, sistem ayar dosyası içine (/etc/sysconfig veya /etc/default) yedeklenecektir.",
