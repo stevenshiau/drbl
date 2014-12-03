@@ -48,6 +48,7 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 - Language files tr_TR for bash and perl were updated. Thanks to Volkan.
 - Language file it_IT was updated. Thanks to Gianfranco Gentili.
 - Language file de_DE was updated. Thanks to Michael Vinzenz.
+- Language file fr_FR was updated. Thanks to Jean-Francois Nifenecker.
 
 * Fri Nov 28 2014 Steven Shiau <steven _at_ nchc org tw> 2.11.10-drbl1
 - Bug fixed: failed to get the ethernet card for multicast in CentOS 7.
