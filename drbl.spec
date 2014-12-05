@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.11.11
+Version:	2.11.12
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,12 +45,15 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
-* Mon Dec 01 2014 Steven Shiau <steven _at_ nchc org tw> 2.11.11-drbl1
-- Language files tr_TR for bash and perl were updated. Thanks to Volkan.
+* Fri Dec 05 2014 Steven Shiau <steven _at_ nchc org tw> 2.11.12-drbl1
 - Language file it_IT was updated. Thanks to Gianfranco Gentili.
 - Language file de_DE was updated. Thanks to Michael Vinzenz.
 - Language file fr_FR was updated. Thanks to Jean-Francois Nifenecker.
 - Language files sk_SK was updated. Thanks to Ondrej Dzivy Balucha.
+- Adding support for Debian 7.7.
+
+* Mon Dec 01 2014 Steven Shiau <steven _at_ nchc org tw> 2.11.11-drbl1
+- Language files tr_TR for bash and perl were updated. Thanks to Volkan.
 
 * Fri Nov 28 2014 Steven Shiau <steven _at_ nchc org tw> 2.11.10-drbl1
 - Bug fixed: failed to get the ethernet card for multicast in CentOS 7.
