@@ -988,10 +988,10 @@ sub interactive_mode {
   	}
   	# Format the input number as text
          if ( "$live_client_branch" eq "stable" || "$live_client_branch" eq "testing" ) {
-          # Normal Clonezilla live, i486, i686-pae and amd64 exist
+          # Normal Clonezilla live, i586, i686-pae and amd64 exist
           SWITCH: for ($live_client_cpu_mode) {
             /^[[:space:]]*0[[:space:]]*$/ && do {
-              $live_client_cpu_mode="i486";
+              $live_client_cpu_mode="i586";
               last SWITCH;
           };
             /^[[:space:]]*1[[:space:]]*$/ && do {
@@ -4515,7 +4515,7 @@ sub usage_details{
   "-r, --drbl_mode [0|1|2] Assign DRBL mode (0: Full DRBL mode, 1: DRBL SSI mode, 2: Do NOT provide diskless Linux service to clients)\n".
   "-s, --swap_create y/N   Switch to create and use local swap in clients (yes or no)\n".
   "-t, --live_client_branch [0|1|2|3] Assign the Clonezilla live release branch to be used, 0 is stable branch (Debian-based), 1 is testing branch (Debian-based), 2 is alternative stable branch (Ubuntu-based), 3 is alternative testing branch (Ubuntu-based). This option should be used when -z|--clonezilla_mode = 3\n".
-  "-u, --live_client_cpu_mode [0|1|2]  Assign the CPU mode for client when doing Clonezilla job with Clonezilla live (0: i486, 1: i686, 2: amd64)\n".
+  "-u, --live_client_cpu_mode [0|1|2]  Assign the CPU mode for client when doing Clonezilla job with Clonezilla live (0: i586, 1: i686, 2: amd64)\n".
   "-v, --verbose           Be more verbose\n".
   "-z, --clonezilla_mode [0|1|2|3] Assign Clonezilla mode (0: Full DRBL mode, 1: Clonezilla box mode, 2: Do NOT provide clonezilla service to clients, 3: Use Clonezilla live as the OS of clients)\n".
   "--skip-drbl-ocs-live-prep  Force to skip running drbl-ocs-live-prep\n".

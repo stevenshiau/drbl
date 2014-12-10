@@ -30,7 +30,7 @@ USAGE() {
   echo "-k, --client-archi [0/1/2]: Set the client's CPU arch, 0 for i386, 1 for i586, 2 for same level with DRBL server (for x86-64, use 2). This option is for the DRBL client is NFS based, i.e. all files are NFS mounted from server. It's different from the option '-u', which is only for clonezilla mode."
   echo "-r, --drbl-mode [0|1|2] Assign DRBL mode (0: Full DRBL mode, 1: DRBL SSI mode, 2: Do NOT provide diskless Linux service to clients). Default value is 0.".
   echo "-t, --testing [y/n]:    Use packages in testing branch or not (Only works for RH-like distribution)."
-  echo "-u, --live-client-cpu-mode [0|1|2]  Assign the CPU mode for client when doing Clonezilla job with Clonezilla live (0: i486, 1: i686, 2: amd64). This option should be used with -z|--clonezilla-mode = 3".
+  echo "-u, --live-client-cpu-mode [0|1|2]  Assign the CPU mode for client when doing Clonezilla job with Clonezilla live (0: i586, 1: i686, 2: amd64). This option should be used with -z|--clonezilla-mode = 3".
   echo "-x, --limit-pxe-drbl-client  Force the DHCP service managed by DRBL will only allow PXE or DRBL clients to lease IP address. By default all the clients can lease IP address. //NOTE// If you want to use Clonezilla live as the OS of clients when running Clonezilla job, do _NOT_ use this option. Otherwise your client won't be able to mount the root file system."
   echo "-z, --clonezilla-mode [0|1|2|3] Assign Clonezilla mode (0: Full DRBL mode, 1: Clonezilla box mode, 2: Do NOT provide clonezilla service to clients, 3: Use Clonezilla live as the OS of clients). Default value is 0."
   echo
