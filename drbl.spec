@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.11.14
+Version:	2.11.15
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Wed Dec 10 2014 Steven Shiau <steven _at_ nchc org tw> 2.11.15-drbl1
+- The language files about stable Clonezilla live was updated as i586 instead of i486.
+
 * Wed Dec 10 2014 Steven Shiau <steven _at_ nchc org tw> 2.11.14-drbl1
 - Now i586 instead of i486 Clonezilla live is in the stable release, therefore the corresponding changes were done.
 

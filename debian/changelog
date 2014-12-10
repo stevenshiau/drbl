@@ -1,3 +1,10 @@
+drbl (2.11.15-drbl2) unstable; urgency=low
+
+  * The language files about stable Clonezilla live was updated as i586
+    instead of i486.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 10 Dec 2014 20:26:50 +0800
+
 drbl (2.11.14-drbl1) unstable; urgency=low
 
   * Now i586 instead of i486 Clonezilla live is in the stable release,
