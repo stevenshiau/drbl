@@ -1,6 +1,10 @@
 DRBL (Diskless Remote Boot in Linux) Release Notes
-Copyright (c) 2002-2012 National Center for High-Performance Computing, Taiwan
+Copyright (c) 2002-2014 National Center for High-Performance Computing, Taiwan
 ----------------------------------------------------------------------
+-2.11.15-drbl
+- Ubuntu 14.10, CentOS 7 supports were added in this release.
+- Language files were updated. Thanks to all the contributors.
+
 -1.10.90-1drbl
 - Ubuntu 11.10 support was added in this release.
 - CentOS 6 (6.1 and 6.2) support was added in this release.
