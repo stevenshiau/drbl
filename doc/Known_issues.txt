@@ -1,5 +1,5 @@
 Known issues:
-1. SIS900 network card (Note: SIS191 has same problem, however, since Etherboot/gPXE does not support SIS191, this workaround won't work for SIS191):
+SIS900 network card (Note: SIS191 has same problem, however, since Etherboot/gPXE does not support SIS191, this workaround won't work for SIS191):
    sis900 client does NOT work with pxelinux >=3.07 simple menu, it will hang like this:
    http://drbl.sf.net/screenshot/?in_path=/00_DRBL#xxx-sis900-client-hang.jpg
    you WON'T see this:
@@ -47,85 +47,4 @@ if substring (option vendor-class-identifier, 0, 3) = "PXE" {
 
    5. Start your annoying sis900 box! It should work now.
 
-2. Clonezilla, from version 1.4.0, is ABLE to save and restore LVM 2 partitions.
-   However, LVM 1 is not supported yet.
-
-3. Some distribution does not install perl-Digest-SHA1. If rpm complains perl-Digest-SHA1 is required, you have to install perl-Digest-SHA1 first. For FC1, install it like:
-   rpm -Uvh http://opensource.nchc.org.tw/fedora/linux/core/1/i386/os/Fedora/RPMS/perl-Digest-SHA1-2.01-15.i386.rpm
-
-4. OpenSuSE 10.0
-   Kernel 2.6.13-15-default in the DRBL server has some BIG problems with NFS lockd. It will cause client won't run OpenOffice.org, rpm, clonezilla and other programs successfully.
-   Errors are like:
-   a. OpenOffice.org
-   -----
-   Unable to start it or save file
-   -----
-   b. rpm:
-   -----
-   linux102:~ # rpm -q drbl
-   error: cannot get shared lock on /var/lib/rpm/Packages
-   error: cannot open Packages index using db3 - Operation not permitted (1)
-   error: cannot open Packages database in /var/lib/rpm
-   package drbl is not installed
-   -----
-   c. clonezilla/partimage:
-   -----
-   imagefile locked
-   The following imagefile is locked.
-   Do you want to wait and retry or change image filename ?
-   File: /mnt/test.000                                     
-   To change the filename, please enter a full path        
-   (location + filename) without volume number at the end, 
-   and press "Change"                 
-   -----
-
-   Solution:
-   1. Use different kernel in the server, 
-      a. the update kernel
-         rpm -ivh ftp://ftp.twaren.net/Linux/SuSE/i386/update/10.0/rpm/i586/kernel-default-2.6.13-15.7.i586.rpm
-      or 
-      b. 2.6.11.4-20a-default from SuSE 9.3 is also tested ok.
-      Then reboot the server.
-   2. Check the bugzilla
-      https://bugzilla.novell.com/show_bug.cgi?id=128784
-      for more details.
-
-5. Ubuntu Breezy
-   The dhcp3-server 3.0.2-1ubuntu6 in Breezy has a problem with "range" option
-   in dhcpd.conf, i.e. when client request IP address 2nd time before its IP
-   address expires, it will get the different IP address from that gotten in the 1st time. 
-   One of the solution:
-   Use the dhcp3-server (dhcp3-server_3.0.3-6ubuntu4) from Dapper. 
-
-6. Fedora Core 5
-   The lftp 3.4.2-5 came with Fedora Core 5 has a bug¡Awhich will cause some problem when it try to browse some URLs. Sometimes it will NOT find kernel rpm for clients when you run drblsrv -i. It is recommended to upgrade the whole system, or at least you upgrade lftp. I386 lftp can be got here:
-   http://free.nchc.org.tw/fedora/linux/core/updates/5/i386/lftp-3.4.7-2.FC5.i386.rpm
-   You can run this command directly to upgrade:
-   yum install lftp
-   or 
-   rpm -Uvh http://free.nchc.org.tw/fedora/linux/core/updates/5/i386/lftp-3.4.7-2.FC5.i386.rpm
-
-7. Fedora 7
-   After an upgrade in Fedora 7, nfs-utils is 1.1.0 and kernel is 2.6.22-1, you will encounter error meeages in DRBL client like:
-   mount.nfs: /etc is already mounted or busy
-   "Starting rpcbind: rpcbind: error while loading shared libraries: libtirpc.so.1: cannot open shared object file: No such file or directory [FAILED]"
-   The solution is not to use kernel 2.6.22 for DRBL client:
-   1. wget http://os.nchc.org.tw/fedora/linux/releases/7/Fedora/i386/os/Fedora/kernel-2.6.21-1.3194.fc7.i586.rpm
-   2. run
-   /opt/drbl/sbin/drblsrv-offline -k kernel-2.6.21-1.3194.fc7.i586.rpm
-   3. reboot the client.
-   It should work.
-
-8. Mandriva 2008.1
-   Mode of udp-receiver and udp-sender in /usr/sbin/ (udpcast-0.0-0.20071228.1mdv2008.1) are wrong:
-   -rw-r--r-- 1 root root 47K 2008-02-06 04:37 udp-receiver
-   -rw-r--r-- 1 root root 51K 2008-02-06 04:37 udp-sender
-   Remember to change the mode before you use clonezilla server edition (chmod
-   755 /usr/sbin/udp-*).
-
-   Ref: https://qa.mandriva.com/show_bug.cgi?id=40247
-
-   
-
-Updated on Apr/20/2008.
-Steven Shiau.
+Updated on Dec/13/2014.

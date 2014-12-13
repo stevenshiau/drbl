@@ -4,6 +4,11 @@ Copyright (c) 2002-2014 National Center for High-Performance Computing, Taiwan
 2.11.15-drbl
  - Ubuntu 14.10, CentOS 7 supports were added in this release.
  - Language files were updated. Thanks to all the contributors.
+ - uEFI nework booting support could be enabled by
+   - Installing syslinux/pxelinux 6.03. If your GNU/Linux distribution does not provide that, you can run:
+     "/usr/share/drbl/sbin/drbl-prepare-pxelinux -d -u -pv 6.03"
+   - You have to modify the file /tftpboot/nbi_img/pxelinux.cfg/default. Change
+     "PATH bios/" to "PATH efi64/"
 
 1.10.90-1drbl
  - Ubuntu 11.10 support was added in this release.
