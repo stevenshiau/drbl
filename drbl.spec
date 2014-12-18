@@ -47,6 +47,7 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 %changelog
 - File Known_issues_Big5.txt was removed.
 - Known_issues.txt and RELEASE-NOTES were updated.
+- Adding package ecryptfs-utils in the packages list of DRBL/Clonezilla live.
 
 * Wed Dec 10 2014 Steven Shiau <steven _at_ nchc org tw> 2.11.15-drbl1
 - The language files about stable Clonezilla live was updated as i586 instead of i486.
