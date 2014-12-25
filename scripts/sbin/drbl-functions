@@ -726,9 +726,6 @@ get_lang_index() {
    local lang=$1
    local language
    case "$lang" in
-      "1")
-           language="zh_TW.BIG5"
-           ;;
       "2")
            language="zh_TW.UTF-8"
            ;;
@@ -1049,7 +1046,6 @@ ask_lang_set() {
     # Language
     echo "Language?".
     echo "[0]: English"
-    echo "[1]: Traditional Chinese (Big5) - Taiwan".
     echo "[2]: Traditional Chinese (UTF-8, Unicode) - Taiwan"
     echo -n "[0] "
     read lang_answer
@@ -1061,11 +1057,8 @@ ask_lang_set() {
 
 load_lang_set() {
   lang_answer=$1
-  # The language files are en, tw.BIG5 and tw.UTF-8, we have to format the input parameter.
+  # The language files are en, tw.UTF-8, we have to format the input parameter.
   case "$lang_answer" in
-     1|zh_TW.BIG5|zh_TW.big5|tw.BIG5)
-        lang="zh_TW.BIG5"
-        ;;
      2|zh_TW.UTF-8|zh_TW.utf8|tw.UTF-8|tw.utf8)
         lang="zh_TW.UTF-8"
         ;;
@@ -1094,15 +1087,14 @@ ask_and_load_lang_set() {
 
 #
 language_help_prompt_by_idx_no() {
-  echo "-l, --language INDEX Set the language to be shown by index number:"
+  echo " -l, --language INDEX Set the language to be shown by index number:"
   echo "       [0|en_US.UTF-8]: English,"
-  echo "       [1|zh_TW.BIG5]: Traditional Chinese (Big5) - Taiwan,"
   echo "       [2|zh_TW.UTF-8]: Traditional Chinese (UTF-8, Unicode) - Taiwan"
   echo "       [a|ask]: Prompt to ask the language index"
 }
 #
 language_help_prompt_by_idx_name() {
-  echo "-ln  NAME    Set the language to be shown by index name, not number, such as en_US.UTF-8, zh_TW.BIG5, zh_TW.UTF-8"
+  echo "-ln  NAME    Set the language to be shown by index name, not number, such as en_US.UTF-8, zh_TW.UTF-8"
 }
 
 # For update-rc.d in Debian
@@ -1713,7 +1705,6 @@ if [ "$mode" = "save" ]; then
       fi
     done
     echo "-i $(cat $vol_size_tmp)" >> $OCS_PARAM_TMP
-    [ -f "$vol_size_tmp" ] && rm -f $vol_size_tmp
   else
     echo "-i $dcs_img_vol_limit" >> $OCS_PARAM_TMP
   fi
@@ -1721,6 +1712,8 @@ fi
 # Force to strip the unnecessary quotation ', this is specially for dialog (from cdialog) in Mandriva and same reason to strip the unnecessary double quotation ", this is sepcially for dialog in OpenSuSE 11.1. Otherwise it will cause -p reboot become (containing space) '-p reboot', which is wrong option in dcs.
 LC_ALL=C perl -pi -e "s/\'//g" $OCS_PARAM_TMP
 LC_ALL=C perl -pi -e "s/\"//g" $OCS_PARAM_TMP
+#
+[ -e "$vol_size_tmp" ] && rm -f $vol_size_tmp
 
 } # end of set_drbl_ocs_extra_param
 
@@ -1984,7 +1977,6 @@ if [ "$mode" = "save" ]; then
       fi
     done
     echo "-i $(cat $vol_size_tmp)" >> $OCS_PARAM_TMP
-    [ -f "$vol_size_tmp" ] && rm -f $vol_size_tmp
   else
     echo "-i $VOL_LIMIT_IN_INTERACTIVE" >> $OCS_PARAM_TMP
   fi
@@ -2019,6 +2011,22 @@ if [ "$mode" = "save" ]; then
     ocs_chk_img="$(echo $ocs_chk_img | sed -r -e "s/none//g")"
     echo "$ocs_chk_img " >> $OCS_PARAM_TMP
   fi
+
+  # Question about encrypt the image. By default, no matter it's beginner or advanced mode, 
+  # we will ask. However, for some customized case, it it could be set via parameter encrypt_ocs_img.
+  # encrypt_ocs_img is from /etc/ocs/ocs-live.conf
+  if [ -z "$encrypt_ocs_img" ]; then
+    $DIA --backtitle "$msg_nchc_free_software_labs" --title  \
+    "$msg_clonezilla_advanced_extra_param | $msg_mode: $ocs_mode_prompt" --menu "$msg_encrypt_image\n$msg_ecryptfs_is_used_for_clonezilla\n$msg_remember_passphrase_of_ecryptfs" \
+    0 0 0 $DIA_ESC \
+    " "         "$msg_not_to_encrypt_img" \
+    "-enc "     "$msg_yes_to_encrypt_img" \
+    2>> $OCS_PARAM_TMP
+  else
+    # Convert none to "", as we can not set encrypt_ocs_img as "" otherwise it will be asked in the previous if block.
+    encrypt_ocs_img="$(echo $encrypt_ocs_img | sed -r -e "s/none//g")"
+    echo "$encrypt_ocs_img " >> $OCS_PARAM_TMP
+  fi
 fi
 
 # For expert mode, we always ask it.
@@ -2036,6 +2044,8 @@ fi
 # Force to strip the unnecessary quotation ', this is specially for dialog (from cdialog) in Mandriva and same reason to strip the unnecessary double quotation ", this is sepcially for dialog in OpenSuSE 11.1. Otherwise it will cause -p reboot become (containing space) '-p reboot', which is wrong option in dcs.
 LC_ALL=C perl -pi -e "s/\'//g" $OCS_PARAM_TMP
 LC_ALL=C perl -pi -e "s/\"//g" $OCS_PARAM_TMP
+#
+[ -e "$vol_size_tmp" ] && rm -f $vol_size_tmp
 
 } # end of set_ocs_sr_extra_param
 #
@@ -2880,7 +2890,7 @@ turn_on_ipv4_forward() {
 ask_if_beginner_or_expert_mode(){
   local TMP mode
   # ocs_user_mode is global variable
-  TMP="$(mktemp /tmp/menu.XXXXXX)"
+  TMP="$(mktemp /tmp/menu-ocs.XXXXXX)"
   trap "[ -f "$TMP" ] && rm -f $TMP" HUP INT QUIT TERM EXIT
   $DIA --backtitle "$msg_nchc_free_software_labs" --title  \
   "$msg_nchc_clonezilla" --menu "$msg_select_beginner_or_expert_mode:" \
@@ -2889,7 +2899,7 @@ ask_if_beginner_or_expert_mode(){
   "Expert"    "$msg_expert_mode" \
   2> $TMP
   mode="$(cat $TMP)"
-  [ -f "$TMP" ] && rm -f $TMP
+  [ -e "$TMP" ] && rm -f $TMP
   case "$mode" in
     "Beginner") ocs_user_mode="beginner" ;;
     "Expert")   ocs_user_mode="expert" ;;
@@ -3294,3 +3304,205 @@ is_systemd_init() {
   fi
   return $re_code
 } # end of is_systemd_init
+#
+check_if_system_support_ecryptfs(){
+  local rc
+  # Not really. It might be bulit-in
+  # So let's check /proc/filesystems
+  if ! grep -Ewq "ecryptfs" /proc/filesystems; then
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+    echo "File system \"ecryptfs\" is not supported by the running Linux kernel \"`uname -r`\"" | tee --append ${OCS_LOGFILE}
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+    echo "$msg_program_stop." | tee --append ${OCS_LOGFILE}
+    grand_task_before_exit
+    exit 1
+  fi
+  if ! type mount.ecryptfs &>/dev/null; then
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+    echo "No \"ecryptfs\" related program was found on this system." | tee --append ${OCS_LOGFILE}
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+    echo "$msg_program_stop." | tee --append ${OCS_LOGFILE}
+    my_ocs_exit 1
+  fi
+} # end of check_if_system_support_ecryptfs
+#
+task_ecryptfs_mount_point() {
+  local task_type="$1"
+  local passwd_ecryptfs pass1 pass2 ecryptfs_pf
+  local TMP grc rc ask_ ans_
+  # target_dir_enc_mntpnt, target_dir_orig and target_dir are gloable variables.
+  # Change the ocsroot to /tmp now since we will create the mount point in /tmp
+
+  check_if_system_support_ecryptfs
+  ###
+  target_dir_enc_mntpnt="$(mktemp -d /tmp/ecryptfs_mnt.XXXXXX)"
+  ecryptfs_pf=$(mktemp /tmp/ecryptfs_f.XXXXXX)
+  # Force to set the mode
+  chmod 600 $ecryptfs_pf
+  TMP=$(mktemp /tmp/ecryptfs_tmp.XXXXXX)
+  trap "[ -f "$TMP" ] && rm -f $TMP" HUP INT QUIT TERM EXIT
+  passwd_ecryptfs=""
+  grc="1" # grand rc for the really working return code
+  # Collect the password for ecryptfs. This is because for ecryptfs it only 
+  # ask once, no confirmation.
+
+  while [ "$grc" -ne 0 ]; do
+    rc="1"
+    ask_="true"
+    echo $msg_delimiter_star_line | tee --append ${OCS_LOGFILE}
+    case "$task_type" in
+     *save*) 
+            # For saving, we ask twice.
+            [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING | tee --append ${OCS_LOGFILE}
+	    echo "$msg_remember_passphrase_of_ecryptfs" | tee --append ${OCS_LOGFILE}
+            [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL | tee --append ${OCS_LOGFILE}
+	    echo -e "*** $msg_enter_passphrase_to_encrypt_img: ${target_dir} ***\n($msg_it_will_not_be_echoed)" | tee --append ${OCS_LOGFILE}
+            read -s pass1
+	    echo -e "*** $msg_reenter_passphrase_to_encrypt_img: ${target_dir} ***\n($msg_it_will_not_be_echoed)" | tee --append ${OCS_LOGFILE}
+            read -s pass2
+            while [ "$pass1" != "$pass2" ]; do
+              [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+              echo "$msg_passphrases_not_match" | tee --append ${OCS_LOGFILE}
+              [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+	      echo -e "*** $msg_enter_passphrase_to_encrypt_img: ${target_dir} ***\n($msg_it_will_not_be_echoed)" | tee --append ${OCS_LOGFILE}
+              read -s pass1
+	      echo -e "*** $msg_reenter_passphrase_to_encrypt_img: ${target_dir} ***\n($msg_it_will_not_be_echoed)" | tee --append ${OCS_LOGFILE}
+              read -s pass2
+            done
+            if [ -z "$pass1" ]; then
+              [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+	      echo "$msg_passphrase_empty" | tee --append ${OCS_LOGFILE}
+              [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+              echo "$msg_program_stop!" | tee --append ${OCS_LOGFILE}
+	      my_ocs_exit 1
+            fi
+            # set the matched passphrase
+            passwd_ecryptfs="$pass1"
+            ;;
+        *)
+            # For restoring, we ask once only.
+	    echo -e "*** $msg_enter_passphrase_for_decrypt_img: ${target_dir} ***\n($msg_it_will_not_be_echoed)" | tee --append ${OCS_LOGFILE}
+            read -s passwd_ecryptfs
+            ;;
+    esac
+    
+    # Put it in the file
+    echo "passphrase_passwd=$passwd_ecryptfs" > $ecryptfs_pf
+    #
+    while [ "$ask_" = "true" ]; do
+      LC_ALL=C mount -t ecryptfs $ocsroot/${target_dir} $target_dir_enc_mntpnt -o $ocs_ecryptfs_opt,key=passphrase:passphrase_passwd_file=$ecryptfs_pf
+      rc="$?"
+      # Even wrong passphrase could give rc=0. However, the data are not really
+      # decrypted. Therefore we have to use another method to check.
+      if [ "$rc" -ne 0 ]; then
+        # Pause so that user can read the error message
+        echo -n "$msg_press_enter_to_continue..."
+        read
+        $DIA --backtitle "$msg_nchc_free_software_labs" --title "$msg_nchc_clonezilla" \
+        --yesno "$msg_failed_to_encrypt_img\n$msg_do_u_want_to_do_it_again" 0 0
+        ans_="$?"
+        case "$ans_" in
+          0) # yes is chosen
+             ask_="true";;
+          1) # no is chosen
+             echo "$msg_program_stop!" | tee --append ${OCS_LOGFILE}
+             [ -f "$TMP" ] && rm -f $TMP
+             [ -f "$ecryptfs_pf" ] && rm -f $ecryptfs_pf
+             my_ocs_exit 1;;
+        esac
+      else
+        # Got the one we want
+        ask_="false"
+        # Do not keep the file on system. For security.
+        [ -f "$ecryptfs_pf" ] && rm -f $ecryptfs_pf
+      fi
+    done
+    if [ -z "$(echo "$task_type" | grep -e "save")" ]; then
+      # Image exists already.
+      # Check if the image really decrypted correctly by testing file "clonezilla-img". This is only for restoring
+      # The results of "file -Lbi clonezilla-img" might be charset=utf-8 or us-ascii, or even others. Therefore just check it not binary and grep a line.
+      if [ -z "$(LC_ALL=C file -Lbi "${target_dir_enc_mntpnt}/clonezilla-img" | grep -Ew "charset=binary")" -a \
+           -n "$(grep -e "^This image was saved by Clonezilla" "${target_dir_enc_mntpnt}/clonezilla-img")" ]; then 		   
+        grc=0
+        [ "$BOOTUP" = "color" ] && $SETCOLOR_SUCCESS
+        echo "$msg_succeed_to_decrypt_img: ${target_dir}" | tee -a $OCS_LOGFILE
+        [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+        echo $msg_delimiter_star_line | tee -a $OCS_LOGFILE
+      else
+        [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+        echo "$msg_failed_to_decrypt_img: ${target_dir} " | tee -a $OCS_LOGFILE
+        [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+	umount $target_dir_enc_mntpnt
+        grc=1
+        confirm_continue_or_not_default_continue
+      fi
+    else
+      # For saving task, the return code for "mount -t ecryptfs" can be used.
+      # Since the above while loop is done, it means monting is OK now.
+      grc=0
+    fi
+  done
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+  echo "$msg_encrypt_img_dir_is_now_as: ${target_dir_enc_mntpnt}" | tee -a $OCS_LOGFILE
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+  if [ "$ocs_sr_mode" = "interactive" ]; then
+    sleep 3
+  fi
+  # Save the original ocsroot for later use
+  ocsroot_orig="$ocsroot"
+  ocsroot="/tmp"
+  # Save the original image dir for later use
+  target_dir_orig="${target_dir}"
+  target_dir="$(basename ${target_dir_enc_mntpnt})"
+  #
+  [ -f "$TMP" ] && rm -f $TMP
+} # end of task_ecryptfs_mount_point
+#
+umount_ecryptfs_mount_point_if_necessary(){
+  local rc
+  if [ "$encrypt_ocs_img" = "yes" ]; then
+    if [ -n "$target_dir_enc_mntpnt" ]; then
+      umount $target_dir_enc_mntpnt 2>/dev/null
+      rc=$?
+      if [ "$rc" -eq 0 ]; then
+        if [ -d "$target_dir_enc_mntpnt" -a \
+             -n "$(echo "$target_dir_enc_mntpnt" | grep -w "ecryptfs_mnt")" ]; then
+          rm -rf "$target_dir_enc_mntpnt"
+        fi
+      fi
+    fi
+  fi
+} # end of umount_ecryptfs_mount_point_if_necessary
+#
+is_ecryptfs_img() {
+  local tgt_dir rc_enc
+  tgt_dir_abs="$1"  # absolute path
+  rc_enc="1"
+   if [ -e "${tgt_dir_abs}/ecryptfs.info" ] && \
+      [ -n "$(LC_ALL=C file -Lbi "${tgt_dir_abs}/clonezilla-img" | grep -Ew "charset=binary")" ]; then 		   
+     rc_enc="0"
+   fi
+   return $rc_enc
+} # end of is_ecryptfs_img
+#
+grand_jobs_before_exit() {
+  # This function is used to collect the jobs before program aborting.
+  # Including:
+  # (1) Unmount ecryptfs if it exists.
+  # (2) Remove MULTIPATH_INFODIR temp dir.
+
+  #(1)
+  umount_ecryptfs_mount_point_if_necessary
+
+  #(2)
+  if [ -d "$MULTIPATH_INFODIR" -a \
+       -n "$(echo $MULTIPATH_INFODIR | grep -w "multipath_info")" ]; then
+    rm -rf "$MULTIPATH_INFODIR"
+  fi
+} # end of grand_jobs_before_exit
+#
+my_ocs_exit() {
+  local ec="$1"
+  grand_jobs_before_exit
+  exit $ec
+} # end of my_ocs_exit

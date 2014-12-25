@@ -787,7 +787,6 @@ msg_which_color_depth_do_u_want='Какую глубину цвета вы хо�
 # Теги от 2009/08/03
 msg_ocs_live_mount_nfs_ser_ver='Какую версию службы NFS вы хотите монтировать?'
 # Теги от 2009/11/05
-msg_set_image_volume_size='Укажите размер тома в МБ, если хотите разбить файл образа раздела на несколько томов. Пожалуйста, введите число, большее 10. Если вы не хотите разбивать файл образа, ввести большое число, например, "1000000". Пожалуйста, не используйте "0", потому что, если ваш дистрибутив GNU/Linux использует новый /sbin/init для инициализации, он будет сбит с толку "0".'
 msg_ocs_param_icrc='Игнорировать проверку CRC программой partclone'
 msg_change_cpu_level_to_i686='Для дистрибутива, который вы используете, доступна только архитектура i686, так что уровень оптимизации будет изменен на i686!'
 # Теги от 2010/02/15
@@ -940,3 +939,20 @@ msg_this_part_in_the_img_is_ok='The image of this partition is restorable'
 # Tag on 2014/09/28
 msg_2_or_more_parts_only_same_parts_on_dest='Two or more partitions from image dir were selected. Only the same partitions on the destination disk could be restored.'
 msg_choose_the_parts_from_img_to_restore='Choose the partition(s) from image to restore to destination disk (ALL DATA ON THE PARTITION WILL BE LOST AND REPLACED!!)'
+# Tag on 2014/12/23
+msg_encrypt_image='Do you want to encrypt the image?'
+msg_yes_to_encrypt_img='Encrypt the image'
+msg_not_to_encrypt_img='Not to encrypt the image'
+msg_ecryptfs_is_used_for_clonezilla='If yes, eCryptfs program will be used to encrypt the image. It uses industry-standard cryptographic ciphers, key generation, and passphrase protection mechanisms. Without your salt/passphrase or private key, nobody will be able to retrieve your data.'
+msg_remember_passphrase_of_ecryptfs='//NOTE// You have to remember the passphrase, otherwise the image will _NOT_ be used in the future.'
+msg_enter_passphrase_to_encrypt_img='Enter the passphrase to encrypt the image'
+msg_it_will_not_be_echoed='It will not be echoed in the screen'
+msg_reenter_passphrase_to_encrypt_img='Re-enter the passphrase to encrypt the image'
+msg_passphrases_not_match='Sorry, passphrases do not match.'
+msg_passphrase_empty='The passphrase can NOT be empty!'
+msg_enter_passphrase_for_decrypt_img='Enter the passphrase to decrypt the image'
+msg_succeed_to_decrypt_img='Succeeded to decrypt the image'
+msg_failed_to_encrypt_img='Failed to encrypt the image.'
+msg_failed_to_decrypt_img='Failed to decrypt the image'
+msg_encrypt_img_dir_is_now_as='The encrypted image dir is now as'
+msg_set_image_volume_size='Укажите размер тома в МБ, если хотите разбить файл образа раздела на несколько томов. Пожалуйста, введите число, большее 10. Если вы не хотите разбивать файл образа, ввести большое число, например, "1000000". Пожалуйста, не используйте "0", потому что, если ваш дистрибутив GNU/Linux использует новый /sbin/init для инициализации, он будет сбит с толку "0". //NOTE// For the FAT32 image repository, the number should not be larger than 4096.'

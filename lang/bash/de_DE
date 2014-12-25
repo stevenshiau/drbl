@@ -788,7 +788,6 @@ msg_which_color_depth_do_u_want='Welche Farbtiefe soll verwendet werden?'
 # Tag on 2009/08/03
 msg_ocs_live_mount_nfs_ser_ver='Welche NFS-Server-Version wollen Sie verwenden?'
 # Tag on 2009/11/05
-msg_set_image_volume_size='Größe der Stücke in MB, in die das Image aufgeteilt wird. Der Wert muss größer als 10 sein. Wenn Sie keine Aufteilung wollen, geben Sie einen großen Wert, z.B. "1000000" ein. Bitte verwenden Sie nicht mehr "0" dafür, wenn Ihre GNU/Linux Distribution das neue /sbin/init von upstart benutzt, fängt dieses mit dem Wert "0" nichts an.'
 msg_ocs_param_icrc='Ignoriere die CRC-Prüfung von partclone'
 msg_change_cpu_level_to_i686='Für die von Ihnen verwendete Distribution ist nur die i686-Architektur verfügbar, daher wird die Optimierung auf i686 geändert!!!'
 # Tag on 2010/02/15
@@ -939,3 +938,20 @@ msg_this_part_in_the_img_is_ok='Das Image dieser Partition kann wiederhergestell
 # Tag on 2014/09/28
 msg_2_or_more_parts_only_same_parts_on_dest='Auf dem Imageverzeichnis wurde mehr als eine Partition ausgewählt. Auf der Zielplatte konnten nur diese Partitionen wiederhergestellt werden.'
 msg_choose_the_parts_from_img_to_restore='Wählen Sie die Partition(en) aus dem Image, die wiederhergestellt werden sollen (ALLE VORHANDENEN DATEN DER ZIELPARTITIONEN WERDEN ÜBERSCHRIEBEN!!)'
+# Tag on 2014/12/23
+msg_encrypt_image='Do you want to encrypt the image?'
+msg_yes_to_encrypt_img='Encrypt the image'
+msg_not_to_encrypt_img='Not to encrypt the image'
+msg_ecryptfs_is_used_for_clonezilla='If yes, eCryptfs program will be used to encrypt the image. It uses industry-standard cryptographic ciphers, key generation, and passphrase protection mechanisms. Without your salt/passphrase or private key, nobody will be able to retrieve your data.'
+msg_remember_passphrase_of_ecryptfs='//NOTE// You have to remember the passphrase, otherwise the image will _NOT_ be used in the future.'
+msg_enter_passphrase_to_encrypt_img='Enter the passphrase to encrypt the image'
+msg_it_will_not_be_echoed='It will not be echoed in the screen'
+msg_reenter_passphrase_to_encrypt_img='Re-enter the passphrase to encrypt the image'
+msg_passphrases_not_match='Sorry, passphrases do not match.'
+msg_passphrase_empty='The passphrase can NOT be empty!'
+msg_enter_passphrase_for_decrypt_img='Enter the passphrase to decrypt the image'
+msg_succeed_to_decrypt_img='Succeeded to decrypt the image'
+msg_failed_to_encrypt_img='Failed to encrypt the image.'
+msg_failed_to_decrypt_img='Failed to decrypt the image'
+msg_encrypt_img_dir_is_now_as='The encrypted image dir is now as'
+msg_set_image_volume_size='Größe der Stücke in MB, in die das Image aufgeteilt wird. Der Wert muss größer als 10 sein. Wenn Sie keine Aufteilung wollen, geben Sie einen großen Wert, z.B. "1000000" ein. Bitte verwenden Sie nicht mehr "0" dafür, wenn Ihre GNU/Linux Distribution das neue /sbin/init von upstart benutzt, fängt dieses mit dem Wert "0" nichts an. //NOTE// For the FAT32 image repository, the number should not be larger than 4096.'

@@ -788,7 +788,6 @@ msg_which_color_depth_do_u_want='Akú farebnú hĺbku chcete použiť?'
 # Tag on 2009/08/03
 msg_ocs_live_mount_nfs_ser_ver='Ktorú verziu NFS služby chcete pripojiť?'
 # Tag on 2009/11/05
-msg_set_image_volume_size='Veľkosť v MB pre rozdelenie obrazu partície do viacerých súborov. Prosím zadajte číslo väčšie ako 10. Ak nechcete rozdeliť obraz, zadajte veľké číslo, napríklad "1000000". Prosím nezadávajte "0", pretože ak vaša distribúcia GNU/Linuxu používa nový /sbin/init z upstartu, tak bude z"0" zmätená.'
 msg_ocs_param_icrc='Ignorovať CRC kontrolu partclone'
 msg_change_cpu_level_to_i686='Pre distribúciu, ktorú používate, je dostupná iba i686 architektúra. Úroveň optimalizácie bola zmenená na i686!!!'
 # Tag on 2010/02/15
@@ -941,3 +940,20 @@ msg_this_part_in_the_img_is_ok='Obraz tejto partície je obnoviteľný'
 # Tag on 2014/09/28
 msg_2_or_more_parts_only_same_parts_on_dest='Dve alebo viacej partícií z adresára obrazu bolo vybraných. Iba rovnaké partície na cieľovom disku môžu byť obnovené.'
 msg_choose_the_parts_from_img_to_restore='Vyberte partíciu(ie) z obrazu na obnovenie na cieľový disk(VŠETKY DÁTA NA CIEĽOVEJ PARTÍCII BUDÚ PREPÍSANÉ!!)'
+# Tag on 2014/12/23
+msg_encrypt_image='Do you want to encrypt the image?'
+msg_yes_to_encrypt_img='Encrypt the image'
+msg_not_to_encrypt_img='Not to encrypt the image'
+msg_ecryptfs_is_used_for_clonezilla='If yes, eCryptfs program will be used to encrypt the image. It uses industry-standard cryptographic ciphers, key generation, and passphrase protection mechanisms. Without your salt/passphrase or private key, nobody will be able to retrieve your data.'
+msg_remember_passphrase_of_ecryptfs='//NOTE// You have to remember the passphrase, otherwise the image will _NOT_ be used in the future.'
+msg_enter_passphrase_to_encrypt_img='Enter the passphrase to encrypt the image'
+msg_it_will_not_be_echoed='It will not be echoed in the screen'
+msg_reenter_passphrase_to_encrypt_img='Re-enter the passphrase to encrypt the image'
+msg_passphrases_not_match='Sorry, passphrases do not match.'
+msg_passphrase_empty='The passphrase can NOT be empty!'
+msg_enter_passphrase_for_decrypt_img='Enter the passphrase to decrypt the image'
+msg_succeed_to_decrypt_img='Succeeded to decrypt the image'
+msg_failed_to_encrypt_img='Failed to encrypt the image.'
+msg_failed_to_decrypt_img='Failed to decrypt the image'
+msg_encrypt_img_dir_is_now_as='The encrypted image dir is now as'
+msg_set_image_volume_size='Veľkosť v MB pre rozdelenie obrazu partície do viacerých súborov. Prosím zadajte číslo väčšie ako 10. Ak nechcete rozdeliť obraz, zadajte veľké číslo, napríklad "1000000". Prosím nezadávajte "0", pretože ak vaša distribúcia GNU/Linuxu používa nový /sbin/init z upstartu, tak bude z"0" zmätená. //NOTE// For the FAT32 image repository, the number should not be larger than 4096.'

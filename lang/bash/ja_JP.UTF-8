@@ -807,7 +807,6 @@ msg_which_color_depth_do_u_want='色深度は幾つにしますか?'
 # Tag on 2009/08/03
 msg_ocs_live_mount_nfs_ser_ver='どのバージョンの NFS サービスをマウントしますか？'
 # Tag on 2009/11/05
-msg_set_image_volume_size='パーティションイメージファイルを複数のボリュームファイルに分割する為のサイズ(MB)。10以上の数を入力して下さい。イメージファイルを分割しない場合、大きな数（例：1000000）を入力して下さい。GNU/Linuxディストリビューションがupstartからの新しい/sbin/initを使用しており、0だとその/sbin/initが混乱するので、0は使用しないで下さい。'
 msg_ocs_param_icrc='partcloneのCRCチェックを無視'
 msg_change_cpu_level_to_i686='ご使用のディストリビューションではi686アーキテクチャのみ利用可能なので、最適化レベルをi686に変更します!!!'
 # Tag on 2010/02/15
@@ -959,3 +958,20 @@ msg_this_part_in_the_img_is_ok='このパーティションのイメージは復
 # Tag on 2014/09/28
 msg_2_or_more_parts_only_same_parts_on_dest='イメージディレクトリから２つ以上のパーティションが選択されました。復元先ディスクのパーティション数と同じ数のパーティションのみ復元可能です。'
 msg_choose_the_parts_from_img_to_restore='復元先ディスクに復元するパーティションを選択して下さい。(復元先パーティションの全データは上書きされ、元のデータは失われます)'
+# Tag on 2014/12/23
+msg_encrypt_image='Do you want to encrypt the image?'
+msg_yes_to_encrypt_img='Encrypt the image'
+msg_not_to_encrypt_img='Not to encrypt the image'
+msg_ecryptfs_is_used_for_clonezilla='If yes, eCryptfs program will be used to encrypt the image. It uses industry-standard cryptographic ciphers, key generation, and passphrase protection mechanisms. Without your salt/passphrase or private key, nobody will be able to retrieve your data.'
+msg_remember_passphrase_of_ecryptfs='//NOTE// You have to remember the passphrase, otherwise the image will _NOT_ be used in the future.'
+msg_enter_passphrase_to_encrypt_img='Enter the passphrase to encrypt the image'
+msg_it_will_not_be_echoed='It will not be echoed in the screen'
+msg_reenter_passphrase_to_encrypt_img='Re-enter the passphrase to encrypt the image'
+msg_passphrases_not_match='Sorry, passphrases do not match.'
+msg_passphrase_empty='The passphrase can NOT be empty!'
+msg_enter_passphrase_for_decrypt_img='Enter the passphrase to decrypt the image'
+msg_succeed_to_decrypt_img='Succeeded to decrypt the image'
+msg_failed_to_encrypt_img='Failed to encrypt the image.'
+msg_failed_to_decrypt_img='Failed to decrypt the image'
+msg_encrypt_img_dir_is_now_as='The encrypted image dir is now as'
+msg_set_image_volume_size='パーティションイメージファイルを複数のボリュームファイルに分割する為のサイズ(MB)。10以上の数を入力して下さい。イメージファイルを分割しない場合、大きな数（例：1000000）を入力して下さい。GNU/Linuxディストリビューションがupstartからの新しい/sbin/initを使用しており、0だとその/sbin/initが混乱するので、0は使用しないで下さい。 //NOTE// For the FAT32 image repository, the number should not be larger than 4096.'

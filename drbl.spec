@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+- Adding encryption function for Clonezilla image. Now it's OK for Clonezilla live, not yet for Clonezilla SE.
+- Remove zh_TW.BIG5 language option.
+
 * Thu Dec 25 2014 Steven Shiau <steven _at_ nchc org tw> 2.11.16-drbl1
 - File Known_issues_Big5.txt was removed.
 - Known_issues.txt and RELEASE-NOTES were updated.

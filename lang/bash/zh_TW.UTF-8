@@ -790,7 +790,6 @@ msg_which_color_depth_do_u_want='你要使用哪個色彩深度?'
 # Tag on 2009/08/03
 msg_ocs_live_mount_nfs_ser_ver='你要掛載哪一個版本的NFS服務?'
 # Tag on 2009/11/05
-msg_set_image_volume_size='將一個分割區的印象檔切割成數個小的分片檔案，每個分片檔的大小 (MB)。輸入的數字請大於10。如果你不要分割的話，請輸入一個大的數字，例如"1000000"，請不要再使用"0"。因為如果你的/sbin/init是來自於新版的upstart，這個"0"會讓/sbin/init搞混'
 msg_ocs_param_icrc='略去執行partclone時的CRC檢查'
 msg_change_cpu_level_to_i686='由於您使用的套件只有i686的核心，因此最佳化程度改為i686!!!'
 # Tag on 2010/02/15
@@ -940,3 +939,20 @@ msg_this_part_in_the_img_is_ok='這個分割區的印象檔是可還原的'
 # Tag on 2014/09/28
 msg_2_or_more_parts_only_same_parts_on_dest='選取了印象檔中的兩個或者超過兩個分割區，因此只能還原到目的碟中同樣的分割區中.'
 msg_choose_the_parts_from_img_to_restore='從印象檔中選取要還原的分割區來還原到目的碟中(注意!!!目的碟中分割區現存的資料會被覆蓋)'
+# Tag on 2014/12/23
+msg_encrypt_image='您是否要對印象檔加密?'
+msg_yes_to_encrypt_img='對印象檔加密'
+msg_not_to_encrypt_img='不對印象檔加密'
+msg_ecryptfs_is_used_for_clonezilla='若是，eCryptfs程式將會被使用來對印象檔加密。它使用的是工業標準的加密密碼，金鑰產生和密碼保護機制。在缺乏您的隨機鹽(salt),密碼以及私鑰的情況下，沒有人有辦法取出您的資料。'
+msg_remember_passphrase_of_ecryptfs='//注意// 您務必記住所輸入的密碼，要不然之後所存的印象檔就無法解開使用。'
+msg_enter_passphrase_to_encrypt_img='請輸入密碼來加密印象檔'
+msg_it_will_not_be_echoed='密碼將不會顯示在螢幕上'
+msg_reenter_passphrase_to_encrypt_img='請再次輸入密碼來加密印象檔'
+msg_passphrases_not_match='抱歉，兩次輸入的密碼不一致'
+msg_passphrase_empty='密碼不能是空的'
+msg_enter_passphrase_for_decrypt_img='請輸入密碼來解開印象檔'
+msg_succeed_to_decrypt_img='成功解開被加密的印象檔'
+msg_failed_to_encrypt_img='無法加密印象檔'
+msg_failed_to_decrypt_img='無法解開被加密的印象檔'
+msg_encrypt_img_dir_is_now_as='加密的印象檔目錄現在變成'
+msg_set_image_volume_size='將一個分割區的印象檔切割成數個小的分片檔案，每個分片檔的大小 (MB)。輸入的數字請大於10。如果你不要分割的話，請輸入一個大的數字，例如"1000000"，請不要再使用"0"。因為如果你的/sbin/init是來自於新版的upstart，這個"0"會讓/sbin/init搞混。//注意// 如果你的印象檔儲藏庫是在FAT32檔案系統上，這個數字不可以超過4096.'

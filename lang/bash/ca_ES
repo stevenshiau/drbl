@@ -792,7 +792,6 @@ msg_which_color_depth_do_u_want="Quina profunditat de color vol?"
 # Tag on 2009/08/03
 msg_ocs_live_mount_nfs_ser_ver="Quina versió de servei NFS desitja muntar?"
 # Tag on 2009/11/05
-msg_set_image_volume_size="La grandària en MB per partir l'arxiu imatge partició en diversos volums d'arxius. Per favor introdueixi un nombre major de 10. Si no desitja fragmentar l'arxiu imatge, introdueixi un nombre molt gran ex. \"1000000\". Per favor no usi mai més \"0\" perquè si la seva distribució de GNU/Linux usa el nou /sbin/init en l'inici, es confondrà amb aquest \"0\"."
 msg_ocs_param_icrc="Ignorar la revisió CRC de partclone"
 msg_change_cpu_level_to_i686="Per a la distribució que està fent servir, només estan disponibles arquitectures i686, per la qual cosa l'optimització de nivell s'ha canviat a i686!!!"
 # Tag on 2010/02/15
@@ -945,4 +944,21 @@ msg_this_part_in_the_img_is_broken="La imatge d'aquesta partició està rompuda"
 msg_this_part_in_the_img_is_ok="La imatge d'aquesta partició se pot restaurar"
 # Tag on 2014/09/28
 msg_2_or_more_parts_only_same_parts_on_dest="Dos o més particions del directori d'imatge han estat seleccionades. Solament les mateixes particions en el disc destí podran ser restaruades."
-msg_choose_the_parts_from_img_to_restore="Selecciona la(es) particion(s) de la imatge a restaurar al disc destí (TOTES LES DATES EN LA PARTICIÓ SERAN PERDUDES I REEMPLAÇADES!!)'
+msg_choose_the_parts_from_img_to_restore="Selecciona la(es) particion(s) de la imatge a restaurar al disc destí (TOTES LES DATES EN LA PARTICIÓ SERAN PERDUDES I REEMPLAÇADES!!)"
+# Tag on 2014/12/23
+msg_encrypt_image='Do you want to encrypt the image?'
+msg_yes_to_encrypt_img='Encrypt the image'
+msg_not_to_encrypt_img='Not to encrypt the image'
+msg_ecryptfs_is_used_for_clonezilla='If yes, eCryptfs program will be used to encrypt the image. It uses industry-standard cryptographic ciphers, key generation, and passphrase protection mechanisms. Without your salt/passphrase or private key, nobody will be able to retrieve your data.'
+msg_remember_passphrase_of_ecryptfs='//NOTE// You have to remember the passphrase, otherwise the image will _NOT_ be used in the future.'
+msg_enter_passphrase_to_encrypt_img='Enter the passphrase to encrypt the image'
+msg_it_will_not_be_echoed='It will not be echoed in the screen'
+msg_reenter_passphrase_to_encrypt_img='Re-enter the passphrase to encrypt the image'
+msg_passphrases_not_match='Sorry, passphrases do not match.'
+msg_passphrase_empty='The passphrase can NOT be empty!'
+msg_enter_passphrase_for_decrypt_img='Enter the passphrase to decrypt the image'
+msg_succeed_to_decrypt_img='Succeeded to decrypt the image'
+msg_failed_to_encrypt_img='Failed to encrypt the image.'
+msg_failed_to_decrypt_img='Failed to decrypt the image'
+msg_encrypt_img_dir_is_now_as='The encrypted image dir is now as'
+msg_set_image_volume_size="La grandària en MB per partir l'arxiu imatge partició en diversos volums d'arxius. Per favor introdueixi un nombre major de 10. Si no desitja fragmentar l'arxiu imatge, introdueixi un nombre molt gran ex. \"1000000\". Per favor no usi mai més \"0\" perquè si la seva distribució de GNU/Linux usa el nou /sbin/init en l'inici, es confondrà amb aquest \"0\". //NOTE// For the FAT32 image repository, the number should not be larger than 4096."
