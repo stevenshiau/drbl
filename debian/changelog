@@ -1,3 +1,12 @@
+drbl (2.11.16-drbl1) unstable; urgency=low
+
+  * File Known_issues_Big5.txt was removed.
+  * Known_issues.txt and RELEASE-NOTES were updated.
+  * Adding package ecryptfs-utils in the packages list
+    of DRBL/Clonezilla live.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 25 Dec 2014 10:05:04 +0800
+
 drbl (2.11.15-drbl2) unstable; urgency=low
 
   * The language files about stable Clonezilla live was updated as i586
