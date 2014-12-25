@@ -5,6 +5,14 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.12.1-drbl1) unstable; urgency=low
+
+  * Adding encryption function for Clonezilla image. Now it's OK for
+    Clonezilla live, not yet for Clonezilla SE.
+  * Remove zh_TW.BIG5 language option.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 25 Dec 2014 19:12:28 +0800
+
 drbl (2.11.16-drbl1) unstable; urgency=low
 
   * File Known_issues_Big5.txt was removed.

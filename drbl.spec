@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.11.16
+Version:	2.12.1
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,7 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Thu Dec 25 2014 Steven Shiau <steven _at_ nchc org tw> 2.12.1-drbl1
 - Adding encryption function for Clonezilla image. Now it's OK for Clonezilla live, not yet for Clonezilla SE.
 - Remove zh_TW.BIG5 language option.
 
