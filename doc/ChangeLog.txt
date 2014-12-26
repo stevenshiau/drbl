@@ -5,6 +5,15 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.12.2-drbl1) unstable; urgency=low
+
+  * Updating msg_encrypt_img_dir_is_now_as in all language files.
+  * The target_dir_enc_mntpnt is just a mounting point. Therefore
+    when program exists, just use rmdir not "rm -rf" to avoid
+    accidentally removing wrong directory.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 26 Dec 2014 22:44:38 +0800
+
 drbl (2.12.1-drbl1) unstable; urgency=low
 
   * Adding encryption function for Clonezilla image. Now it's OK for

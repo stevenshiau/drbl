@@ -3467,7 +3467,8 @@ umount_ecryptfs_mount_point_if_necessary(){
       if [ "$rc" -eq 0 ]; then
         if [ -d "$target_dir_enc_mntpnt" -a \
              -n "$(echo "$target_dir_enc_mntpnt" | grep -w "ecryptfs_mnt")" ]; then
-          rm -rf "$target_dir_enc_mntpnt"
+	  # It's just a mounting point. Better not to use "rm -rf" in case wrongly remove all the dir.
+          rmdir "$target_dir_enc_mntpnt"
         fi
       fi
     fi
