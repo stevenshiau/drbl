@@ -960,5 +960,5 @@ msg_enter_passphrase_for_decrypt_img='Enter the passphrase to decrypt the image'
 msg_succeed_to_decrypt_img='Succeeded to decrypt the image'
 msg_failed_to_encrypt_img='Failed to encrypt the image.'
 msg_failed_to_decrypt_img='Failed to decrypt the image'
-msg_encrypt_img_dir_is_now_as='The encrypted image dir is now as'
+msg_encrypt_img_dir_is_now_as='The temporary encrypted image dir is now as'
 msg_set_image_volume_size="La grandària en MB per partir l'arxiu imatge partició en diversos volums d'arxius. Per favor introdueixi un nombre major de 10. Si no desitja fragmentar l'arxiu imatge, introdueixi un nombre molt gran ex. \"1000000\". Per favor no usi mai més \"0\" perquè si la seva distribució de GNU/Linux usa el nou /sbin/init en l'inici, es confondrà amb aquest \"0\". //NOTE// For the FAT32 image repository, the number should not be larger than 4096."
