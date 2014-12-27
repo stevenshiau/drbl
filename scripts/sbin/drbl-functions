@@ -2536,10 +2536,14 @@ output_netinstall_syslinux_pxelinux_menu() {
       if [ -n "$(echo $inet | grep -iE "\-fedora-([5-9]|1[1-6])-" 2>/dev/null)" ]; then
         # For Fedora 5 to 16.
         extra_append=""
-      else
-        # Ref: https://bugzilla.redhat.com/show_bug.cgi?id=810005
+      elif [ -n "$(echo $inet | grep -iE "\-fedora-(1[7-9]|20)-" 2>/dev/null)" ]; then
+        # For Fedora 16 to 20.
         echo "Using Fedora installation repository \"$fedora_url_site\" from drbl.conf"
         extra_append="inst.repo=$fedora_url_site/fedora/linux/releases/$ni_ver/Fedora/$ni_arch/os"
+      else
+        # For Fedora 21 or later
+        echo "Using Fedora installation repository \"$fedora_url_site\" from drbl.conf"
+        extra_append="inst.repo=$fedora_url_site/fedora/linux/releases/$ni_ver/Server/$ni_arch/os"
       fi
       # For Fedora, enable reiserfs when installing
       menu_hint=""

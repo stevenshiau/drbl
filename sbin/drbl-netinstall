@@ -153,9 +153,14 @@ get_fedora_netinstall() {
         [1-6])
           url=$fedora_url_site/$path_to_fedora/core/$ver/$arch/os/images/pxeboot
           ;;
-        *)
-          # For 7 or later... who knows about the future
+        [7-9]|1[1-9]|20)
+          # For 7 to 20
           url=$fedora_url_site/$path_to_fedora/releases/$ver/Fedora/$arch/os/images/pxeboot
+          ;;
+          *) 
+	  # For 21 or later... who knows about the future...
+	  # E.g. http://free.nchc.org.tw/fedora/linux/releases/21/Server/i386/os/images/pxeboot/
+          url=$fedora_url_site/$path_to_fedora/releases/$ver/Server/$arch/os/images/pxeboot
           ;;
       esac
       get_and_put_linux_img $url Fedora $ver $arch $fedora_netinstall_kernel $fedora_netinstall_initrd

@@ -1,3 +1,10 @@
+drbl (2.12.3-drbl1) unstable; urgency=low
+
+  * Language file zh_TW.UTF-8 was updated.
+  * Supporting netinstall of Fedora 21.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sat, 27 Dec 2014 16:47:00 +0800
+
 drbl (2.12.2-drbl1) unstable; urgency=low
 
   * Updating msg_encrypt_img_dir_is_now_as in all language files.
