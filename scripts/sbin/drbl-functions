@@ -3460,6 +3460,7 @@ task_ecryptfs_mount_point() {
   target_dir="$(basename ${target_dir_enc_mntpnt})"
   #
   [ -f "$TMP" ] && rm -f $TMP
+  return $grc
 } # end of task_ecryptfs_mount_point
 #
 umount_ecryptfs_mount_point_if_necessary(){
