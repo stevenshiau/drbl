@@ -1,3 +1,11 @@
+drbl (2.12.5-drbl1) unstable; urgency=low
+
+  * Adding return code for function task_ecryptfs_mount_point.
+  * Language files were updated for encrypting and decrypting
+    existing images.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sat, 03 Jan 2015 23:43:36 +0800
+
 drbl (2.12.4-drbl1) unstable; urgency=low
 
   * Adding package ntpdate in the packages list of Clonezilla/DRBL
