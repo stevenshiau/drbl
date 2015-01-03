@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+- Adding return code for function task_ecryptfs_mount_point.
+- Language files were updated for encrypting and decrypting existing images.
+
 * Mon Dec 29 2014 Steven Shiau <steven _at_ nchc org tw> 2.12.4-drbl1
 - Adding package ntpdate in the packages list of Clonezilla/DRBL live.
 
