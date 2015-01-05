@@ -969,3 +969,4 @@ msg_remove_original_unencrypted_img='Do you want to remove the original, unencry
 msg_remove_original_unencrypted_img_ask_again='Let me ask you again. Are you sure you want to remove the original, unencrypted image:'
 msg_remove_original_encrypted_img='Do you want to remove the original, encrypted image:'
 msg_remove_original_encrypted_img_ask_again='Let me ask you again. Are you sure you want to remove the original, encrypted image:'
+msg_converted_img_is_not_encrypted='///NOTE/// The converted image is not encrypted. If you want to encrypt it, use "ocs-encrypt-img" to encrypt it.'

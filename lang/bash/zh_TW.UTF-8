@@ -969,3 +969,4 @@ msg_remove_original_unencrypted_img='您是否要移除原本未加密的印象�
 msg_remove_original_unencrypted_img_ask_again='讓我再問您一次，您確認要要移除原本未加密的印象檔:'
 msg_remove_original_encrypted_img='您是否要移除原本已加密的印象檔:'
 msg_remove_original_encrypted_img_ask_again='讓我再問您一次，您確認要要移除原本已加密的印象檔:'
+msg_converted_img_is_not_encrypted='///注意/// 轉換過的印象檔是未加密的。如果你要加密，可以用"ocs-encrypt-img"程式來加密。'

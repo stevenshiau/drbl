@@ -1,3 +1,10 @@
+drbl (2.12.6-drbl1) unstable; urgency=low
+
+  * Language files were updated for converting encrypted/decrypted
+    images.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 05 Jan 2015 13:35:09 +0800
+
 drbl (2.12.5-drbl1) unstable; urgency=low
 
   * Adding return code for function task_ecryptfs_mount_point.
