@@ -45,6 +45,8 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+- Language files were updated for p2v.
+
 * Tue Jan 06 2015 Steven Shiau <steven _at_ nchc org tw> 2.12.7-drbl1
 - Variable "target_dir_enc_mntpnt" was changed to shorter one "ecrypt_mntpnt" in drbl-functions.
 - Avoid using "rm -r" if possible.
