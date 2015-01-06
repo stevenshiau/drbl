@@ -5,6 +5,14 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.12.7-drbl1) unstable; urgency=low
+
+  * Variable "target_dir_enc_mntpnt" was changed to shorter one
+    "ecrypt_mntpnt" in drbl-functions.
+  * Avoid using "rm -r" if possible.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 06 Jan 2015 16:15:03 +0800
+
 drbl (2.12.6-drbl1) unstable; urgency=low
 
   * Language files were updated for converting encrypted/decrypted

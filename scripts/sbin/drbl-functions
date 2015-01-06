@@ -448,8 +448,8 @@ clean_passwd_env() {
       rm -rf $newroot/$d2rm
     fi
   done
-}
-
+} # end of clean_passwd_env
+#
 clean_chpasswd_env() {
   local newroot="$1"
   [ -z "$newroot" ] && exit 1
@@ -459,7 +459,7 @@ clean_chpasswd_env() {
       rm -rf $newroot/$d2rm
     fi
   done
-}
+} # end of clean_chpasswd_env
 
 # check if the user input /dev/hda, /dev/hdb...
 check_input_hd() {
@@ -3334,12 +3334,12 @@ task_ecryptfs_mount_point() {
   local task_type="$1"
   local passwd_ecryptfs pass1 pass2 ecryptfs_pf
   local TMP grc rc ask_ ans_
-  # target_dir_enc_mntpnt, target_dir_orig and target_dir are gloable variables.
+  # ecrypt_mntpnt, target_dir_orig and target_dir are gloable variables.
   # Change the ocsroot to /tmp now since we will create the mount point in /tmp
 
   check_if_system_support_ecryptfs
   ###
-  target_dir_enc_mntpnt="$(mktemp -d /tmp/ecryptfs_mnt.XXXXXX)"
+  ecrypt_mntpnt="$(mktemp -d /tmp/ecryptfs_mnt.XXXXXX)"
   ecryptfs_pf=$(mktemp /tmp/ecryptfs_f.XXXXXX)
   # Force to set the mode
   chmod 600 $ecryptfs_pf
@@ -3394,7 +3394,7 @@ task_ecryptfs_mount_point() {
     echo "passphrase_passwd=$passwd_ecryptfs" > $ecryptfs_pf
     #
     while [ "$ask_" = "true" ]; do
-      LC_ALL=C mount -t ecryptfs $ocsroot/${target_dir} $target_dir_enc_mntpnt -o $ocs_ecryptfs_opt,key=passphrase:passphrase_passwd_file=$ecryptfs_pf
+      LC_ALL=C mount -t ecryptfs $ocsroot/${target_dir} $ecrypt_mntpnt -o $ocs_ecryptfs_opt,key=passphrase:passphrase_passwd_file=$ecryptfs_pf
       rc="$?"
       # Even wrong passphrase could give rc=0. However, the data are not really
       # decrypted. Therefore we have to use another method to check.
@@ -3425,8 +3425,8 @@ task_ecryptfs_mount_point() {
       # Image exists already.
       # Check if the image really decrypted correctly by testing file "clonezilla-img". This is only for restoring
       # The results of "file -Lbi clonezilla-img" might be charset=utf-8 or us-ascii, or even others. Therefore just check it not binary and grep a line.
-      if [ -z "$(LC_ALL=C file -Lbi "${target_dir_enc_mntpnt}/clonezilla-img" | grep -Ew "charset=binary")" -a \
-           -n "$(grep -e "^This image was saved by Clonezilla" "${target_dir_enc_mntpnt}/clonezilla-img")" ]; then 		   
+      if [ -z "$(LC_ALL=C file -Lbi "${ecrypt_mntpnt}/clonezilla-img" | grep -Ew "charset=binary")" -a \
+           -n "$(grep -e "^This image was saved by Clonezilla" "${ecrypt_mntpnt}/clonezilla-img")" ]; then 		   
         grc=0
         [ "$BOOTUP" = "color" ] && $SETCOLOR_SUCCESS
         echo "$msg_succeed_to_decrypt_img: ${target_dir}" | tee -a $OCS_LOGFILE
@@ -3436,7 +3436,7 @@ task_ecryptfs_mount_point() {
         [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
         echo "$msg_failed_to_decrypt_img: ${target_dir} " | tee -a $OCS_LOGFILE
         [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
-	umount $target_dir_enc_mntpnt
+	umount $ecrypt_mntpnt
         grc=1
         confirm_continue_or_not_default_continue
       fi
@@ -3447,17 +3447,17 @@ task_ecryptfs_mount_point() {
     fi
   done
   [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
-  echo "$msg_encrypt_img_dir_is_now_as: ${target_dir_enc_mntpnt}" | tee -a $OCS_LOGFILE
+  echo "$msg_encrypt_img_dir_is_now_as: ${ecrypt_mntpnt}" | tee -a $OCS_LOGFILE
   [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
   if [ "$ocs_sr_mode" = "interactive" ]; then
     sleep 3
   fi
   # Save the original ocsroot for later use
   ocsroot_orig="$ocsroot"
-  ocsroot="/tmp"
+  ocsroot="$(dirname ${ecrypt_mntpnt})"
   # Save the original image dir for later use
   target_dir_orig="${target_dir}"
-  target_dir="$(basename ${target_dir_enc_mntpnt})"
+  target_dir="$(basename ${ecrypt_mntpnt})"
   #
   [ -f "$TMP" ] && rm -f $TMP
   return $grc
@@ -3466,14 +3466,14 @@ task_ecryptfs_mount_point() {
 umount_ecryptfs_mount_point_if_necessary(){
   local rc
   if [ "$encrypt_ocs_img" = "yes" ]; then
-    if [ -n "$target_dir_enc_mntpnt" ]; then
-      umount $target_dir_enc_mntpnt 2>/dev/null
+    if [ -n "$ecrypt_mntpnt" ]; then
+      umount $ecrypt_mntpnt 2>/dev/null
       rc=$?
       if [ "$rc" -eq 0 ]; then
-        if [ -d "$target_dir_enc_mntpnt" -a \
-             -n "$(echo "$target_dir_enc_mntpnt" | grep -w "ecryptfs_mnt")" ]; then
+        if [ -d "$ecrypt_mntpnt" -a \
+             -n "$(echo "$ecrypt_mntpnt" | grep -w "ecryptfs_mnt")" ]; then
 	  # It's just a mounting point. Better not to use "rm -rf" in case wrongly remove all the dir.
-          rmdir "$target_dir_enc_mntpnt"
+          rmdir "$ecrypt_mntpnt"
         fi
       fi
     fi
@@ -3503,7 +3503,8 @@ grand_jobs_before_exit() {
   #(2)
   if [ -d "$MULTIPATH_INFODIR" -a \
        -n "$(echo $MULTIPATH_INFODIR | grep -w "multipath_info")" ]; then
-    rm -rf "$MULTIPATH_INFODIR"
+    rm -f "$MULTIPATH_INFODIR/*"
+    rmdir $MULTIPATH_INFODIR
   fi
 } # end of grand_jobs_before_exit
 #
