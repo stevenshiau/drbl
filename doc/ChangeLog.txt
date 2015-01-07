@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.12.8-drbl1) unstable; urgency=low
+
+  * Language files were updated for p2v and the menus in ocs-sr.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 07 Jan 2015 12:32:20 +0800
+
 drbl (2.12.7-drbl1) unstable; urgency=low
 
   * Variable "target_dir_enc_mntpnt" was changed to shorter one

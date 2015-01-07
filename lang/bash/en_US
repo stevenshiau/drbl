@@ -970,3 +970,6 @@ msg_remove_original_encrypted_img='Do you want to remove the original, encrypted
 msg_remove_original_encrypted_img_ask_again='Let me ask you again. Are you sure you want to remove the original, encrypted image:'
 msg_converted_img_is_not_encrypted='///NOTE/// The converted image is not encrypted. If you want to encrypt it, use "ocs-encrypt-img" to encrypt it.'
 msg_choose_the_image_to_be_converted_virtual='Choose the image to be converted to virtual machine disk file'
+msg_encrypt_existing_img='Encrypt an existing unencrypted image'
+msg_decrypt_existing_img='Decrypt an existing encrypted image'
+msg_p2v_existing_img='Convert an existing image to virtual disk'

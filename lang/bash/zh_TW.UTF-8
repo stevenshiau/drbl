@@ -971,3 +971,6 @@ msg_remove_original_encrypted_img='您是否要移除原本已加密的印象檔
 msg_remove_original_encrypted_img_ask_again='讓我再問您一次，您確認要要移除原本已加密的印象檔:'
 msg_converted_img_is_not_encrypted='///注意/// 轉換過的印象檔是未加密的。如果你要加密，可以用"ocs-encrypt-img"程式來加密。'
 msg_choose_the_image_to_be_converted_virtual='選擇印象檔來轉換成虛擬機器硬碟檔'
+msg_encrypt_existing_img='將現有的一個未加密之印象檔加密'
+msg_decrypt_existing_img='將現有的一個已加密之印象檔解密'
+msg_p2v_existing_img='轉換印象檔成為虛擬機器硬碟檔'
