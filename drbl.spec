@@ -45,6 +45,8 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+- Adding a link file firstboot.DBN7.8.drbl for Debian 7.8. Same link files for older versions, too.
+
 * Wed Jan 07 2015 Steven Shiau <steven _at_ nchc org tw> 2.12.8-drbl1
 - Language files were updated for p2v and the menus in ocs-sr.
 
