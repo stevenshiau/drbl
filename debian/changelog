@@ -1,3 +1,13 @@
+drbl (2.12.9-drbl1) unstable; urgency=low
+
+  * Adding a link file firstboot.DBN7.8.drbl for Debian 7.8.
+    Same link files for older versions, too.
+  * Language files were updated for variables changed and drbl-ocs.
+  * Force to show only unencrypted images for Clonezilla SE in
+    dcs option.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 12 Jan 2015 23:09:08 +0800
+
 drbl (2.12.8-drbl1) unstable; urgency=low
 
   * Language files were updated for p2v and the menus in ocs-sr.

@@ -383,7 +383,7 @@ do_clonezilla_restore_dev() {
     # get the image
     ANS_TMP=`mktemp /tmp/ocs_ans.XXXXXX`
     trap "[ -f "$ANS_TMP" ] && rm -f $ANS_TMP" HUP INT QUIT TERM EXIT
-    get_existing_${dev}_image $ANS_TMP
+    get_existing_${dev}_image $ANS_TMP rest-unenc
     # the return name will be only one image name.
     target_image="$(cat $ANS_TMP)"
     [ -f "$ANS_TMP" ] && rm -f $ANS_TMP
