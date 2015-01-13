@@ -1,3 +1,9 @@
+drbl (2.12.10-drbl1) unstable; urgency=low
+
+  * Adding firstboot.DBN8.0.drbl.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 13 Jan 2015 15:52:23 +0800
+
 drbl (2.12.9-drbl1) unstable; urgency=low
 
   * Adding a link file firstboot.DBN7.8.drbl for Debian 7.8.

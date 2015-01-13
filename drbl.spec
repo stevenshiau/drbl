@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.12.9
+Version:	2.12.10
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Tue Jan 13 2015 Steven Shiau <steven _at_ nchc org tw> 2.12.10-drbl1
+- Adding firstboot.DBN8.0.drbl.
+
 * Mon Jan 12 2015 Steven Shiau <steven _at_ nchc org tw> 2.12.9-drbl1
 - Adding a link file firstboot.DBN7.8.drbl for Debian 7.8. Same link files for older versions, too.
 - Language files were updated for variables changed and drbl-ocs.
