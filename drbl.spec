@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.12.10
+Version:	2.12.11
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Wed Jan 14 2015 Steven Shiau <steven _at_ nchc org tw> 2.12.11-drbl1
+- Package ecryptfs-utils is now listed as required package for DRBL.
+
 * Tue Jan 13 2015 Steven Shiau <steven _at_ nchc org tw> 2.12.10-drbl1
 - Adding firstboot.DBN8.0.drbl.
 

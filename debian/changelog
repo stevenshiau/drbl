@@ -1,3 +1,9 @@
+drbl (2.12.11-drbl1) unstable; urgency=low
+
+  * Package ecryptfs-utils is now listed as required package for DRBL.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 14 Jan 2015 20:38:37 +0800
+
 drbl (2.12.10-drbl1) unstable; urgency=low
 
   * Adding firstboot.DBN8.0.drbl.
