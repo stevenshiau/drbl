@@ -5,6 +5,14 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.12.13-drbl1) unstable; urgency=low
+
+  * Bug fixed: the previous workaround by removing services in
+    client's /etc/rcS.d/ causes clients fail to reboot or shutdown.
+    Forget it.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 16 Jan 2015 22:52:08 +0800
+
 drbl (2.12.12-drbl1) unstable; urgency=low
 
   * Bug fixed: drbl-clean-dhcpd-leases failed to restart dhcpd service

@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.12.12
+Version:	2.12.13
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Fri Jan 16 2015 Steven Shiau <steven _at_ nchc org tw> 2.12.13-drbl1
+- Bug fixed: the previous workaround by removing services in client's /etc/rcS.d/ causes clients fail to reboot or shutdown. Forget it.
+
 * Fri Jan 16 2015 Steven Shiau <steven _at_ nchc org tw> 2.12.12-drbl1
 - Bug fixed: drbl-clean-dhcpd-leases failed to restart dhcpd service for non-systemd environment.
 - Bug fixed: Somehow the unnecessary services in client's /etc/rcS.d/ cause the console behaves weird. Removed them.

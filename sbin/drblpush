@@ -3482,12 +3482,13 @@ if [ -e /etc/debian_version ]; then
 	    # (1) The TUI output of partclone is distored
 	    # (2) Keyboard does not work well in the mode "select-in-client" 
 	    # Therefore we just remove all of them except S00wait-drbl. It's OK to do so because all the required services are actually started by upstart already.
-            if [ "$DISTRIB_RELEASE" = "14.10" ]; then
-	      for isr in $drbl_common_root/etc/rcS.d/*; do
-	        [ "$isr" = "$drbl_common_root/etc/rcS.d/S00wait-drbl" ] && continue
-		rm -f $isr
-	      done
-	    fi
+	    # //NOTE// This workaround does not work well. It will cause client fails to reboot/shtudown. Therefore we can not use it.
+            # if [ "$DISTRIB_RELEASE" = "14.10" ]; then
+            #   for isr in $drbl_common_root/etc/rcS.d/*; do
+            #     [ "$isr" = "$drbl_common_root/etc/rcS.d/S00wait-drbl" ] && continue
+            #     rm -f $isr
+            #   done
+            # fi
 	  fi 
 	fi
 	;;
