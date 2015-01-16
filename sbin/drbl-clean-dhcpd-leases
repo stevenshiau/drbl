@@ -23,4 +23,6 @@ fi
 touch $DHCPDLEASE_DIR/dhcpd.leases
 if is_systemd_init; then
   /bin/systemctl start $DHCP_SRV_NAME.service || /etc/init.d/$DHCP_SRV_NAME start
+else
+  service $DHCP_SRV_NAME restart
 fi
