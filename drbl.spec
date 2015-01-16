@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.12.11
+Version:	2.12.12
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,10 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Fri Jan 16 2015 Steven Shiau <steven _at_ nchc org tw> 2.12.12-drbl1
+- Bug fixed: drbl-clean-dhcpd-leases failed to restart dhcpd service for non-systemd environment.
+- Bug fixed: Somehow the unnecessary services in client's /etc/rcS.d/ cause the console behaves weird. Removed them.
+
 * Wed Jan 14 2015 Steven Shiau <steven _at_ nchc org tw> 2.12.11-drbl1
 - Package ecryptfs-utils is now listed as required package for DRBL.
 

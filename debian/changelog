@@ -1,3 +1,12 @@
+drbl (2.12.12-drbl1) unstable; urgency=low
+
+  * Bug fixed: drbl-clean-dhcpd-leases failed to restart dhcpd service
+    for non-systemd environment.
+  * Bug fixed: Somehow the unnecessary services in client's /etc/rcS.d/
+    cause the console behaves weird. Removed them.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 16 Jan 2015 18:38:16 +0800
+
 drbl (2.12.11-drbl1) unstable; urgency=low
 
   * Package ecryptfs-utils is now listed as required package for DRBL.
