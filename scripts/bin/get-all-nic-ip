@@ -95,6 +95,13 @@ done
 
 NDVS="$(LC_ALL=C ifconfig -a | grep -iE '(HWaddr|encap:Point-to-Point Protocol)'| awk -F' ' '{print $1}')"
 NDVS="$NDVS $(LC_ALL=C ifconfig -a | grep -iE '(^[[:alnum:]]+[[:digit:]]+(:[[:digit:]]+|)\:[[:space:]]+)'| awk -F': ' '{print $1}')"
+# Exclude some device if it's assigned in drbl.conf.
+if [ -n "$exclude_eth_nics" ]; then
+  for exn in $exclude_eth_nics; do
+    NDVS="$(LC_ALL=C echo $NDVS | sed -r -e "s/\b$exn\b//g")"
+  done
+fi
+#
 i=0
 for idev in $NDVS; do
   # physical network device IP

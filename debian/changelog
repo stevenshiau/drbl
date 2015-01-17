@@ -1,3 +1,10 @@
+drbl (2.12.14-drbl1) unstable; urgency=low
+
+  * An option "exclude_eth_nics" was added in drbl.conf so that some
+    network card can be excluded in drblpush.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sat, 17 Jan 2015 14:27:50 +0800
+
 drbl (2.12.13-drbl1) unstable; urgency=low
 
   * Bug fixed: the previous workaround by removing services in

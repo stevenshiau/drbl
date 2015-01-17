@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.12.13
+Version:	2.12.14
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Sat Jan 17 2015 Steven Shiau <steven _at_ nchc org tw> 2.12.14-drbl1
+- An option "exclude_eth_nics" was added in drbl.conf so that some network card can be excluded in drblpush.
+
 * Fri Jan 16 2015 Steven Shiau <steven _at_ nchc org tw> 2.12.13-drbl1
 - Bug fixed: the previous workaround by removing services in client's /etc/rcS.d/ causes clients fail to reboot or shutdown. Forget it.
 
