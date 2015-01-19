@@ -2090,7 +2090,7 @@ case "$OS_Version" in
      # http://opensource.nchc.org.tw/fedora/linux/releases/8/Fedora/i386/os/Packages/
      # http://opensource.nchc.org.tw/fedora/linux/releases/8/Everything/i386/os/Packages/
      # http://opensource.nchc.org.tw/fedora/linux/updates/8/i386/
-     RH_RPMS_os_update_dir="../updates/$FC_VER/$ARCH/ $FC_VER/Fedora/$ARCH/os/Packages/k/ $FC_VER/Fedora/$ARCH/os/Packages/ $FC_VER/Fedora/$ARCH/os/Fedora/ $FC_VER/Everything/$ARCH/os/Packages/ $FC_VER/Everything/$ARCH/os/Fedora/ updates/$FC_VER/$ARCH/ $FC_VER/$ARCH/os/Fedora/RPMS/ $FC_VER/$ARCH/updates/RPMS/ $FC_VER/$ARCH/os/RPMS/"
+     RH_RPMS_os_update_dir="../updates/$FC_VER/$ARCH/k/ ../updates/$FC_VER/$ARCH/ $FC_VER/Fedora/$ARCH/os/Packages/k/ $FC_VER/Fedora/$ARCH/os/Packages/ $FC_VER/Fedora/$ARCH/os/Fedora/ $FC_VER/Everything/$ARCH/os/Packages/ $FC_VER/Everything/$ARCH/os/Fedora/ updates/$FC_VER/$ARCH/ $FC_VER/$ARCH/os/Fedora/RPMS/ $FC_VER/$ARCH/updates/RPMS/ $FC_VER/$ARCH/os/RPMS/"
      ;;
    CO*)
      CO_VER=${OS_Version:2}

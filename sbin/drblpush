@@ -3122,6 +3122,16 @@ if [ -n "$(getenforce 2>/dev/null)" -a "$(getenforce 2>/dev/null)" = "Enforcing"
   sleep 10
   [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
 fi 
+# Disable FirewallD
+if [ "$(LC_ALL=C firewall-cmd --state 2>/dev/null)" = "running" ]; then
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+  echo "'Firewlld' would be DISABLED and stop , then replace with iptables service !!!"
+  systemctl stop firewalld.service
+  systemctl disable firewalld.service
+  sleep 10
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+fi 
+
 # set the tftp to on when xinetd/inted starts and portmap or rpcbind settings in server.
 if [ -e /etc/debian_version ]; then
   # Debian
@@ -3168,10 +3178,16 @@ TFTP_END
   fi
 else
   # RH-like & SuSE
-  perl -p -i -e "s/disable.*=.*/disable                 = no/g" /etc/xinetd.d/tftp 
-  # set the tftp working directory to be /tftpboot/nbi_img 
-  # to have higher security.
-  perl -p -i -e "s/server_arg.*=.*/server_args		= -s \/tftpboot\/nbi_img/g"  /etc/xinetd.d/tftp
+  if [ -e /etc/xinetd.d/tftp ]; then
+    # set the tftp working directory to be /tftpboot/nbi_img 
+    # to have higher security.
+    perl -p -i -e "s/disable.*=.*/disable                 = no/g" /etc/xinetd.d/tftp 
+    perl -p -i -e "s/server_arg.*=.*/server_args		= -s \/tftpboot\/nbi_img/g"  /etc/xinetd.d/tftp
+  fi
+  # For systemd distr. , ex: Fedora 21 
+  if [ -e /usr/lib/systemd/system/tftp.service ]; then
+    perl -p -i -e "s/^(ExecStart=\S*)[[:space:]]+.*$/\$1 -s \/tftpboot\/nbi_img/g" /usr/lib/systemd/system/tftp.service 
+  fi
 fi
 
 # create a config file for each diskless host to mount its fstab

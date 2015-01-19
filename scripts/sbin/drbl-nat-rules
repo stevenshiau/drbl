@@ -94,8 +94,8 @@ do_stop_iptables() {
       # Now this seems to do nothing.
       /etc/init.d/SuSEfirewall2_setup stop
    elif [ -n "$(which systemctl 2>/dev/null)" -a -e "/lib/systemd/system/iptables.service" ]; then
-     # for FC 17/18, add by Ceasar
-	 if [ -e "/lib/systemd/system/firewalld.service" ]; then
+     # for FC 18/21, add by Ceasar
+     if [ "$(LC_ALL=C firewall-cmd --state 2>/dev/null)" = "running" ]; then
        echo "Stop firewalld service ,run :systemctl stop firewalld.service"
        systemctl stop firewalld.service
      fi

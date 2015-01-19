@@ -1,5 +1,5 @@
 #!/bin/bash
-# Steven Shiau <steven _at_ nchc org tw>
+# Steven Shiau <steven _at_ nchc org tw>, Ceasar Sun <ceasar _at_ nchc org tw>
 # License: GPL
 # Description: prepare the pxelinux by using the files on the system or download and extract the required programs for DRBL.
 DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/usr/share/drbl}"
@@ -127,11 +127,12 @@ put_upstream_pxelinux(){
 put_distribution_pxelinux() {
   # Function to use the package from distribution.
   local possible_syslinux_pkgs req_syslinux_pkg_name syslinux_pkgs
-  possible_syslinux_pkgs="pxelinux syslinux-common syslinux"  # First we find pxelinux, then syslinux-common, then syslinux. The order is important.
+  # First we find pxelinux, then syslinux-common, then syslinux. The order is important.
+  possible_syslinux_pkgs="pxelinux syslinux-common syslinux-nonlinux syslinux"
   # Package name:
   # Debian: syslinux-common, for syslinux 6.x, sub-packages, pxelinux is available.
   # Ubuntu: 10.04: syslinux, > 10.10: syslinux-common
-  # Fedora: syslinux
+  # Fedora <=20: syslinux, >= 21: syslinux-nonlinux, by Ceasar
   # Suse: syslinux
   for i in $possible_syslinux_pkgs; do
     if $query_pkglist_exist_cmd $i &>/dev/null; then

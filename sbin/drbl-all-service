@@ -123,6 +123,12 @@ for iser in $drbl_server_service_chklist; do
         drbl_service="$drbl_service $iser"
    fi
 done
+# tftp is a pseudo service (depending on xinetd) in CentOS7 
+if [ -n "$(echo $drbl_service | grep -Ew "[[:space:]]*tftp" |\
+  grep -Ew "[[:space:]]*xinetd")" ]; then
+  drbl_service="$(echo $drbl_service | sed -r -e "s|[[:space:]]*tftp||")"
+fi
+
 #
 check_if_root
 
