@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.12.14
+Version:	2.13.1
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Mon Jan 19 2015 Steven Shiau <steven _at_ nchc org tw> 2.13.1-drbl1
+- Merged the patch from Ceasar to support Fedora 21.
+
 * Sat Jan 17 2015 Steven Shiau <steven _at_ nchc org tw> 2.12.14-drbl1
 - An option "exclude_eth_nics" was added in drbl.conf so that some network card can be excluded in drblpush.
 

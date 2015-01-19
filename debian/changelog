@@ -1,3 +1,9 @@
+drbl (2.13.1-drbl1) unstable; urgency=low
+
+  * Merged the patch from Ceasar to support Fedora 21.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 19 Jan 2015 13:48:35 +0800
+
 drbl (2.12.14-drbl1) unstable; urgency=low
 
   * An option "exclude_eth_nics" was added in drbl.conf so that some
