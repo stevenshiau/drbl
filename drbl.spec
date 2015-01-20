@@ -45,6 +45,8 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+- Language files were updated.
+
 * Mon Jan 19 2015 Steven Shiau <steven _at_ nchc org tw> 2.13.1-drbl1
 - Merged the patch from Ceasar to support Fedora 21.
 
