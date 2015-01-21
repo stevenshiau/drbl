@@ -5,6 +5,14 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.13.2-drbl1) unstable; urgency=low
+
+  * Language files were updated.
+  * Package refit was removed from DRBL/Clonezilla live packages list
+    since it does not exist in Debian repository anymore.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 21 Jan 2015 22:34:45 +0800
+
 drbl (2.13.1-drbl1) unstable; urgency=low
 
   * Merged the patch from Ceasar to support Fedora 21.
