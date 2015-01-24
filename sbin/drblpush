@@ -2486,6 +2486,20 @@ for isrv in $isrv_list ; do
   fi
 done
 
+# Set journal.conf for FC 21 to solve bootup hanging, by Ceasar
+# Ref: http://forums.gentoo.org/viewtopic-t-806432-view-previous.html?sid=206e0c04aa942972883135971a18c6ae
+# Add into clients' /etc/systemd/journald.conf
+# Storage=volatile
+# SystemMaxUse=20M
+# SystemMaxFileSize=20M
+
+if [ -e "$drbl_common_root/etc/systemd/journald.conf" ]; then 
+  sed -i -e "/SystemMaxUse\=/d" -e "/SystemMaxFileSize\=/d" -e "/Storage\=/d" $drbl_common_root/etc/systemd/journald.conf 
+  echo "Storage=volatile" >> $drbl_common_root/etc/systemd/journald.conf 
+  echo "SystemMaxUse=20M" >> $drbl_common_root/etc/systemd/journald.conf 
+  echo "SystemMaxFileSize=20M" >> $drbl_common_root/etc/systemd/journald.conf 
+fi
+
 # Get the gdm or kdm config filename
 # get_gdm_kdm_conf_filename will also process lightdm. For Ubuntu 14.04, /etc/lightdm/lightdm.conf does not exist, and get_gdm_kdm_conf_filename will unzip the one "/usr/share/doc/lightdm/lightdm.conf.gz" and put it in /etc/lightdm/
 get_gdm_kdm_conf_filename
