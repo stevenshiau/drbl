@@ -3333,8 +3333,9 @@ check_if_system_support_ecryptfs(){
 task_ecryptfs_mount_point() {
   local task_type="$1"
   local passwd_ecryptfs pass1 pass2 ecryptfs_pf
-  local TMP grc rc ask_ ans_
-  # ecrypt_mntpnt, target_dir_orig and target_dir are gloable variables.
+  local TMP grc rc ask_ ans_ rc_bindfs
+  # ecrypt_mntpnt, bindfs_mntpnt, webdav_bindfs_flag, target_dir_orig and
+  # target_dir are gloable variables.
   # Change the ocsroot to /tmp now since we will create the mount point in /tmp
 
   check_if_system_support_ecryptfs
@@ -3352,7 +3353,6 @@ task_ecryptfs_mount_point() {
 
   while [ "$grc" -ne 0 ]; do
     rc="1"
-    ask_="true"
     echo $msg_delimiter_star_line | tee --append ${OCS_LOGFILE}
     case "$task_type" in
      *save*) 
@@ -3393,9 +3393,35 @@ task_ecryptfs_mount_point() {
     # Put it in the file
     echo "passphrase_passwd=$passwd_ecryptfs" > $ecryptfs_pf
     #
+    webdav_bindfs_flag="no"
+    ask_="true"
+    #
     while [ "$ask_" = "true" ]; do
-      LC_ALL=C mount -t ecryptfs $ocsroot/${target_dir} $ecrypt_mntpnt -o $ocs_ecryptfs_opt,key=passphrase:passphrase_passwd_file=$ecryptfs_pf
-      rc="$?"
+      # If ocsroot is webdav, we have to use bindfs as the middle layer.
+      # Reason: eCryptFS belongs to a class of pseudo-filesystems, i.e. file systems that run on top of a layer of conventional FS. But davfs2 refers to the network stack-based file systems that are not compatible with eCryptFS. Therefore it is necessary to use fs-wrapper - bindfs. It will hide all incompatibilities though cause some inconvenience.
+      # Ref: http://www.linux.org.ru/wiki/en/WebDav%2Be%D0%A1ryptFS
+      #      https://bugs.launchpad.net/ecryptfs/+bug/277578/comments/25
+      if `is_davfs_ocsroot`; then
+        bindfs_mntpnt="$(mktemp -d /tmp/bindfs_mnt.XXXXXX)"
+	bindfs $ocsroot/${target_dir} $bindfs_mntpnt
+	rc_bindfs="$?"
+	if [ "$rc_bindfs" -eq 0 ]; then
+          webdav_bindfs_flag="yes"
+          LC_ALL=C mount -t ecryptfs $bindfs_mntpnt $ecrypt_mntpnt -o $ocs_ecryptfs_opt,key=passphrase:passphrase_passwd_file=$ecryptfs_pf
+          rc="$?"
+        else
+          [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+          echo "Failed to bindfs WebDAV image by:" | tee --append ${OCS_LOGFILE}
+	  echo "bindfs $ocsroot/${target_dir} $bindfs_mntpnt" | tee --append ${OCS_LOGFILE}
+          [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+          echo "$msg_program_stop" | tee --append ${OCS_LOGFILE}
+          [ "$save_restore_error_log" = "yes" ] && copy_error_log
+          exit 1
+        fi
+      else
+        LC_ALL=C mount -t ecryptfs $ocsroot/${target_dir} $ecrypt_mntpnt -o $ocs_ecryptfs_opt,key=passphrase:passphrase_passwd_file=$ecryptfs_pf
+        rc="$?"
+      fi
       # Even wrong passphrase could give rc=0. However, the data are not really
       # decrypted. Therefore we have to use another method to check.
       if [ "$rc" -ne 0 ]; then
@@ -3437,6 +3463,9 @@ task_ecryptfs_mount_point() {
         echo "$msg_failed_to_decrypt_img: ${target_dir} " | tee -a $OCS_LOGFILE
         [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
 	umount $ecrypt_mntpnt
+	if [ "$webdav_bindfs_flag" = "yes" ]; then
+	  umount $bindfs_mntpnt 2>/dev/null
+        fi
         grc=1
         confirm_continue_or_not_default_continue
       fi
@@ -3464,7 +3493,7 @@ task_ecryptfs_mount_point() {
 } # end of task_ecryptfs_mount_point
 #
 umount_ecryptfs_mount_point_if_necessary(){
-  local rc
+  local rc rc_bindfs
   if [ "$encrypt_ocs_img" = "yes" ]; then
     if [ -n "$ecrypt_mntpnt" ]; then
       umount $ecrypt_mntpnt 2>/dev/null
@@ -3474,6 +3503,15 @@ umount_ecryptfs_mount_point_if_necessary(){
              -n "$(echo "$ecrypt_mntpnt" | grep -w "ecryptfs_mnt")" ]; then
 	  # It's just a mounting point. Better not to use "rm -rf" in case wrongly remove all the dir.
           rmdir "$ecrypt_mntpnt"
+        fi
+      fi
+      if [ "$webdav_bindfs_flag" = "yes" ]; then
+        umount $bindfs_mntpnt 2>/dev/null
+        rc_bindfs=$?
+        if [ -d "$bindfs_mntpnt" -a \
+             -n "$(echo "$bindfs_mntpnt" | grep -w "bindfs_mnt")" ]; then
+	  # It's just a mounting point. Better not to use "rm -rf" in case wrongly remove all the dir.
+          rmdir "$bindfs_mntpnt"
         fi
       fi
     fi
