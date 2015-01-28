@@ -982,3 +982,6 @@ msg_decrypt_existing_img='Decrypt an existing encrypted image'
 msg_p2v_existing_img='Convert an existing image to virtual disk'
 msg_only_nonenc_is_shown='(only unencrypted images are shown)'
 msg_restoring_encrypted_img_not_supported_in_clonezilla_se='Restoring encrypted image is not supported in Clonezilla server Edition.'
+# Tag on 2015/01/27
+msg_mount_webdav_server='Use WebDAV server'
+msg_url_of_davfs_server='URL for the WebDAV server. E.g. http://192.168.1.254/webdav, http://10.1.2.3:8080/share, or https://mywebdavsever.domainname.org'

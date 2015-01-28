@@ -976,3 +976,6 @@ msg_decrypt_existing_img='將現有的一個已加密之印象檔解密'
 msg_p2v_existing_img='轉換印象檔成為虛擬機器硬碟檔'
 msg_only_nonenc_is_shown='(只有未加密的印象檔會被列出)'
 msg_restoring_encrypted_img_not_supported_in_clonezilla_se='再生龍伺服器版不支援還原加密的印象檔功能'
+# Tag on 2015/01/27
+msg_mount_webdav_server='使用WebDAV伺服器的目錄'
+msg_url_of_davfs_server='WebDAV伺服器的網址(URL)。例如: http://192.168.1.254/webdav, http://10.1.2.3:8080/share, 或者 https://mywebdavsever.domainname.org'
