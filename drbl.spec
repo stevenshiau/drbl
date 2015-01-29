@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.13.3
+Version:	2.13.4
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,11 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Thu Jan 29 2015 Steven Shiau <steven _at_ nchc org tw> 2.13.4-drbl1
+- Package bindfs was added in the packages list of DRBL/Clonezilla live.
+- Language files were updated for WebDAV image server.
+- Bindfs middle layer for WebDAV+eCryptfs was added.
+
 * Sun Jan 25 2015 Steven Shiau <steven _at_ nchc org tw> 2.13.3-drbl1
 - Mergeing the patch from Ceasar to fix the boot haning issue of Fedora 21 client.
 

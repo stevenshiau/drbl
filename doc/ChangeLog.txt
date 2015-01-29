@@ -5,6 +5,14 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.13.4-drbl1) unstable; urgency=low
+
+  * Package bindfs was added in the packages list of DRBL/Clonezilla live.
+  * Language files were updated for WebDAV image server.
+  * Bindfs middle layer for WebDAV+eCryptfs was added.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 29 Jan 2015 08:01:36 +0800
+
 drbl (2.13.3-drbl1) unstable; urgency=low
 
   * Mergeing the patch from Ceasar to fix the boot haning issue of
