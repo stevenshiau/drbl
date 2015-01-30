@@ -3313,6 +3313,8 @@ check_if_system_support_ecryptfs(){
   local rc
   # Not really. It might be bulit-in
   # So let's check /proc/filesystems
+  modprobe ecryptfs 2>/dev/null
+  sleep 1
   if ! grep -Ewq "ecryptfs" /proc/filesystems; then
     [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
     echo "File system \"ecryptfs\" is not supported by the running Linux kernel \"`uname -r`\"" | tee --append ${OCS_LOGFILE}
