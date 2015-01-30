@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.13.4
+Version:	2.13.5
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,11 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Fri Jan 30 2015 Steven Shiau <steven _at_ nchc org tw> 2.13.5-drbl1
+- Package gdisk-noicu is now replaced by gdisk in Debian respository.
+- File system ecryptfs is not always built-in, so trying to modprobe before checking it.
+- Bug fixed: grand_jobs_before_exit not grand_task_before_exit.
+
 * Thu Jan 29 2015 Steven Shiau <steven _at_ nchc org tw> 2.13.4-drbl1
 - Package bindfs was added in the packages list of DRBL/Clonezilla live.
 - Language files were updated for WebDAV image server.

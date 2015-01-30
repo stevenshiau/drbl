@@ -1,3 +1,13 @@
+drbl (2.13.5-drbl1) unstable; urgency=low
+
+  * Package gdisk-noicu is now replaced by gdisk in Debian
+    respository.
+  * File system ecryptfs is not always built-in, so trying to
+    modprobe before checking it.
+  * Bug fixed: grand_jobs_before_exit not grand_task_before_exit.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 30 Jan 2015 21:51:18 +0800
+
 drbl (2.13.4-drbl1) unstable; urgency=low
 
   * Package bindfs was added in the packages list of DRBL/Clonezilla live.
