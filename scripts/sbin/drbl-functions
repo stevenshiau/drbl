@@ -3320,7 +3320,7 @@ check_if_system_support_ecryptfs(){
     echo "File system \"ecryptfs\" is not supported by the running Linux kernel \"`uname -r`\"" | tee --append ${OCS_LOGFILE}
     [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
     echo "$msg_program_stop." | tee --append ${OCS_LOGFILE}
-    grand_task_before_exit
+    grand_jobs_before_exit
     exit 1
   fi
   if ! type mount.ecryptfs &>/dev/null; then
