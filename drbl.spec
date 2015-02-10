@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+- Language file es_ES was updated. Thanks to Juan Ramón Martínez.
+- Language file it_IT was updated. Thanks to Gianfranco Gentili.
+
 * Fri Jan 30 2015 Steven Shiau <steven _at_ nchc org tw> 2.13.5-drbl1
 - Package gdisk-noicu is now replaced by gdisk in Debian respository.
 - File system ecryptfs is not always built-in, so trying to modprobe before checking it.
