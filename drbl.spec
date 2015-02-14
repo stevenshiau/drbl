@@ -49,7 +49,7 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 - Language file it_IT was updated. Thanks to Gianfranco Gentili.
 - Language file de_DE was updated. Thanks to Michael Vinzenz.
 - Language file en_US wad updated.
-- Language files sk_SK was updated. Thanks to Ondrej Dzivy Balucha.
+- Language file sk_SK was updated. Thanks to Ondrej Dzivy Balucha.
 - Language file ca_ES was updated. Thanks to René Mérou.
 
 * Fri Jan 30 2015 Steven Shiau <steven _at_ nchc org tw> 2.13.5-drbl1
