@@ -47,6 +47,8 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 %changelog
 - Language file es_ES was updated. Thanks to Juan Ramón Martínez.
 - Language file it_IT was updated. Thanks to Gianfranco Gentili.
+- Language files sk_SK was updated. Thanks to Ondrej Dzivy Balucha.
+- Language file ca_ES was updated. Thanks to René Mérou.
 
 * Fri Jan 30 2015 Steven Shiau <steven _at_ nchc org tw> 2.13.5-drbl1
 - Package gdisk-noicu is now replaced by gdisk in Debian respository.
