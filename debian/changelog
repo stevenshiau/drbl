@@ -1,3 +1,15 @@
+drbl (2.13.6-drbl1) unstable; urgency=low
+
+  * Language file es_ES was updated. Thanks to Juan Ramón Martínez.
+  * Language file it_IT was updated. Thanks to Gianfranco Gentili.
+  * Language file de_DE was updated. Thanks to Michael Vinzenz.
+  * Language file sk_SK was updated. Thanks to Ondrej Dzivy Balucha.
+  * Language file ca_ES was updated. Thanks to René Mérou.
+  * Language file ja_JP.UTF-8 was updated. Thanks to Akira YOSHIYAMA.
+  * Language file en_US wad updated.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 16 Feb 2015 13:19:01 +0800
+
 drbl (2.13.5-drbl1) unstable; urgency=low
 
   * Package gdisk-noicu is now replaced by gdisk in Debian

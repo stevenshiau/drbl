@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.13.5
+Version:	2.13.6
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,12 +45,14 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Mon Feb 16 2015 Steven Shiau <steven _at_ nchc org tw> 2.13.6-drbl1
 - Language file es_ES was updated. Thanks to Juan Ramón Martínez.
 - Language file it_IT was updated. Thanks to Gianfranco Gentili.
 - Language file de_DE was updated. Thanks to Michael Vinzenz.
 - Language file en_US wad updated.
 - Language file sk_SK was updated. Thanks to Ondrej Dzivy Balucha.
 - Language file ca_ES was updated. Thanks to René Mérou.
+- Language file ja_JP.UTF-8 was updated. Thanks to Akira YOSHIYAMA.
 
 * Fri Jan 30 2015 Steven Shiau <steven _at_ nchc org tw> 2.13.5-drbl1
 - Package gdisk-noicu is now replaced by gdisk in Debian respository.
