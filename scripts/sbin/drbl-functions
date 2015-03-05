@@ -3335,12 +3335,14 @@ check_if_system_support_ecryptfs(){
 task_ecryptfs_mount_point() {
   local task_type="$1"
   local passwd_ecryptfs pass1 pass2 ecryptfs_pf
-  local TMP grc rc ask_ ans_ rc_bindfs
+  local TMP grc rc ask_ ans_ rc_bindfs ocs_ecryptfs_opt
   # ecrypt_mntpnt, bindfs_mntpnt, webdav_bindfs_flag, target_dir_orig and
   # target_dir are gloable variables.
   # Change the ocsroot to /tmp now since we will create the mount point in /tmp
 
   check_if_system_support_ecryptfs
+  # Define the ecryptfs option
+  ocs_ecryptfs_opt="ecryptfs_cipher=$ocs_ecryptfs_cipher,ecryptfs_key_bytes=$ocs_ecryptfs_key_bytes,no_sig_cache,ecryptfs_enable_filename_crypto=n,ecryptfs_passthrough"
   ###
   ecrypt_mntpnt="$(mktemp -d /tmp/ecryptfs_mnt.XXXXXX)"
   ecryptfs_pf=$(mktemp /tmp/ecryptfs_f.XXXXXX)
