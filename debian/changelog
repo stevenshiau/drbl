@@ -1,3 +1,9 @@
+drbl (2.13.9-drbl1) unstable; urgency=low
+
+  * Option "-irvd" was added to Clonezilla menu.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 09 Mar 2015 19:52:41 +0800
+
 drbl (2.13.8-drbl1) unstable; urgency=low
 
   * Some ecryptfs-related options from drbl-ocs.conf were moved
