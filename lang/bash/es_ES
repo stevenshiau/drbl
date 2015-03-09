@@ -979,3 +979,5 @@ msg_restoring_encrypted_img_not_supported_in_clonezilla_se='La restauración de 
 # Tag on 2015/01/27
 msg_mount_webdav_server='Usar WebDAV server'
 msg_url_of_davfs_server='URL para el WebDAV server. Ej. http://192.168.1.254/webdav, http://10.1.2.3:8080/share, or https://mywebdavsever.domainname.org'
+# Tag on 2015/03/09
+msg_ocs_param_irvd='Do not remove NTFS volume dirty flag after it is restored'
