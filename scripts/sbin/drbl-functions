@@ -3557,3 +3557,16 @@ my_ocs_exit() {
   grand_jobs_before_exit
   exit $ec
 } # end of my_ocs_exit
+#
+drbl_service_ctl() {
+  # Function to start/stop service, for systemd or sysv/upstart
+  local srv_name="$1"
+  local srv_action="$2"  # start, stop, and restart only
+  if [ -n "$srv_name" -a -n "$srv_action" ]; then
+    if is_systemd_init; then
+      systemctl $srv_action $srv_name
+    else
+      service $srv_name $srv_action
+    fi
+  fi
+} # end of drbl_service_ctl
