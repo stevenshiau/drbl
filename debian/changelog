@@ -1,3 +1,10 @@
+drbl (2.13.10-drbl1) unstable; urgency=low
+
+  * Function drbl_service_ctl was added in drbl-functions so that it
+    can be used for start/stop/restart sysv/upstart/systemd service.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 12 Mar 2015 20:48:21 +0800
+
 drbl (2.13.9-drbl1) unstable; urgency=low
 
   * Option "-irvd" was added to Clonezilla menu.

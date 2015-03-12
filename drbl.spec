@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.13.9
+Version:	2.13.10
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,8 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Thu Mar 12 2015 Steven Shiau <steven _at_ nchc org tw> 2.13.10-drbl1
+- Function drbl_service_ctl was added in drbl-functions so that it can be used for start/stop/restart sysv/upstart/systemd service.
 
 * Mon Mar 09 2015 Steven Shiau <steven _at_ nchc org tw> 2.13.9-drbl1
 - Option "-irvd" was added to Clonezilla menu.
