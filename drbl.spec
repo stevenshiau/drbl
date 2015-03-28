@@ -45,6 +45,8 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+- Package ifenslave was added in the packages list of Clonezilla live.
+
 * Wed Mar 25 2015 Steven Shiau <steven _at_ nchc org tw> 2.13.12-drbl1
 - Updating netinstall for opensuse as 13.2.
 
