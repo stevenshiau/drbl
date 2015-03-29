@@ -982,3 +982,5 @@ msg_mount_webdav_server='Usa il server WebDAV'
 msg_url_of_davfs_server='URL per il server WebDAV. Es. http://192.168.1.254/webdav, http://10.1.2.3:8080/share, o https://mywebdavsever.domainname.org'
 # Tag on 2015/03/09
 msg_ocs_param_irvd='Do not remove NTFS volume dirty flag after it is restored'
+# Tag on 2015/03/29
+msg_img_repository_not_writable='The image repository directory is read-only, not writable'

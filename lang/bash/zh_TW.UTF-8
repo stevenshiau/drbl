@@ -981,3 +981,5 @@ msg_mount_webdav_server='使用WebDAV伺服器的目錄'
 msg_url_of_davfs_server='WebDAV伺服器的網址(URL)。例如: http://192.168.1.254/webdav, http://10.1.2.3:8080/share, 或者 https://mywebdavsever.domainname.org'
 # Tag on 2015/03/09
 msg_ocs_param_irvd='還原後略去移除NTFS volume dirty flag'
+# Tag on 2015/03/29
+msg_img_repository_not_writable='印象檔儲藏庫的目錄是唯讀，無法寫入'

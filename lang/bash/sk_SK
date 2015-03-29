@@ -981,3 +981,5 @@ msg_mount_webdav_server='Použiť WebDAV server'
 msg_url_of_davfs_server='URL pre WebDAV server. Napríklad http://192.168.1.254/webdav, http://10.1.2.3:8080/share, alebo https://mywebdavsever.domainname.org'
 # Tag on 2015/03/09
 msg_ocs_param_irvd='Do not remove NTFS volume dirty flag after it is restored'
+# Tag on 2015/03/29
+msg_img_repository_not_writable='The image repository directory is read-only, not writable'
