@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.13.14-drbl1) unstable; urgency=low
+
+  * Package ca-certificates was added in the packages list of
+    Clonezilla live.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 02 Apr 2015 21:51:34 +0800
+
 drbl (2.13.13-drbl1) unstable; urgency=low
 
   * Package ifenslave was added in the packages list of Clonezilla
