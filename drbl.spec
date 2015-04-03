@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.13.14
+Version:	2.13.15
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Fri Apr 03 2015 Steven Shiau <steven _at_ nchc org tw> 2.13.15-drbl1
+- Package s3fs was added in the packages list of Clonezilla live.
+
 * Thu Apr 02 2015 Steven Shiau <steven _at_ nchc org tw> 2.13.14-drbl1
 - Package ca-certificates was added in the packages list of Clonezilla live.
 

@@ -1,3 +1,9 @@
+drbl (2.13.15-drbl1) unstable; urgency=low
+
+  * Package s3fs was added in the packages list of Clonezilla live.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 03 Apr 2015 23:31:27 +0800
+
 drbl (2.13.14-drbl1) unstable; urgency=low
 
   * Package ca-certificates was added in the packages list of
