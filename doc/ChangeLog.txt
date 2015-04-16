@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.13.17-drbl1) unstable; urgency=low
+
+  * Package cloudfuse was added in the packages list of Clonezilla
+    live.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 16 Apr 2015 11:47:01 +0800
+
 drbl (2.13.16-drbl1) unstable; urgency=low
 
   * A mechanism to avoid AWS S3 with ecryptfs was added because there
