@@ -3342,9 +3342,10 @@ task_ecryptfs_mount_point() {
   # target_dir are gloable variables.
   # Change the ocsroot to /tmp now since we will create the mount point in /tmp
 
-  if `is_s3fs_ocsroot`; then
+  if `is_s3fs_ocsroot` || `is_cloudfuse_ocsroot`; then
     [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
-    echo "Using ecryptfs with s3fs has some issue. Check this URL for more info:" | tee --append ${OCS_LOGFILE}
+    echo "Using ecryptfs with s3fs or cloudfuse has an issue." | tee --append ${OCS_LOGFILE}
+    echo "Please check this URL for more info:" | tee --append ${OCS_LOGFILE}
     echo "https://github.com/s3fs-fuse/s3fs-fuse/issues/166" | tee --append ${OCS_LOGFILE}
     [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
     echo "$msg_program_stop!" | tee --append ${OCS_LOGFILE}

@@ -47,6 +47,8 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 %changelog
 * Thu Apr 16 2015 Steven Shiau <steven _at_ nchc org tw> 2.13.17-drbl1
 - Package cloudfuse was added in the packages list of Clonezilla live.
+- A mechanism to avoid cloudfuse with ecryptfs was added because there is
+an similar issue as this https://github.com/s3fs-fuse/s3fs-fuse/issues/166
 
 * Sat Apr 11 2015 Steven Shiau <steven _at_ nchc org tw> 2.13.16-drbl1
 - A mechanism to avoid AWS S3 with ecryptfs was added because there is
