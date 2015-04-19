@@ -983,3 +983,6 @@ msg_url_of_davfs_server='WebDAV伺服器的網址(URL)。例如: http://192.168.
 msg_ocs_param_irvd='還原後略去移除NTFS volume dirty flag'
 # Tag on 2015/03/29
 msg_img_repository_not_writable='印象檔儲藏庫的目錄是唯讀，無法寫入'
+# Tag on 2015/04/18
+msg_mount_S3_server='使用AWS S3伺服器'
+msg_mount_swift_server='使用OpenStack swift伺服器'

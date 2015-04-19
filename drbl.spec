@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.13.17
+Version:	2.13.18
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Sun Apr 19 2015 Steven Shiau <steven _at_ nchc org tw> 2.13.18-drbl1
+- Updating language files for S3 and Swift.
+
 * Thu Apr 16 2015 Steven Shiau <steven _at_ nchc org tw> 2.13.17-drbl1
 - Package cloudfuse was added in the packages list of Clonezilla live.
 - A mechanism to avoid cloudfuse with ecryptfs was added because there is

@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.13.18-drbl1) unstable; urgency=low
+
+  * Updating language files for S3 and Swift.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sun, 19 Apr 2015 19:28:33 +0800
+
 drbl (2.13.17-drbl1) unstable; urgency=low
 
   * Package cloudfuse was added in the packages list of Clonezilla

@@ -984,3 +984,6 @@ msg_url_of_davfs_server='URL du serveur WebDAV. Ex : http://192.168.1.254/webdav
 msg_ocs_param_irvd='Do not remove NTFS volume dirty flag after it is restored'
 # Tag on 2015/03/29
 msg_img_repository_not_writable='The image repository directory is read-only, not writable'
+# Tag on 2015/04/18
+msg_mount_S3_server='Use AWS S3 server'
+msg_mount_swift_server='Use OpenStack swift server'
