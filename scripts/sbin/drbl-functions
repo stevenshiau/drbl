@@ -3572,7 +3572,7 @@ drbl_service_ctl() {
   local srv_name="$1"
   local srv_action="$2"  # start, stop, and restart only
   if [ -n "$srv_name" -a -n "$srv_action" ]; then
-    if is_systemd_init; then
+    if is_systemd_init && [ -e "/lib/systemd/system/${srv_name}.service" ]; then
       systemctl $srv_action $srv_name
     else
       service $srv_name $srv_action

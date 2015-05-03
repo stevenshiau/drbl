@@ -93,8 +93,12 @@ drbl_startup_service() {
       fi
     fi
   elif [ -n "$(which systemctl 2>/dev/null)" -a -e "/lib/systemd/system/$srv.service" ]; then
-    # FC 17
-    _real_service_name=$(basename $(readlink -f  /usr/lib/systemd/system/$srv.service) ".service")
+    if [ -e /usr/lib/systemd/system/$srv.service ]; then
+      # FC 17
+      _real_service_name=$(basename $(readlink -f  /usr/lib/systemd/system/$srv.service) ".service")
+    else
+      _real_service_name=$(basename $(readlink -f  /lib/systemd/system/$srv.service) ".service")
+    fi
     echo "Now $act '$_real_service_name' service in systemd-like environment..."
     systemctl $act $_real_service_name.service
     ret=$?

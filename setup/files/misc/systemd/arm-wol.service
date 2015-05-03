@@ -1,0 +1,15 @@
+[Unit]
+Description=DRBL client arm WoL service
+DefaultDependencies=no
+After=network.target
+
+[Service]
+Environment=TERM=linux
+ExecStart=/etc/init.d/arm-wol start
+ExecReload=/bin/kill -HUP $MAINPID
+KillMode=process
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+Alias=drbl-clients-nat.service

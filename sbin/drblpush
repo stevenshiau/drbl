@@ -2334,6 +2334,10 @@ cp -f $drbl_setup_path/files/ocs/ocs-run $drbl_common_root/etc/init.d/
 # package. We need gdm-safe-restart for terminal mode setup.
 [ ! -x /usr/sbin/gdm-safe-restart ] && cp -f $drbl_setup_path/files/misc/gdm-safe-restart /usr/sbin/gdm-safe-restart
 chown root.root $drbl_common_root/etc/init.d/{mkswapfile,drblthincli,arm-wol}
+# Put systemd services for {mkswapfile,drblthincli,arm-wol}
+if is_systemd_init; then
+  cp -f $drbl_setup_path/files/misc/systemd/{mkswapfile.service,drblthincli.service,arm-wol.service} $drbl_common_root/lib/systemd/system/
+fi
 
 # For MDK/Debian/SuSE, we put the one we wrote "firstboot.XXX.drbl" to 
 # common root /etc/init.d as firstboot.
@@ -2434,7 +2438,22 @@ for isrv in $isrv_list ; do
   [ -d "$drbl_common_root/etc/init.d/$isrv" -o -d "$drbl_common_root/lib/systemd/system/$isrv.service" ] && continue
   # keep some services.
   [ -n "$(echo $service_to_be_kept | grep -w $isrv)" ] && continue
-  if [ -e /etc/debian_version ]; then
+  if is_systemd_init; then
+    # For systemd-like, E.g. FC17, Debian Jessie, Ubuntu 15.04
+    echo "Deleting '$isrv' service in systemd-like environment ..."
+    if [ -e "$drbl_common_root/etc/init.d/$isrv" ]; then
+      if [ -x "$drbl_common_root/sbin/chkconfig" ]; then
+        chroot $drbl_common_root/ /sbin/chkconfig --del $isrv
+      elif [ -x "$drbl_common_root/sbin/insserv" ]; then
+        chroot $drbl_common_root/ insserv -f -r $isrv &> /dev/null
+      fi
+      find $drbl_common_root/etc/rc*.d -regex ".*[SK][-0-9][0-9]$isrv" -exec rm -f {} \;
+    fi
+    if [ -e "$drbl_common_root/lib/systemd/system/$isrv.service" ]; then
+      #find $drbl_common_root/etc/systemd/ -type l -lname "*/$isrv.service" -exec rm -f {} \; # fix by :ceasar
+      find $drbl_common_root/etc/systemd/ -name "$isrv.service" -exec rm -f {} \;
+    fi
+  elif [ -e /etc/debian_version ]; then
     # For Debian
     # We should keep the services in rcS.d, but "update-rc.d remove" does
     # not support this. It will also clean all the services in rcS.d.
@@ -2459,17 +2478,6 @@ for isrv in $isrv_list ; do
     [ "$isrv" = "README" ] && continue
     [ "$isrv" = "rc" ] && continue
     chroot $drbl_common_root/ /sbin/insserv -f -r $isrv
-  elif is_systemd_init; then
-    # For systemd-like, E.g. FC17
-    echo "Delete '$isrv' service in systemd-like environment ..."
-    if [ -e "$drbl_common_root/etc/init.d/$isrv" ]; then
-      chroot $drbl_common_root/ /sbin/chkconfig --del $isrv
-      find $drbl_common_root/etc/rc*.d -regex ".*[SK][-0-9][0-9]$isrv" -exec rm -f {} \;
-    fi
-    if [ -e "$drbl_common_root/lib/systemd/system/$isrv.service" ]; then
-      #find $drbl_common_root/etc/systemd/ -type l -lname "*/$isrv.service" -exec rm -f {} \; # fix by :ceasar
-      find $drbl_common_root/etc/systemd/ -name "$isrv.service" -exec rm -f {} \;
-    fi
   else
     # For RH-like
     chroot $drbl_common_root/ /sbin/chkconfig --del $isrv
@@ -2635,7 +2643,44 @@ else
   create_chkconfig_env $drbl_common_root/
 fi
 for i in $client_services; do
-  if [ -e /etc/debian_version ]; then
+  if is_systemd_init; then
+    # FC17~,CO7~,..: systemd like
+    echo -n "Adding '$i':"
+    case "$i" in
+      ypbind)
+        # remove ypserv
+        sed -i -e "s/[[:space:]]*ypserv.service//" $drbl_common_root/lib/systemd/system/$i.service
+        ;;
+      dm)
+        # TODO: start drblthincli before dm.
+        true
+        ;;
+      netfs)
+        # TODO
+        true
+        ;;
+    esac
+    if [ -e "$drbl_common_root/lib/systemd/system/$i.service" ]; then
+      # systemctl can't work in chroot environment :`chroot $drbl_common_root/ /sbin/chkconfig --add $i`
+      # Therefore manually link it:
+      _systemctl_target=$(grep -e "^WantedBy=" $drbl_common_root/lib/systemd/system/$i.service | sed -e "s/WantedBy=//")
+	  [ -z "$_systemctl_target" ] && echo "Skip ..." && continue;
+      echo "to target: '$_systemctl_target'";
+      for ti in $_systemctl_target; do
+        ln -s -v /lib/systemd/system/$i.service $drbl_common_root/etc/systemd/system/$ti.wants/$i.service
+      done
+    fi
+    if [ -e "$drbl_common_root/etc/init.d/$i" ]; then
+      # TODO for systemd env
+      if [ -x "$drbl_common_root/sbin/chkconfig" ]; then
+        echo "'chroot $drbl_common_root/ /sbin/chkconfig --add $i'"
+        chroot $drbl_common_root/ /sbin/chkconfig --add $i
+      else
+        # Use insserv for debian/ubuntu
+        chroot $drbl_common_root/ insserv $i &> /dev/null
+      fi
+    fi
+  elif [ -e /etc/debian_version ]; then
     if [ "$dbn_ubn_serv_control_prog" = "use-insserv" ]; then
       # Use insserv
       chroot $drbl_common_root/ insserv $i &> /dev/null
@@ -2698,35 +2743,6 @@ for i in $client_services; do
   elif [ -e /etc/SuSE-release ]; then
     # SuSE
     chroot $drbl_common_root/ /sbin/insserv -f $i
-  elif is_systemd_init; then
-    # FC17~,CO7~,..: systemd like
-    echo -n "Add '$i':"
-    case "$i" in
-      ypbind)
-        # remove ypserv
-        sed -i -e "s/[[:space:]]*ypserv.service//" $drbl_common_root/lib/systemd/system/$i.service
-        ;;
-      dm)
-        # TODO: start drblthincli before dm.
-        true
-        ;;
-      netfs)
-        # TODO
-        true
-        ;;
-    esac
-    if [ -e "$drbl_common_root/etc/init.d/$i" ]; then
-      chroot $drbl_common_root/ /sbin/chkconfig --add $i
-      echo "'chroot $drbl_common_root/ /sbin/chkconfig --add $i'"
-    elif [ -e "$drbl_common_root/lib/systemd/system/$i.service" ]; then
-      # systemctl can't work in chroot environment :`chroot $drbl_common_root/ /sbin/chkconfig --add $i`
-      _systemctl_target=$(grep -e "^WantedBy=" $drbl_common_root/lib/systemd/system/$i.service | sed -e "s/WantedBy=//")
-	  [ -z "$_systemctl_target" ] && echo "Skip ..." && continue;
-      echo "to target: '$_systemctl_target'";
-      for ti in $_systemctl_target; do
-        ln -s -v /lib/systemd/system/$i.service $drbl_common_root/etc/systemd/system/$ti.wants/$i.service
-      done
-    fi
   else
     # RH-like
     # Note by Steven Shiau on 2006/9/26
@@ -2818,7 +2834,6 @@ if [ -e /etc/debian_version ]; then
    if [ -e $drbl_common_root/etc/init.d/module-init-tools ]; then
      perl -pi -e 's|if \[ -w /lib/modules/\$KVER.*|if touch /lib/modules/\$KVER/modules.dep 2>/dev/null; then|g' $drbl_common_root/etc/init.d/module-init-tools
    fi
-
 fi
 
 vmware_as_server="$(grep "VMWare Inc" /proc/pci 2>/dev/null)"
@@ -4263,16 +4278,21 @@ esac
 # set the YP securenets
 drbl-yp-securenets --no-restart generate
 
-# add drbl-clients-nat service for Debian DRBL server.
+# add drbl-clients-nat service for Debian DRBL server. This is only for Debian and Ubuntu.
 if [ -e /etc/debian_version ]; then
-   cp -f $drbl_setup_path/files/misc/drbl-clients-nat /etc/init.d
-   # before we do it, clean it to avoid the stalled files.
-   if [ "$dbn_ubn_serv_control_prog" = "use-insserv" ]; then
-     insserv -f -r drbl-clients-nat &>/dev/null
-   else
-     update-rc.d -f drbl-clients-nat remove &>/dev/null
-     # It will be added to rcX.d by "drbl-all-service add", so we do not add it here
-   fi
+  if is_systemd_init; then
+    cp -f $drbl_setup_path/files/misc/drbl-clients-nat /etc/init.d
+    cp -f $drbl_setup_path/files/misc/systemd/drbl-clients-nat.service /lib/systemd/system/
+    systemctl enable /lib/systemd/system/drbl-clients-nat.service
+  else
+    cp -f $drbl_setup_path/files/misc/drbl-clients-nat /etc/init.d
+    # before we do it, clean it to avoid the stalled files.
+    if [ "$dbn_ubn_serv_control_prog" = "use-insserv" ]; then
+      insserv -f -r drbl-clients-nat &>/dev/null
+    else
+      update-rc.d -f drbl-clients-nat remove &>/dev/null
+      # It will be added to rcX.d by "drbl-all-service add", so we do not add it here
+    fi
 fi
 
 # flush the YP

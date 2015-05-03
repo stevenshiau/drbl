@@ -6,7 +6,7 @@
 #                    Also will run if 'reconfig' is on the kernel cmdline.
 #
 # Modified by Steven Shiau <steven _at_ nchc org tw> to use this in
-# DRBL for Debian/Ubuntu Edgy (6.10) on 2006/9/22
+# DRBL for Debian/Ubuntu.
 # 
 # To avoid there is no input output in rc running, we add this one:
 #exec </dev/console >/dev/console 2>&1
