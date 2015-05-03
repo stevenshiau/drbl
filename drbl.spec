@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.14.1
+Version:	2.14.2
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,7 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Sun May 03 2015 Steven Shiau <steven _at_ nchc org tw> 2.14.2-drbl1
 - Bug fixed: if block error in drblpush.
 - Service drbl-clients-nat.service for systemd should be removed when uninstalling.
 
