@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+- Bug fixed: if block error in drblpush.
+- Service drbl-clients-nat.service for systemd should be removed when uninstalling.
+
 * Sun May 03 2015 Steven Shiau <steven _at_ nchc org tw> 2.14.1-drbl1
 - Updating Debian netinstall as jessie in drbl.conf because it's in stable status now.
 - Adding support for Debian Jessie and Sid with systemd.

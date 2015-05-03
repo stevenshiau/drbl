@@ -88,6 +88,14 @@ do_some_cleanup_before_uninstall() {
   # rm the YP securenets
   drbl-yp-securenets clean
 
+  if is_systemd_init; then
+    echo "$msg_delimiter_star_line"
+    # rm the drbl-clients-nat systemd service for server
+    echo "Disabling drbl-clients-nat service..."
+    systemctl disable /lib/systemd/system/drbl-clients-nat.service
+    rm -f /lib/systemd/system/drbl-clients-nat.service
+  fi
+
   echo "$msg_delimiter_star_line"
   echo "$msg_remove_SmallLinuxs_question"
   echo -n "[Y/n] "

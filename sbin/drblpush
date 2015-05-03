@@ -4293,6 +4293,7 @@ if [ -e /etc/debian_version ]; then
       update-rc.d -f drbl-clients-nat remove &>/dev/null
       # It will be added to rcX.d by "drbl-all-service add", so we do not add it here
     fi
+  fi
 fi
 
 # flush the YP
