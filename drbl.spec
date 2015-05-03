@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.13.18
+Version:	2.14.1
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,10 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Sun May 03 2015 Steven Shiau <steven _at_ nchc org tw> 2.14.1-drbl1
+- Updating Debian netinstall as jessie in drbl.conf because it's in stable status now.
+- Adding support for Debian Jessie and Sid with systemd.
+ 
 * Sun Apr 19 2015 Steven Shiau <steven _at_ nchc org tw> 2.13.18-drbl1
 - Updating language files for S3 and Swift.
 
