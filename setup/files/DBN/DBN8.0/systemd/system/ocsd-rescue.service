@@ -1,4 +1,4 @@
-.include /usr/lib/systemd/system/rescue.service
+.include /lib/systemd/system/rescue.service
 
 [Unit]
 Requires=ocsd-run.service
