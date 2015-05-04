@@ -45,6 +45,8 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+- Bug fixed: the original /sbin/init was overwritten in DRBL live when running drblpush.
+
 * Sun May 03 2015 Steven Shiau <steven _at_ nchc org tw> 2.14.3-drbl1
 - Bug fixed: wrong including path in ocsd-rescue.service for Debian machine.
 

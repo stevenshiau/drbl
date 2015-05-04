@@ -3027,6 +3027,12 @@ export DESTDIR="$drbl_common_root"
 # Ref. Debian's diskless_newimage, /var/lib/diskless/default/root/sbin/init
 # The original init has already renamed as init.orig
 
+# Before copying init.drbl as $drbl_common_root/sbin/init (copyied in the
+# revious rsync command), we'd better to remove $drbl_common_root/sbin/init
+# therwise if it's a symbolic file, which might cause the server /sbin/init
+# o fail. This is the case in systemd:
+# lrwxrwxrwx 1 root root 20 Apr 17 09:37 /sbin/init -> /lib/systemd/systemd*
+rm -f $drbl_common_root/sbin/init
 cp -f $drbl_setup_path/files/misc/init.drbl $drbl_common_root/sbin/init
 # Find if the dir /run is mounted as tmpfs. If so, enable that for client.
 run_fs="$(LC_ALL=C df -T /run 2>/dev/null |grep -Ew "/run" | awk -F" " '{print $1}')"
