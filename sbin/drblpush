@@ -2167,6 +2167,13 @@ rsync -a $RSYNC_OPT_EXTRA /sbin/* $drbl_common_root/sbin/
 # put the real init into common root as init.orig, DRBL client will have 
 # an "init" to run before this init.orig
 rsync -aL $RSYNC_OPT_EXTRA /sbin/init $drbl_common_root/sbin/init.orig
+# Because Ubuntu 15.04 hides insserv in /usr/lib/insserv/insserv due to switch
+# to systemd. However, it's important for us to enable sysvinit service (some
+# services are not systemdlized yet, e.g. nis in Ubuntu 15.04). Therefore force
+# to put it in $drbl_common_root/sbin/
+# Variable DESTDIR is required for copy_exec_drbl use
+export DESTDIR="$drbl_common_root"
+[ -e "/usr/lib/insserv/insserv" ] && copy_exec_drbl /usr/lib/insserv/insserv /sbin/
 
 #
 echo -n "."

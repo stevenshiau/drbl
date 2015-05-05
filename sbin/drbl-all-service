@@ -31,8 +31,19 @@ drbl_startup_service() {
   [ -z "$act" ] && echo "No act in function drbl_startup_service!" && exit 1
   # Traditional service can be started or restart by "/etc/init.d/$srv (start|restart)
   # Upstart service (from 0.6.3 in Ubuntu 9.04), we should use: restart $srv
-  if dpkg -L upstart 2>/dev/null | grep -F "/sbin/start" &>/dev/null && \
-     [ -e /etc/init/${srv}.conf ] ; then
+  if is_systemd_init && [ -e "/lib/systemd/system/$srv.service" ]; then
+    if [ -e /usr/lib/systemd/system/$srv.service ]; then
+      # FC 17
+      _real_service_name=$(basename $(readlink -f  /usr/lib/systemd/system/$srv.service) ".service")
+    else
+      _real_service_name=$(basename $(readlink -f  /lib/systemd/system/$srv.service) ".service")
+    fi
+    echo "Now $act '$_real_service_name' service in systemd-like environment..."
+    systemctl $act $_real_service_name.service
+    ret=$?
+  elif dpkg -L upstart 2>/dev/null | grep -F "/sbin/start" &>/dev/null && \
+     [ -e /etc/init/${srv}.conf ] && ! is_systemd_init; then
+    # This is upstart case. Especially we need to make sure /sbin/init is not linked to systemd. Since on Ubuntu 15.04, both upstart and systemd packages are installed. But the file /sbin/init is the key point.
     if [ "$act" = "restart" ]; then
       # When action is restart, we check the status first, and if it's already stopped, we use "start" instead of "restart", otherwise the service won't be staretd at all. "restart $srv" will just show us: "restart: Unknown instance:"
       [ -n "$(LC_ALL=C status "$srv" | grep -Ei "stop")" ] && act="start"
@@ -92,16 +103,6 @@ drbl_startup_service() {
 	echo " done!"
       fi
     fi
-  elif [ -n "$(which systemctl 2>/dev/null)" -a -e "/lib/systemd/system/$srv.service" ]; then
-    if [ -e /usr/lib/systemd/system/$srv.service ]; then
-      # FC 17
-      _real_service_name=$(basename $(readlink -f  /usr/lib/systemd/system/$srv.service) ".service")
-    else
-      _real_service_name=$(basename $(readlink -f  /lib/systemd/system/$srv.service) ".service")
-    fi
-    echo "Now $act '$_real_service_name' service in systemd-like environment..."
-    systemctl $act $_real_service_name.service
-    ret=$?
   else
     service $srv $act
     ret=$?
@@ -124,6 +125,13 @@ for iser in $drbl_server_service_chklist; do
    if [ -e "/etc/init.d/${iser}" -o \
         -e "/etc/init/${iser}.conf" -o \
 	-e "/lib/systemd/system/${iser}.service" ]; then
+        # For Ubuntu 15.04, nfs-common provides both rpc-statd.service for systemd and statd for sysvinit: 
+	# /etc/init/statd.conf
+	# /lib/systemd/system/rpc-statd.service
+	# For systemd, we only need rpc-statd.service
+	if is_systemd_init && [ "${iser}" = statd ]; then
+          continue
+	fi
         drbl_service="$drbl_service $iser"
    fi
 done
