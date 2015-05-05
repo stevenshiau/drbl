@@ -1,3 +1,18 @@
+drbl (2.14.5-drbl1) unstable; urgency=low
+
+  * Network installation for Ubuntu has been updated to trusty
+    and vivid in drbl.conf.
+  * Initial support for Ubuntu 15.04.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 05 May 2015 17:58:40 +0800
+
+drbl (2.14.4-drbl1) unstable; urgency=low
+
+  * Bug fixed: the original /sbin/init was overwritten in DRBL live
+    when running drblpush.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 04 May 2015 08:40:12 +0800
+
 drbl (2.14.3-drbl1) unstable; urgency=low
 
   * Bug fixed: wrong including path in ocsd-rescue.service for

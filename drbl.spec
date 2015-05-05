@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.14.3
+Version:	2.14.5
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,11 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Tue May 05 2015 Steven Shiau <steven _at_ nchc org tw> 2.14.5-drbl1
+- Network installation for Ubuntu has been updated to trusty and vivid in drbl.conf.
+- Initial support for Ubuntu 15.04.
+
+* Mon May 04 2015 Steven Shiau <steven _at_ nchc org tw> 2.14.4-drbl1
 - Bug fixed: the original /sbin/init was overwritten in DRBL live when running drblpush.
 
 * Sun May 03 2015 Steven Shiau <steven _at_ nchc org tw> 2.14.3-drbl1
