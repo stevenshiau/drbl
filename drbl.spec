@@ -45,6 +45,8 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+- Suppress the messages about client's upstart files not found.
+
 * Tue May 05 2015 Steven Shiau <steven _at_ nchc org tw> 2.14.5-drbl1
 - Network installation for Ubuntu has been updated to trusty and vivid in drbl.conf.
 - Initial support for Ubuntu 15.04.

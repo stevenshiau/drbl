@@ -3494,20 +3494,26 @@ if [ -e /etc/debian_version ]; then
 	if [ -e "$drbl_setup_path/files/Ubuntu/$DISTRIB_RELEASE/drbl-client-boot.conf" ]; then
           cp -af $drbl_setup_path/files/Ubuntu/$DISTRIB_RELEASE/drbl-client-boot.conf $drbl_common_root/etc/init/drbl-client-boot.conf
 	else
-          [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
-          echo "Warning! Unable to find the fine-tune file $drbl_setup_path/files/Ubuntu/$DISTRIB_RELEASE/drbl-client-boot.conf, use $drbl_setup_path/files/Ubuntu/drbl-client-boot-default.conf for DRBL clients!"
-          echo "This may cause some problems to DRBL clients!"
-          [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
-          cp -af $drbl_setup_path/files/Ubuntu/drbl-client-boot-default.conf $drbl_common_root/etc/init/drbl-client-boot.conf
+          if ! is_systemd_init; then
+	    # Only show this for upstart
+            [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+            echo "Warning! Unable to find the fine-tune file $drbl_setup_path/files/Ubuntu/$DISTRIB_RELEASE/drbl-client-boot.conf, use $drbl_setup_path/files/Ubuntu/drbl-client-boot-default.conf for DRBL clients!"
+            echo "This may cause some problems to DRBL clients!"
+            [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+            cp -af $drbl_setup_path/files/Ubuntu/drbl-client-boot-default.conf $drbl_common_root/etc/init/drbl-client-boot.conf
+	  fi
 	fi
 	if [ -e "$drbl_setup_path/files/Ubuntu/$DISTRIB_RELEASE/S00wait-drbl" ]; then
           cp -af $drbl_setup_path/files/Ubuntu/$DISTRIB_RELEASE/S00wait-drbl $drbl_common_root/etc/rcS.d/
 	else
-          [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
-          echo "Warning! Unable to find the fine-tune file $drbl_setup_path/files/Ubuntu/$DISTRIB_RELEASE/S00wait-drbl, use $drbl_setup_path/files/Ubuntu/S00wait-drbl-default for DRBL clients!"
-          echo "This may cause some problems to DRBL clients!"
-          [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
-          cp -af $drbl_setup_path/files/Ubuntu/S00wait-drbl-default $drbl_common_root/etc/init/S00wait-drbl
+          if ! is_systemd_init; then
+	    # Only show this for upstart
+            [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+            echo "Warning! Unable to find the fine-tune file $drbl_setup_path/files/Ubuntu/$DISTRIB_RELEASE/S00wait-drbl, use $drbl_setup_path/files/Ubuntu/S00wait-drbl-default for DRBL clients!"
+            echo "This may cause some problems to DRBL clients!"
+            [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+            cp -af $drbl_setup_path/files/Ubuntu/S00wait-drbl-default $drbl_common_root/etc/init/S00wait-drbl
+	  fi
 	fi
 	# For plymouth.conf, we won't let plymouthd to run in rc=1, even with --mode=shutdown, otherwise when running clonezilla job in the client, the initial screen might be in vt 7, and the clonezilla job is run at vt 1.
 	if [ -e "$drbl_setup_path/files/Ubuntu/$DISTRIB_RELEASE/plymouth.conf" ]; then
