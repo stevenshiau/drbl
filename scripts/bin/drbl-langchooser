@@ -15,7 +15,7 @@ DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/usr/share/drbl}"
 
 USAGE() {
     echo "Usage:"
-    echo "To choose langguage in Clonezilla live"
+    echo "To choose language in Clonezilla live"
     echo "$ocs RESULT_FILE"
 }
 
@@ -33,6 +33,7 @@ while [ "$ASK_LANG" -ne 0 ]; do
   ca_ES.UTF-8 "Catalan | Català" \
   de_DE.UTF-8 "German | Deutsch" \
   en_US.UTF-8 "English" \
+  hu_HU.UTF-8 "Hungarian | Magyar" \
   es_ES.UTF-8 "Spanish | Español" \
   fr_FR.UTF-8 "French | Français" \
   it_IT.UTF-8 "Italian | Italiano" \

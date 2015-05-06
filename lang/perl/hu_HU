@@ -1,0 +1,254 @@
+#!/usr/bin/perl -T
+# Written by Steven Shiau <steven _at_ nchc org tw> for DRBL
+# Hungarian translation by Greg <greg.hefty _at_ freemail hu>
+# License: GPL
+#
+
+$lang_charset = 'iso-8859-1';
+
+%delimiter =
+   (
+   dash_line => '------------------------------------------------------',
+   star_line => '******************************************************',
+   exclamation_line => "!!!!!!!!!!!!!!!!!!!!!!!!!",
+   warning_line => "!!!!!!!!!!!!!!!!!!!!!! Figyelem !!!!!!!!!!!!!!!!!!!!!!!",
+   );
+
+%lang_text =
+   (  
+   Say        => 'Mond',
+   or         => 'vagy',
+   seconds    => 'másodperc',
+   WARNING    => 'FIGYELEM',
+   Accept     => 'Elfogad',
+   as         => 'mint',
+   login      => 'bejelentkezés',
+   clear      => 'törlés',
+   of         => 'ebből:',
+   logout     => 'kijelentkezés',
+   page       => 'oldal',
+   move       => 'mozgat',
+   date       => 'dátum',
+   size       => 'méret',
+   type       => 'típus',
+   filename   => 'fájlnév',
+   encoding   => 'ködolás',
+   download   => 'letöltés',
+   cancel     => 'mégse',
+   continue   => 'folytatás',
+   for        => 'ennek:',
+   save       => 'mentés',
+   add        => 'hozzáadás',
+   delete     => 'törlés',
+   uninstall  => 'eltávolítás',
+   done       => 'kész',
+   finish     => 'befejez',
+   space      => 'szóköz',
+   );
+
+%lang_word =
+   (
+   please_enter => "írja be",
+   to_deploy_them => "telepíteni őket",
+   root_passwd => "root jelszava",
+   initial_digit => "kezdeti számjegy",
+   unable_to_find_the => "Nem található a",
+   program_stop => "Program leállás",
+   );
+
+%lang_deploy =
+   (
+   interactive_mode_prompt => 'Az interaktív mód lehetővé teszi adatok továbbítását a DRBL környezetének.',
+   domain_unset_prompt => 'DOMAIN törölve, adjon meg DOMAIN-t:',
+   domain_prompt => 'Adjon meg DNS domaint (mint pl. drbl.sf.net):',
+   nisdomain_unset_prompt => 'NISDOMAIN törölve, adjon meg NISDOMAIN-t:',
+   nisdomain_prompt => 'Adjon meg NIS/YP domainnevet:',
+   not_allowed_domainname => 'érvénytelen DOMAINNÉV, írjon másikat!',
+   not_allowed_nisdomainname => 'érvénytelen NISDOMAINNÉV, írjon másikat!',
+   set_domain_as => 'DOMAIN-ként beállítva:',
+   enter_client_hostname_prefix => "Adja meg a kliens-hostnév előtagját:\nEz a kliensek hostnevének automatikus létrehozásához használatos. Ha szeretné átírni bizonyos, vagy minden kliens automatikusan létrejött hostnevét, lépjen ki a programból Ctrl-C -vel most, szerkessze az /etc/drbl/client-ip-hostname fájlt, majd ismét futtassa a programot.",
+   not_allowed_hostname => 'érvénytelen kliens-hostnév előtag, írjon másikat!',
+   set_client_hostname_prefix => 'Kliens-hostnév előtagként beállítva:',
+   no_NIC_setup => 'NEM adott meg Internetes hálózati beállítást a kliensek hálózati kártyái számára (mint pl. eth1, eth2, stb. IP címét...), vagy valami nem stimmel!',
+   configured_nic => 'Konfigurált ethernet kártyák a rendszeren:',
+   we_can_NOT_continue => 'NEM lehet folytatni...',
+   but_not_private_IP_or_configured => 'de ez nem privát IP, helytelenül konfigurált, vagy nem aktív!!!',
+   enter_public_IP_for_the_client => "Adja meg a kliens nyilvános IP-jét",
+   its_IP_in_DRBL_is => "A DRBL-es IP-je:",
+   wrong_entered_IP => "A megadott IP helytelen, írjon másikat!",
+   enter_gateway_for_client => "Adja meg a kliens átjáróját",
+   enter_netmask_for_client => "Adja meg a kliens hálózati maszkját",
+   wrong_entered_netmask => "A megadott NETMASK helytelen, írjon másikat!",
+   set_client_public_IP_as => "A következőt állítjuk be a kliensek nyilvános IP-ihez tartozó hálózati paraméterekként:",
+   we_will_skip => 'Kihagyjuk',
+   for_internet_access_prompt => 'A szerver mely ethernet portja tartozik a nyilvános Internet eléréshez és nem a DRBL csatlakozáshoz?',
+   drbl_website_prompt => 'Részletekért tekintse meg a http://drbl.nchc.org.tw/redhat vagy http://drbl.sf.net/redhat honlapot.',
+   ethernet_port_for_internet => 'Az Internet-elérésre szolgáló ethernet port:',
+   ethernet_port_for_DRBL => 'A DRBL környezetnek szánt ethernet port(ok): ',
+   only_1_IP_for_eth0 => 'Az eth0 csak 1 IP címmel bír, ezért ezt nem használjuk a DRBL környezethez!',
+   no_DRBL_port => 'Nincs ethernet port a DRBL környezet számára!',
+   saved_mac_address_files_in_etc => "Ezek a fájlok a $drbl_syscfg könytárba lettek mentve.",
+   collect_MAC_prompt => 
+          "Most begyűjthetők a kliensek MAC címei!\n".
+          "Ha szeretné, hogy a DRBL szerver DHCP szervere mindig ugyanazt az IP címet adja a kliensnek, amikor az bootol, de még sosem hajtotta végre a procedúrát, tegye meg most!\n".
+          "Ha már rendelkezik a kliensek MAC címeivel, azokat különböző csoportfájlokba helyezheti (Ezen fájlok száma azonos a DRBL szolgáltatás hálózati kártyáiéval). Ez esetben, kihagyhatja ezt a lépést.\n".
+          "Ez a lépés segít a kliensek MAC címeit bejegyezni, majd különböző csoportokba osztani. Ezzel időt takarít meg és csökkenti az elírásokat.\n".
+	  "A MAC címek bejegyzése fokozatos, a kliensek bootolásának megfelelően,\n".
+	  "és a szerver hálózati kártyája alapján, különböző fájlokba kerülnek, melyek neve ilyesmi: macadr-eth1.txt, macadr-eth2.txt... Ezek megtalálhatók a $drbl_syscfg könyvtárban.\n".
+	  "Sorban bootolja a klienseket, meggyőződve arról, hogy etherboot-ról vagy PXE-ről indulnak!\n". 
+          "Óhajtja összegyűjteni őket?",
+   ok_let_do_it => 'OK! Kezdjük!',
+   you_are_not_root => 'Ön nem root',
+   ok_let_continue => 'OK! Folytassuk...',
+   fix_eth_IP_prompt => "Kívánja, hogy a DRBL szerver DHCP szervere mindig ugyanazt az IP címet ossza a kliensnek, amikor az bootol (Ha igényli ezt a funkciót, be kell gyűjtse a kliensek MAC címet, majd mentse őket fájl(ok)ba (mint az előbbi eljárásnál)). Ez azon klienseknél használható, melyek a DRBL szerver hálózatának ethernet felületére csatlakoznak",
+   MAC_file_prompt => "OK! Közölje a fájl nevét, ami a kliensek MAC címét soronként tartalmazza, ehhez:",
+   range_prompt => "OK! Folytassuk a kliensek IP címének beállításával oly módon, hogy \"az elsőként bootoló kap IP-t először\", statikus cím helyett!",
+   client_number_connected_to_eth => "Mennyi DRBL kliens (pl. hallgatók gépei) kapcsolódik a DRBL szerver hálózatának ethernet felületére",
+   enter_the_no => "Gépelje be a számot",
+   the_value_you_set => "A kliens IP-cím utolsó számsorának utolsó száma:",
+   set_the_IP_connected_to_eth => "Beállítjuk a DRBL szerver hálózatának ethernet felületéhez csatlakozó kliensek IP címét",
+   do_you_want_to_continue => "Szeretné folytatni?",
+   reenter_or_accept => "újból megadni, vagy bármi mást írni az érték elfogadásához, aztán továbblépni!",
+   filename_you_set => "A beállított fájlnév",
+   by_MAC_file => "A megadott MAC-cím fájl alapján, a DRBL szerver hálózatának ethernet felületére kapcsoló kliensek IP címe",
+   let_restart_it_again => "OK, kezdjük újra!",
+   layout_for_DRBL => "A DRBL környezetének felépítése:",
+   swap_prompt =>
+              "Ha van a kliensgépén helyi merevlemez swap partícióval, vagy írható fájlrendszer,\n".
+              "szeretné azt a swap partíciót arra használni, vagy egy swap fájlt létrehozni az írható fájlrendszeren, hogy a kliens több memóriához jusson? (Ez a lépés NEM tesz tönkre semmilyen adatot azon a merevlemezen)",
+   try_to_create_swap =>
+                "Rendben! Megkísérlünk swap területet létrehozni a kliense számára, ha az rendelkezik helyi merevlemezzel!",
+   max_swap_size =>
+                "Mennyi legyen a swap terület maximális mérete (MB-ban)?\n".
+                "Megpróbáljuk lefoglalni a swap területet, ami ha kevésnek bizonyul, az üres hely 60%-ára terjedhet ki.",
+   mode_for_client_init =>
+              "Mely üzemmódot használják a kliensek bootolás után?\n".
+              "\"1\": Grafikus mód (X window rendszer) (alapértelmezett),\n".
+              "\"2\": Szöveges mód.",
+   client_text_mode => "A kliensek szöveges módban fognak bootolni.",
+   client_graphic_mode => "A kliensek bootolás után grafikus módba lépnek.",
+   login_mode_for_client =>
+                  "Mely módot szeretné, amikor a kliens grafikus módban bootol?\n".
+                  "0: normál bejelentkezés, 1: automata bejelentkezés, 2: időzített bejelentkezés",
+   auto_login => "A kliensek automatikusan bejelentkeznek, mikor bootolnak.",
+   created_account_for_auto_login =>
+                      "fiókok jönnek létre a kliensgépeknek az automatikusan bejelentkezéshez.\n".
+		      "Az automata bejelentkezési ID megegyezik a kliens hostnevével.\n".
+                      "A fiókadatok és jelszavak egy fájlba kerülnek",
+   time_for_countdown => "Hány másodperc legyen a visszaszámlálás?",
+   timed_login_prompt => "A kliensek automatikusan belépnek, ha időtúllépés után",
+   normal_login_prompt => "A kliensek bootoláskor felhasználói bejelentkezésre várnak.",
+   keep_client_setting_question => "Megtartja a meglévő DRBL kliensek létező, régi beállításait?",
+   remove_client_setting => "A DRBL kliensek összes létező beállítása eltávolításra kerül.",
+   keep_client_setting => "Megpróbáljuk megtartani a DRBL kliensek létező beállításait.",
+   set_client_root_passwd => "Óhajtja megadni a kliensek root jelszavát ahelyett, hogy a szerverét használná erre a célra is? (A nagyobb biztonság jegyében)",
+   whats_client_root_passwd => "Mi a kliensek új root jelszava (A képernyőn nem jelenik meg)?",
+   set_client_pxelinux_passwd => "Kívánja megadni a kliensek pxelinux jelszavát, hogy a kliens bootolásakor, be kelljen azt írni az indításhoz (A nagyobb biztonság jegyében)",
+   whats_client_pxelinux_passwd => "Mi a kliensek új jelszava (A képernyőn nem jelenik meg)?",
+   retype_root_passwd => "Új jelszó újra (A képernyőn nem jelenik meg).",
+   sorry_passwd_not_match => "A jelszavak nem egyeznek",
+   sorry_passwd_can_not_empty => "Üres jelszó nem használható",
+   set_client_alias_IP =>
+      "Alias felület által, minden kliensnek 2 IP-je lehet,\n".
+      "melyek közül az egyik privát IP a DRBL szerverhez kapcsolódáshoz, a másik pedig nyilvános IP, ami a kliensek, switch-ről közvetlenül WAN-hoz kapcsolódását szolgálja!\n".
+      "Kíván nyilvános IP-t adni a klienseknek?",
+   searching_installed_drbl_packages => "DRBL szerver számára telepített csomagok keresése...Ez számos percbe is telhet...",
+   no_drbl_server_package_found =>
+	      "Nincs DRBL szerver csomag telepítve!!!\n". 
+	      "Először állítsa be a DRBL szervert, egy másik script (drblsrv -i) segítségével!!!, Különben a rendszer NEM működőképes!!!\n".
+	      "Biztosan folytatja? A válasz lehet \"yes\" vagy \"y\" a folytatáshoz, vagy bármely más betű a kilépéshez!",
+   but_you_will_see_errors => "De számtalan hibaüzenettel kell szembesülnie...!!!",
+   smart_decision => "Helyes, bölcs döntés, most kilépek!",
+   finished_searching_installed_drbl_packages => "A DRBL szerverhez telepített csomagok keresése befejeződött.",
+   note_for_keep_client_setting => "Megjegyzés! Szeretné megtartani a DRBL kliensek létező beállításait, időnként azonban gond adódhat a DRBL kliensekkel, miután ez a script lefutott! Ilyen esetben, azok újraindítása meg kell oldja a problémát!",
+   press_enter_to_continue => "A folytatáshoz nyomjon Enter-t... ",
+   no_deploy_prompt =>
+	      "Minden konfig fájl ebben a munkakönyvtárban jön létre,\n".
+	      "de NEM települnek a rendszerre! \n".
+	      "Amennyiben a rendszerre is alkalmazná őket, ne használja a \"-n\" vagy \"--no_deploy\" opciót",
+   ready_to_deploy =>
+	      "Minden kész a fájlok rendszerre való alkalmazásához! \n".
+	      "Folytatja?",
+   overwrite_firewall_rule => "Figyelem! Ha folytatja, a tűzfalszabályok felülíródnak a telepítés folyományaként!",
+   backup_firewall_rule => "Az eredeti szabályok az iptables.drblsave fájlba, a rendszer konfig könytárában (/etc/sysconfig vagy /etc/default) kerülnek mentésre.",
+   oh_quit_now => "Oh, most kilépek!",
+   accept_or_enter => "Válaszoljon \"Y\"-nal, ha elfogadja, vagy más betűvel, ha egyesével lép be mindbe...",
+   failed_to_open_file => "A fájl megnyitása sikertelen",
+   #
+   analyzing_rpm_info => "rpm csomagok adatainak elemzése... Ez jópár percbe is telhet...",
+   no_drbl_server_package => "Nincs DRBL szerver csomag telepítve!!!",
+   apt_pkg_not_installed =>  "Az \"apt\" csomag NINCS telepítve!!!", 
+   we_are_now_ready_to => "Készel állunk arra, hogy",
+   the_files_for_DRBL_server => "a DRBL szerver fájljait!",
+   say_yes_to_continue_other_to_quit => "A válasz lehet \"yes\" vagy \"y\" a folytatáshoz, vagy bármely más betű a kilépéshez!",
+   say_no_to_quit_other_to_continue => "A válasz lehet \"no\" vagy \"n\" a kilépéshez, vagy bármely más betű a folytatáshoz!",
+   syncing_flush => "Szinkronizálás - fájlrendszer tárolók áttöltése...", 
+   install_and_upgrade => "telepítés és frissítés",
+   IP_start_prompt => "Mi a legkisebb szám, amit az IP utolsó számsoraként használna (azaz d legkisebb értéke az a.b.c.d IP címben) az ezen ethernet portra kapcsolódó DRBL kliensekhez",
+   client_no_in_MAC_file => "A kliensek száma ebben a fájlban",
+   not_initial_value => "Amit beírt, NEM egy érvényes kezdőérték! Írjon mást!!!",
+   can_not_be_the_last_IP => "NEM lehet egy IP utolsó számsora!!!",
+   can_not_be_the_first_IP => "NEM lehet egy IP első számsora!!!",
+   set_client_system_select => "Szeretné meghatározni a kliensek bootsorát (saját paraméterek)?",
+   use_graphic_pxelinux_menu => "Szeretne grafikus hátteret a kliensek bootolásakor a PXE menühöz?",
+   note_for_use_graphic_pxelinux_menu => "Megjegyzés! Ha grafikus PXELinux menüt használ, a kliens boot problémái esetén is szöveges módba válthat a \"switch-pxe-bg-mode -m text\" parancs futtatásával.",
+   whats_client_system_boot_timeout => "Hányszor 1/10 mp legyen a kliensek bootsori időtúllépése?",
+   sorry_timeout_must_be_number => "Az időtúllépés szám kell legyen (pl. 70)!!!",
+   unable_to_get_ethx_IP => "Nem szerezhető IP cím!!!\ Be kell állítani egy statikus, C osztályú, privát IP címet (olyat, mint 192.168.1.1), ami NEM lehet lebegő IP cím (mint egy DHCP kliens)! A hiba ezen hálózati kártyán adódott:",
+   program_stop => "Program leállás!!!",
+   open_thin_client_option => 
+        "Szeretné, hogy a DRBL kliensek terminál módban futhassanak? Más szóval szeretné, hogy a kliens távoli megjelenítőt futtasson (ami többnyire szerver erőforrást emészt fel)? Akkor válaszoljon \"Y\"-nal.\n".
+        "Megjegyzés!\n".
+	"0. Ha erre igennel válaszol, az a kliens számára igen korlátozott környezetet jelent, tehát NEM lesz helyi hozzáférése ezekhez: USB, CD, hang, nyomtató, stb.\n".
+	"1. Ha a szerver nem túl erős, válaszoljon \"no\"-val.\n".
+	"2. \"yes\" válasz esetén, bekapcsoljuk az xdmcp-t,\n".
+	"Ennek bekapcsolása nem épp biztonságos. Az /etc/hosts.allow és /etc/hosts.deny beállítása kizárólag helyi hozzáféréshez is egy alternatíva, de attól még így sem biztonságos.\n".
+	"Ha szeretné üzemeltetni az xdmcp-t, akkor még talán a 177-es port letiltása a tűzfalon a legbiztonságosabb.\n".
+	"Olvassa el a leírást, ha további részletekre kíváncsi az XDMCP biztonságával kapcsolatban.\n".
+	"Állítsa be önállóan!\n".
+	"3. Ha a döntése \"yes\", lehet, hogy később újra kell indítani az asztalkezelőt (gdm/kdm), ám ne feledje menteni az adatait, mielőtt bezár alkalmazásokat!\n".
+	"Szeretné, hogy a kliens terminál módban futhasson?",
+   server_kernel_nfsd_support => "A szerveren futó kernel támogatja:",
+   change_kernel_notes => "Megjegyzés! Ha lecseréli a szerveren futó kernelt, de nem biztos abban, hogy az támogatja az NFS-t udp vagy tcp felett, inkább futtassa újra a \"drblpush -i\"-t, hogy elkerülje a kliens bootolási hibáit!",
+   hint_for_answer => "Tipp! Amikor a választási lehetőség igen/nem, az alapételmezett mindig nagybetűs. Pl. (i/N) esetén, az alapértelmezés \"N\", így ha \"Enter\"-t nyom, olyan, mintha az \"N\"-t választotta volna. Ha bizonytalan lenne a választást illetően, csak nyomjon \"Enter\"-t.",
+   hint_for_detect_MAC => "If you want use the static IP address for DRBL clients, you must run \"drblpush\" in interactive mode (with -i option) and collect the MAC addresses of clients!",
+   illegal_char_in_MAC => "A MAC-cím fájlok érvénytelen karaktert tartalmaznak",
+   fix_wrong_MAC_file => "Ellenőrizze és módosítsa a megadott MAC-cím fájlt.",
+   unable_to_find_public_IP => "Ezen szervernek NINCS nyilvános IP címe.",
+   available_eth_ports => "Ezen szerveren elérhető ethernet portok",
+   is_not_in_the_lists => "nem szerepel a listákon",
+   enter_it_again => "Adja meg újra",
+   the_eth_port_you_choose_for_wan => "A WAN kapcsolathoz kiszemelt ethernet port",
+   set_DBN_client_audio_plugdev_etc_open_to_all => "Engedélyezi a hozzáférést a hang, cdrom, floppy, videó és plugdev (mint pl. USB eszköz) eszközökhöz a DRBL kliens minden felhasználója számára? Ha igen, minden felhasználót hozzáadunk a szerver és kliens eszközcsoportjaihoz.",
+   use_random_password => "Szeretne *VÉLETLENSZERŰ* jelszót az automatikus bejelentkezésű fiókokhoz?",
+   enter_password_for_autologin_accounts => "Adja meg az automatikus bejelentkezésű fiókok jelszavát.",
+   whats_client_autologin_passwd => "Mi a kliensek automatikus bejelentkezésű fiókjának jelszava (Nem jelenik meg a képernyőn)?",
+   retype_autologin_passwd => "Jelszó megadása újból (Nem jelenik meg a képernyőn).",
+   clonezilla_box_mode_for_client => "Kizárólag a Clonezilla box módot használná? Ha igen, a DRBL egyes funkcióit kiiktatjuk, így ízlésesen használható a Clonezilla. Megjegyzés! Ezen módban, a kliens beállítás- és konfig fájljai nem lesznek mentve a DRBL szerverre! Csupán egyszer használatosak, majd eltűnnek a gép kikapcsolásakor!",
+   clonezilla_box_mode_is_set => "Clonezilla box üzem beállítva, ami egy ízléses módja a Clonezilla használatának!",
+   full_clonezilla_mode_is_set => "A teljes Clonezilla mód beállítva!",
+   clonezilla_box_mode_not_set => "A Clonezilla box mód NINCS beállítva, a DRBL box összes funkciója működőképes!",
+   no_clonezilla_in_system => "Nincs Clonezilla a rendszeren!",
+   class_c_IP_for_multicast_clonezilla => "Ha multicast Clonezilla-t szeretne, használjon privát, C osztályú címet (192.168.*.*)! Különben a multicast klónozás teljesítménye iszonyúan gyenge lesz!",
+   drbl_ssi_mode_for_client => "Kívánja a DRBL SSI (Single system image) módot használni? Ha igen, a betöltő és a szerver számára szükséges lemezterület kevesebb. MEGJEGYZÉS! Ezen módban, (1) Az kliensgép memóriája legalább 256 MB. (2) A kliens beállításai és konfig fájljai nem lesznek mentve a DRBL szerverre! Csupán egyszer használatosak, majd eltűnnek a gép kikapcsolásakor! Továbbá, ha a sablon kliens bármely fájlját módosítja (helye a $drblroot), futtatnia kell a drbl-gen-ssi-files parancsot, hogy létrejöjjön a sablon tarball a $drbl_common_root/drbl_ssi/ könytárban. (3) Ha a sablon tarball-ban elhelyezett fájlok segítségével kíván felülírni beállításokat a kliens bootolásakor, nézze meg a $drbl_common_root/drbl_ssi/clients/00_README fájlt a további részletekért.",
+   which_drbl_mode_for_client => "A rendszeren, a lemeznélküli linux szolgáltatásoknak 3 módja van:\n[0] Teljes DRBL mód, mikor minden kliensnél saját, NFS alapú az /etc és /var.\n[1] DRBL SSI (Single system image) mód, ahol minden kliensnél tmpfs alapú az /etc és /var. Ebben a módban, a betöltő és a szerver számára szükséges lemezterület kevesebb. MEGJEGYZÉS! (a) Az ajánlott kliensgép memória legalább 256 MB. (b) A kliens beállításai és konfig fájljai nem lesznek mentve a DRBL szerverre! Csupán egyszer használatosak, majd eltűnnek a gép kikapcsolásakor! Továbbá, ha a sablon kliens bármely fájlját módosítja (helye a $drblroot), futtatnia kell a drbl-gen-ssi-files parancsot, hogy létrejöjjön a sablon tarball a $drbl_common_root/drbl_ssi/ könytárban. (c) Ha a sablon tarball-ban elhelyezett fájlok segítségével kíván felülírni beállításokat a kliens bootolásakor, nézze meg a $drbl_common_root/drbl_ssi/clients/00_README fájlt a további részletekért.\n[2] NEM biztosítok lemez nélküli Linux szolgáltatást a kliensnek.\nMelyik módot szeretné?",
+   drbl_ssi_mode_is_set => "DRBL SSI üzem beállítva, ami egy ízléses módja a DRBL használatának!",
+   full_drbl_mode_is_set => "A teljes DRBL módot választotta!",
+   no_drbl_mode_in_system => "Nincs lemeznélküli Linux a kliensnek a rendszeren.",
+   where_is_ocs_img_repo_dir => "Clonezilla használatakor, a szerver mely könyvtára tárolja a mentett képet (Abszolút útvonalat használjon és NE az /mnt/, /media/ vagy /tmp/ alatt jelölje ki)?",
+   not_allowed_ocs_img_repo_dir => "nem engedélyezett a Clonezilla kép mentéséhez, adjon meg másikat.",
+   drbl_server_as_NAT_server => "Kívánja, hogy a DRBL szerver NAT szerverként funkcionáljon? Amennyiben nem, a DRBL kliense nem tudja elérni az Internetet.",
+   drbl_server_is_NOT_NAT_server => "Ez a DRBL szerver NEM biztosít NAT szolgáltatást, ezért a DRBL kliense nem tudja elérni az Internetet.",
+   both_drbl_clonezilla_are_none => "Mind a DRBL, mind pedig a Clonezilla mód elérhetetlenként lett megjelölve, így csak igen korlátozott funkciók (mint pl. a netinstall, ha telepíti a szükséges fájlokat és a drbl-sl) használhatók ezen a rendszeren!",
+   only_one_network_card_in_system => "///FIGYELEM/// Csupán egyetlen konfigurált hálózati kártya található a rendszeren, ami nem ideális, mivel ez a DRBL szerver DHCP szolgáltatást is nyújt, ami összekeverheti a hálózati környezetét, ha már jelen van másik DHCP szolgáltatás is abban a környezetben, ahova ez a hálózati kártya csatlakozik!!! Javasolt legalább két hálózati kártya alkalmazása a szerveren, ezen problémák elkerülése érdekében.",
+   are_you_sure_you_want_to_continue => "Biztosan folytatja?",
+   # Tag on 2010/12/13
+   which_clonezilla_mode_for_client => "A rendszeren, négy Clonezilla mód elérhető:\n[0] Teljes Clonezilla mód, mikor minden kliensnél saját, NFS alapú az /etc és /var.\n[1] Clonezilla box mód, ahol minden kliensnél tmpfs alapú az /etc és /var. Ebben a módban, a betöltő és a szerver számára szükséges lemezterület kevesebb, mint a Teljes Clonezilla módban. Megjegyzés! Clonezilla box módban, a kliens beállítási- és konfig fájljai nem lesznek mentve a DRBL szerverre! Csupán egyszer használatosak, majd eltűnnek a gép kikapcsolásakor!\n[2] NEM használok Clonezilla-t.\n[3] Clonezilla live használata a kliensek operációs rendszereként (Tesztelés alatt).\nMelyik módot szeretné?",
+   clonezilla_live_mode_is_set => "Clonezilla live használata a kliensek operációs rendszereként Clonezilla feladat futásához.",
+   which_clonezilla_live_branch => "Mi legyen a Clonezilla live kiadásának fajtája kliensekhez?\n[0]: stabil (Debian alapú)\n[1]: tesztváltozat (Debian alapú)\n[2]: alternatív stabil (Ubuntu alapú)\n[3]: alternatív tesztváltozat (Ubuntu alapú)\nHa bizonytalan, válassza ezt [2]: alternatív stabil.",
+   which_live_client_cpu_mode => "Mi legyen a CPU architektúra kliensekhez, Clonezilla feladat, Clonezilla live-val futtatásakor?\n[0]: i586\n[1]: i686\n[2]: amd64\nHa bizonytalan, válassza az i586-ot.",
+   which_live_client_cpu_mode_for_ubuntu => "Mi legyen a CPU architektúra kliensekhez, Clonezilla feladat, Clonezilla live-val futtatásakor?\n[0]: i386\n[1]: amd64\nHa bizonytalan, válassza az i386-ot.",
+   live_client_branch_set=> "A Clonezilla live fajtáját illető választás:",
+   live_client_cpu_arch_is_set => "A CPU architektúra klienseknek, Clonezilla feladat futtatásához",
+   mark_the_end_of_lang =>"."
+   );
