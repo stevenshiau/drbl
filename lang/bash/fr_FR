@@ -987,3 +987,5 @@ msg_img_repository_not_writable='The image repository directory is read-only, no
 # Tag on 2015/04/18
 msg_mount_S3_server='Use AWS S3 server'
 msg_mount_swift_server='Use OpenStack swift server'
+# Tag on 2015/05/06
+msg_locale_hu_HU='Hungarian'

@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.14.7-drbl1) unstable; urgency=low
+
+  * Language files for Hungarian were added. Thanks to Greg Marki
+    (info.mlc _at_ freemail hu) for providing the files.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 06 May 2015 22:38:15 +0800
+
 drbl (2.14.6-drbl1) unstable; urgency=low
 
   * Suppress the messages about client's upstart files not found.

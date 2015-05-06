@@ -852,7 +852,6 @@ msg_locale_sk_SK='Szlovák'
 msg_locale_tr_TR='Török'
 msg_locale_zh_CN='Egyszerűsített Kínai'
 msg_locale_zh_TW='Tradícionális Kínai'
-msg_locale_hu_HU='Magyar'
 msg_if_you_want_to_run_in_unattended_mode='Amennyiben felügyelet nélküli módban futtatná:'
 msg_source_disks_more_than_1='A kép egynél több lemezről készült. Ez a program csak olyan képet kezel, ami egyetlen lemezt foglal magába.'
 msg_restore_1_image_to_multiple_local_disks='Lemezkép visszaállítása több helyi lemezre'
@@ -984,3 +983,8 @@ msg_url_of_davfs_server='WebDAV szerver webcíme. Pl. http://192.168.1.254/webda
 msg_ocs_param_irvd='Az NTFS kötet dirty megjelölésének meghagyása visszaállítás után'
 # Tag on 2015/03/29
 msg_img_repository_not_writable='A képtárhely könyvtára írásvédett, csak olvasható'
+# Tag on 2015/04/18
+msg_mount_S3_server='Use AWS S3 server'
+msg_mount_swift_server='Use OpenStack swift server'
+# Tag on 2015/05/06
+msg_locale_hu_HU='Magyar'

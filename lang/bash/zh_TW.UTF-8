@@ -986,3 +986,5 @@ msg_img_repository_not_writable='印象檔儲藏庫的目錄是唯讀，無法�
 # Tag on 2015/04/18
 msg_mount_S3_server='使用AWS S3伺服器'
 msg_mount_swift_server='使用OpenStack swift伺服器'
+# Tag on 2015/05/06
+msg_locale_hu_HU='匈牙利文'
