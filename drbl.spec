@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.14.7
+Version:	2.14.8
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Sat May 09 2015 Steven Shiau <steven _at_ nchc org tw> 2.14.8-drbl1
+- Adding package tinc in Clonezilla/DRBL live. Thanks to Michael Munger (michael _at_ highpoweredhelp com) for suggesting this.
+
 * Wed May 06 2015 Steven Shiau <steven _at_ nchc org tw> 2.14.7-drbl1
 - Language files for Hungarian were added. Thanks to Greg Marki (info.mlc _at_ freemail hu) for providing the files.
 

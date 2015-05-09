@@ -1,3 +1,10 @@
+drbl (2.14.8-drbl1) unstable; urgency=low
+
+  * Adding package tinc in Clonezilla/DRBL live. Thanks to Michael
+    Munger (michael _at_ highpoweredhelp com) for suggesting this.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sat, 09 May 2015 12:47:53 +0800
+
 drbl (2.14.7-drbl1) unstable; urgency=low
 
   * Language files for Hungarian were added. Thanks to Greg Marki
