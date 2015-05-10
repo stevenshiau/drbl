@@ -984,7 +984,7 @@ msg_ocs_param_irvd='Az NTFS kötet dirty megjelölésének meghagyása visszaál
 # Tag on 2015/03/29
 msg_img_repository_not_writable='A képtárhely könyvtára írásvédett, csak olvasható'
 # Tag on 2015/04/18
-msg_mount_S3_server='Use AWS S3 server'
-msg_mount_swift_server='Use OpenStack swift server'
+msg_mount_S3_server='AWS S3 szerver használata'
+msg_mount_swift_server='OpenStack swift szerver használata'
 # Tag on 2015/05/06
 msg_locale_hu_HU='Magyar'

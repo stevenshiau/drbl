@@ -1,3 +1,9 @@
+drbl (2.14.9-drbl10) unstable; urgency=low
+
+  * Language file hu_HU was updated. Thanks to Michael Munger.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sun, 10 May 2015 20:30:59 +0800
+
 drbl (2.14.8-drbl1) unstable; urgency=low
 
   * Adding package tinc in Clonezilla/DRBL live. Thanks to Michael
