@@ -424,9 +424,9 @@ install_SL(){
   # x86 boot sector # file version 4.10
   # For file version 5.17 in Jessie:
   # debian-7.4.0-i386-netinst.iso: DOS/MBR boot sector; partition 1 : ID=0x17, active, start-CHS (0x0,2,1), end-CHS (0x114,63,32), startsector 64, 567232 sectors
-  if [ -z "$(LC_ALL=C file -Ls $SL_ISO | grep -i "ISO 9660 CD-ROM filesystem data")" ] && \
-     [ -z "$(LC_ALL=C file -Ls $SL_ISO | grep -i "x86 boot sector")" -a "$(echo $SL_ISO | grep -iE "\.iso")" ] && \
-     [ -z "$(LC_ALL=C file -Ls $SL_ISO | grep -i "DOS/MBR boot sector")" -a "$(echo $SL_ISO | grep -iE "\.iso")" ]; then
+  if [ -z "$(LC_ALL=C file -Lsk $SL_ISO | grep -i "ISO 9660 CD-ROM filesystem data")" ] && \
+     [ -z "$(LC_ALL=C file -Lsk $SL_ISO | grep -i "x86 boot sector")" -a "$(echo $SL_ISO | grep -iE "\.iso")" ] && \
+     [ -z "$(LC_ALL=C file -Lsk $SL_ISO | grep -i "DOS/MBR boot sector")" -a "$(echo $SL_ISO | grep -iE "\.iso")" ]; then
     [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
     echo "$SL_ISO is not an ISO 9660 CD-ROM filesystem data file!"
     [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
@@ -557,7 +557,7 @@ install_SL(){
     # In RH9: vmlinuz-2.4.20-28.9smp: x86 boot sector
     # In OpenSuSE 11.3: "file -Ls vmlinuz" gives:
     # vmlinuz: Linux/x86 Kernel, Setup Version 0x20a, bzImage, Version 3.2.0, Version 3.2.0-24, RO-rootFS, swap_dev 0x4, Normal VGA
-    if [ -n "$(LC_ALL=C file -Ls $i | grep -iE "(Linux x86 kernel|Linux kernel x86 boot executable|Linux\/x86 Kernel|x86 boot sector)")" ]; then
+    if [ -n "$(LC_ALL=C file -Lsk $i | grep -iE "(Linux x86 kernel|Linux kernel x86 boot executable|Linux\/x86 Kernel|x86 boot sector)")" ]; then
       # Ugly
       # we skip memtest, etherboot, freedos...
       if [ -z "$(LC_ALL=C echo $i | grep -iE "(memtest|eb.zli|memdisk|gpxe.lkn|ipxe.lkn|freedos|fdos)")" ]; then
@@ -579,12 +579,12 @@ install_SL(){
   # Find initrd
   # UGLY! Here we assume only one gzip/cpio file exists, and it's initrd.
   for i in $isomnt/$bootfiles_path/* $isomnt/$rootfile_path/*; do
-    if [ -n "$(LC_ALL=C file -Ls $i | grep -iE "gzip compressed data")" ]; then
+    if [ -n "$(LC_ALL=C file -Lsk $i | grep -iE "gzip compressed data")" ]; then
       oldinitrd="$i"
       uncompress_to_stdout="gunzip -c"
       compress_to_stdout="gzip -c"
       break
-    elif [ -n "$(LC_ALL=C file -Ls $i | grep -iE "XZ compressed data")" ]; then
+    elif [ -n "$(LC_ALL=C file -Lsk $i | grep -iE "XZ compressed data")" ]; then
       oldinitrd="$i"
       uncompress_to_stdout="xzcat"
       compress_to_stdout="xz -c"
@@ -621,7 +621,7 @@ install_SL(){
         compress_to_stdout="lzma -z -c"
       fi
       break
-    elif [ -n "$(LC_ALL=C file -Ls $i | grep -i "ASCII cpio archive")" ]; then
+    elif [ -n "$(LC_ALL=C file -Lsk $i | grep -i "ASCII cpio archive")" ]; then
       oldinitrd="$i"
       break
     fi

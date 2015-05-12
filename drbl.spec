@@ -45,6 +45,8 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+- Bug fixed: failed to identify the iso file in drbl-sl on Ubuntu 15.04. Thanks to Jasper Aorangi for reporting this (https://sourceforge.net/p/clonezilla/bugs/225/).
+
 * Sun May 10 2015 Steven Shiau <steven _at_ nchc org tw> 2.14.9-drbl1
 - Language file hu_HU was updated. Thanks to Michael Munger.
 
