@@ -1,3 +1,11 @@
+drbl (2.14.10-drbl1) unstable; urgency=low
+
+  * Bug fixed: failed to identify the iso file in drbl-sl on Ubuntu
+    15.04. Thanks to Jasper Aorangi for reporting this
+    (https://sourceforge.net/p/clonezilla/bugs/225/).
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 12 May 2015 21:20:09 +0800
+
 drbl (2.14.9-drbl10) unstable; urgency=low
 
   * Language file hu_HU was updated. Thanks to Michael Munger.
