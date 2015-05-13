@@ -7,6 +7,8 @@ Copyright (c) 2002-2014 National Center for High-Performance Computing, Taiwan
  - uEFI nework booting support could be enabled by
    - Installing syslinux/pxelinux 6.03. If your GNU/Linux distribution does not provide that, you can run:
      "/usr/share/drbl/sbin/drbl-prepare-pxelinux -d -u -pv 6.03"
+      then update the network boot menu by:
+     "/usr/sbin/generate-pxe-menu"
    - You have to modify the file /tftpboot/nbi_img/pxelinux.cfg/default. Change
      "PATH bios/" to "PATH efi64/"
 
