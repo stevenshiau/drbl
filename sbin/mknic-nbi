@@ -309,7 +309,7 @@ fi
 # 
 echo "The selected kernel for DRBL clients is: $drbl_kernel"
 #
-if [ -z "$initfs_type" -a -n "$(echo $drbl_kernel | grep -E "^(2\.6\.1[5-9]+|2\.6\.[2-9][0-9]|3\.)" )" ]; then
+if [ -z "$initfs_type" -a -n "$(echo $drbl_kernel | grep -E "^(2\.6\.1[5-9]+|2\.6\.[2-9][0-9]|3\.|4\.)" )" ]; then
   # default to use initramfs for kernel 2.6.15 or later.
   echo "Kernel 2.6 or 3 was found, so default to use initramfs."
   initfs_type="initramfs"

@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.14.10
+Version:	2.14.11
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Thu May 14 2015 Steven Shiau <steven _at_ nchc org tw> 2.14.11-drbl1
+- Bug fixed: some more files (drblsrv-offline and mknic-nbi) need to be fixed so that it can be used for Linux kernel version 4.
+
 * Tue May 12 2015 Steven Shiau <steven _at_ nchc org tw> 2.14.10-drbl1
 - Bug fixed: failed to identify the iso file in drbl-sl on Ubuntu 15.04. Thanks to Jasper Aorangi for reporting this (https://sourceforge.net/p/clonezilla/bugs/225/).
 

@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.14.11-drbl1) unstable; urgency=low
+
+  * Bug fixed: some more files (drblsrv-offline and mknic-nbi) need
+    to be fixed so that it can be used for Linux kernel version 4.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 14 May 2015 22:28:56 +0800
+
 drbl (2.14.10-drbl1) unstable; urgency=low
 
   * Bug fixed: failed to identify the iso file in drbl-sl on Ubuntu

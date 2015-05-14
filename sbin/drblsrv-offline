@@ -229,8 +229,8 @@ check_input_kernel_param() {
   #                    FC5: kernel-2.6.17-1.2174_FC5.i686.rpm
   #                    RH9: kernel#2.4.20-46.9.legacy_2.4.20-46.9.legacy_i586.rpm
   # For kernel version like: 2.6.15-26-386
-  if [ -n "$(echo $client_kernel_pkg | grep -iE "[_-](2\.6\.|3\.)[[:digit:]]+")" -o \
-       -n "$(echo $client_kernel_ver_from_server | grep -iE "^(2\.6\.|3\.)[[:digit:]]+")" ]; then 
+  if [ -n "$(echo $client_kernel_pkg | grep -iE "[_-][[:digit:]]+\.[[:digit:]]+")" -o \
+       -n "$(echo $client_kernel_ver_from_server | grep -iE "^[[:digit:]]+\.[[:digit:]]+")" ]; then 
     PKG_DEV="udev"
   else
     if [ "$dev_for_client_is_ready" = "no" ]; then
