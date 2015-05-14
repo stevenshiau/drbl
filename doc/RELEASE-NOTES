@@ -5,10 +5,10 @@ Copyright (c) 2002-2014 National Center for High-Performance Computing, Taiwan
  - Ubuntu 14.10, CentOS 7 supports were added in this release.
  - Language files were updated. Thanks to all the contributors.
  - uEFI nework booting support could be enabled by
-   - Installing syslinux/pxelinux 6.03. If your GNU/Linux distribution does not provide that, you can run:
-     "/usr/share/drbl/sbin/drbl-prepare-pxelinux -d -u -pv 6.03"
-      then update the network boot menu by:
-     "/usr/sbin/generate-pxe-menu"
+   - Installing syslinux/pxelinux 6.03. If your GNU/Linux distribution does not provide that (E.g. for CentOS 6 and 7), you can run:
+     /usr/share/drbl/sbin/drbl-prepare-pxelinux -d -u -pv 6.03
+     rm -f /tftpboot/nbi_img/{hdt.c32,chain.c32,mboot.c32,menu.c32,sanboot.c32,vesamenu.c32}
+     /usr/sbin/generate-pxe-menu
    - You have to modify the file /tftpboot/nbi_img/pxelinux.cfg/default. Change
      "PATH bios/" to "PATH efi64/"
 
