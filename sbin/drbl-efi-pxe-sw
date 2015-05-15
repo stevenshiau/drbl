@@ -1,0 +1,91 @@
+#!/bin/bash
+# License: GPL 
+# Author: Steven Shiau <steven _at_ nchc org tw>
+#
+DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/usr/share/drbl}"
+. $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
+. /etc/drbl/drbl-ocs.conf
+. $DRBL_SCRIPT_PATH/sbin/ocs-functions
+
+# Load the config in ocs-live.conf. This is specially for Clonezilla live. It will overwrite some settings of /etc/drbl/drbl-ocs.conf, such as $DIA...
+[ -e "/etc/ocs/ocs-live.conf" ] && . /etc/ocs/ocs-live.conf
+
+# Settings
+syslinux_efi_def_v="6.03"
+
+#
+USAGE() {
+    echo "$ocs - To switch the network booting service"
+    echo "Usage:"
+    echo "To run $ocs:"
+    echo "$ocs [Option] MODE"
+    echo "Options:"
+    echo "-s, --syslinux VER Specify syslinux version. If not assigned, version \"$syslinux_efi_def_v\" will be used. It has to be >= $syslinux_efi_def_v."
+    echo "MODE is the mode you want to switch to, either \"efi\" or \"pxe\"."
+    echo "If no MODE is specified, \"efi\" will be used."
+    echo "Ex:"
+    echo "To switch this DRBL server as a server for uEFI network booting clients, run"
+    echo "   $ocs efi"
+    echo
+
+}
+#
+to_efi_client(){
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+  echo "Switching to the service for uEFI network booting clients..."
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+  drbl-prepare-pxelinux -d -u -pv $syslinux_ver
+  rm -f $pxecfg_pd/{hdt.c32,chain.c32,mboot.c32,menu.c32,sanboot.c32,vesamenu.c32}
+  generate-pxe-menu
+  perl -pi -e "s/^PATH bios/#PATH bios/g" $pxecfg_pd/pxelinux.cfg/default 
+  perl -pi -e "s/^#+PATH efi64/PATH efi64/g" $pxecfg_pd/pxelinux.cfg/default
+}
+#
+to_pxe_client(){
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+  echo "Switching to the service for PXE network booting clients..."
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+  drbl-prepare-pxelinux -d -u -pv $syslinux_ver
+  generate-pxe-menu
+  perl -pi -e "s/^#+PATH bios/PATH bios/g" $pxecfg_pd/pxelinux.cfg/default 
+  perl -pi -e "s/^PATH efi64/#PATH efi64/g" $pxecfg_pd/pxelinux.cfg/default
+}
+
+####################
+### Main program ###
+####################
+
+ocs_file="$0"
+ocs=`basename $ocs_file`
+#
+while [ $# -gt 0 ]; do
+ case "$1" in
+   -s|--syslinux)
+           shift; 
+           if [ -z "$(echo $1 |grep ^-.)" ]; then
+             # skip the -xx option, in case 
+             syslinux_ver="$1"
+             shift;
+           fi
+           [ -z "$syslinux_ver" ] && USAGE && exit 1
+           ;;
+   -*)     echo "${0}: ${1}: invalid option" >&2
+           USAGE >& 2
+           exit 2 ;;
+   *)      break ;;
+ esac
+done
+
+mode="$1"
+
+if [ -z "$syslinux_ver" ]; then
+  syslinux_ver="$syslinux_efi_def_v"
+fi
+if [ -z "$mode" ]; then
+  mode="efi"
+fi
+
+case "$mode" in
+  "efi"|"EFI") to_efi_client;;
+  "pxe"|"PXE") to_pxe_client;;
+esac

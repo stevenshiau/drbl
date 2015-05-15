@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+- Adding drbl-efi-pxe-sw so it's easier to switch that on CentOS.
+- Adding the ocs service for CentOS 7.1.1503.
+
 * Thu May 14 2015 Steven Shiau <steven _at_ nchc org tw> 2.14.11-drbl1
 - Bug fixed: some more files (drblsrv-offline and mknic-nbi) need to be fixed so that it can be used for Linux kernel version 4.
 
