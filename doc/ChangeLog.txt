@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.14.12-drbl1) unstable; urgency=low
+
+  * Adding drbl-efi-pxe-sw so it's easier to switch that on CentOS.
+  * Adding the ocs service for CentOS 7.1.1503.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 15 May 2015 09:47:50 +0800
+
 drbl (2.14.11-drbl1) unstable; urgency=low
 
   * Bug fixed: some more files (drblsrv-offline and mknic-nbi) need
