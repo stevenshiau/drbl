@@ -81,7 +81,7 @@ fi
 # Debian: /usr/share/grub/unicode.pf2 
 # CetnOS: /boot/efi/EFI/centos/fonts/unicode.pf2
 echo "Preparing background img and font..."
-unicode_font="$(LC_ALL=C find /usr/share/grub/ /boot/efi/EFI/ -name "unicode.pf2" -print | uniq | head -n 1)"
+unicode_font="$(LC_ALL=C find /usr/share/grub/ /boot/efi/EFI/ -name "unicode.pf2" -print 2>/dev/null | uniq | head -n 1)"
 if [ -n "$unicode_font" ]; then
   cp -fv $unicode_font $pxecfg_pd/
 fi
