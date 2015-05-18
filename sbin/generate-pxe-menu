@@ -80,6 +80,7 @@ while [ $# -gt 0 ]; do
 	      pxe_mode="$1"
 	      shift
             fi
+	    [ -z "$pxe_mode" ] && USAGE && exit 1
             ;;
     -d|--dir)
             shift
