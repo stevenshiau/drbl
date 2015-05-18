@@ -324,7 +324,7 @@ do_clonezilla_save_dev() {
   if [ "$LIST_HOST" = "on" ]; then
     # NOTE: For prompt, we use \" to show ", but actually run it without \
     drbl-ocs $OCS_OPTS $dcs_save_extra_opt -h "$IP_LIST" -l $lang start${dev} save $input_save_img_name $input_device_name
-    deploy_pxecfg_files
+    deploy_pxecfg_grubefi_files
     [ "$BOOTUP" = "color" ] && $SETCOLOR_SUCCESS
     # NOTE: For prompt, we use \" to show ", but actually run it without \
     echo PS. $msg_run_drbl_ocs_again_cmd 
@@ -333,7 +333,7 @@ do_clonezilla_save_dev() {
     [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
   else
     drbl-ocs $OCS_OPTS $dcs_save_extra_opt -l $lang start${dev} save $input_save_img_name $input_device_name
-    deploy_pxecfg_files
+    deploy_pxecfg_grubefi_files
     [ "$BOOTUP" = "color" ] && $SETCOLOR_SUCCESS
     echo PS. $msg_run_drbl_ocs_again_cmd 
     echo drbl-ocs -b $OCS_OPTS $dcs_save_extra_opt -l $lang start${dev} save $input_save_img_name $input_device_name | tee $run_again_fname
@@ -449,7 +449,7 @@ do_clonezilla_restore_dev() {
     if [ "$LIST_HOST" = "on" ]; then
       # NOTE: For prompt, we use \" to show ", but actually run it without \
       drbl-ocs $OCS_OPTS $dcs_restore_extra_opt -h "$IP_LIST" -l $lang start${dev} restore $target_image $target_dev
-      deploy_pxecfg_files
+      deploy_pxecfg_grubefi_files
       [ "$BOOTUP" = "color" ] && $SETCOLOR_SUCCESS
       echo PS. $msg_run_drbl_ocs_again_cmd 
       # NOTE: For prompt, we use \" to show ", but actually run it without \
@@ -458,7 +458,7 @@ do_clonezilla_restore_dev() {
       [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
     else
       drbl-ocs $OCS_OPTS $dcs_restore_extra_opt -l $lang start${dev} restore $target_image $target_dev
-      deploy_pxecfg_files
+      deploy_pxecfg_grubefi_files
       [ "$BOOTUP" = "color" ] && $SETCOLOR_SUCCESS
       echo PS. $msg_run_drbl_ocs_again_cmd 
       echo drbl-ocs -b $OCS_OPTS $dcs_restore_extra_opt -l $lang start${dev} restore $target_image $target_dev | tee $run_again_fname
@@ -490,7 +490,7 @@ do_clonezilla_restore_dev() {
       mcast_clonezilla_restore_not_for_all_clients_warning
       # NOTE: For prompt, we use \" to show ", but actually run it without \
       drbl-ocs $OCS_OPTS $dcs_restore_extra_opt $mcast_mode_opt -h "$IP_LIST" -l $lang start${dev} multicast_restore $target_image $target_dev
-      deploy_pxecfg_files
+      deploy_pxecfg_grubefi_files
       [ "$BOOTUP" = "color" ] && $SETCOLOR_SUCCESS
       echo PS. $msg_run_drbl_ocs_again_cmd 
       # NOTE: For prompt, we use \" to show ", but actually run it without \
@@ -499,7 +499,7 @@ do_clonezilla_restore_dev() {
       [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
     else
       drbl-ocs $OCS_OPTS $dcs_restore_extra_opt $mcast_mode_opt -l $lang start${dev} multicast_restore $target_image $target_dev
-      deploy_pxecfg_files
+      deploy_pxecfg_grubefi_files
       [ "$BOOTUP" = "color" ] && $SETCOLOR_SUCCESS
       echo PS. $msg_run_drbl_ocs_again_cmd 
       echo drbl-ocs -b $OCS_OPTS $dcs_restore_extra_opt $mcast_mode_opt -l $lang start${dev} multicast_restore $target_image $target_dev | tee $run_again_fname
@@ -536,7 +536,7 @@ do_clonezilla_select_in_client() {
   run_again_fname="/tmp/ocs-select-in-client-`date +%F-%H-%M`"
   if [ "$LIST_HOST" = "on" ]; then
     drbl-ocs -h "$IP_LIST" -l $lang $OCS_OPTS select_in_client
-    deploy_pxecfg_files
+    deploy_pxecfg_grubefi_files
     [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
     echo "$msg_authentication_pxe_linux_info"
     [ "$BOOTUP" = "color" ] && $SETCOLOR_SUCCESS
@@ -546,7 +546,7 @@ do_clonezilla_select_in_client() {
     [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
   else
     drbl-ocs -l $lang $OCS_OPTS select_in_client
-    deploy_pxecfg_files
+    deploy_pxecfg_grubefi_files
     [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
     echo "$msg_authentication_pxe_linux_info"
     [ "$BOOTUP" = "color" ] && $SETCOLOR_SUCCESS
@@ -607,16 +607,31 @@ clean_stale_node_pxe_cfg(){
   # $PXE_CONF is global variable.
   # Clean all the previous saved config file.
   # These files maybe look like: 01-MAC address (with ":" -> "-"), something like C0A8XXXX (only for 192.168.x), default_skeleton
-  echo -n "Clean all the previous saved PXELINUX config file if they exist..."
+  echo -n "Clean all the previous saved PXELINUX config files if they exist..."
   for ifile in $PXELINUX_DIR/*; do
-    [  "$ifile" != "$PXE_CONF" -a \
+    if [  "$ifile" != "$PXE_CONF" -a \
        "$ifile" != "$PXELINUX_DIR/bios" -a \
        "$ifile" != "$PXELINUX_DIR/efi32" -a \
        "$ifile" != "$PXELINUX_DIR/efi64" -a \
-       -f "$ifile" ] && rm -f $ifile
+       -f "$ifile" ]; then
+      rm -f $ifile
+    fi
   done
   echo "done!"
 } # end of clean_stale_node_pxe_cfg
+#
+clean_stale_node_grub_efi_cfg(){
+  # $GRUB_CONF is global variable.
+  # Clean all the previous saved config file.
+  # These files maybe look like: grub.cfg-01-MAC address (with ":" -> "-"), something like grub.cfg-C0A8XXXX (only for 192.168.x), grub.cfg_skeleton
+  echo -n "Clean all the previous saved GRUB EFI NB config files if they exist..."
+  for ifile in $GRUB_EFINB_DIR/grub.cfg-*; do
+    if [ -e "$ifile" ]; then
+      rm -f $ifile
+    fi
+  done
+  echo "done!"
+} # end of clean_stale_node_grub_efi_cfg
 #
 clean_stale_mac_cfg_for_pxelinux_or_not() {
   local ihlist="$*"
@@ -651,18 +666,20 @@ clean_stale_mac_cfg_for_pxelinux_or_not() {
   fi
 } # clean_stale_mac_cfg_for_pxelinux_or_not
 #
-deploy_pxecfg_files(){
+deploy_pxecfg_grubefi_files(){
   # This function will set the specific config or just keep the "default"
   if [ "$LIST_HOST" = "on" ]; then
     # specify the nodes if assigned by user
-    echo "Create specific config for PXE client."
+    echo "Create specific config for PXE and GRUB EFI NB client."
     set_specific_host_pxe_conf `cat $HOSTS_TMP`
+    set_specific_host_grub_efi_conf `cat $HOSTS_TMP`
   else
     # for all clients, so we just keep the file pxelinux.cfg/default, no others.
-    echo "This is for all clients, so we remove other host-based PXE config files in $PXELINUX_DIR/ and keep $PXE_CONF only."
+    echo "This is for all clients, so we remove other host-based PXE config files in $PXELINUX_DIR/ and $GRUB_EFINB_DIR/ and keep $PXE_CONF and $GRUB_CONF only."
     clean_stale_node_pxe_cfg
+    clean_stale_node_grub_efi_cfg
   fi
-} # end of deploy_pxecfg_files
+} # end of deploy_pxecfg_grubefi_files
 
 # Parse command-line options
 while [ $# -gt 0 ]; do
@@ -861,7 +878,7 @@ case "$MODE" in
 	   drbl-powerful-thin-client --no-gen-ssi -p -ln $lang
          fi
 
-	 deploy_pxecfg_files
+	 deploy_pxecfg_grubefi_files
 
          for host in $drblroot/*; do
            # if the LIST_HOST is on, skip those IP not listed in the $IP_LIST
@@ -928,7 +945,7 @@ case "$MODE" in
 	   drbl-powerful-thin-client --no-gen-ssi -p -ln $lang
 	 fi
 
-	 deploy_pxecfg_files
+	 deploy_pxecfg_grubefi_files
 
          for host in $drblroot/*; do
            # if the LIST_HOST is on, skip those IP not listed in the $IP_LIST
@@ -979,21 +996,21 @@ case "$MODE" in
          echo -n "Setting client as remote-memtest mode..."
          stop_ocs_if_necessary
          set-default-pxe-img -i memtest -c $PXE_CONF
-	 deploy_pxecfg_files
+	 deploy_pxecfg_grubefi_files
 	 echo "done!"
 	 ;;
   "remote-fdos")
          echo -n "Setting client as remote-fdos mode..."
          stop_ocs_if_necessary
          set-default-pxe-img -i fdos -c $PXE_CONF
-	 deploy_pxecfg_files
+	 deploy_pxecfg_grubefi_files
 	 echo "done!"
 	 ;;
   "terminal")
          echo -n "Settinig client as DRBL terminal mode..."
          stop_ocs_if_necessary
          set-default-pxe-img -i drbl-terminal -c $PXE_CONF -l "$FULL_OS_Version $thin_client_menu_label"
-	 deploy_pxecfg_files
+	 deploy_pxecfg_grubefi_files
 
          if [ "$LIST_HOST" = "on" ]; then
            drbl-client-system-select -e -h "$IP_LIST" on
@@ -1059,7 +1076,7 @@ case "$MODE" in
      echo -n "Set the PXE environment..."
      set-default-pxe-img -i $OS_netinstall -c $PXE_CONF
      echo "done!"
-     deploy_pxecfg_files
+     deploy_pxecfg_grubefi_files
      ;;
   "clonezilla-start")
      [ -z "$ocs_user_mode" ] && ask_if_beginner_or_expert_mode
@@ -1110,7 +1127,9 @@ case "$MODE" in
      stop_ocs_if_necessary
      # When clonezilla stops, we should make clients boot locally
      set-default-pxe-img -i local -c $PXE_CONF
-     deploy_pxecfg_files
+     # There is no local mode in set-default-grub-efi-img, so we use shutdown 
+     set-default-grub-efi-img -i shutdown -c $GRUB_CONF
+     deploy_pxecfg_grubefi_files
      echo "done!"
      ;;
 
@@ -1118,7 +1137,7 @@ case "$MODE" in
          echo -n "Setting client as local mode..."
          stop_ocs_if_necessary
          set-default-pxe-img -i local -c $PXE_CONF
-	 deploy_pxecfg_files
+	 deploy_pxecfg_grubefi_files
 	 echo "done!"
 	 ;;
   "reboot")
@@ -1204,7 +1223,7 @@ case "$MODE" in
               echo "Switch DRBL client menus..."
        	      switch-pxe-menu -c $PXE_CONF -l $lang $DIA_OPT $MORE_OPT_for_MODE2
        	      rc=$?
-       	      [ "$rc" -eq 0 ] && deploy_pxecfg_files
+       	      [ "$rc" -eq 0 ] && deploy_pxecfg_grubefi_files
        	      ;;
           "switch-pxe-bg-mode")
 	      run-switch-pxe-bg-mode $MORE_OPT_for_MODE2 ;;

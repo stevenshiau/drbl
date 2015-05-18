@@ -1,0 +1,260 @@
+#!/bin/bash
+# Author: Steven Shiau <steven _at_ nchc org tw>
+# License: GPL
+# Description: Output grub efi network boot config on DRBL server.
+
+DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/usr/share/drbl}"
+
+. $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
+[ -e /etc/drbl/drbl-ocs.conf ] && . /etc/drbl/drbl-ocs.conf
+[ -e $DRBL_SCRIPT_PATH/sbin/ocs-functions ] && . $DRBL_SCRIPT_PATH/sbin/ocs-functions
+
+export LC_ALL=C
+#
+USAGE() {
+  echo "Generate the Grub EFI network boot menu for DRBL clients."
+  echo "Usage: $(basename $0) [OPTION]"
+  echo "Options:"
+  echo "-c, --console OPT: set the console output parameters."
+  echo "-d, --dir DIR:     Assign the netinstall files are in DIR instead of default dir $pxecfg_pd"
+  echo "-s, --serial OPT:  set the grub menu to work with serial console output. OPT is like: serial --speed=115200 --unit=0 --word=8 --parity=no --stop=1"
+  echo "-g, --graphic [y|n]:  Option to set client to use graphical mode or not when booting GNU/Linux (now only for Fedora Core)"
+  echo "-p, --grub-efi-dir DIR:  Assign grub config dir as DIR instead of deafult dir $GRUB_EFINB_DIR"
+  echo "-v, --verbose:  verbose mode."
+  echo "Ex:"
+  echo "To create the console output in DRBL client:"
+  echo "$(basename $0) -v -s \"serial --speed=115200 --unit=0 --word=8 --parity=no --stop=1\" -c \"console=ttyS0,38400n81 console=tty0\" "
+  echo "Note! You must put the \" before and after your serial OPT and console OPT."
+}
+
+# default settings
+# GRUB_EFINB_DIR is from drbl.conf, and GRUB_EFI_D is for using only in the program.
+
+#
+check_if_root
+
+# Parse command-line options
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -s|--serial)
+            shift
+            if [ -z "$(echo $1 |grep ^-.)" ]; then
+              # skip the -xx option, in case 
+              GRUB_SERIAL_OUTPUT="$1"
+              shift
+            fi
+	    [ -z "$GRUB_SERIAL_OUTPUT" ] && USAGE && exit 1
+	    ;;
+    -c|--console)
+            shift
+            if [ -z "$(echo $1 |grep ^-.)" ]; then
+              # skip the -xx option, in case 
+              CONSOLE_OUTPUT="$1"
+              shift
+            fi
+	    [ -z "$CONSOLE_OUTPUT" ] && USAGE && exit 1
+	    ;;
+    -g|--graphic)
+            shift
+            if [ -z "$(echo $1 |grep ^-.)" ]; then
+              # skip the -xx option, in case 
+              graphical_boot="$1"
+              shift
+            fi
+	    [ -z "$graphical_boot" ] && USAGE && exit 1
+	    ;;
+    -d|--dir)
+            shift
+            if [ -z "$(echo $1 |grep ^-.)" ]; then
+              # skip the -xx option, in case 
+              TDIR="$1"
+              shift
+            fi
+	    [ -z "$TDIR" ] && USAGE && exit 1
+	    ;;
+    -p|--grub-efi-dir)
+            shift
+            if [ -z "$(echo $1 |grep ^-.)" ]; then
+              # skip the -xx option, in case 
+              GRUB_EFI_D="$1"
+              shift
+            fi
+	    [ -z "$GRUB_EFI_D" ] && USAGE && exit 1
+	    ;;
+    -v|--verbose)
+            shift; verbose="on"
+            ;;
+    -*)     echo "${0}: ${1}: invalid option" >&2
+            USAGE >& 2
+            exit 2 ;;
+    *)      break ;;
+  esac
+done
+
+[ -z "$GRUB_EFI_D" ] && GRUB_EFI_D="$GRUB_EFINB_DIR"
+[ -z "$TDIR" ] && TDIR="$pxecfg_pd"
+
+# Find the IP address of this server. Here we choose the first one in the list, since it's just an example.
+
+echo "Generating default GRUB network boot config ($GRUB_EFI_D/grub.cfg)..."
+# clean the old one
+[ -f "$GRUB_EFI_D/grub.cfg" ] && rm -f $GRUB_EFI_D/grub.cfg
+
+# get the OS_Version and OS_type
+check_distribution_name
+
+# $graphical_boot is in drbl.conf or from command parameter.
+case "$graphical_boot" in
+  y|Y|[yY][eE][sS])
+    case "$OS_Version" in
+      FC*)
+        echo "Use graphical boot for DRBL Fedora Core client..."
+        # We'd better use "rhgb" instead of "quiet rhgb" since if something goes wrong in net initrd, it's not easy to debug.
+        drbl_dist_append="rhgb"
+        ;;
+    esac
+    ;;
+  n|N|[nN][oO])
+    drbl_dist_append=""
+    ;;
+esac
+case "$OS_Version" in
+  DBN*) 
+    # Put quiet for Debian and Ubuntu clients.
+    quiet_opt="quiet"
+    ;;
+  *)
+    # Do not put quiet since for centos 6 clients since it seems after pxelinux booting, no output on screen.
+    quiet_opt=""
+    ;;
+  esac
+#
+# GRUB Linux menu mode
+# find the drbl background logo and memtest
+drbl_logo="$(basename $grub_bg_img)"
+# show some prompts
+[ -n "$GRUB_SERIAL_OUTPUT" ] && echo "GRUB serial output param: $GRUB_SERIAL_OUTPUT"
+[ -n "$CONSOLE_OUTPUT" ] && echo "Linux console output param: $CONSOLE_OUTPUT"
+[ -n "$drbl_dist_append" ] && echo "Extra param: $drbl_dist_append"
+
+# read drbl_deploy.conf if this program is run again after drblpush is done.
+[ -f /etc/drbl/drbl_deploy.conf ] && . /etc/drbl/drbl_deploy.conf
+[ "$drbl_mode" = "drbl_ssi_mode" ] && drbl_mode_opt="clientdir=node_root"
+[ "$clonezilla_mode" = "clonezilla_box_mode" ] && clonezilla_mode_opt="clientdir=node_root"
+
+# Get version number. 
+case "$OS_Version" in
+   RH*|FC*|CO*|MDK*|MDV*|SUSE*)
+      drbl_ver="$(rpm -q drbl | sed -e "s/^drbl-//g")"
+      ocs_ver="$(rpm -q clonezilla | sed -e "s/^clonezilla-//g")"
+      ;;
+   DBN*)
+      drbl_ver="$(dpkg -l drbl | tail -n 1 | awk -F" " '{print $3}')"
+      ocs_ver="$(dpkg -l clonezilla | tail -n 1 | awk -F" " '{print $3}')"
+      ;;
+esac
+[ -z "$drbl_ver" ] && drbl_ver="Unknown"
+[ -z "$ocs_ver" ] && ocs_ver="Unknown"
+
+#
+[ -f "$GRUB_EFI_D/grub.cfg" ] && mv -f $GRUB_EFI_D/grub.cfg $GRUB_EFI_D/grub.cfg.drblsaved
+
+# Kernel EDD (sysfs interface to BIOS EDD information) is useful for partclone.ntfsreloc. However, if it's compiled as builtin in kernel, it might be off by default, as the kernel config:
+# CONFIG_EDD=y
+# CONFIG_EDD_OFF=y
+# If so, we have to put edd=on in boot parameter so the edd will be on when booting
+edd_opt=""
+if [ -e "$pxecfg_pd/kernel_version_in_initrd.txt" ]; then
+  # Client's kernel config exists, i.e. this program is run after client's kernel is copied.
+  client_kver="$(cat $pxecfg_pd/kernel_version_in_initrd.txt 2>/dev/null)"
+  if [ -n "$(grep -Ew "CONFIG_EDD=y" $drbl_common_root/boot/config-${client_kver})" ] && [ -n "$(grep -Ew "CONFIG_EDD_OFF=y" $drbl_common_root/boot/config-${client_kver})" ]; then
+     edd_opt="edd=on"
+  fi
+else
+  # Client's kernel config does not exists, i.e. this program is run BEFORE client's kernel is copied. Here we assume the running kernel on server has the same config with that on client.
+  client_kver="$(uname -r)"
+  if [ -n "$(grep -Ew "CONFIG_EDD=y" /boot/config-${client_kver})" ] && [ -n "$(grep -Ew "CONFIG_EDD_OFF=y" /boot/config-${client_kver})" ]; then
+     edd_opt="edd=on"
+  fi
+fi
+
+now_year="$(LC_ALL=C date +%Y)"
+grub_ver="$(LC_ALL=C cat $pxecfg_pd/GRUB_VERSION)"
+echo "Adding menus for DRBL, Clonezilla..."
+cat <<-GRUB_END > $GRUB_EFI_D/grub.cfg
+# Created by gen-grub-efi-nb-menu! Do NOT edit unless you know what you are doing! 
+GRUB_END
+
+# GRUB serial console 
+# Ref: ttps://www.gnu.org/software/grub/manual/grub.html#serial
+if [ -n "$GRUB_SERIAL_OUTPUT" ]; then
+  cat <<-GRUB_END >> $GRUB_EFI_D/grub.cfg
+$GRUB_SERIAL_OUTPUT
+terminal_input --append serial
+terminal_output --append serial
+
+GRUB_END
+fi
+
+cat <<-GRUB_END >> $GRUB_EFI_D/grub.cfg
+set default=drbl-client
+set timeout_style=menu
+set timeout=7
+set hidden_timeout_quiet=false
+#
+function load_gfxterm {
+  set gfxmode=auto
+  insmod efi_gop
+  insmod efi_uga
+  insmod gfxterm
+  terminal_output gfxterm
+}
+
+# Somehow the grub2 from CentOS 7 will look for unicode.pf2.pf2 if using "loadfont unicode.pf2". While in Debian/Ubuntu it's OK to use "loadfont unicode.pf2".
+if loadfont unicode; then
+  load_gfxterm
+elif loadfont unicode.pf2; then
+  load_gfxterm
+fi
+if background_image drblwp.png; then
+  set color_normal=black/black
+  set color_highlight=magenta/black
+else
+  set color_normal=cyan/blue
+  set color_highlight=white/blue
+fi
+
+GRUB_END
+
+cat <<-GRUB_END >> $GRUB_EFI_D/grub.cfg
+menuentry "$FULL_OS_Version $powerful_client_menu_label" --id drbl-client {
+  echo "Enter DRBL..."
+  echo "Loading Linux vmlinuz-pxe..."
+  linux vmlinuz-pxe devfs=nomount drblthincli=off selinux=0 $quiet_opt $edd_opt $CONSOLE_OUTPUT $drbl_mode_opt $drbl_dist_append
+  echo "Loading initial ramdisk initrd-pxe.img..."
+  initrd initrd-pxe.img 
+}
+
+menuentry "Clonezilla" --id clonezilla-se-client {
+  echo "Enter Clonezilla..."
+  echo 'Loading Linux vmlinuz-pxe...'
+  linux vmlinuz-pxe devfs=nomount drblthincli=off selinux=0 $quiet_opt text 1 $edd_opt $CONSOLE_OUTPUT $clonezilla_mode_opt $drbl_dist_append
+  echo 'Loading initial ramdisk initrd-pxe.img...'
+  initrd initrd-pxe.img
+}
+
+menuentry "Reboot" --id reboot {
+  echo "System rebooting..."
+  reboot
+}
+menuentry "Shutdown" --id shutdown {
+  echo "System shutting down..."
+  halt
+}
+
+GRUB_END
+
+# TODO, generate netinstall for uEFI network boot clients.
+#output_netinstall_syslinux_pxelinux_menu $TDIR $GRUB_EFI_D/grub.cfg
+
+echo "done!"

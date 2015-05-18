@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.14.12
+Version:	2.15.1
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,12 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Mon May 18 2015 Steven Shiau <steven _at_ nchc org tw> 2.15.1-drbl1
+- New file set-default-grub-efi-img was added. It will be used to set the menuentry for GRUB EFI NB was added.
+- New file drbl-gen-grub-efi-nb was added so that it can prepare GRUB EFI network boot files (/tftpboot/nbi_img/bootx64.efi).
+- New file gen-grub-efi-nb-menu was added so that it can be used to create the GRUB EFI NB config files in /tftpboot/nbi_img/grub-efi.cfg/.
+- This is the initial version for using GRUB EFI NB as the uEFI network boot clients due to the syslinux.efi is not working with iPXE clients.
+
 * Fri May 15 2015 Steven Shiau <steven _at_ nchc org tw> 2.14.12-drbl1
 - Adding drbl-efi-pxe-sw so it's easier to switch that on CentOS.
 - Adding the ocs service for CentOS 7.1.1503.

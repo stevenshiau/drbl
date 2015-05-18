@@ -3579,3 +3579,104 @@ drbl_service_ctl() {
     fi
   fi
 } # end of drbl_service_ctl
+#
+get_grub_efi_image_block() {
+     local IMG_NAME="$1"
+     local PXE_CONF_TMP="$2"
+     [ -z "$IMG_NAME" ] && exit 1
+     # By using
+     # grep -Ei -n '^[[:space:]]*menuentry[[:space:]]+.*([[:space:]]|$)+' /tftpboot/nbi_img/grub-efi.cfg/grub.cfg | grep -A1 -E "menuentry[[:space:]]+.*--id drbl-client([[:space:]]|$)+"
+     # 29:menuentry "CentOS 7.1.1503 Linux (DRBL mode, mostly local resources)" {
+     # 34:menuentry 'Clonezilla' {
+     # so we know we can replace the one between line no. 29 and 34
+     between_lines="$(LC_ALL=C grep -Ei -n -- "^[[:space:]]*menuentry[[:space:]]+.*([[:space:]]|$)+" $PXE_CONF_TMP | grep -Ei -A1 -- "menuentry[[:space:]]+.*$IMG_NAME([[:space:]]|$)+" | cut -d":" -f1)"
+     begin_line="$(LC_ALL=C echo $between_lines | awk -F" " '{print $1}')"
+     end_line="$(LC_ALL=C echo $between_lines | awk -F" " '{print $2}')"
+     # if end_line is nothing, it must be the last block, i.e. we can not find the next [.*]
+     if [ -z "$end_line" ]; then
+       end_line="$(LC_ALL=C wc -l $PXE_CONF_TMP | awk -F" " '{print $1}')"
+     else
+       # if not nothing, backword one line
+       end_line="$(($end_line - 1))"
+     fi
+     echo "$begin_line $end_line"
+} # end of get_grub_efi_image_block
+#
+set_specific_host_grub_efi_conf() {
+  local HOSTS="$*"
+  local grub_eficfg grub_eficfg_MAC grub_eficfg_MIP OCS_TMP IP
+  # prepare the HOSTNAME-IP-MAC table
+  OCS_TMP=`mktemp /tmp/ocs_clean_tmp.XXXXXX`
+  trap "[ -f "$OCS_TMP" ] && rm -f $OCS_TMP" HUP INT QUIT TERM EXIT
+  parse_dhcpd_conf $OCS_TMP
+
+  for ih in $HOSTS; do
+    case "$ih" in
+      *.*.*.*)
+        # list by IP
+	# the grub_eficfg will like "grub.cfg-C0A80001"
+	grub_eficfg="grub.cfg-$(drbl-gethostip $ih)"
+        # These files look like: 01-MAC address (with ":" -> "-"),
+	# We'd better to clean the 01-MAC file if it exists since maybe it's created by ocsmgrd when received the results from client in the previous save/restoration. Since 01-MAC has higher priority than "C0A80001" style file in pxelinux, this is a must if we can find it, we have to remove it.
+	# TODO: What if no MAC address setting in dhcpd.conf ? Then $OCS_TMP will be empty, then... ?
+        grub_eficfg_MAC="grub.cfg-01-$(grep ${ih} $OCS_TMP | awk -F" " '{print $3}' | tr ":" "-")"
+        [ -f "$GRUB_EFINB_DIR/$grub_eficfg_MAC" ] && rm -f $GRUB_EFINB_DIR/$grub_eficfg_MAC
+        ;;
+      *:*:*:*:*:*)
+        # list by MAC
+	# for an Ethernet (ARP type 1) with address 88:99:AA:BB:CC:DD it would search for the filename grub.cfg-01-88-99-aa-bb-cc-dd (lowercase)
+	grub_eficfg="$(echo $ih | tr "[A-Z]" "[a-z]" | tr ":" "-")"
+	# append "grub.cfg-01-" in the beginning
+	grub_eficfg="grub.cfg-01-$grub_eficfg"
+	# We'd better to clean the IP-based setting file if it exists since maybe it's created by ocsmgrd when received the results from client in the previous save/restoration. Although grub.cfg-01-MAC has higher priority than "grub.cfg-C0A80001" style file in grub_efi, this NOT a must if we can find it, but we remove it to avoid confusion.
+        IP="$(grep -E ${ih} $OCS_TMP | awk -F" " '{print $2}')"
+	grub_eficfg_MIP="grub.cfg-$(drbl-gethostip $IP)"
+        [ -f "$GRUB_EFINB_DIR/$grub_eficfg_MIP" ] && rm -f $GRUB_EFINB_DIR/$grub_eficfg_MIP
+        ;;
+    esac
+    echo -n "Generate the PXE config file for host $ih ... "
+    cp -f $GRUB_EFINB_DIR/grub.cfg_skeleton $GRUB_EFINB_DIR/$grub_eficfg
+    echo "done!"
+  done
+  [ -f "$OCS_TMP" ] && rm -f $OCS_TMP
+} # end of set_specific_host_grub_efi_conf
+#
+check_entryid_in_grub_efi_cfg() {
+     local ENTRY_ID="$1"
+     local GRUB_CONF_TMP="$2"
+     if [ -z "$ENTRY_ID" ]; then
+        [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+        echo "You must specify the image name! Program terminated!!!"
+        [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+        exit 1
+     fi
+     if ! grep -Eiq "^[[:space:]]*menuentry[[:space:]]+.*--id $ENTRY_ID" $GRUB_CONF_TMP; then
+        [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+        echo "Unable to find the menuentry ($ENTRY_ID) ID! Make sure the $ENTRY_ID is labeled in $GRUB_CONF_TMP! Program terminated!!!"
+        [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+        exit 1
+     fi
+} # end of check_entryid_in_grub_efi_cfg
+#
+sub_default_grub_efi_img() {
+  local ENTRY_ID="$1"  # E.g. drbl-client, clonezilla-se-client
+  local GRUB_CONF_TMP="$2"
+  local ENTRY_LABEL="$3"
+  local lines begin_line end_line
+  check_entryid_in_grub_efi_cfg "$ENTRY_ID" $GRUB_CONF_TMP
+  # Set default menu and update the menuentry 
+  perl -pi -e "s|^set default=.*|set default=$ENTRY_ID|g" $GRUB_CONF_TMP
+
+  lines="$(get_grub_efi_image_block "--id $ENTRY_ID" $GRUB_CONF_TMP)"
+  begin_line="$(echo $lines | awk -F" " '{print $1}')"
+  end_line="$(echo $lines | awk -F" " '{print $2}')"
+
+  if [ -n "$ENTRY_LABEL" ]; then
+    echo The MENUENTRY LABEL is \"$ENTRY_LABEL\"
+    # menuentry "Clonezilla" --id clonezilla-se-client {
+    # ->
+    # menuentry "Clonezilla: multicast restore precise-x86-20150504 to disk sda " --id clonezilla-se-client {
+    sub_menu_label_cmd="if ($begin_line..$end_line) {s|^[[:space:]]*menuentry .*|menuentry \"$ENTRY_LABEL\" --id clonezilla-se-client \{|i}"
+    perl -pi -e "$sub_menu_label_cmd" $GRUB_CONF_TMP
+  fi
+} # end of sub_default_grub_efi_img

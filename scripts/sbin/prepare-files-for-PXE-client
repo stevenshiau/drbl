@@ -230,3 +230,6 @@ else
   #
   gen_pxe_boot_menu
 fi
+
+# Deal with GRUB EFI NB
+drbl-gen-grub-efi-nb

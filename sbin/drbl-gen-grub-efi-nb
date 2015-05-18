@@ -1,0 +1,105 @@
+#!/bin/bash
+# License: GPL 
+# Author: Steven Shiau <steven _at_ nchc org tw>
+# Description: Program to prepare grub uEFI network booting image
+
+#
+DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/usr/share/drbl}"
+. $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
+. /etc/drbl/drbl-ocs.conf
+. $DRBL_SCRIPT_PATH/sbin/ocs-functions
+
+# Settings
+grub_mkimg_compress_opt="-C xz"
+EFI_ARCH=x86_64-efi
+out_f=$pxecfg_pd/bootx64.efi
+#efi_required_mod="part_gpt part_msdos hfsplus fat ext2 ntfs btrfs normal chain boot configfile linux appleldr minicmd multiboot iso9660 acpi efi_gop efi_uga elf loadbios loopback video_fb usb search fixvideo png gfxterm gfxterm_background gfxterm_menu echo videotest video reboot halt gfxmenu gettext tftp efinet net gzio xzio"
+efi_required_mod="normal tftp efinet chain echo net gzio xzio linux \
+	efi_gop efi_uga png gfxterm gfxterm_background gfxterm_menu \
+	serial progress reboot halt"
+
+# Find the grub2 commands: grub-mkimage, grub-mknetdir
+if type grub2-mkimage >/dev/null 2>&1; then
+  GRUB_MKIMG=grub2-mkimage
+elif type grub-mkimage >/dev/null 2>&1; then
+  GRUB_MKIMG=grub-mkimage
+else
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+  echo "Command grub2-mkimage or grub-mkimage not found!"
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+  echo "$msg_program_stop!"
+  exit 1
+fi
+if type grub2-mknetdir >/dev/null 2>&1; then
+  GRUB_MKNETD=grub2-mknetdir
+elif type grub-mknetdir >/dev/null 2>&1; then
+  GRUB_MKNETD=grub-mknetdir
+else
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+  echo "Command grub2-mknetdir or grub-mknetdir not found!"
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+  echo "$msg_program_stop!"
+  exit 1
+fi
+#
+grub_efi_tmpd="$(mktemp -d /tmp/grub-efi.XXXXXX)"
+# Prepare a grub.cfg so that the eltorito image could find it.
+cat <<-GRUB_END > $grub_efi_tmpd/grub-header.cfg
+set prefix=(tftp)/grub-efi.cfg/
+echo 'Network status: '
+net_ls_cards
+net_ls_addr
+net_ls_routes
+
+GRUB_END
+
+if [ -z "$GRUB_EFINB_DIR" ]; then
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+  echo "\"\$GRUB_EFINB_DIR\" _NOT_ defined!"
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+  echo "$msg_program_stop!"
+  exit 1
+fi
+echo "Removing the old $GRUB_EFINB_DIR if it exists..."
+if [ -d "$GRUB_EFINB_DIR" ]; then
+  rm -rf $GRUB_EFINB_DIR
+fi
+mkdir -p $GRUB_EFINB_DIR
+
+# Get the grub version
+grub_v="$(LC_ALL=C $GRUB_MKIMG --version | awk -F" " '{print $NF}')"
+if [ -n "$grub_v" ]; then
+  echo "$grub_v" > $pxecfg_pd/GRUB_VERSION
+else
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+  echo "Warngin! Grub version _NOT_ found!"
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+fi
+
+# Prepare some files, e.g. background img and fonts
+# Unicode is located at:
+# Debian: /usr/share/grub/unicode.pf2 
+# CetnOS: /boot/efi/EFI/centos/fonts/unicode.pf2
+echo "Preparing background img and font..."
+unicode_font="$(LC_ALL=C find /usr/share/grub/ /boot/efi/EFI/ -name "unicode.pf2" -print | uniq | head -n 1)"
+if [ -n "$unicode_font" ]; then
+  cp -fv $unicode_font $pxecfg_pd/
+fi
+cp -fv $grub_bg_img $pxecfg_pd/
+
+# Generate the template grub.cfg
+gen-grub-efi-nb-menu
+
+#
+echo "Creating the uEFI network booting bootable image $out_f..."
+$GRUB_MKIMG $grub_mkimg_compress_opt -O $EFI_ARCH -o $out_f --prefix='(tftp)/grub-efi.cfg/' -c $grub_efi_tmpd/grub-header.cfg $efi_required_mod
+
+# Suppress the output to avoid confusion.
+echo "Preparing the grub modules in $GRUB_EFINB_DIR..."
+$GRUB_MKNETD --net-directory=$GRUB_EFINB_DIR --subdir=/ >/dev/null
+echo "uEFI network booting bootable image is ready."
+
+# Clean the temp dir
+if [ -e "$grub_efi_tmpd" -a -n "$(echo $grub_efi_tmpd | grep -E "grub-efi")" ]; then
+  rm -rf $grub_efi_tmpd
+fi
