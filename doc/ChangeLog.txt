@@ -5,6 +5,15 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.15.4-drbl1) unstable; urgency=low
+
+  * Due to a bug "error: timeout: could not resolve hardware address"
+    (http://sourceforge.net/p/xcat/bugs/4658/) in grub2-efi modules,
+    the grub2-efi-modules or grub2-efi can not be listed in
+    PKG_TO_QUERY of drbl.conf.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 18 May 2015 17:03:42 +0800
+
 drbl (2.15.3-drbl1) unstable; urgency=low
 
   * The package name for grub2-efi modules is grub2-efi-modules,
