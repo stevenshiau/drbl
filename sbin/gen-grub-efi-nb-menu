@@ -266,6 +266,7 @@ menuentry "Reboot" --id reboot {
   echo "System rebooting..."
   reboot
 }
+
 menuentry "Shutdown" --id shutdown {
   echo "System shutting down..."
   halt
