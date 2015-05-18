@@ -93,6 +93,14 @@ gen-grub-efi-nb-menu
 #
 echo "Creating the uEFI network booting bootable image $out_f..."
 $GRUB_MKIMG $grub_mkimg_compress_opt -O $EFI_ARCH -o $out_f --prefix='(tftp)/grub-efi.cfg/' -c $grub_efi_tmpd/grub-header.cfg $efi_required_mod
+rc=$?
+if [ "$rc" -ne 0 ]; then
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+  echo "Warning! Failed to create $out_f!"
+  echo "This server won't be able to serve uEFI network boot clients."
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+  sleep 5
+fi
 
 # Suppress the output to avoid confusion.
 echo "Preparing the grub modules in $GRUB_EFINB_DIR..."

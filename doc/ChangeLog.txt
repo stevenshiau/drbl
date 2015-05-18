@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.15.3-drbl1) unstable; urgency=low
+
+  * The package name for grub2-efi modules is grub2-efi-modules,
+    not grub2-efi on CentOS.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 18 May 2015 16:48:37 +0800
+
 drbl (2.15.2-drbl1) unstable; urgency=low
 
   * drbl.conf: grub-efi-amd64-bin grub2-efi added in PKG_TO_QUERY.
