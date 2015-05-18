@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.15.1
+Version:	2.15.2
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,10 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Mon May 18 2015 Steven Shiau <steven _at_ nchc org tw> 2.15.2-drbl1
+- drbl.conf: grub-efi-amd64-bin grub2-efi added in PKG_TO_QUERY.
+- Suppress the findind error message in drbl-gen-grub-efi-nb.
+
 * Mon May 18 2015 Steven Shiau <steven _at_ nchc org tw> 2.15.1-drbl1
 - New file set-default-grub-efi-img was added. It will be used to set the menuentry for GRUB EFI NB was added.
 - New file drbl-gen-grub-efi-nb was added so that it can prepare GRUB EFI network boot files (/tftpboot/nbi_img/bootx64.efi).

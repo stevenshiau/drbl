@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.15.2-drbl1) unstable; urgency=low
+
+  * drbl.conf: grub-efi-amd64-bin grub2-efi added in PKG_TO_QUERY.
+  * Suppress the findind error message in drbl-gen-grub-efi-nb.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 18 May 2015 15:41:34 +0800
+
 drbl (2.15.1-drbl1) unstable; urgency=low
 
   * New file set-default-grub-efi-img was added. It will be
