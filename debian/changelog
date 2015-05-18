@@ -1,3 +1,18 @@
+drbl (2.15.1-drbl1) unstable; urgency=low
+
+  * New file set-default-grub-efi-img was added. It will be
+    used to set the menuentry for GRUB EFI NB was added.
+  * New file drbl-gen-grub-efi-nb was added so that it can prepare
+    GRUB EFI network boot files (/tftpboot/nbi_img/bootx64.efi).
+  * New file gen-grub-efi-nb-menu was added so that it can be used
+    to create the GRUB EFI NB config files in 
+    /tftpboot/nbi_img/grub-efi.cfg/.
+  * This is the initial version for using GRUB EFI NB as the uEFI
+    network boot clients due to the syslinux.efi is not working
+    with iPXE clients.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 18 May 2015 14:30:11 +0800
+
 drbl (2.14.12-drbl1) unstable; urgency=low
 
   * Adding drbl-efi-pxe-sw so it's easier to switch that on CentOS.
