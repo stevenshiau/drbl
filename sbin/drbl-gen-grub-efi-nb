@@ -16,7 +16,8 @@ out_f=$pxecfg_pd/bootx64.efi
 #efi_required_mod="part_gpt part_msdos hfsplus fat ext2 ntfs btrfs normal chain boot configfile linux appleldr minicmd multiboot iso9660 acpi efi_gop efi_uga elf loadbios loopback video_fb usb search fixvideo png gfxterm gfxterm_background gfxterm_menu echo videotest video reboot halt gfxmenu gettext tftp efinet net gzio xzio"
 efi_required_mod="normal tftp efinet chain echo net gzio xzio linux \
 	efi_gop efi_uga png gfxterm gfxterm_background gfxterm_menu \
-	serial progress reboot halt"
+	serial part_gpt part_msdos boot multiboot progress \
+	reboot halt"
 
 # Find the grub2 commands: grub-mkimage, grub-mknetdir
 if type grub2-mkimage >/dev/null 2>&1; then
