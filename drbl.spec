@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+- Minor improvement for generate-pxe-menu in the parameters while loop.
+- An option was added to set the menu background mode in gen-grub-efi-nb-menu.
+
 * Mon May 18 2015 Steven Shiau <steven _at_ nchc org tw> 2.15.4-drbl1
 - Due to a bug "error: timeout: could not resolve hardware address" (http://sourceforge.net/p/xcat/bugs/4658/) in grub2-efi modules, the grub2-efi-modules or grub2-efi can not be listed in PKG_TO_QUERY of drbl.conf.
 
