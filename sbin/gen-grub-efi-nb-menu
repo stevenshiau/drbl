@@ -17,6 +17,7 @@ USAGE() {
   echo "Options:"
   echo "-c, --console OPT: set the console output parameters."
   echo "-d, --dir DIR:     Assign the netinstall files are in DIR instead of default dir $pxecfg_pd"
+  echo "-m, --bg-mode [text|graphic]:  Set the default GRUB menu mode to text or graphic"
   echo "-s, --serial OPT:  set the grub menu to work with serial console output. OPT is like: serial --speed=115200 --unit=0 --word=8 --parity=no --stop=1"
   echo "-g, --graphic [y|n]:  Option to set client to use graphical mode or not when booting GNU/Linux (now only for Fedora Core)"
   echo "-p, --grub-efi-dir DIR:  Assign grub config dir as DIR instead of deafult dir $GRUB_EFINB_DIR"
@@ -27,8 +28,9 @@ USAGE() {
   echo "Note! You must put the \" before and after your serial OPT and console OPT."
 }
 
-# default settings
+# Default settings
 # GRUB_EFINB_DIR is from drbl.conf, and GRUB_EFI_D is for using only in the program.
+bg_mode="graphic"
 
 #
 check_if_root
@@ -54,6 +56,15 @@ while [ $# -gt 0 ]; do
             fi
 	    [ -z "$CONSOLE_OUTPUT" ] && USAGE && exit 1
 	    ;;
+    -m|--bg-mode)  
+            shift;
+            # skip the -xx option, in case 
+	    if [ -z "$(echo $1 |grep ^-.)" ]; then
+	      bg_mode="$1"
+	      shift
+            fi
+	    [ -z "$bg_mode" ] && USAGE && exit 1
+            ;;
     -g|--graphic)
             shift
             if [ -z "$(echo $1 |grep ^-.)" ]; then
@@ -178,9 +189,14 @@ else
   fi
 fi
 
-now_year="$(LC_ALL=C date +%Y)"
+# Bacground mode
+case "$bg_mode" in
+  text*|TEXT*) g_bg_f="no" ;;
+  graphic*|GRAPHIC*) g_bg_f="yes" ;;
+esac
+
 grub_ver="$(LC_ALL=C cat $pxecfg_pd/GRUB_VERSION)"
-echo "Adding menus for DRBL, Clonezilla..."
+echo "Adding GRUB EFI boot menu for DRBL, Clonezilla..."
 cat <<-GRUB_END > $GRUB_EFI_D/grub.cfg
 # Created by gen-grub-efi-nb-menu! Do NOT edit unless you know what you are doing! 
 GRUB_END
@@ -201,6 +217,7 @@ set default=drbl-client
 set timeout_style=menu
 set timeout=7
 set hidden_timeout_quiet=false
+set graphic_bg=${g_bg_f}
 #
 function load_gfxterm {
   set gfxmode=auto
@@ -211,10 +228,12 @@ function load_gfxterm {
 }
 
 # Somehow the grub2 from CentOS 7 will look for unicode.pf2.pf2 if using "loadfont unicode.pf2". While in Debian/Ubuntu it's OK to use "loadfont unicode.pf2".
-if loadfont unicode; then
-  load_gfxterm
-elif loadfont unicode.pf2; then
-  load_gfxterm
+if [ x"\${graphic_bg}" = xyes ]; then
+  if loadfont unicode; then
+    load_gfxterm
+  elif loadfont unicode.pf2; then
+    load_gfxterm
+  fi
 fi
 if background_image drblwp.png; then
   set color_normal=black/black
