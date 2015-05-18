@@ -1,0 +1,90 @@
+#!/bin/bash
+# Author: Steven Shiau <steven _at_ nchc org tw>
+# License: GPL
+# Description: set the default grub efi image for grub menu format.
+
+# Load DRBL setting and functions
+DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/usr/share/drbl}"
+
+. $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
+
+#
+GRUB_CONF_DEF="$GRUB_EFINB_DIR/grub.cfg"
+
+#
+USAGE() {
+    echo "Usage:"
+    echo "To set the default GRUB client menu:"
+    echo "`basename $0` [OPTION] ENTRY_ID"
+    echo " Options:"
+    echo " -i, --entry-id ENTRY_ID  Set ENTRY_ID as the default one"
+    echo " -c, --config CONF Use the CONF file instead of default one ($GRUB_CONF_DEF)"
+    echo " -l, --label LABEL Assign the menuentry LABEL description"  
+    echo " -v, --verbose     Show verbose messages"
+    echo " -h, --help        Display this help and exit"
+    echo "ENTRY_ID is the menuentry ID"
+    echo "Ex:"
+    echo "To set the default menuentry as \"drbl-client\" without updating the menuentry label"
+    echo "   $ocs -i drbl-client"
+    echo "To set the default menuentry as \"clonezilla-se-client\" and update the menuentry label as \"Clonezilla: multicast restore precise-x86 to disk sda\""
+    echo "   $ocs -i clonezilla-se-client -l \"Clonezilla: multicast restore precise-x86 to disk sda\""
+    echo
+}
+
+####################
+### Main program ###
+####################
+
+ocs_file="$0"
+ocs=`basename $ocs_file`
+#
+# Parse command-line options
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -i|--entry-id)  
+            shift;
+            # skip the -xx option, in case 
+	    if [ -z "$(echo $1 |grep ^-.)" ]; then
+	      entry_id="$1"
+	      shift
+            fi
+            ;;
+    -c|--config)  
+            shift;
+            # skip the -xx option, in case 
+	    if [ -z "$(echo $1 |grep ^-.)" ]; then
+              GRUB_CONF="$1" 
+	      shift
+            fi
+            ;;
+    -h|--help)  
+            USAGE >& 2
+            exit 2 ;;
+    -l|--label)  
+            shift;
+            # skip the -xx option, in case 
+	    if [ -z "$(echo $1 |grep ^-.)" ]; then
+	      ENTRY_LABEL="$1" 
+	      shift
+            fi
+            ;;
+    -v|--verbose)  
+            VERBOSE="on"
+	    shift;;
+    -*)     echo "${0}: ${1}: invalid option" >&2
+            USAGE >& 2
+            exit 2 ;;
+    *)      break ;;
+  esac
+done
+
+[ -z "$GRUB_CONF" ] && GRUB_CONF=$GRUB_CONF_DEF
+if [ -z "$entry_id" ]; then
+   [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+   echo "You must specify the image name! Program terminated!!!"
+   [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+   USAGE
+   exit 1
+fi
+
+sub_default_grub_efi_img "$entry_id" $GRUB_CONF "$ENTRY_LABEL"
