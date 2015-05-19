@@ -1740,15 +1740,20 @@ if exists dhcp-parameter-request-list {
 # Ref:
 # http://www.syslinux.org/wiki/index.php/PXELINUX
 # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=720589
+# //NOTE// From DRBL 2.15, bootia32.efi and bootx64.efi could be the one from
+# (1) syslinux (scripts/sbin/prepare-files-for-PXE-client)
+# or
+# (2) grub (drbl-gen-grub-efi-nb)
 if option arch = 00:06 {
     filename "bootia32.efi";
-    # option pxelinux.configfile "pxelinux.cfg/efi32";
 } else if option arch = 00:07 {
     filename "bootx64.efi";
-    # option pxelinux.configfile "pxelinux.cfg/efi64";
+} else if option arch = 00:09 {
+    # For iPXE uEFI client. Ref: http://ipxe.org/cfg/platform
+    # Thanks to Danny Russ for providing this.
+    filename "bootx64.efi";
 } else {
     filename "pxelinux.0";
-    # option pxelinux.configfile "pxelinux.cfg/bios";
 }
 
 ## Uncomment the following "if block" when you have some buggy PXE NIC card (such as annoying sis900 NIC). Remember to modify the MAC vendor prefix and restart dhcpd service!!!
