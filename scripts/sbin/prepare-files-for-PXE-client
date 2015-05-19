@@ -231,5 +231,7 @@ else
   gen_pxe_boot_menu
 fi
 
-# Deal with GRUB EFI NB
+### Deal with GRUB EFI NB ###
+# //NOTE// This will overwrite the bootx64.efi and bootia32.efi
+# created by syslinux in the previous.
 drbl-gen-grub-efi-nb
