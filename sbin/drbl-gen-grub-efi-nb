@@ -102,6 +102,15 @@ for i in i386 x86_64; do
             out_f="$pxecfg_pd/bootia32.efi" ;;
     x86_64) out_f="$pxecfg_pd/bootx64.efi" ;;
   esac
+  # Checking the required modules
+  for im in $efi_required_mod; do
+    if [ ! -e "/usr/lib/grub/$EFI_ARCH-efi/${im}.mod" ]; then
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+      echo "Missing grub2 module ${im}.mod... Exluding ${im}.mod..."
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+      efi_required_mod="$(echo $efi_required_mod | sed -r -e "s/$im //g")"
+    fi
+  done
   echo "Creating the uEFI network booting bootable image $out_f..."
   $GRUB_MKIMG $grub_mkimg_compress_opt -O ${EFI_ARCH}-efi -o $out_f --prefix='(tftp)/grub-efi.cfg/' -c $grub_efi_tmpd/grub-header.cfg $efi_required_mod
   rc=$?
