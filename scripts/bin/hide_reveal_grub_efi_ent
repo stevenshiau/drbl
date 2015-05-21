@@ -97,19 +97,19 @@ case "$ACT" in
       echo "Skip this."
       exit 2
     fi
+    # The menuentry is like:
+    #menuentry "Local" --id local-disk {
+    #  # This is a template menuentry to boot a local harddrive
+    #  echo "Booting local disk..."
+    #  set root=(hd0,1)
+    #  chainloader /EFI/redhat/grub.efi +1
+    #}
+    [ -n "$VERBOSE" ] && echo "Reveal $ENTRY_ID in $GRUB_CONF_T... "
+    sub_act_cmd="if ($begin_line..$end_line) {s/^#(.*)/\$1/i}"
+    LC_ALL=C perl -pi -e "$sub_act_cmd" $GRUB_CONF_T
+      
     # Only when entry id is local-disk, we will update the ESP and EFI bootloader file
     if [ "$ENTRY_ID" = "local-disk" ]; then
-      # The menuentry for local-disk is like:
-      #menuentry "Local" --id local-disk {
-      #  # This is a template menuentry to boot a local harddrive
-      #  echo "Booting local disk..."
-      #  set root=(hd0,1)
-      #  chainloader /EFI/redhat/grub.efi +1
-      #}
-      [ -n "$VERBOSE" ] && echo "Reveal $ENTRY_ID in $GRUB_CONF_T... "
-      sub_act_cmd="if ($begin_line..$end_line) {s/^#(.*)/\$1/i}"
-      LC_ALL=C perl -pi -e "$sub_act_cmd" $GRUB_CONF_T
-      
       # Modify the OS label, EFI partition and EFI boot file if they exists
       # Normally efi_spt will only be (hd0,1) or (hd0,2). However, if it's (hd1,*) for some cases?
       # efi_spt is ESP number, like "1", "2"...

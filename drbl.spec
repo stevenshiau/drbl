@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.15.5
+Version:	2.15.6
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Thu May 21 2015 Steven Shiau <steven _at_ nchc org tw> 2.15.6-drbl1
+- Bug fixed: wrong if block for local-disk in hide_reveal_grub_efi_ent.
+
 * Thu May 21 2015 Steven Shiau <steven _at_ nchc org tw> 2.15.5-drbl1
 - Minor improvement for generate-pxe-menu in the parameters while loop.
 - An option was added to set the menu background mode in gen-grub-efi-nb-menu.
