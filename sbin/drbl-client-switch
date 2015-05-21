@@ -603,36 +603,6 @@ run-switch-pxe-bg-mode() {
   switch-pxe-bg-mode -m $action
 } # end of run-switch-pxe-bg-mode 
 #
-clean_stale_node_pxe_cfg(){
-  # $PXE_CONF is global variable.
-  # Clean all the previous saved config file.
-  # These files maybe look like: 01-MAC address (with ":" -> "-"), something like C0A8XXXX (only for 192.168.x), default_skeleton
-  echo -n "Clean all the previous saved PXELINUX config files if they exist..."
-  for ifile in $PXELINUX_DIR/*; do
-    if [  "$ifile" != "$PXE_CONF" -a \
-       "$ifile" != "$PXELINUX_DIR/bios" -a \
-       "$ifile" != "$PXELINUX_DIR/efi32" -a \
-       "$ifile" != "$PXELINUX_DIR/efi64" -a \
-       -f "$ifile" ]; then
-      rm -f $ifile
-    fi
-  done
-  echo "done!"
-} # end of clean_stale_node_pxe_cfg
-#
-clean_stale_node_grub_efi_cfg(){
-  # $GRUB_CONF is global variable.
-  # Clean all the previous saved config file.
-  # These files maybe look like: grub.cfg-01-MAC address (with ":" -> "-"), something like grub.cfg-C0A8XXXX (only for 192.168.x), grub.cfg_skeleton
-  echo -n "Clean all the previous saved GRUB EFI NB config files if they exist..."
-  for ifile in $GRUB_EFINB_DIR/grub.cfg-*; do
-    if [ -e "$ifile" ]; then
-      rm -f $ifile
-    fi
-  done
-  echo "done!"
-} # end of clean_stale_node_grub_efi_cfg
-#
 clean_stale_mac_cfg_for_pxelinux_or_not() {
   local ihlist="$*"
   local OCS_TMP ih MAC rm_stale_mac_cfg
@@ -779,6 +749,8 @@ if [ "$LIST_HOST" = "on" ]; then
     # copy the skeleton file
     PXE_CONF="$PXELINUX_DIR/default_skeleton"
     cp -f $PXELINUX_DIR/default $PXE_CONF
+    GRUB_CONF="$GRUB_EFINB_DIR/grub.cfg_skeleton"
+    cp -f $GRUB_EFINB_DIR/grub.cfg $GRUB_CONF
   
     if grep -Eq "^[[:space:]]*([[:alnum:]]+:){5}[[:alnum:]]+([[:space:]]|$)+" $HOSTS_TMP; then
       # HOSTS_TMP is MAC list.
@@ -800,6 +772,7 @@ if [ "$LIST_HOST" = "on" ]; then
   fi
 else
   PXE_CONF="$PXELINUX_DIR/default"
+  GRUB_CONF="$GRUB_EFINB_DIR/grub.cfg"
 fi
 # If clonezilla box mode, we have to suppress some functions
 [ -f /etc/drbl/drbl_deploy.conf ] && . /etc/drbl/drbl_deploy.conf
@@ -1128,7 +1101,7 @@ case "$MODE" in
      # When clonezilla stops, we should make clients boot locally
      set-default-pxe-img -i local -c $PXE_CONF
      # There is no local mode in set-default-grub-efi-img, so we use shutdown 
-     set-default-grub-efi-img -i shutdown -c $GRUB_CONF
+     set-default-grub-efi-img -i local-disk -c $GRUB_CONF
      deploy_pxecfg_grubefi_files
      echo "done!"
      ;;

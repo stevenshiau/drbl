@@ -1,0 +1,131 @@
+#!/bin/bash
+# Author: Steven Shiau <steven _at_ nchc org tw>
+# License: GPL
+# Description: Hide or reveal the menus in GRUB EFI NB config file.
+# Load DRBL setting and functions
+DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/usr/share/drbl}"
+
+. $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
+. /etc/drbl/drbl-ocs.conf
+. $DRBL_SCRIPT_PATH/sbin/ocs-functions
+
+# Functions
+prog="$(basename $0)"
+USAGE() {
+  echo "Usage:"
+  echo "$prog ID [hide|reveal] GRUB_CONF_FILE"
+  echo " Options:"
+  echo " -b, --efi-boot-file FILE  Assign the EFI boot file. This is for menuentry local-disk in reveal case only"  
+  echo " -l, --efi-os-label LABEL  Assign the EFI OS label. This is for menuentry local-disk in reveal case only"
+  echo " -p, --efi-sys-part-no PART_NO    Assign the EFI System Partition, or ESP. This is for menuentry local-disk in reveal case only"
+  echo "Ex: To hide the menuentry id local-disk in /tftpboot/nbi_img/grub-efi.cfg/grub.cfg, run:"
+  echo "    $prog local-disk hide /tftpboot/nbi_img/grub-efi.cfg/grub.cfg"
+}
+
+########################
+##### MAIN PROGRAM #####
+########################
+
+while [ $# -gt 0 ]; do
+ case "$1" in
+    -p|--efi-sys-part-no)  
+            shift;
+            # skip the -xx option, in case 
+	    if [ -z "$(echo $1 |grep ^-.)" ]; then
+	      efi_spt="$1"
+	      shift
+            fi
+            [ -z "$efi_spt" ] && USAGE && exit 1
+            ;;
+    -b|--efi-boot-file)  
+            shift;
+            # skip the -xx option, in case 
+	    if [ -z "$(echo $1 |grep ^-.)" ]; then
+	      efi_boot_file="$1"
+	      shift
+            fi
+            [ -z "$efi_boot_file" ] && USAGE && exit 1
+            ;;
+    -l|--efi-os-label)  
+            shift;
+            # skip the -xx option, in case 
+	    if [ -z "$(echo $1 |grep ^-.)" ]; then
+	      efi_os_label="$1"
+	      shift
+            fi
+            [ -z "$efi_os_label" ] && USAGE && exit 1
+            ;;
+   -*)     echo "${0}: ${1}: invalid option" >&2
+           USAGE >& 2
+           exit 2 ;;
+   *)      break ;;
+ esac
+done
+
+ENTRY_ID="$1"
+ACT="$2"
+GRUB_CONF_T="$3"
+for i in ENTRY_ID ACT GRUB_CONF_T; do
+  eval arg=\$$i
+  [ -z "$arg" ] && USAGE && exit 1
+done
+if [ ! -f "$GRUB_CONF_T" ]; then
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+  echo "file $GRUB_CONF_T not found!"
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+  exit 1
+fi
+#check_entryid_in_grub_efi_cfg $ENTRY_ID $GRUB_CONF_T
+# turn off MENU DEFAULT & turn on MENU HIDE for the specified image
+lines="$(get_grub_efi_image_block "--id $ENTRY_ID" $GRUB_CONF_T)"
+begin_line="$(LC_ALL=C echo $lines | awk -F" " '{print $1}')"
+end_line="$(LC_ALL=C echo $lines | awk -F" " '{print $2}')"
+case "$ACT" in
+  "hide")
+    if [ -z "$begin_line" -o -z "$end_line" ]; then
+      echo "No hidden menuentry with ID $ENTRY_ID found!"
+      echo "Skip this."
+      exit 2
+    fi
+    [ -n "$VERBOSE" ] && echo "Hide $ENTRY_ID in $GRUB_CONF_T... "
+    sub_act_cmd="if ($begin_line..$end_line) {s/^([[:space:]]*[^#].*)/#\$1/i}"
+    LC_ALL=C perl -pi -e "$sub_act_cmd" $GRUB_CONF_T
+    ;;
+  "reveal")
+    if [ -z "$begin_line" -o -z "$end_line" ]; then
+      echo "No revealed menuentry with ID $ENTRY_ID found!"
+      echo "Skip this."
+      exit 2
+    fi
+    # Only when entry id is local-disk, we will update the ESP and EFI bootloader file
+    if [ "$ENTRY_ID" = "local-disk" ]; then
+      # The menuentry for local-disk is like:
+      #menuentry "Local" --id local-disk {
+      #  # This is a template menuentry to boot a local harddrive
+      #  echo "Booting local disk..."
+      #  set root=(hd0,1)
+      #  chainloader /EFI/redhat/grub.efi +1
+      #}
+      [ -n "$VERBOSE" ] && echo "Reveal $ENTRY_ID in $GRUB_CONF_T... "
+      sub_act_cmd="if ($begin_line..$end_line) {s/^#(.*)/\$1/i}"
+      LC_ALL=C perl -pi -e "$sub_act_cmd" $GRUB_CONF_T
+      
+      # Modify the OS label, EFI partition and EFI boot file if they exists
+      # Normally efi_spt will only be (hd0,1) or (hd0,2). However, if it's (hd1,*) for some cases?
+      # efi_spt is ESP number, like "1", "2"...
+      if [ -n "$efi_os_label" ]; then
+        # Because force_grub_efi_clients_boot_label only write to $GRUB_CONF, we have to assign $GRUB_CONF
+        GRUB_CONF=$GRUB_CONF_T
+        force_grub_efi_clients_boot_label local-disk "Local disk: $efi_os_label"
+      fi
+      if [ -n "$efi_spt" ]; then
+        LC_ALL=C perl -pi -e "if ($begin_line..$end_line) \
+          {s|^([[:space:]]*)set root=.*|\$1set root=\(hd0,$efi_spt\)|i}" $GRUB_CONF_T
+      fi
+      if [ -n "$efi_boot_file" ]; then
+        LC_ALL=C perl -pi -e "if ($begin_line..$end_line) \
+          {s|^([[:space:]]*)chainloader.*|\$1chainloader $efi_boot_file \+1|i}" $GRUB_CONF_T
+      fi
+    fi
+    ;;
+esac

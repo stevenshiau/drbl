@@ -11,12 +11,11 @@ DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/usr/share/drbl}"
 
 # Settings
 grub_mkimg_compress_opt="-C xz"
-EFI_ARCH=x86_64-efi
-out_f=$pxecfg_pd/bootx64.efi
+EFI_ARCH="i386 x86_64"
 #efi_required_mod="part_gpt part_msdos hfsplus fat ext2 ntfs btrfs normal chain boot configfile linux appleldr minicmd multiboot iso9660 acpi efi_gop efi_uga elf loadbios loopback video_fb usb search fixvideo png gfxterm gfxterm_background gfxterm_menu echo videotest video reboot halt gfxmenu gettext tftp efinet net gzio xzio"
 efi_required_mod="normal tftp efinet chain echo net gzio xzio linux \
 	efi_gop efi_uga png gfxterm gfxterm_background gfxterm_menu \
-	serial part_gpt part_msdos boot multiboot progress \
+	serial part_gpt part_msdos boot multiboot progress search \
 	reboot halt"
 
 # Find the grub2 commands: grub-mkimage, grub-mknetdir
@@ -92,16 +91,39 @@ cp -fv $grub_bg_img $pxecfg_pd/
 gen-grub-efi-nb-menu
 
 #
-echo "Creating the uEFI network booting bootable image $out_f..."
-$GRUB_MKIMG $grub_mkimg_compress_opt -O $EFI_ARCH -o $out_f --prefix='(tftp)/grub-efi.cfg/' -c $grub_efi_tmpd/grub-header.cfg $efi_required_mod
-rc=$?
-if [ "$rc" -ne 0 ]; then
-  [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
-  echo "Warning! Failed to create $out_f!"
-  echo "This server won't be able to serve uEFI network boot clients."
-  [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
-  sleep 5
-fi
+for i in i386 x86_64; do
+  export EFI_ARCH=$i
+  case "$EFI_ARCH" in
+    i386)   
+            if [ ! -e /usr/lib/grub/i386-efi/moddep.lst ]; then
+	      # On some system, like CentOS 7, there is no i386 efi from grub2.
+	      continue
+	    fi 
+            out_f="$pxecfg_pd/bootia32.efi" ;;
+    x86_64) out_f="$pxecfg_pd/bootx64.efi" ;;
+  esac
+  # Checking the required modules
+  for im in $efi_required_mod; do
+    if [ ! -e "/usr/lib/grub/$EFI_ARCH-efi/${im}.mod" ]; then
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+      echo "Missing grub2 module ${im}.mod... Exluding ${im}.mod..."
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+      efi_required_mod="$(echo $efi_required_mod | sed -r -e "s/$im //g")"
+    fi
+  done
+  echo "Creating the uEFI network booting bootable image $out_f..."
+  $GRUB_MKIMG $grub_mkimg_compress_opt -O ${EFI_ARCH}-efi -o $out_f --prefix='(tftp)/grub-efi.cfg/' -c $grub_efi_tmpd/grub-header.cfg $efi_required_mod
+  rc=$?
+  if [ "$rc" -ne 0 ]; then
+    # When grub-mkimage fails, an empty output file will still be created. We'd better to clean it.
+    rm -f $out_f
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+    echo "Warning! Failed to create $out_f!"
+    echo "This server won't be able to serve uEFI network boot clients."
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+    sleep 5
+  fi
+done
 
 # Suppress the output to avoid confusion.
 echo "Preparing the grub modules in $GRUB_EFINB_DIR..."

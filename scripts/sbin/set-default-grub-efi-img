@@ -48,6 +48,7 @@ while [ $# -gt 0 ]; do
 	      entry_id="$1"
 	      shift
             fi
+            [ -z "$entry_id" ] && USAGE && exit 1
             ;;
     -c|--config)  
             shift;
@@ -56,6 +57,7 @@ while [ $# -gt 0 ]; do
               GRUB_CONF="$1" 
 	      shift
             fi
+            [ -z "$GRUB_CONF" ] && USAGE && exit 1
             ;;
     -h|--help)  
             USAGE >& 2
@@ -67,6 +69,7 @@ while [ $# -gt 0 ]; do
 	      ENTRY_LABEL="$1" 
 	      shift
             fi
+            [ -z "$ENTRY_LABEL" ] && USAGE && exit 1
             ;;
     -v|--verbose)  
             VERBOSE="on"
@@ -81,10 +84,13 @@ done
 [ -z "$GRUB_CONF" ] && GRUB_CONF=$GRUB_CONF_DEF
 if [ -z "$entry_id" ]; then
    [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
-   echo "You must specify the image name! Program terminated!!!"
+   echo "You must specify the entry ID! Program terminated!!!"
    [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
    USAGE
    exit 1
 fi
+# Enable it first
+hide_reveal_grub_efi_ent "$entry_id" reveal $GRUB_CONF
 
+# Set default one
 sub_default_grub_efi_img "$entry_id" $GRUB_CONF "$ENTRY_LABEL"

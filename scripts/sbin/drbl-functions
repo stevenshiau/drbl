@@ -3589,7 +3589,7 @@ get_grub_efi_image_block() {
      # 29:menuentry "CentOS 7.1.1503 Linux (DRBL mode, mostly local resources)" {
      # 34:menuentry 'Clonezilla' {
      # so we know we can replace the one between line no. 29 and 34
-     between_lines="$(LC_ALL=C grep -Ei -n -- "^[[:space:]]*menuentry[[:space:]]+.*([[:space:]]|$)+" $PXE_CONF_TMP | grep -Ei -A1 -- "menuentry[[:space:]]+.*$IMG_NAME([[:space:]]|$)+" | cut -d":" -f1)"
+     between_lines="$(LC_ALL=C grep -Ei -n -- "^[[:space:]]*[#]*menuentry[[:space:]]+.*([[:space:]]|$)+" $PXE_CONF_TMP | grep -Ei -A1 -- "menuentry[[:space:]]+.*$IMG_NAME([[:space:]]|$)+" | cut -d":" -f1)"
      begin_line="$(LC_ALL=C echo $between_lines | awk -F" " '{print $1}')"
      end_line="$(LC_ALL=C echo $between_lines | awk -F" " '{print $2}')"
      # if end_line is nothing, it must be the last block, i.e. we can not find the next [.*]
@@ -3642,20 +3642,20 @@ set_specific_host_grub_efi_conf() {
 } # end of set_specific_host_grub_efi_conf
 #
 check_entryid_in_grub_efi_cfg() {
-     local ENTRY_ID="$1"
-     local GRUB_CONF_TMP="$2"
-     if [ -z "$ENTRY_ID" ]; then
-        [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
-        echo "You must specify the image name! Program terminated!!!"
-        [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
-        exit 1
-     fi
-     if ! grep -Eiq "^[[:space:]]*menuentry[[:space:]]+.*--id $ENTRY_ID" $GRUB_CONF_TMP; then
-        [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
-        echo "Unable to find the menuentry ($ENTRY_ID) ID! Make sure the $ENTRY_ID is labeled in $GRUB_CONF_TMP! Program terminated!!!"
-        [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
-        exit 1
-     fi
+  local ENTRY_ID="$1"
+  local GRUB_CONF_TMP="$2"
+  if [ -z "$ENTRY_ID" ]; then
+     [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+     echo "You must specify the image name! Program terminated!!!"
+     [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+     exit 1
+  fi
+  if ! grep -Eiq "^[[:space:]]*menuentry[[:space:]]+.*--id $ENTRY_ID" $GRUB_CONF_TMP; then
+     [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+     echo "Unable to find the menuentry ($ENTRY_ID) ID! Make sure the $ENTRY_ID is labeled in $GRUB_CONF_TMP! Program terminated!!!"
+     [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+     exit 1
+  fi
 } # end of check_entryid_in_grub_efi_cfg
 #
 sub_default_grub_efi_img() {
@@ -3676,7 +3676,7 @@ sub_default_grub_efi_img() {
     # menuentry "Clonezilla" --id clonezilla-se-client {
     # ->
     # menuentry "Clonezilla: multicast restore precise-x86-20150504 to disk sda " --id clonezilla-se-client {
-    sub_menu_label_cmd="if ($begin_line..$end_line) {s|^[[:space:]]*menuentry .*|menuentry \"$ENTRY_LABEL\" --id clonezilla-se-client \{|i}"
+    sub_menu_label_cmd="if ($begin_line..$end_line) {s|^[[:space:]]*menuentry .*|menuentry \"$ENTRY_LABEL\" --id $ENTRY_ID \{|i}"
     perl -pi -e "$sub_menu_label_cmd" $GRUB_CONF_TMP
   fi
 } # end of sub_default_grub_efi_img
