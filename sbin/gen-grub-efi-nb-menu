@@ -254,13 +254,19 @@ menuentry "$FULL_OS_Version $powerful_client_menu_label" --id drbl-client {
   initrd initrd-pxe.img 
 }
 
-menuentry "Clonezilla" --id clonezilla-se-client {
-  echo "Enter Clonezilla..."
-  echo 'Loading Linux vmlinuz-pxe...'
-  linux vmlinuz-pxe devfs=nomount drblthincli=off selinux=0 $quiet_opt text 1 $edd_opt $CONSOLE_OUTPUT $clonezilla_mode_opt $drbl_dist_append
-  echo 'Loading initial ramdisk initrd-pxe.img...'
-  initrd initrd-pxe.img
-}
+#menuentry "Clonezilla" --id clonezilla-se-client {
+#  echo "Enter Clonezilla..."
+#  echo 'Loading Linux vmlinuz-pxe...'
+#  linux vmlinuz-pxe devfs=nomount drblthincli=off selinux=0 $quiet_opt text 1 $edd_opt $CONSOLE_OUTPUT $clonezilla_mode_opt $drbl_dist_append
+#  echo 'Loading initial ramdisk initrd-pxe.img...'
+#  initrd initrd-pxe.img
+#}
+
+#menuentry "Local" --id local-disk {
+#  echo "Booting local disk..."
+#  set root=(hd0,1)
+#  chainloader /EFI/redhat/grub.efi +1
+#}
 
 menuentry "Reboot" --id reboot {
   echo "System rebooting..."
