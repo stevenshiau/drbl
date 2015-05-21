@@ -1,3 +1,19 @@
+drbl (2.15.5-drbl1) unstable; urgency=low
+
+  * Minor improvement for generate-pxe-menu in the parameters
+    while loop.
+  * An option was added to set the menu background mode in
+    gen-grub-efi-nb-menu.
+  * GRUB efi modules part_gpt part_msdos boot multiboot were
+    added in the bootx64.efi in gen-grub-efi-nb-menu so that
+    we can chainloader to EFI on the local disk,
+    like "chainloader /EFI/redhat/grub.efi +1".
+  * File drbl-efi-pxe-sw was renamed as drbl-syslinux-efi-pxe-sw.
+  * Thanks to Danny Russ | KSC for helping this GRUB EFI
+    network boot solution.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 21 May 2015 22:23:26 +0800
+
 drbl (2.15.4-drbl1) unstable; urgency=low
 
   * Due to a bug "error: timeout: could not resolve hardware address"
