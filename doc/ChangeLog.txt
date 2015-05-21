@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.15.6-drbl1) unstable; urgency=low
+
+  * Bug fixed: wrong if block for local-disk in
+    hide_reveal_grub_efi_ent.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 21 May 2015 23:13:12 +0800
+
 drbl (2.15.5-drbl1) unstable; urgency=low
 
   * Minor improvement for generate-pxe-menu in the parameters
