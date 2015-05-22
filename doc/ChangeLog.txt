@@ -5,6 +5,15 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.15.7-drbl1) unstable; urgency=low
+
+  * If the latest version of fine tune ocs systemd files for
+    DRBL clients are not found, the most related one will
+    be use. E.g. CO7.1.1503 not found, the existing one
+    CO7.0.1406 will be used.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 22 May 2015 09:56:09 +0800
+
 drbl (2.15.6-drbl1) unstable; urgency=low
 
   * Bug fixed: wrong if block for local-disk in
