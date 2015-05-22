@@ -2803,7 +2803,19 @@ done
 if is_systemd_init; then
   [ ! -d "$drbl_common_root/etc/systemd/system/rescue.target.wants" ] && mkdir "$drbl_common_root/etc/systemd/system/rescue.target.wants"
   cp -P $drbl_common_root/etc/systemd/system/multi-user.target.wants/* $drbl_common_root/etc/systemd/system/rescue.target.wants/
-  cp $drbl_setup_path/files/${OS_type}/${OS_Version}/systemd/system/ocsd-*.service $drbl_common_root/etc/systemd/system
+  if [ -d $drbl_setup_path/files/${OS_type}/${OS_Version}/systemd/system ]; then
+    cp $drbl_setup_path/files/${OS_type}/${OS_Version}/systemd/system/ocsd-*.service $drbl_common_root/etc/systemd/system/
+  else
+    # Can not find fine-tune file, show warning, and use the most related one. 
+    OS_Version_Major="${OS_Version:0:3}"  # E.g. CO7.1.1503 -> CO7
+    most_related_ver_d="$(LC_ALL=C find $drbl_setup_path/files/$OS_type/${OS_Version_Major}* -type d -maxdepth 1 -exec dirname {} \; 2>/dev/null | sort | uniq | tail -n 1)"
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+    echo "Warning! The fine-tune files in dir ${drbl_setup_path}/files/${OS_type}/${OS_Version}/systemd/system/ were not found. Using ocs-related systemd files in ${most_related_ver_d}/ for client's systemd service."
+    echo "This may cause some problems to DRBL clients!"
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+    sleep 7
+    cp ${most_related_ver_d}/systemd/system/ocsd-*.service $drbl_common_root/etc/systemd/system/
+  fi
   ln -sf ocsd-rescue.service $drbl_common_root/etc/systemd/system/rescue.service
   rm -rf  $drbl_common_root/etc/rc*.d/S*ocs-run
 fi
@@ -2894,7 +2906,9 @@ fi
 # Remove the /etc/reconfigSys to avoid firstboot run reconfig
 [ -f $drbl_common_root/etc/reconfigSys ] && rm -f $drbl_common_root/etc/reconfigSys
 # Disable the /usr/sbin/firstboot in the firstboot service, we should not reconfig ntp, user accounts for clients... This is for Redhat, Fedora...
-perl -p -i -e 's|^(\s*)(/usr/sbin/firstboot.*)$|$1true # $2 # Modified by DRBL|g' $drbl_common_root/etc/init.d/firstboot
+if [ -e $drbl_common_root/etc/init.d/firstboot ]; then
+  perl -p -i -e 's|^(\s*)(/usr/sbin/firstboot.*)$|$1true # $2 # Modified by DRBL|g' $drbl_common_root/etc/init.d/firstboot
+fi
 
 # Take care the hardware config files, clean old, make them be detected at boot.
 if [ -e /etc/debian_version ]; then
