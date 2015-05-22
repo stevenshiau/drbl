@@ -645,9 +645,14 @@ deploy_pxecfg_grubefi_files(){
     set_specific_host_grub_efi_conf `cat $HOSTS_TMP`
   else
     # for all clients, so we just keep the file pxelinux.cfg/default, no others.
-    echo "This is for all clients, so we remove other host-based PXE config files in $PXELINUX_DIR/ and $GRUB_EFINB_DIR/ and keep $PXE_CONF and $GRUB_CONF only."
+    echo "This is for all clients, so we remove other host-based PXE config files in $PXELINUX_DIR/ and keep $PXE_CONF."
     clean_stale_node_pxe_cfg
-    clean_stale_node_grub_efi_cfg
+    # Only for those non-stop case we will clean the GRUB UEFI NB config files
+    # Otherwise if only /tftpboot/nbi_img/grub.cfg exist, the GRUB EFI NB clienet can not boot into local disk because the original "local-disk" menuentry is only a template. For the real working one, .e.g. grub.cfg-01-00-0c-29-7d-29-b7, it's the one created by ocsmgrd.
+    if [ "$MODE" != "clonezilla-stop" ]; then
+      echo "This is for all clients, so we remove other host-based GRUB EFI NB config files in $GRUB_EFINB_DIR/ and keep $GRUB_CONF only."
+      clean_stale_node_grub_efi_cfg
+    fi
   fi
 } # end of deploy_pxecfg_grubefi_files
 
