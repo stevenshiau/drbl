@@ -1,3 +1,11 @@
+drbl (2.15.8-drbl1) unstable; urgency=low
+
+  * Only for those non-stop cases we will clean the GRUB UEFI NB
+    config files in dcs. Otherwise the local-disk boot normally
+    won't work.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 22 May 2015 22:40:58 +0800
+
 drbl (2.15.7-drbl1) unstable; urgency=low
 
   * If the latest version of fine tune ocs systemd files for
