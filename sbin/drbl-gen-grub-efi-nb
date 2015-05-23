@@ -14,10 +14,11 @@ grub_mkimg_compress_opt="-C xz"
 EFI_ARCH="i386 x86_64"
 #efi_required_mod="part_gpt part_msdos hfsplus fat ext2 ntfs btrfs normal chain boot configfile linux appleldr minicmd multiboot iso9660 acpi efi_gop efi_uga elf loadbios loopback video_fb usb search fixvideo png gfxterm gfxterm_background gfxterm_menu echo videotest video reboot halt gfxmenu gettext tftp efinet net gzio xzio"
 efi_required_mod="normal tftp efinet chain echo net gzio xzio linux \
-	efi_gop efi_uga png gfxterm gfxterm_background gfxterm_menu \
-	serial part_gpt part_msdos boot multiboot progress search \
-	reboot halt"
+efi_gop efi_uga png gfxterm gfxterm_background gfxterm_menu \
+serial part_gpt part_msdos boot multiboot progress search \
+reboot halt"
 
+prog="$0"
 # Find the grub2 commands: grub-mkimage, grub-mknetdir
 if type grub2-mkimage >/dev/null 2>&1; then
   GRUB_MKIMG=grub2-mkimage
@@ -122,6 +123,10 @@ for i in i386 x86_64; do
     echo "This server won't be able to serve uEFI network boot clients."
     [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
     sleep 5
+  else
+    # Create a tag file
+    echo "Created by program \"$prog\" with command:" > ${out_f}.info
+    echo "$GRUB_MKIMG $grub_mkimg_compress_opt -O ${EFI_ARCH}-efi -o $out_f --prefix='(tftp)/grub-efi.cfg/' -c $grub_efi_tmpd/grub-header.cfg $efi_required_mod" >> ${out_f}.info
   fi
 done
 
