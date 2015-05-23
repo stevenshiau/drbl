@@ -52,12 +52,14 @@ put_pxelinux_multi_arch_files() {
   fi
   if [ -e "$pxecfg_pd/efi32/syslinux.efi" ]; then
     mv $pxecfg_pd/efi32/syslinux.efi $pxecfg_pd/bootia32.efi
+    echo "File copied from syslinux efi32/syslinux.efi" > $pxecfg_pd/bootia32.efi.info
   fi
   if [ -e "$pxecfg_pd/efi64/ldlinux.e64" ]; then
     mv $pxecfg_pd/efi64/ldlinux.e64 $pxecfg_pd/ldlinux.e64
   fi
   if [ -e "$pxecfg_pd/efi64/syslinux.efi" ]; then
     mv $pxecfg_pd/efi64/syslinux.efi $pxecfg_pd/bootx64.efi
+    echo "File copied from syslinux efi64/syslinux.efi" > $pxecfg_pd/bootx64.efi.info
   fi
 }
 #
@@ -233,5 +235,6 @@ fi
 
 ### Deal with GRUB EFI NB ###
 # //NOTE// This will overwrite the bootx64.efi and bootia32.efi
-# created by syslinux in the previous.
+# from syslinux in the previous steps. i.e. now we force to use
+# that from grub2 because it's more mature than syslinux 6.03.
 drbl-gen-grub-efi-nb
