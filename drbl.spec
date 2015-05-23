@@ -45,6 +45,8 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+- The corresponding tag files bootx64.efi.info/bootia32.efi.info will be created if the creating command runs successfully.
+
 * Fri May 22 2015 Steven Shiau <steven _at_ nchc org tw> 2.15.8-drbl1
 - Only for those non-stop cases we will clean the GRUB UEFI NB config files in dcs. Otherwise the local-disk boot normally won't work.
 
