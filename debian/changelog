@@ -1,3 +1,10 @@
+drbl (2.15.9-drbl1) unstable; urgency=low
+
+  * The corresponding tag files bootx64.efi.info/bootia32.efi.info
+    will be created if the creating command runs successfully.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sun, 24 May 2015 21:29:27 +0800
+
 drbl (2.15.8-drbl1) unstable; urgency=low
 
   * Only for those non-stop cases we will clean the GRUB UEFI NB
