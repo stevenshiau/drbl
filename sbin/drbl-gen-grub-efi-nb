@@ -19,6 +19,12 @@ serial part_gpt part_msdos boot multiboot progress search \
 reboot halt"
 
 prog="$0"
+################
+##### Main #####
+################
+check_if_root
+ask_and_load_lang_set
+
 # Find the grub2 commands: grub-mkimage, grub-mknetdir
 if type grub2-mkimage >/dev/null 2>&1; then
   GRUB_MKIMG=grub2-mkimage
