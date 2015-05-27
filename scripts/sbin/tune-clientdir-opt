@@ -27,7 +27,7 @@ USAGE() {
   echo "$0 -d 1"
   echo "To turn on the DRBL SSI mode and Clonezilla box mode, run:"
   echo "$0 -d 1 -z 1"
-}
+} # end of USAGE
 # 
 set_clonezilla_mode() {
   local mode=$1
@@ -35,7 +35,7 @@ set_clonezilla_mode() {
   perl -pi -e "s/^[[:space:]]*clonezilla_mode=.*/clonezilla_mode=\"$mode\"/g" /etc/drbl/drbl_deploy.conf
   perl -pi -e "s/^[[:space:]]*clonezilla_mode=.*/clonezilla_mode=$mode/g" /etc/drbl/drblpush.conf
   echo "done!"
-}
+} # end of set_clonezilla_mode
 #
 set_drbl_mode() {
   local mode=$1
@@ -43,32 +43,8 @@ set_drbl_mode() {
   perl -pi -e "s/^[[:space:]]*drbl_mode=.*/drbl_mode=\"$mode\"/g" /etc/drbl/drbl_deploy.conf
   perl -pi -e "s/^[[:space:]]*drbl_mode=.*/drbl_mode=$mode/g" /etc/drbl/drblpush.conf
   echo "done!"
-}
-turn_on_clientdir_opt() {
-  local label="$1"
-  [ -z "$label" ] && echo "No label assigned in turn_on_clientdir_opt!" && exit 1
-  PXE_CONF="$PXELINUX_DIR/default"
-  lines=$(get_pxecfg_image_block $label $PXE_CONF)
-  begin_line=$(echo $lines | awk -F" " '{print $1}')
-  end_line=$(echo $lines | awk -F" " '{print $2}')
-  tag_found="$(head -n $end_line $PXE_CONF | tail -n $(($end_line-$begin_line)) | grep -Ei "^[[:space:]]*append[[:space:]]*.*clientdir=node_root")"
-  if [ -z "$tag_found" ]; then
-    sub_menu_label_cmd="if ($begin_line..$end_line) {s/(^[[:space:]]*append[[:space:]]+.*)/\$1 clientdir=node_root/gi}"
-    perl -pi -e "$sub_menu_label_cmd" $PXE_CONF
-  fi
-}
-
-turn_off_clientdir_opt() {
-  local label="$1"
-  [ -z "$label" ] && echo "No label assigned in turn_off_clientdir_opt!" && exit 1
-  PXE_CONF="$PXELINUX_DIR/default"
-  lines=$(get_pxecfg_image_block $label $PXE_CONF)
-  begin_line=$(echo $lines | awk -F" " '{print $1}')
-  end_line=$(echo $lines | awk -F" " '{print $2}')
-  sub_menu_label_cmd="if ($begin_line..$end_line) {s/(^[[:space:]]*append[[:space:]]+.*)[[:space:]]+clientdir=node_root(.*)/\$1\$2/gi}"
-  perl -pi -e "$sub_menu_label_cmd" $PXE_CONF
-}
-
+} # end of set_drbl_mode
+#
 #
 create_drbl_ssi_clonezilla_box_template() {
   # if template is not assigned, find one.
@@ -169,25 +145,45 @@ done
 #
 ask_and_load_lang_set $specified_lang
 
+# Set the config files for all the process.
+PXE_CONF=$pxecfg_pd/pxelinux.cfg/default
+GRUB_CONF=$GRUB_EFINB_DIR/grub.cfg
+
 case "$drbl_mode" in
   0) # full drbl mode
     [ "$check_clients_files" = "yes" ] && check_full_drbl_mode_clients
     echo "Full DRBL mode. Remove clientdir opt for label drbl in pxelinux config... "
-    hide_reveal_pxe_img drbl reveal $pxecfg_pd/pxelinux.cfg/default
-    turn_off_clientdir_opt drbl
+    # For PXE
+    hide_reveal_pxe_img drbl reveal $PXE_CONF
+    remove_opt_in_pxelinux_cfg_block drbl clientdir
+    # For uEFI
+    hide_reveal_grub_efi_ent drbl-client reveal $GRUB_CONF
+    remove_opt_in_grub_efi_cfg_block drbl-client clientdir
+
     set_drbl_mode full_drbl_mode
     ;;
   1) # drbl ssi mode
     echo "DRBL SSI mode. Set clientdir opt for label drbl in pxelinux config... "
-    hide_reveal_pxe_img drbl reveal $pxecfg_pd/pxelinux.cfg/default
-    turn_on_clientdir_opt drbl
+    # For PXE
+    hide_reveal_pxe_img drbl reveal $PXE_CONF
+    add_opt_in_pxelinux_cfg_block drbl clientdir node_root
+    # For uEFI
+    hide_reveal_grub_efi_ent drbl-client reveal $GRUB_CONF
+    add_opt_in_grub_efi_cfg_block drbl-client clientdir node_root
+
     set_drbl_mode drbl_ssi_mode
     ;;
   2) # none
-    echo "DRBL service is set as unavailable. Set clientdir opt for label drbl in pxelinux config... "
+    echo "DRBL service is set as unavailable."
     create_ssi_template="no"
-    hide_reveal_pxe_img drbl hide $pxecfg_pd/pxelinux.cfg/default
-    turn_on_clientdir_opt drbl
+    # Remove clientdir then hide it
+    # For PXE
+    remove_opt_in_pxelinux_cfg_block drbl clientdir
+    hide_reveal_pxe_img drbl hide $PXE_CONF
+    # For uEFI
+    remove_opt_in_grub_efi_cfg_block drbl-client clientdir
+    hide_reveal_grub_efi_ent drbl-client hide $GRUB_CONF
+
     set_drbl_mode none
     ;;
 esac
@@ -196,7 +192,13 @@ case "$clonezilla_mode" in
   0) # full clonezilla mode
     [ "$check_clients_files" = "yes" ] && check_full_drbl_mode_clients
     echo "Full clonezilla mode. Remove clientdir opt for label clonezilla in pxelinux config... "
-    turn_off_clientdir_opt clonezilla
+    # For PXE
+    hide_reveal_pxe_img clonezilla reveal $PXE_CONF
+    remove_opt_in_pxelinux_cfg_block clonezilla clientdir
+    # For uEFI
+    hide_reveal_grub_efi_ent clonezilla-se-client reveal $GRUB_CONF
+    remove_opt_in_grub_efi_cfg_block clonezilla-se-client clientdir
+
     # TODO: how do we know to use it's as full_clonezilla_mode or none ?
     set_clonezilla_mode full_clonezilla_mode
     [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
@@ -205,23 +207,42 @@ case "$clonezilla_mode" in
     ;;
   1) # clonezilla box mode
     echo "Clonezilla box mode. Set clientdir opt for label clonezilla in pxelinux config... "
-    turn_on_clientdir_opt clonezilla
+    # For PXE
+    hide_reveal_pxe_img clonezilla reveal $PXE_CONF
+    add_opt_in_pxelinux_cfg_block clonezilla clientdir node_root
+    # For uEFI
+    hide_reveal_grub_efi_ent clonezilla-se-client reveal $GRUB_CONF
+    add_opt_in_grub_efi_cfg_block clonezilla-se-client clientdir node_root
+
     set_clonezilla_mode clonezilla_box_mode
     [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
     echo "$msg_run_dcs_clonezilla_start_to_show_pxemenu"
     [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
     ;;
   2) # none
-    echo "Clonezilla service is set as unavailable. Set clientdir opt for label clonezilla in pxelinux config... "
+    echo "Clonezilla service is set as unavailable."
     create_ssi_template="no"
-    hide_reveal_pxe_img clonezilla hide $pxecfg_pd/pxelinux.cfg/default
-    turn_on_clientdir_opt clonezilla
+    # Remove clientdir then hide it
+    # For PXE
+    remove_opt_in_pxelinux_cfg_block clonezilla clientdir
+    hide_reveal_pxe_img clonezilla hide $PXE_CONF
+    # For uEFI
+    remove_opt_in_grub_efi_cfg_block clonezilla-se-client clientdir
+    hide_reveal_grub_efi_ent clonezilla-se-client hide $GRUB_CONF
+
     set_clonezilla_mode none
     ;;
   3) # clonezilla-live mode
     echo "Use Clonezilla live as the OS of clients. Set clientdir opt for label clonezilla in pxelinux config... "
     create_ssi_template="no"
-    turn_on_clientdir_opt clonezilla
+    # For PXE
+    hide_reveal_pxe_img Clonezilla-live reveal $PXE_CONF
+    add_opt_in_pxelinux_cfg_block Clonezilla-live clientdir node_root
+
+    # For uEFI
+    hide_reveal_grub_efi_ent Clonezilla-live reveal $GRUB_CONF
+    add_opt_in_grub_efi_cfg_block Clonezilla-live clientdir node_root
+
     set_clonezilla_mode clonezilla_live_mode
     [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
     echo "$msg_run_dcs_clonezilla_start_to_show_pxemenu"
