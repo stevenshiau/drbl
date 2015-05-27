@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.15.12-drbl1) unstable; urgency=low
+
+  * Improvement: better way to get clientdir for GRUB uEFI NB boot
+    parameters in udhcpc-post.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 28 May 2015 06:14:29 +0800
+
 drbl (2.15.11-drbl1) unstable; urgency=low
 
   * Functions add_opt_in_pxelinux_cfg_block, 

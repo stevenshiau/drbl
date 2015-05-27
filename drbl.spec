@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.15.11
+Version:	2.15.12
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Thu May 28 2015 Steven Shiau <steven _at_ nchc org tw> 2.15.12-drbl1
+- Improvement: better way to get clientdir for GRUB uEFI NB boot parameters in udhcpc-post.
+
 * Wed May 27 2015 Steven Shiau <steven _at_ nchc org tw> 2.15.11-drbl1
 - Functions add_opt_in_pxelinux_cfg_block, remove_opt_in_pxelinux_cfg_block, add_opt_in_grub_efi_cfg_block and remove_opt_in_grub_efi_cfg_block were moved from ocs-functions to drbl-functions.
 
