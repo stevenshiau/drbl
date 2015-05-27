@@ -1,3 +1,13 @@
+drbl (2.15.10-drbl1) unstable; urgency=low
+
+  * Package udisks was replaced by udisks2 in
+    PKG_FROM_DBN_WHICH_OCS_LIVE_NEED of drbl.conf.
+  * Program tune-clientdir-opt now supports GRUB EFI NB.
+  * Program drbl-gen-grub-efi-nb put more info in the
+    uEFI NB bootlader file info.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 27 May 2015 22:30:20 +0800
+
 drbl (2.15.9-drbl1) unstable; urgency=low
 
   * The corresponding tag files bootx64.efi.info/bootia32.efi.info
