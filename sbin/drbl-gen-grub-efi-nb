@@ -133,7 +133,7 @@ done
 # Suppress the output to avoid confusion.
 echo "Preparing the grub modules in $GRUB_EFINB_DIR..."
 $GRUB_MKNETD --net-directory=$GRUB_EFINB_DIR --subdir=/ >/dev/null
-echo "uEFI network booting bootable image is ready."
+echo "The uEFI network booting is ready."
 
 # Clean the temp dir
 if [ -e "$grub_efi_tmpd" -a -n "$(echo $grub_efi_tmpd | grep -E "grub-efi")" ]; then
