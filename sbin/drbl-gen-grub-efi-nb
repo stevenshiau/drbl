@@ -128,7 +128,9 @@ for i in i386 x86_64; do
     echo "Created by program \"$prog\" with command:" > ${out_f}.info
     echo "$GRUB_MKIMG $grub_mkimg_compress_opt -O ${EFI_ARCH}-efi -o $out_f --prefix='(tftp)/grub-efi.cfg/' -c $grub_efi_tmpd/grub-header.cfg $efi_required_mod" >> ${out_f}.info
     echo "The contents of $grub_efi_tmpd/grub-header.cfg:" >> ${out_f}.info
+    echo "$msg_delimiter_star_line" >> ${out_f}.info
     cat $grub_efi_tmpd/grub-header.cfg >> ${out_f}.info
+    echo "$msg_delimiter_star_line" >> ${out_f}.info
   fi
 done
 
