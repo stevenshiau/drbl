@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.15.10
+Version:	2.15.11
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Wed May 27 2015 Steven Shiau <steven _at_ nchc org tw> 2.15.11-drbl1
+- Functions add_opt_in_pxelinux_cfg_block, remove_opt_in_pxelinux_cfg_block, add_opt_in_grub_efi_cfg_block and remove_opt_in_grub_efi_cfg_block were moved from ocs-functions to drbl-functions.
+
 * Wed May 27 2015 Steven Shiau <steven _at_ nchc org tw> 2.15.10-drbl1
 - Package udisks was replaced by udisks2 in PKG_FROM_DBN_WHICH_OCS_LIVE_NEED of drbl.conf.
 - Program tune-clientdir-opt now supports GRUB EFI NB.

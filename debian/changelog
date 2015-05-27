@@ -1,3 +1,12 @@
+drbl (2.15.11-drbl1) unstable; urgency=low
+
+  * Functions add_opt_in_pxelinux_cfg_block, 
+    remove_opt_in_pxelinux_cfg_block, add_opt_in_grub_efi_cfg_block
+    and remove_opt_in_grub_efi_cfg_block were moved from
+    ocs-functions to drbl-functions.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 27 May 2015 23:06:15 +0800
+
 drbl (2.15.10-drbl1) unstable; urgency=low
 
   * Package udisks was replaced by udisks2 in
