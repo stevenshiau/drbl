@@ -361,6 +361,26 @@ parse_os_to_set_repository
 
 echo "$msg_delimiter_star_line"
 
+# Check package in blacklist. Especially for grub2.
+case "$OS_Version" in
+   CO*|RH*)
+     grub2_ver_rel="$(LC_ALL=C rpm -q --qf "%{VERSION}-%{RELEASE}\n" grub2)"
+     grub2_blacklist_v="2.02-0.16"
+     if [ -n "$(echo $grub2_ver_rel | grep -iw "$grub2_blacklist_v")" ]; then
+       [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+       echo "This version of grub2 ($grub2_blacklist_v) is buggy. You have to downgrade or upgrade it to bug free version, otherwise your uEFI client won't be able to make uEFI network boot, and its error in clients is like:"
+       echo "error: timeout: could not resolve hardware address."
+       [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+       echo "E.g. you can run these commands as root to downgrade the bug free version of grub2 on CentOS:"
+       if [ -n "$(rpm -q grub2-efi-modules)" ]; then
+         echo "yum remove grub2-efi-modules"
+       fi 
+       echo "yum downgrade http://vault.centos.org/7.0.1406/os/x86_64/Packages/grub2-2.02-0.2.10.el7.centos.1.x86_64.rpm http://vault.centos.org/7.0.1406/os/x86_64/Packages/grub2-efi-2.02-0.2.10.el7.centos.1.x86_64.rpm http://vault.centos.org/7.0.1406/os/x86_64/Packages/grub2-tools-2.02-0.2.10.el7.centos.1.x86_64.rpm"
+       echo "$msg_delimiter_star_line"
+       confirm_continue_or_not_default_quit
+     fi
+     ;;
+esac
 if [ -z "$select_repository" ]; then
   # default setting, maybe overwritten by command option
   echo "$msg_delimiter_star_line"
