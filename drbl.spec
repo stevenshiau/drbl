@@ -49,6 +49,7 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 - Checking the grub2 version in blacklist for CentOS/RHEL when running drblsrv.
 - Language file es_ES was updated. Thanks to Juan Ramón Martínez.
 - Language file it_IT was updated. Thanks to Gianfranco Gentili.
+- Language file sk_SK was updated. Thanks to Ondrej Dzivy Balucha.
 
 * Thu May 28 2015 Steven Shiau <steven _at_ nchc org tw> 2.15.12-drbl1
 - Improvement: better way to get clientdir for GRUB uEFI NB boot parameters in udhcpc-post.

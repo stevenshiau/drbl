@@ -375,10 +375,10 @@ msg_ethernet_port_is_up_confirm='1. This ethernet port in server is up and conne
 msg_more_NIC_connect_each_other='2. If you have more than one (>=2) network switches for the DRBL environment, make sure all the switches are connected to each other, otherwise the multicast packets will not be sent to every clients from the ethernet port mentioned above via all the switches, so the multicast clone might NOT start.'
 msg_switch_drbl_service='Spustiť/zastaviť/reštartovať/pridať/odstrániť DRBL služby (Pre všetkých klientov)'
 msg_start_drbl_all_services='Spustiť DRBL-related služby na DRBL serveri'
-msg_stop_drbl_all_services='Stop DRBL-related services in DRBL server'
-msg_restart_drbl_all_services='Restart DRBL-related services in DRBL server'
-msg_add_drbl_all_services='Add all DRBL-related services in DRBL server'
-msg_del_drbl_all_services='Del all DRBL-related services in DRBL server'
+msg_stop_drbl_all_services='Zastaviť DRBL-related služby na DRBL serveri'
+msg_restart_drbl_all_services='Reštartovať DRBL-related služby na DRBL serveri'
+msg_add_drbl_all_services='Pridať všetky DRBL-related služby na DRBL server'
+msg_del_drbl_all_services='Ostrániť všetky DRBL-related služby z DRBL servera'
 msg_choose_action='The action is'
 msg_login_switch='Switch client graphical (X-window) login mode'
 msg_normal_login='Štandardné prihlásenie (používateľ musí zadať meno a heslo)'
@@ -955,7 +955,7 @@ msg_enter_passphrase_for_decrypt_img='Zadajte heslo/frázu na dešifrovanie obra
 msg_succeed_to_decrypt_img='Dešifrovanie bolo úspešné'
 msg_failed_to_encrypt_img='Dešifrovanie obrazu zlyhalo'
 msg_encrypt_img_dir_is_now_as='Dočasný adresár obrazu je teraz'
-msg_set_image_volume_size='Veľkosť v MB pre rozdelenie obrazu partície do viacerých súborov. Prosím zadajte číslo väčšie ako 10. Ak nechcete rozdeliť obraz, zadajte veľké číslo, napríklad "1000000". Prosím nezadávajte "0", pretože ak vaša distribúcia GNU/Linuxu používa nový /sbin/init z upstartu, tak bude z"0" zmätená. //NOTE// For the FAT32 image repository, the number should not be larger than 4096.'
+msg_set_image_volume_size='Veľkosť v MB pre rozdelenie obrazu partície do viacerých súborov. Prosím zadajte číslo väčšie ako 10. Ak nechcete rozdeliť obraz, zadajte veľké číslo, napríklad "1000000". Prosím nezadávajte "0", pretože ak vaša distribúcia GNU/Linuxu používa nový /sbin/init z upstartu, tak bude z"0" zmätená. //Poznámka// Pre FAT32 adresár na uloženie obrazov, by číslo nemalo byť väčšie ako 4096.'
 # Tag on 2015/01/03
 msg_is_encrypted_image_already='Tento obraz už je zašifrovaný, tak ho už nieje potrebné znovu zašifrovať'
 msg_is_unencrypted_image_already='Tento obraz už je dešifrovaný, tak ho už nieje potrebné znovu dešifrovať'
@@ -980,11 +980,11 @@ msg_restoring_encrypted_img_not_supported_in_clonezilla_se='Obnova zašifrovaný
 msg_mount_webdav_server='Použiť WebDAV server'
 msg_url_of_davfs_server='URL pre WebDAV server. Napríklad http://192.168.1.254/webdav, http://10.1.2.3:8080/share, alebo https://mywebdavsever.domainname.org'
 # Tag on 2015/03/09
-msg_ocs_param_irvd='Do not remove NTFS volume dirty flag after it is restored'
+msg_ocs_param_irvd='Neodstrániť dirty flag z NTFS zväzku po jeho obnove'
 # Tag on 2015/03/29
-msg_img_repository_not_writable='The image repository directory is read-only, not writable'
+msg_img_repository_not_writable='Adresár s obrazmi diskov je iba na čítanie, nieje možné doňho zapisovať'
 # Tag on 2015/04/18
-msg_mount_S3_server='Use AWS S3 server'
-msg_mount_swift_server='Use OpenStack swift server'
+msg_mount_S3_server='Použiť AWS S3 server'
+msg_mount_swift_server='Použiť OpenStack swift server'
 # Tag on 2015/05/06
-msg_locale_hu_HU='Hungarian'
+msg_locale_hu_HU='Maďarčina'
