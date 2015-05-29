@@ -978,13 +978,13 @@ msg_only_nonenc_is_shown='(sólo se muestran las imágenes sin cifrar)'
 msg_restoring_encrypted_img_not_supported_in_clonezilla_se='La restauración de imágenes cifradas no está soportada en Clonezilla server Edition.'
 # Tag on 2015/01/27
 msg_mount_webdav_server='Usar WebDAV server'
-msg_url_of_davfs_server='URL para el WebDAV server. Ej. http://192.168.1.254/webdav, http://10.1.2.3:8080/share, or https://mywebdavsever.domainname.org'
+msg_url_of_davfs_server='URL para el WebDAV server. Ej. http://192.168.1.254/webdav, http://10.1.2.3:8080/share, o https://mywebdavsever.domainname.org'
 # Tag on 2015/03/09
-msg_ocs_param_irvd='Do not remove NTFS volume dirty flag after it is restored'
+msg_ocs_param_irvd='No quite el volumen NTFS marcado como defectuoso después de ser restaurado'
 # Tag on 2015/03/29
-msg_img_repository_not_writable='The image repository directory is read-only, not writable'
+msg_img_repository_not_writable='La imagen del directorio del repositorio es de sólo lectura, no escribible'
 # Tag on 2015/04/18
-msg_mount_S3_server='Use AWS S3 server'
-msg_mount_swift_server='Use OpenStack swift server'
+msg_mount_S3_server='Use el servidor AWS S3'
+msg_mount_swift_server='Use el servidor rápido OpenStack'
 # Tag on 2015/05/06
-msg_locale_hu_HU='Hungarian'
+msg_locale_hu_HU='Húngaro'

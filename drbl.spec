@@ -47,6 +47,8 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 %changelog
 - Functions confirm_continue_or_not_default_quit, confirm_continue_or_not_default_continue, and confirm_continue_no_default_answer were moved from ocs-functions to drbl-functions.
 - Checking the grub2 version in blacklist for CentOS/RHEL when running drblsrv.
+- Language file es_ES was updated. Thanks to Juan Ramón Martínez.
+- Language file it_IT was updated. Thanks to Gianfranco Gentili.
 
 * Thu May 28 2015 Steven Shiau <steven _at_ nchc org tw> 2.15.12-drbl1
 - Improvement: better way to get clientdir for GRUB uEFI NB boot parameters in udhcpc-post.
