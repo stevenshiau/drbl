@@ -559,8 +559,8 @@ install_SL(){
     # vmlinuz: Linux/x86 Kernel, Setup Version 0x20a, bzImage, Version 3.2.0, Version 3.2.0-24, RO-rootFS, swap_dev 0x4, Normal VGA
     if [ -n "$(LC_ALL=C file -Lsk $i | grep -iE "(Linux x86 kernel|Linux kernel x86 boot executable|Linux\/x86 Kernel|x86 boot sector)")" ]; then
       # Ugly
-      # we skip memtest, etherboot, freedos...
-      if [ -z "$(LC_ALL=C echo $i | grep -iE "(memtest|eb.zli|memdisk|gpxe.lkn|ipxe.lkn|freedos|fdos)")" ]; then
+      # we skip memtest, etherboot, ipxe, freedos...
+      if [ -z "$(LC_ALL=C echo $i | grep -iE "(memtest|eb.zli|memdisk|gpxe.lkn|ipxe.lkn|ipxe.efi|freedos|fdos)")" ]; then
         kernel="$i"
         break
       fi
