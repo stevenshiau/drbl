@@ -986,11 +986,11 @@ msg_restoring_encrypted_img_not_supported_in_clonezilla_se="Clonezilla server Ed
 msg_mount_webdav_server="Utilitzi el servidor WebDAV"
 msg_url_of_davfs_server="URL per al servidor WebDAV. P.ex. http://192.168.1.254/webdav, http://10.1.2.3:8080/share, o https://mywebdavsever.domainname.org"
 # Tag on 2015/03/09
-msg_ocs_param_irvd='Do not remove NTFS volume dirty flag after it is restored'
+msg_ocs_param_irvd="No retiri el volum NTFS marcat com a defectuos després de que sigui restaurat"
 # Tag on 2015/03/29
-msg_img_repository_not_writable='The image repository directory is read-only, not writable'
+msg_img_repository_not_writable="El directori del repositori de l'imatge és únicament de lectura, no s'hi pot escriure"
 # Tag on 2015/04/18
-msg_mount_S3_server='Use AWS S3 server'
-msg_mount_swift_server='Use OpenStack swift server'
+msg_mount_S3_server="Utilitzi el servidor AWS S3"
+msg_mount_swift_server="Utilitzi el servidor ràpit OpenStack"
 # Tag on 2015/05/06
-msg_locale_hu_HU='Hungarian'
+msg_locale_hu_HU="Hongarès"
