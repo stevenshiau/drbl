@@ -52,6 +52,7 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 - Language file sk_SK was updated. Thanks to Ondrej Dzivy Balucha.
 - Language file ca_ES was updated. Thanks to René Mérou.
 - Language file fr_FR was updated. Thanks to Jean-Francois Nifenecker.
+- Language file de_DE was updated. Thanks to Michael Vinzenz.
 
 * Thu May 28 2015 Steven Shiau <steven _at_ nchc org tw> 2.15.12-drbl1
 - Improvement: better way to get clientdir for GRUB uEFI NB boot parameters in udhcpc-post.
