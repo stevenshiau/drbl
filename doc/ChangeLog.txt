@@ -5,6 +5,25 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.15.13-drbl1) unstable; urgency=low
+
+  * Functions confirm_continue_or_not_default_quit,
+    confirm_continue_or_not_default_continue, and 
+    confirm_continue_no_default_answer were moved from ocs-functions
+    to drbl-functions.
+  * Checking the grub2 version in blacklist for CentOS/RHEL when
+    running drblsrv.
+  * Language file es_ES was updated. Thanks to Juan Ramón Martínez.
+  * Language file it_IT was updated. Thanks to Gianfranco Gentili.
+  * Language file sk_SK was updated. Thanks to Ondrej Dzivy Balucha.
+  * Language file ca_ES was updated. Thanks to René Mérou.
+  * Language file fr_FR was updated. Thanks to Jean-Francois
+    Nifenecker.
+  * Language file de_DE was updated. Thanks to Michael Vinzenz.
+  * drbl-sl should skip ipxe.efi when searching kernel.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sun, 31 May 2015 21:23:00 +0800
+
 drbl (2.15.12-drbl1) unstable; urgency=low
 
   * Improvement: better way to get clientdir for GRUB uEFI NB boot

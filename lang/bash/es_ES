@@ -982,7 +982,7 @@ msg_url_of_davfs_server='URL para el WebDAV server. Ej. http://192.168.1.254/web
 # Tag on 2015/03/09
 msg_ocs_param_irvd='No quite el volumen NTFS marcado como defectuoso después de ser restaurado'
 # Tag on 2015/03/29
-msg_img_repository_not_writable='La imagen del directorio del repositorio es de sólo lectura, no escribible'
+msg_img_repository_not_writable='El directorio del repositorio de la imagen es de sólo lectura, no escribible'
 # Tag on 2015/04/18
 msg_mount_S3_server='Use el servidor AWS S3'
 msg_mount_swift_server='Use el servidor rápido OpenStack'
