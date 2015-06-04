@@ -1001,11 +1001,11 @@ msg_restoring_encrypted_img_not_supported_in_clonezilla_se='Clonezilla サーバ
 msg_mount_webdav_server='WebDAV サーバを使用'
 msg_url_of_davfs_server='WebDAV サーバの URL。例 http://192.168.1.254/webdav, http://10.1.2.3:8080/share, or https://mywebdavsever.domainname.org'
 # Tag on 2015/03/09
-msg_ocs_param_irvd='Do not remove NTFS volume dirty flag after it is restored'
+msg_ocs_param_irvd='NTFS ボリュームのリストア後、NTFS ボリュームのダーティフラグを消さないで下さい'
 # Tag on 2015/03/29
-msg_img_repository_not_writable='The image repository directory is read-only, not writable'
+msg_img_repository_not_writable='イメージリポジトリディレクトリは read only で、書き込めません'
 # Tag on 2015/04/18
-msg_mount_S3_server='Use AWS S3 server'
-msg_mount_swift_server='Use OpenStack swift server'
+msg_mount_S3_server='AWS S3 サーバを使用'
+msg_mount_swift_server='OpenStack Swift サーバを使用'
 # Tag on 2015/05/06
-msg_locale_hu_HU='Hungarian'
+msg_locale_hu_HU='ハンガリー語'

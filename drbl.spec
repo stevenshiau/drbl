@@ -46,6 +46,7 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 
 %changelog
 - Language file es_ES was updated. Thanks to Juan Ramón Martínez.
+- Language file ja_JP.UTF-8 was updated. Thanks to Akira YOSHIYAMA.
 
 * Sun May 31 2015 Steven Shiau <steven _at_ nchc org tw> 2.15.13-drbl1
 - Functions confirm_continue_or_not_default_quit, confirm_continue_or_not_default_continue, and confirm_continue_no_default_answer were moved from ocs-functions to drbl-functions.
