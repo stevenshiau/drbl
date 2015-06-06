@@ -1,3 +1,10 @@
+drbl (2.15.14-drbl1) unstable; urgency=low
+
+  * Language file es_ES was updated. Thanks to Juan Ramón Martínez.
+  * Language file ja_JP.UTF-8 was updated. Thanks to Akira YOSHIYAMA.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sat, 06 Jun 2015 10:06:14 +0800
+
 drbl (2.15.13-drbl1) unstable; urgency=low
 
   * Functions confirm_continue_or_not_default_quit,
