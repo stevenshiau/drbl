@@ -5,6 +5,16 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.15.16-drbl1) unstable; urgency=low
+
+  * Disabled efi_netboot_1st_in_nvram when server is Debian or
+    Ubuntu due to grub does not have the patch
+   (https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=793760).
+  * Package grub2-efi-modules added in the packages list
+    "PKG_TO_QUERY" in drbl.conf.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 30 Jul 2015 18:19:57 +0800
+
 drbl (2.15.15-drbl1) unstable; urgency=low
 
   * The useless note about option "-z3" was removed. Thanks to
