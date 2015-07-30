@@ -1919,6 +1919,13 @@ print DISKLESS_OUT q{
 # Decide the sysv init service control program is update-rc.d or insserv in Debian or Ubuntu. The output variable is "$dbn_ubn_serv_control_prog".
 if [ -e /etc/debian_version ]; then
   get_debian_ubuntu_init_serv_control_prog
+  # Jul/30/2015 Besides, due to this issue on Debian/Ubuntu:
+  # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=793760
+  # we disabled efi_netboot_1st_in_nvram
+  # otherwise for Clonezilla SE the uEFI clients will always enter Clonezilla
+  # mode after finishing the previous Clonezilla job. One day when Debian/Ubuntu
+  # applies the patch, we will enable it.
+  LC_ALL=C perl -pi -e 's/^efi_netboot_1st_in_nvram=.*/efi_netboot_1st_in_nvram="no" # Disabled when running drblpush/g' /etc/drbl/drbl-ocs.conf
 fi
 
 # Create the prerun/postrun dirs if they do not exist
@@ -4236,7 +4243,7 @@ elif [ -e "/etc/SuSE-release" ]; then
    perl -pi -e "s/^[#]*[[:space:]]*[#]*DHCPD_INTERFACE=.*/DHCPD_INTERFACE=\"$dhcp_eths\"/g" $SYSCONF_PATH/$DHCP_SRV_NAME
 else
    # RH-like, use the parameter "DHCPDARGS"
-   echo "# //NOTE from DRBL// This file is not used by Fedora/CentOS which use systemd. This is only for older versions. However, we still need this for the function get_dhcpd_interface in drbl-functions" > $SYSCONF_PATH/$DHCP_SRV_NAME
+   echo "# //NOTE from DRBL// This file is not used by Fedora/CentOS which uses systemd. This is only for older versions. However, we still need this for the function get_dhcpd_interface in drbl-functions" > $SYSCONF_PATH/$DHCP_SRV_NAME
    echo "DHCPDARGS=\"$dhcp_eths\"" >> $SYSCONF_PATH/$DHCP_SRV_NAME
 fi
 
