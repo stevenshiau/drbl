@@ -1,3 +1,10 @@
+drbl (2.15.18-drbl1) unstable; urgency=low
+
+  * Package zerofree was added in the packages list for
+    DRBL/Clonezilla live.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 11 Aug 2015 13:31:33 +0800
+
 drbl (2.15.17-drbl1) unstable; urgency=low
 
   * Language files were updated for the option "-k1", both GPT and
