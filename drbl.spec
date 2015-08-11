@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.15.16
+Version:	2.15.17
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Tue Aug 11 2015 Steven Shiau <steven _at_ nchc org tw> 2.15.17-drbl1
+- Language files were updated for the option "-k1", both GPT and MBR format are supported.
+
 * Thu Jul 30 2015 Steven Shiau <steven _at_ nchc org tw> 2.15.16-drbl1
 - Disabled efi_netboot_1st_in_nvram when server is Debian or Ubuntu due to grub does not have the patch (https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=793760).
 - Package grub2-efi-modules added in the packages list "PKG_TO_QUERY" in drbl.conf.

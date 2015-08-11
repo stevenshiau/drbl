@@ -697,7 +697,7 @@ msg_to_be_created='À créer'
 msg_ssh_port_on_server='Port à connecter à l'\''hôte SSH distant (port standard = 22)'
 # To be translated
 msg_use_the_part_table_from_image='Utiliser la table de partitions de l'\''image'
-msg_ocs_param_k1='Créer la table de partitions proportionnellement (pour le format MBR, pas pour GPT)'
+msg_ocs_param_k1='Créer la table de partitions proportionnellement'
 msg_ocs_param_k2='Passer en ligne de commande pour créer la partition manuellement'
 msg_hint_for_fdisk='Choix du mode de création de la table de partitions sur le disque cible : ***ATTENTION*** (1) LA CREATION D'\''UNE TABLE DE PARTITIONS SUR LE DISQUE CIBLE EN EFFACE TOUTES LES DONNÉES !!! (2) Clonezilla ne sait pas restaurer l'\''image d'\''un grand disque (ou partition) sur un disque (ou partition) plus petit. Il est possible cependant de restaurer l'\''image d'\''un petit disque (ou partition) vers un support plus grand. (3) Si vous ne voulez PAS que Clonezilla crée la table de partitions, cochez l'\''option -k'
 msg_choose_param_to_set_multiple_choices='Paramétrage avancé (un choix multiple est possible). Si vous ne savez pas quoi sélectionner, conservez les valeurs par défaut : ne changez RIEN, appuyez simplement sur Entrée '
