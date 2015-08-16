@@ -1,3 +1,10 @@
+drbl (2.15.19-drbl1) unstable; urgency=low
+
+  * Files isolinux.bin and memdisk should be extracted and put to
+    syslinux in get_syslinux_binary_for_dos_linux of drbl-functions.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sun, 16 Aug 2015 22:54:09 +0800
+
 drbl (2.15.18-drbl1) unstable; urgency=low
 
   * Package zerofree was added in the packages list for

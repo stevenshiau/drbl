@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.15.18
+Version:	2.15.19
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Sun Aug 16 2015 Steven Shiau <steven _at_ nchc org tw> 2.15.19-drbl1
+- Files isolinux.bin and memdisk should be extracted and put to syslinux in get_syslinux_binary_for_dos_linux of drbl-functions.
+
 * Tue Aug 11 2015 Steven Shiau <steven _at_ nchc org tw> 2.15.18-drbl1
 - Package zerofree was added in the packages list for DRBL/Clonezilla live.
 
