@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.15.19
+Version:	2.15.20
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Mon Aug 17 2015 Steven Shiau <steven _at_ nchc org tw> 2.15.20-drbl1
+- Make sure there is no white space in the end of opt_content in function add_opt_in_pxelinux_cfg_block in drbl-functions. This could reduce the chance that boot parameters are wrongly parsed by Linux kernel.
+
 * Sun Aug 16 2015 Steven Shiau <steven _at_ nchc org tw> 2.15.19-drbl1
 - Files isolinux.bin and memdisk should be extracted and put to syslinux in get_syslinux_binary_for_dos_linux of drbl-functions.
 

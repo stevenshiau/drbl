@@ -1,3 +1,12 @@
+drbl (2.15.20-drbl1) unstable; urgency=low
+
+  * Make sure there is no white space in the end of opt_content in
+    function add_opt_in_pxelinux_cfg_block in drbl-functions.
+    This could reduce the chance that boot parameters are wrongly
+    parsed by Linux kernel.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 17 Aug 2015 21:48:39 +0800
+
 drbl (2.15.19-drbl1) unstable; urgency=low
 
   * Files isolinux.bin and memdisk should be extracted and put to

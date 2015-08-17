@@ -3692,6 +3692,12 @@ add_opt_in_pxelinux_cfg_block() {
   [ -z "$label" ] && echo "No label in add_opt_in_pxelinux_cfg_block!" && exit 1
   [ -z "$opt_name" ] && echo "opt_name NOT specified in add_opt_in_pxelinux_cfg_block! Abort!" && exit 1
   [ -z "$opt_content" ] && echo "opt_content NOT specified in add_opt_in_pxelinux_cfg_block! Abort!" && exit 1
+  # Make sure there is no white space in the end of opt_content, i.e. e.g.
+  # "clonezilla -l en_US.UTF-8 -p reboot -k  " -> "clonezilla -l en_US.UTF-8 -p reboot -k"
+  # Otherwise it might cause the boot parameters to be wrongly parsed, i.e. the boot parameters:
+  # ocs_live_run="clonezilla -l en_US.UTF-8 -p reboot -k  " net.ifnames=0
+  # is wrongly parsed by Linux kernel 4.1 so that net.ifnames=0 won't take effect.
+  opt_content="$(echo "$opt_content" | sed -r -e "s/[[:space:]]*$//g")"
   lines="$(get_pxecfg_image_block $label $PXE_CONF)"
   begin_line="$(echo $lines | awk -F" " '{print $1}')"
   end_line="$(echo $lines | awk -F" " '{print $2}')"
