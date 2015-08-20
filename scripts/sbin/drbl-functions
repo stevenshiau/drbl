@@ -3697,7 +3697,7 @@ add_opt_in_pxelinux_cfg_block() {
   # Otherwise it might cause the boot parameters to be wrongly parsed, i.e. the boot parameters:
   # ocs_live_run="clonezilla -l en_US.UTF-8 -p reboot -k  " net.ifnames=0
   # is wrongly parsed by Linux kernel 4.1 so that net.ifnames=0 won't take effect.
-  opt_content="$(echo "$opt_content" | sed -r -e "s/[[:space:]]*$//g")"
+  opt_content="$(LC_ALL=C echo "$opt_content" | sed -r -e "s/[[:space:]]*$//g")"
   lines="$(get_pxecfg_image_block $label $PXE_CONF)"
   begin_line="$(echo $lines | awk -F" " '{print $1}')"
   end_line="$(echo $lines | awk -F" " '{print $2}')"
