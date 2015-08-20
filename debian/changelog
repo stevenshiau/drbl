@@ -1,3 +1,9 @@
+drbl (2.15.21-drbl1) unstable; urgency=low
+
+  * Adding support for Debian 8.1.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 20 Aug 2015 11:26:59 +0800
+
 drbl (2.15.20-drbl1) unstable; urgency=low
 
   * Make sure there is no white space in the end of opt_content in
