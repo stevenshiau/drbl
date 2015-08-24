@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.15.22-drbl1) unstable; urgency=low
+
+  * Bug fixed: For Debian >=8 the file /var/lib/nfs/state was missing
+    which caused rpc.statd failing to start in DRBL client.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 24 Aug 2015 09:10:44 +0800
+
 drbl (2.15.21-drbl1) unstable; urgency=low
 
   * Adding support for Debian 8.1.

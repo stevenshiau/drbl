@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.15.21
+Version:	2.15.22
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Mon Aug 24 2015 Steven Shiau <steven _at_ nchc org tw> 2.15.22-drbl1
+- Bug fixed: For Debian >=8 the file /var/lib/nfs/state was missing which caused rpc.statd failing to start in DRBL client.
+
 * Thu Aug 20 2015 Steven Shiau <steven _at_ nchc org tw> 2.15.21-drbl1
 - Adding support for Debian 8.1.
 

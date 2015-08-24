@@ -194,6 +194,8 @@ esac
 # it will be mounted. i.e. # we just share that for every client.
 #rsync -a $RSYNC_OPT_EXTRA --exclude=rpm/ --exclude=dpkg/ $drbl_common_root/var $drblroot/$ip/
 rsync -a $RSYNC_OPT_EXTRA $varlib_opts_common_to_each $drbl_common_root/var $drblroot/$ip/
+# For nfs statd, the file /var/lib/nfs/state is important, othewise it won't be started in the 1st time in some distribution (like Debian >= 8).
+rsync -a $RSYNC_OPT_EXTRA $drbl_common_root/var/lib/nfs/state $drblroot/$ip/var/lib/nfs/
 # create those directory excluding in varlib_opts_common_to_each
 rsync -a $RSYNC_OPT_EXTRA --include="*/" --exclude="*" $drbl_common_root/var $drblroot/$ip/
 
