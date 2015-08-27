@@ -899,8 +899,14 @@ case "$MODE" in
              perl -p -i -e "s/^id:[0-9]:initdefault:/id:$CLIENT_INIT:initdefault:/g" $host/etc/inittab
            fi
 	   # For systemd-like
-           if [ -e "$host/etc/systemd/system/default.target" ]; then
-             ln -fsv /lib/systemd/system/runlevel${CLIENT_INIT}.target $host/etc/systemd/system/default.target
+           #if [ -e "$host/etc/systemd/system/default.target" ]; then
+           #  ln -fsv /lib/systemd/system/runlevel${CLIENT_INIT}.target $host/etc/systemd/system/default.target
+           #fi
+           if is_systemd_init; then
+             remove_opt_in_pxelinux_cfg_block drbl systemd.unit
+             remove_opt_in_grub_efi_cfg_block drbl-client systemd.unit
+             add_opt_in_pxelinux_cfg_block -n drbl systemd.unit graphical.target
+             add_opt_in_grub_efi_cfg_block -n drbl-client systemd.unit graphical.target
            fi
          done
 	 echo "done!"
@@ -958,8 +964,14 @@ case "$MODE" in
              perl -p -i -e "s/^id:[0-9]:initdefault:/id:$CLIENT_INIT:initdefault:/g" $host/etc/inittab
            fi
 	   # For systemd-like
-           if [ -e "$host/etc/systemd/system/default.target" ]; then
-             ln -fsv /lib/systemd/system/runlevel${CLIENT_INIT}.target $host/etc/systemd/system/default.target
+           #if [ -e "$host/etc/systemd/system/default.target" ]; then
+           #  ln -fsv /lib/systemd/system/runlevel${CLIENT_INIT}.target $host/etc/systemd/system/default.target
+           #fi
+           if is_systemd_init; then
+             remove_opt_in_pxelinux_cfg_block drbl systemd.unit
+             remove_opt_in_grub_efi_cfg_block drbl-client systemd.unit
+             add_opt_in_pxelinux_cfg_block -n drbl systemd.unit multi-user.target
+             add_opt_in_grub_efi_cfg_block -n drbl-client systemd.unit multi-user.target
            fi
          done
 	 echo "done!"
