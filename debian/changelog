@@ -1,3 +1,13 @@
+drbl (2.15.23-drbl1) unstable; urgency=low
+
+  * Functions add_opt_in_pxelinux_cfg_block and
+    add_opt_in_grub_efi_cfg_block were improved to have an
+    option "-n".
+  * Using boot parameters for switching clients' mode
+    (text or graphical) in systemd.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 27 Aug 2015 11:53:09 +0800
+
 drbl (2.15.22-drbl1) unstable; urgency=low
 
   * Bug fixed: For Debian >=8 the file /var/lib/nfs/state was missing
