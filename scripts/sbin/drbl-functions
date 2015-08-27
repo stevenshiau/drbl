@@ -3685,6 +3685,17 @@ sub_default_grub_efi_img() {
 #
 add_opt_in_pxelinux_cfg_block() {
   # add something like: ocs_opt="--language 0  -g auto -p true restoredisk 2disks hda hdb" in pxelinux config file
+  local prot_dq="\\\""  # protection double quotation for later use.
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      -n|--no-dq) shift; prot_dq="" ;;
+      -*)     echo "${0}: ${1}: invalid option in function add_opt_in_pxelinux_cfg_block"
+              echo "$msg_program_stop"
+              [ "$save_restore_error_log" = "yes" ] && copy_error_log
+              exit 2 ;;
+      *)      break ;;
+    esac
+  done
   local label="$1"
   local opt_name="$2" # can be ocs_opt (for NFSRoot-based Clonezilla client) or ocs_live_run (for Clonezilla-live-based client)
   local opt_content="$3"
@@ -3708,16 +3719,16 @@ add_opt_in_pxelinux_cfg_block() {
   tag_found="$(LC_ALL=C head -n $end_line $PXE_CONF | tail -n $(($end_line-$begin_line)) | grep -Eiw "^[[:space:]]*append[[:space:]]*.*[[:space:]]+$opt_name=.*([[:space:]]+|$)")"
   if [ -z "$tag_found" ]; then
     # append ocs_opt=... in the end of append kernel parameter.
-    sub_menu_label_cmd="if ($begin_line..$end_line) {s|(^[[:space:]]*append[[:space:]]+.*)|\$1 $opt_name=\"$opt_content\"|i}"
+    sub_menu_label_cmd="if ($begin_line..$end_line) {s|(^[[:space:]]*append[[:space:]]+.*)|\$1 $opt_name=${prot_dq}${opt_content}${prot_dq}|i}"
     LC_ALL=C perl -pi -e "$sub_menu_label_cmd" $PXE_CONF
   else
     # overwrite existing ocs_opt=...
     # ocs_opt must be the last parameters in default append for pxelinux.
     # If tag if found, 2 cases: (1) with "" (e.g. ocs_daemonon="ssh", (2) without "" (e.g. ocs_daemonon=ssh)
     if [ -n "$(echo $tag_found | grep -iE "$opt_name=\"[^\"]*\"")" ]; then
-      sub_menu_label_cmd="if ($begin_line..$end_line) {s|(^[[:space:]]*append[[:space:]]*.*)[[:space:]]+$opt_name=\"[^\"]*\"([[:space:]]+.*$)|\$1 $opt_name=\"$opt_content\"\$2|i}"
+      sub_menu_label_cmd="if ($begin_line..$end_line) {s|(^[[:space:]]*append[[:space:]]*.*)[[:space:]]+$opt_name=\"[^\"]*\"([[:space:]]+.*$)|\$1 $opt_name=${prot_dq}${opt_content}${prot_dq}\$2|i}"
     else
-      sub_menu_label_cmd="if ($begin_line..$end_line) {s|(^[[:space:]]*append[[:space:]]*.*)[[:space:]]+$opt_name=[^[:space:]]+([[:space:]]+.*$)|\$1 $opt_name=\"$opt_content\"\$2|i}"
+      sub_menu_label_cmd="if ($begin_line..$end_line) {s|(^[[:space:]]*append[[:space:]]*.*)[[:space:]]+$opt_name=[^[:space:]]+([[:space:]]+.*$)|\$1 $opt_name=${prot_dq}${opt_content}${prot_dq}\$2|i}"
     fi
     LC_ALL=C perl -pi -e "$sub_menu_label_cmd" $PXE_CONF
   fi
@@ -3758,7 +3769,18 @@ remove_opt_in_pxelinux_cfg_block() {
 } # end of remove_opt_in_pxelinux_cfg_block()
 #
 add_opt_in_grub_efi_cfg_block() {
-  # add something like: ocs_opt="--language 0  -g auto -p true restoredisk 2disks hda hdb" in grub efi nb config file
+  # add something like: ocs_opt=\"--language 0  -g auto -p true restoredisk 2disks hda hdb\" in grub efi nb config file
+  local prot_dq="\\\\\""  # protection double quotation for later use.
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      -n|--no-dq) shift; prot_dq="" ;;
+      -*)     echo "${0}: ${1}: invalid option in function add_opt_in_pxelinux_cfg_block"
+              echo "$msg_program_stop"
+              [ "$save_restore_error_log" = "yes" ] && copy_error_log
+              exit 2 ;;
+      *)      break ;;
+    esac
+  done
   local entry_id="$1" # e.g. "clonezilla-se-client"
   local opt_name="$2" # can be ocs_opt (for NFSRoot-based Clonezilla client) or ocs_live_run (for Clonezilla-live-based client)
   local opt_content="$3"
@@ -3781,16 +3803,16 @@ add_opt_in_grub_efi_cfg_block() {
   tag_found="$(LC_ALL=C head -n $end_line $GRUB_CONF | tail -n $(($end_line-$begin_line)) | grep -Eiw "^[[:space:]]*linux[[:space:]]*.*[[:space:]]+$opt_name=.*([[:space:]]+|$)")"
   if [ -z "$tag_found" ]; then
     # append ocs_opt=... in the end of linux kernel parameter.
-    sub_menu_entry_cmd="if ($begin_line..$end_line) {s|(^[[:space:]]*linux[[:space:]]+.*)|\$1 $opt_name=\\\\\"$opt_content\\\\\"|i}"
+    sub_menu_entry_cmd="if ($begin_line..$end_line) {s|(^[[:space:]]*linux[[:space:]]+.*)|\$1 $opt_name=${prot_dq}${opt_content}${prot_dq}|i}"
     LC_ALL=C perl -pi -e "$sub_menu_entry_cmd" $GRUB_CONF
   else
     # overwrite existing ocs_opt=...
     # ocs_opt must be the last parameters in default append for grub efi nb.
     # If tag if found, 2 cases: (1) with "" (e.g. ocs_daemonon="ssh", (2) without "" (e.g. ocs_daemonon=ssh)
     if [ -n "$(echo $tag_found | grep -iE "$opt_name=\\\\\"[^\"]*\\\\\"")" ]; then
-      sub_menu_entry_cmd="if ($begin_line..$end_line) {s|(^[[:space:]]*linux[[:space:]]*.*)[[:space:]]+$opt_name=\"[^\"]*\"([[:space:]]+.*$)|\$1 $opt_name=\\\\\"$opt_content\\\\\"\$2|i}"
+      sub_menu_entry_cmd="if ($begin_line..$end_line) {s|(^[[:space:]]*linux[[:space:]]*.*)[[:space:]]+$opt_name=\"[^\"]*\"([[:space:]]+.*$)|\$1 $opt_name=${prot_dq}${opt_content}${prot_dq}\$2|i}"
     else
-      sub_menu_entry_cmd="if ($begin_line..$end_line) {s|(^[[:space:]]*linux[[:space:]]*.*)[[:space:]]+$opt_name=[^[:space:]]+([[:space:]]+.*$)|\$1 $opt_name=\\\\\"$opt_content\\\\\"\$2|i}"
+      sub_menu_entry_cmd="if ($begin_line..$end_line) {s|(^[[:space:]]*linux[[:space:]]*.*)[[:space:]]+$opt_name=[^[:space:]]+([[:space:]]+.*$)|\$1 $opt_name=${prot_dq}${opt_content}${prot_dq}\$2|i}"
     fi
     LC_ALL=C perl -pi -e "$sub_menu_entry_cmd" $GRUB_CONF
   fi
