@@ -318,6 +318,10 @@ else
   add_extra_nfs_opt_to_fstab
 fi
 
+# An insurance to make sure that all mounting in /etc/fstab are done.
+# Somehow for systemd some weird case the /tmp/ won't be mounted although it's listed in /etc/fstab. Therefore here do it again.
+mount -a
+
 # Clear mtab
 rm -f /etc/mtab /etc/mtab~ /etc/mtab~~ /etc/nologin
 
