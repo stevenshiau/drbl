@@ -2356,11 +2356,24 @@ chown root.root $drbl_common_root/etc/init.d/{mkswapfile,drblthincli,arm-wol}
 # Put systemd services for {mkswapfile,drblthincli,arm-wol}
 if is_systemd_init; then
   cp -f $drbl_setup_path/files/misc/systemd/{mkswapfile.service,drblthincli.service,arm-wol.service} $drbl_common_root/lib/systemd/system/
-  # Write the override file for remote-fs-pre of systemd due to nfs-utils
-  # does not ship native systemd unit files.
-  # Ref: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=768006
-  mkdir -p $drbl_common_root/lib/systemd/system/nfs-common.service.d/
-  cp -f $drbl_setup_path/files/misc/systemd/remote-fs-pre.conf $drbl_common_root/lib/systemd/system/nfs-common.service.d/
+  if [ -e /etc/debian_version ]; then
+    # Write the override file for remote-fs-pre of systemd due to nfs-utils
+    # in Debian does not ship native systemd unit files.
+    # Ref: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=768006
+    mkdir -p $drbl_common_root/lib/systemd/system/nfs-common.service.d/
+    cp -f $drbl_setup_path/files/misc/systemd/remote-fs-pre.conf $drbl_common_root/lib/systemd/system/nfs-common.service.d/
+    if [ ! -e /etc/systemd/system/tmp.mount -a \
+         ! -e /lib/systemd/system/tmp.mount -a \
+           -e /usr/share/systemd/tmp.mount ]; then
+      # Debian systemd 220 disabled tmp.mount, and it might cause our diskless client umount /tmp in amd64. We have to enable it.
+      # Ref: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=779902
+      perl -pi -e "s/[#]RAMTMP=.*/RAMTMP=yes/g" $drbl_common_root/etc/default/tmpfs
+      cp -a /usr/share/systemd/tmp.mount $drbl_common_root/lib/systemd/system/tmp.mount
+      # Manuall link the tmp.mount since systemctl fails to run in chroot.
+      mkdir -p $drbl_common_root/etc/systemd/system/local-fs.target.wants/
+      ln -fs /lib/systemd/system/tmp.mount $drbl_common_root/etc/systemd/system/local-fs.target.wants/tmp.mount 
+    fi
+  fi
 fi
 
 # For MDK/Debian/SuSE, we put the one we wrote "firstboot.XXX.drbl" to 
