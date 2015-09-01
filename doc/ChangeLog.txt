@@ -5,6 +5,16 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.15.25-drbl1) unstable; urgency=low
+
+  * Bug fixed: DRBL client sometimes failed to mount nfs due to remote-fs
+    service starts first. A workaround was added.
+    (https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=768006)
+
+  * Reverted the previous implementation for /etc/fstab.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 01 Sep 2015 10:05:15 +0800
+
 drbl (2.15.24-drbl1) unstable; urgency=low
 
   * An insurance to make sure that all mounting in /etc/fstab
