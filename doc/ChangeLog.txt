@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.15.26-drbl1) unstable; urgency=low
+
+  * Put tmp.mount back for DRBL client. It was disabled in Debian
+    patched systemd.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 01 Sep 2015 16:49:11 +0800
+
 drbl (2.15.25-drbl1) unstable; urgency=low
 
   * Bug fixed: DRBL client sometimes failed to mount nfs due to remote-fs

@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.15.25
+Version:	2.15.26
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Tue Sep 01 2015 Steven Shiau <steven _at_ nchc org tw> 2.15.26-drbl1
+- Put tmp.mount back for DRBL client. It was disabled in Debian patched systemd.
+
 * Tue Sep 01 2015 Steven Shiau <steven _at_ nchc org tw> 2.15.25-drbl1
 - Bug fixed: DRBL client sometimes failed to mount nfs due to remote-fs service starts first. A workaround was added. (https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=768006)
 
