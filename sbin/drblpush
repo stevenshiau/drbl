@@ -2356,6 +2356,11 @@ chown root.root $drbl_common_root/etc/init.d/{mkswapfile,drblthincli,arm-wol}
 # Put systemd services for {mkswapfile,drblthincli,arm-wol}
 if is_systemd_init; then
   cp -f $drbl_setup_path/files/misc/systemd/{mkswapfile.service,drblthincli.service,arm-wol.service} $drbl_common_root/lib/systemd/system/
+  # Write the override file for remote-fs-pre of systemd due to nfs-utils
+  # does not ship native systemd unit files.
+  # Ref: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=768006
+  mkdir -p $drbl_common_root/lib/systemd/system/nfs-common.service.d/
+  cp -f $drbl_setup_path/files/misc/systemd/remote-fs-pre.conf $drbl_common_root/lib/systemd/system/nfs-common.service.d/
 fi
 
 # For MDK/Debian/SuSE, we put the one we wrote "firstboot.XXX.drbl" to 
