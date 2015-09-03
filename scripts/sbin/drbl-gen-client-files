@@ -226,8 +226,8 @@ $nfsserver:$drblroot/$ip/root     /root   nfs     $FSTAB_NFS_RW_OPT
 $nfsserver:/usr             /usr        nfs    $FSTAB_NFS_RO_OPT
 $nfsserver:/home            /home       nfs    $FSTAB_NFS_RW_OPT
 $nfsserver:/var/spool/mail /var/spool/mail       nfs     $FSTAB_NFS_RW_OPT
-none                    /proc           proc    defaults        0 0
-tmpfs                   /tmp            tmpfs   defaults        0 0
+none                    /proc           proc    defaults     0 0
+tmpfs                   /tmp            tmpfs   nosuid,nodev 0 0
 #/dev/fd0                /mnt/floppy     auto    noauto,owner,kudzu 0 0
 #/dev/sr0          	/mnt/cdrom      iso9660 iocharset=cp950,noauto,owner,kudzu,ro 0 0
 FSTAB
