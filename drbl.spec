@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.15.26
+Version:	2.15.27
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,11 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Thu Sep 03 2015 Steven Shiau <steven _at_ nchc org tw> 2.15.27-drbl1
+- Package strace was added in clonezilla/drbl live system.
+- Set nosuid,nodev in /etc/fstab for client's /tmp dir.
+- Disabled workaround for dm after nis in drbl-live.
+
 * Tue Sep 01 2015 Steven Shiau <steven _at_ nchc org tw> 2.15.26-drbl1
 - Put tmp.mount back for DRBL client. It was disabled in Debian patched systemd.
 

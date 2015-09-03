@@ -1,3 +1,11 @@
+drbl (2.15.27-drbl1) unstable; urgency=low
+
+  * Package strace was added in clonezilla/drbl live system.
+  * Set nosuid,nodev in /etc/fstab for client's /tmp dir.
+  * Disabled workaround for dm after nis in drbl-live.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 03 Sep 2015 17:59:33 +0800
+
 drbl (2.15.26-drbl1) unstable; urgency=low
 
   * Put tmp.mount back for DRBL client. It was disabled in Debian
