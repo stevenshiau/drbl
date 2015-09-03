@@ -124,8 +124,9 @@ start_drbl_live() {
   # 2014/03/15 Somehow in DRBL live, lightdm of the client's services in /tftpboot/node_root/ are not after nis.
   # It's weird if we run "drbl-client-service lightdm on", then in /tftpboot/nodes/$IP/ the lightdm are after nis.
   # Fighted for more than 3 days, but still can not find why this only happens in DRBL live. Not in the Sid installed on the harddrive. Anyway, this is a workaround.
-  default_dm="$(drbl-check-dm 2> /dev/null)"
-  drbl-client-service $default_dm on
+  # 2015/09/03 No more this issue, and this should not be used since it will affect the client's /etc/rc1.d/ because after drblpush the ocs-run should be /etc/rc1.d/S19ocs-run, but after drbl-client-service, it will be moved as /etc/rc1.d/S01ocs-run. Apparently we need ocs-run after other services, like ssh, mountnfs...
+  #default_dm="$(drbl-check-dm 2> /dev/null)"
+  #drbl-client-service $default_dm on
   
   echo "$msg_delimiter_star_line"
   if [ "$limit_pxe_drbl_client" = "yes" ]; then
