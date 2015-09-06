@@ -135,6 +135,8 @@ fi
 # nfs_client_extra_opt is loaded from drbl.conf
 nfs_ver_opt="nfsvers=3"
 # If need, you can add "rsize=65536,wsize=65536"
+# FSTAB_NFS_ROOT_OPT is for nfs root only. It's actually ro, while due to the service /etc/init.d/checkroot.sh will parse it and judge if it's read-only or not. we have to make it "like" rw, but actually it's ro.
+FSTAB_NFS_ROOT_OPT="rw,soft,$nfs_ver_opt,$nfs_protocol,$nfs_client_extra_opt,defaults        0 0"
 FSTAB_NFS_RO_OPT="ro,soft,$nfs_ver_opt,$nfs_protocol,$nfs_client_extra_opt,defaults        0 0"
 FSTAB_NFS_RW_OPT="rw,hard,intr,$nfs_ver_opt,$nfs_protocol,$nfs_client_extra_opt,defaults        0 0"
 
@@ -219,14 +221,14 @@ cat <<-FSTAB > $drblroot/$ip/etc/fstab
 ## to the mount in system. Mount options maybe differs, too.
 ## Therefore if this line is not commented, it will mount again.
 ## Keep this line here for ref only.
-$nfsserver:$drbl_common_root  /       nfs     nolock,$FSTAB_NFS_RO_OPT
+$nfsserver:$drbl_common_root  /       nfs     nolock,$FSTAB_NFS_ROOT_OPT
 $nfsserver:$drblroot/$ip/etc      /etc    nfs     $FSTAB_NFS_RW_OPT
 $nfsserver:$drblroot/$ip/var      /var    nfs     $FSTAB_NFS_RW_OPT
 $nfsserver:$drblroot/$ip/root     /root   nfs     $FSTAB_NFS_RW_OPT
 $nfsserver:/usr             /usr        nfs    $FSTAB_NFS_RO_OPT
 $nfsserver:/home            /home       nfs    $FSTAB_NFS_RW_OPT
 $nfsserver:/var/spool/mail /var/spool/mail       nfs     $FSTAB_NFS_RW_OPT
-none                    /proc           proc    defaults     0 0
+#none                    /proc           proc    defaults     0 0
 tmpfs                   /tmp            tmpfs   nosuid,nodev 0 0
 #/dev/fd0                /mnt/floppy     auto    noauto,owner,kudzu 0 0
 #/dev/sr0          	/mnt/cdrom      iso9660 iocharset=cp950,noauto,owner,kudzu,ro 0 0
