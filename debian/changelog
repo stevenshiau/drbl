@@ -1,3 +1,15 @@
+drbl (2.15.28-drbl1) unstable; urgency=medium
+
+  * Client's /etc/fstab was changed. For nfs root, we set
+    the option as "rw" so that checkroot.sh in Debian sysvinit
+    could update the /etc/mtab.
+  * The /proc in drbl client's /etc/fstab is commented. It's done
+    by udevd automatically.
+  * No more creating /dev/{console,null} in $drbl_common_root/. It's
+    done by udevd automatically.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sun, 06 Sep 2015 12:17:07 +0800
+
 drbl (2.15.27-drbl1) unstable; urgency=low
 
   * Package strace was added in clonezilla/drbl live system.
