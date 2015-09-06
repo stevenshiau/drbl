@@ -1,3 +1,10 @@
+drbl (2.15.29-drbl1) unstable; urgency=low
+
+  * Adding support files for Debian 7.9 and 8.2 in
+    /usr/share/drbl/setup/files/DBN/
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sun, 06 Sep 2015 12:29:00 +0800
+
 drbl (2.15.28-drbl1) unstable; urgency=medium
 
   * Client's /etc/fstab was changed. For nfs root, we set

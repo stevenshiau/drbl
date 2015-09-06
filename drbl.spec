@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.15.28
+Version:	2.15.29
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,7 +45,10 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
-* Thu Sep 03 2015 Steven Shiau <steven _at_ nchc org tw> 2.15.28-drbl1
+* Sun Sep 06 2015 Steven Shiau <steven _at_ nchc org tw> 2.15.29-drbl1
+- Adding support files for Debian 7.9 and 8.2 in /usr/share/drbl/setup/files/DBN/.
+
+* Sun Sep 06 2015 Steven Shiau <steven _at_ nchc org tw> 2.15.28-drbl1
 - Client's /etc/fstab was changed. For nfs root, we set the option as "rw" so that checkroot.sh in Debian sysvinit could update the /etc/mtab.
 - The /proc in drbl client's /etc/fstab is commented. It's done by udevd automatically.
 - No more creating /dev/{console,null} in $drbl_common_root/. It's done by udevd automatically.
