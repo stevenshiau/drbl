@@ -2158,14 +2158,15 @@ for ir in .bashrc .bash_profile .profile .viminfo; do
   [ -f /root/$ir ] && rsync -a $RSYNC_OPT_EXTRA /root/$ir $drbl_common_root/root/
 done
 
-# create the console so that client can output message when entering init. This is especially for Debian. 
-echo -n "."
-# force to clean the old ones
-for i in console null; do
-  [ -c $drbl_common_root/dev/$i ] && rm -f $drbl_common_root/dev/$i
-done
-mknod -m 600 $drbl_common_root/dev/console c 5 1
-mknod -m 666 $drbl_common_root/dev/null c 1 3
+# Sep/06/2015 Forget about this. We already use udev by default and we'd better to have a clean /dev otherwise it might cause udevd gives strange results. E.g. umounted /dev when doing clonezilla job.
+## create the console so that client can output message when entering init. This is especially for Debian. 
+#echo -n "."
+## force to clean the old ones
+#for i in console null; do
+#  [ -c $drbl_common_root/dev/$i ] && rm -f $drbl_common_root/dev/$i
+#done
+#mknod -m 600 $drbl_common_root/dev/console c 5 1
+#mknod -m 666 $drbl_common_root/dev/null c 1 3
 
 #
 echo -n "."
