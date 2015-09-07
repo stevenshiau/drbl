@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.15.29
+Version:	2.15.30
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,14 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Mon Sep 07 2015 Steven Shiau <steven _at_ nchc org tw> 2.15.30-drbl1
+- Option "-b" was added was added to drbl-live.
+- A tag file will be added in /tfptboot/node_root/drbl_ssi/ when drbl-live is run.
+- Default to use "-t devtmpfs" instead of "-t udev" for mount command in init.drbl.
+- The flag TMPFS_RUN was changed to "true" by default in init.drbl
+- Reverted to create /dev/{console,null} in $drbl_common_root/. It's required in some cases.
+- Corresponding change was done in drblpush with TMPFS_RUN in init.drbl.
+
 * Sun Sep 06 2015 Steven Shiau <steven _at_ nchc org tw> 2.15.29-drbl1
 - Adding support files for Debian 7.9 and 8.2 in /usr/share/drbl/setup/files/DBN/.
 

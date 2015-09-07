@@ -5,6 +5,21 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.15.30-drbl1) unstable; urgency=low
+
+  * Option "-b" was added was added to drbl-live.
+  * A tag file will be added in /tfptboot/node_root/drbl_ssi/ when
+    drbl-live is run.
+  * Default to use "-t devtmpfs" instead of "-t udev" for mount command
+    in init.drbl.
+  * The flag TMPFS_RUN was changed to "true" by default in init.drbl
+  * Reverted to create /dev/{console,null} in $drbl_common_root/. 
+    It's required in some cases.
+  * Corresponding change was done in drblpush with TMPFS_RUN in
+    init.drbl.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 07 Sep 2015 10:09:34 +0800
+
 drbl (2.15.29-drbl1) unstable; urgency=low
 
   * Adding support files for Debian 7.9 and 8.2 in
