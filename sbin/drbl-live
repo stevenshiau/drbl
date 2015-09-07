@@ -18,6 +18,7 @@ USAGE() {
     echo "Usage:"
     echo "$0 [OPTION] {start|stop|restart}"
     echo "OPTION:"
+    echo " -b, -batch, --batch          Run program in batch mode, i.e. without any prompt or wait for pressing enter key.  //NOTE// You have to use '-batch' instead of '-b' when you want to use it in the boot parameters. Otherwise the program init on system will honor '-b', too."
     echo "-p, --prepare-ocsroot         Prepare clonezilla image home dir also."
     echo "-s, --skip-pause-in-the-end   Skip showing the messsage and pause in the end of execuation."
     echo "-n, --no-prompt-drbl-live     Assume it's running for drbl live. (This is normally only used for clonezilla server edition script ocs-srv-live in DRBL live mode)"
@@ -84,8 +85,19 @@ start_drbl_live() {
   echo "$msg_delimiter_star_line"
   echo $msg_now_continue_to_run_drblpush
   echo $msg_this_might_take_several_minutes
-  echo -n $msg_press_enter_to_continue
-  read
+  if [ "$ocs_batch_mode" != "on" ]; then
+    echo -n $msg_press_enter_to_continue
+    read
+  fi
+
+  # Make a tag in client's root to mark this is drbl-live system. Since this is live system, we do not have to clean it later.
+  get_live_media_mnt_point
+  if [ -z "$LIVE_MEDIA" ]; then
+    echo "///WARNING/// filesystem.squashfs not found! No idea where is LIVE_MEDIA!!!"
+  fi
+  echo "Live media is in $LIVE_MEDIA"
+  echo "This is drbl live system." > $drbl_common_root/drbl_ssi/drbl-live-system.txt
+  cat $LIVE_MEDIA/DRBL-Live-Version >> $drbl_common_root/drbl_ssi/drbl-live-system.txt
   
   # Before we run drblpush, we have to remove the services we put only for DRBL live server when creating drbl live. This will avoide those to be copied to SSI template tarball. Since these services are one-time use only for server during booting.
   rm -f /etc/rcS.d/*kbd-conf
@@ -250,6 +262,9 @@ autologin_group="autologin"
 #
 while [ $# -gt 0 ]; do
   case "$1" in
+    -b|-batch|--batch)
+            ocs_batch_mode="on"
+	    shift;;
     -p|--prepare-ocsroot)
             prepare_ocsroot="yes"
             shift ;;
