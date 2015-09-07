@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.15.31-drbl1) unstable; urgency=low
+
+  * Option "-n" should be added for mount command when mounting /dev in
+    read-only / (hence read-only /etc).
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 07 Sep 2015 11:25:27 +0800
+
 drbl (2.15.30-drbl1) unstable; urgency=low
 
   * Option "-b" was added was added to drbl-live.

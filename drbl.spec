@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.15.30
+Version:	2.15.31
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Mon Sep 07 2015 Steven Shiau <steven _at_ nchc org tw> 2.15.31-drbl1
+- Option "-n" should be added for mount command when mounting /dev in read-only / (hence read-only /etc).
+
 * Mon Sep 07 2015 Steven Shiau <steven _at_ nchc org tw> 2.15.30-drbl1
 - Option "-b" was added was added to drbl-live.
 - A tag file will be added in /tfptboot/node_root/drbl_ssi/ when drbl-live is run.
