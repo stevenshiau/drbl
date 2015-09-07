@@ -24,7 +24,7 @@ RW_NFS_EXTRA_OPT="rw,tcp,nolock,$nfs_ver_opt"
 NFS_OPT_TO_ADD="nosharecache"
 
 # Flag to have tmpfs /run or not. This value will be enabled by drblpush if /run is found as tmpfs mounted on DRBL server.
-TMPFS_RUN="false"
+TMPFS_RUN="true"
 
 #
 create_dev(){
@@ -33,7 +33,7 @@ create_dev(){
    umount -l /dev 2>/dev/null
    echo "done!"
 
-   if ! mount -t devtmpfs -o mode=0755 udev /dev; then
+   if ! mount -o size=10240k,mode=0755 -t devtmpfs devtmpfs /dev; then
       echo "W: devtmpfs not available, falling back to tmpfs for /dev"
       mount -t tmpfs -o nr_inodes=24576 -o mode=0755 udev /dev
       [ -e /dev/console ] || mknod -m 0600 /dev/console c 5 1
