@@ -3200,7 +3200,7 @@ gen_CDG_checksums() {
   # This function will generate Clonezilla, DRBL, GParted live checksum files, including MD5SUMS, SHA1SUMS, and a file called CHECKSUMS.TXT including MD5 and SHA1 checksums.
   local sum_file="CHECKSUMS.TXT"
   local sum_file_html="CHECKSUMS.php"
-  local filetype="iso zip tar.gz"
+  local filetype="iso zip tar tar.gz"
   echo -n "Creating checksums..."
   rm -f MD5SUMS SHA1SUMS SHA256SUMS
   for i in $filetype; do
