@@ -12,6 +12,8 @@
 DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/usr/share/drbl}"
 
 . $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
+. /etc/drbl/drbl-ocs.conf
+. $DRBL_SCRIPT_PATH/sbin/ocs-functions
 
 # Settings
 SL_ISO_URL_EXAMPLE="http://downloads.sourceforge.net/clonezilla/clonezilla-live-2.2.3-10-i686-pae.iso"
@@ -45,11 +47,12 @@ USAGE() {
   echo "OPTION:"
   language_help_prompt_by_idx_no
   echo "-b, --batch-mode   Run clone in batch mode."
-  echo "-i, --install ISO:        Load Small Linux ISO into DRBL environment, you must put the iso file in the current working dir." 
+  echo "-i, --install ISO:        Load Small Linux ISO into DRBL environment, you must put the iso file in the current working dir. This conflicts with \"-p\" option." 
   echo "-d, --distribution DIST:  Assign the small GNU/Linux distribution as DIST. Available names are: $supported_SL_dists."
   echo "-f, --use-nfsroot      By default the boot parameter to load the root file system (e.g. filesystem.squashfs) is fetch. With this option, nfsroot is used. //NOTE// This function only works for live-initramfs based system. E.g. Clonezilla live or GParted live."
   echo "-k, --keep-pxecfg  Keep the pxelinux config file without updating the boot parameters."
   echo "-n, --no-prompt-boot-message  Skip the prompt messages about booting via PXE or etherboot in the end of execution."
+  echo "-p, --live-path  PATH:    Assign the mounted or unzipped live system as PATH. This conflicts with \"-i\" option."  
   echo "-s, --server-ip IP_ADDR:  Assign the tftp or NFS server's IP address to be used in Clonezilla/GParted live."
   echo "-u, --uninstall DIST:     Uninstall Small Linux DIST."
   echo "-V, --dist-version VER:   Assign the version of small GNU/Linux version number as VER."
@@ -112,9 +115,13 @@ prepare_param_in_pxe_cfg(){
        fi
        get_rootfs_location_opt
        if [ -z "$cl_gp_boot_param" ]; then
-         append_param_in_pxe_cfg="initrd=$nbi_initrd boot=live union=aufs noswap noprompt nolocales vga=788 $rootfs_location_opt ocs_server=\"$server_IP\""
+         append_param_in_pxe_cfg="initrd=$nbi_initrd boot=live union=overlay noswap noprompt nolocales vga=788 $rootfs_location_opt ocs_server=\"$server_IP\""
        else
          append_param_in_pxe_cfg="initrd=$nbi_initrd $cl_gp_boot_param noprompt $rootfs_location_opt ocs_server=\"$server_IP\""
+	 if is_drbl_live_env; then
+           # We will reuse the filesystem.squashfs from DRBL live, however, it's not like that of Clonezilla live, therefore more option are needed here.
+	   append_param_in_pxe_cfg="$append_param_in_pxe_cfg systemd.unit=multi-user.target drbl_live_noconfx ocs_prerun1=\"mkdir -p /var/lib/live/clonezilla/ocs-live.d\" ocs_prerun2=\"echo sudo -i ocs-live-run-menu >> /home/user/.bashrc\""
+	 fi
        fi
        ;;
     gparted-live)
@@ -370,15 +377,27 @@ put_kernel_initrd_root_fs_on_pxe_server() {
     "nfsroot")
              echo "Copying root image $isomnt/$rootfile to $drbl_common_root/clonezilla-live/... $msg_this_might_take_several_minutes"
 	     mkdir -p $drbl_common_root/clonezilla-live/live/
-             rsync -aP $isomnt/$rootfile $drbl_common_root/clonezilla-live/live/ ;;
+	     # In DRBL live server when unfs3 is used, we can use mount --bind to make this
+	     if is_drbl_live_env; then
+	       if mountpoint $drbl_common_root/clonezilla-live/live/ &>/dev/null ; then
+	          umount $drbl_common_root/clonezilla-live/live/
+	       fi
+	       mount --bind $isomnt/$rootfile_path $drbl_common_root/clonezilla-live/live/
+             else
+               rsync -aP $isomnt/$rootfile $drbl_common_root/clonezilla-live/live/
+             fi
+	     ;;
   esac
   prepare_param_in_pxe_cfg
   chmod 644 $pxecfg_pd/$nbi_kernel $pxecfg_pd/$nbi_initrd
 } # end of put_kernel_initrd_root_fs_on_pxe_server
 #
 umount_and_clean_tmp_working_dirs(){
-  if mountpoint $isomnt &>/dev/null; then
-    umount $isomnt
+  if [ "$iso_mnt_flag" = "true" ]; then
+    # It's mounted by this program.
+    if mountpoint $isomnt &>/dev/null; then
+      umount $isomnt
+    fi
   fi
   [ -d "$isomnt" -a -n "$(echo $isomnt | grep "drblsl_tmp")" ] && rm -rf $isomnt
   [ -d "$wd" -a -n "$(echo $wd | grep "drbl_sl_wd")" ] && rm -rf $wd
@@ -405,35 +424,63 @@ fi
 
 #
 install_SL(){
-  if [ -z "$SL_ISO" ]; then
-    USAGE
-    exit 1
+  # 2 cases, (1) live iso/zip (2) path where iso is mounted or zip is uncompressed.
+  # Case (1)
+  if [ "$source_mode" = "iso-zip" ]; then
+    if [ -z "$SL_ISO" ]; then
+      USAGE
+      exit 1
+    fi
+    
+    if [ ! -f "$SL_ISO" ]; then
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+      echo "$SL_ISO is NOT found!"
+      echo "You have to prepare the iso file. For example, if you want to use Clonezilla live, you can get it via this command:"
+      echo "wget $SL_ISO_URL_EXAMPLE"
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+      exit 1
+    fi
+    
+    # Program file might give different results:
+    # ISO 9660 CD-ROM filesystem data # file vesion 5.03
+    # x86 boot sector # file version 4.10
+    # For file version 5.17 in Jessie:
+    # debian-7.4.0-i386-netinst.iso: DOS/MBR boot sector; partition 1 : ID=0x17, active, start-CHS (0x0,2,1), end-CHS (0x114,63,32), startsector 64, 567232 sectors
+    if [ -z "$(LC_ALL=C file -Lsk $SL_ISO | grep -i "ISO 9660 CD-ROM filesystem data")" ] && \
+       [ -z "$(LC_ALL=C file -Lsk $SL_ISO | grep -i "x86 boot sector")" -a "$(echo $SL_ISO | grep -iE "\.iso")" ] && \
+       [ -z "$(LC_ALL=C file -Lsk $SL_ISO | grep -i "DOS/MBR boot sector")" -a "$(echo $SL_ISO | grep -iE "\.iso")" ]; then
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+      echo "$SL_ISO is not an ISO 9660 CD-ROM filesystem data file!"
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+      echo "Program terminated!"
+      exit 1
+    fi
+  elif [ "$source_mode" = "live-path" ]; then
+    # Case (2): live-path. From the 1st line in file 
+    # /lib/live/mount/medium/{Clonezilla-Live-Version,DRBL-Live-Version,GParted-Live-Version}
+    # we can get the file name. Its content is like:
+    # ==================================
+    # clonezilla-live-2.4.2-49-i686-pae
+    # This Clonezilla live iso file was created by this command:
+    # ocs-iso -s --extra-boot-param quiet -y 6.03 -i 2.4.2-49-i686-pae
+    # ==================================
+    if [ -e "$LIVE_PATH/Clonezilla-Live-Version" ]; then
+      SL_ISO="$(head -n 1 $LIVE_PATH/Clonezilla-Live-Version)"
+    elif [ -e "$LIVE_PATH/DRBL-Live-Version" ]; then
+      # To avoid confusion, we switch drbl-live to Clonezilla live since this small linux won't be really DRBL, we just need it work as Clonezilla live.
+      #SL_ISO="$(head -n 1 $LIVE_PATH/DRBL-Live-Version)"
+      SL_ISO="clonezilla-live-0.0.0-0"
+    elif [ -e "$LIVE_PATH/GParted-Live-Version" ]; then
+      SL_ISO="$(head -n 1 $LIVE_PATH/GParted-Live-Version)"
+    else
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+      echo "File $LIVE_PATH/Clonezilla-Live-Version, $LIVE_PATH/DRBL-Live-Version or $LIVE_PATH/GParted-Live-Version not found!"
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+      echo "$msg_program_stop."
+      exit 1
+    fi
   fi
-  
-  if [ ! -f "$SL_ISO" ]; then
-    [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
-    echo "$SL_ISO is NOT found!"
-    echo "You have to prepare the iso file. For example, if you want to use Clonezilla live, you can get it via this command:"
-    echo "wget $SL_ISO_URL_EXAMPLE"
-    [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
-    exit 1
-  fi
-  
-  # Program file might give different results:
-  # ISO 9660 CD-ROM filesystem data # file vesion 5.03
-  # x86 boot sector # file version 4.10
-  # For file version 5.17 in Jessie:
-  # debian-7.4.0-i386-netinst.iso: DOS/MBR boot sector; partition 1 : ID=0x17, active, start-CHS (0x0,2,1), end-CHS (0x114,63,32), startsector 64, 567232 sectors
-  if [ -z "$(LC_ALL=C file -Lsk $SL_ISO | grep -i "ISO 9660 CD-ROM filesystem data")" ] && \
-     [ -z "$(LC_ALL=C file -Lsk $SL_ISO | grep -i "x86 boot sector")" -a "$(echo $SL_ISO | grep -iE "\.iso")" ] && \
-     [ -z "$(LC_ALL=C file -Lsk $SL_ISO | grep -i "DOS/MBR boot sector")" -a "$(echo $SL_ISO | grep -iE "\.iso")" ]; then
-    [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
-    echo "$SL_ISO is not an ISO 9660 CD-ROM filesystem data file!"
-    [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
-    echo "Program terminated!"
-    exit 1
-  fi
-  
+
   # get SL_OS name from iso file name
   # Ugly, since it's not easy to know which one is which one, here we just judge them by file name.
   [ -z "$SL_OS" ] && get_SL_OS_NAME
@@ -531,15 +578,21 @@ install_SL(){
   fi
   
   #
-  isomnt="$(mktemp -d /tmp/drblsl_tmp.XXXXXX)"
-  wd="$(mktemp -d drbl_sl_wd.XXXXXX)"
-  if [ -n "$(echo $SL_ISO | grep -iE "\.iso")" ]; then
-  echo "Mounting the iso file $SL_ISO at mounting point $isomnt"
-    mount -o loop $SL_ISO $isomnt
-  elif [ -n "$(echo $SL_ISO | grep -iE "\.zip")" ]; then
-    unzip $SL_ISO -d $isomnt
-  else
-    echo "$SL_ISO: Unknown file format! Program terminated!"
+  if [ "$source_mode" = "iso-zip" ]; then
+    iso_mnt_flag=""
+    isomnt="$(mktemp -d /tmp/drblsl_tmp.XXXXXX)"
+    wd="$(mktemp -d drbl_sl_wd.XXXXXX)"
+    if [ -n "$(echo $SL_ISO | grep -iE "\.iso")" ]; then
+    echo "Mounting the iso file $SL_ISO at mounting point $isomnt"
+      mount -o loop $SL_ISO $isomnt
+      iso_mnt_flag="true"
+    elif [ -n "$(echo $SL_ISO | grep -iE "\.zip")" ]; then
+      unzip $SL_ISO -d $isomnt
+    else
+      echo "$SL_ISO: Unknown file format! Program terminated!"
+    fi
+  elif [ "$source_mode" = "live-path" ]; then
+    isomnt="$LIVE_PATH"
   fi
   
   # Find kernel
@@ -662,7 +715,8 @@ install_SL(){
         echo "$msg_program_stop"
         exit 1
       fi
-      cl_gp_boot_param="$(LC_ALL=C grep -Eiw "append" $iso_cfg_file | grep -Eiw $initrd_filename | head -n 1 | sed -r -e "s/append//g" -e "s/initrd=.*$initrd_filename[[:space:]]+//g" | sed -e "s/^[[:space:]]*//g")"
+      # Filter out the ocs_prerun* in case it's preseed by users.
+      cl_gp_boot_param="$(LC_ALL=C grep -Eiw "append" $iso_cfg_file | grep -Eiw $initrd_filename | head -n 1 | sed -r -e "s/append//g" -e "s/initrd=.*$initrd_filename[[:space:]]+//g" | sed -r -e "s/ocs_prerun[[:digit:]]*=\".*\"//g" | sed -e "s/^[[:space:]]*//g")"
       ;;
   esac
   
@@ -779,6 +833,15 @@ while [ $# -gt 0 ]; do
 	  shift
         fi
 	;;
+    -p|--live-path)
+        shift; mode="install"
+        if [ -z "$(echo $1 |grep ^-.)" ]; then
+          # skip the -xx option, in case 
+          LIVE_PATH="$1"
+          [ -z "$LIVE_PATH" ] && USAGE && exit 1
+	  shift
+        fi
+	;;
     -d|--distribution)
         shift;
         if [ -z "$(echo $1 |grep ^-.)" ]; then
@@ -830,6 +893,13 @@ done
 
 # Load the language file
 ask_and_load_lang_set $specified_lang
+
+#
+if [ -n "$SL_ISO" ]; then
+  source_mode="iso-zip"
+elif [ -n "$LIVE_PATH" ]; then
+  source_mode="live-path"
+fi
 
 # run it
 case "$mode" in
