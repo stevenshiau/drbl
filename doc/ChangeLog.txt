@@ -5,6 +5,20 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.16.1-drbl1) unstable; urgency=low
+
+  * Due to the issue /tmp or /dev missing issue:
+    http://lists.freedesktop.org/archives/systemd-devel/
+    2015-September/034175.html
+    DRBL live now switch to use drbl-live-ocs-prep for
+    Clonezilla SE client, i.e. less use NFS root.
+  * Adding file type "tar" in function gen_CDG_checksums of
+    drbl-functions.
+  * Option "-p" was added so that drbl-sl supports the mounted or
+    unzipped live dir.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 10 Sep 2015 14:08:53 +0800
+
 drbl (2.15.31-drbl1) unstable; urgency=low
 
   * Option "-n" should be added for mount command when mounting /dev in

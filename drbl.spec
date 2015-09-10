@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.15.31
+Version:	2.16.1
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,12 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Thu Sep 10 2015 Steven Shiau <steven _at_ nchc org tw> 2.16.1-drbl1
+- Adding file type "tar" in function gen_CDG_checksums of drbl-functions.
+- Due to the issue /tmp or /dev missing issue: http://lists.freedesktop.org/archives/systemd-devel/2015-September/034175.html, DRBL live now switch to use drbl-live-ocs-prep for Clonezilla SE client, i.e. less use NFS root.
+- Adding file type "tar" in function gen_CDG_checksums of drbl-functions.
+- Option "-p" was added so that drbl-sl supports the mounted or unzipped live dir.
+
 * Mon Sep 07 2015 Steven Shiau <steven _at_ nchc org tw> 2.15.31-drbl1
 - Option "-n" should be added for mount command when mounting /dev in read-only / (hence read-only /etc).
 
