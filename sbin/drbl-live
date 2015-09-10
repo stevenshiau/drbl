@@ -133,6 +133,11 @@ start_drbl_live() {
   # run drblpush again so that the network interface can be updated. Maybe there is new ethx.
   yes "" | drblpush -i -r 1 -z 1 --not-add-start-drbl-srvi --skip-drbl-ocs-live-prep -p $client_no_per_NIC
 
+  # Sep/10/2015 Due to this /tmp/ or /dev/ missing issue, we switch to use live system for Clonezilla SE client
+  # http://lists.freedesktop.org/archives/systemd-devel/2015-September/034175.html
+  # Actually this method is easier and better for Clonezilla jobs.
+  drbl-ocs-live-prep -p $LIVE_MEDIA
+
   # 2014/03/15 Somehow in DRBL live, lightdm of the client's services in /tftpboot/node_root/ are not after nis.
   # It's weird if we run "drbl-client-service lightdm on", then in /tftpboot/nodes/$IP/ the lightdm are after nis.
   # Fighted for more than 3 days, but still can not find why this only happens in DRBL live. Not in the Sid installed on the harddrive. Anyway, this is a workaround.
