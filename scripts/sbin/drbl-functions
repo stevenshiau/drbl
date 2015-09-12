@@ -1014,15 +1014,31 @@ sub_default_pxe_img() {
 delete_label_block_pxe_img() {
      local LABEL="$1"
      local PXE_CONF_TMP="$2"
+     local lines begin_line end_line rc
      [ -z "$LABEL" -o -z "$PXE_CONF_TMP" ] && return 1
      lines=$(get_pxecfg_image_block $LABEL $PXE_CONF_TMP)
      begin_line=$(echo $lines | awk -F" " '{print $1}')
      end_line=$(echo $lines | awk -F" " '{print $2}')
      # delete lines between $begin_line and $end_line
      perl -i -ne "print unless $begin_line..$end_line" $PXE_CONF_TMP
-     return 0
-}
-
+     rc=$?
+     return $rc
+} # end of delete_label_block_pxe_img
+#
+delete_menuentry_block_grub_img() {
+     local ENTRY_ID="$1"
+     local GRUB_CONF_TMP="$2"
+     local lines begin_line end_line rc
+     [ -z "$ENTRY_ID" -o -z "$GRUB_CONF_TMP" ] && return 1
+     lines="$(get_grub_efi_image_block "--id $ENTRY_ID" $GRUB_CONF_TMP)"
+     begin_line=$(echo $lines | awk -F" " '{print $1}')
+     end_line=$(echo $lines | awk -F" " '{print $2}')
+     # delete lines between $begin_line and $end_line
+     perl -i -ne "print unless $begin_line..$end_line" $GRUB_CONF_TMP
+     rc=$?
+     return $rc
+} # end of delete_label_block_pxe_img
+#
 ask_lang_set() {
   local language_opt="$1"
   local chosen_lang_var
