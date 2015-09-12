@@ -5,6 +5,15 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.16.2-drbl1) unstable; urgency=low
+
+  * Bug fixed: Live system for Clonezilla jobs in Clonezilla SE was
+    not working for the uEFI network booting environment. 
+  * Bug fixed: Program tune-clientdir-opt should not reveal the
+    Clonezilla menu. Let dcs to reveal or hide that.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sat, 12 Sep 2015 21:28:33 +0800
+
 drbl (2.16.1-drbl1) unstable; urgency=low
 
   * Due to the issue /tmp or /dev missing issue:

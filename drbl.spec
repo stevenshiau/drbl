@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.16.1
+Version:	2.16.2
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,10 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Sat Sep 12 2015 Steven Shiau <steven _at_ nchc org tw> 2.16.2-drbl1
+- Bug fixed: Live system for Clonezilla jobs in Clonezilla SE was not working for the uEFI network booting environment. 
+- Bug fixed: Program tune-clientdir-opt should not reveal the Clonezilla menu. Let dcs to reveal or hide that.
+
 * Thu Sep 10 2015 Steven Shiau <steven _at_ nchc org tw> 2.16.1-drbl1
 - Adding file type "tar" in function gen_CDG_checksums of drbl-functions.
 - Due to the issue /tmp or /dev missing issue: http://lists.freedesktop.org/archives/systemd-devel/2015-September/034175.html, DRBL live now switch to use drbl-live-ocs-prep for Clonezilla SE client, i.e. less use NFS root.
