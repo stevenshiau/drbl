@@ -3784,9 +3784,29 @@ remove_opt_in_pxelinux_cfg_block() {
   fi
 } # end of remove_opt_in_pxelinux_cfg_block()
 #
+get_status_grub_efi_cfg_block() {
+  local ENTRY_ID="$1"
+  local GRUB_CONF_TMP="$2"
+  local lines begin_line end_line rc block_status
+  [ -z "$ENTRY_ID" -o -z "$GRUB_CONF_TMP" ] && return 1
+  lines="$(get_grub_efi_image_block "--id $ENTRY_ID" $GRUB_CONF_TMP)"
+  begin_line=$(echo $lines | awk -F" " '{print $1}')
+  end_line=$(echo $lines | awk -F" " '{print $2}')  # end_line is useless in this function. Just keep it for completion
+  if [ -n "$(LC_ALL=C sed -n "${begin_line}p" $GRUB_CONF_TMP | grep -E "^#menuentry")" ]; then
+  # Found something like:
+  # #menuentry "Clonezilla" --id clonezilla-se-client {
+  # so it's disabled.
+    block_status="hide"
+  else
+    block_status="reveal"
+  fi
+  echo "$block_status"
+} # end of get_status_grub_efi_cfg_block
+#
 add_opt_in_grub_efi_cfg_block() {
   # add something like: ocs_opt=\"--language 0  -g auto -p true restoredisk 2disks hda hdb\" in grub efi nb config file
   local prot_dq="\\\\\""  # protection double quotation for later use.
+  local status_saved
   while [ $# -gt 0 ]; do
     case "$1" in
       -n|--no-dq) shift; prot_dq="" ;;
@@ -3807,6 +3827,8 @@ add_opt_in_grub_efi_cfg_block() {
   [ -z "$opt_content" ] && echo "opt_content NOT specified in add_opt_in_grub_efi_cfg_block! Abort!" && exit 1
   # Before adding option, we have to enable it because with grub there is no
   # way to hide unless with use # to comment the whole menuentry.
+  # Save the status first
+  status_saved="$(get_status_grub_efi_cfg_block "$entry_id" $GRUB_CONF)"
   hide_reveal_grub_efi_ent "$entry_id" reveal $GRUB_CONF
   #
   lines="$(get_grub_efi_image_block "--id $entry_id" $GRUB_CONF)"
@@ -3832,6 +3854,8 @@ add_opt_in_grub_efi_cfg_block() {
     fi
     LC_ALL=C perl -pi -e "$sub_menu_entry_cmd" $GRUB_CONF
   fi
+  # Restore the status
+  hide_reveal_grub_efi_ent "$entry_id" "$status_saved" $GRUB_CONF
 } # end of add_opt_in_grub_efi_cfg_block
 #
 remove_opt_in_grub_efi_cfg_block() {
@@ -3839,9 +3863,12 @@ remove_opt_in_grub_efi_cfg_block() {
   local opt_name="$2" # can be ocs_opt (for NFSRoot-based Clonezilla client) or ocs_live_run (for Clonezilla-live-based client)
   local tag_found
   local sub_menu_entry_cmd
+  local status_saved
   [ -z "$entry_id" ] && echo "No entry_id in remove_opt_in_pxelinux_cfg_block!" && exit 1
   # Before adding option, we have to enable it because with grub there is no
   # way to hide unless with use # to comment the whole menuentry.
+  # Save the status first
+  status_saved="$(get_status_grub_efi_cfg_block "$entry_id" $GRUB_CONF)"
   hide_reveal_grub_efi_ent "$entry_id" reveal $GRUB_CONF
   # remove something like ocs_opt=... from the append .... like this in pxelinux config:
   # append ... ocs_opt="--language 0  -g auto -p true restoredisk 2disks hda hdb"...
@@ -3870,7 +3897,9 @@ remove_opt_in_grub_efi_cfg_block() {
     sub_menu_entry_cmd="if ($begin_line..$end_line) {s|(^[[:space:]]*linux[[:space:]]+.*)[[:space:]]+$opt_name([[:space:]]+.*)|\$1\$2|i}"
     LC_ALL=C perl -pi -e "$sub_menu_entry_cmd" $GRUB_CONF
   fi
-} # end of remove_opt_in_grub_efi_cfg_block()
+  # Restore the status
+  hide_reveal_grub_efi_ent "$entry_id" "$status_saved" $GRUB_CONF
+} # end of remove_opt_in_grub_efi_cfg_block
 #
 confirm_continue_or_not_default_quit() {
   local ans_continue
