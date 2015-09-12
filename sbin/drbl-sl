@@ -96,17 +96,19 @@ get_SL_rootfile(){
   esac
 } # end of get_SL_rootfile
 #
-prepare_param_in_pxe_cfg(){
+prepare_param_in_pxe_grub_cfg(){
   # This function must be used after ramdisk_size is calculated.
   case "$(echo $SL_OS | tr "[A-Z]" "[a-z]")" in
     dsl|DamnSmallLinux)
-       append_param_in_pxe_cfg="ramdisk_size=$ramdisk_size init=/etc/init lang=us apm=power-off vga=791 initrd=$nbi_initrd nomce noapic quiet BOOT_IMAGE=knoppix frominitrd"
+       append_param_in_grub_cfg="ramdisk_size=$ramdisk_size init=/etc/init lang=us apm=power-off vga=791 nomce noapic quiet BOOT_IMAGE=knoppix frominitrd"
+       append_param_in_pxe_cfg="initrd=$nbi_initrd $append_param_in_grub_cfg"
        ;;
     puppy|PuppyLinux)
        # from version 216, init is ready when released, and no bootparam_trigger is necessary. Now drbl-SL only supports puppy from version 4.2.1
        bootparam_trigger=""
        use_modified_init="no"
-       append_param_in_pxe_cfg="initrd=$nbi_initrd"
+       append_param_in_grub_cfg=""
+       append_param_in_pxe_cfg="initrd=$nbi_initrd $append_param_in_grub_cfg"
        ;;
     clonezilla-live)
        if [ -z "$server_IP" ]; then
@@ -115,11 +117,14 @@ prepare_param_in_pxe_cfg(){
        fi
        get_rootfs_location_opt
        if [ -z "$cl_gp_boot_param" ]; then
-         append_param_in_pxe_cfg="initrd=$nbi_initrd boot=live union=overlay noswap noprompt nolocales vga=788 $rootfs_location_opt ocs_server=\"$server_IP\""
+         append_param_in_grub_cfg="boot=live union=overlay noswap noprompt nolocales vga=788 $rootfs_location_opt ocs_server=\"$server_IP\""
+	 append_param_in_pxe_cfg="initrd=$nbi_initrd $append_param_in_grub_cfg"
        else
-         append_param_in_pxe_cfg="initrd=$nbi_initrd $cl_gp_boot_param noprompt $rootfs_location_opt ocs_server=\"$server_IP\""
+         append_param_in_grub_cfg="$cl_gp_boot_param noprompt $rootfs_location_opt ocs_server=\"$server_IP\""
+         append_param_in_pxe_cfg="initrd=$nbi_initrd $append_param_in_grub_cfg"
 	 if is_drbl_live_env; then
            # We will reuse the filesystem.squashfs from DRBL live, however, it's not like that of Clonezilla live, therefore more option are needed here.
+	   append_param_in_grub_cfg="$append_param_in_grub_cfg systemd.unit=multi-user.target drbl_live_noconfx ocs_prerun1=\"mkdir -p /var/lib/live/clonezilla/ocs-live.d\" ocs_prerun2=\"echo sudo -i ocs-live-run-menu >> /home/user/.bashrc\""
 	   append_param_in_pxe_cfg="$append_param_in_pxe_cfg systemd.unit=multi-user.target drbl_live_noconfx ocs_prerun1=\"mkdir -p /var/lib/live/clonezilla/ocs-live.d\" ocs_prerun2=\"echo sudo -i ocs-live-run-menu >> /home/user/.bashrc\""
 	 fi
        fi
@@ -131,13 +136,15 @@ prepare_param_in_pxe_cfg(){
        fi
        get_rootfs_location_opt
        if [ -z "$cl_gp_boot_param" ]; then
-         append_param_in_pxe_cfg="initrd=$nbi_initrd boot=live union=aufs noswap noprompt nolocales vga=788 $rootfs_location_opt "
+         append_param_in_grub_cfg="boot=live union=aufs noswap noprompt nolocales vga=788 $rootfs_location_opt "
+         append_param_in_pxe_cfg="initrd=$nbi_initrd $append_param_in_grub_cfg"
        else
-         append_param_in_pxe_cfg="initrd=$nbi_initrd $cl_gp_boot_param noprompt $rootfs_location_opt"
+         append_param_in_grub_cfg="$cl_gp_boot_param noprompt $rootfs_location_opt"
+         append_param_in_pxe_cfg="initrd=$nbi_initrd $append_param_in_grub_cfg"
        fi
        ;;
   esac
-} # end of prepare_param_in_pxe_cfg
+} # end of prepare_param_in_pxe_grub_cfg
 #
 create_linuxrc_pxe_initrd_with_rootfs_inserted(){
   case "$initrd_type" in
@@ -185,7 +192,7 @@ create_linuxrc_pxe_initrd_with_rootfs_inserted(){
     
     #
     get_SL_rootfile
-    prepare_param_in_pxe_cfg
+    prepare_param_in_pxe_grub_cfg
     
     echo 'Copying content of the old initrd...'
     ( cp -a $wd/oldinitrd.tmp/* $wd/initrd.tmp )
@@ -241,7 +248,7 @@ create_linuxrc_pxe_initrd_with_rootfs_inserted(){
     
     #
     get_SL_rootfile
-    prepare_param_in_pxe_cfg
+    prepare_param_in_pxe_grub_cfg
     
     echo 'Copying content of the old initrd...'
     ( cp -a $wd/oldinitrd.tmp/* $wd/initrd.tmp/ )
@@ -286,7 +293,7 @@ put_pxe_initrd_without_rootfs_inserted(){
   echo "$msg_RAM_size_for_SL_drbl_client: $client_RAM_required MB."
   [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
   get_SL_rootfile
-  prepare_param_in_pxe_cfg
+  prepare_param_in_pxe_grub_cfg
   # Copy the linux kernel
   cp -f $kernel $pxecfg_pd/$nbi_kernel
   chmod 644 $pxecfg_pd/$nbi_kernel $pxecfg_pd/$nbi_initrd
@@ -321,7 +328,7 @@ create_casper_pxe_initrd_with_rootfs_inserted(){
       [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
       echo "$msg_RAM_size_for_SL_drbl_client: $client_RAM_required MB."
       [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
-      prepare_param_in_pxe_cfg
+      prepare_param_in_pxe_grub_cfg
       cp -f $kernel $pxecfg_pd/$nbi_kernel
       chmod 644 $pxecfg_pd/$nbi_kernel $pxecfg_pd/$nbi_initrd
       ;;
@@ -356,7 +363,7 @@ create_casper_pxe_initrd_with_rootfs_inserted(){
       [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
       echo "$msg_RAM_size_for_SL_drbl_client: $client_RAM_required MB."
       [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
-      prepare_param_in_pxe_cfg
+      prepare_param_in_pxe_grub_cfg
       cp -f $kernel $pxecfg_pd/$nbi_kernel
       chmod 644 $pxecfg_pd/$nbi_kernel $pxecfg_pd/$nbi_initrd
       ;;
@@ -388,7 +395,7 @@ put_kernel_initrd_root_fs_on_pxe_server() {
              fi
 	     ;;
   esac
-  prepare_param_in_pxe_cfg
+  prepare_param_in_pxe_grub_cfg
   chmod 644 $pxecfg_pd/$nbi_kernel $pxecfg_pd/$nbi_initrd
 } # end of put_kernel_initrd_root_fs_on_pxe_server
 #
@@ -760,6 +767,27 @@ label $SL_NAME
 
 SL_PXE
   fi
+
+  # append the config file in grub efi dir.
+  if [ -z "$(grep -E "^[[:space:]]*menuentry[[:space:]]+\"$SL_NAME\"[[:space:]]*--id clonezilla-live-client {$" $GRUB_EFINB_DIR/grub.cfg)" ] || [ "$force_to_update_pxecfg" = "yes" ]; then
+    if [ -n "$(grep -E "^[[:space:]]*menuentry[[:space:]]+\"$SL_NAME\"[[:space:]]*--id clonezilla-live-client {$" $GRUB_EFINB_DIR/grub.cfg)" ]; then
+      echo "First removing $SL_NAME setting in $GRUB_EFINB_DIR/grub.cfg..."
+      delete_menuentry_block_grub_img $SL_NAME $GRUB_EFINB_DIR/grub.cfg
+    fi
+    echo "Append the $SL_FULL_NAME config in $GRUB_EFINB_DIR/grub.cfg..."
+    cat <<-SL_PXE >> $GRUB_EFINB_DIR/grub.cfg
+menuentry "$SL_NAME" --id clonezilla-live-client {
+  # This is Clonezilla live especially to be run for Clonezilla SE.
+  # Do _NOT_ edit unless you know what you are doing!
+  echo "Enter $SL_FULL_NAME $SL_VER (Ramdisk)..."
+  echo 'Loading $nbi_kernel...'
+  linux $nbi_kernel $append_param_in_pxe_cfg
+  echo 'Loading initial ramdisk $nbi_initrd...'
+  initrd $nbi_initrd
+}
+
+SL_PXE
+  fi
   # Put the version number
 cat <<-SL_INFO_PXE > $pxecfg_pd/${SL_NAME}-info.txt
 $SL_FULL_NAME version: $SL_VER
@@ -794,13 +822,20 @@ uninstall_SL(){
       echo "Removing $id setting in $PXELINUX_DIR/default..."
       delete_label_block_pxe_img $id $PXELINUX_DIR/default
     fi
+    if [ -n "$(grep -E "^[[:space:]]*menuentry[[:space:]]+\"$SL_NAME\"[[:space:]]*--id clonezilla-live-client {$" $GRUB_EFINB_DIR/grub.cfg)" ]; then
+      echo "First removing $SL_NAME setting in $GRUB_EFINB_DIR/grub.cfg..."
+      delete_menuentry_block_grub_img $SL_NAME $GRUB_EFINB_DIR/grub.cfg
+    fi
     # remove vmlinuz and initrd
     if [ -n "$(ls $pxecfg_pd/${id}-* 2>/dev/null)" ]; then
       echo "Removing installed $id if it exists..."
       rm -fv $pxecfg_pd/${id}-*
     fi
-    if [ -d "$drbl_common_root/clonezilla-live/" ]; then
-      rm -rfv $drbl_common_root/clonezilla-live/*
+    if ! is_drbl_live_env; then
+      # When it's not in drbl live env, the files are copied to $drbl_common_root/clonezilla-live/, therefore we remove them. Otherwise it's a mount point.
+      if [ -d "$drbl_common_root/clonezilla-live/" ]; then
+        rm -rfv $drbl_common_root/clonezilla-live/*
+      fi
     fi
   done
 } # end of uninstall_SL
