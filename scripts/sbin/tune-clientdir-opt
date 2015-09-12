@@ -193,10 +193,8 @@ case "$clonezilla_mode" in
     [ "$check_clients_files" = "yes" ] && check_full_drbl_mode_clients
     echo "Full clonezilla mode. Remove clientdir opt for label clonezilla in pxelinux config... "
     # For PXE
-    hide_reveal_pxe_img clonezilla reveal $PXE_CONF
     remove_opt_in_pxelinux_cfg_block clonezilla clientdir
     # For uEFI
-    hide_reveal_grub_efi_ent clonezilla-se-client reveal $GRUB_CONF
     remove_opt_in_grub_efi_cfg_block clonezilla-se-client clientdir
 
     # TODO: how do we know to use it's as full_clonezilla_mode or none ?
@@ -208,10 +206,8 @@ case "$clonezilla_mode" in
   1) # clonezilla box mode
     echo "Clonezilla box mode. Set clientdir opt for label clonezilla in pxelinux config... "
     # For PXE
-    hide_reveal_pxe_img clonezilla reveal $PXE_CONF
     add_opt_in_pxelinux_cfg_block clonezilla clientdir node_root
     # For uEFI
-    hide_reveal_grub_efi_ent clonezilla-se-client reveal $GRUB_CONF
     add_opt_in_grub_efi_cfg_block clonezilla-se-client clientdir node_root
 
     set_clonezilla_mode clonezilla_box_mode
@@ -225,23 +221,15 @@ case "$clonezilla_mode" in
     # Remove clientdir then hide it
     # For PXE
     remove_opt_in_pxelinux_cfg_block clonezilla clientdir
-    hide_reveal_pxe_img clonezilla hide $PXE_CONF
     # For uEFI
     remove_opt_in_grub_efi_cfg_block clonezilla-se-client clientdir
-    hide_reveal_grub_efi_ent clonezilla-se-client hide $GRUB_CONF
 
     set_clonezilla_mode none
     ;;
   3) # clonezilla-live mode
     echo "Use Clonezilla live as the OS of clients. Set clientdir opt for label clonezilla in pxelinux config... "
     create_ssi_template="no"
-    # For PXE
-    hide_reveal_pxe_img Clonezilla-live reveal $PXE_CONF
-    add_opt_in_pxelinux_cfg_block Clonezilla-live clientdir node_root
-
-    # For uEFI
-    hide_reveal_grub_efi_ent Clonezilla-live reveal $GRUB_CONF
-    add_opt_in_grub_efi_cfg_block Clonezilla-live clientdir node_root
+    # No need to add any options in this mode. Later drbl-ocs-live-prep will add the required options.
 
     set_clonezilla_mode clonezilla_live_mode
     [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
@@ -249,6 +237,14 @@ case "$clonezilla_mode" in
     [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
     ;;
 esac
+# No matter which mode of Clonezilla, we hide the Clonezilla menu first. Only dcs will reveal or hide the menu
+# For PXE
+hide_reveal_pxe_img clonezilla hide $PXE_CONF
+hide_reveal_pxe_img Clonezilla-live hide $PXE_CONF
+
+# For uEFI
+hide_reveal_grub_efi_ent clonezilla-se-client hide $GRUB_CONF
+hide_reveal_grub_efi_ent "clonezilla-live-client" hide $GRUB_CONF
 
 #
 if  [ "$create_ssi_template" = "yes" ]; then
