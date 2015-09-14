@@ -102,7 +102,7 @@ start_drbl_live() {
   # Before we run drblpush, we have to remove the services we put only for DRBL live server when creating drbl live. This will avoide those to be copied to SSI template tarball. Since these services are one-time use only for server during booting.
   rm -f /etc/rcS.d/*kbd-conf
   rm -f /etc/rcS.d/*Forcevideo-drbl-live 
-  
+
   # Before running drblpush, first we add a group for the autologin accounts
   if [ -z "$(grep -E "^$autologin_group:" /etc/group)" ]; then
     groupadd "$autologin_group"
@@ -133,6 +133,12 @@ start_drbl_live() {
   # run drblpush again so that the network interface can be updated. Maybe there is new ethx.
   yes "" | drblpush -i -r 1 -z 1 --not-add-start-drbl-srvi --skip-drbl-ocs-live-prep -p $client_no_per_NIC
 
+  # The override from drbl live system should be removed. It's autologin for Live system, not for drbl client
+  rm -rf $drbl_common_root/etc/systemd/system/getty\@tty*
+  rm -rf $drbl_common_root/etc/systemd/system/serial-getty\@ttyS*
+  rm -rf $drblroot/*/etc/systemd/system/getty\@tty*
+  rm -rf $drblroot/*/etc/systemd/system/serial-getty\@ttyS*
+  
   # Sep/10/2015 Due to this /tmp/ or /dev/ missing issue, we switch to use live system for Clonezilla SE client
   # http://lists.freedesktop.org/archives/systemd-devel/2015-September/034175.html
   # Actually this method is easier and better for Clonezilla jobs.
