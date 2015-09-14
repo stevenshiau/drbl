@@ -3864,7 +3864,7 @@ remove_opt_in_grub_efi_cfg_block() {
   local tag_found
   local sub_menu_entry_cmd
   local status_saved
-  [ -z "$entry_id" ] && echo "No entry_id in remove_opt_in_pxelinux_cfg_block!" && exit 1
+  [ -z "$entry_id" ] && echo "No entry_id in remove_opt_in_grub_efi_cfg_block!" && exit 1
   # Before adding option, we have to enable it because with grub there is no
   # way to hide unless with use # to comment the whole menuentry.
   # Save the status first
