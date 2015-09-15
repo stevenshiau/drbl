@@ -124,8 +124,9 @@ prepare_param_in_pxe_grub_cfg(){
          append_param_in_pxe_cfg="initrd=$nbi_initrd $append_param_in_grub_cfg"
 	 if is_drbl_live_env; then
            # We will reuse the filesystem.squashfs from DRBL live, however, it's not like that of Clonezilla live, therefore more option are needed here.
-	   append_param_in_grub_cfg="$append_param_in_grub_cfg systemd.unit=multi-user.target drbl_live_noconfx ocs_prerun1=\"mkdir -p /var/lib/live/clonezilla/ocs-live.d\" ocs_prerun2=\"echo sudo -i ocs-live-run-menu >> /home/user/.bashrc\""
-	   append_param_in_pxe_cfg="$append_param_in_pxe_cfg systemd.unit=multi-user.target drbl_live_noconfx ocs_prerun1=\"mkdir -p /var/lib/live/clonezilla/ocs-live.d\" ocs_prerun2=\"echo sudo -i ocs-live-run-menu >> /home/user/.bashrc\""
+	   clonezilla_se_live_opts="username=$assgned_username systemd.unit=multi-user.target drbl_live_noconfx ocs_prerun1=\"mkdir -p /var/lib/live/clonezilla/ocs-live.d\" ocs_prerun2=\"echo sudo -i ocs-live-run-menu >> /home/$assgned_username/.bashrc\""
+	   append_param_in_grub_cfg="$append_param_in_grub_cfg $clonezilla_se_live_opts"
+	   append_param_in_pxe_cfg="$append_param_in_pxe_cfg $clonezilla_se_live_opts"
 	 fi
        fi
        ;;
@@ -487,11 +488,16 @@ install_SL(){
       exit 1
     fi
   fi
-
   # get SL_OS name from iso file name
   # Ugly, since it's not easy to know which one is which one, here we just judge them by file name.
   [ -z "$SL_OS" ] && get_SL_OS_NAME
   
+  # Assign different usernames for the clonezilla/drbl/gparted live (RAM) clients.
+  # E.g.
+  # clonezilla-live -> clonezilla
+  # drbl-live -> drbl
+  assgned_username="$(echo $SL_OS | tr "[A-Z]" "[a-z]" | awk -F"-" '{print $1}')"
+
   # Some settings for SL
   # insert_rootfs=yes => we have to put the root/main filesystem from SL in initrd
   # init_type: linuxrc or casper
@@ -722,8 +728,14 @@ install_SL(){
         echo "$msg_program_stop"
         exit 1
       fi
-      # Filter out the ocs_prerun* in case it's preseed by users.
-      cl_gp_boot_param="$(LC_ALL=C grep -Eiw "append" $iso_cfg_file | grep -Eiw $initrd_filename | head -n 1 | sed -r -e "s/append//g" -e "s/initrd=.*$initrd_filename[[:space:]]+//g" | sed -r -e "s/ocs_prerun[[:digit:]]*=\".*\"//g" | sed -e "s/^[[:space:]]*//g")"
+      # Assign and filter out the ocs_prerun* in case it's preseed by users.
+      # (1) ocs_prerun*
+      # (2) "drbl_live_noconfx" which we will add later
+      # (3) "username", we will add it later
+      # (4) more... Check function filter_cl_gp_boot_param.
+      # By grep both "append" and "initrd_filename" we can find the correct append line.
+      cl_gp_boot_param="$(LC_ALL=C grep -Eiw "append" $iso_cfg_file | \
+      grep -Eiw "$initrd_filename" | head -n 1 | filter_cl_gp_boot_param)"
       ;;
   esac
   
@@ -772,7 +784,7 @@ SL_PXE
   if [ -z "$(grep -E "^[[:space:]]*menuentry[[:space:]]+\"$SL_NAME\"[[:space:]]*--id clonezilla-live-client {$" $GRUB_EFINB_DIR/grub.cfg)" ] || [ "$force_to_update_pxecfg" = "yes" ]; then
     if [ -n "$(grep -E "^[[:space:]]*menuentry[[:space:]]+\"$SL_NAME\"[[:space:]]*--id clonezilla-live-client {$" $GRUB_EFINB_DIR/grub.cfg)" ]; then
       echo "First removing $SL_NAME setting in $GRUB_EFINB_DIR/grub.cfg..."
-      delete_menuentry_block_grub_img $SL_NAME $GRUB_EFINB_DIR/grub.cfg
+      delete_menuentry_block_grub_img clonezilla-live-client $GRUB_EFINB_DIR/grub.cfg
     fi
     echo "Append the $SL_FULL_NAME config in $GRUB_EFINB_DIR/grub.cfg..."
     cat <<-SL_PXE >> $GRUB_EFINB_DIR/grub.cfg
@@ -824,7 +836,7 @@ uninstall_SL(){
     fi
     if [ -n "$(grep -E "^[[:space:]]*menuentry[[:space:]]+\"$SL_NAME\"[[:space:]]*--id clonezilla-live-client {$" $GRUB_EFINB_DIR/grub.cfg)" ]; then
       echo "First removing $SL_NAME setting in $GRUB_EFINB_DIR/grub.cfg..."
-      delete_menuentry_block_grub_img $SL_NAME $GRUB_EFINB_DIR/grub.cfg
+      delete_menuentry_block_grub_img clonezilla-live-client $GRUB_EFINB_DIR/grub.cfg
     fi
     # remove vmlinuz and initrd
     if [ -n "$(ls $pxecfg_pd/${id}-* 2>/dev/null)" ]; then
