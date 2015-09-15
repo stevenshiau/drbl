@@ -5,6 +5,23 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.16.4-drbl1) unstable; urgency=low
+
+  * Link the kernel and initrd of clonezilla live in /tftpboot/nbi_img/ to
+    that of drbl live for DRBL live system.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 15 Sep 2015 20:35:01 +0800
+
+drbl (2.16.3-drbl1) unstable; urgency=low
+
+  * Switched to use live system for DRBL client due to the missing /tmp
+    or /dev/ issue.
+  * Disabled updating initramfs when starting, because
+    use_run_in_initrd and use_dev_pts_in_initrd in linuxrc.conf have fit
+    the status in Sid.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 15 Sep 2015 09:31:23 +0800
+
 drbl (2.16.2-drbl1) unstable; urgency=low
 
   * Bug fixed: Live system for Clonezilla jobs in Clonezilla SE was

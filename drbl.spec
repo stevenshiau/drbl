@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.16.2
+Version:	2.16.4
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,13 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Tue Sep 15 2015 Steven Shiau <steven _at_ nchc org tw> 2.16.4-drbl1
+- Link the kernel and initrd of clonezilla live in /tftpboot/nbi_img/ to that of drbl live for DRBL live system.
+
+* Tue Sep 15 2015 Steven Shiau <steven _at_ nchc org tw> 2.16.3-drbl1
+- Switched to use live system for DRBL client due to the missing /tmp or /dev/ issue.
+- Disabled updating initramfs when starting, because use_run_in_initrd and use_dev_pts_in_initrd in linuxrc.conf have fit the status in Sid.
+
 * Sat Sep 12 2015 Steven Shiau <steven _at_ nchc org tw> 2.16.2-drbl1
 - Bug fixed: Live system for Clonezilla jobs in Clonezilla SE was not working for the uEFI network booting environment. 
 - Bug fixed: Program tune-clientdir-opt should not reveal the Clonezilla menu. Let dcs to reveal or hide that.
