@@ -3600,19 +3600,19 @@ drbl_service_ctl() {
 #
 get_grub_efi_image_block() {
      local IMG_NAME="$1"
-     local PXE_CONF_TMP="$2"
+     local GRUB_CONF_TMP="$2"
      [ -z "$IMG_NAME" ] && exit 1
      # By using
      # grep -Ei -n '^[[:space:]]*menuentry[[:space:]]+.*([[:space:]]|$)+' /tftpboot/nbi_img/grub-efi.cfg/grub.cfg | grep -A1 -E "menuentry[[:space:]]+.*--id drbl-client([[:space:]]|$)+"
      # 29:menuentry "CentOS 7.1.1503 Linux (DRBL mode, mostly local resources)" {
      # 34:menuentry 'Clonezilla' {
      # so we know we can replace the one between line no. 29 and 34
-     between_lines="$(LC_ALL=C grep -Ei -n -- "^[[:space:]]*[#]*menuentry[[:space:]]+.*([[:space:]]|$)+" $PXE_CONF_TMP | grep -Ei -A1 -- "menuentry[[:space:]]+.*$IMG_NAME([[:space:]]|$)+" | cut -d":" -f1)"
+     between_lines="$(LC_ALL=C grep -Ei -n -- "^[[:space:]]*[#]*menuentry[[:space:]]+.*([[:space:]]|$)+" $GRUB_CONF_TMP | grep -Ei -A1 -- "menuentry[[:space:]]+.*$IMG_NAME([[:space:]]|$)+" | cut -d":" -f1)"
      begin_line="$(LC_ALL=C echo $between_lines | awk -F" " '{print $1}')"
      end_line="$(LC_ALL=C echo $between_lines | awk -F" " '{print $2}')"
      # if end_line is nothing, it must be the last block, i.e. we can not find the next [.*]
      if [ -z "$end_line" ]; then
-       end_line="$(LC_ALL=C wc -l $PXE_CONF_TMP | awk -F" " '{print $1}')"
+       end_line="$(LC_ALL=C wc -l $GRUB_CONF_TMP | awk -F" " '{print $1}')"
      else
        # if not nothing, backword one line
        end_line="$(($end_line - 1))"
@@ -3784,6 +3784,22 @@ remove_opt_in_pxelinux_cfg_block() {
   fi
 } # end of remove_opt_in_pxelinux_cfg_block()
 #
+override_opt_in_pxelinux_cfg_block() {
+  # Function to override all the boot parameters
+  local label="$1"
+  local all_opts="$2" # all the boot parameters
+  [ -z "$label" ] && echo "No label in override_opt_in_pxelinux_cfg_block!" && exit 1
+  lines="$(get_pxecfg_image_block $label $PXE_CONF)"
+  begin_line="$(echo $lines | awk -F" " '{print $1}')"
+  end_line="$(echo $lines | awk -F" " '{print $2}')"
+  if [ -z "$begin_line" -o -z "$end_line" ]; then
+    echo "No \"$label\" found in $PXE_CONF, skip overwriding that."
+    return 1
+  fi
+  sub_menu_label_cmd="if ($begin_line..$end_line) {s|(^[[:space:]]*append[[:space:]]+).*$|\$1$all_opts|i}"
+  LC_ALL=C perl -pi -e "$sub_menu_label_cmd" $PXE_CONF
+} # end of override_opt_in_pxelinux_cfg_block
+#
 get_status_grub_efi_cfg_block() {
   local ENTRY_ID="$1"
   local GRUB_CONF_TMP="$2"
@@ -3900,6 +3916,58 @@ remove_opt_in_grub_efi_cfg_block() {
   # Restore the status
   hide_reveal_grub_efi_ent "$entry_id" "$status_saved" $GRUB_CONF
 } # end of remove_opt_in_grub_efi_cfg_block
+#
+override_opt_in_grub_efi_cfg_block() {
+  # Function to override all the boot parameters. A grub config block is like:
+  # menuentry "Debian Testing-Unstable Linux (DRBL mode, mostly local resources)" --id drbl-client {
+  # echo "Enter DRBL..."
+  # echo "Loading Linux vmlinuz-pxe..."
+  # linux vmlinuz-pxe boot=live union=overlay config components nomodeset quiet net.ifnames=0  nosplash username=drbl keyboard-layouts=us locales=en_US.UTF-8 drbl_live_noconfx ocs_daemonon="ssh" noprompt netboot=nfs nfsroot=192.168.7.254:/tftpboot/node_root/clonezilla-live/ dcs_put_dticons="no"
+  # echo "Loading initial ramdisk initrd-pxe.img..."
+  # initrd initrd-pxe.img
+  # }
+  local update_mode
+  local sub_menu_entry_cmd
+  local status_saved
+  update_mode="linux"  # By default this function is used to update the line begin with "linux"
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      -i|--initrd) shift; update_mode="initrd" ;;
+      -*)     echo "${0}: ${1}: invalid option in function add_opt_in_pxelinux_cfg_block"
+              echo "$msg_program_stop"
+              [ "$save_restore_error_log" = "yes" ] && copy_error_log
+              exit 2 ;;
+      *)      break ;;
+    esac
+  done
+  local entry_id="$1" # e.g. "clonezilla-se-client"
+  local all_opts="$2" # all the boot parameters
+  [ -z "$entry_id" ] && echo "No entry_id in override_opt_in_grub_efi_cfg_block!" && exit 1
+  # Before adding option, we have to enable it because with grub there is no
+  # way to hide unless with use # to comment the whole menuentry.
+  # Save the status first
+  status_saved="$(get_status_grub_efi_cfg_block "$entry_id" $GRUB_CONF)"
+  hide_reveal_grub_efi_ent "$entry_id" reveal $GRUB_CONF
+  lines="$(get_grub_efi_image_block "--id $entry_id" $GRUB_CONF)"
+  begin_line="$(echo $lines | awk -F" " '{print $1}')"
+  end_line="$(echo $lines | awk -F" " '{print $2}')"
+  if [ -z "$begin_line" -o -z "$end_line" ]; then
+    echo "No \"$entry_id\" found in $GRUB_CONF, skip removing that."
+    return 1
+  fi
+  sub_menu_entry_cmd="if ($begin_line..$end_line) {s|(^[[:space:]]*${update_mode}[[:space:]]+).*$|\$1$all_opts|i}"
+  LC_ALL=C perl -pi -e "$sub_menu_entry_cmd" $GRUB_CONF
+  # Update the echo command for initrd, too
+  # TODO: If in the future the kernel file is required to be updated, add that.
+  case "$update_mode" in
+   initrd)
+     sub_menu_entry_cmd="if ($begin_line..$end_line) {s|(^[[:space:]]*)echo \"Loading initial ramdisk.*\"$|\$1echo \"Loading initial ramdisk $all_opts\"|i}"
+     LC_ALL=C perl -pi -e "$sub_menu_entry_cmd" $GRUB_CONF
+     ;;
+  esac
+  # Restore the status
+  hide_reveal_grub_efi_ent "$entry_id" "$status_saved" $GRUB_CONF
+} # end of override_opt_in_grub_efi_cfg_block
 #
 confirm_continue_or_not_default_quit() {
   local ans_continue
@@ -4059,3 +4127,27 @@ confirm_continue_no_default_answer() {
    esac
   done
 } # end of confirm_continue_no_default_answer
+#
+filter_cl_gp_boot_param(){
+  # Function to filter the boot parameters which should not be used in PXE RAM based drbl/clonezilla/gparted client.
+  # Used for programs drbl-sl and drbl-live
+  # (1) For /proc/cmdline, it's like (customized by user):
+  # BOOT_IMAGE=/live/vmlinuz initrd=/live/initrd.img boot=live union=overlay username=user config components nomodeset quiet vga=785 ip= net.ifnames=0  nosplash i915.blacklist=yes radeonhd.blacklist=yes nouveau.blacklist=yes vmwgfx.enable_fbdev=1 keyboard-layouts=NONE locales=en_US.UTF-8 drbl_live_noconfx ocs_daemonon="ssh" ocs_prerun1="ifconfig eth0 192.168.120.3; route add default gw 192.168.120.254 eth0; ifconfig eth1 192.168.7.254 netmask 255.255.255.0; echo nameserver 8.8.8.8 > /etc/resolv.conf" ocs_prerun2="mount -t nfs 192.168.120.254:/home/partimag /home/partimag" ocs_prerun3="drbl-live --batch --skip-pause-in-the-end --no-prompt-drbl-live start" ocs_prerun5="perl -pi -e 's/timeout 70/timeout 10/' /tftpboot/nbi_img/pxelinux.cfg/default"
+  # (2) For isolinux.cfg or syslinux.cfg, it's like (customized by user):
+  # append initrd=/live/initrd.img boot=live union=overlay username=user config components nomodeset quiet vga=785 ip= net.ifnames=0  nosplash i915.blacklist=yes radeonhd.blacklist=yes nouveau.blacklist=yes vmwgfx.enable_fbdev=1 keyboard-layouts=NONE locales=en_US.UTF-8 drbl_live_noconfx ocs_daemonon="ssh" ocs_prerun1="ifconfig eth0 192.168.120.3; route add default gw 192.168.120.254 eth0; ifconfig eth1 192.168.7.254 netmask 255.255.255.0; echo nameserver 8.8.8.8 > /etc/resolv.conf" ocs_prerun2="mount -t nfs 192.168.120.254:/home/partimag /home/partimag" ocs_prerun3="drbl-live --batch --skip-pause-in-the-end --no-prompt-drbl-live start" ocs_prerun5="perl -pi -e 's/timeout 70/timeout 10/' /tftpboot/nbi_img/pxelinux.cfg/default" 
+  sed -r -e "s|append||g" |\
+  sed -r -e "s|BOOT_IMAGE=[^[:space:]]+[[:space:]]?||g" | \
+  sed -r -e "s|initrd=[^[:space:]]+[[:space:]]?||g" | \
+  sed -r -e "s|vga=[^[:space:]]+[[:space:]]?||g" | \
+  sed -r -e "s|ip=[^[:space:]]*[[:space:]]?||g" | \
+  sed -r -e "s|username=[^[:space:]]+[[:space:]]?||g" | \
+  sed -r -e "s|keyboard-layouts=[^[:space:]]+[[:space:]]?||g" | \
+  sed -r -e "s|locales=[^[:space:]]+[[:space:]]?||g" | \
+  sed -r -e "s|[^[:space:]]+.blacklist=[^[:space:]]+[[:space:]]?||g" | \
+  sed -r -e "s|vmwgfx.enable_fbdev=[^[:space:]]+[[:space:]]?||g" | \
+  sed -r -e "s|ocs_prerun[[:digit:]]*=\".*\"||g" | \
+  sed -r -e "s|ocs_daemon.*=\".*\"||g" | \
+  sed -r -e "s|drbl_live_noconfx||g" | \
+  sed -r -e "s|^[[:space:]]*||g" | \
+  sed -r -e "s|[[:space:]]+$||g"
+} # end of filter_cl_gp_boot_param
