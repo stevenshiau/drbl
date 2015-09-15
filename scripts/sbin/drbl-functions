@@ -3785,7 +3785,21 @@ remove_opt_in_pxelinux_cfg_block() {
 } # end of remove_opt_in_pxelinux_cfg_block()
 #
 override_opt_in_pxelinux_cfg_block() {
-  # Function to override all the boot parameters
+  # Function to override all the boot parameters. E.g.
+  # kernel vmlinuz-pxe
+  # append initrd=initrd-pxe.img devfs=nomount drblthincli=off quiet
+  local update_mode
+  update_mode="append"  # By default this function is used to update the line begin with "append"
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      -k|--kernel) shift; update_mode="kernel" ;;
+      -*)     echo "${0}: ${1}: invalid option in function add_opt_in_pxelinux_cfg_block"
+              echo "$msg_program_stop"
+              [ "$save_restore_error_log" = "yes" ] && copy_error_log
+              exit 2 ;;
+      *)      break ;;
+    esac
+  done
   local label="$1"
   local all_opts="$2" # all the boot parameters
   [ -z "$label" ] && echo "No label in override_opt_in_pxelinux_cfg_block!" && exit 1
@@ -3796,7 +3810,7 @@ override_opt_in_pxelinux_cfg_block() {
     echo "No \"$label\" found in $PXE_CONF, skip overwriding that."
     return 1
   fi
-  sub_menu_label_cmd="if ($begin_line..$end_line) {s|(^[[:space:]]*append[[:space:]]+).*$|\$1$all_opts|i}"
+  sub_menu_label_cmd="if ($begin_line..$end_line) {s|(^[[:space:]]*${update_mode}[[:space:]]+).*$|\$1$all_opts|i}"
   LC_ALL=C perl -pi -e "$sub_menu_label_cmd" $PXE_CONF
 } # end of override_opt_in_pxelinux_cfg_block
 #
@@ -3926,7 +3940,7 @@ override_opt_in_grub_efi_cfg_block() {
   # echo "Loading initial ramdisk initrd-pxe.img..."
   # initrd initrd-pxe.img
   # }
-  local update_mode
+  local update_mode kernel_f
   local sub_menu_entry_cmd
   local status_saved
   update_mode="linux"  # By default this function is used to update the line begin with "linux"
@@ -3957,9 +3971,15 @@ override_opt_in_grub_efi_cfg_block() {
   fi
   sub_menu_entry_cmd="if ($begin_line..$end_line) {s|(^[[:space:]]*${update_mode}[[:space:]]+).*$|\$1$all_opts|i}"
   LC_ALL=C perl -pi -e "$sub_menu_entry_cmd" $GRUB_CONF
-  # Update the echo command for initrd, too
-  # TODO: If in the future the kernel file is required to be updated, add that.
+  # Update the echo command for kernel and initrd, too
   case "$update_mode" in
+   linux)
+     # When in this mode, the 1st parameter in linux "line" is kernel, e.g.
+     # linux vmlinuz-pxe root=... ro quiet...
+     kernel_f="$(echo $all_opts | awk -F" " '{print $1}')"
+     sub_menu_entry_cmd="if ($begin_line..$end_line) {s|(^[[:space:]]*)echo \"Loading Linux kernel.*\"$|\$1echo \"Loading Linux kernel $kernel_f\"|i}"
+     LC_ALL=C perl -pi -e "$sub_menu_entry_cmd" $GRUB_CONF
+     ;;
    initrd)
      sub_menu_entry_cmd="if ($begin_line..$end_line) {s|(^[[:space:]]*)echo \"Loading initial ramdisk.*\"$|\$1echo \"Loading initial ramdisk $all_opts\"|i}"
      LC_ALL=C perl -pi -e "$sub_menu_entry_cmd" $GRUB_CONF
