@@ -56,6 +56,64 @@ set_locale_for_clients() {
   drbl-gen-ssi-files
 } # end of set_locale_for_clients
 #
+prep_live_system_for_drbl_clonezilla_clients(){
+  # Sep/10/2015 Due to this /tmp/ or /dev/ missing issue, we switch to use live system for Clonezilla SE client
+  # http://lists.freedesktop.org/archives/systemd-devel/2015-September/034175.html
+  # Actually this method is easier and better for Clonezilla jobs.
+  # (1) Prepre the Clonezilla SE client with live system
+  # The kernel (Clonezilla-live-vmlinuz) and initrd (Clonezilla-live-initrd.img) from $LIVE_MEDIA will be linked as "DRBL-live-vmlinuz" and "DRBL-live-initrd.img" in drbl-ocs-live-prep
+  drbl-ocs-live-prep -p $LIVE_MEDIA
+
+  # (2) Update the network boot menu for DRBL client with live system
+  # Prepare the keyboard and locales for DRBL clients
+  if [ -n "$(printenv LC_ALL)" ]; then
+    client_locale="$(printenv LC_ALL)"
+  elif [ -n "$(printenv LANG)" ]; then
+    client_locale="$(printenv LANG)"
+  else
+    # If both LC_ALL and LANG are not found, force to set en_US.UTF-8
+    client_locale="en_US.UTF-8"
+  fi
+  if [ -e /etc/default/keyboard ]; then
+    . /etc/default/keyboard
+    client_kb_layout="$XKBLAYOUT"
+    client_kb_model="$XKBMODEL"
+    client_kb_variant="$XKBVARIANT"
+    client_kb_options="$XKBOPTIONS"
+  fi
+  if [ -z "$client_kb_layout" ]; then
+    # If no keybouard layout is found, set it as us.
+    client_kb_layout=us
+    # For the rest (model, variant or options they might be nothing.
+  fi
+  # We will make pxelinux config like this for DRBL client:
+  # APPEND initrd=DRBL-live-initrd.img boot=live union=overlay username=drbl config components nomodeset quiet nosplash keyboard-layouts=NONE locales=en_US.UTF-8 drbl_live_noconfx ocs_daemonon="ssh" noprompt netboot=nfs nfsroot=192.168.7.254:/tftpboot/node_root/clonezilla-live/ dcs_put_dticons="no"
+
+  PXE_CONF="$PXE_CONF_DEF"
+  GRUB_CONF="$GRUB_EFINB_CONF_DEF"
+  # TODO: find a better way to give different nfs_srv IP address if more than one available, so that clients can be grouped to different NFS server.
+  live_nfs_srv="$(get-all-nic-ip -b | awk -F" " '{print $1}')"
+  # Find the boot parameters from the server, and re-use it for client.
+  # It maybe be customized by users, so we have to filter some more, like ocs_prerun*, and some will be added later, like "drbl_live_noconfx" so we force to remove it to avoid duplicated.
+  # E.g:
+  # BOOT_IMAGE=/live/vmlinuz initrd=/live/initrd.img boot=live union=overlay username=user config components nomodeset quiet vga=785 ip= net.ifnames=0  nosplash i915.blacklist=yes radeonhd.blacklist=yes nouveau.blacklist=yes vmwgfx.enable_fbdev=1 keyboard-layouts=NONE locales=en_US.UTF-8 drbl_live_noconfx ocs_daemonon="ssh" ocs_prerun1="ifconfig eth0 192.168.120.3; route add default gw 192.168.120.254 eth0; ifconfig eth1 192.168.7.254 netmask 255.255.255.0; echo nameserver 8.8.8.8 > /etc/resolv.conf" ocs_prerun2="mount -t nfs 192.168.120.254:/home/partimag /home/partimag" ocs_prerun3="drbl-live --batch --skip-pause-in-the-end --no-prompt-drbl-live start" ocs_prerun5="perl -pi -e 's/timeout 70/timeout 10/' /tftpboot/nbi_img/pxelinux.cfg/default"
+  cl_gp_boot_param="$(LC_ALL=C cat /proc/cmdline | filter_cl_gp_boot_param)"
+  # Append those preseeding boot param we want for live system client
+  cl_gp_boot_param="$cl_gp_boot_param username=drbl keyboard-layouts=$client_kb_layout locales=$client_locale drbl_live_noconfx ocs_daemonon=\"ssh\" noprompt netboot=nfs nfsroot=${live_nfs_srv}:$drbl_common_root/clonezilla-live/ dcs_put_dticons=\"no\""
+  # This is for the boot parameters in grub config, i.e. those in the "linux" line, e.g.
+  # linux vmlinuz-pxe boot=live union=overlay config components nomodeset quiet 
+  boot_param_in_grub_cfg="DRBL-live-vmlinuz $cl_gp_boot_param"
+  # This is the boot parameters for PXElinux config, i.e. those in the "append" line, e.g.
+  # append initrd=/live/initrd.img boot=live union=overlay config components nomodeset quiet
+  boot_param_in_pxe_cfg="initrd=DRBL-live-initrd.img $cl_gp_boot_param"
+
+  override_opt_in_pxelinux_cfg_block drbl "$boot_param_in_pxe_cfg"
+  override_opt_in_pxelinux_cfg_block -k drbl "DRBL-live-vmlinuz"
+  override_opt_in_grub_efi_cfg_block drbl-client "$boot_param_in_grub_cfg"
+  override_opt_in_grub_efi_cfg_block -i drbl-client "DRBL-live-initrd.img"
+
+} # end of prep_live_system_for_drbl_clonezilla_clients
+#
 start_drbl_live() {
   if [ "$prompt_drbl_live" = "yes" ]; then
     [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
@@ -124,7 +182,9 @@ start_drbl_live() {
   #echo "Updating the initramfs for PXE clients..."
   #mknic-nbi -p 1
   
-  # ocs_client_no_per_NIC is read from /etc/ocs/ocs-live.conf, which might be from boot parameter.
+  prep_live_system_for_drbl_clonezilla_clients
+
+  # ocs_client_no_per_NIC is read from /etc/ocs/ocs-live.conf, which might be from boot parameter, or is assigned by this program with option "-c"
   if [ -n "$ocs_client_no_per_NIC" ]; then
     LC_ALL=C perl -pi -e "s/^client_no_per_NIC=.*/client_no_per_NIC=$ocs_client_no_per_NIC/g" $drbl_setup_path/files/ocs/live-hook/ocs-live-hook.conf
   fi
@@ -139,65 +199,6 @@ start_drbl_live() {
   rm -rf $drbl_common_root/etc/systemd/system/serial-getty\@ttyS*
   rm -rf $drblroot/*/etc/systemd/system/getty\@tty*
   rm -rf $drblroot/*/etc/systemd/system/serial-getty\@ttyS*
-  
-  # Sep/10/2015 Due to this /tmp/ or /dev/ missing issue, we switch to use live system for Clonezilla SE client
-  # http://lists.freedesktop.org/archives/systemd-devel/2015-September/034175.html
-  # Actually this method is easier and better for Clonezilla jobs.
-  # (1) Prepare the keyboard and locales for DRBL clients
-  if [ -n "$(printenv LC_ALL)" ]; then
-    client_locale="$(printenv LC_ALL)"
-  elif [ -n "$(printenv LANG)" ]; then
-    client_locale="$(printenv LANG)"
-  else
-    # If both LC_ALL and LANG are not found, force to set en_US.UTF-8
-    client_locale="en_US.UTF-8"
-  fi
-  if [ -e /etc/default/keyboard ]; then
-    . /etc/default/keyboard
-    client_kb_layout="$XKBLAYOUT"
-    client_kb_model="$XKBMODEL"
-    client_kb_variant="$XKBVARIANT"
-    client_kb_options="$XKBOPTIONS"
-  fi
-  if [ -z "$client_kb_layout" ]; then
-    # If no keybouard layout is found, set it as us.
-    client_kb_layout=us
-    # For the rest (model, variant or options they might be nothing.
-  fi
-  # We will make pxelinux config like this for DRBL client:
-  # APPEND initrd=Clonezilla-live-initrd.img boot=live union=overlay username=drbl config components nomodeset quiet nosplash keyboard-layouts=NONE locales=en_US.UTF-8 drbl_live_noconfx ocs_daemonon="ssh" noprompt netboot=nfs nfsroot=192.168.7.254:/tftpboot/node_root/clonezilla-live/ dcs_put_dticons="no"
-
-  PXE_CONF="$PXE_CONF_DEF"
-  GRUB_CONF="$GRUB_EFINB_CONF_DEF"
-  # TODO: find a better way to give different nfs_srv IP address if more than one available, so that clients can be grouped to different NFS server.
-  live_nfs_srv="$(get-all-nic-ip -b | awk -F" " '{print $1}')"
-  # Find the boot parameters from the server, and re-use it for client.
-  # It maybe be customized by users, so we have to filter some more, like ocs_prerun*, and some will be added later, like "drbl_live_noconfx" so we force to remove it to avoid duplicated.
-  # E.g:
-  # BOOT_IMAGE=/live/vmlinuz initrd=/live/initrd.img boot=live union=overlay username=user config components nomodeset quiet vga=785 ip= net.ifnames=0  nosplash i915.blacklist=yes radeonhd.blacklist=yes nouveau.blacklist=yes vmwgfx.enable_fbdev=1 keyboard-layouts=NONE locales=en_US.UTF-8 drbl_live_noconfx ocs_daemonon="ssh" ocs_prerun1="ifconfig eth0 192.168.120.3; route add default gw 192.168.120.254 eth0; ifconfig eth1 192.168.7.254 netmask 255.255.255.0; echo nameserver 8.8.8.8 > /etc/resolv.conf" ocs_prerun2="mount -t nfs 192.168.120.254:/home/partimag /home/partimag" ocs_prerun3="drbl-live --batch --skip-pause-in-the-end --no-prompt-drbl-live start" ocs_prerun5="perl -pi -e 's/timeout 70/timeout 10/' /tftpboot/nbi_img/pxelinux.cfg/default"
-  cl_gp_boot_param="$(LC_ALL=C cat /proc/cmdline | filter_cl_gp_boot_param)"
-  # Append those preseeding boot param we want for live system client
-  cl_gp_boot_param="$cl_gp_boot_param username=drbl keyboard-layouts=$client_kb_layout locales=$client_locale drbl_live_noconfx ocs_daemonon=\"ssh\" noprompt netboot=nfs nfsroot=${live_nfs_srv}:$drbl_common_root/clonezilla-live/ dcs_put_dticons=\"no\""
-  # This is for the boot parameters in grub config, i.e. those in the "linux" line, e.g.
-  # linux vmlinuz-pxe boot=live union=overlay config components nomodeset quiet 
-  boot_param_in_grub_cfg="vmlinuz-pxe $cl_gp_boot_param"
-  # This is the boot parameters for PXElinux config, i.e. those in the "append" line, e.g.
-  # append initrd=/live/initrd.img boot=live union=overlay config components nomodeset quiet
-  boot_param_in_pxe_cfg="initrd=Clonezilla-live-initrd.img $cl_gp_boot_param"
-
-  override_opt_in_pxelinux_cfg_block drbl "$boot_param_in_pxe_cfg"
-  override_opt_in_grub_efi_cfg_block drbl-client "$boot_param_in_grub_cfg"
-  override_opt_in_grub_efi_cfg_block -i drbl-client "Clonezilla-live-initrd.img"
-
-  # (2) Update the Clonezilla SE client
-  drbl-ocs-live-prep -p $LIVE_MEDIA
-
-  # 2014/03/15 Somehow in DRBL live, lightdm of the client's services in /tftpboot/node_root/ are not after nis.
-  # It's weird if we run "drbl-client-service lightdm on", then in /tftpboot/nodes/$IP/ the lightdm are after nis.
-  # Fighted for more than 3 days, but still can not find why this only happens in DRBL live. Not in the Sid installed on the harddrive. Anyway, this is a workaround.
-  # 2015/09/03 No more this issue, and this should not be used since it will affect the client's /etc/rc1.d/ because after drblpush the ocs-run should be /etc/rc1.d/S19ocs-run, but after drbl-client-service, it will be moved as /etc/rc1.d/S01ocs-run. Apparently we need ocs-run after other services, like ssh, mountnfs...
-  #default_dm="$(drbl-check-dm 2> /dev/null)"
-  #drbl-client-service $default_dm on
   
   echo "$msg_delimiter_star_line"
   if [ "$limit_pxe_drbl_client" = "yes" ]; then
@@ -324,6 +325,14 @@ while [ $# -gt 0 ]; do
     -b|-batch|--batch)
             ocs_batch_mode="on"
 	    shift;;
+    -c|-client-no)
+            shift
+            if [ -z "$(echo $1 |grep ^-.)" ]; then
+              # skip the -xx option, in case 
+              ocs_client_no_per_NIC="$1"
+              shift
+            fi
+            ;;
     -p|--prepare-ocsroot)
             prepare_ocsroot="yes"
             shift ;;
