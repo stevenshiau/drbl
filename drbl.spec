@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.16.4
+Version:	2.16.5
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Thu Sep 17 2015 Steven Shiau <steven _at_ nchc org tw> 2.16.5-drbl1
+- Change ocs_client_trig_type=proc-cmdline in drbl-ocs.conf when running drbl-live start.
+
 * Tue Sep 15 2015 Steven Shiau <steven _at_ nchc org tw> 2.16.4-drbl1
 - Link the kernel and initrd of clonezilla live in /tftpboot/nbi_img/ to that of drbl live for DRBL live system.
 

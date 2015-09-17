@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.16.5-drbl1) unstable; urgency=low
+
+  * Change ocs_client_trig_type=proc-cmdline in drbl-ocs.conf when
+    running drbl-live start.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 17 Sep 2015 09:58:51 +0800
+
 drbl (2.16.4-drbl1) unstable; urgency=low
 
   * Link the kernel and initrd of clonezilla live in /tftpboot/nbi_img/ to
