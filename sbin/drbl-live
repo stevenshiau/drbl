@@ -199,6 +199,10 @@ start_drbl_live() {
   rm -rf $drbl_common_root/etc/systemd/system/serial-getty\@ttyS*
   rm -rf $drblroot/*/etc/systemd/system/getty\@tty*
   rm -rf $drblroot/*/etc/systemd/system/serial-getty\@ttyS*
+
+  # Since we use Clonezilla box or live system for clients OS when doing Clonezilla jobs, they all listen to the boot parameters
+  # Therefore here we change ocs_client_trig_type as proc-cmdline to make drbl-ocs run a little bit faster.
+  perl -pi -e "s/^ocs_client_trig_type=.*/ocs_client_trig_type=proc-cmdline/g" /etc/drbl/drbl-ocs.conf
   
   echo "$msg_delimiter_star_line"
   if [ "$limit_pxe_drbl_client" = "yes" ]; then
