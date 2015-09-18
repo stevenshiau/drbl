@@ -16,7 +16,7 @@ EFI_ARCH="i386 x86_64"
 efi_required_mod="normal tftp efinet chain echo net gzio xzio linux \
 efi_gop efi_uga png gfxterm gfxterm_background gfxterm_menu \
 serial part_gpt part_msdos boot multiboot progress search \
-reboot halt"
+configfile test sleep reboot halt"
 
 prog="$0"
 ################
@@ -57,6 +57,17 @@ echo 'Network status: '
 net_ls_cards
 net_ls_addr
 net_ls_routes
+
+if [ -e "$prefix/grub.cfg-01:$net_default_mac" ]; then
+  echo "Use config file: $prefix/grub.cfg-01:$net_default_mac"
+  configfile $prefix/grub.cfg-01:$net_default_mac
+elif [ -e "$prefix/grub.cfg" ]; then
+  echo "Use config file: $prefix/grub.cfg"
+  configfile $prefix/grub.cfg
+else
+  echo "Could not find config file $prefix/grub.cfg-$net_default_mac or $prefix/grub.cfg!"
+  sleep 15
+fi
 
 GRUB_END
 
