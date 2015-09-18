@@ -51,13 +51,6 @@ fi
 #
 grub_efi_tmpd="$(mktemp -d /tmp/grub-efi.XXXXXX)"
 # Prepare a grub.cfg so that the eltorito image could find it.
-cat <<-GRUB_END > $grub_efi_tmpd/grub-header.cfg
-set prefix=(tftp)/grub-efi.cfg
-echo 'Network status: '
-net_ls_cards
-net_ls_addr
-net_ls_routes
-
 # Because if/elif/else/fi is only supported in normal module, and in this embedded, preconfig only the command in rescue mode is supported, here we use this unique, subtle way. i.e.
 # Quoted from Andrei Borzenkov:
 # "if" is not external command - it must be recognized and processed by
@@ -71,14 +64,20 @@ net_ls_routes
 # commands.
 # For more details, check:
 # http://lists.gnu.org/archive/html/help-grub/2015-09/msg00035.html
+cat <<-GRUB_END > $grub_efi_tmpd/grub-header.cfg
+set prefix=(tftp)/grub-efi.cfg
+echo 'Network status: '
+net_ls_cards
+net_ls_addr
+net_ls_routes
 
-echo "Loading config file $prefix/grub.cfg-01:$net_default_mac..."
-configfile $prefix/grub.cfg-01:$net_default_mac
+echo "Loading config file \$prefix/grub.cfg-01:\$net_default_mac..."
+configfile \$prefix/grub.cfg-01:\$net_default_mac
 
-echo "Loading config file: $prefix/grub.cfg"
-configfile $prefix/grub.cfg
+echo "Loading config file: \$prefix/grub.cfg"
+configfile \$prefix/grub.cfg
 
-echo "Could not find config file $prefix/grub.cfg-$net_default_mac or $prefix/grub.cfg!"
+echo "Could not find config file \$prefix/grub.cfg-\$net_default_mac or \$prefix/grub.cfg!"
 sleep 15
 
 GRUB_END
