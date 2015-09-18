@@ -5,6 +5,14 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.16.7-drbl1) unstable; urgency=low
+
+  * Forget about condition test for the existing of config file in grub
+    embedded preconfig file. Just use configfile module to make that in 
+    drbl-gen-grub-efi-nb.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sat, 19 Sep 2015 00:03:33 +0800
+
 drbl (2.16.6-drbl1) unstable; urgency=low
 
   * The /tftpboot/nbi_img/grub.cfg/grub.cfg-01:$net_default_mac has higher
