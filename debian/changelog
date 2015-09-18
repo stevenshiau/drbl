@@ -1,3 +1,12 @@
+drbl (2.16.6-drbl1) unstable; urgency=low
+
+  * The /tftpboot/nbi_img/grub.cfg/grub.cfg-01:$net_default_mac has higher
+    priority than /tftpboot/nbi_img/grub.cfg/grub.cfg. By doing this, we do
+    not have to patch the grub2 as described here:
+    https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=793760
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 18 Sep 2015 14:34:00 +0800
+
 drbl (2.16.5-drbl1) unstable; urgency=low
 
   * Change ocs_client_trig_type=proc-cmdline in drbl-ocs.conf when
