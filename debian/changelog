@@ -1,3 +1,10 @@
+drbl (2.16.8-drbl1) unstable; urgency=low
+
+  * Bug fixed: the variable was not protected when writing the preconfig
+    file with cat command in drbl-gen-grub-efi-nb.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sat, 19 Sep 2015 07:12:54 +0800
+
 drbl (2.16.7-drbl1) unstable; urgency=low
 
   * Forget about condition test for the existing of config file in grub

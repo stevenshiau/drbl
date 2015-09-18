@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.16.7
+Version:	2.16.8
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Sat Sep 19 2015 Steven Shiau <steven _at_ nchc org tw> 2.16.8-drbl1
+- Bug fixed: the variable was not protected when writing the preconfig file with cat command in drbl-gen-grub-efi-nb.
+
 * Sat Sep 19 2015 Steven Shiau <steven _at_ nchc org tw> 2.16.7-drbl1
 - Forget about condition test for the existing of config file in grub embedded preconfig file. Just use configfile module to make that in drbl-gen-grub-efi-nb.
 
