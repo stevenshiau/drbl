@@ -99,7 +99,7 @@ prep_live_system_for_drbl_clonezilla_clients(){
   # BOOT_IMAGE=/live/vmlinuz initrd=/live/initrd.img boot=live union=overlay username=user config components nomodeset quiet vga=785 ip= net.ifnames=0  nosplash i915.blacklist=yes radeonhd.blacklist=yes nouveau.blacklist=yes vmwgfx.enable_fbdev=1 keyboard-layouts=NONE locales=en_US.UTF-8 drbl_live_noconfx ocs_daemonon="ssh" ocs_prerun1="ifconfig eth0 192.168.120.3; route add default gw 192.168.120.254 eth0; ifconfig eth1 192.168.7.254 netmask 255.255.255.0; echo nameserver 8.8.8.8 > /etc/resolv.conf" ocs_prerun2="mount -t nfs 192.168.120.254:/home/partimag /home/partimag" ocs_prerun3="drbl-live --batch --skip-pause-in-the-end --no-prompt-drbl-live start" ocs_prerun5="perl -pi -e 's/timeout 70/timeout 10/' /tftpboot/nbi_img/pxelinux.cfg/default"
   cl_gp_boot_param="$(LC_ALL=C cat /proc/cmdline | filter_cl_gp_boot_param)"
   # Append those preseeding boot param we want for live system client
-  cl_gp_boot_param="$cl_gp_boot_param username=drbl keyboard-layouts=$client_kb_layout locales=$client_locale drbl_live_noconfx ocs_daemonon=\"ssh\" noprompt netboot=nfs nfsroot=${live_nfs_srv}:$drbl_common_root/clonezilla-live/ dcs_put_dticons=\"no\""
+  cl_gp_boot_param="$cl_gp_boot_param hostname=drbl-client username=drbl keyboard-layouts=$client_kb_layout locales=$client_locale drbl_live_noconfx ocs_daemonon=\"ssh\" noprompt netboot=nfs nfsroot=${live_nfs_srv}:$drbl_common_root/clonezilla-live/ dcs_put_dticons=\"no\""
   # This is for the boot parameters in grub config, i.e. those in the "linux" line, e.g.
   # linux vmlinuz-pxe boot=live union=overlay config components nomodeset quiet 
   boot_param_in_grub_cfg="DRBL-live-vmlinuz $cl_gp_boot_param"
