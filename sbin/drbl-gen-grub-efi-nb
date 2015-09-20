@@ -13,10 +13,12 @@ DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/usr/share/drbl}"
 grub_mkimg_compress_opt="-C xz"
 EFI_ARCH="i386 x86_64"
 #efi_required_mod="part_gpt part_msdos hfsplus fat ext2 ntfs btrfs normal chain boot configfile linux appleldr minicmd multiboot iso9660 acpi efi_gop efi_uga elf loadbios loopback video_fb usb search fixvideo png gfxterm gfxterm_background gfxterm_menu echo videotest video reboot halt gfxmenu gettext tftp efinet net gzio xzio"
+# Rerfer to the file systems list in /usr/lib/grub/x86_64-efi/fs.lst. This is for client's local disk boot.
+fs_mod="ext2 xfs reiserfs jfs hfsplus fat ntfs"
 efi_required_mod="normal tftp efinet chain echo net gzio xzio linux \
 efi_gop efi_uga png gfxterm gfxterm_background gfxterm_menu \
 serial part_gpt part_msdos boot multiboot progress search \
-configfile test sleep reboot halt"
+$fs_mod configfile test sleep reboot halt"
 
 prog="$0"
 ################
