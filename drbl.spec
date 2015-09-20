@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.16.8
+Version:	2.16.10
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,13 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Sun Sep 20 2015 Steven Shiau <steven _at_ nchc org tw> 2.16.10-drbl1
+- More grub2 file system modules were added in drbl-gen-grub-efi-nb so that local disk boot is supported for uEFI network boot menu.
+- Live system hostname is assigned as ocs-client in Clonezilla SE of DRBL live, while drbl client is assigned as drbl-client. This is to avoid confusion.
+
+* Sat Sep 19 2015 Steven Shiau <steven _at_ nchc org tw> 2.16.9-drbl1
+- Since we have used grub embedded preconfig way in drbl-gen-grub-efi-nb to solve this grub uEFI network booting restoring issue in Debian: http://lists.gnu.org/archive/html/help-grub/2015-09/msg00035.html. Therefore no more disabling efi_netboot_1st_in_nvram in drbl-ocs.conf.
+
 * Sat Sep 19 2015 Steven Shiau <steven _at_ nchc org tw> 2.16.8-drbl1
 - Bug fixed: the variable was not protected when writing the preconfig file with cat command in drbl-gen-grub-efi-nb.
 

@@ -5,6 +5,25 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.16.10-drbl1) unstable; urgency=low
+
+  * More grub2 file system modules were added in drbl-gen-grub-efi-nb so
+    that local disk boot is supported for uEFI network boot menu.
+  * Live system hostname is assigned as ocs-client in Clonezilla SE of DRBL
+    live, while drbl client is assigned as drbl-client. This is to avoid
+    confusion.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sun, 20 Sep 2015 13:27:03 +0800
+
+drbl (2.16.9-drbl1) unstable; urgency=low
+
+  * Since we have used grub embedded preconfig way in drbl-gen-grub-efi-nb 
+    to solve this grub uEFI network booting restoring issue in Debian:
+    http://lists.gnu.org/archive/html/help-grub/2015-09/msg00035.html
+    Therefore no more disabling efi_netboot_1st_in_nvram in drbl-ocs.conf.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sat, 19 Sep 2015 08:24:16 +0800
+
 drbl (2.16.8-drbl1) unstable; urgency=low
 
   * Bug fixed: the variable was not protected when writing the preconfig
