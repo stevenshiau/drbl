@@ -3652,7 +3652,7 @@ set_specific_host_grub_efi_conf() {
         [ -f "$GRUB_EFINB_DIR/$grub_eficfg_MIP" ] && rm -f $GRUB_EFINB_DIR/$grub_eficfg_MIP
         ;;
     esac
-    echo -n "Generate the PXE config file for host $ih ... "
+    echo -n "Generate the grub uEFI netboot config file for host $ih ... "
     cp -f $GRUB_EFINB_DIR/grub.cfg_skeleton $GRUB_EFINB_DIR/$grub_eficfg
     echo "done!"
   done
