@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.16.11-drbl1) unstable; urgency=low
+
+  * Bug fixed: wrong info about prompt for grub uEFI netboot.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 21 Sep 2015 14:49:06 +0800
+
 drbl (2.16.10-drbl1) unstable; urgency=low
 
   * More grub2 file system modules were added in drbl-gen-grub-efi-nb so

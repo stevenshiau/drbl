@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.16.10
+Version:	2.16.11
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Mon Sep 21 2015 Steven Shiau <steven _at_ nchc org tw> 2.16.11-drbl1
+- Bug fixed: wrong info about prompt for grub uEFI netboot.
+
 * Sun Sep 20 2015 Steven Shiau <steven _at_ nchc org tw> 2.16.10-drbl1
 - More grub2 file system modules were added in drbl-gen-grub-efi-nb so that local disk boot is supported for uEFI network boot menu.
 - Live system hostname is assigned as ocs-client in Clonezilla SE of DRBL live, while drbl client is assigned as drbl-client. This is to avoid confusion.
