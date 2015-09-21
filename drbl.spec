@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.16.11
+Version:	2.16.12
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Mon Sep 21 2015 Steven Shiau <steven _at_ nchc org tw> 2.16.12-drbl1
+- Update Forcevideo-drbl-live to work with the latest Sid. Thanks to Eric Reischer (emr _at_ hev psu edu) for reporting this issue.
+
 * Mon Sep 21 2015 Steven Shiau <steven _at_ nchc org tw> 2.16.11-drbl1
 - Bug fixed: wrong info about prompt for grub uEFI netboot.
 

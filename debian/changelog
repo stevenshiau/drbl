@@ -1,3 +1,10 @@
+drbl (2.16.12-drbl1) unstable; urgency=low
+
+  * Update Forcevideo-drbl-live to work with the latest Sid. Thanks
+    to Eric Reischer (emr _at_ hev psu edu) for reporting this issue.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 21 Sep 2015 22:35:54 +0800
+
 drbl (2.16.11-drbl1) unstable; urgency=low
 
   * Bug fixed: wrong info about prompt for grub uEFI netboot.
