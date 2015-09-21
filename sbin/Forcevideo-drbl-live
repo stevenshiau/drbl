@@ -31,7 +31,7 @@ if [ -z "$LIVE_MEDIA" -o ! -d "/$LIVE_MEDIA" ]; then
 fi
 
 #
-if [ ! -e /etc/X11/X ]; then
+if ! type X >/dev/null 2>&1; then
   echo "No X program! Skip X configure!"
   exit 3
 fi
@@ -70,7 +70,7 @@ set_priority() {
   echo "///NOTE/// If graphical environment (X-window) fails to start, you can:"
   [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
   echo "  (a): Run \"sudo $0\" to configure it again. Use '1: Medium mode' or '2: Expert mode', then say 'no' to 'Attempt to autodetect video buffer' so that you can choose 'vesa' as the X server driver. When 'Attempt monitor autodetection', say 'no' either so that you can choose 1024x768, 800x600 or 640x480 as your resolution. For the rest of settings, you can accept the default values if you have no idea about them."
-  echo "  (b): Run \"sudo /etc/init.d/gdm restart\" to enter graphical environment."
+  echo "  (b): Run \"sudo service lightdm restart\" to enter graphical environment."
   echo -n "[0] "
   read ans_ver
   case "$ans_ver" in
@@ -265,7 +265,7 @@ reconfig_Xorg
 if [ "$start_x" = "yes" ]; then
   echo '*****************************************************'
   [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
-  echo "Do you want to run \"sudo /etc/init.d/gdm restart\" to enter graphical environment ?"
+  echo "Do you want to run \"sudo service lightdm restart\" to enter graphical environment ?"
   [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
   echo -n "[Y/n] "
   read enter_X
@@ -274,7 +274,7 @@ if [ "$start_x" = "yes" ]; then
        exit 1
        ;;
     *)
-       sudo /etc/init.d/gdm restart
+       sudo service lightdm restart
        ;;
   esac
 fi
