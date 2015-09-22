@@ -647,12 +647,7 @@ deploy_pxecfg_grubefi_files(){
     # for all clients, so we just keep the file pxelinux.cfg/default, no others.
     echo "This is for all clients, so we remove other host-based PXE config files in $PXELINUX_DIR/ and keep $PXE_CONF."
     clean_stale_node_pxe_cfg
-    # Only for those non-stop case we will clean the GRUB UEFI NB config files
-    # Otherwise if only /tftpboot/nbi_img/grub.cfg exist, the GRUB EFI NB clienet can not boot into local disk because the original "local-disk" menuentry is only a template. For the real working one, .e.g. grub.cfg-01-00-0c-29-7d-29-b7, it's the one created by ocsmgrd.
-    if [ "$MODE" != "clonezilla-stop" ]; then
-      echo "This is for all clients, so we remove other host-based GRUB EFI NB config files in $GRUB_EFINB_DIR/ and keep $GRUB_CONF only."
-      clean_stale_node_grub_efi_cfg
-    fi
+    clean_stale_node_grub_efi_cfg
   fi
 } # end of deploy_pxecfg_grubefi_files
 
@@ -1117,7 +1112,6 @@ case "$MODE" in
      stop_ocs_if_necessary
      # When clonezilla stops, we should make clients boot locally
      set-default-pxe-img -i local -c $PXE_CONF
-     # There is no local mode in set-default-grub-efi-img, so we use shutdown 
      set-default-grub-efi-img -i local-disk -c $GRUB_CONF
      deploy_pxecfg_grubefi_files
      echo "done!"
@@ -1127,6 +1121,7 @@ case "$MODE" in
          echo -n "Setting client as local mode..."
          stop_ocs_if_necessary
          set-default-pxe-img -i local -c $PXE_CONF
+         set-default-grub-efi-img -i local-disk -c $GRUB_CONF
 	 deploy_pxecfg_grubefi_files
 	 echo "done!"
 	 ;;
