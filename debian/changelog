@@ -1,3 +1,17 @@
+drbl (2.17.1-drbl1) unstable; urgency=low
+
+  * For all cases, dcs clean the UEFI NB config files because now
+    local-disk is always revealed.
+  * Bug fixed: dcs -> local did not switch that for local-disk in grub uEFI
+    netboot mode.
+  * Reveal local-disk in the uEFI netboot menu by default. We have listed
+    most of the OSes.
+  * Convert the ":" in the MAC address based file name to "-" for grub uEFI
+    netboot mode, i.e. something like: grub.cfg-01-00-0c-29-1d-9a-d1, not
+    grub.cfg:01:00:0c:29:1d:9a:d1
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 22 Sep 2015 21:50:37 +0800
+
 drbl (2.16.12-drbl1) unstable; urgency=low
 
   * Update Forcevideo-drbl-live to work with the latest Sid. Thanks

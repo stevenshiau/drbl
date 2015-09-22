@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.16.12
+Version:	2.17.1
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,12 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Tue Sep 22 2015 Steven Shiau <steven _at_ nchc org tw> 2.17.1-drbl1
+- For all cases, dcs clean the UEFI NB config files because now local-disk is always revealed.
+- Bug fixed: dcs -> local did not switch that for local-disk in grub uEFI netboot mode.
+- Reveal local-disk in the uEFI netboot menu by default. We have listed most of the OSes.
+- Convert the ":" in the MAC address based file name to "-" for grub uEFI netboot mode, i.e.  something like: grub.cfg-01-00-0c-29-1d-9a-d1, not grub.cfg:01:00:0c:29:1d:9a:d1
+
 * Mon Sep 21 2015 Steven Shiau <steven _at_ nchc org tw> 2.16.12-drbl1
 - Update Forcevideo-drbl-live to work with the latest Sid. Thanks to Eric Reischer (emr _at_ hev psu edu) for reporting this issue.
 
