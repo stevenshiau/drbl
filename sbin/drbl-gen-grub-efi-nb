@@ -18,7 +18,7 @@ fs_mod="ext2 xfs reiserfs jfs hfsplus fat ntfs"
 efi_required_mod="normal tftp efinet chain echo net gzio xzio linux \
 efi_gop efi_uga png gfxterm gfxterm_background gfxterm_menu \
 serial part_gpt part_msdos boot multiboot progress search \
-$fs_mod configfile test sleep reboot halt"
+$fs_mod configfile test sleep tr reboot halt"
 
 prog="$0"
 ################
@@ -73,13 +73,15 @@ net_ls_cards
 net_ls_addr
 net_ls_routes
 
-echo "Loading config file \$prefix/grub.cfg-01:\$net_default_mac..."
-configfile \$prefix/grub.cfg-01:\$net_default_mac
+tr --set pretty_mac x: x- \$net_default_mac
+
+echo "Loading config file \$prefix/grub.cfg-01-\$pretty_mac..."
+configfile \$prefix/grub.cfg-01-\$pretty_mac
 
 echo "Loading config file: \$prefix/grub.cfg"
 configfile \$prefix/grub.cfg
 
-echo "Could not find config file \$prefix/grub.cfg-\$net_default_mac or \$prefix/grub.cfg!"
+echo "Could not find config file \$prefix/grub.cfg-\$pretty_mac or \$prefix/grub.cfg!"
 sleep 15
 
 GRUB_END
