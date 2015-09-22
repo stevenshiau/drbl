@@ -108,24 +108,5 @@ case "$ACT" in
     sub_act_cmd="if ($begin_line..$end_line) {s/^#(.*)/\$1/i}"
     LC_ALL=C perl -pi -e "$sub_act_cmd" $GRUB_CONF_T
       
-    # Only when entry id is local-disk, we will update the ESP and EFI bootloader file
-    if [ "$ENTRY_ID" = "local-disk" ]; then
-      # Modify the OS label, EFI partition and EFI boot file if they exists
-      # Normally efi_spt will only be (hd0,1) or (hd0,2). However, if it's (hd1,*) for some cases?
-      # efi_spt is ESP number, like "1", "2"...
-      if [ -n "$efi_os_label" ]; then
-        # Because force_grub_efi_clients_boot_label only write to $GRUB_CONF, we have to assign $GRUB_CONF
-        GRUB_CONF=$GRUB_CONF_T
-        force_grub_efi_clients_boot_label local-disk "Local disk: $efi_os_label"
-      fi
-      if [ -n "$efi_spt" ]; then
-        LC_ALL=C perl -pi -e "if ($begin_line..$end_line) \
-          {s|^([[:space:]]*)set root=.*|\$1set root=\(hd0,$efi_spt\)|i}" $GRUB_CONF_T
-      fi
-      if [ -n "$efi_boot_file" ]; then
-        LC_ALL=C perl -pi -e "if ($begin_line..$end_line) \
-          {s|^([[:space:]]*)chainloader.*|\$1chainloader $efi_boot_file \+1|i}" $GRUB_CONF_T
-      fi
-    fi
     ;;
 esac
