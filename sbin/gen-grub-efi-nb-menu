@@ -262,7 +262,7 @@ menuentry "$FULL_OS_Version $powerful_client_menu_label" --id drbl-client {
 #  initrd initrd-pxe.img
 #}
 
-menuentry "First local disk" --id local-disk {
+menuentry "Local operating system (if available)" --id local-disk {
   echo "Booting first local disk..."
   set root=(hd0,1)
   if [ -e /EFI/redhat/grub.efi ]; then
