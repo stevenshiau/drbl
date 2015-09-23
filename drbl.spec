@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.17.1
+Version:	2.17.2
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Wed Sep 23 2015 Steven Shiau <steven _at_ nchc org tw> 2.17.2-drbl1
+- Use the same prompt "Local operating system (if available)" for uEFI netboot, as that of PXE.
+
 * Tue Sep 22 2015 Steven Shiau <steven _at_ nchc org tw> 2.17.1-drbl1
 - For all cases, dcs clean the UEFI NB config files because now local-disk is always revealed.
 - Bug fixed: dcs -> local did not switch that for local-disk in grub uEFI netboot mode.
