@@ -275,8 +275,16 @@ menuentry "Local operating system (if available)" --id local-disk {
     chainloader /EFI/debian/grubx64.efi +1
   elif [ -e /EFI/ubuntu/grubx64.efi ]; then
     chainloader /EFI/ubuntu/grubx64.efi +1
+  elif [ -e /EFI/mageia/grubx64.efi ]; then
+    chainloader /EFI/mageia/grubx64.efi +1
   elif [ -e /EFI/opensuse/grubx64.efi ]; then
     chainloader /EFI/opensuse/grubx64.efi +1
+  elif [ -e /EFI/sled12/grubx64.efi ]; then
+    # SuSE Linux Enterprise 12
+    chainloader /EFI/sled12/grubx64.efi +1
+  elif [ -e /EFI/SuSE/elilo.efi ]; then
+    # SuSE Linux Enterprise 11
+    chainloader /EFI/SuSE/elilo.efi +1
   elif [ -e /EFI/Boot/bootx64.efi ]; then
     # MS Windows
     chainloader /EFI/Boot/bootx64.efi +1
