@@ -68,6 +68,7 @@ grub_efi_tmpd="$(mktemp -d /tmp/grub-efi.XXXXXX)"
 # http://lists.gnu.org/archive/html/help-grub/2015-09/msg00035.html
 cat <<-GRUB_END > $grub_efi_tmpd/grub-header.cfg
 set prefix=(tftp)/grub-efi.cfg
+echo "Grub CPU and platform: \$grub_cpu, \$grub_platform"
 echo 'Network status: '
 net_ls_cards
 net_ls_addr
