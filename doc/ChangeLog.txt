@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.17.3-drbl1) unstable; urgency=low
+
+  * Show Grub CPU and platform in the preconfig of grub uEFI netboot.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 29 Sep 2015 20:27:34 +0800
+
 drbl (2.17.2-drbl1) unstable; urgency=low
 
   * Use the same prompt "Local operating system (if available)" for uEFI
