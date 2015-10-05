@@ -18,7 +18,8 @@ USAGE() {
     echo "Usage:"
     echo "$0 [OPTION] {start|stop|restart}"
     echo "OPTION:"
-    echo " -b, -batch, --batch          Run program in batch mode, i.e. without any prompt or wait for pressing enter key.  //NOTE// You have to use '-batch' instead of '-b' when you want to use it in the boot parameters. Otherwise the program init on system will honor '-b', too."
+    echo "-b, -batch, --batch          Run program in batch mode, i.e. without any prompt or wait for pressing enter key.  //NOTE// You have to use '-batch' instead of '-b' when you want to use it in the boot parameters. Otherwise the program init on system will honor '-b', too."
+    echo "-c, -client-no NO             Assign the client number as NO for each network card connected to clients"
     echo "-p, --prepare-ocsroot         Prepare clonezilla image home dir also."
     echo "-s, --skip-pause-in-the-end   Skip showing the messsage and pause in the end of execuation."
     echo "-n, --no-prompt-drbl-live     Assume it's running for drbl live. (This is normally only used for clonezilla server edition script ocs-srv-live in DRBL live mode)"
@@ -184,12 +185,20 @@ start_drbl_live() {
   
   prep_live_system_for_drbl_clonezilla_clients
 
+  # 1st we load $client_no_per_NIC and $autologin_passwd_opt from the ocs-live-hook.conf when creating DRBL live.
+  # However, later if client_no_per_NIC is assigned in boot parameter or "-c" option, it will be override.
+  . $drbl_setup_path/files/ocs/live-hook/ocs-live-hook.conf
+
   # ocs_client_no_per_NIC is read from /etc/ocs/ocs-live.conf, which might be from boot parameter, or is assigned by this program with option "-c"
   if [ -n "$ocs_client_no_per_NIC" ]; then
-    LC_ALL=C perl -pi -e "s/^client_no_per_NIC=.*/client_no_per_NIC=$ocs_client_no_per_NIC/g" $drbl_setup_path/files/ocs/live-hook/ocs-live-hook.conf
+    if [ -n "$(grep -Ew "^client_no_per_NIC=.*" /etc/ocs/ocs-live.conf)" ]; then
+      LC_ALL=C perl -pi -e "s/^client_no_per_NIC=.*/client_no_per_NIC=$ocs_client_no_per_NIC/g" /etc/ocs/ocs-live.conf
+    else
+      echo "client_no_per_NIC=$ocs_client_no_per_NIC" >> /etc/ocs/ocs-live.conf
+    fi
   fi
-  # load $client_no_per_NIC and $autologin_passwd_opt for later use
-  . $drbl_setup_path/files/ocs/live-hook/ocs-live-hook.conf
+  # Now load $client_no_per_NIC for later use
+  . /etc/ocs/ocs-live.conf
   
   # run drblpush again so that the network interface can be updated. Maybe there is new ethx.
   yes "" | drblpush -i -r 1 -z 1 --not-add-start-drbl-srvi --skip-drbl-ocs-live-prep -p $client_no_per_NIC
