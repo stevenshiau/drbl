@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.17.4
+Version:	2.17.5
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Mon Oct 12 2015 Steven Shiau <steven _at_ nchc org tw> 2.17.5-drbl1
+- Language file zh_CN was updated. Thanks to Zhiqiang Zhang.
+
 * Mon Oct 05 2015 Steven Shiau <steven _at_ nchc org tw> 2.17.4-drbl1
 - Update the help message of drbl-live.
 - Bug fixed: read the ocs_client_no_per_NIC from /etc/ocs/ocs-live.conf in higer priority than that of $drbl_setup_path/files/ocs/live-hook/ocs-live-hook.conf in drbl-live.
