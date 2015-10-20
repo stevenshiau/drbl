@@ -83,8 +83,9 @@ end_line="$(LC_ALL=C echo $lines | awk -F" " '{print $2}')"
 case "$ACT" in
   "hide")
     if [ -z "$begin_line" -o -z "$end_line" ]; then
-      echo "No hidden menuentry with ID $ENTRY_ID found!"
-      echo "Skip this."
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+      echo "No hidden menuentry with ID $ENTRY_ID found! Skip it."
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
       exit 2
     fi
     [ -n "$VERBOSE" ] && echo "Hide $ENTRY_ID in $GRUB_CONF_T... "
@@ -93,8 +94,9 @@ case "$ACT" in
     ;;
   "reveal")
     if [ -z "$begin_line" -o -z "$end_line" ]; then
-      echo "No revealed menuentry with ID $ENTRY_ID found!"
-      echo "Skip this."
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+      echo "No revealed menuentry with ID $ENTRY_ID found! Skip it."
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
       exit 2
     fi
     # The menuentry is like:
