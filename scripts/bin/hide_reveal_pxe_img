@@ -29,7 +29,8 @@ if [ ! -f "$PXE_CONF" ]; then
   [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
   exit 1
 fi
-check_img_in_pxe_cfg $lab $PXE_CONF
+# Check in the other way, not using check_img_in_pxe_cfg since it gives red error, while we just need warning especially when "clonezilla-live" is not available for Clonezilla SE with Clonezilla live client.
+#check_img_in_pxe_cfg $lab $PXE_CONF
 # turn off MENU DEFAULT & turn on MENU HIDE for the specified image
 lines="$(get_pxecfg_image_block $lab $PXE_CONF)"
 begin_line="$(LC_ALL=C echo $lines | awk -F" " '{print $1}')"
@@ -37,10 +38,22 @@ end_line="$(LC_ALL=C echo $lines | awk -F" " '{print $2}')"
 case "$ACT" in
   "hide")
     [ -n "$VERBOSE" ] && echo "Hide $lab in $PXE_CONF... "
+    if [ -z "$begin_line" -o -z "$end_line" ]; then
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+      echo "No hidden label $lab was found! Skip it."
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+      exit 2
+    fi
     sub_act_cmd="if ($begin_line..$end_line) {s/^(#|[[:space:]])*MENU HIDE.*/  MENU HIDE/i}"
     ;;
   "reveal")
     [ -n "$VERBOSE" ] && echo "Reveal $lab in $PXE_CONF... "
+    if [ -z "$begin_line" -o -z "$end_line" ]; then
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+      echo "No revealed label $lab was found! Skip it."
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+      exit 2
+    fi
     sub_act_cmd="if ($begin_line..$end_line) {s/^(#|[[:space:]])*MENU HIDE.*/  # MENU HIDE/i}"
     ;;
 esac
