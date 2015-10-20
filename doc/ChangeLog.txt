@@ -5,6 +5,14 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.17.6-drbl1) unstable; urgency=low
+
+  * Suppress the error message in hide_reveal_pxe_img,
+    use warning only.
+  * Polish the output messages in hide_reveal_grub_efi_ent.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 20 Oct 2015 11:27:54 +0800
+
 drbl (2.17.5-drbl1) unstable; urgency=low
 
   * Language file zh_CN was updated. Thanks to Zhiqiang Zhang.
