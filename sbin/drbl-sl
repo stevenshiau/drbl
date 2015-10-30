@@ -124,7 +124,10 @@ prepare_param_in_pxe_grub_cfg(){
          append_param_in_pxe_cfg="initrd=$nbi_initrd $append_param_in_grub_cfg"
 	 if is_drbl_live_env; then
            # We will reuse the filesystem.squashfs from DRBL live, however, it's not like that of Clonezilla live, therefore more option are needed here.
-	   clonezilla_se_live_opts="hostname=ocs-client username=$assgned_username systemd.unit=multi-user.target drbl_live_noconfx ocs_prerun1=\"mkdir -p /var/lib/live/clonezilla/ocs-live.d\" ocs_prerun2=\"grep -qsE ^sudo -i ocs-live-run-menu /home/$assgned_username/.bash_profile || echo sudo -i ocs-live-run-menu >> /home/$assgned_username/.bash_profile\""
+	   clonezilla_se_live_opts="hostname=ocs-client \
+username=$assgned_username systemd.unit=multi-user.target drbl_live_noconfx \
+stick-to-pxe-srv ocs_prerun1=\"mkdir -p /var/lib/live/clonezilla/ocs-live.d\" \
+ocs_prerun2=\"grep -qsE ^sudo -i ocs-live-run-menu /home/$assgned_username/.bash_profile || echo sudo -i ocs-live-run-menu >> /home/$assgned_username/.bash_profile\""
 	   append_param_in_grub_cfg="$append_param_in_grub_cfg $clonezilla_se_live_opts"
 	   append_param_in_pxe_cfg="$append_param_in_pxe_cfg $clonezilla_se_live_opts"
 	 fi
