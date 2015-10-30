@@ -1,3 +1,17 @@
+drbl (2.17.7-drbl1) unstable; urgency=low
+
+  * Adding boot parameter "stick-to-pxe-srv" for DRBL live clients.
+    This mechanism is used to stick to the PXE server when live-boot
+    trying to lease IP address by using the boot parameter
+    "stick-to-pxe-srv". It will drop the DHCP server without providing
+    filename, so it can partially solve the issue that 2 DHCP servers
+    co-exist on the same LAN. By default the max lease loop number is
+    10 times. The boot parameter "ethdev-dhcp-max-loop" can be used
+    to assign the max number. 
+    //NOTE// This mechanism is only for DRBL/Clonezilla SE live.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 30 Oct 2015 09:22:58 +0800
+
 drbl (2.17.6-drbl1) unstable; urgency=low
 
   * Suppress the error message in hide_reveal_pxe_img,
