@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.17.7
+Version:	2.17.8
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,10 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Sat Oct 31 2015 Steven Shiau <steven _at_ nchc org tw> 2.17.8-drbl1
+- Test if GRUB_CONF exists before modifying it in tune-clientdir-opt.
+- Adding support for CentOS 6.7.
+
 * Fri Oct 30 2015 Steven Shiau <steven _at_ nchc org tw> 2.17.7-drbl1
 - Adding boot parameter "stick-to-pxe-srv" for DRBL live clients.  This mechanism is used to stick to the PXE server when live-boot trying to lease IP address by using the boot parameter "stick-to-pxe-srv". It will drop the DHCP server without providing filename, so it can partially solve the issue that 2 DHCP servers co-exist on the same LAN. By default the max lease loop number is 10 times. The boot parameter "ethdev-dhcp-max-loop" can be used to assign the max number. //NOTE// This mechanism is only for DRBL/Clonezilla SE live.
 

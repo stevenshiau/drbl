@@ -1,3 +1,10 @@
+drbl (2.17.8-drbl1) unstable; urgency=low
+
+  * Test if GRUB_CONF exists before modifying it in tune-clientdir-opt.
+  * Adding support for CentOS 6.7.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sat, 31 Oct 2015 17:04:58 +0800
+
 drbl (2.17.7-drbl1) unstable; urgency=low
 
   * Adding boot parameter "stick-to-pxe-srv" for DRBL live clients.
