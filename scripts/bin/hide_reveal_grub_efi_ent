@@ -69,13 +69,13 @@ for i in ENTRY_ID ACT GRUB_CONF_T; do
   eval arg=\$$i
   [ -z "$arg" ] && USAGE && exit 1
 done
-if [ ! -f "$GRUB_CONF_T" ]; then
-  [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
-  echo "file $GRUB_CONF_T not found!"
-  [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
-  exit 1
-fi
 #check_entryid_in_grub_efi_cfg $ENTRY_ID $GRUB_CONF_T
+if [ -n "$GRUB_CONF_T" -a ! -e "$GRUB_CONF_T" ]; then
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+  echo "File $GRUB_CONF_T not found. No support for uEFI network boot."
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+  exit 2
+fi
 # turn off MENU DEFAULT & turn on MENU HIDE for the specified image
 lines="$(get_grub_efi_image_block "--id $ENTRY_ID" $GRUB_CONF_T)"
 begin_line="$(LC_ALL=C echo $lines | awk -F" " '{print $1}')"
