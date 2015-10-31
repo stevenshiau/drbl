@@ -3819,6 +3819,12 @@ get_status_grub_efi_cfg_block() {
   local GRUB_CONF_TMP="$2"
   local lines begin_line end_line rc block_status
   [ -z "$ENTRY_ID" -o -z "$GRUB_CONF_TMP" ] && return 1
+  if [ -n "$GRUB_CONF_TMP" -a ! -e "$GRUB_CONF_TMP" ]; then
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+    echo "File $GRUB_CONF_TMP not found. No support for uEFI network boot."
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+    return 2
+  fi
   lines="$(get_grub_efi_image_block "--id $ENTRY_ID" $GRUB_CONF_TMP)"
   begin_line=$(echo $lines | awk -F" " '{print $1}')
   end_line=$(echo $lines | awk -F" " '{print $2}')  # end_line is useless in this function. Just keep it for completion
@@ -3855,6 +3861,12 @@ add_opt_in_grub_efi_cfg_block() {
   [ -z "$entry_id" ] && echo "No entry_id in add_opt_in_grub_efi_cfg_block!" && exit 1
   [ -z "$opt_name" ] && echo "opt_name NOT specified in add_opt_in_grub_efi_cfg_block! Abort!" && exit 1
   [ -z "$opt_content" ] && echo "opt_content NOT specified in add_opt_in_grub_efi_cfg_block! Abort!" && exit 1
+  if [ -n "$GRUB_CONF" -a ! -e "$GRUB_CONF" ]; then
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+    echo "File $GRUB_CONF not found. No support for uEFI network boot."
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+    return 2
+  fi
   # Before adding option, we have to enable it because with grub there is no
   # way to hide unless with use # to comment the whole menuentry.
   # Save the status first
@@ -3895,6 +3907,12 @@ remove_opt_in_grub_efi_cfg_block() {
   local sub_menu_entry_cmd
   local status_saved
   [ -z "$entry_id" ] && echo "No entry_id in remove_opt_in_grub_efi_cfg_block!" && exit 1
+  if [ -n "$GRUB_CONF" -a ! -e "$GRUB_CONF" ]; then
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+    echo "File $GRUB_CONF not found. No support for uEFI network boot."
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+    return 2
+  fi
   # Before adding option, we have to enable it because with grub there is no
   # way to hide unless with use # to comment the whole menuentry.
   # Save the status first
