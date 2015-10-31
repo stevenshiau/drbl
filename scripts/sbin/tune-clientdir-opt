@@ -157,8 +157,11 @@ case "$drbl_mode" in
     hide_reveal_pxe_img drbl reveal $PXE_CONF
     remove_opt_in_pxelinux_cfg_block drbl clientdir
     # For uEFI
-    hide_reveal_grub_efi_ent drbl-client reveal $GRUB_CONF
-    remove_opt_in_grub_efi_cfg_block drbl-client clientdir
+    # Older version of GNU/Linux, like CentOS 6 does not support grub uEFI network boot.
+    if [ -e "$GRUB_CONF" ]; then
+      hide_reveal_grub_efi_ent drbl-client reveal $GRUB_CONF
+      remove_opt_in_grub_efi_cfg_block drbl-client clientdir
+    fi
 
     set_drbl_mode full_drbl_mode
     ;;
@@ -168,8 +171,11 @@ case "$drbl_mode" in
     hide_reveal_pxe_img drbl reveal $PXE_CONF
     add_opt_in_pxelinux_cfg_block drbl clientdir node_root
     # For uEFI
-    hide_reveal_grub_efi_ent drbl-client reveal $GRUB_CONF
-    add_opt_in_grub_efi_cfg_block drbl-client clientdir node_root
+    # Older version of GNU/Linux, like CentOS 6 does not support grub uEFI network boot.
+    if [ -e "$GRUB_CONF" ]; then
+      hide_reveal_grub_efi_ent drbl-client reveal $GRUB_CONF
+      add_opt_in_grub_efi_cfg_block drbl-client clientdir node_root
+    fi
 
     set_drbl_mode drbl_ssi_mode
     ;;
@@ -181,8 +187,11 @@ case "$drbl_mode" in
     remove_opt_in_pxelinux_cfg_block drbl clientdir
     hide_reveal_pxe_img drbl hide $PXE_CONF
     # For uEFI
-    remove_opt_in_grub_efi_cfg_block drbl-client clientdir
-    hide_reveal_grub_efi_ent drbl-client hide $GRUB_CONF
+    # Older version of GNU/Linux, like CentOS 6 does not support grub uEFI network boot.
+    if [ -e "$GRUB_CONF" ]; then
+      remove_opt_in_grub_efi_cfg_block drbl-client clientdir
+      hide_reveal_grub_efi_ent drbl-client hide $GRUB_CONF
+    fi
 
     set_drbl_mode none
     ;;
@@ -195,7 +204,10 @@ case "$clonezilla_mode" in
     # For PXE
     remove_opt_in_pxelinux_cfg_block clonezilla clientdir
     # For uEFI
-    remove_opt_in_grub_efi_cfg_block clonezilla-se-client clientdir
+    # Older version of GNU/Linux, like CentOS 6 does not support grub uEFI network boot.
+    if [ -e "$GRUB_CONF" ]; then
+      remove_opt_in_grub_efi_cfg_block clonezilla-se-client clientdir
+    fi
 
     # TODO: how do we know to use it's as full_clonezilla_mode or none ?
     set_clonezilla_mode full_clonezilla_mode
@@ -208,7 +220,10 @@ case "$clonezilla_mode" in
     # For PXE
     add_opt_in_pxelinux_cfg_block clonezilla clientdir node_root
     # For uEFI
-    add_opt_in_grub_efi_cfg_block clonezilla-se-client clientdir node_root
+    # Older version of GNU/Linux, like CentOS 6 does not support grub uEFI network boot.
+    if [ -e "$GRUB_CONF" ]; then
+      add_opt_in_grub_efi_cfg_block clonezilla-se-client clientdir node_root
+    fi
 
     set_clonezilla_mode clonezilla_box_mode
     [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
@@ -222,7 +237,10 @@ case "$clonezilla_mode" in
     # For PXE
     remove_opt_in_pxelinux_cfg_block clonezilla clientdir
     # For uEFI
-    remove_opt_in_grub_efi_cfg_block clonezilla-se-client clientdir
+    # Older version of GNU/Linux, like CentOS 6 does not support grub uEFI network boot.
+    if [ -e "$GRUB_CONF" ]; then
+      remove_opt_in_grub_efi_cfg_block clonezilla-se-client clientdir
+    fi
 
     set_clonezilla_mode none
     ;;
@@ -243,8 +261,11 @@ hide_reveal_pxe_img clonezilla hide $PXE_CONF
 hide_reveal_pxe_img Clonezilla-live hide $PXE_CONF
 
 # For uEFI
-hide_reveal_grub_efi_ent clonezilla-se-client hide $GRUB_CONF
-hide_reveal_grub_efi_ent "clonezilla-live-client" hide $GRUB_CONF
+# Older version of GNU/Linux, like CentOS 6 does not support grub uEFI network boot.
+if [ -e "$GRUB_CONF" ]; then
+  hide_reveal_grub_efi_ent clonezilla-se-client hide $GRUB_CONF
+  hide_reveal_grub_efi_ent "clonezilla-live-client" hide $GRUB_CONF
+fi
 
 #
 if  [ "$create_ssi_template" = "yes" ]; then
