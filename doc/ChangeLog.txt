@@ -5,6 +5,15 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.17.9-drbl1) unstable; urgency=low
+
+  * When grub-mkimage or grub-mknetdir not found, drbl-gen-grub-efi-nb 
+    shows warning messages only instead of error message because older
+    version of GNU/Linux (e.g. CentOS 6) does not support creating
+    grub uEFI network boot image.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sat, 31 Oct 2015 21:09:08 +0800
+
 drbl (2.17.8-drbl1) unstable; urgency=low
 
   * Test if GRUB_CONF exists before modifying it in tune-clientdir-opt.

@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.17.8
+Version:	2.17.9
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Sat Oct 31 2015 Steven Shiau <steven _at_ nchc org tw> 2.17.9-drbl1
+- When grub-mkimage or grub-mknetdir not found, drbl-gen-grub-efi-nb shows warning messages only instead of error message because older version of GNU/Linux (e.g. CentOS 6) does not support creating grub uEFI network boot image.
+
 * Sat Oct 31 2015 Steven Shiau <steven _at_ nchc org tw> 2.17.8-drbl1
 - Test if GRUB_CONF exists before modifying it in tune-clientdir-opt.
 - Adding support for CentOS 6.7.
