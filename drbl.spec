@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.17.10
+Version:	2.17.11
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Mon Nov 2 2015 Steven Shiau <steven _at_ nchc org tw> 2.17.11-drbl1
+- More tests about if $GRUB_CONF exists before going on in some functions of drbl-functions about grub2 uEFI network boot.
+
 * Sat Oct 31 2015 Steven Shiau <steven _at_ nchc org tw> 2.17.10-drbl1
 - Check if file $GRUB_CONF exists first in hide_reveal_grub_efi_ent and some functions in drbl-functions.
 
