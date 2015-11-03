@@ -2385,6 +2385,8 @@ fi
 # common root /etc/init.d as firstboot.
 # There is already firstboot comes with RH/FC/CentOS.
 # We do NOT use the firstboot comes with yast2-firstboot in SuSE.
+echo "OS_type='$OS_type'  OS_Version='$OS_Version' "
+read
 if [ "$OS_type" != "RH" ]; then
   if [ -f "$drbl_setup_path/files/${OS_type}/${OS_Version}/firstboot.${OS_Version}.drbl" ]; then
     cp -f $drbl_setup_path/files/${OS_type}/${OS_Version}/firstboot.${OS_Version}.drbl $drbl_common_root/etc/init.d/firstboot
