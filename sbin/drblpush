@@ -2385,8 +2385,6 @@ fi
 # common root /etc/init.d as firstboot.
 # There is already firstboot comes with RH/FC/CentOS.
 # We do NOT use the firstboot comes with yast2-firstboot in SuSE.
-echo "OS_type='$OS_type'  OS_Version='$OS_Version' "
-read
 if [ "$OS_type" != "RH" ]; then
   if [ -f "$drbl_setup_path/files/${OS_type}/${OS_Version}/firstboot.${OS_Version}.drbl" ]; then
     cp -f $drbl_setup_path/files/${OS_type}/${OS_Version}/firstboot.${OS_Version}.drbl $drbl_common_root/etc/init.d/firstboot
@@ -3611,7 +3609,7 @@ if [ -e /etc/debian_version ]; then
   fi
 
   # Start for LinuxMint , by Ceasar
-  if [ "$DISTRIB_ID" = "LinuxMint" ]; then
+  if [ "$DISTRIB_ID" = "LinuxMint" -a -z "$(echo $DISTRIB_DESCRIPTION | grep -iE '^LMDE' )" ]; then
     case "$DISTRIB_RELEASE" in
       *)
         # LinuxMint "17"|"17.1"|"17.2") or later
