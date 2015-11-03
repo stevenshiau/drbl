@@ -3495,7 +3495,7 @@ if [ "$client_archi_set" = "best_optimization" ]; then
     fi
   fi
   # For LinuxMint, via Ceasar Sun
-  if [ "$DISTRIB_ID" = "LinuxMint"  -a  -z "$(echo $DISTRIB_DESCRIPTION | grep -iE '^LMDE' )"]; then
+  if [ "$DISTRIB_ID" = "LinuxMint"  -a  -z "$(echo $DISTRIB_DESCRIPTION | grep -iE '^LMDE' )" ]; then
     # LinuxMint follow Ubuntu policy exclude  LMDE
     echo "The kernel image in Ubuntu $DISTRIB_RELEASE \"uses generic\" for i686/amd64 CPU."
     KARCH_LIST="generic"
