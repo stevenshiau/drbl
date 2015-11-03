@@ -311,6 +311,18 @@ get_autologin_account() {
       ip="$(basename $ihost)"
       auto_login_id="$(awk -F" " "/^$ip[[:space:]]+/ {print \$2}" $IP_HOST_TABLE)"
     fi
+
+    # Add by Ceasar:
+    # auto-login account can be define via : /etc/drbl/auto_login_host_id_passwd.txt
+    # Read /etc/drbl/auto_login_host_id_passwd.example as sample
+    auto_login_host_id_passwd_file="/etc/drbl/auto_login_host_id_passwd.txt"
+    _tmp_auto_login_id="$(awk  -v  auto_login_id="$auto_login_id" '{if ($1 == auto_login_id ) {print $2}}' $auto_login_host_id_passwd_file 2>/dev/null )"
+    _tmp_auto_login_passwd="$(awk -v  auto_login_id="$auto_login_id"  '{if ($1 == auto_login_id ) {print $3}}' $auto_login_host_id_passwd_file 2>/dev/null )"
+
+    if [ -n "$ _tmp_auto_login_id" ] ; then
+      auto_login_id="$_tmp_auto_login_id"
+      password_opt="$_tmp_auto_login_passwd"
+    fi 
 }
 # only show existing autologin account
 get_existing_autologin_account() {
@@ -1012,37 +1024,31 @@ sub_default_pxe_img() {
 #}
 #
 delete_label_block_pxe_img() {
-  local LABEL="$1"
-  local PXE_CONF_TMP="$2"
-  local lines begin_line end_line rc
-  [ -z "$LABEL" -o -z "$PXE_CONF_TMP" ] && return 1
-  lines=$(get_pxecfg_image_block $LABEL $PXE_CONF_TMP)
-  begin_line=$(echo $lines | awk -F" " '{print $1}')
-  end_line=$(echo $lines | awk -F" " '{print $2}')
-  # delete lines between $begin_line and $end_line
-  perl -i -ne "print unless $begin_line..$end_line" $PXE_CONF_TMP
-  rc=$?
-  return $rc
+     local LABEL="$1"
+     local PXE_CONF_TMP="$2"
+     local lines begin_line end_line rc
+     [ -z "$LABEL" -o -z "$PXE_CONF_TMP" ] && return 1
+     lines=$(get_pxecfg_image_block $LABEL $PXE_CONF_TMP)
+     begin_line=$(echo $lines | awk -F" " '{print $1}')
+     end_line=$(echo $lines | awk -F" " '{print $2}')
+     # delete lines between $begin_line and $end_line
+     perl -i -ne "print unless $begin_line..$end_line" $PXE_CONF_TMP
+     rc=$?
+     return $rc
 } # end of delete_label_block_pxe_img
 #
 delete_menuentry_block_grub_img() {
-  local ENTRY_ID="$1"
-  local GRUB_CONF_TMP="$2"
-  local lines begin_line end_line rc
-  [ -z "$ENTRY_ID" -o -z "$GRUB_CONF_TMP" ] && return 1
-  if [ -n "$GRUB_CONF_TMP" -a ! -e "$GRUB_CONF_TMP" ]; then
-    [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
-    echo "File $GRUB_CONF_TMP not found. No support for uEFI network boot."
-    [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
-    return 2
-  fi
-  lines="$(get_grub_efi_image_block "--id $ENTRY_ID" $GRUB_CONF_TMP)"
-  begin_line=$(echo $lines | awk -F" " '{print $1}')
-  end_line=$(echo $lines | awk -F" " '{print $2}')
-  # delete lines between $begin_line and $end_line
-  perl -i -ne "print unless $begin_line..$end_line" $GRUB_CONF_TMP
-  rc=$?
-  return $rc
+     local ENTRY_ID="$1"
+     local GRUB_CONF_TMP="$2"
+     local lines begin_line end_line rc
+     [ -z "$ENTRY_ID" -o -z "$GRUB_CONF_TMP" ] && return 1
+     lines="$(get_grub_efi_image_block "--id $ENTRY_ID" $GRUB_CONF_TMP)"
+     begin_line=$(echo $lines | awk -F" " '{print $1}')
+     end_line=$(echo $lines | awk -F" " '{print $2}')
+     # delete lines between $begin_line and $end_line
+     perl -i -ne "print unless $begin_line..$end_line" $GRUB_CONF_TMP
+     rc=$?
+     return $rc
 } # end of delete_label_block_pxe_img
 #
 ask_lang_set() {
@@ -1237,11 +1243,12 @@ prepare_gdm_custom_conf(){
 } # end of prepare_gdm_custom_conf
 #
 get_gdm_kdm_conf_filename() {
-  # Get the gdm, kdm config:
+  # Get the gdm, kdm, mdm config:
   # Ex: this is the setting for gdm 2.13 before and kdm 2.x/3.x
   # GDM_CFG="/etc/X11/gdm/gdm.conf"
   # FAC_GDM_CFG="/etc/X11/gdm/factory-gdm.conf"
   # KDM_CFG="/etc/kde3/kdm/kdmrc"
+  # KDM_CFG="/etc/mdm/mdm.conf"
   # For gdm 2.13 or later, different filenames, such as custom.conf, gdm.conf-custom and kdmrc, no more factory-gdm.conf
   # For Ubuntu 9.10, since upstart use /etc/init/gdm.conf, we have to exclude that.
   GDM_CFG=""
@@ -1291,6 +1298,13 @@ get_gdm_kdm_conf_filename() {
     fi
     LIGHTDM_CFG=/etc/lightdm/lightdm.conf
   fi
+
+  # For mdm : by Ceasar for Linuxmint
+  if [ -e "/etc/mdm/mdm.conf" ]; then
+    # for mdm v2.0
+    MDM_CFG=/etc/mdm/mdm.conf
+  fi
+
 } # end of get_gdm_kdm_conf_filename
 #
 get_block_line_in_gdm_kdm() {
@@ -1310,7 +1324,11 @@ get_block_line_in_gdm_kdm() {
   begin_line="$(echo $between_lines | awk -F" " '{print $1}')"
   end_line="$(echo $between_lines | awk -F" " '{print $2}')"
   # if end_line is nothing, it must be the last block, i.e. we can not find the next [.*]
-  if [ -z "$end_line" ]; then
+  if [ -z "$begin_line" -a  -z "$end_line"  ]; then
+    # no this session in file
+     begin_line="$(LC_ALL=C wc -l $CFG_FILE | awk -F" " '{print $1}')"
+     end_line="$(LC_ALL=C wc -l $CFG_FILE | awk -F" " '{print $1}')"
+  elif [ -z "$end_line"  ]; then
     end_line="$(LC_ALL=C wc -l $CFG_FILE | awk -F" " '{print $1}')"
   else
     # if not nothing, backword one line
@@ -3605,28 +3623,25 @@ drbl_service_ctl() {
 } # end of drbl_service_ctl
 #
 get_grub_efi_image_block() {
-  local IMG_NAME="$1"
-  local GRUB_CONF_TMP="$2"
-  [ -z "$IMG_NAME" ] && exit 1
-  # By using
-  # grep -Ei -n '^[[:space:]]*menuentry[[:space:]]+.*([[:space:]]|$)+' /tftpboot/nbi_img/grub-efi.cfg/grub.cfg | grep -A1 -E "menuentry[[:space:]]+.*--id drbl-client([[:space:]]|$)+"
-  # 29:menuentry "CentOS 7.1.1503 Linux (DRBL mode, mostly local resources)" {
-  # 34:menuentry 'Clonezilla' {
-  # so we know we can replace the one between line no. 29 and 34
-  if [ -n "$GRUB_CONF_TMP" -a ! -e "$GRUB_CONF_TMP" ]; then
-    return 2
-  fi
-  between_lines="$(LC_ALL=C grep -Ei -n -- "^[[:space:]]*[#]*menuentry[[:space:]]+.*([[:space:]]|$)+" $GRUB_CONF_TMP | grep -Ei -A1 -- "menuentry[[:space:]]+.*$IMG_NAME([[:space:]]|$)+" | cut -d":" -f1)"
-  begin_line="$(LC_ALL=C echo $between_lines | awk -F" " '{print $1}')"
-  end_line="$(LC_ALL=C echo $between_lines | awk -F" " '{print $2}')"
-  # if end_line is nothing, it must be the last block, i.e. we can not find the next [.*]
-  if [ -z "$end_line" ]; then
-    end_line="$(LC_ALL=C wc -l $GRUB_CONF_TMP | awk -F" " '{print $1}')"
-  else
-    # if not nothing, backword one line
-    end_line="$(($end_line - 1))"
-  fi
-  echo "$begin_line $end_line"
+     local IMG_NAME="$1"
+     local GRUB_CONF_TMP="$2"
+     [ -z "$IMG_NAME" ] && exit 1
+     # By using
+     # grep -Ei -n '^[[:space:]]*menuentry[[:space:]]+.*([[:space:]]|$)+' /tftpboot/nbi_img/grub-efi.cfg/grub.cfg | grep -A1 -E "menuentry[[:space:]]+.*--id drbl-client([[:space:]]|$)+"
+     # 29:menuentry "CentOS 7.1.1503 Linux (DRBL mode, mostly local resources)" {
+     # 34:menuentry 'Clonezilla' {
+     # so we know we can replace the one between line no. 29 and 34
+     between_lines="$(LC_ALL=C grep -Ei -n -- "^[[:space:]]*[#]*menuentry[[:space:]]+.*([[:space:]]|$)+" $GRUB_CONF_TMP | grep -Ei -A1 -- "menuentry[[:space:]]+.*$IMG_NAME([[:space:]]|$)+" | cut -d":" -f1)"
+     begin_line="$(LC_ALL=C echo $between_lines | awk -F" " '{print $1}')"
+     end_line="$(LC_ALL=C echo $between_lines | awk -F" " '{print $2}')"
+     # if end_line is nothing, it must be the last block, i.e. we can not find the next [.*]
+     if [ -z "$end_line" ]; then
+       end_line="$(LC_ALL=C wc -l $GRUB_CONF_TMP | awk -F" " '{print $1}')"
+     else
+       # if not nothing, backword one line
+       end_line="$(($end_line - 1))"
+     fi
+     echo "$begin_line $end_line"
 } # end of get_grub_efi_image_block
 #
 set_specific_host_grub_efi_conf() {
@@ -3677,12 +3692,6 @@ check_entryid_in_grub_efi_cfg() {
      [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
      exit 1
   fi
-  if [ -n "$GRUB_CONF_TMP" -a ! -e "$GRUB_CONF_TMP" ]; then
-    [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
-    echo "File $GRUB_CONF_TMP not found. No support for uEFI network boot."
-    [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
-    return 2
-  fi
   if ! grep -Eiq "^[[:space:]]*menuentry[[:space:]]+.*--id $ENTRY_ID" $GRUB_CONF_TMP; then
      [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
      echo "Unable to find the menuentry ($ENTRY_ID) ID! Make sure the $ENTRY_ID is labeled in $GRUB_CONF_TMP! Program terminated!!!"
@@ -3696,12 +3705,6 @@ sub_default_grub_efi_img() {
   local GRUB_CONF_TMP="$2"
   local ENTRY_LABEL="$3"
   local lines begin_line end_line
-  if [ -n "$GRUB_CONF_TMP" -a ! -e "$GRUB_CONF_TMP" ]; then
-    [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
-    echo "File $GRUB_CONF_TMP not found. No support for uEFI network boot."
-    [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
-    return 2
-  fi
   check_entryid_in_grub_efi_cfg "$ENTRY_ID" $GRUB_CONF_TMP
   # Set default menu and update the menuentry 
   perl -pi -e "s|^set default=.*|set default=$ENTRY_ID|g" $GRUB_CONF_TMP
@@ -3840,9 +3843,6 @@ get_status_grub_efi_cfg_block() {
   local GRUB_CONF_TMP="$2"
   local lines begin_line end_line rc block_status
   [ -z "$ENTRY_ID" -o -z "$GRUB_CONF_TMP" ] && return 1
-  if [ -n "$GRUB_CONF_TMP" -a ! -e "$GRUB_CONF_TMP" ]; then
-    return 2
-  fi
   lines="$(get_grub_efi_image_block "--id $ENTRY_ID" $GRUB_CONF_TMP)"
   begin_line=$(echo $lines | awk -F" " '{print $1}')
   end_line=$(echo $lines | awk -F" " '{print $2}')  # end_line is useless in this function. Just keep it for completion
@@ -3879,12 +3879,6 @@ add_opt_in_grub_efi_cfg_block() {
   [ -z "$entry_id" ] && echo "No entry_id in add_opt_in_grub_efi_cfg_block!" && exit 1
   [ -z "$opt_name" ] && echo "opt_name NOT specified in add_opt_in_grub_efi_cfg_block! Abort!" && exit 1
   [ -z "$opt_content" ] && echo "opt_content NOT specified in add_opt_in_grub_efi_cfg_block! Abort!" && exit 1
-  if [ -n "$GRUB_CONF" -a ! -e "$GRUB_CONF" ]; then
-    [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
-    echo "File $GRUB_CONF not found. No support for uEFI network boot."
-    [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
-    return 2
-  fi
   # Before adding option, we have to enable it because with grub there is no
   # way to hide unless with use # to comment the whole menuentry.
   # Save the status first
@@ -3925,12 +3919,6 @@ remove_opt_in_grub_efi_cfg_block() {
   local sub_menu_entry_cmd
   local status_saved
   [ -z "$entry_id" ] && echo "No entry_id in remove_opt_in_grub_efi_cfg_block!" && exit 1
-  if [ -n "$GRUB_CONF" -a ! -e "$GRUB_CONF" ]; then
-    [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
-    echo "File $GRUB_CONF not found. No support for uEFI network boot."
-    [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
-    return 2
-  fi
   # Before adding option, we have to enable it because with grub there is no
   # way to hide unless with use # to comment the whole menuentry.
   # Save the status first
@@ -3993,12 +3981,6 @@ override_opt_in_grub_efi_cfg_block() {
   local entry_id="$1" # e.g. "clonezilla-se-client"
   local all_opts="$2" # all the boot parameters
   [ -z "$entry_id" ] && echo "No entry_id in override_opt_in_grub_efi_cfg_block!" && exit 1
-  if [ -n "$GRUB_CONF" -a ! -e "$GRUB_CONF" ]; then
-    [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
-    echo "File $GRUB_CONF not found. No support for uEFI network boot."
-    [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
-    return 2
-  fi
   # Before adding option, we have to enable it because with grub there is no
   # way to hide unless with use # to comment the whole menuentry.
   # Save the status first

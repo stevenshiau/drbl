@@ -1584,7 +1584,7 @@ sub drbl_server_parse {
   my $nameserver_sys=`LC_ALL=C grep ^nameserver $DNS_sys | awk -F\" \" '{print \$2}'`;
   chomp $nameserver_sys;  # clean the last \n before substitute them as ","
   $nameserver_sys =~ s/\n/,/g;
-  if ( "$nameserver_sys" eq "127.0.0.1" ) {
+  if ( "$nameserver_sys" eq "127.0.0.1" ||  "$nameserver_sys" eq "127.0.1.1"  ) {
     # On Ubuntu, dnsmasq with network-manager, the result might 127.0.0.1. We use nm-tool to get the real one
     $nameserver_sys=`LC_ALL=C nm-tool -v 2>/dev/null | grep -i "DNS:" | awk -F " " '{print \$2}'`;
     chomp $nameserver_sys;  # clean the last \n before substitute them as ","
@@ -2551,7 +2551,7 @@ if [ -e "$drbl_common_root/etc/systemd/journald.conf" ]; then
 fi
 
 # Get the gdm or kdm config filename
-# get_gdm_kdm_conf_filename will also process lightdm. For Ubuntu 14.04, /etc/lightdm/lightdm.conf does not exist, and get_gdm_kdm_conf_filename will unzip the one "/usr/share/doc/lightdm/lightdm.conf.gz" and put it in /etc/lightdm/
+# get_gdm_kdm_conf_filename will also process lightdm/mdm. For Ubuntu 14.04, /etc/lightdm/lightdm.conf does not exist, and get_gdm_kdm_conf_filename will unzip the one "/usr/share/doc/lightdm/lightdm.conf.gz" and put it in /etc/lightdm/
 get_gdm_kdm_conf_filename
 
 if [ -z "$GDM_CFG" ]; then
@@ -3607,6 +3607,59 @@ if [ -e /etc/debian_version ]; then
 	;;
     esac
   fi
+
+  # Start for LinuxMint , by Ceasar
+  if [ "$DISTRIB_ID" = "LinuxMint" ]; then
+    case "$DISTRIB_RELEASE" in
+      *)
+        # LinuxMint "17"|"17.1"|"17.2") or later
+        if [ -e "$drbl_setup_path/files/${DISTRIB_ID}/${DISTRIB_RELEASE}/drbl-client-boot.conf" ]; then
+          cp -af $drbl_setup_path/files/${DISTRIB_ID}/${DISTRIB_RELEASE}/drbl-client-boot.conf $drbl_common_root/etc/init/drbl-client-boot.conf
+        else
+          if ! is_systemd_init; then
+            [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+            echo "Warning! Unable to find the fine-tune file $drbl_setup_path/files/${DISTRIB_ID}/${DISTRIB_RELEASE}/drbl-client-boot.conf, use $drbl_setup_path/files/${DISTRIB_ID}/drbl-client-boot-default.conf for DRBL clients!"
+            echo "This may cause some problems to DRBL clients!"
+            [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+            cp -af $drbl_setup_path/files/${DISTRIB_ID}/drbl-client-boot-default.conf $drbl_common_root/etc/init/drbl-client-boot.conf
+          fi
+        fi
+
+        if [ -e "$drbl_setup_path/files/${DISTRIB_ID}/${DISTRIB_RELEASE}/S00wait-drbl" ]; then
+          cp -af $drbl_setup_path/files/${DISTRIB_ID}/${DISTRIB_RELEASE}/S00wait-drbl $drbl_common_root/etc/rcS.d/
+        else
+          if ! is_systemd_init; then
+            [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+            echo "Warning! Unable to find the fine-tune file $drbl_setup_path/files/${DISTRIB_ID}/$DISTRIB_RELEASE/S00wait-drbl, use $drbl_setup_path/files/${DISTRIB_ID}/S00wait-drbl-default for DRBL clients!"
+            echo "This may cause some problems to DRBL clients!"
+            [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+            cp -af $drbl_setup_path/files/${DISTRIB_ID}/S00wait-drbl-default $drbl_common_root/etc/init/S00wait-drbl
+          fi
+        fi
+        # deal with plymouth.conf
+        if [ -e "$drbl_setup_path/files/${DISTRIB_ID}/${DISTRIB_RELEASE}/plymouth.conf" ]; then
+          # Use the customized plymouth.conf.
+          cp -af $drbl_setup_path/files/${DISTRIB_ID}/${DISTRIB_RELEASE}/plymouth.conf $drbl_common_root/etc/init/plymouth.conf
+        else
+          if [ "$DISTRIB_RELEASE" \< 17 ]; then
+            echo "Not supported version: DISTRIB_ID='$DISTRIB_ID' ; DISTRIB_RELEASE='$DISTRIB_RELEASE'";
+          elif [ "$DISTRIB_RELEASE" \< 18 ]; then
+            # For : LinuxMint 17.x
+            echo "manual" > $drbl_common_root/etc/init/plymouth.override
+	    perl -pi -e 's|^([[:space:]]*)(status plymouth-shutdown.*start wait-for-state WAITER=rc WAIT_FOR=plymouth-shutdown.*)|$1true #$2 # Commented by DRBL to keep the services in rc in same console|g' $drbl_common_root/etc/init/rc.conf
+	  else
+            # For : LinuxMint 18 or later (pre-expected)
+	    perl -pi -e 's|^([[:space:]]*)(status plymouth-shutdown.*start wait-for-state WAITER=rc WAIT_FOR=plymouth-shutdown.*)|$1true #$2 # Commented by DRBL to keep the services in rc in same console|g' $drbl_common_root/etc/init/rc.conf
+	  fi 
+        fi
+      ;;
+      *)
+        echo "Not supported version :$DISTRIB_ID <$DISTRIB_RELEASE>";
+      ;;
+    esac
+  fi
+  # End for LinuxMint
+
   # Modify upstart 0.6.3 /etc/init.d/*.conf.
   if [ -d "$drbl_common_root/etc/init" ]; then
     # For Ubuntu 9.10 upstart problem.
