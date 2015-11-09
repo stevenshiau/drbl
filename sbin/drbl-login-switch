@@ -323,6 +323,150 @@ set_lightdm_normal_login() {
     tune_lightdm_manual_login $inode true
 } # end of set_lightdm_normal_login
 #
+######################################################################################
+# waiting fixing , via : Ceasar 
+set_mdm_auto_login() {
+  local inode="$1"
+  local iauto_login_id="$2"
+  if [ ! -f "$inode/$MDM_CFG"  ]; then
+    echo "[daemon]" > $inode/$MDM_CFG
+  fi
+  if [ ! -f "$inode/$MDM_CFG" ]; then
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING 
+    echo "LightDM config in $inode NOT found, assume it's DRBL SSI mode!"  
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+    return 1
+  fi
+  # disable other types login (timed login) if exists
+  perl -p -i -e "s/^[[:space:]]*#*[[:space:]]*TimedLoginEnable=.*/TimedLoginEnable=false/" $inode/$MDM_CFG
+
+  # put the autologin id
+  lines="$(get_block_line_in_gdm_kdm daemon $inode/$MDM_CFG)"
+  begin_line=$(echo $lines | awk -F" " '{print $1}')
+  end_line=$(echo $lines | awk -F" " '{print $2}')
+  chk_cmd="if ($begin_line..$end_line) {print}"
+  if [ -n "$(perl -n -e "$chk_cmd" $inode/$MDM_CFG | grep -i "^AutomaticLogin=")" ]; then
+    sub_cmd="if ($begin_line..$end_line) {s/^AutomaticLogin=.*/AutomaticLogin=$iauto_login_id/}"
+    perl -pi -e "$sub_cmd" $inode/$MDM_CFG
+  else
+    # insert 2 blank line
+    sub_cmd="if ($((end_line))..$((end_line))) {s/^(.*)$/\$1\n\n/gi}"
+    perl -pi -e "$sub_cmd" $inode/$MDM_CFG
+    # replace the one we want in the added blank line
+    sub_cmd="if ($((end_line+1))..$((end_line+1))) {s/^$/AutomaticLogin=$iauto_login_id/gi}"
+    perl -pi -e "$sub_cmd" $inode/$MDM_CFG
+    sub_cmd="if ($((end_line+2))..$((end_line+2))) {s/^$/AutomaticLoginEnable=true/gi}"
+    perl -pi -e "$sub_cmd" $inode/$MDM_CFG
+
+  fi
+} # end of set_mdm_auto_login
+#
+set_mdm_timed_login() {
+  local inode="$1"
+  local iauto_login_id="$2"
+  local tlogin_time="$3"
+  if [ ! -f "$inode/$MDM_CFG" ]; then
+    echo "[daemon]" > $inode/$MDM_CFG
+  fi
+  if [ ! -f $inode/$MDM_CFG ]; then
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING 
+    echo "$inode/$MDM_CFG is NOT found!!! Assume it's DRBL SSI mode!"  
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+    return 1
+  fi
+
+  # disable other types login (timed login) if exists
+  perl -p -i -e "s/^[[:space:]]*#*[[:space:]]*AutomaticLoginEnable=.*/AutomaticLoginEnable=false/" $inode/$MDM_CFG
+
+  # set the timed login time
+  [ -z "$tlogin_time" ] && tlogin_time="$TIMED_LIGHTDM_TIME_DEFAULT"
+
+  # put the timedlogin delay time
+  lines="$(get_block_line_in_gdm_kdm daemon $inode/$MDM_CFG)"
+  begin_line=$(echo $lines | awk -F" " '{print $1}')
+  end_line=$(echo $lines | awk -F" " '{print $2}')
+  chk_cmd="if ($begin_line..$end_line) {print}"
+  if [ -n "$(perl -n -e "$chk_cmd" $inode/$MDM_CFG | grep -i "^TimedLoginDelay=")" ]; then
+    sub_cmd="if ($begin_line..$end_line) {s/^TimedLoginDelay=.*/TimedLoginDelay=$tlogin_time/}"
+    perl -pi -e "$sub_cmd" $inode/$MDM_CFG
+  else
+    # insert 1 blank line
+    sub_cmd="if ($((end_line))..$((end_line))) {s/^(.*)$/\$1\n/gi}"
+    perl -pi -e "$sub_cmd" $inode/$MDM_CFG
+    # replace the one we want in the added blank line
+    sub_cmd="if ($((end_line+1))..$((end_line+1))) {s/^$/TimedLoginDelay=$tlogin_time/gi}"
+    perl -pi -e "$sub_cmd" $inode/$MDM_CFG
+  fi
+  # put the timedlogin id
+  lines="$(get_block_line_in_gdm_kdm deamon $inode/$MDM_CFG)"
+  begin_line=$(echo $lines | awk -F" " '{print $1}')
+  end_line=$(echo $lines | awk -F" " '{print $2}')
+  chk_cmd="if ($begin_line..$end_line) {print}"
+  if [ -n "$(perl -n -e "$chk_cmd" $inode/$MDM_CFG | grep -i "^TimedLogin=")" ]; then
+    sub_cmd="if ($begin_line..$end_line) {s/^TimedLogin=.*/TimedLogin=$iauto_login_id/}"
+    perl -pi -e "$sub_cmd" $inode/$MDM_CFG
+  else
+    # insert 2 blank line
+    sub_cmd="if ($((end_line))..$((end_line))) {s/^(.*)$/\$1\n\n/gi}"
+    perl -pi -e "$sub_cmd" $inode/$MDM_CFG
+    # replace the one we want in the added blank line
+    sub_cmd="if ($((end_line+1))..$((end_line+1))) {s/^$/TimedLogin=$iauto_login_id/gi}"
+    perl -pi -e "$sub_cmd" $inode/$MDM_CFG
+    sub_cmd="if ($((end_line+2))..$((end_line+2))) {s/^$/TimedLoginEnable=true/gi}"
+    perl -pi -e "$sub_cmd" $inode/$MDM_CFG
+  fi
+  # Append greeter-show-manual-login=true
+  tune_mdm_manual_login $inode true
+} # end of set_mdm_timed_login
+#
+tune_mdm_manual_login() {
+  local inode="$1" # Path to $LIGHTDM_CFG
+  local manual_login_mode="$2"  # true or false
+  # To config greeter-show-manual-login=true
+  if [ ! -f "$inode/$LIGHTDM_CFG" ]; then
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING 
+    echo "LightDM config in $inode NOT found, assume it's DRBL SSI mode!"  
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+    return 1
+  fi
+
+  # put the greeter-show-manual-login 
+  lines="$(get_block_line_in_gdm_kdm greeter $inode/$MDM_CFG)"
+  begin_line=$(echo $lines | awk -F" " '{print $1}')
+  end_line=$(echo $lines | awk -F" " '{print $2}')
+  chk_cmd="if ($begin_line..$end_line) {print}"
+  if [ -n "$(perl -n -e "$chk_cmd" $inode/$LIGHTDM_CFG | grep -i "^greeter-show-manual-login=")" ]; then
+    sub_cmd="if ($begin_line..$end_line) {s/^greeter-show-manual-login=.*/greeter-show-manual-login=$manual_login_mode/}"
+    perl -pi -e "$sub_cmd" $inode/$MDM_CFG
+  else
+    # insert 1 blank line
+    sub_cmd="if ($((end_line))..$((end_line))) {s/^(.*)$/\$1\n/gi}"
+    perl -pi -e "$sub_cmd" $inode/$MDM_CFG
+    # replace the one we want in the added blank line
+    sub_cmd="if ($((end_line+1))..$((end_line+1))) {s/^$/greeter-show-manual-login=$manual_login_mode/gi}"
+    perl -pi -e "$sub_cmd" $inode/$MDM_CFG
+  fi
+} # end of tune_mdm_manual_login
+#
+set_mdm_normal_login() {
+    local inode="$1"
+    if [ ! -f "$inode/$LIGHTDM_CFG" -a \
+           -d "$inode/etc/lightdm/lightdm.conf.d" ]; then
+      echo "[SeatDefaults]" > $inode/$LIGHTDM_CFG
+    fi
+    if [ ! -f $inode/$LIGHTDM_CFG ]; then
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING 
+      echo "$inode/$LIGHTDM_CFG is NOT found!!! Assume it's DRBL SSI mode!"  
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+      return 1
+    fi
+    # disable auto and timed login, then it will be normal login since this is the default setting.
+    perl -p -i -e "s/^[[:space:]]*#*[[:space:]]*autologin-user=.*/#autologin-user=/" $inode/$LIGHTDM_CFG
+    perl -p -i -e "s/^[[:space:]]*#*[[:space:]]*autologin-user-timeout=.*/#autologin-user-timeout=/" $inode/$LIGHTDM_CFG
+    # Append greeter-show-manual-login=true
+    tune_mdm_manual_login $inode true
+} # end of set_mdm_normal_login
+#####################################################################333#
 set_kdm_auto_login() {
     local inode="$1"
     if [ ! -f "$inode/$KDM_CFG" ]; then
@@ -603,6 +747,34 @@ case "$preferred" in
           ;;
        "normal_login")
      	  set_lightdm_normal_login $ihost
+     	  echo "done!"
+          ;;
+     esac
+    done
+    # output result and update yp
+    output_result_and_update_yp
+    ;;
+  mdm)
+    for ihost in $host_list; do
+     echo -n "Setting node `basename $ihost` as $login_dm_mode... "
+     case "$login_dm_mode" in
+       "auto_login"|"timed_login")
+	  # create auto login account if necessary
+	  create_autologin_account $ihost
+	  # set the mode for $AUTO_LOGIN_ID_PASSWD as root access only
+	  [ -f "$AUTO_LOGIN_ID_PASSWD" ] && chmod 600 $AUTO_LOGIN_ID_PASSWD
+     	  case "$login_dm_mode" in
+     	    "auto_login")
+     	       set_mdm_auto_login $ihost $auto_login_id
+     	       ;;
+     	    "timed_login")
+     	       set_mdm_timed_login $ihost $auto_login_id $timed_login_time
+     	       ;;
+     	  esac
+     	  echo "done!"
+          ;;
+       "normal_login")
+     	  set_mdm_normal_login $ihost
      	  echo "done!"
           ;;
      esac
