@@ -319,7 +319,7 @@ get_autologin_account() {
     _tmp_auto_login_id="$(awk  -v  auto_login_id="$auto_login_id" '{if ($1 == auto_login_id ) {print $2}}' $auto_login_host_id_passwd_file 2>/dev/null )"
     _tmp_auto_login_passwd="$(awk -v  auto_login_id="$auto_login_id"  '{if ($1 == auto_login_id ) {print $3}}' $auto_login_host_id_passwd_file 2>/dev/null )"
 
-    if [ -n "$ _tmp_auto_login_id" ] ; then
+    if [ -n "$_tmp_auto_login_id" ] ; then
       auto_login_id="$_tmp_auto_login_id"
       password_opt="$_tmp_auto_login_passwd"
     fi 
