@@ -1,0 +1,15 @@
+# DRBL clients HOST- ACCOUNT- PASSWD Mapping
+# The format is:
+# ---------------------
+# "hostname"  "auto-login account" "passwd for this account"
+# ---------------------
+# List them line by line, edit this before you run "drblpush -i".
+# *******NOTE********
+# 1. The hostname must be unique! Do NOT duplicate them.
+# 2. Random password would be assigned if 3th field is empty (as the example 3)
+#
+# Example:
+# host-01 autouser-01 passw111
+# host-02 autouser-01 passwd222
+# cust-host-03  random-passwd-account
+
