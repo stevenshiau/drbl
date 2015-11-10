@@ -5,6 +5,17 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.18.1-drbl1) unstable; urgency=low
+
+  [ Ceasar Sun ]
+  * Adding syslinux-common as required pkg in drbl.conf for Debian-like
+    Linux. This is used to support Linux Mint.
+  * Adding mdm support for drbl-login-switch.
+  * Adding breakpoints in init.drbl.
+  * Adding support for Linux Mint.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 10 Nov 2015 10:15:05 +0800
+
 drbl (2.17.12-drbl1) unstable; urgency=low
 
   * Adding package fatresize in the DRBL/Clonezilla live packages
