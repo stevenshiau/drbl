@@ -1,6 +1,6 @@
 #!/bin/bash
 # This file is borrowed from Debian's diskless.
-# Modified by Steven Shiau, <steven _at_ nchc org tw>
+# Modified by Steven Shiau <steven _at_ nchc org tw>, Ceasar Sun <ceasar _at_ nchc org tw>
 # License: GPL
 # 2006/02/28
 # Thanks to James MacLean for providing clientdir method in kernel cmdline.
@@ -120,6 +120,32 @@ remove_extra_nfs_opt_to_fstab() {
     perl -pi -e "s|,nosharecache||g" /etc/fstab
   fi
 } # end of remove_extra_nfs_opt_to_fstab() {
+maybe_break(){
+	# Refer from Debian live-boot
+	if echo "${break:-}" | egrep -q "(,|^)$1(,|$)"; then
+		if command -v chvt >/dev/null 2>&1; then
+			chvt 1
+		fi
+
+		echo "break point=$break"
+
+		#run_scripts /scripts/panic
+		for i in 1 2 3 4 5 6; do
+			[ -c /dev/tty$i ] || mknod /dev/tty$i c 4 $i
+		done
+		REASON="$@" PS1='(init.drbl) ' /bin/sh -i </dev/console >/dev/console 2>&1
+	fi
+}
+parse_cmd_append(){
+for x in $(cat /proc/cmdline); do
+	case $x in
+	break=*)
+		break=${x#break=}
+		;;
+	esac
+done
+
+}
 
 ############
 ### MAIN ###
@@ -214,6 +240,8 @@ else
   echo "Program terminated!"
   exit 1
 fi
+
+maybe_break drbl_prenfs
 
 # Check if single system image is on
 ssi_flag=0
@@ -318,6 +346,8 @@ else
   add_extra_nfs_opt_to_fstab
 fi
 
+maybe_break drbl_postnfs
+
 # Clear mtab
 rm -f /etc/mtab /etc/mtab~ /etc/mtab~~ /etc/nologin
 
@@ -368,6 +398,9 @@ echo "Let original init take over..."
 # initrd=initrd-pxe.img devfs=nomount drblthincli=off selinux=0   1 ocs_opt="--language en  -b -g auto -y0 -p true --max-time-to-wait 300 --mcast-port 22 32 multicast_restoredisk 2disks hda hdb"
 # We have to filter the ocs_opt to avoid some options, like -b or 1 inside it, which init will think it's emergency mode or other mode
 pure_cmdline="$(sed -e "s/ocs_opt=\".*\"//g" /proc/cmdline)"
+
+maybe_break drbl_pre_run_init
+
 exec /sbin/init.orig $pure_cmdline $*
 # Only should get here if something went wrong
 echo "FATAL ERROR: exec /sbin/init.orig failed" >&2
