@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.18.2-drbl1) unstable; urgency=low
+
+  * Adding fatresize in the packages list for clonezilla/drbl live.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 16 Nov 2015 09:56:40 +0800
+
 drbl (2.18.1-drbl1) unstable; urgency=low
 
   [ Ceasar Sun ]

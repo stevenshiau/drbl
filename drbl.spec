@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.18.1
+Version:	2.18.2
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Mon Nov 16 2015 Steven Shiau <steven _at_ nchc org tw> 2.18.2-drbl1
+- Adding fatresize in the packages list for clonezilla/drbl live.
+
 * Tue Nov 10 2015 Steven Shiau <steven _at_ nchc org tw> 2.18.1-drbl1
 [ Ceassar Sun ]
 - Adding syslinux-common as required pkg in drbl.conf for Debian-like Linux. This is used to support Linux Mint.
