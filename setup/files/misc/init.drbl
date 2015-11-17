@@ -351,12 +351,15 @@ maybe_break drbl_postnfs
 # Clear mtab
 rm -f /etc/mtab /etc/mtab~ /etc/mtab~~ /etc/nologin
 
-# if, for any reason, mtab was not synced with what it should be, Sync it.
-while read ilist; do
-  # skip the "rootfs / rootfs rw 0 0" 
-  [ -n "$(echo $ilist | grep -E "^rootfs \/ rootfs .*")" ] && continue
-  echo $ilist >> /etc/mtab
-done < /proc/mounts
+# systemd v227 forces to have /etc/mtab as symbolic file to /proc/mounts.
+# Ref: https://github.com/stevenshiau/drbl/issues/4
+## if, for any reason, mtab was not synced with what it should be, Sync it.
+#while read ilist; do
+#  # skip the "rootfs / rootfs rw 0 0" 
+#  [ -n "$(echo $ilist | grep -E "^rootfs \/ rootfs .*")" ] && continue
+#  echo $ilist >> /etc/mtab
+#done < /proc/mounts
+ln -fs /proc/mounts /etc/mtab
 
 # umount the useless /initrd/proc and /initrd if they exist.
 for i in /initrd/proc /initrd; do
