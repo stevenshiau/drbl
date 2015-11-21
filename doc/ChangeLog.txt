@@ -5,6 +5,15 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.18.3-drbl1) unstable; urgency=low
+
+  * Add options -sc0 and -scr for checking image integrity before
+    restoring an image. The former is to check on Clonezilla server,
+    and the latter is to check on Clonezilla client.
+  * Language files were updated for options -sc0 and -scr.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sat, 21 Nov 2015 22:42:17 +0800
+
 drbl (2.18.2-drbl1) unstable; urgency=low
 
   * Adding fatresize in the packages list for clonezilla/drbl live.

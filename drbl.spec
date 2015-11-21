@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.18.2
+Version:	2.18.3
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,10 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Sat Nov 21 2015 Steven Shiau <steven _at_ nchc org tw> 2.18.3-drbl1
+- Add options -sc0 and -scr for checking image integrity before restoring an image. The former is to check on Clonezilla server, and the latter is to check on Clonezilla client.
+- Language files were updated for options -sc0 and -scr.
+
 * Mon Nov 16 2015 Steven Shiau <steven _at_ nchc org tw> 2.18.2-drbl1
 - Adding fatresize in the packages list for clonezilla/drbl live.
 
