@@ -990,3 +990,8 @@ msg_mount_S3_server='Use AWS S3 server'
 msg_mount_swift_server='Use OpenStack swift server'
 # Tag on 2015/05/06
 msg_locale_hu_HU='Hungarian'
+# Tag on 2015/11/18
+msg_choose_if_checking_image_restorable_before_restoring_on_this_server='Before restoring the image, do you want to check if the image is restorable on this server? ///NOTE/// This action will only check the image is restorable or not, and it will not write any data to the harddrive.'
+msg_choose_if_checking_image_restorable_before_restoring='Before restoring the image, do you want to check if the image is restorable or not? ///NOTE/// This action will only check the image is restorable or not, and it will not write any data to the harddrive.'
+msg_ocs_param_check_img_restorable_before_restoring='Yes, check the image before restoring'
+msg_ocs_param_skip_checking_img_restorable_before_restoring='No, skip checking the image before restoring'
