@@ -1693,7 +1693,7 @@ else
     "$msg_clonezilla_advanced_extra_param | $msg_mode: $ocs_mode_prompt" --menu "$msg_choose_if_checking_image_restorable" \
     0 0 0 $DIA_ESC \
     " "     "$msg_ocs_param_check_img_restorable" \
-    "-sc "  "$msg_ocs_param_skip_checking_img_restorable" \
+    "-scs " "$msg_ocs_param_skip_checking_img_restorable" \
     2>> $OCS_PARAM_TMP
   else
     # Convert none to "", as we can not set ocs_chk_img as "" otherwise it will be asked in the previous if block.
@@ -2082,7 +2082,7 @@ if [ "$mode" = "save" ]; then
     "$msg_clonezilla_advanced_extra_param | $msg_mode: $ocs_mode_prompt" --menu "$msg_choose_if_checking_image_restorable" \
     0 0 0 $DIA_ESC \
     " "     "$msg_ocs_param_check_img_restorable" \
-    "-sc "  "$msg_ocs_param_skip_checking_img_restorable" \
+    "-scs " "$msg_ocs_param_skip_checking_img_restorable" \
     2>> $OCS_PARAM_TMP
   else
     # Convert none to "", as we can not set ocs_chk_img as "" otherwise it will be asked in the previous if block.
