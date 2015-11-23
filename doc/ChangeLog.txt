@@ -5,6 +5,14 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.18.4-drbl1) unstable; urgency=low
+
+  * Switch to use "-scs" instead of "-sc" although "-sc" is still
+    working. This will be easier to tell the differences between
+    saving and restoring image. 
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 23 Nov 2015 17:20:27 +0800
+
 drbl (2.18.3-drbl1) unstable; urgency=low
 
   * Add options -sc0 and -scr for checking image integrity before
