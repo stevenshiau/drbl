@@ -5,6 +5,17 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.18.5-drbl1) unstable; urgency=low
+
+  * "Shoutdown" should be "Desligar" in luanguage file pt_BR.
+    Thanks to Luciano (lboni2 _at_ yahoo com br) for correcting this.
+  * Give warning about grub2 uEFI NB on CentOS 7 for grub2 versions
+    2.02-0.17 and 2.02-0.23 in drblsrv.
+  * Add OCS files (ocsd-*.service) for Clonezilla SE clients.
+  * Apply the patches from Ceasar Sun to initial support Fedora >=21.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sat, 12 Dec 2015 08:27:51 +0800
+
 drbl (2.18.4-drbl1) unstable; urgency=low
 
   * Switch to use "-scs" instead of "-sc" although "-sc" is still
