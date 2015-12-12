@@ -100,7 +100,8 @@ if [ -n "$baseurl" ]; then
   convert_url_os_path $baseurl
 else
   # try to find mirrorlist
-  mirrorlist="$(LC_ALL=C perl -n -e "$chk_cmd" $yum_repo_set | grep -Ei "^[[:space:]]*mirrorlist=" | sed -re "s/^[[:space:]]*mirrorlist=//gi")"
+  # Fedora 21,22 use 'metalink' not 'mirrorlist'
+  mirrorlist="$(LC_ALL=C perl -n -e "$chk_cmd" $yum_repo_set | grep -Ei "^[[:space:]]*(mirrorlist|metalink)=" | sed -re "s/^[[:space:]]*(mirrorlist|metalink)=//gi")"
 
   # eval mirrorlist=$mirrorlist
   # Note! eval mirrorlist=$mirrorlist fails in CentOS 4.3, since there are "=" in the variable, 
