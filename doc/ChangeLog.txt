@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.18.6-drbl1) unstable; urgency=low
+
+  * Adding ocsd files for CentOS 7.2.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 14 Dec 2015 22:22:42 +0800
+
 drbl (2.18.5-drbl1) unstable; urgency=low
 
   * "Shoutdown" should be "Desligar" in luanguage file pt_BR.

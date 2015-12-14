@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.18.5
+Version:	2.18.6
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Mon Dec 14 2015 Steven Shiau <steven _at_ nchc org tw> 2.18.6-drbl1
+- Adding ocsd files for CentOS 7.2.
+
 * Sat Dec 12 2015 Steven Shiau <steven _at_ nchc org tw> 2.18.5-drbl1
 - "Shoutdown" should be "Desligar" in luanguage file pt_BR. Thanks to Luciano (lboni2 _at_ yahoo com br) for correcting this.
 - Give warning about grub2 uEFI NB on CentOS 7 for grub2 versions 2.02-0.17 and 2.02-0.23 in drblsrv.
