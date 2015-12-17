@@ -127,7 +127,9 @@ run_drblsrv_offline() {
      "from_downloaded_pkg")
         case "$OS_type" in
           RH|MDK)
-            client_kernel_pkg="$(unalias ls 2>/dev/null; ls $client_kernel_tmp_dir/*.rpm)"
+            #client_kernel_pkg="$(unalias ls 2>/dev/null; ls $client_kernel_tmp_dir/*.rpm)"
+            client_kernel_pkg=$client_kernel_tmp_dir/$chosen_kernel_for_client
+
             ;;
   	  DBN)
 	    # ${latest_drbl_kernel_in_rep} is global variable when downloading kernel from apt repository
@@ -1456,14 +1458,7 @@ LATEST_KTMP="$(mktemp /tmp/latest_ktmp.XXXXXX)"
 
 # For Fedora Core 5 with x86_64 arch, all kernels have SMP support, even though the name will not contain smp.
 case "$OS_Version" in
-   FC5)
-     # Remove the -smp tag in kernel package name if it's x86_64 FC5 or later. 
-     if [ "$ARCH" = "x86_64" ]; then
-       echo "Note: For Fedora Core 5 or newer version with x86_64 arch, all kernels have SMP support, even though the name will not contain smp."
-       SMP_OPTION=""
-     fi
-     ;;
-   FC[6-9]|FC[12][0123456789])
+   FC[12][0123456789])
      # From Fedora Core 6, one kernel fits single processor and SMP (including 
      # i386 and x86_64 distributions).
      SMP_OPTION=""
@@ -1708,7 +1703,22 @@ case "$client_kernel_install_mode" in
         echo -n "Downloading $KARCH $chosen_kernel_for_client from $kgot_url_rpm to $client_kernel_tmp_dir/... "
         # just download it
         get_inst_rpm -f $kgot_url_rpm -t $client_kernel_tmp_dir
-        rc=$?
+	 rc=$?
+         # FC 22 or later use kernel-core-`uname -r`*.rpm as real  package , but kernel-`uname-r`*.rpm only be meta package 
+         if [ -z "$(LC_ALL=C rpm -qpl $client_kernel_tmp_dir/${avail_krpm} 2>/dev/null | grep vmlinuz )" ] ; then
+            kcore_rpm="$(LC_ALL=C rpm -qpR $client_kernel_tmp_dir/${avail_krpm} | grep -E '^kernel[-PAE]*-core' | sed -e 's/uname-r\ *=\ *//g' -e 's/+PAE$//g').rpm"
+            kmodules_rpm="$(LC_ALL=C rpm -qpR $client_kernel_tmp_dir/${avail_krpm} | grep -E '^kernel[-PAE]*-modules' | sed -e 's/uname-r\ *=\ *//g' -e 's/+PAE$//g').rpm"
+            kcoregot_url_rpm="$url_os_coreroot/${idir}/${kcore_rpm}"
+            kmodulesgot_url_rpm="$url_os_coreroot/${idir}/${kmodules_rpm}"
+            get_inst_rpm -f $kcoregot_url_rpm -t $client_kernel_tmp_dir
+            get_inst_rpm -f $kmodulesgot_url_rpm -t $client_kernel_tmp_dir
+             if [ -n "$(LC_ALL=C rpm -qpl $client_kernel_tmp_dir/${kcore_rpm} 2>/dev/null | grep vmlinuz )" ] ; then 
+                chosen_kernel_for_client=${kcore_rpm}
+                drblsrv_offline_extra_opt="$drblsrv_offline_extra_opt -e $client_kernel_tmp_dir/$kmodules_rpm"
+              else
+                 rc=1
+              fi
+         fi
       fi
       # once it's done, skip the next search
       if [ "$rc" -eq 0 ]; then
@@ -1718,6 +1728,7 @@ case "$client_kernel_install_mode" in
         [ -n "$verbose" ] && echo "$chosen_kernel_for_client is not found in $url_os_coreroot/${idir}."
       fi
     done
+
     if [ "$rc" -ne 0 ]; then
       [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
       echo "$chosen_kernel_for_client is NOT found in the repository!"
@@ -2345,15 +2356,7 @@ parse_client_archi_setting() {
           ;;
     esac
   fi
-  # For FC12/13/14/17..., only one archi for x86 is available, i.e. i686.
-  case "$OS_Version" in
-  FC[12][23456789])
-        [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
-        echo "$msg_change_cpu_level_to_i686"
-        [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
-        client_archi_ans="2"
-        ;;
-  esac
+  
   # for Debian woody/sarge/breezy-> i386 and i686 are available, i586 is not available.
   if [ "$client_archi_ans" = "1" ]; then
     case "$OS_Version" in
