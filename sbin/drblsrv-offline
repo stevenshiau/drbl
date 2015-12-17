@@ -1,5 +1,5 @@
 #!/bin/bash
-# Author: Steven Shiau <steven _at_ nchc org tw>
+# Author: Steven Shiau <steven _at_ nchc org tw>, Ceasar Sun <ceasar _at_ nchc ogr tw>
 # License: GPL 
 
 # Load DRBL setting and functions
@@ -173,7 +173,8 @@ install_kernel_for_client_func() {
 	# From ubuntu 7.10, another kernel module is linux-ubuntu-modules.
 	if [ -n "$extra_client_kernel_pkg" ]; then
           for i in $extra_client_kernel_pkg; do
-            if [ -n "$(echo $i | grep linux-restricted-modules)" ]; then
+            # FC 22 or later use kernel[-PAE]*-modules-*.rpm for extra modules
+            if [ -n "$(LC_ALL=C echo $i | grep -E 'linux-restricted-modules|kernel[-PAE]*-modules' )" ]; then
               install_extra_opt="--just-cp-files"
 	    else
               install_extra_opt=""
