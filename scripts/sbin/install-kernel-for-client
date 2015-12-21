@@ -1,5 +1,5 @@
 #!/bin/bash
-# Author: Steven Shiau <steven _at_ nchc org tw>
+# Author: Steven Shiau <steven _at_ nchc org tw>, Ceasar Sun <ceasar _at_ nchc org tw>
 # License: GPL 
 #
 # This program is free software; you can redistribute it and/or modify
@@ -121,13 +121,7 @@ case "$mode" in
       client_kernel_ver="$(rpm -qpl $client_kernel_pkg | awk -F" " '{print $NF}' | awk -F"/" '/\/lib\/modules/ {print $4}' | sort | uniq)"
     fi
     # we might need /tftpboot/node_root/var/lock/rpm/ for locking in some dist (like CentOS 4.4).
-    # if [ -L /var/lock ]; then
-    #   # For FC17, /var/lock is linked to /run/lock, a tmpfs dir.
-    #   # Here we do thing here. The /var/lock file will be copied in drblpush later.
-    #   true
-    # else
     mkdir -p $drbl_common_root/var/lock/rpm/
-    # fi
     echo "Installing $client_kernel_pkg for clients... "
     echo "$msg_install_kernel_might_take_several_minutes "
     # We do not care about those files put into $drbl_common_root/usr/
@@ -163,14 +157,64 @@ case "$mode" in
     ;;
 esac
 
-# If just copy files, we end program here.
-[ "$just_cp_files" = "yes" ] && exit 0
+if [ "$rc" -eq 1 ]; then
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+  echo "Failed to install the kernel $client_kernel_pkg!"
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+  exit 1
+fi
 
-# Need to create the files
-# $pxecfg_pd/kernel_version_in_initrd.txt
-# $pxecfg_pd/client_kernel_arch.txt
+if [ ! "$just_cp_files" = "yes" ]; then 
+  # For FC 22 or later, rpm -ivh doesn't put /boot/System.map-$client_kernel_ver wit --noscripts
+  # Therefore we copy vmlinuz, 
+  # if package is "kernel-modules,[-extra]-* " skip this
+  if [ ! -e "$drbl_common_root/boot/System.map-$client_kernel_ver" ]; then
+    KRC=0
+    echo "Preparing client's /boot/System.map-$client_kernel_ver..."
+    _ksystem_map_realpath="$(LC_ALL=C rpm -qpl $client_kernel_pkg | grep -E 'System.map' | grep -vE '^/boot/')"
+    _ksystem_map_bootpath="$(LC_ALL=C rpm -qpl $client_kernel_pkg | grep -E '^/boot/System.map' )"
+    if [ -e "$drbl_common_root/$_ksystem_map_realpath" \
+         -a "$_ksystem_map_bootpath" = "/boot/System.map-$client_kernel_ver" ]
+    then 
+      cp -a $drbl_common_root/$_ksystem_map_realpath $drbl_common_root/$_ksystem_map_bootpath
+    else
+      KRC=1
+    fi
 
-if [ "$rc" -eq 0 ]; then
+    echo "Preparing client's /boot/linuz-$client_kernel_ver..."
+    _kvmlinuz_realpath="$(LC_ALL=C rpm -qpl $client_kernel_pkg | grep -E 'vmlinuz$' | grep -vE '^/boot/')"
+    _kvmlinuz_bootpath="$(LC_ALL=C rpm -qpl $client_kernel_pkg | grep -E '^/boot/vmlinuz' )"
+    if [ -e "$drbl_common_root/$_kvmlinuz_realpath" \
+	 -a "$_kvmlinuz_bootpath" = "/boot/vmlinuz-$client_kernel_ver" ]
+    then 
+      cp -a $drbl_common_root/$_kvmlinuz_realpath $drbl_common_root/$_kvmlinuz_bootpath
+    else
+      KRC=1
+    fi
+
+    echo "Preparing client's /boot/config-$client_kernel_ver ..."
+    _kconfig_realpath="$(LC_ALL=C rpm -qpl $client_kernel_pkg | grep -E 'config$' | grep -vE '^/boot/')"
+    _kconfig_bootpath="$(LC_ALL=C rpm -qpl $client_kernel_pkg | grep -E '^/boot/config' )"
+    if [ -e "$drbl_common_root/$_kconfig_realpath" \
+	 -a "$_kconfig_bootpath" = "/boot/config-$client_kernel_ver" ]
+    then 
+      cp -a $drbl_common_root/$_kconfig_realpath  $drbl_common_root/$_kconfig_bootpath
+    else
+      KRC=1
+    fi
+
+    # Output error messages about failing to prepare kernel for clients.
+    if [ "$KRC" -ne 0 ]; then
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+      echo "Failed to prepare Linux kernel for DRBL clients in RedHat-like environment."
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+      echo "$msg_program_stop!"
+      exit 1
+    fi
+  fi
+  # Need to create the files
+  # $pxecfg_pd/kernel_version_in_initrd.txt
+  # $pxecfg_pd/client_kernel_arch.txt
   # Only when we can find something like /tftpboot/node_root/boot/System.map-2.6.27.39-0.2-default we can find KARCH.
   if [ -e "$drbl_common_root/boot/System.map-$client_kernel_ver" ]; then
     # make a tag in the system for client's kernel arch.
@@ -185,19 +229,15 @@ if [ "$rc" -eq 0 ]; then
     mkdir -p $pxecfg_pd/
     echo "$KARCH" > $pxecfg_pd/client_kernel_arch.txt
   fi
-else
-  [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
-  echo "Failed to install the kernel $client_kernel_pkg!"
-  [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
-  exit 1
+
+  # UGLY... find a better to strip the tail for MDK kernel
+  # for MDK kernel-2.6.8.1.24mdk-1-1mdk, however the kernel tag is 2.6.8.1-24mdk
+  # we need to strip the -1-1mdk
+  client_kernel_ver="$(echo $client_kernel_ver | sed -e "s/-1-1mdk//g")"
 fi
 
-# UGLY... find a better to strip the tail for MDK kernel
-# for MDK kernel-2.6.8.1.24mdk-1-1mdk, however the kernel tag is 2.6.8.1-24mdk
-# we need to strip the -1-1mdk
-client_kernel_ver="$(echo $client_kernel_ver | sed -e "s/-1-1mdk//g")"
-
 # create modules.dep...
+# we still neeed to rebuild $drbl_common_root/boot/System.map-$client_kernel_ver for client
 if [ -e "$drbl_common_root/boot/System.map-$client_kernel_ver" ]; then
    echo -n "Generating modules.dep and map files for clients... "
    depmod -ae -b $drbl_common_root/ -F $drbl_common_root/boot/System.map-$client_kernel_ver -r $client_kernel_ver 2> $depmod_stderr
@@ -205,6 +245,9 @@ if [ -e "$drbl_common_root/boot/System.map-$client_kernel_ver" ]; then
 else
    echo "$drbl_common_root/boot/System.map-$client_kernel_ver NOT found! Assume it's in another kernel package."
 fi
+
+# we stop here for kernel extra/module package 
+[ "$just_cp_files" = "yes" ] && exit 0
 
 # Firmwares. For Ubuntu, the firmwares come with kernel package, however, it's not true for other distributions. We can only try to use that from server
 if [ -d "/lib/firmware" ]; then
