@@ -1,6 +1,6 @@
 #!/bin/bash
 # License: GPL 
-# Author: Steven Shiau <steven _at_ nchc org tw>
+# Author: Steven Shiau <steven _at_ nchc org tw>, Ceasar Sun <ceasar _at_ nchc ogr tw>
 # Description: Program to prepare grub uEFI network booting image
 
 #
@@ -11,7 +11,6 @@ DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/usr/share/drbl}"
 
 # Settings
 grub_mkimg_compress_opt="-C xz"
-EFI_ARCH="i386 x86_64"
 #efi_required_mod="part_gpt part_msdos hfsplus fat ext2 ntfs btrfs normal chain boot configfile linux appleldr minicmd multiboot iso9660 acpi efi_gop efi_uga elf loadbios loopback video_fb usb search fixvideo png gfxterm gfxterm_background gfxterm_menu echo videotest video reboot halt gfxmenu gettext tftp efinet net gzio xzio"
 # Rerfer to the file systems list in /usr/lib/grub/x86_64-efi/fs.lst. This is for client's local disk boot.
 fs_mod="ext2 xfs reiserfs jfs hfsplus fat ntfs"
@@ -124,8 +123,26 @@ cp -fv $grub_bg_img $pxecfg_pd/
 # Generate the template grub.cfg
 gen-grub-efi-nb-menu
 
-#
-for i in i386 x86_64; do
+# For x86-64 arch, we create bootx64.efi and bootia32.efi.
+# For i386 arch, we only create bootia32.efi.
+# First we find the installed OS arch
+sys_arch="$(LC_ALL=C getconf LONG_BIT)"
+dest_bootloader=""
+case "$sys_arch" in 
+  32)  echo "System architecture is 32-bit."
+       dest_bootloader="i386"
+       ;;
+  64)  echo "System architecture is 64-bit."
+       dest_bootloader="i386 x86_64";;
+   *) 
+       [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+       echo "Unknown system architecture in drbl-gen-grub-efi-nb!"
+       [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+       echo "$msg_program_stop!"
+       exit 1
+esac
+
+for i in $dest_bootloader; do
   export EFI_ARCH=$i
   case "$EFI_ARCH" in
     i386)   
