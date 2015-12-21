@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.18.6
+Version:	2.18.7
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,13 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Mon Dec 21 2015 Steven Shiau <steven _at_ nchc org tw> 2.18.7-drbl1
+- Update msg_ocs_param_t in language files in en_US and zh_TW.UTF-8.
+- [Ceasar Sun]
+  Add Conflicts=mkswapfile.service to avoid DRBL service mkswapfile to be
+  started in ocsd-run.service.
+  Add support for Fedora 22 and 23.
+
 * Mon Dec 14 2015 Steven Shiau <steven _at_ nchc org tw> 2.18.6-drbl1
 - Adding ocsd files for CentOS 7.2.
 
