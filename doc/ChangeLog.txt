@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.18.8-drbl1) unstable; urgency=low
+
+  * Package perl-modules was replaced by perl in
+    PKG_FROM_DBN_WHICH_OCS_LIVE_NEED of drbl.conf.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 22 Dec 2015 20:54:18 +0800
+
 drbl (2.18.7-drbl1) unstable; urgency=low
 
   * [Ceasar Sun]

@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.18.7
+Version:	2.18.8
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Tue Dec 22 2015 Steven Shiau <steven _at_ nchc org tw> 2.18.8-drbl1
+- Package perl-modules was replaced by perl in PKG_FROM_DBN_WHICH_OCS_LIVE_NEED of drbl.conf.
+
 * Mon Dec 21 2015 Steven Shiau <steven _at_ nchc org tw> 2.18.7-drbl1
 - Update msg_ocs_param_t in language files in en_US and zh_TW.UTF-8.
 - [Ceasar Sun]
