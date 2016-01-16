@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.18.8
+Version:	2.18.11
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,15 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Sat Jan 16 2016 Steven Shiau <steven _at_ nchc org tw> 2.18.11-drbl1
+- Functions add_opt_in_pxelinux_cfg_block, remove_opt_in_pxelinux_cfg_block, add_opt_in_grub_efi_cfg_block, and remove_opt_in_grub_efi_cfg_block of drbl-functions failed to deal with 'locales=' and 'keyboard-layouts='. This makes drbl-ocs-live-prep can not preset locales and keyboard-layouts.
+
+* Mon Jan 04 2016 Steven Shiau <steven _at_ nchc org tw> 2.18.10-drbl1
+- List kmod or module-init-tools in the package for suggestions in drbl.conf. This chnage was due to the change in mkpxeinitrd-net.
+
+* Thu Dec 24 2015 Steven Shiau <steven _at_ nchc org tw> 2.18.9-drbl1
+- Package console-common is not included in Clonezila/DRBL/GParted live because it's deprecated: https://bugs.launchpad.net/bugs/1528861
+
 * Tue Dec 22 2015 Steven Shiau <steven _at_ nchc org tw> 2.18.8-drbl1
 - Package perl-modules was replaced by perl in PKG_FROM_DBN_WHICH_OCS_LIVE_NEED of drbl.conf.
 

@@ -5,6 +5,31 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.18.11-drbl1) unstable; urgency=low
+
+  * Functions add_opt_in_pxelinux_cfg_block, 
+    remove_opt_in_pxelinux_cfg_block, add_opt_in_grub_efi_cfg_block,
+    and remove_opt_in_grub_efi_cfg_block of drbl-functions failed to
+    deal with 'locales=' and 'keyboard-layouts='. This makes
+    drbl-ocs-live-prep can not preset locales and keyboard-layouts.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sat, 16 Jan 2016 16:01:22 +0800
+
+drbl (2.18.10-drbl1) unstable; urgency=low
+
+  * List kmod or module-init-tools in the package for suggestions in
+    drbl.conf. This chnage was due to the change in mkpxeinitrd-net.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 04 Jan 2016 21:00:10 +0800
+
+drbl (2.18.9-drbl1) unstable; urgency=low
+
+  * Package console-common is not included in Clonezila/DRBL/GParted
+    live because it's deprecated:
+    https://bugs.launchpad.net/bugs/1528861
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 24 Dec 2015 21:35:58 +0800
+
 drbl (2.18.8-drbl1) unstable; urgency=low
 
   * Package perl-modules was replaced by perl in
