@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.18.12-drbl1) unstable; urgency=low
+
+  * Remove console-common for pkgs list:
+    https://bugs.launchpad.net/ubuntu/+source/cryptsetup/+bug/1528861
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 20 Jan 2016 13:05:51 +0800
+
 drbl (2.18.11-drbl1) unstable; urgency=low
 
   * Functions add_opt_in_pxelinux_cfg_block, 

@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.18.11
+Version:	2.18.12
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,10 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Wed Jan 20 2016 Steven Shiau <steven _at_ nchc org tw> 2.18.12-drbl1
+- Remove console-common for pkgs list:
+  https://bugs.launchpad.net/ubuntu/+source/cryptsetup/+bug/1528861
+
 * Sat Jan 16 2016 Steven Shiau <steven _at_ nchc org tw> 2.18.11-drbl1
 - Functions add_opt_in_pxelinux_cfg_block, remove_opt_in_pxelinux_cfg_block, add_opt_in_grub_efi_cfg_block, and remove_opt_in_grub_efi_cfg_block of drbl-functions failed to deal with 'locales=' and 'keyboard-layouts='. This makes drbl-ocs-live-prep can not preset locales and keyboard-layouts.
 
