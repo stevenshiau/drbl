@@ -1535,6 +1535,7 @@ if [ "$mode" = "restore" ]; then
     "-j2"      "$msg_ocs_param_j2" on \
     "-cm"      "$msg_ocs_param_cm" off \
     "-cs"      "$msg_ocs_param_cs" off \
+    "-cmf"     "$msg_ocs_param_cmf" off \
     "-f"       "$msg_ocs_param_f" off \
     "-s"       "$msg_ocs_param_s" off \
     "-a"       "$msg_ocs_param_a" off \
@@ -1663,6 +1664,7 @@ else
     "-rescue "   "$msg_ocs_param_rescue" off \
     "-gm "       "$msg_ocs_param_gm" off \
     "-gs "       "$msg_ocs_param_gs" off \
+    "-gmf "      "$msg_ocs_param_gmf" off \
     "-o0 "       "$msg_ocs_param_o0" off \
     "-o1 "       "$msg_ocs_param_o1" off \
     2>> $OCS_PARAM_TMP
@@ -1835,6 +1837,7 @@ if [ "$mode" = "restore" ]; then
     "-j2"      "$msg_ocs_param_j2" on \
     "-cm"      "$msg_ocs_param_cm" off \
     "-cs"      "$msg_ocs_param_cs" off \
+    "-cmf"     "$msg_ocs_param_cmf" off \
     "-a"       "$msg_ocs_param_a" off \
     "-o0"      "$msg_ocs_param_o0" off \
     "-o1"      "$msg_ocs_param_o1" off \
@@ -1945,6 +1948,7 @@ else
     "-rescue "  "$msg_ocs_param_rescue" off \
     "-gm "      "$msg_ocs_param_gm" off \
     "-gs "      "$msg_ocs_param_gs" off \
+    "-gmf "     "$msg_ocs_param_gmf" off \
     2>> $OCS_PARAM_TMP
   else
     echo "-c " "-j2 " >> $OCS_PARAM_TMP
@@ -3277,30 +3281,23 @@ gen_CDG_checksums() {
   local sum_file="CHECKSUMS.TXT"
   local sum_file_html="CHECKSUMS.php"
   local filetype="iso zip tar tar.gz"
+  local sum_types="md5sum sha1sum sha256sum sha512sum"
+  local sum_of
   echo -n "Creating checksums..."
-  rm -f MD5SUMS SHA1SUMS SHA256SUMS
+  rm -f $sum_file $sum_file_html
   for i in $filetype; do
     if [ -n "$(ls *.$i 2>/dev/null)" ]; then
-      echo -n "."
-      LC_ALL=C md5sum *.$i  >> MD5SUMS
-      echo -n "."
-      LC_ALL=C sha1sum *.$i >> SHA1SUMS 
-      echo -n "."
-      LC_ALL=C sha256sum *.$i >> SHA256SUMS 
+      for jsum in $sum_types; do
+        sum_of="$(echo $jsum | tr "[a-z]" "[A-Z]")S"  # e.g. md5sum -> MD5SUMS
+        echo -n "."
+        LC_ALL=C $jsum *.$i  > $sum_of
+        echo "### ${sum_of}:" >> $sum_file
+        cat ${sum_of} >> $sum_file
+        echo >> $sum_file
+      done
     fi
   done
   echo " Done!"
-  
-  echo "### MD5SUMS:" > $sum_file
-  cat MD5SUMS >> $sum_file
-
-  echo >> $sum_file
-  echo "### SHA1SUMS:" >> $sum_file
-  cat SHA1SUMS >> $sum_file
-
-  echo >> $sum_file
-  echo "### SHA256SUMS:" >> $sum_file
-  cat SHA256SUMS >> $sum_file
 
   txt2html $sum_file > $sum_file_html
 } # end of gen_CDG_checksums
