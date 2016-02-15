@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.18.12
+Version:	2.19.1
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,11 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Mon Feb 15 2016 Steven Shiau <steven _at_ nchc org tw> 2.19.1-drbl1
+- Language files were updated for options -gmf and -cmf, etc.
+- Add "-cmf" & "-gmf" in dialog menu.
+- Add sha512sum and refine the function gen_CDG_checksums.
+
 * Wed Jan 20 2016 Steven Shiau <steven _at_ nchc org tw> 2.18.12-drbl1
 - Remove console-common for pkgs list:
   https://bugs.launchpad.net/ubuntu/+source/cryptsetup/+bug/1528861

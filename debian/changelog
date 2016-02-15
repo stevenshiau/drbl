@@ -1,3 +1,12 @@
+drbl (2.19.1-drbl1) unstable; urgency=low
+
+  * Add "-cmf" & "-gmf" in dialog menu.
+  * Add sha512sum and refine the function gen_CDG_checksums of
+    drbl-functions.
+  * Language files were updated for options -gmf and -cmf, etc.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 15 Feb 2016 23:05:28 +0800
+
 drbl (2.18.12-drbl1) unstable; urgency=low
 
   * Remove console-common for pkgs list:
