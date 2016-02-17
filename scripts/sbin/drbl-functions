@@ -3285,17 +3285,18 @@ gen_CDG_checksums() {
   local sum_of
   echo -n "Creating checksums..."
   rm -f $sum_file $sum_file_html
-  for i in $filetype; do
-    if [ -n "$(ls *.$i 2>/dev/null)" ]; then
-      for jsum in $sum_types; do
-        sum_of="$(echo $jsum | tr "[a-z]" "[A-Z]")S"  # e.g. md5sum -> MD5SUMS
+  for jsum in $sum_types; do
+    sum_of="$(echo $jsum | tr "[a-z]" "[A-Z]")S"  # e.g. md5sum -> MD5SUMS
+    [ -e "$sum_of" ] && rm -f $sum_of
+    for i in $filetype; do
+      if [ -n "$(ls *.$i 2>/dev/null)" ]; then
         echo -n "."
-        LC_ALL=C $jsum *.$i  > $sum_of
-        echo "### ${sum_of}:" >> $sum_file
-        cat ${sum_of} >> $sum_file
-        echo >> $sum_file
-      done
-    fi
+        LC_ALL=C $jsum *.$i  >> $sum_of
+      fi
+    done
+    echo "### ${sum_of}:" >> $sum_file
+    cat ${sum_of} >> $sum_file
+    echo >> $sum_file
   done
   echo " Done!"
 
