@@ -1,3 +1,11 @@
+drbl (2.19.4-drbl1) unstable; urgency=low
+
+  * Bug fixed: gen_CDG_checksums failed to list all files for checksum
+    files.
+  * Update language files for better description about checksum.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 17 Feb 2016 10:55:53 +0800
+
 drbl (2.19.3-drbl1) unstable; urgency=low
 
   * Update language files for better description about checksum.
