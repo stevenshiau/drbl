@@ -1,3 +1,9 @@
+drbl (2.19.3-drbl1) unstable; urgency=low
+
+  * Update language files for better description about checksum.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 16 Feb 2016 14:35:32 +0800
+
 drbl (2.19.2-drbl1) unstable; urgency=low
 
   * Update language files for better description about checksum.
