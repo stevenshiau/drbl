@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.19.5-drbl1) unstable; urgency=low
+
+  * Update language files for the checksum results log file prompt.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 18 Feb 2016 21:39:17 +0800
+
 drbl (2.19.4-drbl1) unstable; urgency=low
 
   * Bug fixed: gen_CDG_checksums failed to list all files for checksum
