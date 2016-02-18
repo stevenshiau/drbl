@@ -1005,3 +1005,5 @@ msg_chksum_inspection_for_files_passed='Checksum inspection passed for files in 
 msg_unsble_to_inspect_checksum='Uable to inspect the checksum for files.'
 msg_ocs_onthefly_param_cmf='Inspect checksum for files in device after cloning'
 msg_this_dev_is_busy_you_have_to_unmount='This device is busy, before going on you have to unmount it'
+# Tag on 2016/02/18
+msg_chksum_results_saved_in_this_file='Checksum inspecting results are saved in this file'

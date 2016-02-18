@@ -1004,3 +1004,5 @@ msg_chksum_inspection_for_files_passed='這分割區中檔案的雜湊值比對�
 msg_unsble_to_inspect_checksum='無法比對檔案的雜湊值。'
 msg_ocs_onthefly_param_cmf='對拷後比對分割區中所有檔案的雜湊值'
 msg_this_dev_is_busy_you_have_to_unmount='這分割區使用中，要進一部執行的話你要先卸載它'
+# Tag on 2016/02/18
+msg_chksum_results_saved_in_this_file='檔案的雜湊值比對結果存在這個檔案'
