@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.19.6
+Version:	2.19.7
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Wed Mar 02 2016 Steven Shiau <steven _at_ nchc org tw> 2.19.7-drbl1
+- Bug fixed: do not strip the word about kernel or linux-image in pkg-ver-latest
+
 * Wed Mar 02 2016 Steven Shiau <steven _at_ nchc org tw> 2.19.6-drbl1
 - Use "sort -V" instead of awk in pkg-ver-latest.
 
