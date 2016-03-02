@@ -1,2 +1,2 @@
 #!/bin/bash
-LC_ALL=C sed -r -e "s/^(kernel|linux)(|-smp|-image)[#-]//g" | sort -r -V | uniq | head -n 1
+LC_ALL=C sort -r -V | uniq | head -n 1
