@@ -1,3 +1,11 @@
+drbl (2.19.8-drbl1) unstable; urgency=low
+
+  * Apply the patch for ru_RU.UTF-8 from
+    https://github.com/stevenshiau/drbl/pull/6. Thanks to don Rumata.
+  * Update language files for ocs-match-checksums.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sat, 05 Mar 2016 21:24:16 +0800
+
 drbl (2.19.7-drbl1) unstable; urgency=low
 
   * Bug fixed: do not strip the word about kernel or linux-image in 
