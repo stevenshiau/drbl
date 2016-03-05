@@ -1027,3 +1027,6 @@ msg_ocs_onthefly_param_cmf='Inspect checksum for files in device after cloning'
 msg_this_dev_is_busy_you_have_to_unmount='This device is busy, before going on you have to unmount it'
 # Tag on 2016/02/18
 msg_chksum_results_saved_in_this_file='Checksum inspecting results are saved in this file'
+# Tag on 2016/03/05
+msg_local_source_disk_for_checksum_inspect='Choose local disk to inspect the checksum.'
+msg_choose_the_image_to_be_checked_for_checksum='Choose the image to inspect the checksum in the image and the files in the partition or disk (only images with checksum are shown). //NOTE// Some files checksum inspection might fail, e.g. if you choose to let Clonezilla reinstall grub boot loader, the /boot/grub/core.img will be different'

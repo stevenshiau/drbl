@@ -1006,3 +1006,5 @@ msg_ocs_onthefly_param_cmf='對拷後比對分割區中所有檔案的雜湊值'
 msg_this_dev_is_busy_you_have_to_unmount='這分割區使用中，要進一部執行的話你要先卸載它'
 # Tag on 2016/02/18
 msg_chksum_results_saved_in_this_file='檔案的雜湊值比對結果存在這個檔案'
+msg_local_source_disk_for_checksum_inspect='選擇本機硬碟來檢查雜湊值'
+msg_choose_the_image_to_be_checked_for_checksum='選擇印象檔來檢查其中的雜湊值與硬碟中檔案做比對(只有之前存的時候有雜湊值紀錄檔的印象檔才會列出) //注意// 某些檔案的雜湊值比對可能會失敗，例如若你選擇讓再生龍重新安裝製grub開機管理程式(boot loader)，那/boot/grub/core.img將會不同'
