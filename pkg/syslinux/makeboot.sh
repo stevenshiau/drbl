@@ -1,12 +1,19 @@
 #!/bin/bash
-# Author: Steven Shiau <steven _at_ nchc org tw>, Ceasar Sun <ceasar _at_ nchc org tw>
+
+######
+# Author: Steven Shiau <steven _at_ clonezilla org>, Ceasar Sun <ceasar _at_ clonezilla org>
 # License: GPL
 # Description: Program to make USB flash drive (FAT, EXT, BTRFS , XFS or NTFS) bootable by syslinux or extlinux
-
+# Main steps:
 # 1. Checking if partition table correct (on boundary, bootable)
 # 2. cat mbr
-# 3. "syslinux -f -i" or "extlinux -i"
+# 3. Run "syslinux -f -i" or "extlinux -i"
 #
+#  Latest update:  2016/3/7 by Ceasar
+#	1. Fix: use "findmnt" to get mount path
+#	2. Fix: consider mount path with "space" character ex: "/media/user/USB\ DISK"
+######
+
 # Append PATH
 export PATH=/sbin:/usr/sbin:/bin:/usr/bin:$PATH
 
@@ -361,7 +368,7 @@ fi
 # Since most of the cases when makeboot.sh is run, all the files are in FAT (USB flash drive normally uses FAT), we have to make syslinux executable.
 #
 # Check if $target_part is mounted or not
-mnt_pnt="$(LC_ALL=C df $target_part | grep -Ew $target_part | awk -F" " '{print $6}')"
+mnt_pnt="$(LC_ALL=C findmnt -nr -o target -S $target_part )"
 flag_mount=""
 if [ -z "$mnt_pnt" ]; then
   # Not mounted. Mount it.
@@ -419,8 +426,8 @@ case "$mode" in
      chmod u+x $extlinux_tmpd/extlinux
      check_if_syslinux_runs "$extlinux_tmpd/extlinux"
      if [ $rc -eq 0 ]; then
-       echo "Running: $extlinux_tmpd/extlinux -i $destfs_tmpd/syslinux "
-       $extlinux_tmpd/extlinux -i $destfs_tmpd/syslinux
+       echo "Running: $extlinux_tmpd/extlinux -i '$destfs_tmpd/syslinux' "
+       "$extlinux_tmpd/extlinux" -i "$destfs_tmpd/syslinux"
        s_rc="$?"
        if [ "$s_rc" -ne 0 ]; then
          [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
