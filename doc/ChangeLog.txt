@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.19.10-drbl1) unstable; urgency=low
+
+  * Add support for Debian 8.3.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 07 Mar 2016 10:26:27 +0800
+
 drbl (2.19.9-drbl1) unstable; urgency=low
 
   * Remove scientific linux i386 net install in drbl.conf since it does not
