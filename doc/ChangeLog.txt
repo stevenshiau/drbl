@@ -5,6 +5,14 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.19.9-drbl1) unstable; urgency=low
+
+  * Remove scientific linux i386 net install in drbl.conf since it does not
+    exist.
+  * Fix typos in changelog.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 07 Mar 2016 08:48:48 +0800
+
 drbl (2.19.8-drbl1) unstable; urgency=low
 
   * Apply the patch for ru_RU.UTF-8 from
@@ -81,13 +89,13 @@ drbl (2.18.11-drbl1) unstable; urgency=low
 drbl (2.18.10-drbl1) unstable; urgency=low
 
   * List kmod or module-init-tools in the package for suggestions in
-    drbl.conf. This chnage was due to the change in mkpxeinitrd-net.
+    drbl.conf. This change was due to the change in mkpxeinitrd-net.
 
  -- Steven Shiau <steven@nchc.org.tw>  Mon, 04 Jan 2016 21:00:10 +0800
 
 drbl (2.18.9-drbl1) unstable; urgency=low
 
-  * Package console-common is not included in Clonezila/DRBL/GParted
+  * Package console-common is not included in Clonezilla/DRBL/GParted
     live because it's deprecated:
     https://bugs.launchpad.net/bugs/1528861
 
@@ -117,7 +125,7 @@ drbl (2.18.6-drbl1) unstable; urgency=low
 
 drbl (2.18.5-drbl1) unstable; urgency=low
 
-  * "Shoutdown" should be "Desligar" in luanguage file pt_BR.
+  * "Shoutdown" should be "Desligar" in language file pt_BR.
     Thanks to Luciano (lboni2 _at_ yahoo com br) for correcting this.
   * Give warning about grub2 uEFI NB on CentOS 7 for grub2 versions
     2.02-0.17 and 2.02-0.23 in drblsrv.
