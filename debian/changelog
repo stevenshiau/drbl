@@ -1,3 +1,9 @@
+drbl (2.19.11-drbl1) unstable; urgency=low
+
+  * Add client files for Ubuntu 15.10.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 07 Mar 2016 16:42:39 +0800
+
 drbl (2.19.10-drbl1) unstable; urgency=low
 
   * Add support for Debian 8.3.
