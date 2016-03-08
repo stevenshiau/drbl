@@ -1,3 +1,13 @@
+drbl (2.19.12-drbl1) unstable; urgency=low
+
+  [Ceasar Sun]
+  * Support destination dir name with white space for makeboot.sh.
+
+  [Robert Rubino]
+  * Add an error routine to makeboot.bat and makeboot64.bat.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 07 Mar 2016 19:35:04 +0800
+
 drbl (2.19.11-drbl1) unstable; urgency=low
 
   * Add client files for Ubuntu 15.10.
