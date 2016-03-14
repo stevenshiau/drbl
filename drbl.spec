@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.19.12
+Version:	2.19.13
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Mon Mar 14 2016 Steven Shiau <steven _at_ nchc org tw> 2.19.13-drbl1
+- Now all the supported GNU/Linux has option "-V" for sort, so just use it instead of using the function get_sort_V_opt to decide.
+
 * Mon Mar 07 2016 Steven Shiau <steven _at_ nchc org tw> 2.19.12-drbl1
 [Ceasar Sun]
 - Support destination dir name with white space for makeboot.sh.

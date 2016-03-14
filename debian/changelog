@@ -1,3 +1,10 @@
+drbl (2.19.13-drbl1) unstable; urgency=low
+
+  * Now all the supported GNU/Linux has option "-V" for sort, so
+    just use it instead of using the function get_sort_V_opt to decide.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 14 Mar 2016 21:24:47 +0800
+
 drbl (2.19.12-drbl1) unstable; urgency=low
 
   [Ceasar Sun]
