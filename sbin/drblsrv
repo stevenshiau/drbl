@@ -1453,7 +1453,6 @@ prepare_install_RH_MDK_client_kernel() {
 local kgot
 local KEXTRA=""
 local avail_krpm
-local sort_V_opt=""
 LATEST_KTMP="$(mktemp /tmp/latest_ktmp.XXXXXX)"
 
 # For Fedora Core 5 with x86_64 arch, all kernels have SMP support, even though the name will not contain smp.
@@ -1579,9 +1578,8 @@ esac
 #
 klist_no=
 i=1
-get_sort_V_opt  # Get option $sort_V_opt
 for idir in $RPMS_os_update_dir; do
-  kgot="$(list_available_rpm $url_os_coreroot/${idir}/  | grep -E "^kernel${KEXTRA}${SMP_OPTION}-[2-9]\.[0-9]+\.[0-9]+" | grep -v "test" | $cpu_filter | sort $sort_V_opt -r | uniq)" 
+  kgot="$(list_available_rpm $url_os_coreroot/${idir}/  | grep -E "^kernel${KEXTRA}${SMP_OPTION}-[2-9]\.[0-9]+\.[0-9]+" | grep -v "test" | $cpu_filter | sort -V -r | uniq)" 
   # store the url to show error msg later if no kernel available.
   klist_ar[$i]="$url_os_coreroot/${idir}/"
   i=$((i+1))
