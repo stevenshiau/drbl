@@ -92,10 +92,8 @@ for i in $srv_IPs; do
 done
 
 #
-get_sort_V_opt  # Get option $sort_V_opt
-#
 case "$sort_output" in
-  yes) LC_ALL=C cat $IPLIST | sort $sort_V_opt | uniq ;;
+  yes) LC_ALL=C cat $IPLIST | sort -V | uniq ;;
   no) LC_ALL=C cat $IPLIST ;;
 esac
 
