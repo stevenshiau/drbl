@@ -1,3 +1,9 @@
+drbl (2.19.14-drbl1) unstable; urgency=low
+
+  * Add "exit" option parallel to the beginner/expert selection.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 21 Mar 2016 11:55:24 +0800
+
 drbl (2.19.13-drbl1) unstable; urgency=low
 
   * Now all the supported GNU/Linux has option "-V" for sort, so

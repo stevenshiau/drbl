@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.19.13
+Version:	2.19.14
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Tue Mar 21 2016 Steven Shiau <steven _at_ nchc org tw> 2.19.14-drbl1
+- Add "exit" option parallel to the beginner/expert selection.
+
 * Mon Mar 14 2016 Steven Shiau <steven _at_ nchc org tw> 2.19.13-drbl1
 - Now all the supported GNU/Linux has option "-V" for sort, so just use it instead of using the function get_sort_V_opt to decide.
 
