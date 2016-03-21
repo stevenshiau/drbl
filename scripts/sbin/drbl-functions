@@ -2985,6 +2985,7 @@ ask_if_beginner_or_expert_mode(){
   0 0 0 \
   "Beginner"  "$msg_beginner_mode" \
   "Expert"    "$msg_expert_mode" \
+  "Exit"      "$msg_exit. $msg_enter_cml" \
   2> $TMP
   mode="$(cat $TMP)"
   [ -e "$TMP" ] && rm -f $TMP
