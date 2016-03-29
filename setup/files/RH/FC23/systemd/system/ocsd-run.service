@@ -1,0 +1,28 @@
+#  This file is part of drbl/Cloneizlla-SE.
+# Author : Ceasar Sun <ceasar _at_ nchc org tw>
+
+[Unit]
+Description=OCS-run service via Clonezilla 
+DefaultDependencies=no
+After=remote-fs.target sshd.service
+#After=basic.target plymouth-start.service
+#Before=rescue.target
+AllowIsolate=true
+Conflicts=mkswapfile.service
+
+[Service]
+Environment=HOME=/root
+WorkingDirectory=/root
+Environment=TERM=linux
+ExecStartPre=-/bin/plymouth quit
+ExecStartPre=-/usr/sbin/systemctl stop mkswapfile.service
+ExecStart=/etc/init.d/ocs-run start
+Type=oneshot
+StandardInput=tty-force
+StandardOutput=inherit
+StandardError=inherit
+#KillMode=process
+
+# Bash ignores SIGTERM, so we send SIGHUP instead, to ensure that bash
+# terminates cleanly.
+#KillSignal=SIGHUP
