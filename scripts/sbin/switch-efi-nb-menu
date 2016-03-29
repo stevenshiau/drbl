@@ -1,0 +1,230 @@
+#!/bin/bash
+# Author: Steven Shiau <steven _at_ nchc org tw>
+# License: GPL
+# Description: switch the uEFI network Boot menu in the config file
+
+# Load DRBL setting and functions
+DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/usr/share/drbl}"
+
+. $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
+
+#
+# DIA (="dialog") is loaded from drbl.conf
+GRUB_NB_CONF_DEF="$GRUB_EFINB_DIR/grub.cfg"
+
+# functions
+clean_tmp() {
+  [ -f "$TMP" ] && rm -f $TMP
+  [ -f "$GRUB_NB_CONF_TMP" ] && rm -f $GRUB_NB_CONF_TMP
+}
+
+#
+USAGE() {
+    echo "Usage:"
+    echo "To hide, reveal or set default uEFI network Boot client menu:"
+    echo "`basename $0` [OPTION] [hide|reveal|setdefault]"
+    echo "Options:"
+    language_help_prompt_by_idx_no
+    echo "-i, --menu MENU   Assign MENU to be processed"
+    echo "-c, --config CONF use the CONF file instead of default one ($GRUB_NB_CONF_DEF)"
+    dialog_like_prog_help_prompt
+    echo "-v, --verbose     show verbose messages"
+    echo "-h, --help        display this help and exit"
+    echo
+    echo "EXAMPLE"
+    echo "     To hide the menu 'local' and 'memtest', you can run:"
+    echo "     $0 -i 'local memtest' hide"
+}
+
+select_image() {
+  all_label="$(LC_ALL=C grep -Eo -- "^[[:space:]]*[#]*[[:space:]]*menuentry[[:space:]]+.*--id[[:space:]]+.*[[:space:]]+\{" $GRUB_NB_CONF_TMP | awk -F" " '{ print $(NF-1)}')"
+  [ -n "$VERBOSE" ] && echo "all_label: $all_label"
+  if [ -z "$all_label" ]; then
+     $DIA --title "No uEFI network Boot image found!" --clear \
+     --msgbox "I can NOT find any uEFI network Boot image in $GRUB_NB_CONF! \nMake sure you already setup DRBL server properly!" 0 0
+    exit 0
+  fi
+  
+  MENU=""
+  for i in $all_label; do
+     # EX for i: netinstall-Debian-jessie-amd64
+     # get the description for the netinstall image from grub NB default
+     lines="$(get_grub_efi_image_block $i $GRUB_NB_CONF_TMP)"
+     begin_line="$(echo $lines | awk -F" " '{print $1}')"
+     end_line="$(echo $lines | awk -F" " '{print $2}')"
+     search_cmd="if ($begin_line..$end_line) {print}"
+     des="$(LC_ALL=C perl -n -e "$search_cmd" $GRUB_NB_CONF_TMP | grep -Eo "^[[:space:]]*[#]*[[:space:]]*menuentry.*[[:space:]]+--id" | sed -r -e "s/^[[:space:]]*[#]*[[:space:]]*menuentry[[:space:]]+\"//g" -e "s/\"[[:space:]]+--id//g" -e "s/[[:space:]]/_/g")"
+  
+     case "$action" in
+      "hide"|"setdefault")
+        grep_cmd="^[[:space:]]*[#]+[[:space:]]*menuentry"
+           ;; 
+      "reveal")
+        grep_cmd="^[[:space:]]*menuentry"
+           ;; 
+     esac
+     add_menu="$(LC_ALL=C perl -n -e "$search_cmd" $GRUB_NB_CONF_TMP | grep -Ei "$grep_cmd")"
+     if [ -z "$add_menu" ]; then
+       MENU="$MENU $i $des off "
+     fi
+  done
+  
+  # check if we can find any target menu
+  if [ -z "$MENU" ]; then
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+    echo "Error!!! No any unhidden menu was found!"
+    echo "Maybe they are all unhidden!"
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+    clean_tmp
+    echo "$msg_program_stop"
+    exit 1
+  fi
+  
+  #
+  eval title="\$msg_title_${action}"
+  eval list_des="\$msg_${action}_list_des"
+  
+  case "$action" in
+   "hide"|"reveal")
+        $DIA \
+        --backtitle "$msg_nchc_title" \
+        --title "$title" \
+        --separate-output \
+        --checklist "$list_des ($msg_press_space_to_mark_selection)" 0 80 0 \
+        $MENU 2> $TMP
+        image_selected="$(cat $TMP)"
+        ;; 
+   "setdefault")
+        # Here we use --radiolist so that the format of MENU is compatible with --checklist
+        $DIA \
+        --backtitle "$msg_nchc_title" \
+        --title "$title" \
+        --radiolist "$list_des" 0 80 0 \
+        $MENU 2> $TMP
+        image_selected="$(cat $TMP)"
+        ;; 
+  esac
+  [ -f "$TMP" ] && rm -f $TMP
+  [ -z "$image_selected" ] && exit 1
+  [ -n "$VERBOSE" ] && echo "image_selected: $image_selected" 
+} # end of select_image
+
+select_hide_reveal_setdefault() {
+  TMP=$(mktemp /tmp/menu.XXXXXX)
+  $DIA \
+  --backtitle "$msg_nchc_title" \
+  --title "$msg_hide_reveal" \
+  --menu "$msg_choose_the_action:" 0 60 0 \
+  "hide" "$msg_hide_pxe_menus" \
+  "reveal" "$msg_reveal_pxe_menus" \
+  "setdefault" "$msg_setdefault_pxe_menu" \
+  2> $TMP
+  action=$(cat $TMP)
+  [ -f "$TMP" ] && rm -f $TMP
+  [ -z "$action" ] && echo "No action selected! Program terminated!!!" && exit 1
+} # end of select_hide_reveal_setdefault
+
+image_selected=""
+# Parse command-line options
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -l|--language)
+  	    shift
+            if [ -z "$(echo $1 |grep ^-.)" ]; then
+              # skip the -xx option, in case 
+  	      specified_lang="$1"
+  	      shift
+            fi
+  	    ;;
+    -i|--image)  
+            shift
+            # skip the -xx option, in case 
+            if [ -z "$(echo $1 |grep ^-.)" ]; then
+              image_selected="$image_selected $1"
+              shift
+            fi
+            ;;
+    -c|--config)  
+            shift
+            # skip the -xx option, in case 
+	    if [ -z "$(echo $1 |grep ^-.)" ]; then
+	      GRUB_NB_CONF="$1" 
+	      shift
+            fi
+	    ;;
+    -h|--help)  
+            USAGE >& 2
+            exit 2 ;;
+    -d0|--dialog)   DIA="dialog"; shift;;
+    -d1|--Xdialog)  DIA="Xdialog"; shift;;
+    -d2|--whiptail) DIA="whiptail"; shift;;
+    -d3|--gdialog)  DIA="gdialog"; shift;;
+    -d4|--kdialog)  DIA="kdialog"; shift;;
+    -v|--verbose)   VERBOSE="on"; shift;;
+    -*)     echo "${0}: ${1}: invalid option" >&2
+            USAGE >& 2
+            exit 2 ;;
+    *)      break ;;
+  esac
+done
+#
+ask_and_load_lang_set $specified_lang
+
+# check DIA
+check_DIA_set_ESC $DIA
+
+#
+action="$1"
+[ -z "$action" ] && select_hide_reveal_setdefault
+[ -z "$GRUB_NB_CONF" ] && GRUB_NB_CONF=$GRUB_NB_CONF_DEF
+
+#
+TMP=$(mktemp /tmp/menu.XXXXXX)
+GRUB_NB_CONF_TMP="$(mktemp /tmp/grub_nb_cfg.XXXXXX)"
+
+# copy the original pxe_conf to be a template
+if [ ! -f "$GRUB_NB_CONF" ]; then
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+  echo -e "Unable to find any uEFI network Boot config file! \nMake sure you already setup DRBL server properly!"
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+  clean_tmp
+  exit 1
+fi
+cp -f $GRUB_NB_CONF $GRUB_NB_CONF_TMP
+
+[ -z "$image_selected" ] && select_image
+
+# hide or reveal the specified menu
+case "$action" in
+  "hide")
+       for img in $image_selected; do
+         echo "Hide the label \"$img\"."
+	 hide_reveal_grub_efi_ent $img hide $GRUB_NB_CONF_TMP
+       done
+       ;; 
+  "reveal")
+       for img in $image_selected; do
+         echo "Reveal the label \"$img\"."
+         hide_reveal_grub_efi_ent $img reveal $GRUB_NB_CONF_TMP
+       done
+       ;; 
+  "setdefault")
+       echo "Set the default label \"$image_selected\"."
+       set-default-grub-efi-img -i $image_selected -c $GRUB_NB_CONF_TMP
+       ;; 
+esac
+# check if all menu is hidden!!! We can not do that!
+if [ -z "$(grep -iE "^[[:space:]]*menuentry[[:space:]]+" $GRUB_NB_CONF_TMP)" ]; then
+   [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+   echo "$msg_error!!! $msg_you_can_not_hide_all_pxe_menus!!!"
+   echo "$msg_program_stop!!! $msg_no_modification!"
+   [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+   clean_tmp
+   exit 1
+fi
+
+#
+[ -n "$VERBOSE" ] && echo "Copy the template file $GRUB_NB_CONF_TMP to actual one $GRUB_NB_CONF"
+cp -f $GRUB_NB_CONF_TMP $GRUB_NB_CONF
+[ -f "$GRUB_NB_CONF_TMP" ] && rm -f $GRUB_NB_CONF_TMP
+exit 0
