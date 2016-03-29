@@ -28,6 +28,7 @@ USAGE() {
     echo "-i, --menu MENU   Assign MENU to be processed"
     echo "-c, --config CONF use the CONF file instead of default one ($PXE_CONF_DEF)"
     dialog_like_prog_help_prompt
+    echo "-o, --output-result-file  FILE   Output the selecting results to the FILE. It includes the results of action and image_selected." 
     echo "-v, --verbose     show verbose messages"
     echo "-h, --help        display this help and exit"
     echo
@@ -152,27 +153,23 @@ while [ $# -gt 0 ]; do
 	      shift
             fi
 	    ;;
+    -o|--output-result-file)  
+            shift
+            # skip the -xx option, in case 
+	    if [ -z "$(echo $1 |grep ^-.)" ]; then
+	      RESULT_FILE="$1" 
+	      shift
+            fi
+	    ;;
     -h|--help)  
             USAGE >& 2
             exit 2 ;;
-    -d0|--dialog)  
-	    DIA="dialog" 
-	    shift;;
-    -d1|--Xdialog)  
-	    DIA="Xdialog" 
-	    shift;;
-    -d2|--whiptail)  
-	    DIA="whiptail" 
-	    shift;;
-    -d3|--gdialog)  
-	    DIA="gdialog" 
-	    shift;;
-    -d4|--kdialog)  
-	    DIA="kdialog" 
-	    shift;;
-    -v|--verbose)  
-            VERBOSE="on"
-	    shift;;
+    -d0|--dialog)   DIA="dialog"; shift;;
+    -d1|--Xdialog)  DIA="Xdialog"; shift;;
+    -d2|--whiptail) DIA="whiptail"; shift;;
+    -d3|--gdialog)  DIA="gdialog"; shift;;
+    -d4|--kdialog)  DIA="kdialog"; shift;;
+    -v|--verbose)   VERBOSE="on"; shift;;
     -*)     echo "${0}: ${1}: invalid option" >&2
             USAGE >& 2
             exit 2 ;;
@@ -205,6 +202,8 @@ fi
 cp -f $PXE_CONF $PXE_CONF_TMP
 
 [ -z "$image_selected" ] && select_image
+# Make $image_selected in one line
+image_selected="$(echo $image_selected)"
 
 # hide or reveal the specified menu
 case "$action" in
@@ -238,5 +237,16 @@ fi
 #
 [ -n "$VERBOSE" ] && echo "Copy the template file $PXE_CONF_TMP to actual one $PXE_CONF"
 cp -f $PXE_CONF_TMP $PXE_CONF
+cp_rc="$?"
 [ -f "$PXE_CONF_TMP" ] && rm -f $PXE_CONF_TMP
+
+# Write settings for later use
+if [ "$cp_rc" -eq 0 -a -n "$RESULT_FILE" ]; then
+  echo "Output action and selected menus to $RESULT_FILE."
+  cat <<-RESULT_END > $RESULT_FILE
+action="$action"
+image_selected="$image_selected"
+RESULT_END
+fi
+
 exit 0
