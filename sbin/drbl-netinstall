@@ -584,6 +584,7 @@ if [ "$show_rerun_generate_pxe_menu" = "yes" ] ; then
     *)
        echo "$msg_ok_let_do_it"
        generate-pxe-menu
+       gen-grub-efi-nb-menu
        [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
        echo "$msg_run_dcs_to_show_netboot_menu"
        [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
