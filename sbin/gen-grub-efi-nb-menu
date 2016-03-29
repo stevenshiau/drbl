@@ -308,7 +308,6 @@ menuentry "Shutdown" --id shutdown {
 
 GRUB_END
 
-# TODO, generate netinstall for uEFI network boot clients.
-#output_netinstall_syslinux_pxelinux_menu $TDIR $GRUB_EFI_D/grub.cfg
+output_netinstall_syslinux_pxelinux_menu --efi $TDIR $GRUB_EFI_D/grub.cfg
 
 echo "done!"
