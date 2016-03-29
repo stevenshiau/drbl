@@ -1,0 +1,80 @@
+#!/bin/bash
+# Author: Steven Shiau <steven _at_ nchc org tw>
+# License: GPL
+# Description: swith the pxe menu (simple menu format) to text or graphic mode
+
+# Load DRBL setting and functions
+DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/usr/share/drbl}"
+
+. $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
+
+#
+GRUB_NB_CONF_DEF="$GRUB_EFINB_DIR/grub.cfg"
+
+#
+USAGE() {
+    echo "Usage:"
+    echo "To set the default uEFI network boot client menu:"
+    echo "`basename $0` [OPTION]"
+    echo " Options:"
+    echo " -m, --mode [text|graphic]  Set the default mode to text or graphic"
+    echo " -c, --config CONF Use the CONF file instead of default one ($GRUB_NB_CONF_DEF)"
+    echo " -v, --verbose     Show verbose messages"
+    echo " -h, --help        Display this help and exit"
+}
+
+SIMPLE_MENU=""
+# Parse command-line options
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -m|--mode)  
+            shift;
+            # skip the -xx option, in case 
+	    if [ -z "$(echo $1 |grep ^-.)" ]; then
+	      mode="$1"
+	      shift
+            fi
+            ;;
+    -c|--config)  
+            shift;
+            # skip the -xx option, in case 
+	    if [ -z "$(echo $1 |grep ^-.)" ]; then
+              GRUB_NB_CONF="$1" 
+	      shift
+            fi
+            ;;
+    -h|--help)  
+            USAGE >& 2
+            exit 2 ;;
+    -v|--verbose)  
+            VERBOSE="on"
+	    shift;;
+    -*)     echo "${0}: ${1}: invalid option" >&2
+            USAGE >& 2
+            exit 2 ;;
+    *)      break ;;
+  esac
+done
+
+[ -z "$GRUB_NB_CONF" ] && GRUB_NB_CONF=$GRUB_NB_CONF_DEF
+if [ -z "$mode" ]; then
+   [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+   echo "You must specify the mode! Program terminated!!!"
+   [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+   USAGE
+   exit 1
+fi
+
+# process mode
+case "$mode" in
+  text|TEXT)
+    echo -n "Modifying $GRUB_NB_CONF to let DRBL client use text uEFI network boot boot menu... "
+    perl -pi -e 's/^set graphic_bg=.*/set graphic_bg=yes/g' $GRUB_NB_CONF
+    echo "done!"
+    ;;
+  graphic|GRAPHIC)
+    echo -n "Modifying $GRUB_NB_CONF to let DRBL client use graphical uEFI network boot boot menu... "
+    perl -pi -e 's/^set graphic_bg=.*/set graphic_bg=no/g' $GRUB_NB_CONF
+    echo "done!"
+    ;;
+esac
