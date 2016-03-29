@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.19.15-drbl1) unstable; urgency=low
+
+  * Add GNU/Linux distribution network installation for uEFI network
+    boot clients.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 29 Mar 2016 20:16:07 +0800
+
 drbl (2.19.14-drbl1) unstable; urgency=low
 
   * Add "exit" option parallel to the beginner/expert selection.

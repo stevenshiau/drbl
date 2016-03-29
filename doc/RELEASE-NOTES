@@ -1,6 +1,11 @@
 DRBL (Diskless Remote Boot in Linux) Release Notes
-Copyright (c) 2002-2014 National Center for High-Performance Computing, Taiwan
+Copyright (c) 2002-2016 DRBL Project
 ----------------------------------------------------------------------
+2.19.11-drbl
+ - Ubuntu 15.10 support were added in this release.
+ - uEFI nework booting mechanism was improved.
+ - Language files were updated. Thanks to all the contributors.
+
 2.11.15-drbl
  - Ubuntu 14.10, CentOS 7 supports were added in this release.
  - Language files were updated. Thanks to all the contributors.
