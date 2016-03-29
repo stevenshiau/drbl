@@ -2517,9 +2517,10 @@ parse_cmdline_option() {
 } # parse_cmdline_option
 #
 output_netinstall_syslinux_pxelinux_menu() {
-  local TDIR  # Where netinstall kernel/initrd exists (/tftpboot/nbi_img)
-  local PXECFG_DIR_FNAME  # Where pxeliux cfg file exists (/tftpboot/nbi_img/pxelinux.cfg/)
+  local TDIR  # Where netinstall kernel/initrd exists (e.g. /tftpboot/nbi_img)
+  local NB_CFG_DIR_FNAME  # Where pxeliux cfg file exists (e.g. /tftpboot/nbi_img/pxelinux.cfg/)
   local menu_hint ni_ver ni_arch boot_file_dir
+  local nb_mode_="pxe" # Default mode if not assigned
   # output the netinstall menu
   # Here 2 types: Linux and BSD
   # The netinstall kernel files (linux) or pxeboot file (bsd) in /tftpboot/nbi_img are, e.g.:
@@ -2540,6 +2541,7 @@ output_netinstall_syslinux_pxelinux_menu() {
 
   while [ $# -gt 0 ]; do
    case "$1" in
+     -e|--efi) nb_mode_="efi"; shift;;
      -p|--prefix)
            shift
            if [ -z "$(echo $1 |grep ^-.)" ]; then
@@ -2561,7 +2563,7 @@ output_netinstall_syslinux_pxelinux_menu() {
   done
 
   TDIR="$1" 
-  PXECFG_DIR_FNAME="$2"
+  NB_CFG_DIR_FNAME="$2"
   
   # Type 1: Linux
   for inet in $TDIR/vmlinuz-netinstall-*; do
@@ -2703,8 +2705,6 @@ output_netinstall_syslinux_pxelinux_menu() {
    [ -z "$img_menu" ] && continue
    [ -z "$img" -o -z "$kernel" ] && continue
 
-   echo "Adding $img_menu menu..."
-   [ -n "$verbose" ] && echo "extra option in append: $extra_append"    
    # Generate the description:
    # EX for i: rh-8.0-netinstall
    # create the description for the netinstall image
@@ -2716,7 +2716,11 @@ output_netinstall_syslinux_pxelinux_menu() {
    else
      ramdisk_size_opt=""
    fi
-   cat <<-PXE_END >> $PXECFG_DIR_FNAME
+
+   if [ "$nb_mode_" = "pxe" ]; then
+     echo "Adding $img_menu menu..."
+     [ -n "$verbose" ] && echo "extra option in append: $extra_append"    
+     cat <<-PXE_END >> $NB_CFG_DIR_FNAME
 label $img_menu
   # MENU DEFAULT
   MENU HIDE
@@ -2731,6 +2735,23 @@ label $img_menu
   ENDTEXT
 
 PXE_END
+   else
+    # Only output x86-64/amd64 one
+    if [ -n "$(echo $kernel | grep -iE "(x86-64|x86_64|amd64)")" ]; then
+     echo "Adding $img_menu menu..."
+     [ -n "$verbose" ] && echo "extra option in append: $extra_append"    
+     cat <<-PXE_END >> $NB_CFG_DIR_FNAME
+#menuentry "$des" --id $img_menu {
+#  echo "Enter netinstall for $img_menu..."
+#  echo "Loading Linux kernel..."
+#  linux $boot_file_dir$kernel $ramdisk_size_opt $extra_append
+#  echo "Loading initial ramdisk..."
+#  initrd $boot_file_dir$img
+#}
+
+PXE_END
+    fi
+   fi
   done
 
   # Type 2: BSD
@@ -2747,7 +2768,8 @@ PXE_END
    des="${des} installation via network"
    [ -z "$img_menu" ] && continue
    echo "Adding $img_menu menu..."
-   cat <<-PXE_END >> $PXECFG_DIR_FNAME
+   if [ "$nb_mode_" = "pxe" ]; then
+     cat <<-PXE_END >> $NB_CFG_DIR_FNAME
 label $img_menu
   # MENU DEFAULT
   MENU HIDE
@@ -2760,6 +2782,16 @@ label $img_menu
   ENDTEXT
 
 PXE_END
+   else
+     cat <<-PXE_END >> $NB_CFG_DIR_FNAME
+menuentry "$des" --id $img_menu {
+  echo "Enter netinstall for $img_menu..."
+  echo "Loading Linux kernel..."
+  linux $boot_file_dir$img
+}
+
+PXE_END
+   fi
   done
 } # end of output_netinstall_syslinux_pxelinux_menu
 #
