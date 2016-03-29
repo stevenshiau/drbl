@@ -1206,9 +1206,21 @@ case "$MODE" in
 	 case "$OTHER_MODE" in
           "switch-pxe-menu")
               echo "Switch DRBL client menus..."
-       	      switch-pxe-menu -c $PXE_CONF -l $lang $DIA_OPT $MORE_OPT_for_MODE2
+              TMP_PXEMENU="$(mktemp /tmp/pxemenu.XXXXXX)"
+              trap "[ -f "$TMP_PXEMENU" ] && rm -f $TMP_PXEMENU" HUP INT QUIT TERM EXIT
+       	      switch-pxe-menu -c $PXE_CONF -l $lang -o $TMP_PXEMENU $DIA_OPT $MORE_OPT_for_MODE2
        	      rc=$?
+	      if [ -e "$TMP_PXEMENU" ]; then
+		# Convert PXE ID to grub NB ID
+		perl -pi -e "s/drbl/drbl-client/g; \
+			     s/clonezilla/clonezilla-se-client/g; \
+			     s/local/local-disk/g" $TMP_PXEMENU
+		# Load them
+                . $TMP_PXEMENU # Obtain "action" and "image_selected"
+       	        switch-efi-nb-menu -c $GRUB_CONF -l $lang -i "$image_selected" $action $DIA_OPT $MORE_OPT_for_MODE2
+	      fi
        	      [ "$rc" -eq 0 ] && deploy_pxecfg_grubefi_files
+	      [ -e "$TMP_PXEMENU" ] && rm -f $TMP_PXEMENU
        	      ;;
           "switch-pxe-bg-mode")
 	      run-switch-pxe-bg-mode $MORE_OPT_for_MODE2 ;;
