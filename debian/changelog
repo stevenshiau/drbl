@@ -1,3 +1,9 @@
+drbl (2.19.16-drbl1) unstable; urgency=low
+
+  * Add support for Debian 7.10 and 8.4. 
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 04 Apr 2016 20:46:40 +0800
+
 drbl (2.19.15-drbl1) unstable; urgency=low
 
   * Add GNU/Linux distribution network installation for uEFI network
