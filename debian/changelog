@@ -1,3 +1,10 @@
+drbl (2.20.1-drbl1) unstable; urgency=medium
+
+  * Remove drbl client's files for Ubuntu <= 13.10.
+  * Add initial support for Ubuntu 16.04. Not finished.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 11 Apr 2016 20:03:29 +0800
+
 drbl (2.19.16-drbl1) unstable; urgency=low
 
   * Add support for Debian 7.10 and 8.4. 
