@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.20.1
+Version:	2.20.2
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,16 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Mon May 02 2016 Steven Shiau <steven _at_ nchc org tw> 2.20.2-drbl1
+- Remove cryptsetup for Ubuntu-based Clonezilla live temporarily
+  from drbl.conf. Due to this issue:
+  https://bugs.launchpad.net/ubuntu/+source/cryptsetup/+bug/1528861 
+  It will be added for Debian-based Clonezilla live when creating.
+- Add package console-common for Clonezilla live again because we have
+  removed cryptsetup and plymouth for Ubuntu-based Clonezilla live.
+- Remove vblade for DRBL server temporarily since it will cause
+  depending issue for runit on Ubuntu 16.04.
+
 * Mon Apr 11 2016 Steven Shiau <steven _at_ nchc org tw> 2.20.1-drbl1
 - Remove drbl client's files for Ubuntu <= 13.10.
 - Add initial support for Ubuntu 16.04. Not finished.
