@@ -1,3 +1,9 @@
+drbl (2.20.3-drbl1) unstable; urgency=medium
+
+  * Update netinstall for Ubuntu as "wily xenial" in drbl.conf. 
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 10 May 2016 20:26:22 +0800
+
 drbl (2.20.2-drbl1) unstable; urgency=medium
 
   * Remove cryptsetup for Ubuntu-based Clonezilla live temporarily
