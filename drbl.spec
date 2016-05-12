@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.20.3
+Version:	2.20.4
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Thu May 12 2016 Steven Shiau <steven _at_ nchc org tw> 2.20.4-drbl1
+- [Ceasar Sun] Fix the nis failed to start in xenial.
+
 * Tue May 10 2016 Steven Shiau <steven _at_ nchc org tw> 2.20.3-drbl1
 - Update netinstall for Ubuntu as "wily xenial" in drbl.conf. 
 
