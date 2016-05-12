@@ -5,9 +5,16 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.20.5-drbl1) unstable; urgency=medium
+
+  * Add package dos2unix in Clonezilla/DRBL live packages list. 
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 13 May 2016 06:05:02 +0800
+
 drbl (2.20.4-drbl1) unstable; urgency=medium
 
-  * [Ceasar Sun] Fix the nis failed to start in xenial.
+  [Ceasar Sun]
+  * Fix the nis failed to start in xenial.
 
  -- Steven Shiau <steven@nchc.org.tw>  Thu, 12 May 2016 19:46:31 +0800
 
