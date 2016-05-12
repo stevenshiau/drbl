@@ -2372,7 +2372,9 @@ if is_systemd_init; then
            -e /usr/share/systemd/tmp.mount ]; then
       # Debian systemd 220 disabled tmp.mount, and it might cause our diskless client umount /tmp in amd64. We have to enable it.
       # Ref: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=779902
-      perl -pi -e "s/[#]RAMTMP=.*/RAMTMP=yes/g" $drbl_common_root/etc/default/tmpfs
+      if [ -e "$drbl_common_root/etc/default/tmpfs" ]; then
+        perl -pi -e "s/[#]RAMTMP=.*/RAMTMP=yes/g" $drbl_common_root/etc/default/tmpfs
+      fi
       cp -a /usr/share/systemd/tmp.mount $drbl_common_root/lib/systemd/system/tmp.mount
       # Manuall link the tmp.mount since systemctl fails to run in chroot.
       mkdir -p $drbl_common_root/etc/systemd/system/local-fs.target.wants/
@@ -2706,20 +2708,24 @@ for i in $client_services; do
       # systemctl can't work in chroot environment :`chroot $drbl_common_root/ /sbin/chkconfig --add $i`
       # Therefore manually link it:
       _systemctl_target=$(grep -e "^WantedBy=" $drbl_common_root/lib/systemd/system/$i.service | sed -e "s/WantedBy=//")
-	  [ -z "$_systemctl_target" ] && echo "Skip ..." && continue;
-      echo "to target: '$_systemctl_target'";
-      for ti in $_systemctl_target; do
-        ln -s -v /lib/systemd/system/$i.service $drbl_common_root/etc/systemd/system/$ti.wants/$i.service
-      done
+      if [ ! -z "$_systemctl_target" ]; then
+        echo "to target: '$_systemctl_target'";
+        for ti in $_systemctl_target; do
+          ln -s -v /lib/systemd/system/$i.service $drbl_common_root/etc/systemd/system/$ti.wants/$i.service
+        done
+      else
+        echo "Skip ...";
+      fi
     fi
     if [ -e "$drbl_common_root/etc/init.d/$i" ]; then
-      # TODO for systemd env
       if [ -x "$drbl_common_root/sbin/chkconfig" ]; then
-        echo "'chroot $drbl_common_root/ /sbin/chkconfig --add $i'"
+        echo "Run: 'chroot $drbl_common_root/ /sbin/chkconfig --add $i'"
         chroot $drbl_common_root/ /sbin/chkconfig --add $i
       else
         # Use insserv for debian/ubuntu
-        chroot $drbl_common_root/ insserv $i &> /dev/null
+	# Add '-f' to fix adding nis service error in Xenial, by Ceasar
+        echo "Run: 'chroot $drbl_common_root/ insserv -f $i &> /dev/null'"
+        chroot $drbl_common_root/ insserv -f $i &> /dev/null
       fi
     fi
   elif [ -e /etc/debian_version ]; then
@@ -2825,7 +2831,6 @@ for i in $client_services; do
     chroot $drbl_common_root/ /sbin/chkconfig $i on
   fi
 done
-
 # deal with ocs-run service in systemd environemnt on Fedora 17 and later
 #	1. create rescue.target and services files
 #	2. make a link of rescue.service to ocsd-rescue.service 
