@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.20.8-drbl1) unstable; urgency=medium
+
+  * Remove the option "--force-yes" of apt-get when installing required
+    packages on Debian. It was for legacy Debian/Ubuntu.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sat, 14 May 2016 18:53:11 +0800
+
 drbl (2.20.7-drbl1) unstable; urgency=medium
 
   * install-kernel-for-client: avoid getting empty line for
