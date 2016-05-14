@@ -1,3 +1,10 @@
+drbl (2.20.7-drbl1) unstable; urgency=medium
+
+  * install-kernel-for-client: avoid getting empty line for
+    kernel version.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sat, 14 May 2016 11:59:03 +0800
+
 drbl (2.20.6-drbl1) unstable; urgency=medium
 
   * install-kernel-for-client: Better to parse kernel version,
