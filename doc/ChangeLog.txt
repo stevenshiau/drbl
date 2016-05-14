@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.20.6-drbl1) unstable; urgency=medium
+
+  * install-kernel-for-client: Better to parse kernel version,
+    avoid getting empty line.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sat, 14 May 2016 10:05:38 +0800
+
 drbl (2.20.5-drbl1) unstable; urgency=medium
 
   * Add package dos2unix in Clonezilla/DRBL live packages list. 
