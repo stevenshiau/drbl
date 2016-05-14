@@ -3178,10 +3178,6 @@ install_drbl_DBN() {
 #    ;;
 #esac
 
-# append the --force-yes since there is no key in drbl related package.
-# Only Ubuntu/Etch will check key, not sarga or woody, but we just give it.
-apt_extra_opt="--force-yes"
-
 # Some checkings:
 # It seems sarge running kernel 2.4 will have NFS problem...
 case "$OS_Version" in
