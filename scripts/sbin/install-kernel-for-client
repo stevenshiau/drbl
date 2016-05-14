@@ -118,7 +118,7 @@ case "$mode" in
     if [ -z "$client_kernel_ver" ]; then
       # For OpenSuSE 11.1, kernel-default or kernel-pae, there is no vmlinuz-* file, try another method, i.e. use the path:
       # /lib/modules/2.6.27.7-9-default/...
-      client_kernel_ver="$(rpm -qpl $client_kernel_pkg | awk -F" " '{print $NF}' | awk -F"/" '/\/lib\/modules/ {print $4}' | sort | uniq)"
+      client_kernel_ver="$(rpm -qpl $client_kernel_pkg | grep "/lib/modules" | awk -F" " '{print $NF}' | awk -F"/" '/\/lib\/modules/ {print $4}' | sort | uniq)"
     fi
     # we might need /tftpboot/node_root/var/lock/rpm/ for locking in some dist (like CentOS 4.4).
     mkdir -p $drbl_common_root/var/lock/rpm/
@@ -134,7 +134,7 @@ case "$mode" in
     if [ -z "$client_kernel_ver" ]; then
       # For deb linux-ubuntu-modules-* or linux-restricted-modules-*, there is no vmlinuz-* file, try another method, i.e. use the path:
       # ./lib/modules/2.6.22-14-386/...
-      client_kernel_ver="$(dpkg --contents $client_kernel_pkg | awk -F" " '{print $NF}' | awk -F"/" '/\.\/lib\/modules/ {print $4}' | sort | uniq)"
+      client_kernel_ver="$(dpkg --contents $client_kernel_pkg | grep "/lib/modules" | awk -F" " '{print $NF}' | awk -F"/" '/\.\/lib\/modules/ {print $4}' | sort | uniq)"
     fi
     echo "Installing $client_kernel_pkg for clients... "
     echo "$msg_install_kernel_might_take_several_minutes "
