@@ -40,6 +40,9 @@ batch_mode="off"
 # Prompt messages after installation.
 booting_messages="on"
 
+# By default when Clonezilla live is used, not to add ocs_server
+add_ocs_server="no"
+
 # Functions
 USAGE() {
   echo "Load small GNU/Linux ($supported_SL_dists) Linux to DRBL environment."
@@ -52,6 +55,7 @@ USAGE() {
   echo "-f, --use-nfsroot      By default the boot parameter to load the root file system (e.g. filesystem.squashfs) is fetch. With this option, nfsroot is used. //NOTE// This function only works for live-initramfs based system. E.g. Clonezilla live or GParted live."
   echo "-k, --keep-pxecfg  Keep the pxelinux config file without updating the boot parameters."
   echo "-n, --no-prompt-boot-message  Skip the prompt messages about booting via PXE or etherboot in the end of execution."
+  echo "-o, --add-ocs-server      Add ocs_server in the boot parameters for Clonezilla live."
   echo "-p, --live-path  PATH:    Assign the mounted or unzipped live system as PATH. This conflicts with \"-i\" option."  
   echo "-s, --server-ip IP_ADDR:  Assign the tftp or NFS server's IP address to be used in Clonezilla/GParted live."
   echo "-u, --uninstall DIST:     Uninstall Small Linux DIST."
@@ -115,12 +119,15 @@ prepare_param_in_pxe_grub_cfg(){
          # Find the IP address of this server. Here we choose the first one in the list of those connected to DRBL clients.
          server_IP="$(LC_ALL=C get-all-nic-ip -b | awk -F" " '{print $1}')"
        fi
+       if [ "$add_ocs_server" = "yes" ]; then
+         ocs_serer_opt="ocs_server=\"$server_IP\""
+       fi
        get_rootfs_location_opt
        if [ -z "$cl_gp_boot_param" ]; then
-         append_param_in_grub_cfg="boot=live union=overlay noswap noprompt nolocales vga=788 $rootfs_location_opt ocs_server=\"$server_IP\""
+         append_param_in_grub_cfg="boot=live union=overlay noswap noprompt nolocales vga=788 $rootfs_location_opt $ocs_serer_opt"
 	 append_param_in_pxe_cfg="initrd=$nbi_initrd $append_param_in_grub_cfg"
        else
-         append_param_in_grub_cfg="$cl_gp_boot_param noprompt $rootfs_location_opt ocs_server=\"$server_IP\""
+         append_param_in_grub_cfg="$cl_gp_boot_param noprompt $rootfs_location_opt $ocs_serer_opt"
          append_param_in_pxe_cfg="initrd=$nbi_initrd $append_param_in_grub_cfg"
 	 if is_drbl_live_env; then
            # We will reuse the filesystem.squashfs from DRBL live, however, it's not like that of Clonezilla live, therefore more option are needed here.
@@ -904,6 +911,7 @@ while [ $# -gt 0 ]; do
     -f|--use-nfsroot) shift; rootfs_location="nfsroot" ;;
     -k|--keep-pxecfg) shift; force_to_update_pxecfg="no" ;;
     -n|--no-prompt-boot-message) shift; booting_messages="off";;
+    -o|--add-ocs-server) shift; add_ocs_server="yes" ;;
     -s|--server-ip)
         shift;
         if [ -z "$(echo $1 |grep ^-.)" ]; then
