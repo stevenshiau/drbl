@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.20.10-drbl1) unstable; urgency=medium
+
+  [Ceasar Sun]
+  * drbl-login-switch now supports the config for Xenial.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 17 May 2016 16:39:42 +0800
+
 drbl (2.20.9-drbl1) unstable; urgency=medium
 
   * Add an option "-o" to drbl-sl so that different cases can be used.
