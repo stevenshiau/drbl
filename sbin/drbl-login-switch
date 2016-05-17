@@ -1,5 +1,6 @@
 #!/bin/bash
 # Steven Shiau <steven _at_ nchc org tw>
+# Ceasar Sun <ceasar _at_ nchc org tw>
 # License: GPL
 # Description: To set the login mode for DRBL clients
 
@@ -283,7 +284,12 @@ tune_lightdm_manual_login() {
   fi
 
   # put the greeter-show-manual-login 
+  end_line_of_file="$(LC_ALL=C wc -l $inode/$LIGHTDM_CFG | awk -F" " '{print $1}')"
   lines="$(get_block_line_in_gdm_kdm SeatDefaults $inode/$LIGHTDM_CFG)"
+  # In Xenial, use [Seat:*] to replace with [SeatDefaults]. That's the reason to get "end_line_of_file first". By Ceasar
+  if [ "$end_line_of_file" = "$(echo $lines | awk -F" " '{print $1}')" ]; then
+    lines="$(get_block_line_in_gdm_kdm 'Seat:\*' $inode/$LIGHTDM_CFG)"
+  fi
   begin_line=$(echo $lines | awk -F" " '{print $1}')
   end_line=$(echo $lines | awk -F" " '{print $2}')
   chk_cmd="if ($begin_line..$end_line) {print}"
