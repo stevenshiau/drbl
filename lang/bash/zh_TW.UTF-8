@@ -879,7 +879,7 @@ msg_ocs_param_icds='略去檢查目的碟空間是否夠大'
 msg_ocs_onthefly_param_icds='略去檢查目的碟空間是否夠大'
 # Tag on 2012/02/02
 msg_ocs_param_fsck_src_part='存印象檔之前嘗試交談式檢查與修復來源裝置檔案系統'
-msg_ocs_param_fsck_src_part_yes='存印象檔之前嘗試自動(小心!)交談式檢查與修復來源裝置檔案系統'
+msg_ocs_param_fsck_src_part_yes='存印象檔之前嘗試自動(小心!)檢查與修復來源裝置檔案系統'
 msg_ocs_onthefly_param_fsck_src_part='複製之前嘗試交談式檢查與修復來源裝置的檔案系統'
 msg_ocs_onthefly_param_fsck_src_part_yes='複製之前嘗試自動(小心!)檢查與修復來源裝置的檔案系統'
 msg_run_clonezilla_live_again="重來一次 (印象檔儲藏庫$ocsroot若已經掛載將會被卸載)"
