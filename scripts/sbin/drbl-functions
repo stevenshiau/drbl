@@ -2303,19 +2303,21 @@ config_drbl_live_network(){
     fi
     echo -n "$msg_only_one_IP_so_create_alias_IP "
     alias_done="no"
+    # Get the NIC device name for the only one device
+    nic_dev_only="$(get-nic-devs | head -n 1)"
     i="$drbl_live_private_IP_alias_eth_def"
     while [ "$alias_done" = "no" ]; do
       if ! ping -c 3 192.168.$i.254 &>/dev/null; then
-        ifconfig eth0:1 192.168.$i.254 netmask 255.255.255.0
+        ifconfig ${nic_dev_only}:1 192.168.$i.254 netmask 255.255.255.0
         alias_done="yes"
       else
         i=$((i+1))
       fi
     done
-    if ! egrep -e "^auto[[:space:]]+eth0:1" /etc/network/interfaces; then
+    if ! egrep -e "^auto[[:space:]]+${nic_dev_only}:1" /etc/network/interfaces; then
       cat <<-NET_END >> /etc/network/interfaces
-auto eth0:1
-iface eth0:1 inet static
+auto ${nic_dev_only}:1
+iface ${nic_dev_only}:1 inet static
 	address 192.168.$i.254
 	netmask 255.255.255.0
 NET_END
