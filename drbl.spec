@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.20.11
+Version:	2.20.12
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,11 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Fri Jun 03 2016 Steven Shiau <steven _at_ nchc org tw> 2.20.12-drbl1
+- Add netework boot paramter "dhcp-vendor-id=DRBLClient" for drbl-live clients.
+- Use a flexible network device name instead of eth0 for alias network device in function config_drbl_live_network of drbl-functions.
+- Fixed wrong descriptions in msg_ocs_param_fsck_src_part_yes for zh_TW.UTF-8.
+
 * Sun May 22 2016 Steven Shiau <steven _at_ nchc org tw> 2.20.11-drbl1
 - Add support for Debian 7.11 and 8.5.
 
