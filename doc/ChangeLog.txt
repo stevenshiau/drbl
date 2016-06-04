@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.20.13-drbl1) unstable; urgency=medium
+
+  * Add dhcp-vendor-id=DRBLClient in clonezilla_se_live_opts in drbl-sl.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sat, 04 Jun 2016 13:46:31 +0800
+
 drbl (2.20.12-drbl1) unstable; urgency=medium
 
   * Add netework boot paramter "dhcp-vendor-id=DRBLClient" for
