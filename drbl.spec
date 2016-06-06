@@ -1,10 +1,10 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.20.13
+Version:	2.20.15
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
-Source0:	drbl-%{version}.tar.bz2
+Source0:	drbl-%{version}.tar.xz
 URL:		http://drbl.org
 BuildArch:	noarch
 BuildRoot:	%{_tmppath}/%{name}-%{version}-root
@@ -45,6 +45,12 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Mon Jun 06 2016 Steven Shiau <steven _at_ nchc org tw> 2.20.15-drbl1
+- Use xz format for drbl tarball for Debian.
+
+* Mon Jun 06 2016 Steven Shiau <steven _at_ nchc org tw> 2.20.14-drbl1
+- Drop the requirement of mkswap-uuid. Modern mkswap has the option to do that. 
+
 * Sat Jun 04 2016 Steven Shiau <steven _at_ nchc org tw> 2.20.13-drbl1
 - Add dhcp-vendor-id=DRBLClient in clonezilla_se_live_opts in drbl-sl.
 

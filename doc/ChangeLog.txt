@@ -5,6 +5,19 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.20.15-drbl1) unstable; urgency=medium
+
+  * Use xz format for drbl tarball for Debian.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 06 Jun 2016 11:32:10 +0800
+
+drbl (2.20.14-drbl1) unstable; urgency=medium
+
+  * Drop the requirement of mkswap-uuid. Modern mkswap has the option to do
+    that. 
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 06 Jun 2016 11:28:07 +0800
+
 drbl (2.20.13-drbl1) unstable; urgency=medium
 
   * Add dhcp-vendor-id=DRBLClient in clonezilla_se_live_opts in drbl-sl.
