@@ -16,7 +16,7 @@ RELEASE=`grep ^Release $SPEC_FILE |sed -e "s/\t/ /g" -e "s/ \+/ /g" |cut  -d":" 
 echo "VER, RELEASE: $VER, $RELEASE"
 
 #
-TARBALL=drbl-$VER.tar.bz2
+TARBALL=drbl-$VER.tar.xz
 
 # check
 [ ! -f "$TARBALL" ] && echo "Can NOT find file $TARBALL! Did you forget to update the rdate in file drbl.spec ? Program Stop!!!" && exit 1
