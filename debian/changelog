@@ -1,3 +1,13 @@
+drbl (2.20.16-drbl1) unstable; urgency=medium
+
+  * Bug fixed: the mode for drblpush was 644, not 755.
+    Thanks to Danny Russ | KSC for reporting this.
+  * Due to the change in Debian Sid that "init" is not essential any more.
+    It has to added as a required package in drbl.conf.
+    Ref: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=756023
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 07 Jun 2016 12:35:54 +0800
+
 drbl (2.20.15-drbl1) unstable; urgency=medium
 
   * Use xz format for drbl tarball for Debian.
