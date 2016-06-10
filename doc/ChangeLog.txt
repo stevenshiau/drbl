@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.20.17-drbl1) unstable; urgency=medium
+
+  * Remove package init for Ubuntu 14.04 since it still uses upstart, not
+    systemd.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 10 Jun 2016 09:46:35 +0800
+
 drbl (2.20.16-drbl1) unstable; urgency=medium
 
   * Bug fixed: the mode for drblpush was 644, not 755.

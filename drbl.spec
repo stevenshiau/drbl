@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.20.16
+Version:	2.20.17
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Fri Jun 10 2016 Steven Shiau <steven _at_ nchc org tw> 2.20.17-drbl1
+- Remove package init for Ubuntu 14.04 since it still uses upstart, not systemd.
+
 * Tue Jun 07 2016 Steven Shiau <steven _at_ nchc org tw> 2.20.16-drbl1
 - Bug fixed: the mode for drblpush was 644, not 755. Thanks to Danny Russ | KSC for reporting this.
 - Due to the change in Debian Sid that "init" is not essential any more.  It has to added as a required package in drbl.conf.  Ref: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=756023
