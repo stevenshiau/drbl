@@ -3306,8 +3306,7 @@ fi
 
 # For Ubuntu 14.04, there is no package "init" because it still uses upstart. Remove it from list.
 if [ "$DISTRIB_ID" = "Ubuntu" -a "$DISTRIB_RELEASE" = "14.04" ]; then
-    PKG_FROM_DBN="$(echo $PKG_FROM_DBN | sed -r -e "s/\<init\>//g")"
-  fi
+  PKG_FROM_DBN="$(echo $PKG_FROM_DBN | sed -r -e "s/\<init\>//g")"
 fi
 
 # From ntfs-3g 1:2011.4.12AR.4-2, it will provide all the files of ntfsprogs.
