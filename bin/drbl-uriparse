@@ -1,0 +1,106 @@
+#!/usr/bin/perl
+# License: GPL 
+# Author: Steven Shiau <steven _at_ clonezilla org>
+# Description: Program to parse the URI to get the attribute.
+#
+# A URI (Uniform Resource Identifiers) is like:
+# foo://username:password@example.org:8080/to/the/dir?name=singer#bird
+# \_/   \______/ \______/ \______________/\_________/\__________/ \__/
+#  |       |        |            |             |           |        |
+#scheme username  password   authority       path        query   fragment
+#
+# Ref: https://svn.apache.org/repos/asf/labs/webarch/trunk/uri/rfc/rfc2396.html
+# ^(([^:/?#]+):)?(//([^/?#]*))?([^?#]*)(\?([^#]*))?(#(.*))?
+#  12            3  4          5       6  7        8 9
+# scheme    = $2
+# authority = $4
+# path      = $5
+# query     = $7
+# fragment  = $9
+#
+# E.g http://www.ics.uci.edu/pub/ietf/uri/#Related
+# $1 = http:
+# $2 = http
+# $3 = //www.ics.uci.edu
+# $4 = www.ics.uci.edu
+# $5 = /pub/ietf/uri/
+# $6 = <undefined>
+# $7 = <undefined>
+# $8 = #Related
+# $9 = Related
+#
+# Input URI example:
+# "http://www.ics.uci.edu:8042/pub/ietf/uri/#Related";
+# "http://user:pwd@clonezilla@www.ics.uci.edu:8042/pub/ietf/uri/#Related";
+# "smb://jack@www.ics.uci.edu:8042/pub/ietf/uri/#Related
+# Apparently the username can not contain the character ":"
+#
+#
+our $usage="Usage: $0 URI ATTRIBUTE";
+#
+sub usage_details{
+  print "$usage\n".
+  "Parse Uniform Resource Identifiers (URI) then output the ATTRIBUTE\n".
+  "URI is like: http://user:mypwd\@host.mydomain.org:8042/pub/ietf/uri/#Related\n".
+  "ATTRIBUTE could be one of these: scheme, domain, port, path, query, fragment, username, password.\n".
+  "E.g. to get the username in URI smb://jack:loverose\@titanic.net:1911/to/new-york/\n".
+  "Run:\n".
+  "$0 smb://jack:loverose\@titanic.com:1911/to/new-york username\n";
+} # end of usage_details
+
+##################
+###### MAIN ######
+##################
+my $uri;
+my $want;
+# Must have argument
+die "$usage\n" if $#ARGV<0;
+$uri = shift(@ARGV);
+$want = shift(@ARGV);
+
+if( $uri =~ /^(-)?(-)?h(elp)?$/) {
+  usage_details();
+  exit;
+}
+
+my @uri_g = ($uri =~ m{^(([^:/?#]+):)?(//([^/?#]*))?([^?#]*)(\?([^#]*))?(#(.*))?});
+# Array index is from 0.
+my $scheme = $uri_g[1];
+my $authority = $uri_g[3];
+my $path = $uri_g[4];
+my $query = $uri_g[6];
+my $fragment = $uri_g[8];
+
+# authority may like: user:pwd@clonezilla@www.ics.uci.edu:8042 -> extract username, password, IP address/FQDN, port
+my @auth = ($authority =~ m{^(([^:]+):?(\S+)?@)?([[:print:]]+)?(:([0-9]*)?)});
+#                            12        3        4              5 6
+# http://u:p@www.ics.uci.edu:8042/pub/ietf/uri/#Related
+# u:p@www.ics.uci.edu u:p@www.ics.uci.edu :8042 8042
+my $username = $auth[1];
+my $password = $auth[2];
+my $domain = $auth[3];
+my $port = $auth[5];
+
+# Form the output hash
+my %output = (
+  # Long attributes:
+  scheme => "$scheme",
+  domain => "$domain",
+  port => "$port",
+  path => "$path",
+  query => "$query",
+  fragment => "$fragment",
+  username => "$username",
+  password => "$password",
+  # Short attributes:
+  sc => "$scheme",
+  dm => "$domain",
+  pt => "$port",
+  ph => "$path",
+  qy => "$query",
+  fr => "$fragment",
+  user => "$username",
+  pw => "$password",
+);
+
+print "$output{$want}\n";
