@@ -1,3 +1,10 @@
+drbl (2.20.19-drbl1) unstable; urgency=medium
+
+  * New program "drbl-uriparse" added. It can be used to parse the URI to get
+    the attribute.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 14 Jun 2016 17:07:55 +0800
+
 drbl (2.20.18-drbl1) unstable; urgency=medium
 
   * Bug fixed: extra "if" in the if block of drblsrv.

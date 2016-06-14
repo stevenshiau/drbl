@@ -1030,3 +1030,6 @@ msg_chksum_results_saved_in_this_file='Checksum inspecting results are saved in 
 # Tag on 2016/03/05
 msg_local_source_disk_for_checksum_inspect='Choose local disk to inspect the checksum.'
 msg_choose_the_image_to_be_checked_for_checksum='Choose the image to inspect the checksum in the image and the files in the partition or disk (only images with checksum are shown). //NOTE// Some files checksum inspection might fail, e.g. if you choose to let Clonezilla reinstall grub boot loader, the /boot/grub/core.img will be different'
+# Tag on 2016/06/14
+msg_failed_to_clone_the_boot_loader_on_EBR="Failed to clone boot loader to extended partition"
+msg_ocs_param_t2='Client skip restoring the EBR (Extended Boot Record)'

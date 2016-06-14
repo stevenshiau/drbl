@@ -1522,6 +1522,7 @@ if [ "$mode" = "restore" ]; then
     "-u"       "$msg_ocs_param_u" off \
     "-t"       "$msg_ocs_param_t" $skip_clean_mbr_opt \
     "-t1"      "$msg_ocs_param_t1" off \
+    "-t2"      "$msg_ocs_param_t2" off \
     "-r"       "$msg_ocs_param_r" on \
     "-ns"      "$msg_ocs_param_ns" off \
     "-e"       "$msg_ocs_param_e" off \
@@ -1825,6 +1826,7 @@ if [ "$mode" = "restore" ]; then
     "-c"       "$msg_ocs_param_c" on \
     "-t"       "$msg_ocs_param_t" $skip_clean_mbr_opt \
     "-t1"      "$msg_ocs_param_t1" off \
+    "-t2"      "$msg_ocs_param_t2" off \
     "-r"       "$msg_ocs_param_r" on \
     "-e"       "$msg_ocs_param_e" off \
     "-icrc"    "$msg_ocs_param_icrc" off \

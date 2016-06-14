@@ -446,7 +446,7 @@ msg_different_type_of_input_devs='你輸入的裝置兩者屬於不同類型'
 msg_a_partition_table_already_exist='在目的碟中已經有一個分割表存在'
 msg_do_u_want_to_duplicate_the_partition_layout_to='你是否要複製分割表到'
 msg_do_you_want_to_clone_the_MBR_to='你是否要複製主要開機磁區(MBR)到'
-msg_do_you_want_to_clone_the_boot_loader_to='你是否要複製開機載入程式(boot loader (executable code area，硬碟的前446 bytes))到'
+msg_do_you_want_to_clone_the_boot_loader_to='你是否要複製開機載入程式(boot loader,executable code area，硬碟的前446 bytes))到'
 msg_skip_clone_MBR='略去複製主要開機磁區(MBR)'
 msg_skip_clone_boot_loader='略去複製開機載入程式(boot loader)'
 msg_failed_to_clone_the_MBR='未能複製主要開機磁區(MBR)到'
@@ -1008,3 +1008,6 @@ msg_this_dev_is_busy_you_have_to_unmount='這分割區使用中，要進一部�
 msg_chksum_results_saved_in_this_file='檔案的雜湊值比對結果存在這個檔案'
 msg_local_source_disk_for_checksum_inspect='選擇本機硬碟來檢查雜湊值'
 msg_choose_the_image_to_be_checked_for_checksum='選擇印象檔來檢查其中的雜湊值與硬碟中檔案做比對(只有之前存的時候有雜湊值紀錄檔的印象檔才會列出) //注意// 某些檔案的雜湊值比對可能會失敗，例如若你選擇讓再生龍重新安裝製grub開機管理程式(boot loader)，那/boot/grub/core.img將會不同'
+# Tag on 2016/06/14
+msg_failed_to_clone_the_boot_loader_on_EBR="複製開機載入程式(boot loader)到延伸分割區失敗"
+msg_ocs_param_t2='用戶端電腦略去復原EBR (Extended Boot Record)'
