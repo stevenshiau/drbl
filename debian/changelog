@@ -1,3 +1,10 @@
+drbl (2.20.17-drbl2) not-released; urgency=medium
+
+  * New program "drbl-uriparse" added. It can be used to parse the URI to get
+    the attribute.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sun, 12 Jun 2016 21:04:09 +0800
+
 drbl (2.20.17-drbl1) unstable; urgency=medium
 
   * Remove package init for Ubuntu 14.04 since it still uses upstart, not
