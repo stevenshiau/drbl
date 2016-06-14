@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.20.18
+Version:	2.20.19
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Tue Jun 14 2016 Steven Shiau <steven _at_ nchc org tw> 2.20.19-drbl1
+- New program "drbl-uriparse" added. It can be used to parse the URI to get the attribute.
+
 * Fri Jun 10 2016 Steven Shiau <steven _at_ nchc org tw> 2.20.18-drbl1
 - Bug fixed: extra "if" in the if block of drblsrv.
 
