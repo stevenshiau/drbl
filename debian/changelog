@@ -1,3 +1,9 @@
+drbl (2.20.18-drbl1) unstable; urgency=medium
+
+  * Bug fixed: extra "if" in the if block of drblsrv.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 10 Jun 2016 09:53:43 +0800
+
 drbl (2.20.17-drbl1) unstable; urgency=medium
 
   * Remove package init for Ubuntu 14.04 since it still uses upstart, not
