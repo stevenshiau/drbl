@@ -483,19 +483,32 @@ install_SL(){
     # This Clonezilla live iso file was created by this command:
     # ocs-iso -s --extra-boot-param quiet -y 6.03 -i 2.4.2-49-i686-pae
     # ==================================
+    # Jun/15/2016 In order to work with toram=live mechanism, we also put those *-Live-Version
+    # in /lib/live/mount/medium/live/, therefore we have check these files, too
+    # /lib/live/mount/medium/live/{Clonezilla-Live-Version,DRBL-Live-Version,GParted-Live-Version}
+    # //NOTE// For backward compatibility both of these two types of files have to be checked.
+    # User might use newer DRBL environment to deploy old version of clonezilla/drbl/gparted live.
     if [ -e "$LIVE_PATH/Clonezilla-Live-Version" ]; then
       SL_ISO="$(head -n 1 $LIVE_PATH/Clonezilla-Live-Version)"
-    elif [ -e "$LIVE_PATH/DRBL-Live-Version" ]; then
+    elif [ -e "$LIVE_PATH/$bootfiles_path/Clonezilla-Live-Version" ]; then
+      SL_ISO="$(head -n 1 $LIVE_PATH/$bootfiles_path/Clonezilla-Live-Version)"
+    elif [ -e "$LIVE_PATH/DRBL-Live-Version" -o \
+           -e "$LIVE_PATH/$bootfiles_path/DRBL-Live-Version" ]; then
       # To avoid confusion, we switch drbl-live to Clonezilla live since this small linux won't be really DRBL, we just need it work as Clonezilla live.
       #SL_ISO="$(head -n 1 $LIVE_PATH/DRBL-Live-Version)"
       SL_ISO="clonezilla-live-0.0.0-0"
     elif [ -e "$LIVE_PATH/GParted-Live-Version" ]; then
       SL_ISO="$(head -n 1 $LIVE_PATH/GParted-Live-Version)"
+    elif [ -e "$LIVE_PATH/$bootfiles_path/GParted-Live-Version" ]; then
+      SL_ISO="$(head -n 1 $LIVE_PATH/$bootfiles_path/GParted-Live-Version)"
     else
       [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
-      echo "File $LIVE_PATH/Clonezilla-Live-Version, $LIVE_PATH/DRBL-Live-Version or $LIVE_PATH/GParted-Live-Version not found!"
+      echo "File $LIVE_PATH/Clonezilla-Live-Version, $LIVE_PATH/DRBL-Live-Version, $LIVE_PATH/GParted-Live-Version, or"
+      echo "$LIVE_PATH/$bootfiles_path/Clonezilla-Live-Version, $LIVE_PATH/$bootfiles_path/DRBL-Live-Version or $LIVE_PATH/$bootfiles_path/GParted-Live-Version not found!"
       [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
       echo "$msg_program_stop."
+      echo -n "$msg_press_enter_to_continue..."
+      read
       exit 1
     fi
   fi
