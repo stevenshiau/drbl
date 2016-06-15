@@ -1,3 +1,11 @@
+drbl (2.20.20-drbl1) unstable; urgency=medium
+
+  * Program drbl-sl supports toram=live mechanism, so it will check the
+    file /lib/live/mount/medium/live/{Clonezilla-Live-Version,
+    DRBL-Live-Version,GParted-Live-Version}, too.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 16 Jun 2016 05:51:50 +0800
+
 drbl (2.20.19-drbl1) unstable; urgency=medium
 
   * New program "drbl-uriparse" added. It can be used to parse the URI to get
