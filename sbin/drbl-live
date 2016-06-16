@@ -161,7 +161,17 @@ start_drbl_live() {
   fi
   echo "Live media is in $LIVE_MEDIA"
   echo "This is drbl live system." > $drbl_common_root/drbl_ssi/drbl-live-system.txt
-  cat $LIVE_MEDIA/DRBL-Live-Version >> $drbl_common_root/drbl_ssi/drbl-live-system.txt
+  if [ -e "$LIVE_MEDIA/DRBL-Live-Version" ]; then
+    cat $LIVE_MEDIA/DRBL-Live-Version >> $drbl_common_root/drbl_ssi/drbl-live-system.txt
+  elif [ -e "$LIVE_MEDIA/live/DRBL-Live-Version" ]; then
+    cat $LIVE_MEDIA/live/DRBL-Live-Version >> $drbl_common_root/drbl_ssi/drbl-live-system.txt
+  else
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+    echo "File \"$LIVE_MEDIA/DRBL-Live-Version\" or \"$LIVE_MEDIA/live/DRBL-Live-Version\" _NOT_ found!"
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+    echo -n $msg_press_enter_to_continue
+    read
+  fi
   
   # Before we run drblpush, we have to remove the services we put only for DRBL live server when creating drbl live. This will avoide those to be copied to SSI template tarball. Since these services are one-time use only for server during booting.
   rm -f /etc/rcS.d/*kbd-conf

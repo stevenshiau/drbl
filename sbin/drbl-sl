@@ -490,21 +490,21 @@ install_SL(){
     # User might use newer DRBL environment to deploy old version of clonezilla/drbl/gparted live.
     if [ -e "$LIVE_PATH/Clonezilla-Live-Version" ]; then
       SL_ISO="$(head -n 1 $LIVE_PATH/Clonezilla-Live-Version)"
-    elif [ -e "$LIVE_PATH/$bootfiles_path/Clonezilla-Live-Version" ]; then
-      SL_ISO="$(head -n 1 $LIVE_PATH/$bootfiles_path/Clonezilla-Live-Version)"
+    elif [ -e "$LIVE_PATH/live/Clonezilla-Live-Version" ]; then
+      SL_ISO="$(head -n 1 $LIVE_PATH/live/Clonezilla-Live-Version)"
     elif [ -e "$LIVE_PATH/DRBL-Live-Version" -o \
-           -e "$LIVE_PATH/$bootfiles_path/DRBL-Live-Version" ]; then
+           -e "$LIVE_PATH/live/DRBL-Live-Version" ]; then
       # To avoid confusion, we switch drbl-live to Clonezilla live since this small linux won't be really DRBL, we just need it work as Clonezilla live.
       #SL_ISO="$(head -n 1 $LIVE_PATH/DRBL-Live-Version)"
       SL_ISO="clonezilla-live-0.0.0-0"
     elif [ -e "$LIVE_PATH/GParted-Live-Version" ]; then
       SL_ISO="$(head -n 1 $LIVE_PATH/GParted-Live-Version)"
-    elif [ -e "$LIVE_PATH/$bootfiles_path/GParted-Live-Version" ]; then
-      SL_ISO="$(head -n 1 $LIVE_PATH/$bootfiles_path/GParted-Live-Version)"
+    elif [ -e "$LIVE_PATH/live/GParted-Live-Version" ]; then
+      SL_ISO="$(head -n 1 $LIVE_PATH/live/GParted-Live-Version)"
     else
       [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
       echo "File $LIVE_PATH/Clonezilla-Live-Version, $LIVE_PATH/DRBL-Live-Version, $LIVE_PATH/GParted-Live-Version, or"
-      echo "$LIVE_PATH/$bootfiles_path/Clonezilla-Live-Version, $LIVE_PATH/$bootfiles_path/DRBL-Live-Version or $LIVE_PATH/$bootfiles_path/GParted-Live-Version not found!"
+      echo "$LIVE_PATH/live/Clonezilla-Live-Version, $LIVE_PATH/live/DRBL-Live-Version or $LIVE_PATH/live/GParted-Live-Version not found!"
       [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
       echo "$msg_program_stop."
       echo -n "$msg_press_enter_to_continue..."
