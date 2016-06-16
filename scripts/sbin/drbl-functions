@@ -4323,6 +4323,7 @@ filter_cl_gp_boot_param(){
   sed -r -e "s|ocs_prerun[[:digit:]]*=\".*\"||g" | \
   sed -r -e "s|ocs_daemon.*=\".*\"||g" | \
   sed -r -e "s|drbl_live_noconfx||g" | \
+  sed -r -e "s|toram=?[^[:space:]]*[[:space:]]?||g" | \
   sed -r -e "s|^[[:space:]]*||g" | \
   sed -r -e "s|[[:space:]]+$||g"
 } # end of filter_cl_gp_boot_param
