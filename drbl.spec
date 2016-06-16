@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.20.20
+Version:	2.20.21
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,8 +45,11 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Thu Jun 16 2016 Steven Shiau <steven _at_ nchc org tw> 2.20.21-drbl1
+- Bug fixed for using toram=live mode. Now it works when using toram=live,syslinux.
+
 * Thu Jun 16 2016 Steven Shiau <steven _at_ nchc org tw> 2.20.20-drbl1
--Program drbl-sl supports toram=live mechanism, so it will check the file /lib/live/mount/medium/live/{Clonezilla-Live-Version, DRBL-Live-Version,GParted-Live-Version}, too.
+- Program drbl-sl supports toram=live mechanism, so it will check the file /lib/live/mount/medium/live/{Clonezilla-Live-Version, DRBL-Live-Version,GParted-Live-Version}, too.
 
 * Tue Jun 14 2016 Steven Shiau <steven _at_ nchc org tw> 2.20.19-drbl1
 - New program "drbl-uriparse" added. It can be used to parse the URI to get the attribute.

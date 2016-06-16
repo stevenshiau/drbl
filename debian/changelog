@@ -1,3 +1,10 @@
+drbl (2.20.21-drbl1) unstable; urgency=medium
+
+  * Bug fixed for using toram=live mode. Now it works when using 
+    toram=live,syslinux.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 16 Jun 2016 13:13:20 +0800
+
 drbl (2.20.20-drbl1) unstable; urgency=medium
 
   * Program drbl-sl supports toram=live mechanism, so it will check the
