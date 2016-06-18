@@ -30,9 +30,11 @@
 # $9 = Related
 #
 # Input URI example:
-# "http://www.ics.uci.edu:8042/pub/ietf/uri/#Related";
-# "http://user:pwd@clonezilla@www.ics.uci.edu:8042/pub/ietf/uri/#Related";
-# "smb://jack@www.ics.uci.edu:8042/pub/ietf/uri/#Related
+# "http://www.ics.uci.edu:8042/pub/ietf/uri/#Related"
+# "http://user:pwd@clonezilla@www.ics.uci.edu:8042/pub/ietf/uri/#Related"
+# "smb://jack@www.ics.uci.edu:8042/pub/ietf/uri/#Related"
+# Samba with domain format: smb://[[domain;]username[:password]@]server[/share[/path]]
+# e.g. "smb://workgrp;jack:jpwd@192.168.100.254/share/samba/"
 # Apparently the username can not contain the character ":"
 #
 #
@@ -64,6 +66,7 @@ if( $uri =~ /^(-)?(-)?h(elp)?$/) {
 }
 
 my @uri_g = ($uri =~ m{^(([^:/?#]+):)?(//([^/?#]*))?([^?#]*)(\?([^#]*))?(#(.*))?});
+#                       12            3   4         5       6           7 8
 # Array index is from 0.
 my $scheme = $uri_g[1];
 my $authority = $uri_g[3];
@@ -71,15 +74,15 @@ my $path = $uri_g[4];
 my $query = $uri_g[6];
 my $fragment = $uri_g[8];
 
-# authority may like: user:pwd@clonezilla@www.ics.uci.edu:8042 -> extract username, password, IP address/FQDN, port
-my @auth = ($authority =~ m{^(([^:]+):?(\S+)?@)?([[:print:]]+)?(:([0-9]*)?)});
-#                            12        3        4              5 6
+# authority may like: user:pwdclonezilla@www.ics.uci.edu:8042 -> extract username, password, IP address/FQDN, port
+my @auth = ($authority =~ m{^(([^:]+):?(\S+)?@)?([^:]+):?([0-9]+)?});
+#                            12        3        4        5 
 # http://u:p@www.ics.uci.edu:8042/pub/ietf/uri/#Related
 # u:p@www.ics.uci.edu u:p@www.ics.uci.edu :8042 8042
 my $username = $auth[1];
 my $password = $auth[2];
 my $domain = $auth[3];
-my $port = $auth[5];
+my $port = $auth[4];
 
 # Form the output hash
 my %output = (
