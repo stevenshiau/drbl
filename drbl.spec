@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.20.22
+Version:	2.20.23
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Sat Jun 18 2016 Steven Shiau <steven _at_ nchc org tw> 2.20.23-drbl1
+- Bug fixed: failed to parse correct domain if no port is assigned.
+
 * Thu Jun 16 2016 Steven Shiau <steven _at_ nchc org tw> 2.20.22-drbl1
 - Update function filter_cl_gp_boot_param of ocs-functions to filter toram option. Otherwise if toram=live,syslinux shown in drbl live client, it will crash.
 

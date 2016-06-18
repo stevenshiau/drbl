@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.20.23-drbl1) unstable; urgency=medium
+
+  * Bug fixed: failed to parse correct domain if no port is assigned.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sat, 18 Jun 2016 17:59:52 +0800
+
 drbl (2.20.22-drbl1) unstable; urgency=medium
 
   * Update function filter_cl_gp_boot_param of ocs-functions to filter
