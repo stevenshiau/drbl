@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.20.23
+Version:	2.20.24
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Sun 19 2016 Steven Shiau <steven _at_ nchc org tw> 2.20.24-drbl1
+- Improve drbl-get-nfsserver by using mount status to get nfs server first, if it's not found, then gateway will be used.
+
 * Sat Jun 18 2016 Steven Shiau <steven _at_ nchc org tw> 2.20.23-drbl1
 - Bug fixed: failed to parse correct domain if no port is assigned.
 
