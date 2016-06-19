@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.20.24-drbl1) unstable; urgency=medium
+
+  * Improve drbl-get-nfsserver by using mount status to get nfs server first,
+    if it's not found, then gateway will be used.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sun, 19 Jun 2016 13:04:02 +0800
+
 drbl (2.20.23-drbl1) unstable; urgency=medium
 
   * Bug fixed: failed to parse correct domain if no port is assigned.
