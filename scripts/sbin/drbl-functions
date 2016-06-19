@@ -4327,3 +4327,14 @@ filter_cl_gp_boot_param(){
   sed -r -e "s|^[[:space:]]*||g" | \
   sed -r -e "s|[[:space:]]+$||g"
 } # end of filter_cl_gp_boot_param
+#
+is_valid_IPv4_add() {
+  local input_ip="$1"
+  local rc=1
+  if [ -n "$(echo $input_ip | grep -Eo "^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$")" ]; then
+    rc=0
+  else
+    rc=1
+  fi
+  return $rc
+} # end of is_valid_IPv4_add
