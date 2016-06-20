@@ -1,3 +1,9 @@
+drbl (2.20.25-drbl1) unstable; urgency=medium
+
+  * Add package qemu-utils for Clonezilla/DRBL live system.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 20 Jun 2016 11:53:56 +0800
+
 drbl (2.20.24-drbl1) unstable; urgency=medium
 
   * Improve drbl-get-nfsserver by using mount status to get nfs server first,
