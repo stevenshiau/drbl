@@ -3662,6 +3662,7 @@ grand_jobs_before_exit() {
   # Including:
   # (1) Unmount ecryptfs if it exists.
   # (2) Remove MULTIPATH_INFODIR temp dir.
+  # (3) Remove partition_table from gen_proc_partitions_map_file
 
   #(1)
   umount_ecryptfs_mount_point_if_necessary
@@ -3671,6 +3672,11 @@ grand_jobs_before_exit() {
        -n "$(echo $MULTIPATH_INFODIR | grep -w "multipath_info")" ]; then
     rm -f "$MULTIPATH_INFODIR/*"
     rmdir $MULTIPATH_INFODIR
+  fi
+  #(3)
+  if [ -f "$partition_table" -a \
+       -n "$(echo $partition_table | grep -w "parttable-ocs")" ]; then
+    rm -f $partition_table
   fi
 } # end of grand_jobs_before_exit
 #
