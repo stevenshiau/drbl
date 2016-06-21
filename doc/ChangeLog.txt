@@ -5,6 +5,14 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.20.27-drbl1) unstable; urgency=medium
+
+  * Use shorter name for fsck-related options, i.e.
+    "-fsck-src-part" is replaced by "-fsck", and 
+    "-fsck-src-part-y" is replaced by "-fsck-y".
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 21 Jun 2016 11:02:21 +0800
+
 drbl (2.20.26-drbl1) unstable; urgency=medium
 
   * Clean tmp file parttable-ocs.* when exiting.

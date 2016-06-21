@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.20.25
+Version:	2.20.27
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,12 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Tue Jun 21 2016 Steven Shiau <steven _at_ nchc org tw> 2.20.27-drbl1
+- Use shorter name for fsck-related options, i.e.  "-fsck-src-part" is replaced by "-fsck", and "-fsck-src-part-y" is replaced by "-fsck-y".
+
+* Mon Jun 20 2016 Steven Shiau <steven _at_ nchc org tw> 2.20.26-drbl1
+- Clean tmp file parttable-ocs.* when exiting.
+
 * Mon Jun 20 2016 Steven Shiau <steven _at_ nchc org tw> 2.20.25-drbl1
 - Add package qemu-utils for Clonezilla/DRBL live system.
 
