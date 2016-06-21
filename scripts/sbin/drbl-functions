@@ -1679,8 +1679,8 @@ else
     "$msg_clonezilla_advanced_extra_param | $msg_mode: $ocs_mode_prompt" --menu "$msg_choose_if_fsck_the_source_part" \
     0 0 0 $DIA_ESC \
     " "     "$msg_skip_check_source_fs" \
-    "-fsck-src-part "   "$msg_ocs_param_fsck_src_part" \
-    "-fsck-src-part-y " "$msg_ocs_param_fsck_src_part_yes" \
+    "-fsck "   "$msg_ocs_param_fsck_src_part" \
+    "-fsck-y " "$msg_ocs_param_fsck_src_part_yes" \
     2>> $OCS_PARAM_TMP
   else
     # Convert none to "", as we can not set ocs_fsck_src_part as "" otherwise it will be asked in the previous if block.
@@ -2071,8 +2071,8 @@ if [ "$mode" = "save" ]; then
     "$msg_clonezilla_advanced_extra_param | $msg_mode: $ocs_mode_prompt" --menu "$msg_choose_if_fsck_the_source_part" \
     0 0 0 $DIA_ESC \
     " "     "$msg_skip_check_source_fs" \
-    "-fsck-src-part "   "$msg_ocs_param_fsck_src_part" \
-    "-fsck-src-part-y " "$msg_ocs_param_fsck_src_part_yes" \
+    "-fsck "   "$msg_ocs_param_fsck_src_part" \
+    "-fsck-y " "$msg_ocs_param_fsck_src_part_yes" \
     2>> $OCS_PARAM_TMP
   else
     # Convert none to "", as we can not set ocs_fsck_src_part as "" otherwise it will be asked in the previous if block.
