@@ -1,3 +1,10 @@
+drbl (2.20.27-drbl2) NOTRELEASED; urgency=medium
+
+  * When option "-k1" or "-k2" of ocs-sr or drbl-ocs is chosen,
+    "-icds" is on automatically.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 21 Jun 2016 21:25:52 +0800
+
 drbl (2.20.27-drbl1) unstable; urgency=medium
 
   * Use shorter name for fsck-related options, i.e.
