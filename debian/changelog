@@ -2,8 +2,9 @@ drbl (2.20.27-drbl2) NOTRELEASED; urgency=medium
 
   * When option "-k1" or "-k2" of ocs-sr or drbl-ocs is chosen,
     "-icds" is on automatically.
+  * Language files updated for fuse-related messages.
 
- -- Steven Shiau <steven@nchc.org.tw>  Tue, 21 Jun 2016 21:25:52 +0800
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 22 Jun 2016 11:58:16 +0800
 
 drbl (2.20.27-drbl1) unstable; urgency=medium
 
