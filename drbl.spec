@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.20.27
+Version:	2.20.28
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,11 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Mon Jun 27 2016 Steven Shiau <steven _at_ nchc org tw> 2.20.28-drbl1
+- When option "-k1" or "-k2" of ocs-sr or drbl-ocs is chosen, "-icds" is on automatically.
+- Language files updated for fuse-related messages.
+- Add "-batch" in the TUI for saving mode.
+
 * Tue Jun 21 2016 Steven Shiau <steven _at_ nchc org tw> 2.20.27-drbl1
 - Use shorter name for fsck-related options, i.e.  "-fsck-src-part" is replaced by "-fsck", and "-fsck-src-part-y" is replaced by "-fsck-y".
 
