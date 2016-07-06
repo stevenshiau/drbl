@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.20.28
+Version:	2.20.29
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Wed Jul 06 2016 Steven Shiau <steven _at_ nchc org tw> 2.20.29-drbl1
+- Update language files for ocs-live-bind-mount use.
+
 * Mon Jun 27 2016 Steven Shiau <steven _at_ nchc org tw> 2.20.28-drbl1
 - When option "-k1" or "-k2" of ocs-sr or drbl-ocs is chosen, "-icds" is on automatically.
 - Language files updated for fuse-related messages.
