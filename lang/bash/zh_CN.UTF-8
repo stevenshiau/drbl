@@ -741,7 +741,6 @@ msg_ocs_param_cm='通过MD5校验和检查映像'
 msg_ocs_param_cs='通过SHA1校验和检查映像'
 msg_MD5SUMS_check_failed='MD5校验和不匹配！'
 msg_SHA1SUMS_check_failed='SHA1校验和不匹配！'
-msg_which_dir_as_clonezilla_img_home='哪一个目录是用于Clonezilla映像的(只有目录的第一级会被显示，并且Clonezilla映像(例如目录)本身将会被不包含进去。此外，如果这个目录名称中有空格的话，它将不会被显示)？'
 msg_top_directory_in_local_dev='本地设备中的顶极目录'
 msg_run_generage_pxe_menu_after_drbl_netinstall='因为网络安装文件已经下载完毕，您希望更新PXE启动菜单么？'
 msg_run_generate_pxe_menu_and_dcs_to_show_netboot_menu='///注意/// 您现在必须重新运行“generate-pxe-menu”来更新PXE菜单，然后运行“dcs -> more -> switch-pxe-menu”在启动菜单中显示这个网络安装。'
@@ -1014,3 +1013,15 @@ msg_choose_the_image_to_be_checked_for_checksum='Choose the image to inspect the
 # Tag on 2016/06/14
 msg_failed_to_clone_the_boot_loader_on_EBR="Failed to clone boot loader to extended partition"
 msg_ocs_param_t2='Client skip restoring the EBR (Extended Boot Record)'
+# Tag on 2016/07/03
+msg_parent_directory='Parent directory'
+msg_dir_browser_for_img='Directory Browser for Clonezilla image repository'
+msg_which_dir_as_clonezilla_img_home='哪一个目录是用于Clonezilla映像的(如果这个目录名称中有空格的话，它将不会被显示)？'
+msg_path_on_the_resource='Path on the resource'
+msg_current_selected_dir_name='Current selected dir name'
+msg_when_current_selected_dir_name_is_ok='When the "Current selected dir name" is what you want, use "Tab" key to choose "Done"'
+msg_not_chosing_CZ_IMG_dir='//NOTE// You should not choose the directory tagged with CZ_IMG. They are just for you to know the images list in the current dir.'
+msg_no_any_image_found='There is no any image found in this directory'
+msg_this_directory_is_not_mountpoint='This directory is not a mount point'
+msg_there_is_no_way_to_mount_subdirectory='There is no way to mount the sub-directory.'
+msg_the_dir_you_choose_is_clonezilla_img_dir='This directory you choose is a Clonezilla image dir'

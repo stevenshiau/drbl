@@ -739,7 +739,6 @@ msg_ocs_param_cm='Проверить контрольную сумму MD5 дл�
 msg_ocs_param_cs='Проверить контрольную сумму SHA1 для образа'
 msg_MD5SUMS_check_failed='Контрольная сумма MD5 не соответствует!'
 msg_SHA1SUMS_check_failed='Контрольная сумма SHA1 не соответствует!'
-msg_which_dir_as_clonezilla_img_home='Какой каталог для образа Clonezilla (показаны только каталоги первого уровня, а имя образа Clonezilla (т.е. каталог) само по себе будет исключено. Если в имени каталога есть пробелы, он не будет показан)?'
 msg_top_directory_in_local_dev='Корневой каталог в локальном устройстве'
 msg_run_generage_pxe_menu_after_drbl_netinstall='Файлы с netinstall загружен, хотите ли вы обновить загрузочное меню PXE?'
 msg_run_generate_pxe_menu_and_dcs_to_show_netboot_menu='///ПРИМЕЧАНИЕ/// Теперь вы должны перезапустить "generate-pxe-menu", чтобы обновить меню PXE, а затем запустить "dcs -> more -> switch-pxe-menu", чтобы обнаружить netinstall в загрузочном меню.'
@@ -1016,3 +1015,15 @@ msg_choose_the_image_to_be_checked_for_checksum='Choose the image to inspect the
 # Tag on 2016/06/14
 msg_failed_to_clone_the_boot_loader_on_EBR="Failed to clone boot loader to extended partition"
 msg_ocs_param_t2='Client skip restoring the EBR (Extended Boot Record)'
+# Tag on 2016/07/03
+msg_parent_directory='Parent directory'
+msg_dir_browser_for_img='Directory Browser for Clonezilla image repository'
+msg_which_dir_as_clonezilla_img_home='Какой каталог для образа Clonezilla (Если в имени каталога есть пробелы, он не будет показан)?'
+msg_path_on_the_resource='Path on the resource'
+msg_current_selected_dir_name='Current selected dir name'
+msg_when_current_selected_dir_name_is_ok='When the "Current selected dir name" is what you want, use "Tab" key to choose "Done"'
+msg_not_chosing_CZ_IMG_dir='//NOTE// You should not choose the directory tagged with CZ_IMG. They are just for you to know the images list in the current dir.'
+msg_no_any_image_found='There is no any image found in this directory'
+msg_this_directory_is_not_mountpoint='This directory is not a mount point'
+msg_there_is_no_way_to_mount_subdirectory='There is no way to mount the sub-directory.'
+msg_the_dir_you_choose_is_clonezilla_img_dir='This directory you choose is a Clonezilla image dir'

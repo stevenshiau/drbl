@@ -741,7 +741,6 @@ msg_ocs_param_cm='經由MD5雜湊值檢查印象檔'
 msg_ocs_param_cs='經由SHA1雜湊值檢查印象檔'
 msg_MD5SUMS_check_failed='MD5雜湊值檢查發現有問題!'
 msg_SHA1SUMS_check_failed='SHA1雜湊值檢查發現有問題!'
-msg_which_dir_as_clonezilla_img_home='哪個目錄要給再生龍Clonezilla來存取印象檔 (只顯示第一層目錄，且Clonezilla印象檔本身的目錄會被排除。此外，如果目錄名稱有空白，這裡也不顯示)?'
 msg_top_directory_in_local_dev='所掛載裝置的根目錄(最上層目錄)'
 msg_run_generage_pxe_menu_after_drbl_netinstall='因為網路安裝檔案已經下載，你是否要更新PXE的開機選單?'
 msg_run_generate_pxe_menu_and_dcs_to_show_netboot_menu='///注意/// 你應該重新執行"generate-pxe-menu"來更新PXE的開機選單，然後執行"dcs -> more -> switch-pxe-menu"來顯示網路安裝的選單.'
@@ -1011,3 +1010,15 @@ msg_choose_the_image_to_be_checked_for_checksum='選擇印象檔來檢查其中�
 # Tag on 2016/06/14
 msg_failed_to_clone_the_boot_loader_on_EBR="複製開機載入程式(boot loader)到延伸分割區失敗"
 msg_ocs_param_t2='用戶端電腦略去復原EBR (Extended Boot Record)'
+# Tag on 2016/07/03
+msg_parent_directory='上層目錄'
+msg_dir_browser_for_img='再生龍印象檔儲藏庫瀏覽'
+msg_which_dir_as_clonezilla_img_home='哪個目錄要給再生龍Clonezilla來存取印象檔(如果目錄名稱有空白，這裡不顯示)?'
+msg_path_on_the_resource='在儲藏資源上的路徑'
+msg_current_selected_dir_name='目前選擇的目錄名稱'
+msg_when_current_selected_dir_name_is_ok='當"目前選擇的目錄名稱"符合你要的，請使用"Tab"鍵來選擇"Done"'
+msg_not_chosing_CZ_IMG_dir='//注意//你不應該選擇被標示有CZ_IMG的目錄，它只是列給你參考知道目前選擇的目錄下有哪些印象檔.'
+msg_no_any_image_found='在這個目錄下沒有找到任何印象檔'
+msg_this_directory_is_not_mountpoint='這個目錄不是個掛載點'
+msg_there_is_no_way_to_mount_subdirectory='無法掛載次一層目錄'
+msg_the_dir_you_choose_is_clonezilla_img_dir='你所選擇的這目錄是再生龍的印象檔'
