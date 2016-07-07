@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.20.30
+Version:	2.20.31
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Thu Jul 07 2016 Steven Shiau <steven _at_ nchc org tw> 2.20.31-drbl1
+- Update language file zh_TW.UTF-8 for bind mount.
+
 * Thu Jul 07 2016 Steven Shiau <steven _at_ nchc org tw> 2.20.30-drbl1
 - Update language files for ocs-live-bind-mount use in prep-ocsroot and ocs-live-run-menu.
 
