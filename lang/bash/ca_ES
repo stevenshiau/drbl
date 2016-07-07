@@ -1029,3 +1029,5 @@ msg_no_any_image_found='There is no any image found in this directory'
 msg_this_directory_is_not_mountpoint='This directory is not a mount point'
 msg_there_is_no_way_to_mount_subdirectory='There is no way to mount the sub-directory.'
 msg_the_dir_you_choose_is_clonezilla_img_dir='This directory you choose is a Clonezilla image dir'
+msg_remount_subdir="Remount subdir in medium of current repository"
+msg_run_clonezilla_live_again_but_remounted_subdir="Start over (Remount subdir in medium of current repository)"
