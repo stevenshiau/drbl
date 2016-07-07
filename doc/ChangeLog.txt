@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.20.30-drbl1) unstable; urgency=medium
+
+  * Update language files for ocs-live-bind-mount use in prep-ocsroot and
+    ocs-live-run-menu.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 07 Jul 2016 19:20:07 +0800
+
 drbl (2.20.29-drbl1) unstable; urgency=medium
 
   * Update language files for ocs-live-bind-mount use.
