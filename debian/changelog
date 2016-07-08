@@ -1,8 +1,9 @@
-drbl (2.20.31-drbl2) unreleased; urgency=medium
+drbl (2.20.32-drbl1) unstable; urgency=medium
 
   * Update Fedora netinstall ver as 24 in drbl-ocs.conf.
+  * Update language files for exiting dir browsing.
 
- -- Steven Shiau <steven@nchc.org.tw>  Fri, 08 Jul 2016 11:22:24 +0800
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 08 Jul 2016 13:34:23 +0800
 
 drbl (2.20.31-drbl1) unstable; urgency=medium
 
