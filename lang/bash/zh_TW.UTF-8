@@ -1025,3 +1025,4 @@ msg_the_dir_you_choose_is_clonezilla_img_dir='你所選擇的這目錄是再生�
 msg_remount_subdir="重新掛載目前儲藏庫媒體的下層目錄來當儲藏庫"
 msg_run_clonezilla_live_again_but_remounted_subdir="重來一次 (重新掛載目前儲藏庫媒體的下層目錄來當儲藏庫)"
 msg_exit_browsing="退出這個目錄瀏覽工具"
+msg_this_img_repo_can_only_be_used_for_saving='所掛載的印象檔儲藏庫此刻只能用來存印象檔。'

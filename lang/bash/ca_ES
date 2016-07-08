@@ -1032,3 +1032,4 @@ msg_the_dir_you_choose_is_clonezilla_img_dir='This directory you choose is a Clo
 msg_remount_subdir="Remount subdir in medium of current repository"
 msg_run_clonezilla_live_again_but_remounted_subdir="Start over (Remount subdir in medium of current repository)"
 msg_exit_browsing="Exit directory browsing"
+msg_this_img_repo_can_only_be_used_for_saving='This mounted image repository can only be used for saving image at the meantime'
