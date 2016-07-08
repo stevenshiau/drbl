@@ -1014,3 +1014,4 @@ msg_failed_to_clone_the_boot_loader_on_EBR="Failed to clone boot loader to exten
 msg_ocs_param_t2='Client skip restoring the EBR (Extended Boot Record)'
 msg_remount_subdir="Remount subdir in medium of current repository"
 msg_run_clonezilla_live_again_but_remounted_subdir="Start over (Remount subdir in medium of current repository)"
+msg_exit_browsing="Exit directory browsing"

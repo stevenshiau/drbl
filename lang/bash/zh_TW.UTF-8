@@ -1024,3 +1024,4 @@ msg_there_is_no_way_to_mount_subdirectory='無法掛載次一層目錄'
 msg_the_dir_you_choose_is_clonezilla_img_dir='你所選擇的這目錄是再生龍的印象檔'
 msg_remount_subdir="重新掛載目前儲藏庫媒體的下層目錄來當儲藏庫"
 msg_run_clonezilla_live_again_but_remounted_subdir="重來一次 (重新掛載目前儲藏庫媒體的下層目錄來當儲藏庫)"
+msg_exit_browsing="退出這個目錄瀏覽工具"
