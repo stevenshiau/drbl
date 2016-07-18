@@ -2200,26 +2200,12 @@ root_over_nfs() {
   return $rc
 }
 #
-get_dir_filesystem(){
-  # function to show the filesystem of input dir
-  local target_dir="$1"
-  local df_list
-  [ -z "$target_dir" ] && return 1
-  # merge the  df -T output as one line, otherwise for some version of df with nfs, the results is in 2 lines like:
-  # [root@co50102 tmp]# LC_ALL=C df -T /home/partimag/
-  #    Filesystem    Type   1K-blocks      Used Available Use% Mounted on
-  #    192.168.205.254:/home
-  #                   nfs     7395808   3855328   3158752  55% /home
-  df_list="$(LC_ALL=C df -T $target_dir | tail -n +2)"
-  echo $df_list | awk -F" " '{print $2}'
-}
-
-# Copyright (C) 2007 Bryan McLellan <btm@loftninjas.org>
-# Licensed under the GNU GPL version 2 or greater, see COPYING
-# generate a random password of length passed out of characters in array char. returns password in $random_password
-# replaces external perl password generation script
-# Modified by Steven Shiau, remove 0, 1, add [ ] ^ ! $ %
 make_random_password(){ 
+  # Copyright (C) 2007 Bryan McLellan <btm@loftninjas.org>
+  # Licensed under the GNU GPL version 2 or greater, see COPYING
+  # generate a random password of length passed out of characters in array char. returns password in $random_password
+  # replaces external perl password generation script
+  # Modified by Steven Shiau, remove 0, 1, add [ ] ^ ! $ %
   local randchar=""
   [ -z "$1" ] && lenpass=6 || lenpass=$1
 
