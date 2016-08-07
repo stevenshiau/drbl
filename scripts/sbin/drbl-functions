@@ -1595,9 +1595,8 @@ if [ "$mode" = "restore" ]; then
     ;;
   esac
   # Question about checking the image is restorable or not. By default, no matter it's beginner or advanced mode, 
-  # we will ask. However, for some customized case, it it could be set via parameter ocs_chk_img.
-  # ocs_chk_img is from /etc/ocs/ocs-live.conf
-  if [ -z "$ocs_chk_img" ]; then
+  # we will ask.
+  if [ -z "$chk_img_restoreable_on_srv" ]; then
     $DIA --backtitle "$msg_nchc_free_software_labs" --title  \
     "$msg_clonezilla_advanced_extra_param | $msg_mode: $ocs_mode_prompt" --menu "$msg_choose_if_checking_image_restorable_before_restoring_on_this_server" \
     0 0 0 $DIA_ESC \
@@ -1605,9 +1604,7 @@ if [ "$mode" = "restore" ]; then
     "-sc0 " "$msg_ocs_param_skip_checking_img_restorable_before_restoring" \
     2>> $OCS_PARAM_TMP
   else
-    # Convert none to "", as we can not set ocs_chk_img as "" otherwise it will be asked in the previous if block.
-    ocs_chk_img="$(echo $ocs_chk_img | sed -r -e "s/none//g")"
-    echo "$ocs_chk_img " >> $OCS_PARAM_TMP
+    echo " " >> $OCS_PARAM_TMP
   fi
   if grep -Ew "exit" $OCS_PARAM_TMP &>/dev/null; then
     echo "$msg_program_stop"
@@ -1630,13 +1627,13 @@ if [ "$mode" = "restore" ]; then
     $DIA --backtitle "$msg_nchc_free_software_labs" --title  \
     "$msg_clonezilla_advanced_extra_param | $msg_mode: $ocs_mode_prompt" --menu "$msg_if_always_provide_clonezilla_srv" \
     0 0 0 $DIA_ESC \
-    ""          "$msg_ocs_param_skip" \
+    " "         "$msg_ocs_param_skip" \
     "-y0 "      "$msg_ocs_param_y0" \
     "-y1 "      "$msg_ocs_param_y1" \
     "-y2 "      "$msg_ocs_param_y2" \
     2>> $OCS_PARAM_TMP
   else
-    echo "" >> $OCS_PARAM_TMP
+    echo " " >> $OCS_PARAM_TMP
   fi
 else
   # save
@@ -1678,8 +1675,7 @@ else
     echo "-j2 " >> $OCS_PARAM_TMP
   fi
   # Question about fsck the source partition. By default, no matter it's beginner or advanced mode, we will ask.
-  # However, for some customized case, it it could be set via parameter ocs_fsck_src_part.
-  if [ -z "$ocs_fsck_src_part" ]; then
+  if [ -z "$fsck_src_part_intr" -a -z "$fsck_src_part_auto" ]; then
     $DIA --backtitle "$msg_nchc_free_software_labs" --title  \
     "$msg_clonezilla_advanced_extra_param | $msg_mode: $ocs_mode_prompt" --menu "$msg_choose_if_fsck_the_source_part" \
     0 0 0 $DIA_ESC \
@@ -1688,15 +1684,19 @@ else
     "-fsck-y " "$msg_ocs_param_fsck_src_part_yes" \
     2>> $OCS_PARAM_TMP
   else
-    # Convert none to "", as we can not set ocs_fsck_src_part as "" otherwise it will be asked in the previous if block.
-    ocs_fsck_src_part="$(echo $ocs_fsck_src_part | sed -r -e "s/none//g")"
-    echo "$ocs_fsck_src_part " >> $OCS_PARAM_TMP
+    case "$fsck_src_part_intr" in
+      yes) echo "-fsck " >> $OCS_PARAM_TMP;;
+        *) echo " " >> $OCS_PARAM_TMP;;
+    esac
+    case "$fsck_src_part_auto" in
+      yes) echo "-fsck-y " >> $OCS_PARAM_TMP;;
+        *) echo " " >> $OCS_PARAM_TMP;;
+    esac
   fi
 
   # Question about checking the image is restorable or not. By default, no matter it's beginner or advanced mode, 
-  # we will ask. However, for some customized case, it it could be set via parameter ocs_chk_img.
-  # ocs_chk_img is from /etc/ocs/ocs-live.conf
-  if [ -z "$ocs_chk_img" ]; then
+  # we will ask.
+  if [ -z "$chk_img_restoreable_mod_save" ]; then
     $DIA --backtitle "$msg_nchc_free_software_labs" --title  \
     "$msg_clonezilla_advanced_extra_param | $msg_mode: $ocs_mode_prompt" --menu "$msg_choose_if_checking_image_restorable" \
     0 0 0 $DIA_ESC \
@@ -1704,9 +1704,10 @@ else
     "-scs " "$msg_ocs_param_skip_checking_img_restorable" \
     2>> $OCS_PARAM_TMP
   else
-    # Convert none to "", as we can not set ocs_chk_img as "" otherwise it will be asked in the previous if block.
-    ocs_chk_img="$(echo $ocs_chk_img | sed -r -e "s/none//g")"
-    echo "$ocs_chk_img " >> $OCS_PARAM_TMP
+    case "$chk_img_restoreable_mod_save" in
+      yes) echo " " >> $OCS_PARAM_TMP;;
+       no) echo "-scs " >> $OCS_PARAM_TMP;;
+    esac
   fi
 fi
 
@@ -1901,9 +1902,8 @@ if [ "$mode" = "restore" ]; then
       ;;
   esac
   # Question about checking the image is restorable or not. By default, no matter it's beginner or advanced mode, 
-  # we will ask. However, for some customized case, it it could be set via parameter ocs_chk_img.
-  # ocs_chk_img is from /etc/ocs/ocs-live.conf
-  if [ -z "$ocs_chk_img" ]; then
+  # we will ask.
+  if [ -z "$chk_img_restoreable_mod_restore" ]; then
     $DIA --backtitle "$msg_nchc_free_software_labs" --title  \
     "$msg_clonezilla_advanced_extra_param | $msg_mode: $ocs_mode_prompt" --menu "$msg_choose_if_checking_image_restorable_before_restoring" \
     0 0 0 $DIA_ESC \
@@ -1911,9 +1911,10 @@ if [ "$mode" = "restore" ]; then
     "-scr " "$msg_ocs_param_skip_checking_img_restorable_before_restoring" \
     2>> $OCS_PARAM_TMP
   else
-    # Convert none to "", as we can not set ocs_chk_img as "" otherwise it will be asked in the previous if block.
-    ocs_chk_img="$(echo $ocs_chk_img | sed -r -e "s/none//g")"
-    echo "$ocs_chk_img " >> $OCS_PARAM_TMP
+    case "$chk_img_restoreable_mod_restore" in
+      yes) echo " " >> $OCS_PARAM_TMP;;
+       no) echo "-scr " >> $OCS_PARAM_TMP;;
+    esac
   fi
   if grep -Ew "exit" $OCS_PARAM_TMP &>/dev/null; then
     echo "$msg_program_stop"
@@ -2075,8 +2076,7 @@ if [ "$mode" = "save" ]; then
     echo "-i $VOL_LIMIT_IN_INTERACTIVE" >> $OCS_PARAM_TMP
   fi
   # Question about fsck the source partition. By default, no matter it's beginner or advanced mode, we will ask.
-  # However, for some customized case, it it could be set via parameter ocs_fsck_src_part.
-  if [ -z "$ocs_fsck_src_part" ]; then
+  if [ -z "$fsck_src_part_intr" -a -z "$fsck_src_part_auto" ]; then
     $DIA --backtitle "$msg_nchc_free_software_labs" --title  \
     "$msg_clonezilla_advanced_extra_param | $msg_mode: $ocs_mode_prompt" --menu "$msg_choose_if_fsck_the_source_part" \
     0 0 0 $DIA_ESC \
@@ -2085,15 +2085,19 @@ if [ "$mode" = "save" ]; then
     "-fsck-y " "$msg_ocs_param_fsck_src_part_yes" \
     2>> $OCS_PARAM_TMP
   else
-    # Convert none to "", as we can not set ocs_fsck_src_part as "" otherwise it will be asked in the previous if block.
-    ocs_fsck_src_part="$(echo $ocs_fsck_src_part | sed -r -e "s/none//g")"
-    echo "$ocs_fsck_src_part " >> $OCS_PARAM_TMP
+    case "$fsck_src_part_intr" in
+      yes) echo "-fsck " >> $OCS_PARAM_TMP;;
+        *) echo " " >> $OCS_PARAM_TMP;;
+    esac
+    case "$fsck_src_part_auto" in
+      yes) echo "-fsck-y " >> $OCS_PARAM_TMP;;
+        *) echo " " >> $OCS_PARAM_TMP;;
+    esac
   fi
   
   # Question about checking the image is restorable or not. By default, no matter it's beginner or advanced mode, 
-  # we will ask. However, for some customized case, it it could be set via parameter ocs_chk_img.
-  # ocs_chk_img is from /etc/ocs/ocs-live.conf
-  if [ -z "$ocs_chk_img" ]; then
+  # we will ask.
+  if [ -z "$chk_img_restoreable_mod_save" ]; then
     $DIA --backtitle "$msg_nchc_free_software_labs" --title  \
     "$msg_clonezilla_advanced_extra_param | $msg_mode: $ocs_mode_prompt" --menu "$msg_choose_if_checking_image_restorable" \
     0 0 0 $DIA_ESC \
@@ -2101,9 +2105,10 @@ if [ "$mode" = "save" ]; then
     "-scs " "$msg_ocs_param_skip_checking_img_restorable" \
     2>> $OCS_PARAM_TMP
   else
-    # Convert none to "", as we can not set ocs_chk_img as "" otherwise it will be asked in the previous if block.
-    ocs_chk_img="$(echo $ocs_chk_img | sed -r -e "s/none//g")"
-    echo "$ocs_chk_img " >> $OCS_PARAM_TMP
+    case "$chk_img_restoreable_mod_save" in
+      yes) echo " " >> $OCS_PARAM_TMP;;
+       no) echo "-scs " >> $OCS_PARAM_TMP;;
+    esac
   fi
 
   # Question about encrypt the image. By default, no matter it's beginner or advanced mode, 
