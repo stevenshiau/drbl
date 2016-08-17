@@ -1,3 +1,10 @@
+drbl (2.20.37-drbl1) unstable; urgency=medium
+
+  * Skip stopping or starting service if it's masked
+    in drbl-all-service.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 17 Aug 2016 17:03:28 +0800
+
 drbl (2.20.36-drbl1) unstable; urgency=medium
 
   * Drop the support for boot paramter ocs_chk_img and ocs_fsck_src_part

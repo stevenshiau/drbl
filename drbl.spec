@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.20.36
+Version:	2.20.37
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,10 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Wed Aug 17 2016 Steven Shiau <steven _at_ nchc org tw> 2.20.37-drbl1
+- Skip stopping or starting service if it's masked
+  in drbl-all-service.
+
 * Sun Aug 07 2016 Steven Shiau <steven _at_ nchc org tw> 2.20.36-drbl1
 - Drop the support for boot paramter ocs_chk_img and ocs_fsck_src_part
   in drbl-functions. Only honor the options of ocs-sr by "-scr", "-scs",
