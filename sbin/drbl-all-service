@@ -38,9 +38,13 @@ drbl_startup_service() {
     else
       _real_service_name=$(basename $(readlink -f  /lib/systemd/system/$srv.service) ".service")
     fi
-    echo "Now $act '$_real_service_name' service in systemd-like environment..."
-    systemctl $act $_real_service_name.service
-    ret=$?
+    if [ "$_real_service_name" = "null" ]; then
+      echo "Service $srv.service is masked. Skiping $act it."
+    else
+      echo "Now $act '$_real_service_name' service in systemd-like environment..."
+      systemctl $act $_real_service_name.service
+      ret=$?
+    fi
   elif dpkg -L upstart 2>/dev/null | grep -F "/sbin/start" &>/dev/null && \
      [ -e /etc/init/${srv}.conf ] && ! is_systemd_init; then
     # This is upstart case. Especially we need to make sure /sbin/init is not linked to systemd. Since on Ubuntu 15.04, both upstart and systemd packages are installed. But the file /sbin/init is the key point.
