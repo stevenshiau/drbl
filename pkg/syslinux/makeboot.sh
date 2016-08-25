@@ -357,7 +357,7 @@ fi
 if [ "$ocs_batch_mode" = "false" ]; then
   to_continue_or_not "Do you want to install mbr on $target_disk $on_this_machine ?"
 fi
-echo Running: cat "$path_of_prog/utils/mbr/mbr.bin" > $target_disk
+echo "Running: cat $path_of_prog/utils/mbr/mbr.bin > $target_disk"
 cat "$path_of_prog/utils/mbr/mbr.bin" > $target_disk
 
 echo "--------------------------------------------"
