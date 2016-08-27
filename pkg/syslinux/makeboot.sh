@@ -9,10 +9,16 @@
 # 2. cat mbr
 # 3. Run "syslinux -f -i" or "extlinux -i"
 #
-#  Latest update:  2016/3/7 by Ceasar
+#  Update history:
+#    2016/3/7 by Ceasar
 #	1. Fix: use "findmnt" to get mount path
 #	2. Fix: consider mount path with "space" character ex: "/media/user/USB\ DISK"
+#    2016/8/27 by David Tonhofer
+#	1. Rewrite some codes to reuse.
+#       2. Add comments.
 ######
+
+set -u
 
 # Append PATH
 export PATH=/sbin:/usr/sbin:/bin:/usr/bin:$PATH
@@ -25,10 +31,10 @@ prog="$(basename $0)"
 path_of_prog="$(LC_ALL=C cd "$(dirname "$0")/../../"; pwd)"
 
 #
-[ -z "$SETCOLOR_SUCCESS" ] && SETCOLOR_SUCCESS="echo -en \\033[1;32m"
-[ -z "$SETCOLOR_FAILURE" ] && SETCOLOR_FAILURE="echo -en \\033[1;31m"
-[ -z "$SETCOLOR_WARNING" ] && SETCOLOR_WARNING="echo -en \\033[1;33m"
-[ -z "$SETCOLOR_NORMAL"  ] && SETCOLOR_NORMAL="echo -en \\033[0;39m"
+[ -z ${SETCOLOR_SUCCESS:-''} ] && SETCOLOR_SUCCESS="echo -en \\033[1;32m"
+[ -z ${SETCOLOR_FAILURE:-''} ] && SETCOLOR_FAILURE="echo -en \\033[1;31m"
+[ -z ${SETCOLOR_WARNING:-''} ] && SETCOLOR_WARNING="echo -en \\033[1;33m"
+[ -z ${SETCOLOR_NORMAL:-''}  ] && SETCOLOR_NORMAL="echo -en \\033[0;39m"
 BOOTUP="color"
 
 #
@@ -38,12 +44,14 @@ msg_do_you_want_to_make_it_bootable="Do you want to mark it as bootable ?"
 
 #
 USAGE() {
-   echo "$prog - To make the device bootable with syslinux"
-   echo "Usage: $prog [OPTION] partition_device"
+   echo "$prog - To make the device bootable with syslinux/extlinux"
+   echo "Usage: $prog [OPTION] partition_device_holding_clonezilla_filetree"
    echo "Options:"
    echo "-b, --batch-mode 	batch, unattended mode. Use carefully! DANGEROUS!!!"
    echo "-L, --LABEL STRING 	set device via LABEL if LABEL exists"
    echo "-U, --UUID STRING	set device via UUID"
+   echo "This script is assumed to ACTUALLY RESIDE IN THE CORRECT PLACE OF THE CLONEZILLA FILE TREE!"
+   echo "The path to it is used to find other files!"
    echo "Note:"
    echo "  Device assignment priority: Partition name > UUID > LABEL (if not only one NAME-TYPE is assigned)"
    echo "Ex:" 
@@ -113,7 +121,7 @@ get_part_number() {
 #
 check_if_syslinux_runs() {
   local sys_exec="$1"
-  local rc
+  local lrc
   # Check if the libc6-i386 (debian/ubuntu) files exists, which is required
   # for running 32-bit syslinux
   # E.g. On Debian AMD64 system without installing libc6-i386,
@@ -148,8 +156,8 @@ check_if_syslinux_runs() {
     exit 1
   fi
   $sys_exec -h 2>/dev/null >/dev/null
-  rc=$?
-  if [ "$rc" -ne 0 ]; then
+  lrc=$?
+  if [ "$lrc" -ne 0 ]; then
    if [ "$(LC_ALL=C uname -m)" = "x86_64" ]; then
      [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
      echo "On x86-64 system, you should install libc6-i386 (for Debian/Ubuntu) or glibc.i686 (for Fedora/CentOS/OpenSuSE) package so that the required libraries to run 32-bit program $sys_exec exist."
@@ -158,18 +166,22 @@ check_if_syslinux_runs() {
      exit 1
    fi
   fi
+  return $lrc
 } # end of check_if_syslinux_runs
 
 #
 export LANG=C
 
+target_part_label=''
+target_part_uuid=''
+
 #
 while [ $# -gt 0 ]; do
  case "$1" in
    -b|--batch) ocs_batch_mode="true"; shift;;
-   -L|--LABLE) shift
+   -L|--LABEL) shift
            if [ -z "$(echo $1 |grep ^-.)" ]; then
-             # skip the -xx option, in case 
+             # only accept argument if it doesn't look like an option
 	     target_part_label=$1
              shift;
            fi
@@ -177,7 +189,7 @@ while [ $# -gt 0 ]; do
            ;;
    -U|--UUID) shift
            if [ -z "$(echo $1 |grep ^-.)" ]; then
-             # skip the -xx option, in case 
+             # only accept argument if it doesn't look like an option
 	     target_part_uuid=$1
              shift;
            fi
@@ -226,7 +238,7 @@ fi
 #
 if [ -z "$target_part" ]; then
   [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
-  echo "No destination partition was assigned!"
+  echo "No target partition could be determined!"
   [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
   USAGE
   exit 1
@@ -285,7 +297,8 @@ fi
 
 #
 [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
-echo "This command will install MBR and syslinux bootloader on this machine"
+echo "This command will install MBR and syslinux/extlinux bootloader on $target_disk"
+echo "Clonezilla files are assumed to be on $target_part"
 [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
 echo "--------------------------------------------"
 [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
@@ -315,7 +328,7 @@ TYPE=""
 
 echo "File system of $target_part: $TYPE"
 case "$TYPE" in
-  fat16|fat32|vfat)    mode="syslinux";;
+  fat16|fat32|vfat)                mode="syslinux";;
   ntfs|ext[2-4]|btrfs|xfs|ufs|ffs) mode="extlinux";;
   *)                   
      [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
@@ -353,17 +366,26 @@ if [ "$bootable" != "*" ]; then
   echo "--------------------------------------------"
 fi
 
-# 3. MBR
+# 3. Install MBR
 if [ "$ocs_batch_mode" = "false" ]; then
-  to_continue_or_not "Do you want to install mbr on $target_disk $on_this_machine ?"
+  to_continue_or_not "Do you want to install MBR on $target_disk $on_this_machine ?"
 fi
-echo "Running: cat $path_of_prog/utils/mbr/mbr.bin > $target_disk"
+echo "Running: cat \"$path_of_prog/utils/mbr/mbr.bin\" > $target_disk"
 cat "$path_of_prog/utils/mbr/mbr.bin" > $target_disk
+if [ "$?" -ne 0 ]; then
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+  echo "Failed to write bootloader into MBR of $target_disk"
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+  echo "Program terminated!"
+  exit 1
+fi
 
 echo "--------------------------------------------"
 # 4.
 if [ "$ocs_batch_mode" = "false" ]; then
-  to_continue_or_not "Do you want to install the SYSLINUX bootloader on $target_part $on_this_machine ?"
+  # The bootloader has already been installed, now we need to write the syslinux/extlinux
+  # boot files to the partition (is it necessary to ask the user again?)
+  to_continue_or_not "Do you want to install the $mode boot files on $target_part $on_this_machine ?"
 fi
 # Since most of the cases when makeboot.sh is run, all the files are in FAT (USB flash drive normally uses FAT), we have to make syslinux executable.
 #
@@ -381,81 +403,81 @@ else
   destfs_tmpd=$mnt_pnt
   rc=0
 fi
-# Create the syslinux in the destination partition
-if [ $rc -eq 0 ]; then
+# Create the syslinux directory in the destination partition
+if [ "$rc" -eq 0 ]; then
   mkdir -p "$destfs_tmpd/syslinux"
+else
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+  echo "Failed to mount partition $target_part!"
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+  echo "Program terminated!"
+  exit 1
 fi
 
-case "$mode" in
-  syslinux)
-     syslinux_tmpd="$(mktemp -d /tmp/syslinux_tmp.XXXXXX)"
-     echo "A filesystem supporting Unix file mode for syslinux is required. Copying syslinux from FAT to /tmp/..."
-     cp -fv "$path_of_prog/utils/linux/syslinux" $syslinux_tmpd
-     chmod u+x $syslinux_tmpd/syslinux
-     check_if_syslinux_runs "$syslinux_tmpd/syslinux"
-     if [ $rc -eq 0 ]; then
-       echo "Running: $syslinux_tmpd/syslinux -d syslinux -f -i $target_part "
-       $syslinux_tmpd/syslinux -d syslinux -f -i $target_part
-       s_rc="$?"
-       if [ "$s_rc" -ne 0 ]; then
-         [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
-         echo "Failed to run syslinux!"
-         [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
-         echo "Program terminated!"
-         exit 1
-       fi
-       echo "done!"
-     else
-       [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
-       echo "Failed to mount FAT partition $target_part!"
-       [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
-       echo "Program terminated!"
-       exit 1
-     fi
-     [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
-     echo "//NOTE// If your USB flash drive fails to boot (maybe buggy BIOS), try to use \"syslinux -d syslinux -fs $target_part\", i.e. running with \"-fs\"."
-     [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
-     if [ -d "$syslinux_tmpd" -a -n "$(echo $syslinux_tmpd | grep "syslinux_tmp" )" ]; then
-       rm -rf $syslinux_tmpd
-     fi
-     ;;
-  extlinux)
-     extlinux_tmpd="$(mktemp -d /tmp/extlinux_tmp.XXXXXX)"
-     echo "A filesystem supporting Unix file mode for extlinux is required. Copying extlinux from FAT to /tmp/..."
-     cp -fv "$path_of_prog/utils/linux/extlinux" $extlinux_tmpd
-     chmod u+x $extlinux_tmpd/extlinux
-     check_if_syslinux_runs "$extlinux_tmpd/extlinux"
-     if [ $rc -eq 0 ]; then
-       echo "Running: $extlinux_tmpd/extlinux -i '$destfs_tmpd/syslinux' "
-       "$extlinux_tmpd/extlinux" -i "$destfs_tmpd/syslinux"
-       s_rc="$?"
-       if [ "$s_rc" -ne 0 ]; then
-         [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
-         echo "Failed to run extlinux!"
-         [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
-         echo "Program terminated!"
-         exit 1
-       fi
-       echo "done!"
-     else
-       [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
-       echo "Failed to mount NTFS partition $target_part!"
-       [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
-       echo "Program terminated!"
-       exit 1
-     fi
-     if [ -d "$extlinux_tmpd" -a -n "$(echo $extlinux_tmpd | grep "extlinux_tmp" )" ]; then
-       rm -rf $extlinux_tmpd
-     fi
-     ;;
-esac
-#
+# Create manipulable copy (may not be needed depending on the situation)
+linux_tmpd="$(mktemp -d /tmp/linux_tmp.XXXXXX)"
+[ $? -eq 0 ] || exit 1
+
+echo "A filesystem supporting Unix file mode for $mode is required. Copying $mode to $linux_tmpd"
+cp -fv "$path_of_prog/utils/linux/$mode" "$linux_tmpd"
+chmod u+x "$linux_tmpd/$mode"
+
+check_if_syslinux_runs "$linux_tmpd/$mode"
+rc=$?
+
+if [ "$rc" -eq 0 ]; then
+   case "$mode" in
+      syslinux)
+         echo "Running: \"$linux_tmpd/syslinux\" -d syslinux -f -i \"$target_part\""
+         # http://www.syslinux.org/wiki/index.php?title=SYSLINUX#Linux
+         "$linux_tmpd/syslinux" -d syslinux -f -i "$target_part"
+         s_rc="$?" 
+         ;;
+      extlinux)
+         echo "Running: \"$linux_tmpd/extlinux\" -i \"$destfs_tmpd/syslinux\""
+         # http://www.syslinux.org/wiki/index.php?title=EXTLINUX
+         "$linux_tmpd/extlinux" -i "$destfs_tmpd/syslinux"
+         s_rc="$?" 
+         ;;
+   esac
+   if [ "$s_rc" -ne 0 ]; then
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+      echo "Failed to run $mode in installation mode!"
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+      echo "Program terminated!"
+      exit 1
+   fi
+   # Success
+   if [ "$mode" = syslinux ]; then
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+      echo "//NOTE// If your USB flash drive fails to boot (maybe buggy BIOS), try to use \"syslinux -d syslinux -fs $target_part\", i.e. running with \"-fs\"."
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+   fi
+   [ "$BOOTUP" = "color" ] && $SETCOLOR_SUCCESS
+   echo "$mode ran successfully in installation mode."
+   echo "Done!"
+   [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+else 
+   [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+   echo "Failed to run $mode!"
+   [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+   echo "Program terminated!"
+   exit 1
+fi
+
+# Cleanup temporary copy
+if [ -d "$linux_tmpd" -a -n "$(echo $linux_tmpd | grep "linux_tmp" )" ]; then
+   rm -rf $linux_tmpd
+fi
+
+# Umount destination if we mounted it 
 if mountpoint $destfs_tmpd >/dev/null 2>&1; then
   if [ "$flag_mount" = "mounted" ]; then
-    # mounted by this program. We unmount it.
     umount $destfs_tmpd
   fi
 fi
+
+# Remove mountpoint if we created it
 if [ -d "$destfs_tmpd" -a -n "$(echo $destfs_tmpd | grep "destfs_tmpd" )" ]; then
   rm -rf $destfs_tmpd
 fi
