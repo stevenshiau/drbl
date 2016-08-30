@@ -1,3 +1,14 @@
+drbl (2.20.38-drbl1) unstable; urgency=medium
+
+  * Polish the program makeboot.sh.
+    Applied the changes from David Tonhofer.
+    Ref: https://sourceforge.net/p/clonezilla/discussion/Open_discussion/thread/cf6f506b
+  * Missing quotes in the echo command of makeboot.sh. Thanks to David
+    Tonhofer.
+    Ref: https://sourceforge.net/p/clonezilla/discussion/Open_discussion/thread/a852d0a8
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 30 Aug 2016 14:46:03 +0800
+
 drbl (2.20.37-drbl1) unstable; urgency=medium
 
   * Skip stopping or starting service if it's masked

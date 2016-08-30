@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.20.37
+Version:	2.20.38
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,14 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Tue Aug 30 2016 Steven Shiau <steven _at_ nchc org tw> 2.20.38-drbl1
+  - Polish the program makeboot.sh.
+    Applied the changes from David Tonhofer.
+    Ref: https://sourceforge.net/p/clonezilla/discussion/Open_discussion/thread/cf6f506b
+  - Missing quotes in the echo command of makeboot.sh. Thanks to David
+    Tonhofer.
+    Ref: https://sourceforge.net/p/clonezilla/discussion/Open_discussion/thread/a852d0a8
+
 * Wed Aug 17 2016 Steven Shiau <steven _at_ nchc org tw> 2.20.37-drbl1
 - Skip stopping or starting service if it's masked
   in drbl-all-service.
