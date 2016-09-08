@@ -1435,20 +1435,28 @@ ocs_advanced_param_post_mode_after_clone() {
     echo "-p $ocs_postmode " >> $ocs_parm
   fi
 } # end of ocs_advanced_param_post_mode_after_clone
-ocs_sr_advanced_param_post_mode_after_clone() {
+#
+ocs_sr_param_postaction_after_clone() {
   local ocs_parm="$1" # The file to output the result //NOTE// This is to be append, not overwritten.
-  if [ "$ocs_user_mode" = "expert" ]; then
-    $DIA --backtitle "$msg_nchc_free_software_labs" --title  \
-    "$msg_clonezilla_advanced_extra_param | $msg_mode: $ocs_mode_prompt" --menu "$msg_choose_post_mode_after_clone:" \
-    0 0 0 $DIA_ESC \
-    "-p true "      "$msg_ocs_param_p_true" \
-    "-p reboot "    "$msg_ocs_param_p_reboot" \
-    "-p poweroff "  "$msg_ocs_param_p_poweroff" \
-    2>> $ocs_parm
-  else
-    echo "-p true " >> $ocs_parm
-  fi
-} # end of ocs_sr_advanced_param_post_mode_after_clone
+  $DIA --backtitle "$msg_nchc_free_software_labs" --title  \
+  "$msg_clonezilla_advanced_extra_param | $msg_mode: $ocs_mode_prompt" --menu "$msg_choose_post_mode_after_clone:" \
+  0 0 0 $DIA_ESC \
+  "-p choose "    "$msg_ocs_param_p_choose" \
+  "-p reboot "    "$msg_ocs_param_p_reboot" \
+  "-p poweroff "  "$msg_ocs_param_p_poweroff" \
+  2>> $ocs_parm
+} # end of ocs_sr_param_postaction_after_clone
+#
+ocs_onthefly_param_postaction_after_clone() {
+  local ocs_parm="$1" # The file to output the result //NOTE// This is to be append, not overwritten.
+  $DIA --backtitle "$msg_nchc_free_software_labs" --title  \
+  "$msg_clonezilla_advanced_extra_param | $msg_mode: $ocs_mode_prompt" --menu "$msg_choose_post_mode_after_clone:" \
+  0 0 0 $DIA_ESC \
+  "-pa choose "    "$msg_ocs_param_p_choose" \
+  "-pa reboot "    "$msg_ocs_param_p_reboot" \
+  "-pa poweroff "  "$msg_ocs_param_p_poweroff" \
+  2>> $ocs_parm
+} # end of ocs_onthefly_param_postaction_after_clone
 #
 show_z4_or_above_menu_or_not() {
   # function to show -z4, -z5/z5p, -z6/z6p options
@@ -2128,16 +2136,11 @@ if [ "$mode" = "save" ]; then
   fi
 fi
 
-# For expert mode, we always ask it.
-# For beginner mode, if user has specified postrun, then we do not have to set it. Otherwise, ask it.
-if [ "$ocs_user_mode" = "expert" ]; then
-  ocs_sr_advanced_param_post_mode_after_clone $OCS_PARAM_TMP
+# For both beginner and expert modes, if user has specified postaction, then we do not have to set it. Otherwise, ask it.
+if [ -n "$postaction" ]; then
+  echo "-p $postaction " >> $OCS_PARAM_TMP
 else
-  if [ -n "$postrun" ]; then
-    echo "-p $postrun " >> $OCS_PARAM_TMP
-  else
-    ocs_sr_advanced_param_post_mode_after_clone $OCS_PARAM_TMP
-  fi
+  ocs_sr_param_postaction_after_clone $OCS_PARAM_TMP
 fi
 
 # Force to strip the unnecessary quotation ', this is specially for dialog (from cdialog) in Mandriva and same reason to strip the unnecessary double quotation ", this is sepcially for dialog in OpenSuSE 11.1. Otherwise it will cause -p reboot become (containing space) '-p reboot', which is wrong option in dcs.
@@ -4092,7 +4095,7 @@ override_opt_in_grub_efi_cfg_block() {
   # menuentry "Debian Testing-Unstable Linux (DRBL mode, mostly local resources)" --id drbl-client {
   # echo "Enter DRBL..."
   # echo "Loading Linux vmlinuz-pxe..."
-  # linux vmlinuz-pxe boot=live union=overlay config components nomodeset quiet net.ifnames=0  nosplash username=drbl keyboard-layouts=us locales=en_US.UTF-8 drbl_live_noconfx ocs_daemonon="ssh" noprompt netboot=nfs nfsroot=192.168.7.254:/tftpboot/node_root/clonezilla-live/ dcs_put_dticons="no"
+  # linux vmlinuz-pxe boot=live union=overlay config components nomodeset quiet net.ifnames=0  nosplash username=drbl keyboard-layouts=us locales=en_US.UTF-8 drbl_live_noconfx ocs_daemonon="ssh" noeject netboot=nfs nfsroot=192.168.7.254:/tftpboot/node_root/clonezilla-live/ dcs_put_dticons="no"
   # echo "Loading initial ramdisk initrd-pxe.img..."
   # initrd initrd-pxe.img
   # }
