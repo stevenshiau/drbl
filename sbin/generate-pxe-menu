@@ -379,7 +379,7 @@ label AoE-client
 #  MENU LABEL Clonezilla Live
 #  # MENU PASSWD
 #  kernel vmlinuz1
-#  append initrd=initrd1.img boot=live union=aufs noswap noprompt nolocales ip=frommedia vga=788 fetch=tftp://\$YOUR_SERVER_IP/filesystem.squashfs
+#  append initrd=initrd1.img boot=live union=aufs noswap noeject nolocales ip=frommedia vga=788 fetch=tftp://\$YOUR_SERVER_IP/filesystem.squashfs
 #  TEXT HELP
 #  Boot Clonezilla live via network
 #  ENDTEXT
@@ -393,7 +393,7 @@ label AoE-client
 #  MENU LABEL GParted Live
 #  # MENU PASSWD
 #  kernel vmlinuz1
-#  append initrd=initrd1.img boot=live union=aufs noswap noprompt ip=frommedia vga=788 fetch=tftp://\$YOUR_SERVER_IP/filesystem.squashfs
+#  append initrd=initrd1.img boot=live union=aufs noswap noeject ip=frommedia vga=788 fetch=tftp://\$YOUR_SERVER_IP/filesystem.squashfs
 #  TEXT HELP
 #  Boot GParted live via network
 #  ENDTEXT

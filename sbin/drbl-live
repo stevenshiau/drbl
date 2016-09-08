@@ -88,7 +88,7 @@ prep_live_system_for_drbl_clonezilla_clients(){
     # For the rest (model, variant or options they might be nothing.
   fi
   # We will make pxelinux config like this for DRBL client:
-  # APPEND initrd=DRBL-live-initrd.img boot=live union=overlay username=drbl config components nomodeset quiet nosplash keyboard-layouts=NONE locales=en_US.UTF-8 drbl_live_noconfx ocs_daemonon="ssh" noprompt netboot=nfs nfsroot=192.168.7.254:/tftpboot/node_root/clonezilla-live/ dcs_put_dticons="no"
+  # APPEND initrd=DRBL-live-initrd.img boot=live union=overlay username=drbl config components nomodeset quiet nosplash keyboard-layouts=NONE locales=en_US.UTF-8 drbl_live_noconfx ocs_daemonon="ssh" noeject netboot=nfs nfsroot=192.168.7.254:/tftpboot/node_root/clonezilla-live/ dcs_put_dticons="no"
 
   PXE_CONF="$PXE_CONF_DEF"
   GRUB_CONF="$GRUB_EFINB_CONF_DEF"
@@ -103,7 +103,7 @@ prep_live_system_for_drbl_clonezilla_clients(){
   # //NOTE// This is only for DRBL part. For that about Clonezilla part, it's parsed in drbl-sl. Just search "clonezilla_se_live_opts" or "stick-to-pxe-srv" in drbl-sl.
   cl_gp_boot_param="$cl_gp_boot_param hostname=drbl-client username=drbl \
 keyboard-layouts=$client_kb_layout locales=$client_locale drbl_live_noconfx \
-stick-to-pxe-srv dhcp-vendor-id=DRBLClient ocs_daemonon=\"ssh\" noprompt netboot=nfs \
+stick-to-pxe-srv dhcp-vendor-id=DRBLClient ocs_daemonon=\"ssh\" noeject netboot=nfs \
 nfsroot=${live_nfs_srv}:$drbl_common_root/clonezilla-live/ \
 dcs_put_dticons=\"no\""
   # This is for the boot parameters in grub config, i.e. those in the "linux" line, e.g.

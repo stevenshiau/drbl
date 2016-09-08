@@ -124,10 +124,10 @@ prepare_param_in_pxe_grub_cfg(){
        fi
        get_rootfs_location_opt
        if [ -z "$cl_gp_boot_param" ]; then
-         append_param_in_grub_cfg="boot=live union=overlay noswap noprompt nolocales vga=788 $rootfs_location_opt $ocs_serer_opt"
+         append_param_in_grub_cfg="boot=live union=overlay noswap noeject nolocales vga=788 $rootfs_location_opt $ocs_serer_opt"
 	 append_param_in_pxe_cfg="initrd=$nbi_initrd $append_param_in_grub_cfg"
        else
-         append_param_in_grub_cfg="$cl_gp_boot_param noprompt $rootfs_location_opt $ocs_serer_opt"
+         append_param_in_grub_cfg="$cl_gp_boot_param noeject $rootfs_location_opt $ocs_serer_opt"
          append_param_in_pxe_cfg="initrd=$nbi_initrd $append_param_in_grub_cfg"
 	 if is_drbl_live_env; then
            # We will reuse the filesystem.squashfs from DRBL live, however, it's not like that of Clonezilla live, therefore more option are needed here.
@@ -148,10 +148,10 @@ ocs_prerun2=\"grep -qsE ^sudo -i ocs-live-run-menu /home/$assgned_username/.bash
        fi
        get_rootfs_location_opt
        if [ -z "$cl_gp_boot_param" ]; then
-         append_param_in_grub_cfg="boot=live union=aufs noswap noprompt nolocales vga=788 $rootfs_location_opt "
+         append_param_in_grub_cfg="boot=live union=aufs noswap noeject nolocales vga=788 $rootfs_location_opt "
          append_param_in_pxe_cfg="initrd=$nbi_initrd $append_param_in_grub_cfg"
        else
-         append_param_in_grub_cfg="$cl_gp_boot_param noprompt $rootfs_location_opt"
+         append_param_in_grub_cfg="$cl_gp_boot_param noeject $rootfs_location_opt"
          append_param_in_pxe_cfg="initrd=$nbi_initrd $append_param_in_grub_cfg"
        fi
        ;;
