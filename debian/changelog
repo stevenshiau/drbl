@@ -1,3 +1,12 @@
+drbl (2.21.1-drbl1) unstable; urgency=medium
+
+  * Bug fixed: Replace boot paramater noprompt with noeject since live-boot
+    >= v3 uses noeject, not noprompt.
+  * Ask the post action (choose, reboot, poweroff) before starting cloning.
+    Thanks to Aaron Burling (aaron_burling _at_ lkstevens wednet edu) for this idea.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 08 Sep 2016 20:13:46 +0800
+
 drbl (2.20.38-drbl1) unstable; urgency=medium
 
   * Polish the program makeboot.sh.
@@ -22,7 +31,8 @@ drbl (2.20.36-drbl1) unstable; urgency=medium
     in drbl-functions. Only honor the options of ocs-sr by "-scr", "-scs",
     "-fsck", "-fsck-y".
   * Also make something like "ocs-sr -x -scr" work. It won't ask about if
-    "-scr" should be used or not. Thanks to Aaron for reporting this issue.
+    "-scr" should be used or not. Thanks to Aaron Burling
+    (aaron_burling _at_ lkstevens wednet edu) for reporting this issue.
 
  -- Steven Shiau <steven@nchc.org.tw>  Sun, 07 Aug 2016 21:11:15 +0800
 
@@ -2773,7 +2783,8 @@ drbl (2.3.13-drbl1) unstable; urgency=low
 drbl (2.3.12-drbl1) unstable; urgency=low
 
   * Bug fixed: we should also test udevd since the udev on CentOS 5.9
-    is older version. Thanks to Aaron for reporting this issue.
+    is older version. Thanks to Aaron Burling (aaron_burling _at_ lkstevens
+    wednet edu) for reporting this issue.
   * Files halt and rc.sysinit for CentOS 5.9's client were added.
 
  -- Steven Shiau <steven@nchc.org.tw>  Fri, 01 Mar 2013 13:41:24 +0800

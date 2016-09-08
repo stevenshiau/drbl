@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.20.38
+Version:	2.21.1
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,12 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Thu Sep 08 2016 Steven Shiau <steven _at_ nchc org tw> 2.21.1-drbl1
+  - Bug fixed: Replace boot paramater noprompt with noeject since live-boot
+    >= v3 uses noeject, not noprompt.
+  - Ask the post action (choose, reboot, poweroff) before starting cloning.
+    Thanks to Aaron Burling (aaron_burling _at_ lkstevens wednet edu) for this idea.
+
 * Tue Aug 30 2016 Steven Shiau <steven _at_ nchc org tw> 2.20.38-drbl1
   - Polish the program makeboot.sh.
     Applied the changes from David Tonhofer.
@@ -62,7 +68,8 @@ make install DESTDIR=$RPM_BUILD_ROOT/
   in drbl-functions. Only honor the options of ocs-sr by "-scr", "-scs",
   "-fsck", "-fsck-y".
 - Also make something like "ocs-sr -x -scr" work. It won't ask about if
-  "-scr" should be used or not. Thanks to Aaron for reporting this issue.
+  "-scr" should be used or not. Thanks to Aaron Burling
+  (aaron_burling _at_ lkstevens wednet edu) for reporting this issue.
 
 * Sun Jul 24 2016 Steven Shiau <steven _at_ nchc org tw> 2.20.35-drbl1
 * Add powertop in the packages list of Clonezilla/DRBL live. 
