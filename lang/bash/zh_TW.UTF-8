@@ -1026,3 +1026,10 @@ msg_remount_subdir="重新掛載目前儲藏庫媒體的下層目錄來當儲藏
 msg_run_clonezilla_live_again_but_remounted_subdir="重來一次 (重新掛載目前儲藏庫媒體的下層目錄來當儲藏庫)"
 msg_exit_browsing="退出這個目錄瀏覽工具"
 msg_this_img_repo_can_only_be_used_for_saving='所掛載的印象檔儲藏庫此刻只能用來存印象檔。'
+# Tag on 2016/09/09
+msg_choose_post_mode_after_clone_1='當所有程式執行完後，要執行的動作'
+msg_ocs_param_p_poweroff_1='關機'
+msg_ocs_param_p_reboot_1='重新開機'
+msg_ocs_param_p_choose_1='完成後再選擇要重新開機/關機/其他'
+msg_remove_source_or_destination_disk_after_cloning='///注意/// 記得在這台機器重新開機前，要移除來源碟或者複製好的目的碟。'
+msg_2_identical_systems_will_confuse_restored_os='要不然當兩顆相同作業系統的硬碟存在同一台機器，還原後的作業系統開機時會混淆，有可能會造成開機失敗。'

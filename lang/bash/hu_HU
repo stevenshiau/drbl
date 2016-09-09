@@ -1027,3 +1027,10 @@ msg_remount_subdir="Remount subdir in medium of current repository"
 msg_run_clonezilla_live_again_but_remounted_subdir="Start over (Remount subdir in medium of current repository)"
 msg_exit_browsing="Exit directory browsing"
 msg_this_img_repo_can_only_be_used_for_saving='This mounted image repository can only be used for saving image at the meantime'
+# Tag on 2016/09/09
+msg_choose_post_mode_after_clone_1='The action to perform when everything is finished'
+msg_ocs_param_p_poweroff_1='Shutdown'
+msg_ocs_param_p_reboot_1='Reboot'
+msg_ocs_param_p_choose_1='Choose reboot/shutdown/etc when everything is finished'
+msg_remove_source_or_destination_disk_after_cloning='///NOTE/// Remember to remove the source disk or the cloned destination disk before you boot this machine.'
+msg_2_identical_systems_will_confuse_restored_os='Otherwise when two identical systems exist on the same machine, the restored OS will be confused, and the booting might fail.'
