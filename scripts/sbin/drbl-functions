@@ -1439,22 +1439,22 @@ ocs_advanced_param_post_mode_after_clone() {
 ocs_sr_param_postaction_after_clone() {
   local ocs_parm="$1" # The file to output the result //NOTE// This is to be append, not overwritten.
   $DIA --backtitle "$msg_nchc_free_software_labs" --title  \
-  "$msg_clonezilla_advanced_extra_param | $msg_mode: $ocs_mode_prompt" --menu "$msg_choose_post_mode_after_clone:" \
+  "$msg_mode: $ocs_mode_prompt" --menu "$msg_choose_post_mode_after_clone_1:" \
   0 0 0 $DIA_ESC \
-  "-p choose "    "$msg_ocs_param_p_choose" \
-  "-p reboot "    "$msg_ocs_param_p_reboot" \
-  "-p poweroff "  "$msg_ocs_param_p_poweroff" \
+  "-p choose "    "$msg_ocs_param_p_choose_1" \
+  "-p reboot "    "$msg_ocs_param_p_reboot_1" \
+  "-p poweroff "  "$msg_ocs_param_p_poweroff_1" \
   2>> $ocs_parm
 } # end of ocs_sr_param_postaction_after_clone
 #
 ocs_onthefly_param_postaction_after_clone() {
   local ocs_parm="$1" # The file to output the result //NOTE// This is to be append, not overwritten.
   $DIA --backtitle "$msg_nchc_free_software_labs" --title  \
-  "$msg_clonezilla_advanced_extra_param | $msg_mode: $ocs_mode_prompt" --menu "$msg_choose_post_mode_after_clone:" \
+  "$msg_mode: $ocs_mode_prompt" --menu "$msg_choose_post_mode_after_clone_1:" \
   0 0 0 $DIA_ESC \
-  "-pa choose "    "$msg_ocs_param_p_choose" \
-  "-pa reboot "    "$msg_ocs_param_p_reboot" \
-  "-pa poweroff "  "$msg_ocs_param_p_poweroff" \
+  "-pa choose "    "$msg_ocs_param_p_choose_1" \
+  "-pa reboot "    "$msg_ocs_param_p_reboot_1" \
+  "-pa poweroff "  "$msg_ocs_param_p_poweroff_1" \
   2>> $ocs_parm
 } # end of ocs_onthefly_param_postaction_after_clone
 #
