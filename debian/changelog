@@ -1,3 +1,12 @@
+drbl (2.21.2-drbl1) unstable; urgency=medium
+
+  * Separate the reboot/poweroff prompt messages in menu for Clonezilla SE
+    and Clonezilla live.
+  * Update language files about poweroff/reboot, and removing source or
+    destination disk after cloning.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 09 Sep 2016 18:54:59 +0800
+
 drbl (2.21.1-drbl1) unstable; urgency=medium
 
   * Bug fixed: Replace boot paramater noprompt with noeject since live-boot

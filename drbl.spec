@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.21.1
+Version:	2.21.2
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,12 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Fri Sep 09 2016 Steven Shiau <steven _at_ nchc org tw> 2.21.2-drbl1
+  - Separate the reboot/poweroff prompt messages in menu for Clonezilla SE
+    and Clonezilla live.
+  - Update language files about poweroff/reboot, and removing source or
+    destination disk after cloning.
+
 * Thu Sep 08 2016 Steven Shiau <steven _at_ nchc org tw> 2.21.1-drbl1
   - Bug fixed: Replace boot paramater noprompt with noeject since live-boot
     >= v3 uses noeject, not noprompt.
