@@ -2088,7 +2088,7 @@ if [ "$mode" = "save" ]; then
     $DIA --backtitle "$msg_nchc_free_software_labs" --title  \
     "$msg_clonezilla_advanced_extra_param | $msg_mode: $ocs_mode_prompt" --menu "$msg_choose_if_fsck_the_source_part" \
     0 0 0 $DIA_ESC \
-    " "     "$msg_skip_check_source_fs" \
+    "-sfsck "  "$msg_skip_check_source_fs" \
     "-fsck "   "$msg_ocs_param_fsck_src_part" \
     "-fsck-y " "$msg_ocs_param_fsck_src_part_yes" \
     2>> $OCS_PARAM_TMP
@@ -2126,13 +2126,14 @@ if [ "$mode" = "save" ]; then
     $DIA --backtitle "$msg_nchc_free_software_labs" --title  \
     "$msg_clonezilla_advanced_extra_param | $msg_mode: $ocs_mode_prompt" --menu "$msg_encrypt_image\n$msg_ecryptfs_is_used_for_clonezilla\n$msg_remember_passphrase_of_ecryptfs" \
     0 0 0 $DIA_ESC \
-    " "         "$msg_not_to_encrypt_img" \
+    "-senc "    "$msg_not_to_encrypt_img" \
     "-enc "     "$msg_yes_to_encrypt_img" \
     2>> $OCS_PARAM_TMP
   else
-    # Convert none to "", as we can not set encrypt_ocs_img as "" otherwise it will be asked in the previous if block.
-    encrypt_ocs_img="$(echo $encrypt_ocs_img | sed -r -e "s/none//g")"
-    echo "$encrypt_ocs_img " >> $OCS_PARAM_TMP
+    case "$encrypt_ocs_img" in
+      yes) echo "-enc " >> $OCS_PARAM_TMP;;
+       no) echo "-senc " >> $OCS_PARAM_TMP;;
+    esac
   fi
 fi
 
