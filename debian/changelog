@@ -1,3 +1,9 @@
+drbl (2.21.3-drbl1) unstable; urgency=medium
+
+  *  Add options -sfsck and -senc in the Clonezilla live interactive menu.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 16 Sep 2016 16:03:48 +0800
+
 drbl (2.21.2-drbl1) unstable; urgency=medium
 
   * Separate the reboot/poweroff prompt messages in menu for Clonezilla SE
