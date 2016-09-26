@@ -45,6 +45,10 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Mon Sep 26 2016 Steven Shiau <steven _at_ nchc org tw> 2.21.6-drbl1
+  - If batch mode is on, do not append "-c" in the beginner mode
+    for ocs-sr menu.
+
 * Mon Sep 19 2016 Steven Shiau <steven _at_ nchc org tw> 2.21.5-drbl1
   - Add support for Debian 8.6. 
 

@@ -1,3 +1,10 @@
+drbl (2.21.6-drbl1) unstable; urgency=medium
+
+  * If batch mode is on, do not append "-c" in the beginner mode
+    for ocs-sr menu.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 26 Sep 2016 22:40:52 +0800
+
 drbl (2.21.5-drbl1) unstable; urgency=medium
 
   * Add support for Debian 8.6. 
