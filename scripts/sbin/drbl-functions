@@ -1805,7 +1805,7 @@ local mode2_="$3"
 local cpu_no
 local vol_size_tmp
 local ASK_VOL_SIZE=1
-local inst_grub_opt
+local inst_grub_opt opt_confirm_
 vol_size_tmp="$(mktemp /tmp/vol_size_tmp.XXXXXX)"
 
 # If the mode is only for parts, we won't turn on "-g auto" option by default
@@ -1860,15 +1860,22 @@ if [ "$mode" = "restore" ]; then
     "-srel"    "$msg_ocs_param_srel" off \
     2> $OCS_PARAM_TMP
   else
+    if [ "$ocs_batch_mode" != "on" ]; then
+      # Interactive mode. We need to add "-c"
+      opt_confirm_="-c"
+    else
+      # Batch mode. We do not add "-c"
+      opt_confirm_=""
+    fi
     # Beginner mode. Use default settings
     if [ "$inst_grub_opt" = "on" ]; then
       # restoredisk mode.
       # "$inst_grub_opt" = "on" (-g auto) means skip_clean_mbr_opt="off" (no -t)
-      echo "-g auto" "-e1 auto" "-e2" "-c" "-r" "-j2" > $OCS_PARAM_TMP
+      echo "-g auto" "-e1 auto" "-e2" "-r" "-j2" "$opt_confirm_" > $OCS_PARAM_TMP
     else
       # restoreparts mode.
       # "$inst_grub_opt" = "off" (no "-g auto") means skip_clean_mbr_opt="on" (-t)
-      echo "-e1 auto" "-e2" "-c" "-t" "-r" "-j2" > $OCS_PARAM_TMP
+      echo "-e1 auto" "-e2" "-t" "-r" "-j2" "$opt_confirm_" > $OCS_PARAM_TMP
     fi
   fi
 
