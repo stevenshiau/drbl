@@ -58,7 +58,7 @@ msg_serial_console_option='¿Desea usar la salida de consola serie para los clie
 msg_know_nothing_serial_console='Si NO sabe nada sobre esto, introduzca "N" aquí, sino los clientes mostrarán NOTHING (NADA) en la pantalla !'
 msg_serial_console_only='¿Usar la consola serie sólo en los clientes? (Adecuado para clientes sin salida VGA).'
 msg_redirect_to_which_port='¿A qué puerto serie redireccionó?'
-msg_serial_console_speed='¿Cúal es la velocidad de salida de la consola serie?'
+msg_serial_console_speed='¿Cual es la velocidad de salida de la consola serie?'
 msg_smp_clients='¿Desea usar el SMP kernel para los clientes, por ej. su cliente posee dos o más CPUs? Nota!!! Eligiendo el kernel SMP, este script seleccionará el kernel optimizado automáticamente!'
 msg_smp_clients_MDK='¿Desea usar el SMP kernel para los clientes, por ej. su cliente posee dos o más CPUs?'
 msg_smp_clients_RH="$msg_smp_clients"
@@ -935,7 +935,7 @@ msg_this_part_in_the_img_is_ok='La imagen de esta partición es restaurable'
 msg_2_or_more_parts_only_same_parts_on_dest='Dos o mas particiones del directorio imagen fueron seleccionadas. Sólo las mismas particiones del disco de destino podrán ser restauradas.'
 msg_choose_the_parts_from_img_to_restore='Elija la(s) partición(es) de la imagen a restaurar al disco de destino (TODOS LOS DATOS DE LA PARTICIÓN SE PERDERÁN Y SE REEMPLAZARÁN!!)'
 # Tag on 2014/12/23
-msg_encrypt_image='Desea cifrar la imagen?'
+msg_encrypt_image='¿Desea cifrar la imagen?'
 msg_yes_to_encrypt_img='Cifrar la imagen'
 msg_not_to_encrypt_img='No cifrar la imagen'
 msg_ecryptfs_is_used_for_clonezilla='Si es que sí, el programa eCryptfs se usará para cifrar la imagen. Utiliza sistemas de cifrado estándar de la industria criptográfica, generación de claves y los mecanismos de protección de contraseña. Sin su contraseña o clave privada, nadie será capaz de recuperar sus datos.'
@@ -984,37 +984,37 @@ msg_mount_swift_server='Use el servidor rápido OpenStack'
 # Tag on 2015/05/06
 msg_locale_hu_HU='Húngaro'
 # Tag on 2015/11/18
-msg_choose_if_checking_image_restorable_before_restoring_on_this_server='Before restoring the image, do you want to check if the image is restorable on this server? ///NOTE/// This action will only check the image is restorable or not, and it will not write any data to the harddrive.'
-msg_choose_if_checking_image_restorable_before_restoring='Before restoring the image, do you want to check if the image is restorable or not? ///NOTE/// This action will only check the image is restorable or not, and it will not write any data to the harddrive.'
-msg_ocs_param_check_img_restorable_before_restoring='Yes, check the image before restoring'
-msg_ocs_param_skip_checking_img_restorable_before_restoring='No, skip checking the image before restoring'
+msg_choose_if_checking_image_restorable_before_restoring_on_this_server='Antes de restaurar la imagen, ¿quiere comprobar si la imagen es restaurable en este servidor? ///NOTA/// Esta acción sólo comprobará si la imagen es restaurable o no, y no escribirá ningún dato en el disco duro.'
+msg_choose_if_checking_image_restorable_before_restoring='Antes de restaurar la imagen, ¿quiere comprobar si la imagen es restaurable o no? ///NOTA/// Esta acción sólo comprobará si la imagen es restaurable o no, y no escribirá ningún dato en el disco duro.'
+msg_ocs_param_check_img_restorable_before_restoring='Si, comprobar la imagen antes de restaurar'
+msg_ocs_param_skip_checking_img_restorable_before_restoring='No, saltar la comprobación de la imagen antes de restaurar'
 # Tag on 2016/02/14
-msg_ocs_param_gmf='Generate checksum for files in device after saving'
-msg_fail_to_mount_maybe_linux_not_support='Failed to mount this device, maybe it is not support by Linux kernel'
-msg_unsble_to_create_checksum_file='Uable to create the checksum file.'
-msg_this_might_take_some_time='This might take some time...'
-msg_ocs_param_cmf='Inspect checksum for files in device after restoring'
-msg_chksum_for_files_not_match='Warning! Checksum for some files in this device did NOT match'
-msg_chksum_inspection_for_files_passed='Checksum inspection passed for files in this device'
-msg_unsble_to_inspect_checksum='Uable to inspect the checksum for files.'
-msg_ocs_onthefly_param_cmf='Inspect checksum for files in device after cloning'
-msg_this_dev_is_busy_you_have_to_unmount='This device is busy, before going on you have to unmount it'
+msg_ocs_param_gmf='Generar checksum de archivos en el dispositivo después de guardar'
+msg_fail_to_mount_maybe_linux_not_support='Fallo al montar en este dispositivo, quizás no es soportado por el kernel de Linux'
+msg_unsble_to_create_checksum_file='No se puede crear el archivo checksum'
+msg_this_might_take_some_time='Esto puede llevar algún tiempo ...'
+msg_ocs_param_cmf='Inspeccionar los checksum de archivos en el dispositivo después de la restauración'
+msg_chksum_for_files_not_match='Atención! Los checksum de algunos archivos en este dispositivo NO se han encontrado'
+msg_chksum_inspection_for_files_passed='Checksum de los archivos en este dispositivo verificados'
+msg_unsble_to_inspect_checksum='No es posible inspeccionar los checksum de los archivos.'
+msg_ocs_onthefly_param_cmf='Inspeccionar checksum de archivos en el dispositivo después de la clonación'
+msg_this_dev_is_busy_you_have_to_unmount='Este dispositivo está ocupado, antes de continuar hay que desmontarlo'
 # Tag on 2016/02/18
-msg_chksum_results_saved_in_this_file='Checksum inspecting results are saved in this file'
+msg_chksum_results_saved_in_this_file='La inspección de checksum de los resultados se guardan en este archivo'
 # Tag on 2016/03/05
-msg_local_source_disk_for_checksum_inspect='Choose local disk to inspect the checksum.'
-msg_choose_the_image_to_be_checked_for_checksum='Choose the image to inspect the checksum in the image and the files in the partition or disk (only images with checksum are shown). //NOTE// Some files checksum inspection might fail, e.g. if you choose to let Clonezilla reinstall grub boot loader, the /boot/grub/core.img will be different'
+msg_local_source_disk_for_checksum_inspect='Elija disco local para verificar el checksum.'
+msg_choose_the_image_to_be_checked_for_checksum='Elija la imagen para verificar el checksum de la misma y de los archivos de la partición o disco (sólo se muestran imágenes con checksum). //NOTA// Alguna verificación dhecksum de archivos puede fallar, ej. si elige dejar que Clonezilla reinstale el grub boot loader, el archivo /boot/grub/core.img será diferente'
 # Tag on 2016/06/14
-msg_failed_to_clone_the_boot_loader_on_EBR="Failed to clone boot loader to extended partition"
-msg_ocs_param_t2='Client skip restoring the EBR (Extended Boot Record)'
-msg_remount_subdir="Remount subdir in medium of current repository"
-msg_run_clonezilla_live_again_but_remounted_subdir="Start over (Remount subdir in medium of current repository)"
-msg_exit_browsing="Exit directory browsing"
-msg_this_img_repo_can_only_be_used_for_saving='This mounted image repository can only be used for saving image at the meantime'
+msg_failed_to_clone_the_boot_loader_on_EBR="Fallo al clonar el boot loader a la partición extendida"
+msg_ocs_param_t2='El cliente omite la restauración del EBR (Extended Boot Record)'
+msg_remount_subdir="Remontar subdirectorio en medio del repositorio actual"
+msg_run_clonezilla_live_again_but_remounted_subdir="Comenzar de nuevo (Remontar subdirectorio en medio del repositorio actual)"
+msg_exit_browsing="Salir de la exploración de directorios"
+msg_this_img_repo_can_only_be_used_for_saving='Esta imagen de repositorio montada sólo se puede utilizar para guardar la imagen'
 # Tag on 2016/09/09
-msg_choose_post_mode_after_clone_1='The action to perform when everything is finished'
-msg_ocs_param_p_poweroff_1='Shutdown'
-msg_ocs_param_p_reboot_1='Reboot'
-msg_ocs_param_p_choose_1='Choose reboot/shutdown/etc when everything is finished'
-msg_remove_source_or_destination_disk_after_cloning='///NOTE/// Remember to remove the source disk or the cloned destination disk before you boot this machine.'
-msg_2_identical_systems_will_confuse_restored_os='Otherwise when two identical systems exist on the same machine, the restored OS will be confused, and the booting might fail.'
+msg_choose_post_mode_after_clone_1='La acción a realizar cuando todo esté terminado'
+msg_ocs_param_p_poweroff_1='Apagar'
+msg_ocs_param_p_reboot_1='Reiniciar'
+msg_ocs_param_p_choose_1='Elija reiniciar/apagar/etc cuando todo esté terminado'
+msg_remove_source_or_destination_disk_after_cloning='///NOTA/// Recuerde que debe retirar el disco de origen o el disco de destino clonado antes de iniciar esta máquina.'
+msg_2_identical_systems_will_confuse_restored_os='Por otra parte, cuando existen dos sistemas idénticos en la misma máquina, el S.O. restaurado podrá confundirse, y el arranque puede fallar.'

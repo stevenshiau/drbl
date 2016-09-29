@@ -14,7 +14,7 @@ $lang_charset = 'iso-8859-1';
    );
 
 %lang_text =
-   (  
+   (
    Say        => 'Responda',
    or         => 'o',
    seconds    => 'segundos',
@@ -89,14 +89,14 @@ $lang_charset = 'iso-8859-1';
    only_1_IP_for_eth0 => 'Sólo 1 dirección IP para eth0, no se usará eth0 para el entorno DRBL!',
    no_DRBL_port => 'No hay puerto ethernet disponible para el entorno DRBL!',
    saved_mac_address_files_in_etc => "Estos archivos están guardados en el directorio $drbl_syscfg.",
-   collect_MAC_prompt => 
+   collect_MAC_prompt =>
           "Ahora se pueden recopilar las direcciones MAC de los clientes!\n".
           "Si desea que el servicio DHCP en el servidor DRBL ofrezca la misma dirección IP al cliente cada vez que el cliente inicie, y nunca se hizo este procedimiento, hágalo ahora!\n".
           "Si ya tiene estas direcciones MAC de los clientes, puede ponerlas en diferentes archivos de grupo (El número de archivos es el mismo número de tarjetas de red del servicio DRBL). En este caso, puede saltar este paso.\n".
           "Este paso le ayuda a grabar las direcciones MAC de los clientes, y las divide en diferentes grupos. Le ahorra tiempo y reduce errores.\n".
 	  "Las direcciones MAC se grabarán una por una según el inicio de los clientes,\n".
 	  "y se pondrán en diferentes archivos según la tarjeta de red del servidor, el nombre del archivo será como macadr-eth1.txt, macadr-eth2.txt... YoPuede encontralos en el directorio $drbl_syscfg.\n".
-	  "Por favor inicie los clientes por orden, asegúrese de que inician desde etherboot o PXE!\n". 
+	  "Por favor inicie los clientes por orden, asegúrese de que inician desde etherboot o PXE!\n".
           "Desea recopilarlas ?",
    ok_let_do_it => 'OK! Hagámoslo!',
    you_are_not_root => 'Usted no es root',
@@ -155,7 +155,7 @@ $lang_charset = 'iso-8859-1';
       "Desea configurar la IP pública de los clientes ?",
    searching_installed_drbl_packages => "Buscando los paquetes instalados del servidor DRBL... Esto puede tardar varios minutos...",
    no_drbl_server_package_found =>
-	      "No está instalado el paquete servidor DRBL!!!\n". 
+	      "No está instalado el paquete servidor DRBL!!!\n".
 	      "Debe ejecutar otro script (drblsrv -i) para configurar el servidor DRBL primero!!!, De lo contrario el sistema NO funcionará!!!\n".
 	      "Seguro que desea continuar ? Introduzca \"yes\" o \"y\" para continuar, u otra letra para detener!",
    but_you_will_see_errors => "Pero verá muchos de mensajes de error...!!!",
@@ -178,12 +178,12 @@ $lang_charset = 'iso-8859-1';
    #
    analyzing_rpm_info => "Analizando la información de los paquetes rpm... Esto puede tardar varios minutos...",
    no_drbl_server_package => "No está instalado el paquete de servidor DRBL!!!",
-   apt_pkg_not_installed =>  "El paquete \"apt\" NO está instalado!!!", 
+   apt_pkg_not_installed =>  "El paquete \"apt\" NO está instalado!!!",
    we_are_now_ready_to => "Estamos preparados para",
    the_files_for_DRBL_server => "los archivos del servidor DRBL!",
    say_yes_to_continue_other_to_quit => "Introduzca \"yes\" o \"y\" para continuar, u otra letra para quitar!",
    say_no_to_quit_other_to_continue => "Introduzca \"no\" o \"n\" para quitar, u otra letra para continuar!",
-   syncing_flush => "Sincronizando - sistema de archivo de vaciado de buffers...", 
+   syncing_flush => "Sincronizando - sistema de archivo de vaciado de buffers...",
    install_and_upgrade => "instalo y actualizo",
    IP_start_prompt => "Cuál es el número inicial que desea usar en el último grupo de dígitos de la dirección IP (por ej. el valor inicial de d en la dirección IP a.b.c.d) de los clientes DRBL conectados a este puerto ethernet",
    client_no_in_MAC_file => "El número de clientes en este archivo es",
@@ -197,7 +197,7 @@ $lang_charset = 'iso-8859-1';
    sorry_timeout_must_be_number => "La cuenta atrás debe ser un número (introduzca 70)!!!",
    unable_to_get_ethx_IP => "No ha sido posible obtener la dirección IP!!!\ Debe configurar una dirección privada de clase C estática (como 192.168.1.1), y NO puede ser una dirección IP cambiante (como el cliente DHCP)! Este error está en la tarjeta de red:",
    program_stop => "Programa detenido!!!",
-   open_thin_client_option => 
+   open_thin_client_option =>
         "Desea que los clientes DRBL tengan una opción de ejecutarse en modo terminal ? por ej. quiere dejar ejecutar a este cliente la visualización remota (que utilizará recursos del servidor), introduzca \"Y\" aqui.\n".
         "Nota!\n".
 	"0. Si reponde si a esta opción, el cliente tendrá un entorno limitado, por ej. NO tendrá acceso a un USB local, CD, audio, impresora, etc. en el cliente.\n".
@@ -248,8 +248,8 @@ $lang_charset = 'iso-8859-1';
    which_clonezilla_mode_for_client => "En el sistema, hay 4 modos disponibles para clonezilla:\n[0] Modo Clonezilla completo, cada cliente tiene su propio NFS basado en /etc y /var.\n[1] Modo Clonezilla box, cada cliente usa tmpfs basado en /etc y /var. En este modo, la carga y el espacio de disco necesario del servidor es inferior que en el Modo Clonezilla completo. Nota! En el modo Clonezilla box, la configuración y los archivos de configuración del cliente no se salvarán en el servidor DRBL! Serán usados una vez y descartados una vez la máquina se apague!\n[2] No quiero clonezilla.\n[3] Usar Clonezilla live como el S.O. (Sistema Operativo) de clientes (Testeo).\nQué modo prefiere?",
    clonezilla_live_mode_is_set => "Usar Clonezilla live como el S.O. (Sistema Operativo) de clientes cuando se ejecuta una tarea Clonezilla.",
    which_clonezilla_live_branch => "Qué versión/rama de Clonezilla live quiere que usen los clientes?\n[0]: stable (Debian-based)\n[1]: testing (Debian-based)\n[2]: alternative stable (Ubuntu-based)\n[3]: alternative testing (Ubuntu-based)\nSi no está seguro escoja [2]: alternative stable.",
-   which_live_client_cpu_mode => "Cúal es la arquitectura de CPU de los clientes cuando se ejecuta una tarea Clonezilla con Clonezilla live?\n[0]: i586\n[1]: i686\n[2]: amd64\nSi no está seguro, elija i586.",
-   which_live_client_cpu_mode_for_ubuntu => "Cúal es la arquitectura de CPU de los clientes cuando se ejecuta una tarea Clonezilla con Clonezilla live?\n[0]: i386\n[1]: amd64\nSi no está seguro, elija i386.",
+   which_live_client_cpu_mode => "Cual es la arquitectura de CPU de los clientes cuando se ejecuta una tarea Clonezilla con Clonezilla live?\n[0]: i586\n[1]: i686\n[2]: amd64\nSi no está seguro, elija i586.",
+   which_live_client_cpu_mode_for_ubuntu => "Cual es la arquitectura de CPU de los clientes cuando se ejecuta una tarea Clonezilla con Clonezilla live?\n[0]: i386\n[1]: amd64\nSi no está seguro, elija i386.",
    live_client_branch_set=> "La rama establecida para Clonezilla live es",
    live_client_cpu_arch_is_set => "La arquitectura de CPU para clientes cuando se ejecuta una tarea Clonezilla",
    mark_the_end_of_lang =>"."
