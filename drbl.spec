@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.21.6
+Version:	2.21.7
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,15 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Sat Oct 01 2016 Steven Shiau <steven _at_ nchc org tw> 2.21.7-drbl1
+  - Language file hu_HU was updated. Thanks to Greg Marki.
+  - Language file ja_JP.UTF-8 was updated. Thanks to Akira YOSHIYAMA.
+  - Language file de_DE was updated. Thanks to Michael Vinzenz.
+  - Language file fr_FR was updated. Thanks to Jean-Francois Nifenecker.
+  - Language file it_IT was updated. Thanks to Gianfranco Gentili.
+  - Language files es_ES were updated. Thanks to Juan Ramón Martínez
+    and Alex Ibáñez López.
+
 * Mon Sep 26 2016 Steven Shiau <steven _at_ nchc org tw> 2.21.6-drbl1
   - If batch mode is on, do not append "-c" in the beginner mode
     for ocs-sr menu.
