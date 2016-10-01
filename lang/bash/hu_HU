@@ -2,7 +2,7 @@
 # Written by Steven Shiau <steven _at_ nchc org tw> to use in DRBL 
 # Hungarian translation by Greg <greg.hefty _at_ freemail hu>
 # License: GPL
-# Merged some of those revised by Dylan Pack <sarpulhu _at_ gmail com> on 26/Feb/2009.
+# Last updated: 30 Sept. 2016
 
 #-----------------------------------------
 # some words
@@ -983,49 +983,49 @@ msg_mount_swift_server='OpenStack swift szerver használata'
 # Tag on 2015/05/06
 msg_locale_hu_HU='Magyar'
 # Tag on 2015/11/18
-msg_choose_if_checking_image_restorable_before_restoring_on_this_server='Before restoring the image, do you want to check if the image is restorable on this server? ///NOTE/// This action will only check the image is restorable or not, and it will not write any data to the harddrive.'
-msg_choose_if_checking_image_restorable_before_restoring='Before restoring the image, do you want to check if the image is restorable or not? ///NOTE/// This action will only check the image is restorable or not, and it will not write any data to the harddrive.'
-msg_ocs_param_check_img_restorable_before_restoring='Yes, check the image before restoring'
-msg_ocs_param_skip_checking_img_restorable_before_restoring='No, skip checking the image before restoring'
+msg_choose_if_checking_image_restorable_before_restoring_on_this_server='Végrehajtás előtt szeretné ellenőrizni, hogy a lemezkép visszaállítható-e erre a szerverre? ///MEGJEGYZÉS/// Ez a művelet csupán a visszaállíthatóságot vizsgálja és semmilyen adatot nem ír a merevlemezre.'
+msg_choose_if_checking_image_restorable_before_restoring='Végrehajtás előtt szeretné ellenőrizni a lemezkép visszaállíthatóságát? ///MEGJEGYZÉS/// Ez a művelet csupán a visszaállíthatóságot vizsgálja és semmilyen adatot nem ír a merevlemezre.'
+msg_ocs_param_check_img_restorable_before_restoring='Igen, ellenőrizze a képet visszaállítás előtt'
+msg_ocs_param_skip_checking_img_restorable_before_restoring='Nem, most ugorja át a kép ellenőrzését'
 # Tag on 2016/02/14
-msg_ocs_param_gmf='Generate checksum for files in device after saving'
-msg_fail_to_mount_maybe_linux_not_support='Failed to mount this device, maybe it is not support by Linux kernel'
-msg_unsble_to_create_checksum_file='Uable to create the checksum file.'
-msg_this_might_take_some_time='This might take some time...'
-msg_ocs_param_cmf='Inspect checksum for files in device after restoring'
-msg_chksum_for_files_not_match='Warning! Checksum for some files in this device did NOT match'
-msg_chksum_inspection_for_files_passed='Checksum inspection passed for files in this device'
-msg_unsble_to_inspect_checksum='Uable to inspect the checksum for files.'
-msg_ocs_onthefly_param_cmf='Inspect checksum for files in device after cloning'
-msg_this_dev_is_busy_you_have_to_unmount='This device is busy, before going on you have to unmount it'
+msg_ocs_param_gmf='Ellenőrzőszám generálása az eszközön lévő fájlokhoz mentés után'
+msg_fail_to_mount_maybe_linux_not_support='Az eszköz illesztése sikertelen, lehet, a Linux kernel nem támogatja'
+msg_unsble_to_create_checksum_file='Az ellenőrzőszám-fájl létrehozása nem lehetséges.'
+msg_this_might_take_some_time='Ez igénybe vehet némi időt...'
+msg_ocs_param_cmf='Az eszközön lévő fájlok ellenőrzőinek vizsgálata visszaállítás után'
+msg_chksum_for_files_not_match='Figyelem! Az eszközön lévő egyes fájlok ellenőrzőszáma NEM egyezik'
+msg_chksum_inspection_for_files_passed='Az eszközön lévő összes fájl ellenőrzőszáma egyezett'
+msg_unsble_to_inspect_checksum='Nem lehetséges a fájlok ellenőrzőértékeinek vizsgálata.'
+msg_ocs_onthefly_param_cmf='Az eszközön lévő fájlok ellenőrzőinek vizsgálata klónozás után'
+msg_this_dev_is_busy_you_have_to_unmount='Ez az eszköz használatban van, először le kell csatolni'
 # Tag on 2016/02/18
-msg_chksum_results_saved_in_this_file='Checksum inspecting results are saved in this file'
+msg_chksum_results_saved_in_this_file='Az ellenőrzőértékek vizsgálatának eredménye mentve ebbe a fájlba'
 # Tag on 2016/03/05
-msg_local_source_disk_for_checksum_inspect='Choose local disk to inspect the checksum.'
-msg_choose_the_image_to_be_checked_for_checksum='Choose the image to inspect the checksum in the image and the files in the partition or disk (only images with checksum are shown). //NOTE// Some files checksum inspection might fail, e.g. if you choose to let Clonezilla reinstall grub boot loader, the /boot/grub/core.img will be different'
+msg_local_source_disk_for_checksum_inspect='Válasszon helyi lemezt az ellenőrzőértékek vizsgálatához.'
+msg_choose_the_image_to_be_checked_for_checksum='Válasszon képet az ahhoz, illetve a partíción, vagy lemezen lévő fájlokhoz tartozó ellenőrzőszámok vizsgálatához (csak az ellenőrzőszámmal bíró képek láthatók). //MEGJEGYZÉS// Egyes fájlok ellenőrzőértéke eltérhet, ha pl. arra utasítja a Clonezilla-t, telepítse újra a grub boot loadert, a /boot/grub/core.img különbözni fog'
 # Tag on 2016/06/14
-msg_failed_to_clone_the_boot_loader_on_EBR="Failed to clone boot loader to extended partition"
-msg_ocs_param_t2='Client skip restoring the EBR (Extended Boot Record)'
+msg_failed_to_clone_the_boot_loader_on_EBR="Sikertelen a boot loader klónozása a kiterjesztett partícióra"
+msg_ocs_param_t2='A kliens átugorja az EBR visszaállítását (Extended Boot Record)'
 # Tag on 2016/07/03
-msg_parent_directory='Parent directory'
-msg_dir_browser_for_img='Directory Browser for Clonezilla image repository'
+msg_parent_directory='Szülő könyvtár'
+msg_dir_browser_for_img='Könyvtárböngésző a Clonezilla képtár számára'
 msg_which_dir_as_clonezilla_img_home='Mely könyvtárat jelöli ki a Clonezilla képhez (A könyvtárak nevében szereplő szóköz _NEM_ jelenik meg)?'
-msg_path_on_the_resource='Path on the resource'
-msg_current_selected_dir_name='Current selected dir name'
-msg_when_current_selected_dir_name_is_ok='When the "Current selected dir name" is what you want, use "Tab" key to choose "Done"'
-msg_not_chosing_CZ_IMG_dir='//NOTE// You should not choose the directory tagged with CZ_IMG. They are just for you to know the images list in the current dir.'
-msg_no_any_image_found='There is no any image found in this directory'
-msg_this_directory_is_not_mountpoint='This directory is not a mount point'
-msg_there_is_no_way_to_mount_subdirectory='There is no way to mount the sub-directory.'
-msg_the_dir_you_choose_is_clonezilla_img_dir='This directory you choose is a Clonezilla image dir'
-msg_remount_subdir="Remount subdir in medium of current repository"
-msg_run_clonezilla_live_again_but_remounted_subdir="Start over (Remount subdir in medium of current repository)"
-msg_exit_browsing="Exit directory browsing"
-msg_this_img_repo_can_only_be_used_for_saving='This mounted image repository can only be used for saving image at the meantime'
+msg_path_on_the_resource='Útvonal a forráson'
+msg_current_selected_dir_name='Kiválasztott könyvtárnév'
+msg_when_current_selected_dir_name_is_ok='Ha a "Kiválasztott könyvtárnév" megfelelő, a "Tab" gombbal jelölje ki, hogy "Kész"'
+msg_not_chosing_CZ_IMG_dir='//MEGJEGYZÉS// Ne válasszon CZ_IMG-vel jelölt könyvtárat. Csupán az aktuális könyvtár képlistájának azonosítására szolgálnak.'
+msg_no_any_image_found='Nem található kép ebben a könyvtárban'
+msg_this_directory_is_not_mountpoint='Ez a könyvtár nem beolvasási pont'
+msg_there_is_no_way_to_mount_subdirectory='Kivitelezhetetlen az alkönyvtár beolvasása.'
+msg_the_dir_you_choose_is_clonezilla_img_dir='A választott könyvtár egy Clonezilla képfájlé'
+msg_remount_subdir="A médium jelenlegi tárolóján lévő alkönyvtár újbóli beolvasása"
+msg_run_clonezilla_live_again_but_remounted_subdir="Újrakezdés (A médium jelenlegi tárolóján lévő alkönyvtár újbóli beolvasása)"
+msg_exit_browsing="Kilépés a könyvtárböngészőből"
+msg_this_img_repo_can_only_be_used_for_saving='A beolvasott képtároló csak az időközben mentett képhez használható'
 # Tag on 2016/09/09
-msg_choose_post_mode_after_clone_1='The action to perform when everything is finished'
-msg_ocs_param_p_poweroff_1='Shutdown'
-msg_ocs_param_p_reboot_1='Reboot'
-msg_ocs_param_p_choose_1='Choose reboot/shutdown/etc when everything is finished'
-msg_remove_source_or_destination_disk_after_cloning='///NOTE/// Remember to remove the source disk or the cloned destination disk before you boot this machine.'
-msg_2_identical_systems_will_confuse_restored_os='Otherwise when two identical systems exist on the same machine, the restored OS will be confused, and the booting might fail.'
+msg_choose_post_mode_after_clone_1='A feladatok végeztével végrehajtandó művelet'
+msg_ocs_param_p_poweroff_1='Kikapcsolás'
+msg_ocs_param_p_reboot_1='Újraindítás'
+msg_ocs_param_p_choose_1='Válassza az újraindítást/kikapcsolást/stb. a feladatok befejezése utánra'
+msg_remove_source_or_destination_disk_after_cloning='///MEGJEGYZÉS/// Ne feledje eltávolítani a forráslemezt, vagy a klónozott céllemezt a gép betöltése előtt.'
+msg_2_identical_systems_will_confuse_restored_os='Különben, ha két azonos rendszer van ugyanazon gépen, az a visszaállított rendszert megzavarhatja és a betöltés meghiúsul.'
