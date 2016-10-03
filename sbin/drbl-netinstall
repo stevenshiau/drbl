@@ -294,9 +294,13 @@ get_opensuse_netinstall() {
         10.1)
           url=$opensuse_url_site/$path_to_opensuse/SL-10.1/inst-source/boot/$arch/loader
           ;;
-        *)
+        1[123].*)
           # For 10.2 or later... who knows about the future
           url=$opensuse_url_site/$path_to_opensuse/$ver/repo/oss/boot/$arch/loader
+          ;;
+        *)
+          # For Leap 42.1 or later... who knows about the future
+          url=$opensuse_url_site/$path_to_opensuse/leap/$ver/repo/oss/boot/$arch/loader
           ;;
       esac
       get_and_put_linux_img $url openSUSE $ver $arch $opensuse_netinstall_kernel $opensuse_netinstall_initrd
