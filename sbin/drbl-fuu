@@ -32,13 +32,21 @@ usage() {
   echo "DESCRIPTION"
   echo "drbl-cp-user (or drbl-user-cp) for putting files, drbl-get-user (or drbl-user-get) for collecting files, drbl-rm-user (or drbl-user-rm) for removing files."
   echo "Usage: `basename $0` [-g|--group] group [-d|--directory] directory [-v|--verbose] source target"
-  echo "-g, --group:     set the user group to be processed." 
-  echo "-d, --directory DIR: process the sub-directory DIR in user's home"
-  echo "-v, --verbose    prints out verbose information"
+  echo "-g, --group  GROUP   Assign the user group to be processed as GROUP." 
+  echo "-u, --user   USERS   Assign the user(s) to be processed as USERS." 
+  echo "-d, --directory DIR  Process the sub-directory DIR in user's home"
+  echo "-v, --verbose        Prints out verbose information"
+  echo "If GROUP or USERS is not assigned, all the users will be processed."
   echo
   echo "Example:"
   echo "drbl-cp-user -d work source_files new_file.txt" 
   echo "will copy source_files into user's ~/work/ directory as file name new_file.txt"
+  echo
+  echo "drbl-cp-user -g g3c5 source_files new_file.txt" 
+  echo "will copy source_files into ~/work/ directory for the users belong to group g3c5 as file name new_file.txt"
+  echo
+  echo "drbl-cp-user -u \"john jack mary\" source_files new_file.txt" 
+  echo "will copy source_files into ~/work/ directory for the users john, jack and mary as file name new_file.txt"
   echo
   echo "drbl-rm-user -d work target.txt" 
   echo "will remove target.txt from user's ~/work directory"
@@ -65,10 +73,12 @@ while [ $# -gt 0 ]; do
     -d|--directory)
 		shift; sub_dir="$1"
 		shift;;
+    -u|--users)
+		shift; chosen_users="$1"
+		shift;;
     -v|--verbose)
 		shift; VERBOSE="on"
                 ;;
-
     -*)		echo "${0}: ${1}: invalid option" >&2
 		usage >& 2
 		exit 2 ;;
@@ -79,6 +89,9 @@ done
 # get the source and target
 source_file=$1
 target_file=$2
+
+#
+ask_and_load_lang_set $specified_lang
 
 # check if source_file is dir or file, if dir, append /
 # To do:
@@ -108,7 +121,18 @@ case "$run_cmd" in
 esac
 
 # set the default values if empty
-[ -z "$chosen_group" ] && chosen_group="all"
+if [ -z "$chosen_group" -a -z "$chosen_users" ]; then
+  chosen_group="all"
+fi
+if [ -n "$chosen_group" -a -n "$chosen_users" ]; then
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+  echo "Group and user(s) can not be assigned together!"
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+  echo "Please only assign one of them."
+  echo "$msg_program_stop"
+  exit 1
+fi
+
 [ -z "$mode" ] && mode="put"
 [ -z "$source_file" ] && echo "No source! Program terminated!" && exit 1
 [ -z "$target_file" ] && target_file="$source_file"
@@ -116,13 +140,14 @@ esac
 #
 if [ -n "$VERBOSE" ]; then
    echo "chosen_group=$chosen_group"
+   echo "chosen_users=$chosen_users"
    echo "mode=$mode"
    echo "source_file=$source_file"
    echo "target_file=$target_file"
 fi
 
 # main
-if  [ $chosen_group = "all" ]; then 
+if  [ "$chosen_group" = "all" ]; then 
     echo "We will treat all users..."
     #
     IFS_org=$IFS
@@ -137,22 +162,35 @@ if  [ $chosen_group = "all" ]; then
     done </etc/passwd
     IFS=$IFS_org
     echo "grp_member=$grp_member"
-elif ! grep "^$chosen_group:" /etc/group 2>/dev/null; then
-    echo "group $chosen_group does NOT exist!!!"
-    exit
+elif [ -n "$chosen_group" ]; then
+    if ! grep "^$chosen_group:" /etc/group 2>/dev/null; then
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+      echo "group $chosen_group does NOT exist!!!"
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+      echo "$msg_program_stop"
+      exit 1
+    else
+      grp_member=$(grep "^$chosen_group:" /etc/group | awk -F':' '{print $4}' | sed -e "s/,/ /g")
+    fi
+elif [ -n "$chosen_users" ]; then
+    grp_member="$chosen_users"
 else
-    grp_member=$(grep "^$chosen_group:" /etc/group | awk -F':' '{print $4}' | sed -e "s/,/ /g")
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+    echo "No group or users were assigned!"
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+    echo "$msg_program_stop"
+    exit 1
 fi
 
 if [ "$mode" = "rm" ]; then
   echo "Warning! This will delete $source_file in user's (i.e. $grp_member) home directory"
-  echo "[y/N]"
+  echo -n "[y/N] "
   read rm_confirm
   case "$rm_confirm" in
       y|[yY][eE][sS])
        if [ -n "$sub_dir" ]; then
          echo "Do you want to remove the directory \"$sub_dir\" in each user's home directory ?"
-         echo "[y/N]"
+         echo -n "[y/N] "
          read rm_dir_confirm
          case "$rm_dir_confirm" in
              y|[yY][eE][sS])
