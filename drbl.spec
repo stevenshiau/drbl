@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.21.8
+Version:	2.21.9
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,10 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Thu Oct 13 2016 Steven Shiau <steven _at_ nchc org tw> 2.21.9-drbl1
+  - Add option "-u, --user" for drbl-fuu so that drbl-cp-user, drbl-rm-user,
+    drbl-get-user can be used to assign some specific users.
+
 * Thu Oct 13 2016 Steven Shiau <steven _at_ nchc org tw> 2.21.8-drbl1
   - Add packages os-prober & dislocker for Clonezilla/DRBL live packages
     list.

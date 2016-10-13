@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.21.9-drbl1) unstable; urgency=medium
+
+  * Add option "-u, --user" for drbl-fuu so that drbl-cp-user, drbl-rm-user,
+    drbl-get-user can be used to assign some specific users.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 13 Oct 2016 19:45:02 +0800
+
 drbl (2.21.8-drbl1) unstable; urgency=medium
 
   * Add packages os-prober & dislocker for Clonezilla/DRBL live packages
