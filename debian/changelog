@@ -1,3 +1,10 @@
+drbl (2.21.8-drbl1) unstable; urgency=medium
+
+  * Add packages os-prober & dislocker for Clonezilla/DRBL live packages
+    list.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 13 Oct 2016 15:10:01 +0800
+
 drbl (2.21.7-drbl1) unstable; urgency=medium
 
   * Language file hu_HU was updated. Thanks to Greg Marki.
