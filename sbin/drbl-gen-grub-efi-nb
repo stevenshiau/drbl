@@ -65,6 +65,10 @@ grub_efi_tmpd="$(mktemp -d /tmp/grub-efi.XXXXXX)"
 # commands.
 # For more details, check:
 # http://lists.gnu.org/archive/html/help-grub/2015-09/msg00035.html
+
+# Also check grub 2.02 manual (not 2.00, since the variables are very different):
+# http://dev.gentoo.org/~floppym/grub.html
+
 cat <<-GRUB_END > $grub_efi_tmpd/grub-header.cfg
 set prefix=(tftp)/grub-efi.cfg
 echo "Grub CPU and platform: \$grub_cpu, \$grub_platform"
@@ -78,10 +82,13 @@ tr --set pretty_mac x: x- \$net_default_mac
 echo "Loading config file \$prefix/grub.cfg-01-\$pretty_mac..."
 configfile \$prefix/grub.cfg-01-\$pretty_mac
 
+echo "Loading config file \$prefix/grub.cfg-\$net_default_ip..."
+configfile \$prefix/grub.cfg-\$net_default_ip
+
 echo "Loading config file: \$prefix/grub.cfg"
 configfile \$prefix/grub.cfg
 
-echo "Could not find config file \$prefix/grub.cfg-\$pretty_mac or \$prefix/grub.cfg!"
+echo "Could not find config file \$prefix/grub.cfg-\$pretty_mac, \$prefix/grub.cfg-\$net_default_ip or \$prefix/grub.cfg!"
 sleep 15
 
 GRUB_END
