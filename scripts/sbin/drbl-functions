@@ -3748,8 +3748,8 @@ set_specific_host_grub_efi_conf() {
     case "$ih" in
       *.*.*.*)
         # list by IP
-	# the grub_eficfg will like "grub.cfg-C0A80001"
-	grub_eficfg="grub.cfg-$(drbl-gethostip $ih)"
+	# the grub_eficfg will like "grub.cfg-192.168.177.2"
+	grub_eficfg="grub.cfg-${ih}"
         # These files look like: 01-MAC address (with ":" -> "-"),
 	# We'd better to clean the 01-MAC file if it exists since maybe it's created by ocsmgrd when received the results from client in the previous save/restoration. Since 01-MAC has higher priority than "C0A80001" style file in pxelinux, this is a must if we can find it, we have to remove it.
 	# TODO: What if no MAC address setting in dhcpd.conf ? Then $OCS_TMP will be empty, then... ?
@@ -3764,7 +3764,7 @@ set_specific_host_grub_efi_conf() {
 	grub_eficfg="grub.cfg-01-$grub_eficfg"
 	# We'd better to clean the IP-based setting file if it exists since maybe it's created by ocsmgrd when received the results from client in the previous save/restoration. Although grub.cfg-01-MAC has higher priority than "grub.cfg-C0A80001" style file in grub_efi, this NOT a must if we can find it, but we remove it to avoid confusion.
         IP="$(grep -E ${ih} $OCS_TMP | awk -F" " '{print $2}')"
-	grub_eficfg_MIP="grub.cfg-$(drbl-gethostip $IP)"
+	grub_eficfg_MIP="grub.cfg-${IP}"
         [ -f "$GRUB_EFINB_DIR/$grub_eficfg_MIP" ] && rm -f $GRUB_EFINB_DIR/$grub_eficfg_MIP
         ;;
     esac
@@ -4356,3 +4356,18 @@ is_valid_IPv4_add() {
   fi
   return $rc
 } # end of is_valid_IPv4_add
+#
+deploy_pxecfg_grubefi_files(){
+  # This function will set the specific config or just keep the "default"
+  if [ "$LIST_HOST" = "on" ]; then
+    # specify the nodes if assigned by user
+    echo "Create specific config for PXE and GRUB EFI NB client."
+    set_specific_host_pxe_conf `cat $HOSTS_TMP`
+    set_specific_host_grub_efi_conf `cat $HOSTS_TMP`
+  else
+    # for all clients, so we just keep the file pxelinux.cfg/default, no others.
+    echo "This is for all clients, so we remove other host-based PXE config files in $PXELINUX_DIR/ and keep $PXE_CONF."
+    clean_stale_node_pxe_cfg
+    clean_stale_node_grub_efi_cfg
+  fi
+} # end of deploy_pxecfg_grubefi_files
