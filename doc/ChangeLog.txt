@@ -5,6 +5,17 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.21.10-drbl1) unstable; urgency=medium
+
+  * Forgot to load grub.cfg-$IP before grub.cfg for uEFI netboot client.
+    Thanks to Anshu Arya for reporting this issue.
+    Ref: https://sourceforge.net/p/drbl/discussion/DRBL_for_Debian/thread/73a26bf9
+
+  * Run deploy_pxecfg_grubefi_files inside drbl-ocs because the prompt to
+    start clonezilla SE service only mentions to run drbl-ocs.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 18 Oct 2016 20:06:31 +0800
+
 drbl (2.21.9-drbl1) unstable; urgency=medium
 
   * Add option "-u, --user" for drbl-fuu so that drbl-cp-user, drbl-rm-user,

@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.21.9
+Version:	2.21.10
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,13 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Tue Oct 18 2016 Steven Shiau <steven _at_ nchc org tw> 2.21.10-drbl1
+  - Forgot to load grub.cfg-$IP before grub.cfg for uEFI netboot client.
+    Thanks to Anshu Arya for reporting this issue.
+    Ref: https://sourceforge.net/p/drbl/discussion/DRBL_for_Debian/thread/73a26bf9
+  - Run deploy_pxecfg_grubefi_files inside drbl-ocs because the prompt to
+    start clonezilla SE service only mentions to run drbl-ocs.
+
 * Thu Oct 13 2016 Steven Shiau <steven _at_ nchc org tw> 2.21.9-drbl1
   - Add option "-u, --user" for drbl-fuu so that drbl-cp-user, drbl-rm-user,
     drbl-get-user can be used to assign some specific users.
