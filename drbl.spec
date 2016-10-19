@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.21.10
+Version:	2.21.11
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,10 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Wed Oct 19 2016 Steven Shiau <steven _at_ nchc org tw> 2.21.11-drbl1
+  - Add ext4magic & myrescue in the packages list of
+    Clonezilla/DRBL live system.
+
 * Tue Oct 18 2016 Steven Shiau <steven _at_ nchc org tw> 2.21.10-drbl1
   - Forgot to load grub.cfg-$IP before grub.cfg for uEFI netboot client.
     Thanks to Anshu Arya for reporting this issue.

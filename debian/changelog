@@ -1,3 +1,10 @@
+drbl (2.21.11-drbl1) unstable; urgency=medium
+
+  * Add ext4magic & myrescue in the packages list of
+    Clonezilla/DRBL live system.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 19 Oct 2016 15:07:54 +0800
+
 drbl (2.21.10-drbl1) unstable; urgency=medium
 
   * Forgot to load grub.cfg-$IP before grub.cfg for uEFI netboot client.
