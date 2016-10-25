@@ -2693,7 +2693,7 @@ fi
 for i in $client_services; do
   if is_systemd_init; then
     # FC17~,CO7~,..: systemd like
-    echo -n "Adding '$i':"
+    echo "Enabling service $i..."
     case "$i" in
       ypbind)
         # remove ypserv
@@ -2723,18 +2723,18 @@ for i in $client_services; do
     fi
     if [ -e "$drbl_common_root/etc/init.d/$i" ]; then
       if [ -x "$drbl_common_root/sbin/chkconfig" ]; then
-        echo "Run: 'chroot $drbl_common_root/ /sbin/chkconfig --add $i'"
+        echo "Running: chroot $drbl_common_root/ /sbin/chkconfig --add $i"
         chroot $drbl_common_root/ /sbin/chkconfig --add $i
       elif [ -x "$drbl_common_root/usr/sbin/update-rc.d" ]; then
-        echo "Run: 'chroot $drbl_common_root /usr/sbin/update-rc.d $i defaults'"
+        echo "Running: chroot $drbl_common_root /usr/sbin/update-rc.d $i defaults"
         chroot $drbl_common_root /usr/sbin/update-rc.d $i defaults
-        echo "Run: 'chroot $drbl_common_root /usr/sbin/update-rc.d $i enable'"
+        echo "Running: chroot $drbl_common_root /usr/sbin/update-rc.d $i enable"
         chroot $drbl_common_root /usr/sbin/update-rc.d $i enable
       elif [ -x "$drbl_common_root/sbin/insserv" ]; then
         # Use insserv for debian/ubuntu
 	# Ubuntu >= 16.10, there is no insserv at all.
 	# Add '-f' to fix adding nis service error in Xenial, by Ceasar
-        echo "Run: 'chroot $drbl_common_root/ insserv -f $i &> /dev/null'"
+        echo "Running: chroot $drbl_common_root/ insserv -f $i &> /dev/null"
         chroot $drbl_common_root/ insserv -f $i &> /dev/null
       fi
     fi
@@ -3410,19 +3410,29 @@ if [ -e /etc/debian_version ]; then
   # For genuine Debian
   # remove -i in "reboot -d -f -i" so it won't stop network before reboot
   # remove -i in "halt -d -f -i -p" so it won't stop network before halt
-  perl -pi -e 's/^([[:space:]]*reboot .*)-i(.*)/$1 $2 # Modified by DRBL/' $drbl_common_root/etc/init.d/reboot
-  perl -pi -e 's/^([[:space:]]*halt .*)-i(.*)/$1 $2 # Modified by DRBL/' $drbl_common_root/etc/init.d/halt
+  if [ -e $drbl_common_root/etc/init.d/reboot ]; then
+    perl -pi -e 's/^([[:space:]]*reboot .*)-i(.*)/$1 $2 # Modified by DRBL/' $drbl_common_root/etc/init.d/reboot
+  fi
+  if  [ -e $drbl_common_root/etc/init.d/halt ]; then
+    perl -pi -e 's/^([[:space:]]*halt .*)-i(.*)/$1 $2 # Modified by DRBL/' $drbl_common_root/etc/init.d/halt
+  fi
   # For B2D, the reboot and halt is a little different, except the above,
   # we have to comment umount -a 
-  perl -pi -e 's/^([[:space:]]*umount -a.*)/#$1 # Modified by DRBL/' $drbl_common_root/etc/init.d/reboot
-  perl -pi -e 's/^([[:space:]]*umount -a.*)/#$1 # Modified by DRBL/' $drbl_common_root/etc/init.d/halt
+  if [ -e $drbl_common_root/etc/init.d/reboot ]; then
+    perl -pi -e 's/^([[:space:]]*umount -a.*)/#$1 # Modified by DRBL/' $drbl_common_root/etc/init.d/reboot
+  fi
+  if [ -e $drbl_common_root/etc/init.d/halt ]; then
+    perl -pi -e 's/^([[:space:]]*umount -a.*)/#$1 # Modified by DRBL/' $drbl_common_root/etc/init.d/halt
+  fi
   # To force do not turn off network when rebooting/halting.
-  if grep -Eq "^NETDOWN=" $drbl_common_root/etc/init.d/halt; then
+  if grep -Eq "^NETDOWN=" $drbl_common_root/etc/init.d/halt 2>/dev/null; then
     # If we found "NETDOWN=..." in /etc/init.d/halt, force to write NETDOWN=no in client's /etc/default/halt
-    if ! grep -Eq "^NETDOWN=" $drbl_common_root/etc/default/halt; then
+    if ! grep -Eq "^NETDOWN=" $drbl_common_root/etc/default/halt 2>/dev/null; then
       echo "NETDOWN=no  # Modified by DRBL" >> $drbl_common_root/etc/default/halt
     else
-      perl -pi -e 's/^NETDOWN=.*/NETDOWN=no # Modified by DRBL/' $drbl_common_root/etc/default/halt
+      if [ -e $drbl_common_root/etc/default/halt ]; then
+        perl -pi -e 's/^NETDOWN=.*/NETDOWN=no # Modified by DRBL/' $drbl_common_root/etc/default/halt
+      fi
     fi
   fi
   # Disable the /lib/init/rw removinig. Otherwise harmless errors will be shown during clents booting.
@@ -3443,7 +3453,9 @@ if [ -e /etc/debian_version ]; then
   # bootmisc.sh will prevent client to login by showning
   # "System bootup in progress - please wait" > /etc/nologin
   # We must avoid /etc/nologin to be created by set DELAYLOGIN=no in client's /etc/default/rcS
-  perl -pi -e 's|^[[:space:]]*DELAYLOGIN=.*|DELAYLOGIN=no # modified by DRBL|' $drbl_common_root/etc/default/rcS
+  if [ -e $drbl_common_root/etc/default/rcS ]; then
+    perl -pi -e 's|^[[:space:]]*DELAYLOGIN=.*|DELAYLOGIN=no # modified by DRBL|' $drbl_common_root/etc/default/rcS
+  fi
 
   if [ -x "$drbl_common_root/etc/init.d/linux-restricted-modules-common" ]; then
     # $drbl_common_root/lib/modules/$KERNEL_VER/volatile is already created in drblsrv-offline for Ubuntu. Here we have to modify linux-restricted-modules-common service so that it can write in /lib/modules/$KERNEL_VER/volatile, otherwise it is Read-Only NFS filesystem.
@@ -3747,7 +3759,12 @@ elif [ -e /etc/SuSE-release ]; then
   perl -pi -e 's|^([[:space:]]*)(mount -f /)|$1# $2 # Modified by DRBL|g' $drbl_common_root/etc/init.d/boot.rootfsck
 
   # 5. Force /etc/init.d/rc1.d/S*single to be at S90, not too early. In OpenSuSE 11.1, it's S10single, while ocs-run is S19.
-  (cd $drbl_common_root/etc/init.d/rc1.d/; mv S*single S90single)
+  ( 
+    if ls $drbl_common_root/etc/init.d/rc1.d/S*single >/dev/null 2>&1; then
+      cd $drbl_common_root/etc/init.d/rc1.d/
+      mv S*single S90single
+    fi
+  )
 else
   # RH-like
   if [ -f "$drbl_setup_path/files/${OS_type}/${OS_Version}/halt.$OS_Version.drbl" ]; then
@@ -3790,23 +3807,23 @@ fi
 # in clients
 echo -n "Deleting the accounts (except root) in the clients common root template... "
 usrdel_file_need="/usr/sbin/userdel"
-cp --parents $usrdel_file_need $drbl_common_root
+cp --parents -d $usrdel_file_need $drbl_common_root
 if ldd $usrdel_file_need &>/dev/null; then
   usrdel_lib_need=$(LC_ALL=C ldd /usr/sbin/userdel | sed -e "s/.*=> //g" -e "s/(0x.*)//g" | awk '{print $1}')
   for imod in $usrdel_lib_need; do
     # Skip linux-vdso.so.1 and linux-gate.so.1, the virtual DSO, a shared object exposed by the kernel. They do not exist on the file system. Ref: http://ilivetoseek.wordpress.com/2011/10/24/linux-gate-so-1-or-linux-vdso-so-1/ 
     [ "$imod" = "linux-vdso.so.1" ] && continue
     [ "$imod" = "linux-gate.so.1" ] && continue
-    cp --parents $imod $drbl_common_root
+    cp --parents -d $imod $drbl_common_root
   done
 fi
 # UGLY... For SuSE, we need to copy /usr/lib/pwdutils/ to $drbl_common_root, 
 # but why ? Here it's just a lots of try-and-errors...
-[ -d /usr/lib/pwdutils/ ] && cp --parents -r /usr/lib/pwdutils $drbl_common_root
-[ -x /usr/sbin/userdel-pre.local ] && cp --parents /usr/sbin/userdel-pre.local $drbl_common_root 
-[ -x /usr/sbin/userdel-post.local ] && cp --parents /usr/sbin/userdel-post.local $drbl_common_root 
+[ -d /usr/lib/pwdutils/ ] && cp --parents -d -r /usr/lib/pwdutils $drbl_common_root
+[ -x /usr/sbin/userdel-pre.local ] && cp --parents -d /usr/sbin/userdel-pre.local $drbl_common_root 
+[ -x /usr/sbin/userdel-post.local ] && cp --parents -d /usr/sbin/userdel-post.local $drbl_common_root 
 # /usr/bin/crontab exists in /usr/sbin/userdel-pre.local in SuSE
-[ -x /usr/bin/crontab ] && cp --parents /usr/bin/crontab $drbl_common_root 
+[ -x /usr/bin/crontab ] && cp --parents -d /usr/bin/crontab $drbl_common_root 
 
 user_to_del="$(drbl-get-common-username 2>/dev/null)"
 for u in $user_to_del; do
