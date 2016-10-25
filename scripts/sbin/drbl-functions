@@ -209,7 +209,7 @@ create_depmod_env() {
       # Skip linux-vdso.so.1 and linux-gate.so.1, the virtual DSO, a shared object exposed by the kernel. They do not exist on the file system. Ref: http://ilivetoseek.wordpress.com/2011/10/24/linux-gate-so-1-or-linux-vdso-so-1/ 
       [ "$imod" = "linux-vdso.so.1" ] && continue
       [ "$imod" = "linux-gate.so.1" ] && continue
-      cp --parents $imod $newroot
+      cp --parents -d $imod $newroot
     done
   fi
 }
@@ -241,7 +241,7 @@ create_chkconfig_env() {
       # Skip linux-vdso.so.1 and linux-gate.so.1, the virtual DSO, a shared object exposed by the kernel. They do not exist on the file system. Ref: http://ilivetoseek.wordpress.com/2011/10/24/linux-gate-so-1-or-linux-vdso-so-1/ 
       [ "$imod" = "linux-vdso.so.1" ] && continue
       [ "$imod" = "linux-gate.so.1" ] && continue
-      cp --parents $imod $newroot
+      cp --parents -d $imod $newroot
     done
   fi
 }
@@ -261,14 +261,14 @@ clean_chkconfig_env() {
 create_insserv_env() {
   local newroot="$1"
   [ -z "$newroot" ] && exit 1
-  cp --parents /sbin/insserv $newroot
+  cp --parents -d /sbin/insserv $newroot
   if ldd /sbin/insserv &>/dev/null; then
     insserv_lib_need=$(LC_ALL=C ldd /sbin/insserv | sed -e "s/.*=> //g" -e "s/(0x.*)//g" | awk '{print $1}')
     for imod in $insserv_lib_need; do
       # Skip linux-vdso.so.1 and linux-gate.so.1, the virtual DSO, a shared object exposed by the kernel. They do not exist on the file system. Ref: http://ilivetoseek.wordpress.com/2011/10/24/linux-gate-so-1-or-linux-vdso-so-1/ 
       [ "$imod" = "linux-vdso.so.1" ] && continue
       [ "$imod" = "linux-gate.so.1" ] && continue
-      cp --parents $imod $newroot
+      cp --parents -d $imod $newroot
     done
   fi
 }
@@ -363,7 +363,7 @@ create_authconfig_env() {
        # Skip linux-vdso.so.1 and linux-gate.so.1, the virtual DSO, a shared object exposed by the kernel. They do not exist on the file system. Ref: http://ilivetoseek.wordpress.com/2011/10/24/linux-gate-so-1-or-linux-vdso-so-1/ 
        [ "$imod" = "linux-vdso.so.1" ] && continue
        [ "$imod" = "linux-gate.so.1" ] && continue
-       cp --parents $imod $newroot
+       cp --parents -d $imod $newroot
      done
    fi
    if ldd /usr/sbin/pwconf &>/dev/null; then
@@ -372,7 +372,7 @@ create_authconfig_env() {
        # Skip linux-vdso.so.1 and linux-gate.so.1, the virtual DSO, a shared object exposed by the kernel. They do not exist on the file system. Ref: http://ilivetoseek.wordpress.com/2011/10/24/linux-gate-so-1-or-linux-vdso-so-1/ 
        [ "$imod" = "linux-vdso.so.1" ] && continue
        [ "$imod" = "linux-gate.so.1" ] && continue
-       cp --parents $imod $newroot
+       cp --parents -d $imod $newroot
      done
    fi
    if ldd /usr/sbin/grpconv &>/dev/null; then
@@ -381,7 +381,7 @@ create_authconfig_env() {
        # Skip linux-vdso.so.1 and linux-gate.so.1, the virtual DSO, a shared object exposed by the kernel. They do not exist on the file system. Ref: http://ilivetoseek.wordpress.com/2011/10/24/linux-gate-so-1-or-linux-vdso-so-1/ 
        [ "$imod" = "linux-vdso.so.1" ] && continue
        [ "$imod" = "linux-gate.so.1" ] && continue
-       cp --parents $imod $newroot
+       cp --parents -d $imod $newroot
      done
    fi
 }
@@ -406,11 +406,11 @@ create_chpasswd_env() {
     # Skip linux-vdso.so.1 and linux-gate.so.1, the virtual DSO, a shared object exposed by the kernel. They do not exist on the file system. Ref: http://ilivetoseek.wordpress.com/2011/10/24/linux-gate-so-1-or-linux-vdso-so-1/ 
     [ "$imod" = "linux-vdso.so.1" ] && continue
     [ "$imod" = "linux-gate.so.1" ] && continue
-    cp --parents $imod $newroot
+    cp --parents -d $imod $newroot
   done
   # /bin/echo is necessary for chpasswd
-  cp --parents /bin/echo $newroot
-  cp --parents /usr/sbin/chpasswd $newroot
+  cp --parents -d /bin/echo $newroot
+  cp --parents -d /usr/sbin/chpasswd $newroot
   # cp --parents /usr/bin/strace $newroot
 
   #cp --parents -r $PAM_need_files $newroot
@@ -1144,7 +1144,7 @@ prepare_update_rc_d_env() {
     # Skip linux-vdso.so.1 and linux-gate.so.1, the virtual DSO, a shared object exposed by the kernel. They do not exist on the file system. Ref: http://ilivetoseek.wordpress.com/2011/10/24/linux-gate-so-1-or-linux-vdso-so-1/ 
     [ "$imod" = "linux-vdso.so.1" ] && continue
     [ "$imod" = "linux-gate.so.1" ] && continue
-    cp --parents $imod $newroot
+    cp --parents -d $imod $newroot
   done
   # Ugly! we need some perl pm...
   mkdir -p $newroot/usr/{share,lib}
@@ -1170,7 +1170,7 @@ prepare_update_rc_d_env() {
     for imod in $insserv_lib_need; do
       [ "$imod" = "linux-vdso.so.1" ] && continue
       [ "$imod" = "linux-gate.so.1" ] && continue
-      cp --parents $imod $newroot
+      cp --parents -d $imod $newroot
     done
   fi
 } # end of prepare_update_rc_d_env
