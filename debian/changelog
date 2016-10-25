@@ -1,3 +1,11 @@
+drbl (2.22.3-drbl1) unstable; urgency=medium
+
+  * Suppress some unnecessary error or warning messages when running drblpush -i.
+    e.g. append option "-d" to "cp --parents" to suppress the copying about
+    linking files.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 25 Oct 2016 21:32:29 +0800
+
 drbl (2.22.2-drbl1) unstable; urgency=medium
 
   * Add yakkety in the netinstall for Ubuntu. 

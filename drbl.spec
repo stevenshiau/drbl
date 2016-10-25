@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.22.2
+Version:	2.22.3
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,11 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Tue Oct 25 2016 Steven Shiau <steven _at_ nchc org tw> 2.22.3-drbl1
+  - Suppress some unnecessary error or warning messages when running drblpush -i.
+    e.g. append option "-d" to "cp --parents" to suppress the copying about
+    linking files.
+
 * Tue Oct 25 2016 Steven Shiau <steven _at_ nchc org tw> 2.22.2-drbl1
   - Add yakkety in the netinstall for Ubuntu. 
 
