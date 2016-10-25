@@ -5,6 +5,14 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.22.1-drbl1) unstable; urgency=medium
+
+  * Move package initscripts from PKG_FROM_DBN to PKG_TO_QUERY in drbl.conf.
+  * Add clonezilla SE client service for Ubuntu 16.10.
+  * Initial support for Ubuntu 16.10.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 25 Oct 2016 16:04:13 +0800
+
 drbl (2.21.11-drbl1) unstable; urgency=medium
 
   * Add ext4magic & myrescue in the packages list of
