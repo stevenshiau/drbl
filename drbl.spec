@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.22.1
+Version:	2.22.2
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Tue Oct 25 2016 Steven Shiau <steven _at_ nchc org tw> 2.22.2-drbl1
+  - Add yakkety in the netinstall for Ubuntu. 
+
 * Tue Oct 25 2016 Steven Shiau <steven _at_ nchc org tw> 2.22.1-drbl1
   - Move package initscripts from PKG_FROM_DBN to PKG_TO_QUERY in drbl.conf.
   - Add clonezilla SE client service for Ubuntu 16.10.
