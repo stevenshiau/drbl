@@ -2403,19 +2403,23 @@ fi
 if [ -e /etc/debian_version ]; then
   # Debian
   # For genuine Debian Sarge
-  perl -pi -e 's/(^[[:space:]]*umount -ttmpfs.*)/#$1 # Modified by DRBL/g' $drbl_common_root/etc/init.d/umountfs
-  perl -pi -e 's/(^[[:space:]]*umount -tnoproc)(,noprocfs.*)/$1,nonfs,notmpfs$2 # Modified by DRBL/g' $drbl_common_root/etc/init.d/umountfs
-  # For genuine Debian Etch
-  perl -pi -e 's/(^[[:space:]]*)(proc|procfs|linprocfs|devfs|sysfs|usbfs.*)/$1nfs|tmpfs|none|$2/g' $drbl_common_root/etc/init.d/umountfs
-  # for B2D
-  perl -pi -e 's/^[[:space:]]*umount \$FORCE -a -r.*/umount \$FORCE -tnoproc,nonfs,notmpfs,noprocfs,nodevfs,nosysfs,nousbfs,nousbdevfs,nodevpts -d -a -r # Modified by DRBL/g' $drbl_common_root/etc/init.d/umountfs
-  # for Ubuntu Dapper
-  # To avoid $DIR is noting.
-  # Ref: https://lists.ubuntu.com/archives/ubuntu-users/2006-May/079378.html
-  perl -pi -e 's|^([[:space:]]*)(umount -r -d \$DIRS*)|$1 [ -n "\$DIRS" ] && $2 # Modified by DRBL|g' $drbl_common_root/etc/init.d/umountfs
-  # For Debian Squeeze, by default it uses parallel start service "startpar" (i.e. CONCURRENCY=makefile). We disable it in the client so that we won't have to modify the services. E.g. /etc/rc1.d/*ssh when running clonezilla SE job. 
-  LC_ALL=C perl -pi -e "s|^CONCURRENCY=.*|CONCURRENCY=none # Mofified by DRBL|g" $drbl_common_root/etc/init.d/rc
-  # Disable the lvm udevd, otherwise this rule file will be read-only in the client, and it will be auto-run during booting. Then the disk will be always busy. Clonezilla will fail to create partition table.
+  if [ -e $drbl_common_root/etc/init.d/umountfs ]; then
+    perl -pi -e 's/(^[[:space:]]*umount -ttmpfs.*)/#$1 # Modified by DRBL/g' $drbl_common_root/etc/init.d/umountfs
+    perl -pi -e 's/(^[[:space:]]*umount -tnoproc)(,noprocfs.*)/$1,nonfs,notmpfs$2 # Modified by DRBL/g' $drbl_common_root/etc/init.d/umountfs
+    # For genuine Debian Etch
+    perl -pi -e 's/(^[[:space:]]*)(proc|procfs|linprocfs|devfs|sysfs|usbfs.*)/$1nfs|tmpfs|none|$2/g' $drbl_common_root/etc/init.d/umountfs
+    # for B2D
+    perl -pi -e 's/^[[:space:]]*umount \$FORCE -a -r.*/umount \$FORCE -tnoproc,nonfs,notmpfs,noprocfs,nodevfs,nosysfs,nousbfs,nousbdevfs,nodevpts -d -a -r # Modified by DRBL/g' $drbl_common_root/etc/init.d/umountfs
+    # for Ubuntu Dapper
+    # To avoid $DIR is noting.
+    # Ref: https://lists.ubuntu.com/archives/ubuntu-users/2006-May/079378.html
+    perl -pi -e 's|^([[:space:]]*)(umount -r -d \$DIRS*)|$1 [ -n "\$DIRS" ] && $2 # Modified by DRBL|g' $drbl_common_root/etc/init.d/umountfs
+    # For Debian Squeeze, by default it uses parallel start service "startpar" (i.e. CONCURRENCY=makefile). We disable it in the client so that we won't have to modify the services. E.g. /etc/rc1.d/*ssh when running clonezilla SE job. 
+  fi
+  if [ -e $drbl_common_root/etc/init.d/rc ]; then
+    LC_ALL=C perl -pi -e "s|^CONCURRENCY=.*|CONCURRENCY=none # Mofified by DRBL|g" $drbl_common_root/etc/init.d/rc
+    # Disable the lvm udevd, otherwise this rule file will be read-only in the client, and it will be auto-run during booting. Then the disk will be always busy. Clonezilla will fail to create partition table.
+  fi
   disable_lvm2_udevd_rules $drbl_common_root
 
 elif [ -e /etc/SuSE-release ]; then
@@ -2721,8 +2725,14 @@ for i in $client_services; do
       if [ -x "$drbl_common_root/sbin/chkconfig" ]; then
         echo "Run: 'chroot $drbl_common_root/ /sbin/chkconfig --add $i'"
         chroot $drbl_common_root/ /sbin/chkconfig --add $i
-      else
+      elif [ -x "$drbl_common_root/usr/sbin/update-rc.d" ]; then
+        echo "Run: 'chroot $drbl_common_root /usr/sbin/update-rc.d $i defaults'"
+        chroot $drbl_common_root /usr/sbin/update-rc.d $i defaults
+        echo "Run: 'chroot $drbl_common_root /usr/sbin/update-rc.d $i enable'"
+        chroot $drbl_common_root /usr/sbin/update-rc.d $i enable
+      elif [ -x "$drbl_common_root/sbin/insserv" ]; then
         # Use insserv for debian/ubuntu
+	# Ubuntu >= 16.10, there is no insserv at all.
 	# Add '-f' to fix adding nis service error in Xenial, by Ceasar
         echo "Run: 'chroot $drbl_common_root/ insserv -f $i &> /dev/null'"
         chroot $drbl_common_root/ insserv -f $i &> /dev/null
