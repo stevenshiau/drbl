@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.22.4-drbl1) unstable; urgency=medium
+
+  * Remove ncpfs from clonezilla/drbl live packages list. It's not in the
+    Debian repository anymore.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 27 Oct 2016 22:08:34 +0800
+
 drbl (2.22.3-drbl1) unstable; urgency=medium
 
   * Suppress some unnecessary error or warning messages when running drblpush -i.
