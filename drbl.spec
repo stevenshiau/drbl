@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.22.4
+Version:	2.22.5
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Mon Oct 31 2016 Steven Shiau <steven _at_ nchc org tw> 2.22.5-drbl1
+  - Add p7zip-full in drbl/clonezilla live packages list.
+
 * Thu Oct 27 2016 Steven Shiau <steven _at_ nchc org tw> 2.22.4-drbl1
   - Remove ncpfs from clonezilla/drbl live packages list. It's not in the
     Debian repository anymore.

@@ -1,3 +1,9 @@
+drbl (2.22.5-drbl1) unstable; urgency=medium
+
+  * Add p7zip-full in drbl/clonezilla live packages list.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 31 Oct 2016 20:53:09 +0800
+
 drbl (2.22.4-drbl1) unstable; urgency=medium
 
   * Remove ncpfs from clonezilla/drbl live packages list. It's not in the
