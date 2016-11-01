@@ -356,6 +356,19 @@ install_drbl_RH() {
 # create the directory for diskless image
 [ ! -d "/tftpboot/nbi_img" ] && mkdir -p /tftpboot/nbi_img
 
+# Check if selinux is enabled
+if [ -e /etc/selinux/config ]; then
+   SELINUX=""
+   . /etc/selinux/config
+   if [ "$SELINUX" = "enforcing" ]; then
+     echo "$msg_delimiter_star_line"
+     [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+     echo "$msg_warning_selinux_is_enabled"
+     [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+     confirm_continue_or_not_default_quit
+   fi
+fi
+
 # 1.
 # setup apt/yum first
 # parse os to set the repository
