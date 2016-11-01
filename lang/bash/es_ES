@@ -1018,3 +1018,5 @@ msg_ocs_param_p_reboot_1='Reiniciar'
 msg_ocs_param_p_choose_1='Elija reiniciar/apagar/etc cuando todo esté terminado'
 msg_remove_source_or_destination_disk_after_cloning='///NOTA/// Recuerde que debe retirar el disco de origen o el disco de destino clonado antes de iniciar esta máquina.'
 msg_2_identical_systems_will_confuse_restored_os='Por otra parte, cuando existen dos sistemas idénticos en la misma máquina, el S.O. restaurado podrá confundirse, y el arranque puede fallar.'
+# Tag on 2016/11/01
+msg_warning_selinux_is_enabled='Warning! SELinux on this system is enabled! If you have no idea how to configure it for DRBL server, before going on, please (1) disable it by setting "SELINUX=disabled" in /etc/selinux/config, (2) reboot the system (3) Run drblsrv program again.'
