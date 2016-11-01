@@ -1,3 +1,11 @@
+drbl (2.22.6-drbl1) unstable; urgency=medium
+
+  * Add a mechanism to check if selinux enabled or not in RH-like system.
+  * Language files updated for selinux checking description.
+  * Language file ca_ES was updated. Thanks to René Mérou.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 01 Nov 2016 22:09:07 +0800
+
 drbl (2.22.5-drbl1) unstable; urgency=medium
 
   * Add p7zip-full in drbl/clonezilla live packages list.
