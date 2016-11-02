@@ -1029,4 +1029,4 @@ msg_ocs_param_p_choose_1='Wählen Sie reboot/shutdown/etc wenn alles beendet ist
 msg_remove_source_or_destination_disk_after_cloning='///HINWEIS/// Denken Sie daran, die Quell-Platte oder die geklonte Zielplatte zu entfernen, bevor Sie das System neu booten.'
 msg_2_identical_systems_will_confuse_restored_os='Andernfalls könnte das wiederhergestellte Betriebssystem einen Konflikt erkennen und der Bootvorgang fehlschlagen, wenn zwei identische Systeme auf dem selben Rechner vorhanden sind.'
 # Tag on 2016/11/01
-msg_warning_selinux_is_enabled='Warning! SELinux on this system is enabled! If you have no idea how to configure it for DRBL server, before going on, please (1) disable it by setting "SELINUX=disabled" in /etc/selinux/config, (2) reboot the system (3) Run drblsrv program again.'
+msg_warning_selinux_is_enabled='Warning! SELinux on this system is enabled! If you have no idea how to configure it for DRBL server, before going on, please (1) Disable it by setting "SELINUX=disabled" in /etc/selinux/config, (2) Reboot the system (3) Run drblsrv program again.'
