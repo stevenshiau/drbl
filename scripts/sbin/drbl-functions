@@ -3302,12 +3302,12 @@ get_latest_pkg_in_drbl_repository() {
     exit 1
   fi
   ktmp="$(mktemp -d /tmp/live_pver.XXXXXX || exit 1)"
-    echo "Downloading $drbl_mirror_url/dists/drbl/$branch/binary-i386/Packages.gz to finding latest $pkg version..."
-    LC_ALL=C wget -q -P $ktmp/ $drbl_mirror_url/dists/drbl/$branch/binary-i386/Packages.gz
-    pver="$(zgrep -Ew -A 10 "^Package: $pkg" $ktmp/Packages.gz | grep -E "^Version:" | sed -e "s/^Version: //g" | sort -V -r | uniq | head -n 1)"
+    echo "Downloading $drbl_mirror_url/dists/drbl/$branch/binary-amd64/Packages.xz to finding latest $pkg version..."
+    LC_ALL=C wget -q -P $ktmp/ $drbl_mirror_url/dists/drbl/$branch/binary-amd64/Packages.xz
+    pver="$(xzgrep -Ew -A 10 "^Package: $pkg" $ktmp/Packages.xz | grep -E "^Version:" | sed -e "s/^Version: //g" | sort -V -r | uniq | head -n 1)"
     if [ -z "$pver" ]; then
-      # Clean Packages.gz to avoid wget using another name like Packages.gz.1 then search the next again
-      rm -f $ktmp/Packages.gz
+      # Clean Packages.xz to avoid wget using another name like Packages.xz.1 then search the next again
+      rm -f $ktmp/Packages.xz
       return 1
     fi
   if [ -n "$pver" ]; then
@@ -3315,7 +3315,7 @@ get_latest_pkg_in_drbl_repository() {
   else
     [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
     echo "Warning!"
-    echo "Unable to find the latest kernel version in $drbl_mirror_url/dists/$i/main/binary-i386/Packages.gz. Use the pre-defined one."
+    echo "Unable to find the latest kernel version in $drbl_mirror_url/dists/$i/main/binary-amd64/Packages.xz. Use the pre-defined one."
     [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
     echo -n "$msg_press_enter_to_continue"
     read 
