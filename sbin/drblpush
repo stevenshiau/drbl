@@ -2497,9 +2497,8 @@ for isrv in $isrv_list ; do
       fi
       find $drbl_common_root/etc/rc*.d -regex ".*[SK][-0-9][0-9]$isrv" -exec rm -f {} \;
     fi
-    if [ -e "$drbl_common_root/lib/systemd/system/$isrv.service" ]; then
-      #find $drbl_common_root/etc/systemd/ -type l -lname "*/$isrv.service" -exec rm -f {} \; # fix by :ceasar
-      find $drbl_common_root/etc/systemd/ -name "$isrv.service" -exec rm -f {} \;
+    if [ -e "$drbl_common_root/lib/systemd/system/${isrv}.service" ]; then
+      find $drbl_common_root/etc/systemd/ -name "${isrv}.service" -exec rm -f {} \;
     fi
   elif [ -e /etc/debian_version ]; then
     # For Debian
@@ -2622,8 +2621,8 @@ client_services="$client_services firstboot"
 
 # check if the service listed exists
 for iser in $client_services_chklist; do
-   # For FC17, chcek /lib/systemd/system/*.service
-   [ -e "/etc/init.d/$iser" -o -f "/lib/systemd/system/$iser.service" ] && client_services="$client_services $iser"
+   # For systemd, chcek /lib/systemd/system/*.service
+   [ -e "/etc/init.d/$iser" -o -f "/lib/systemd/system/${iser}.service" ] && client_services="$client_services $iser"
 done
 
 # add the services only exist in DRBL client.
