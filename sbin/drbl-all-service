@@ -32,16 +32,11 @@ drbl_startup_service() {
   # Traditional service can be started or restart by "/etc/init.d/$srv (start|restart)
   # Upstart service (from 0.6.3 in Ubuntu 9.04), we should use: restart $srv
   if is_systemd_init && [ -e "/lib/systemd/system/$srv.service" ]; then
-    if [ -e /usr/lib/systemd/system/$srv.service ]; then
-      # FC 17
-      _real_service_name=$(basename $(readlink -f  /usr/lib/systemd/system/$srv.service) ".service")
-    else
-      _real_service_name=$(basename $(readlink -f  /lib/systemd/system/$srv.service) ".service")
-    fi
+    _real_service_name="$(basename $(readlink -f  /lib/systemd/system/$srv.service) ".service")"
     if [ "$_real_service_name" = "null" ]; then
       echo "Service $srv.service is masked. Skiping $act it."
     else
-      echo "Now $act '$_real_service_name' service in systemd-like environment..."
+      echo "Now $act $_real_service_name service by systemd command..."
       systemctl $act $_real_service_name.service
       ret=$?
     fi
@@ -108,6 +103,7 @@ drbl_startup_service() {
       fi
     fi
   else
+    echo "Now $act $srv service by SysV command..."
     service $srv $act
     ret=$?
   fi
@@ -139,6 +135,11 @@ for iser in $drbl_server_service_chklist; do
         drbl_service="$drbl_service $iser"
    fi
 done
+# When nfs-kernel-server and nfs-server co-exist in drbl_service, it means systemd covers both of them. Just keep one of them.
+if [ -n "$(echo $drbl_service | grep -Ew nfs-kernel-server)" -a \
+     -n "$(echo $drbl_service | grep -Ew nfs-server)" ]; then
+  drbl_service="$(echo $drbl_service | sed -r -e "s|[[:space:]]*nfs-kernel-server||")"
+fi
 # tftp is a pseudo service (depending on xinetd) in CentOS7 
 if [ -n "$(echo $drbl_service | grep -Ew "[[:space:]]*tftp" |\
   grep -Ew "[[:space:]]*xinetd")" ]; then
@@ -233,10 +234,22 @@ case "$switch" in
       echo "Now add the service: $drbl_service"
       [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
       for serv in $drbl_service; do 
-        if [ -e /etc/debian_version ]; then
+        # Check if systemd service first.
+        if is_systemd_init && [ -e "/lib/systemd/system/${serv}.service" ]; then
+          # For systemd, systemctl can't en/disable if service name be a alias name, ex: nfslock, due to 'nfslock' -> 'nfs-lock'
+          _real_service_name=$(basename $(readlink -f /lib/systemd/system/${serv}.service) ".service")
+          echo "Force to add $_real_service_name service by systemd command..."
+          if [ "$_real_service_name" = 'iptables' -a "$(systemctl is-enabled firewalld.service 2>/dev/null)" = 'enable' ]; then
+            # On FC18, firewalld could conflict with iptables, so disable firewalld from now on
+            echo "Stopping and disabling firewalld service by: 'systemctl stop/disable firewalld.service'..."
+            systemctl stop firewalld.service
+            systemctl disable firewalld.service
+          fi
+          systemctl enable $_real_service_name.service
+        elif [ -e /etc/debian_version ]; then
           # Debian-like
           get_debian_ubuntu_init_serv_control_prog
-          echo "Force to add $serv service in this Debian DRBL server..."
+	  echo "Force to add $serv service by SysV command (insserv)..."
           if [ "$dbn_ubn_serv_control_prog" = "use-insserv" ]; then
             insserv $serv &>/dev/null
 	  else
@@ -267,22 +280,11 @@ case "$switch" in
           fi
         elif [ -e /etc/SuSE-release ]; then
            # SuSE
-           echo "Force to add $serv service in this SuSE DRBL server..."
+	   echo "Force to add $serv service by SysV command (insserv)..."
            insserv $serv &>/dev/null
-        elif [ -n "$(which systemctl 2>/dev/null)" -a -e "/lib/systemd/system/$serv.service" ]; then
-           # For systemd, systemctl can't en/disable if service name be a alias name, ex: nfslock, due to 'nfslock' -> 'nfs-lock'
-           _real_service_name=$(basename $(readlink -f  /usr/lib/systemd/system/$serv.service) ".service")
-           echo "Force to add $_real_service_name service via systemd-like DRBL server..."
-           if [ "$_real_service_name" = 'iptables' -a "$(systemctl is-enabled firewalld.service 2>/dev/null)" = 'enable' ]; then
-             # On FC18, firewalld could conflict with iptables, so disable firewalld from now on
-             echo "Stopping and disabling firewalld service by: 'systemctl stop/disable firewalld.service'..."
-             systemctl stop firewalld.service
-             systemctl disable firewalld.service
-           fi
-           systemctl enable $_real_service_name.service
         else
             # RH-like
-           echo "Force to add $serv service in this RH-like DRBL server..."
+	   echo "Force to add $serv service by SysV command (chkconfig)..."
            chkconfig $serv on
         fi
       done
@@ -297,7 +299,7 @@ case "$switch" in
         if [ -e /etc/debian_version ]; then
           # Debian-like
           get_debian_ubuntu_init_serv_control_prog
-          echo "Force to delete $serv service in this Debian DRBL server..."
+	  echo "Force to delete $serv service by SysV command (insserv)..."
           if [ "$dbn_ubn_serv_control_prog" = "use-insserv" ]; then
             insserv -r $serv &>/dev/null
           else
@@ -305,16 +307,16 @@ case "$switch" in
           fi
         elif [ -e /etc/SuSE-release ]; then
           # SuSE
-          echo "Force to delete $serv service in this SuSE DRBL server..."
+	  echo "Force to delete $serv service by SysV command (insserv)..."
           insserv -f -r $serv &>/dev/null
         elif [ -n "$(which systemctl 2>/dev/null)" -a -e "/lib/systemd/system/$serv.service" ]; then
            # For systemd, systemctl can't en/disable if service name be a alias name, ex: nfslock, due to 'nfslock' -> 'nfs-lock'
            _real_service_name=$(basename $(readlink -f  /usr/lib/systemd/system/$serv.service) ".service")
-           echo "Force to del $_real_service_name service via systemd-like DRBL server..."
+           echo "Force to del $_real_service_name service by systemd command..."
            systemctl disable $_real_service_name.service
         else
           # RH-like
-          echo "Force to delete $serv service in this RH-like DRBL server..."
+	  echo "Force to delete $serv service by SysV command (chkconfig)..."
           chkconfig --del $serv
         fi
       done
