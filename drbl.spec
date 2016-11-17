@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.22.6
+Version:	2.22.8
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,16 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Thu Nov 17 2016 Steven Shiau <steven _at_ nchc org tw> 2.22.8-drbl1
+  - Change maxswapsize default value to 1024 MB. 
+
+* Mon Nov 14 2016 Steven Shiau <steven _at_ nchc org tw> 2.22.7-drbl1
+  - Make service be started with systemd command first. This should fix an
+    issue that rpc-statd service was not started on Ubuntu 16.10.
+  - Remove portmap in drbl_server_service_chklist.
+    Add rpc-statd in client_services_chklist.
+  - Add packages sysstat and iftop in the clonezilla/drbl live packages
+    list.
 * Mon Nov 01 2016 Steven Shiau <steven _at_ nchc org tw> 2.22.6-drbl1
   - Add a mechanism to check if selinux enabled or not in RH-like system.
   - Language files updated for selinux checking description.
