@@ -137,19 +137,19 @@ EOF
           cat <<EOF >> $nfs_exports
 $drbl_common_root $subnet.*($EXPORTS_NFS_RO_NRS_OPT)
 /usr $subnet.*($EXPORTS_NFS_RO_NRS_OPT)
-/home $subnet.*($EXPORTS_NFS_RW_NRS_OPT)
+/home $subnet.*($EXPORTS_NFS_RW_NRS_OPT,crossmnt)
 /var/spool/mail $subnet.*($EXPORTS_NFS_RW_RS_OPT)
 EOF
           if [ -d /opt/ ]; then
             cat <<EOF >> $nfs_exports
-/opt $subnet.*($EXPORTS_NFS_RO_NRS_OPT)
+/opt $subnet.*($EXPORTS_NFS_RO_NRS_OPT,crossmnt)
 EOF
           fi
-          # if $ocsroot is not under /home, or if $ocsroot is a mount point, we have to export it
+          # if $ocsroot is not under /home, or if $ocsroot is a mount point, and not under /home or /opt, we have to export it
           if [ -z "$(echo $ocsroot | grep -Ew "^/home")" -o \
-	       -n "$(awk -F" " '{print $2}' /proc/mounts | grep -Ew "$ocsroot")" ]; then
+	       -n "$(awk -F" " '{print $2}' /proc/mounts | grep -Ew "$ocsroot" | grep -Ev "(^/home|^/opt)")" ]; then
             cat <<EOF >> $nfs_exports
-$ocsroot $subnet.*($EXPORTS_NFS_RW_NRS_OPT)
+$ocsroot $subnet.*($EXPORTS_NFS_RW_NRS_OPT,crossmnt)
 EOF
           fi
           # add user assigned dir to exports
@@ -175,19 +175,19 @@ EOF
           cat <<EOF >> $nfs_exports
 $drbl_common_root $ip($EXPORTS_NFS_RO_NRS_OPT)
 /usr $ip($EXPORTS_NFS_RO_NRS_OPT)
-/home $ip($EXPORTS_NFS_RW_NRS_OPT)
+/home $ip($EXPORTS_NFS_RW_NRS_OPT,crossmnt)
 /var/spool/mail $ip($EXPORTS_NFS_RW_RS_OPT)
 EOF
           if [ -d /opt/ ]; then
             cat <<EOF >> $nfs_exports
-/opt $ip($EXPORTS_NFS_RO_NRS_OPT)
+/opt $ip($EXPORTS_NFS_RO_NRS_OPT,crossmnt)
 EOF
           fi
-          # if $ocsroot is not under /home, or if $ocsroot is a mount point, we have to export it
+          # if $ocsroot is not under /home, or if $ocsroot is a mount point, and not under /home or /opt, we have to export it
           if [ -z "$(echo $ocsroot | grep -Ew "^/home")" -o \
-	       -n "$(awk -F" " '{print $2}' /proc/mounts | grep -Ew "$ocsroot")" ]; then
+	       -n "$(awk -F" " '{print $2}' /proc/mounts | grep -Ew "$ocsroot" | grep -Ev "(^/home|^/opt)")" ]; then
             cat <<EOF >> $nfs_exports
-$ocsroot $ip($EXPORTS_NFS_RW_NRS_OPT)
+$ocsroot $ip($EXPORTS_NFS_RW_NRS_OPT,crossmnt)
 EOF
           fi
           # add user assigned dir to exports
