@@ -5,6 +5,14 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.23.1-drbl1) unstable; urgency=medium
+
+  * Add crossmnt option in nfs export for /home & /opt in drbl-nfs-exports.
+    This would make automatically mount in clients when /home/partimag is
+    mounted in different device on DRBL server.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 21 Nov 2016 22:19:52 +0800
+
 drbl (2.22.8-drbl1) unstable; urgency=medium
 
   * Change maxswapsize default value to 1024 MB. 
