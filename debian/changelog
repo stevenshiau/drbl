@@ -1,3 +1,9 @@
+drbl (2.23.2-drbl1) unstable; urgency=medium
+
+  * Add package bicon in drbl/clonezilla live system. 
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 24 Nov 2016 08:05:42 +0800
+
 drbl (2.23.1-drbl1) unstable; urgency=medium
 
   * Add crossmnt option in nfs export for /home & /opt in drbl-nfs-exports.
