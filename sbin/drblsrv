@@ -3317,8 +3317,10 @@ if [ "$DISTRIB_ID" = "Ubuntu" -a "$DISTRIB_RELEASE" = "9.10" ]; then
   fi
 fi
 
-# For Ubuntu 14.04, there is no package "init" because it still uses upstart. Remove it from list.
-if [ "$DISTRIB_ID" = "Ubuntu" -a "$DISTRIB_RELEASE" = "14.04" ]; then
+# For Ubuntu 14.04 or Debian Wheezy, there is no package "init" because it still uses upstart.
+# Remove it from list.
+if [ "$DISTRIB_ID" = "Ubuntu" -a "$DISTRIB_RELEASE" = "14.04" ] ||
+   [ -n "$(echo "$OS_Version" | grep -Ew "DBN7.*")" ] ; then
   PKG_FROM_DBN="$(echo $PKG_FROM_DBN | sed -r -e "s/\<init\>//g")"
 fi
 
