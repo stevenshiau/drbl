@@ -1,3 +1,12 @@
+drbl (2.23.3-drbl1) unstable; urgency=medium
+
+  * Skip installing package "init" for Debian Wheezy when running
+    "drblsrv -i".
+    Thanks to Peter Brisson for reporting this issue:
+    https://sourceforge.net/p/clonezilla/discussion/Open_discussion/thread/433ed559/
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sun, 27 Nov 2016 10:49:20 +0800
+
 drbl (2.23.2-drbl1) unstable; urgency=medium
 
   * Add package bicon in drbl/clonezilla live system. 

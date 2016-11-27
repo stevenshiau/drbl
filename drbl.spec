@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.23.2
+Version:	2.23.3
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,12 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Sat Nov 27 2016 Steven Shiau <steven _at_ nchc org tw> 2.23.3-drbl1
+  - Skip installing package "init" for Debian Wheezy when running
+    "drblsrv -i".
+    Thanks to Peter Brisson for reporting this issue:
+    https://sourceforge.net/p/clonezilla/discussion/Open_discussion/thread/433ed559/
+
 * Thu Nov 24 2016 Steven Shiau <steven _at_ nchc org tw> 2.23.2-drbl1
   - Add package bicon in drbl/clonezilla live system. 
 
