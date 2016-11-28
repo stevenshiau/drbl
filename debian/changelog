@@ -1,3 +1,10 @@
+drbl (2.23.4-drbl1) unstable; urgency=medium
+
+  * Define LOCAL_EFI_BOOT_GRUB_CFG in drbl-functions and use it both in
+    gen-grub-efi-nb-menu and ocs-live-boot-menu.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 28 Nov 2016 19:25:44 +0800
+
 drbl (2.23.3-drbl1) unstable; urgency=medium
 
   * Skip installing package "init" for Debian Wheezy when running

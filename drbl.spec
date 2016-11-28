@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.23.3
+Version:	2.23.4
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,10 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Mon Nov 28 2016 Steven Shiau <steven _at_ nchc org tw> 2.23.4-drbl1
+  * Define LOCAL_EFI_BOOT_GRUB_CFG in drbl-functions and use it both in
+    gen-grub-efi-nb-menu and ocs-live-boot-menu.
+
 * Sat Nov 27 2016 Steven Shiau <steven _at_ nchc org tw> 2.23.3-drbl1
   - Skip installing package "init" for Debian Wheezy when running
     "drblsrv -i".
