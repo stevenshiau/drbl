@@ -1,3 +1,9 @@
+drbl (2.23.5-drbl1) unstable; urgency=medium
+
+  * Add initial codes about bittorrent restoring. Not finished yet.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 12 Dec 2016 15:36:01 +0800
+
 drbl (2.23.4-drbl1) unstable; urgency=medium
 
   * Define LOCAL_EFI_BOOT_GRUB_CFG in drbl-functions and use it both in
