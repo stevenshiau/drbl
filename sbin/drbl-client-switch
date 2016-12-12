@@ -94,15 +94,15 @@ stop_ocs_if_necessary() {
   # $IP_LIST and $OCS_OPTS are global variables
   # if "LIST_HOST" is NOT nothing, we will process those clients... use the
   # -h parameter of drbl-ocs.
+  local host_opt
   if [ -f "$ocs_lock_dir/clonezilla.lock" ]; then
-    echo "Your system is already in clonezilla mode... we will stop it first, then change to other mode..."
+   echo "Your system is already in clonezilla mode... we will stop it first, then change to other mode..."
    if [ -n "$IP_LIST" ]; then 
-     drbl-ocs -n $OCS_OPTS -h "$IP_LIST" -l $lang stop
-   else
-     drbl-ocs -n $OCS_OPTS -l $lang stop
+     host_opt="-h \"$IP_LIST\""
    fi
+   drbl-ocs -n $OCS_OPTS $host_opt -l $lang stop
   fi
-}
+} # end of stop_ocs_if_necessary
 
 #
 mcast_clonezilla_restore_not_for_all_clients_warning() {
@@ -317,6 +317,7 @@ do_clonezilla_save_dev() {
   trap "[ -f "$OCS_PARAM_TMP" ] && rm -f $OCS_PARAM_TMP" HUP INT QUIT TERM EXIT
   set_drbl_ocs_extra_param save $OCS_PARAM_TMP $dev
   OCS_OPTS="$(cat $OCS_PARAM_TMP)"
+  OCS_OPTS="$(echo $OCS_OPTS)"  # Make it in one line
   [ -f "$OCS_PARAM_TMP" ] && rm -f $OCS_PARAM_TMP
 
   stop_ocs_if_necessary
@@ -349,6 +350,7 @@ do_clonezilla_restore_dev() {
   # dev is: disk or parts
   local dev="$1"
   local target_image default_mcast_client_no=''
+  local host_opt drbl_ocs_cmd
   [ -z "$dev" ] && echo "You must specify the device type (parts or disk)!!! Program terminated!!!" && exit 1
   # We won't provide the method to change the mount point to replace /home/partimag in dcs, so we fix the imagedir="$ocsroot" (/home/partimag). However, user still can use drbl-ocs to do that.
   #
@@ -368,6 +370,7 @@ do_clonezilla_restore_dev() {
   trap "[ -f "$OCS_PARAM_TMP" ] && rm -f $OCS_PARAM_TMP" HUP INT QUIT TERM EXIT
   set_drbl_ocs_extra_param restore $OCS_PARAM_TMP $dev
   OCS_OPTS="$(cat $OCS_PARAM_TMP)"
+  OCS_OPTS="$(echo $OCS_OPTS)"  # Make it in one line
   [ -f "$OCS_PARAM_TMP" ] && rm -f $OCS_PARAM_TMP
 
   if [ -n "$(echo $OCS_OPTS | grep -E "\-[u]")" ]; then
@@ -420,9 +423,10 @@ do_clonezilla_restore_dev() {
       --backtitle "$msg_nchc_title" \
       --title "$msg_nchc_clonezilla | $msg_mode: $ocs_mode_prompt" \
       --menu "$msg_choose_the_mode_to_restore_dev" 0 0 0 \
-      "multicast" "$msg_multicast_restore" \
-      "broadcast" "$msg_broadcast_restore" \
-      "unicast" "$msg_unicast_restore" \
+      "multicast"  "$msg_multicast_restore" \
+      "broadcast"  "$msg_broadcast_restore" \
+      "unicast"    "$msg_unicast_restore" \
+      # "bittorrent" "$msg_bittorent_restore" \
       2> $TMP
       dcs_cast_mode=$(cat $TMP) 
       [ -f "$TMP" ] && rm -f $TMP
@@ -434,7 +438,7 @@ do_clonezilla_restore_dev() {
     exit 1
   fi
   case "$dcs_cast_mode" in
-    "multicast"|"broadcast"|"unicast") true;;
+    "multicast"|"broadcast"|"unicast"|"bittorrent") true;;
     *)
       [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
       echo "\"$dcs_cast_mode\" is an unknown or unsupported mode! You must assign a correct option for dcs_cast_mode!"
@@ -447,24 +451,29 @@ do_clonezilla_restore_dev() {
   run_again_fname="/tmp/ocs-$target_image-`date +%F-%H-%M`"
   if [ "$dcs_cast_mode" = "unicast" ]; then
     if [ "$LIST_HOST" = "on" ]; then
-      # NOTE: For prompt, we use \" to show ", but actually run it without \
-      drbl-ocs $OCS_OPTS $dcs_restore_extra_opt -h "$IP_LIST" -l $lang start${dev} restore $target_image $target_dev
-      # deploy_pxecfg_grubefi_files is run inside drbl-ocs.
-      [ "$BOOTUP" = "color" ] && $SETCOLOR_SUCCESS
-      echo PS. $msg_run_drbl_ocs_again_cmd 
-      # NOTE: For prompt, we use \" to show ", but actually run it without \
-      echo drbl-ocs -b $OCS_OPTS $dcs_restore_extra_opt -h \"$IP_LIST\" -l $lang start${dev} restore $target_image $target_dev | tee $run_again_fname
-      echo "$msg_ocs_sr_again_command_saved_filename: $run_again_fname"
-      [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
-    else
-      drbl-ocs $OCS_OPTS $dcs_restore_extra_opt -l $lang start${dev} restore $target_image $target_dev
-      # deploy_pxecfg_grubefi_files is run inside drbl-ocs.
-      [ "$BOOTUP" = "color" ] && $SETCOLOR_SUCCESS
-      echo PS. $msg_run_drbl_ocs_again_cmd 
-      echo drbl-ocs -b $OCS_OPTS $dcs_restore_extra_opt -l $lang start${dev} restore $target_image $target_dev | tee $run_again_fname
-      echo "$msg_ocs_sr_again_command_saved_filename: $run_again_fname"
-      [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+      host_opt="-h \"$IP_LIST\""
     fi
+    # Squeeze multiple spaces to one only
+    drbl_ocs_cmd="$(echo drbl-ocs $OCS_OPTS $dcs_restore_extra_opt $host_opt -l $lang start${dev} restore $target_image $target_dev | sed -r -e "s|[[:space:]]+| |g")"
+    eval $drbl_ocs_cmd
+    drbl-ocs $OCS_OPTS $dcs_restore_extra_opt -h "$IP_LIST" -l $lang start${dev} restore $target_image $target_dev
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_SUCCESS
+    echo PS. $msg_run_drbl_ocs_again_cmd 
+    echo "$drbl_ocs_cmd" | tee $run_again_fname
+    echo "$msg_ocs_sr_again_command_saved_filename: $run_again_fname"
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+  elif [ "$dcs_cast_mode" = "bittorrent" ]; then
+    if [ "$LIST_HOST" = "on" ]; then
+      host_opt="-h \"$IP_LIST\""
+    fi
+    # Squeeze multiple spaces to one only
+    drbl_ocs_cmd="$(echo drbl-ocs $OCS_OPTS $dcs_restore_extra_opt $host_opt -l $lang start${dev} bt_restore $target_image $target_dev | sed -r -e "s|[[:space:]]+| |g")"
+    eval $drbl_ocs_cmd
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_SUCCESS
+    echo PS. $msg_run_drbl_ocs_again_cmd 
+    echo "$drbl_ocs_cmd" | tee $run_again_fname
+    echo "$msg_ocs_sr_again_command_saved_filename: $run_again_fname"
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
   else
     # multicast or broadcast
     # Get the multicast options: time_to_wait, clients_to_wait...
@@ -488,24 +497,16 @@ do_clonezilla_restore_dev() {
 
     if [ "$LIST_HOST" = "on" ]; then
       mcast_clonezilla_restore_not_for_all_clients_warning
-      # NOTE: For prompt, we use \" to show ", but actually run it without \
-      drbl-ocs $OCS_OPTS $dcs_restore_extra_opt $mcast_mode_opt -h "$IP_LIST" -l $lang start${dev} multicast_restore $target_image $target_dev
-      # deploy_pxecfg_grubefi_files is run inside drbl-ocs.
-      [ "$BOOTUP" = "color" ] && $SETCOLOR_SUCCESS
-      echo PS. $msg_run_drbl_ocs_again_cmd 
-      # NOTE: For prompt, we use \" to show ", but actually run it without \
-      echo drbl-ocs -b $OCS_OPTS $dcs_restore_extra_opt $mcast_mode_opt -h \"$IP_LIST\" -l $lang start${dev} multicast_restore $target_image $target_dev | tee $run_again_fname
-      echo "$msg_ocs_sr_again_command_saved_filename: $run_again_fname"
-      [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
-    else
-      drbl-ocs $OCS_OPTS $dcs_restore_extra_opt $mcast_mode_opt -l $lang start${dev} multicast_restore $target_image $target_dev
-      # deploy_pxecfg_grubefi_files is run inside drbl-ocs.
-      [ "$BOOTUP" = "color" ] && $SETCOLOR_SUCCESS
-      echo PS. $msg_run_drbl_ocs_again_cmd 
-      echo drbl-ocs -b $OCS_OPTS $dcs_restore_extra_opt $mcast_mode_opt -l $lang start${dev} multicast_restore $target_image $target_dev | tee $run_again_fname
-      echo "$msg_ocs_sr_again_command_saved_filename: $run_again_fname"
-      [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+      host_opt="-h \"$IP_LIST\""
     fi
+    # Squeeze multiple spaces to one only
+    drbl_ocs_cmd="$(echo drbl-ocs $OCS_OPTS $dcs_restore_extra_opt $mcast_mode_opt $host_opt -l $lang start${dev} multicast_restore $target_image $target_dev | sed -r -e "s|[[:space:]]+| |g")"
+    eval $drbl_ocs_cmd
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_SUCCESS
+    echo PS. $msg_run_drbl_ocs_again_cmd 
+    echo "$drbl_ocs_cmd" | tee $run_again_fname
+    echo "$msg_ocs_sr_again_command_saved_filename: $run_again_fname"
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
   fi
   [ -e "$run_again_fname" ] && chmod 755 $run_again_fname
   echo "done!"
@@ -530,6 +531,7 @@ do_clonezilla_select_in_client() {
 
   # force to strip the unnecessary quotation ', this is specially for dialog (from cdialog) in Mandriva. Otherwise it will cause -p reboot (containing space) becomes '-p reboot', which is wrong option in dcs.
   OCS_OPTS="$(cat $OCS_PARAM_TMP | sed -e "s/\'//g")"
+  OCS_OPTS="$(echo $OCS_OPTS)"  # Make it in one line
   [ -f "$OCS_PARAM_TMP" ] && rm -f $OCS_PARAM_TMP
 
   stop_ocs_if_necessary
