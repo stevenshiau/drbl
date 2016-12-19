@@ -1,3 +1,9 @@
+drbl (2.23.6-drbl1) unstable; urgency=medium
+
+  * Add package archivemount for drbl/clonezilla live.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 19 Dec 2016 17:54:52 +0800
+
 drbl (2.23.5-drbl1) unstable; urgency=medium
 
   * Add initial codes about bittorrent restoring. Not finished yet.
