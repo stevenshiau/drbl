@@ -414,6 +414,11 @@ do_clonezilla_restore_dev() {
         ;;
     esac
 
+    # Enable bittorrent restoring when ocs-bttrack is available
+    if type ocs-bttrack &>/dev/null; then
+      bt_restore_msg_1="bittorrent"
+      bt_restore_msg_2="$(rep_whspc_w_udrsc "$msg_bittorent_restore")" 
+    fi
     # get the mode of unicast of multicast
     eval msg_choose_the_mode_to_restore_dev=\$msg_choose_the_mode_to_restore_$dev
     if [ -z "$dcs_cast_mode" ]; then
@@ -423,10 +428,10 @@ do_clonezilla_restore_dev() {
       --backtitle "$msg_nchc_title" \
       --title "$msg_nchc_clonezilla | $msg_mode: $ocs_mode_prompt" \
       --menu "$msg_choose_the_mode_to_restore_dev" 0 0 0 \
-      "multicast"  "$msg_multicast_restore" \
-      "broadcast"  "$msg_broadcast_restore" \
-      "unicast"    "$msg_unicast_restore" \
-      # "bittorrent" "$msg_bittorent_restore" \
+      "multicast"       "$msg_multicast_restore" \
+      "broadcast"       "$msg_broadcast_restore" \
+      $bt_restore_msg_1 $bt_restore_msg_2 \
+      "unicast"         "$msg_unicast_restore" \
       2> $TMP
       dcs_cast_mode=$(cat $TMP) 
       [ -f "$TMP" ] && rm -f $TMP
@@ -463,11 +468,22 @@ do_clonezilla_restore_dev() {
     echo "$msg_ocs_sr_again_command_saved_filename: $run_again_fname"
     [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
   elif [ "$dcs_cast_mode" = "bittorrent" ]; then
+    mcast_mode_opt=""
+    ANS_TMP=`mktemp /tmp/ocs_ans.XXXXXX`
+    trap "[ -f "$ANS_TMP" ] && rm -f $ANS_TMP" HUP INT QUIT TERM EXIT
+    if [ "$LIST_HOST" = "on" ]; then
+      default_bt_client_no="$(LC_ALL=C echo $IP_LIST | wc -w)"
+    fi
+    ask_clients_to_wait_for_bittorrent $ANS_TMP $default_bt_client_no
+    . $ANS_TMP
+    [ -n "$clients_to_wait" ] && bt_mod_opt="--clients-to-wait $clients_to_wait"
+    [ -f "$ANS_TMP" ] && rm -f $ANS_TMP
+
     if [ "$LIST_HOST" = "on" ]; then
       host_opt="-h \"$IP_LIST\""
     fi
     # Squeeze multiple spaces to one only
-    drbl_ocs_cmd="$(echo drbl-ocs $OCS_OPTS $dcs_restore_extra_opt $host_opt -l $lang start${dev} bt_restore $target_image $target_dev | sed -r -e "s|[[:space:]]+| |g")"
+    drbl_ocs_cmd="$(echo drbl-ocs $OCS_OPTS $dcs_restore_extra_opt $bt_mod_opt $host_opt -l $lang start${dev} bt_restore $target_image $target_dev | sed -r -e "s|[[:space:]]+| |g")"
     eval $drbl_ocs_cmd
     [ "$BOOTUP" = "color" ] && $SETCOLOR_SUCCESS
     echo PS. $msg_run_drbl_ocs_again_cmd 
@@ -483,7 +499,7 @@ do_clonezilla_restore_dev() {
     if [ "$LIST_HOST" = "on" ]; then
       default_mcast_client_no="$(LC_ALL=C echo $IP_LIST | wc -w)"
     fi
-    ask_time_or_clients_to_wait $ANS_TMP $default_mcast_client_no
+    ask_time_or_clients_to_wait_for_mcast $ANS_TMP $default_mcast_client_no
     . $ANS_TMP
     # we will get time_to_wait or client_to_want.
     [ -n "$time_to_wait" ] && mcast_mode_opt="$mcast_mode_opt --time-to-wait $time_to_wait"
