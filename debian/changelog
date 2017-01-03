@@ -1,3 +1,10 @@
+drbl (2.23.8-drbl1) unstable; urgency=medium
+
+  * Add option "-noabo" in the dialog menu.
+  * Language files were updated for option "-noabo".
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 03 Jan 2017 21:53:26 +0800
+
 drbl (2.23.7-drbl1) unstable; urgency=medium
 
   * Add experimental bittorent restoring codes in dcs.

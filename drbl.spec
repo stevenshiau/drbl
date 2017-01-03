@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.23.7
+Version:	2.23.8
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,10 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Tue Jan 03 2017 Steven Shiau <steven _at_ nchc org tw> 2.23.8-drbl1
+  - Add option "-noabo" in the dialog menu.
+  - Language files were updated for option "-noabo".
+
 * Sat Dec 24 2016 Steven Shiau <steven _at_ nchc org tw> 2.23.7-drbl1
   - Add experimental bittorent restoring codes in dcs.
 
