@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.23.6
+Version:	2.23.7
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Sat Dec 24 2016 Steven Shiau <steven _at_ nchc org tw> 2.23.7-drbl1
+  - Add experimental bittorent restoring codes in dcs.
+
 * Mon Dec 19 2016 Steven Shiau <steven _at_ nchc org tw> 2.23.6-drbl1
   - Add package archivemount for drbl/clonezilla live.
 

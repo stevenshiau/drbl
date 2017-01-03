@@ -1712,6 +1712,7 @@ else
     "-gm "       "$msg_ocs_param_gm" off \
     "-gs "       "$msg_ocs_param_gs" off \
     "-gmf "      "$msg_ocs_param_gmf" off \
+    "-noabo"     "$msg_ocs_param_noabo" off \
     "-o0 "       "$msg_ocs_param_o0" off \
     "-o1 "       "$msg_ocs_param_o1" off \
     2>> $OCS_PARAM_TMP
@@ -2013,6 +2014,7 @@ else
     "-gm "      "$msg_ocs_param_gm" off \
     "-gs "      "$msg_ocs_param_gs" off \
     "-gmf "     "$msg_ocs_param_gmf" off \
+    "-noabo"     "$msg_ocs_param_noabo" off \
     2>> $OCS_PARAM_TMP
   else
     echo "-c " "-j2 " >> $OCS_PARAM_TMP

@@ -1032,3 +1032,5 @@ msg_2_identical_systems_will_confuse_restored_os='要不然當兩顆相同作業
 msg_warning_selinux_is_enabled='警告! 此系統上的SELinux已經開啟。若你不知道如何設定它讓DRBL伺服器使用的話，在繼續進行之前，請關閉SELinux。要關閉它，你可以將檔案/etc/selinux/config中的設定改成"SELINUX=disabled"，然後重新開機後重新執行drblsrv程式。'
 # Tag on 2016/12/06
 msg_bittorent_restore="BT(位元洪流)還原"
+# Tag on 2017/01/03
+msg_ocs_param_noabo='不限僅擁有者可以讀取印象檔'

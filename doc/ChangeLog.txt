@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.23.7-drbl1) unstable; urgency=medium
+
+  * Add experimental bittorent restoring codes in dcs.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sat, 24 Dec 2016 16:42:41 +0800
+
 drbl (2.23.6-drbl1) unstable; urgency=medium
 
   * Add package archivemount for drbl/clonezilla live.
