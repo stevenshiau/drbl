@@ -1,7 +1,7 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
 Version:	2.23.8
-Release:	drbl1
+Release:	drbl2
 License:	GPL
 Group:		Development/DRBL
 Source0:	drbl-%{version}.tar.xz
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Fri Jan 06 2017 Steven Shiau <steven _at_ nchc org tw> 2.23.8-drbl2
+  * Language file sk_SK was updated. Thanks to Ondrej Dzivy Balucha.
+
 * Tue Jan 03 2017 Steven Shiau <steven _at_ nchc org tw> 2.23.8-drbl1
   - Add option "-noabo" in the dialog menu.
   - Language files were updated for option "-noabo".

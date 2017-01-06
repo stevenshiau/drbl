@@ -1,3 +1,9 @@
+drbl (2.23.8-drbl2) unstable; urgency=medium
+
+  * Language file sk_SK was updated. Thanks to Ondrej Dzivy Balucha.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 06 Jan 2017 14:16:53 +0800
+
 drbl (2.23.8-drbl1) unstable; urgency=medium
 
   * Add option "-noabo" in the dialog menu.
