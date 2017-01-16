@@ -1774,6 +1774,12 @@ if option arch = 00:06 {
 #}
 
 # Uncomment the following to get the debug/verbose messages in system log. The messages like the following will be shown:
+# PXEClient:Arch:00009:UNDI:003016
+# Begin of log command
+#log ( info, vendor-class-identifier ) ;
+# End of log command
+
+# Uncomment the following to get the debug/verbose messages in system log. The messages like the following will be shown:
 # Client 0:c:29:3b:34:fb requests 1:2:3:5:6:b:c:d:f:10:11:12:2b:36:3c:43:80:81:82:83:84:85:86:87 - PXEClient:Arch:00000:UNDI:002001 - no dhcp-client-id
 # Client 0:c:29:3b:34:fb requests 1:3:6:c:f:1c:28:29:2a - DRBLClient - no dhcp-client-id
 # Begin of log command
