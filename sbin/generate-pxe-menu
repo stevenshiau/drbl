@@ -245,6 +245,10 @@ say **********************************************
 # Allow client to edit boot parameters
 ALLOWOPTIONS 1
 
+# Append DHCP/BOOTP to the kernel command line, i.e., ip=<client-ip>:<boot-server-ip>:<gw-ip>:<netmask>
+# We need this when using proxy DHCP
+IPAPPEND 1
+
 PXE_END
 
 # PATH is supported after syslinux/pxelinux >=5
