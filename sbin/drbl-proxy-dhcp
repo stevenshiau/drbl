@@ -1,0 +1,176 @@
+#!/bin/bash
+# License: GPL 
+# Author: Steven Shiau <steven _at_ clonezilla org>
+# Description: Program to enable or disable proxy DHCP.
+
+# Load DRBL setting and functions
+# Setting
+# Source function library.
+[ -f /etc/rc.d/init.d/functions ] && . /etc/rc.d/init.d/functions
+
+# Load DRBL setting and functions
+DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/usr/share/drbl}"
+
+. $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
+
+# Settings
+dnsmasq_cfg=/etc/dnsmasq.conf
+
+#
+USAGE() {
+    echo "$ocs - To enable or disable DHCP relay/proxy mode"
+    echo "Usage:"
+    echo "To run $ocs:"
+    echo "$ocs [enable|disable]"
+    echo "//NOTE// When enabling proxy DHCP mode on this machine, your network configuration for ethernet port on this machine should be assigned as one of the DHCP clients in the existing DHCP service."
+    echo "Ex:"
+    echo "To start proxy DHCP, run:"
+    echo "   $ocs enable"
+    echo "To stop proxy DHCP, i.e., use DHCP and TFTP services on this DRBL server, run:"
+    echo "   $ocs disable"
+    echo
+} # end of USAGE
+#
+get_tftpd_srv_name() {
+  check_distribution_name
+  case "$OS_type" in
+    RH) TFTPD_SRVNAME="tftp" ;;
+    DBN) TFTPD_SRVNAME="tftpd-hpa" ;;
+  esac
+} # end of get_tftpd_srv_name
+#
+enable_proxy_dhcp() {
+  local pidof_dnsmasq pidof_dhcpd pidof_tftpd
+
+  # Check if dnsmsq exists
+  if ! type dnsmasq &>/dev/null; then
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+    echo "Program dnsmasq not found! No way to relay DHCP."
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+    echo "$msg_program_stop!"
+    exit 1
+  fi
+
+  echo $msg_delimiter_star_line
+  # Stop PXE-related services
+  service $DHCP_SRV_NAME stop
+  service $TFTPD_SRVNAME stop
+  
+  # Disable PXE-related services
+  systemctl disable $DHCP_SRV_NAME
+  systemctl disable $TFTPD_SRVNAME
+  
+  # Generate dnsmasq.conf
+  cat <<-DNSMQSQ_END > $dnsmasq_cfg
+# Configured by DRBL
+port=0
+log-dhcp
+dhcp-no-override
+enable-tftp
+tftp-root=$pxecfg_pd
+DNSMQSQ_END
+
+  all_eth_dev="$(LC_ALL=C get-all-nic-ip -d)"
+  uplink_eth="$(LC_ALL=C get-all-nic-ip -u)"
+  for inet in $all_eth_dev; do
+    [ "$inet" = "$uplink_eth" ] && continue
+    ip="$(LC_ALL=C drbl-get-ipadd $inet)"
+    echo "dhcp-range=$ip,proxy" >> $dnsmasq_cfg
+  done
+  
+  cat <<-DNSMQSQ_END >> $dnsmasq_cfg 
+## PXEClient:Arch:00000
+pxe-service=X86PC, "Boot BIOS PXE", pxelinux.0
+
+## PXEClient:Arch:00007
+pxe-service=BC_EFI, "Boot UEFI BC", bootx64.efi
+
+## PXEClient:Arch:00009
+pxe-service=X86-64_EFI, "Boot UEFI X86-64", bootx64.efi
+
+pxe-prompt="Booting DRBL Client", 1
+DNSMQSQ_END
+
+  # Disable DHCP server name checking
+  echo $msg_delimiter_star_line
+  mknic-nbi -c n
+  
+  # Restart dnsmasq
+  echo $msg_delimiter_star_line
+  echo "Starting service dnsmasq..."
+  service dnsmasq restart
+
+  echo $msg_delimiter_star_line
+  # Checking the services
+  pidof_dnsmasq="$(LC_LALL=C pidof dnsmasq)"
+  pidof_dhcpd="$(LC_ALL=C pidof dhcpd)"
+  pidof_tftpd="$(LC_ALL=C pidof in.tftpd)"
+  if [ -n "$pidof_dnsmasq" -a -z "$pidof_dhcpd" -a -z "$pidof_tftpd" ]; then
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_SUCCESS
+    echo "Proxy DHCP mode enabled successfully!"
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+  else
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+    echo "Failed to enable proxy DHCP mode!"
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+  fi
+} # end of enable_proxy_dhcp
+
+#
+disable_proxy_dhcp() {
+  local pidof_dnsmasq pidof_dhcpd pidof_tftpd
+
+  # Stop dnsmasq
+  echo $msg_delimiter_star_line
+  echo "Stop service dnsmasq..."
+  service dnsmasq stop
+  systemctl disable dnsmasq
+
+  echo $msg_delimiter_star_line
+  # Enable PXE-related services
+  systemctl enable $DHCP_SRV_NAME
+  systemctl enable $TFTPD_SRVNAME
+
+  echo $msg_delimiter_star_line
+  # Start PXE-related services
+  service $DHCP_SRV_NAME start
+  service $TFTPD_SRVNAME start
+
+  echo $msg_delimiter_star_line
+  # Enable DHCP server name checking
+  echo $msg_delimiter_star_line
+  mknic-nbi -c y
+
+  echo $msg_delimiter_star_line
+  # Checking the services
+  pidof_dnsmasq="$(LC_LALL=C pidof dnsmasq)"
+  pidof_dhcpd="$(LC_ALL=C pidof dhcpd)"
+  pidof_tftpd="$(LC_ALL=C pidof in.tftpd)"
+  if [ -z "$pidof_dnsmasq" -a -n "$pidof_dhcpd" -a -n "$pidof_tftpd" ]; then
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_SUCCESS
+    echo "Proxy DHCP mode disabled successfully!"
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+  else
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+    echo "Failed to disable proxy DHCP mode!"
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+  fi
+} # end of disable_proxy_dhcp
+
+####################
+### Main program ###
+####################
+
+ocs_file="$0"
+ocs=`basename $ocs_file`
+mode="$1"
+
+#
+ask_and_load_lang_set
+
+get_tftpd_srv_name
+case "$mode" in
+   enable) enable_proxy_dhcp;;
+  disable) disable_proxy_dhcp;;
+        *) USAGE;;
+esac
