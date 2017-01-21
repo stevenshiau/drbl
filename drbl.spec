@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.23.8
+Version:	2.23.11
 Release:	drbl2
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,26 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Sat Jan 21 2017 Steven Shiau <steven _at_ nchc org tw> 2.23.11-drbl1
+  - Skip copying /var/lib/docker to common root.
+
+* Wed Jan 18 2017 Steven Shiau <steven _at_ nchc org tw> 2.23.10-drbl1
+  - Add shadow-utils as required package in RH-like OS
+  - Add dnsmasq in the packages list in DRBL/Clonezilla live.
+  - Add a program "drbl-proxy-dhcp" to enable/disable proxy DHCP.
+  - Use drbl_bootp=$net_default_next_server in grub netboot. This should
+    work for the future grub (after grub git Nov/23/2016).
+    Ref:
+    http://git.savannah.gnu.org/gitweb/?p=grub.git;a=commit;h=f8c3af3b613f9b1d5123f1ccad565950f82f6959
+
+* Mon Jan 16 2017 Steven Shiau <steven _at_ nchc org tw> 2.23.9-drbl1
+  - Remove files for DRBL Debian (v5 and 6) client.
+    Add files for Debian 8.7.
+  - Append DHCP/BOOTP to the kernel command line, i.e.,
+    ip=<client-ip>:<boot-server-ip>:<gw-ip>:<netmask>
+    We need this when using proxy DHCP.
+  - Add template log for client arch in dhcpd.conf.
+
 * Fri Jan 06 2017 Steven Shiau <steven _at_ nchc org tw> 2.23.8-drbl2
   * Language file sk_SK was updated. Thanks to Ondrej Dzivy Balucha.
 

@@ -1,3 +1,32 @@
+drbl (2.23.11-drbl1) unstable; urgency=medium
+
+  * Skip copying /var/lib/docker to common root.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sat, 21 Jan 2017 13:55:09 +0800
+
+drbl (2.23.10-drbl1) unstable; urgency=medium
+
+  * Add shadow-utils as required package in RH-like OS
+  * Add dnsmasq in the packages list in DRBL/Clonezilla live.
+  * Add a program "drbl-proxy-dhcp" to enable/disable proxy DHCP.
+  * Use drbl_bootp=$net_default_next_server in grub netboot. This should
+    work for the future grub (after grub git Nov/23/2016).
+    Ref:
+    http://git.savannah.gnu.org/gitweb/?p=grub.git;a=commit;h=f8c3af3b613f9b1d5123f1ccad565950f82f6959
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 18 Jan 2017 20:43:12 +0800
+
+drbl (2.23.9-drbl1) unstable; urgency=medium
+
+  * Remove files for DRBL Debian (v5 and 6) client.
+    Add files for Debian 8.7.
+  * Append DHCP/BOOTP to the kernel command line, i.e.,
+    ip=<client-ip>:<boot-server-ip>:<gw-ip>:<netmask>
+    We need this when using proxy DHCP.
+  * Add template log for client arch in dhcpd.conf.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 16 Jan 2017 16:18:02 +0800
+
 drbl (2.23.8-drbl2) unstable; urgency=medium
 
   * Language file sk_SK was updated. Thanks to Ondrej Dzivy Balucha.
