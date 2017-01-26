@@ -5,6 +5,16 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.23.12-drbl1) unstable; urgency=medium
+
+  * Add a mechanism to enable proxy DHCP as 1 NIC.
+  * Bug fixed: "IPAPPEND 1" should not be global in pxelinux.cfg. 
+    It is only necessary for DRBL clients.
+    Otherwise it will confuse local boot, for example.
+  * Update language files about proxy DHCP mechanism.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 26 Jan 2017 11:08:47 +0800
+
 drbl (2.23.11-drbl1) unstable; urgency=medium
 
   * Skip copying /var/lib/docker to common root.

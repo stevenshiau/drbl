@@ -1,7 +1,7 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.23.11
-Release:	drbl2
+Version:	2.23.12
+Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
 Source0:	drbl-%{version}.tar.xz
@@ -45,6 +45,13 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Thu Jan 26 2017 Steven Shiau <steven _at_ nchc org tw> 2.23.12-drbl1
+  - Add a mechanism to enable proxy DHCP as 1 NIC.
+  - Bug fixed: "IPAPPEND 1" should not be global in pxelinux.cfg. 
+    It is only necessary for DRBL clients.
+    Otherwise it will confuse local boot, for example.
+  - Update language files about proxy DHCP mechanism.
+
 * Sat Jan 21 2017 Steven Shiau <steven _at_ nchc org tw> 2.23.11-drbl1
   - Skip copying /var/lib/docker to common root.
 
