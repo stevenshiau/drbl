@@ -1,0 +1,72 @@
+#!/bin/bash
+# License: GPL 
+# Author: Steven Shiau <steven _at_ clonezilla org>
+# Description: Program to add a virtual network device.
+
+# Load DRBL setting and functions
+# Setting
+# Source function library.
+[ -f /etc/rc.d/init.d/functions ] && . /etc/rc.d/init.d/functions
+
+# Load DRBL setting and functions
+DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/usr/share/drbl}"
+
+. $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
+
+#
+USAGE() {
+    echo "$ocs - To add a virtual network interface"
+    echo "Usage:"
+    echo "To run $ocs:"
+    echo "$ocs NET_INTERFACE VIR_NET_INTERFACE"
+    echo "NET_INTERFACE is the existing physical network device which the virtual network device will be bound to"
+    echo "VIR_NET_INTERFACE is the virtual network device name" 
+    echo "Ex:"
+    echo "To add a virtual network device drblvir0 on existing network card \"eth1\", run:"
+    echo "   $ocs eth1 drblvir0"
+    echo
+} # end of USAGE
+
+####################
+### Main program ###
+####################
+
+ocs_file="$0"
+ocs=`basename $ocs_file`
+#
+while [ $# -gt 0 ]; do
+ case "$1" in
+   -*)     echo "${0}: ${1}: invalid option" >&2
+           USAGE >& 2
+           exit 2 ;;
+   *)      break ;;
+ esac
+done
+
+phy_ethdev="$1"
+vir_netdev="$2"
+
+#
+if [ -z "$phy_ethdev" -o -z "$vir_netdev" ]; then
+  USAGE
+  exit 1
+fi
+random_MAC="$(LC_ALL=C echo -n 02; od -t x1 -An -N 5 /dev/urandom | tr ' ' ':')"
+if [ -n "$random_MAC" ]; then
+  ip link add link $phy_ethdev address $random_MAC $vir_netdev type macvlan mode bridge
+  ip link set $vir_netdev up
+fi
+
+if [ -e "/sys/class/net/$vir_netdev" ]; then
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_SUCCESS
+  echo "This virtual network device was created successfully: $vir_netdev"
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+  ip addr show $vir_netdev
+  exit 0
+else
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+  echo "Failed to create virtual network device: $vir_netdev!"
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+  echo "$msg_program_stop!"
+  my_ocs_exit 1
+fi
