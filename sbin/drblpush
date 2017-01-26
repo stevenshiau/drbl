@@ -376,6 +376,11 @@ sub interactive_mode {
 	my @range_start;
 	my @range_end;
 	my @MAC_file;
+	my $one_ethernet_port_server="no";
+	my $use_proxy_dhcp="no";
+	my $DHCPOFFER_siaddr="";
+	my $DHCPOFFER_yiaddr="";
+	my $DHCPOFFER_eth="";
 
         # Try to get setting from system 
         chomp($dnsdomain_sys=`dnsdomainname`);
@@ -534,6 +539,7 @@ sub interactive_mode {
             }
 	    print "$lang_deploy{\"the_eth_port_you_choose_for_wan\"}: ".
 	          colored ("$pub_port_NAT\n", "$color_warn");
+            # Exclude uplink port, so @ethernet_sys will contain only ports connected to DRBL clients.
             @ethernet_sys = grep { $_ ne "$pub_port_NAT" } @ethernet_sys;
 	    if (@ethernet_sys) {
               print "$lang_deploy{\"ethernet_port_for_DRBL\"} ".
@@ -557,6 +563,7 @@ sub interactive_mode {
 		} elsif ($public_ip_port) {
                   @ethernet_sys = ("$public_ip_port");
 		}
+		$one_ethernet_port_server="yes";
                 last SWITCH;
               };
               /.*/ && do {
@@ -573,53 +580,137 @@ sub interactive_mode {
 	    exit;
 	  }
 	  # Checking if class A/B private IP ? If so, set warning about multicast clonezilla
-          for($i=0;$i<=$#ethernet_sys;$i++) {
-	    my $ethx="$ethernet_sys[$i]";
-            my $IP=`drbl-get-ipadd $ethx`;
-	    chomp($IP);
-	    if ( "$IP" =~ /^(172\.(1[6-9]|2[0-9]|3[01])\..*|10\..*)/ ) {
-              # Class A: 10.0.0.0 - 10.255.255.255
-              # Class B: 172.16.0.0  - 172.31.255.255 
+          # for($i=0;$i<=$#ethernet_sys;$i++) {
+	  #  my $ethx="$ethernet_sys[$i]";
+          #  my $IP=`drbl-get-ipadd $ethx`;
+	  #  chomp($IP);
+	  #  if ( "$IP" =~ /^(172\.(1[6-9]|2[0-9]|3[01])\..*|10\..*)/ ) {
+          #    # Class A: 10.0.0.0 - 10.255.255.255
+          #    # Class B: 172.16.0.0  - 172.31.255.255 
+	  #    print "$delimiter{\"star_line\"}\n";
+	  #    #print "Found class A or B private IP \"$IP\" in $ethx for your DRBL system! ".
+	  #    #colored ("$lang_deploy{\"class_c_IP_for_multicast_clonezilla\"}\n", "$color_warn");
+	  #    #print "$delimiter{\"star_line\"}\n".
+	  #    #      "$lang_deploy{\"press_enter_to_continue\"}";
+	  #    #      chomp($line=<STDIN>);
+          #  }
+	  #};
+	  #print "$delimiter{\"star_line\"}\n";
+        }
+        if ($one_ethernet_port_server eq "yes") {
+	  # Ask if proxy DHCP when there is existing DHCP
+	  # Detect DHCP service first
+	  my $detect_dhcp_rlt1=256;
+          while ($detect_dhcp_rlt1 == 256) { 
+	     $detect_dhcp_rlt1=system("drbl-find-dhcp-srv -i $ethernet_sys[0] $drblpush_wd/dhcp-detect.tmp");
+	     if ($detect_dhcp_rlt1 == 256) { 
+               print "\n$delimiter{\"star_line\"}\n";
+	       print colored ("$lang_deploy{\"failed_to_detect_dhcp_service\"}\n", "$color_warn").
+                              "$lang_deploy{\"do_you_want_to_try_it_again\"}\n".
+                              "[Y/n] ";
+	       chomp(my $try_again=<STDIN>);
+	       if ($try_again eq "n" || $try_again eq "N" || $try_again eq "no" || $try_again eq "NO") {
+	         $detect_dhcp_rlt1=0;
+               }
+             }
+          }
+	  # Only when $drblpush_wd/dhcp-detect.tmp exists we will continue this
+	  chomp($DHCPOFFER_eth=`. $drblpush_wd/dhcp-detect.tmp; echo \$DHCPOFFER_eth`);
+	  chomp($DHCPOFFER_siaddr=`. $drblpush_wd/dhcp-detect.tmp; echo \$DHCPOFFER_siaddr`);
+	  chomp($DHCPOFFER_yiaddr=`. $drblpush_wd/dhcp-detect.tmp; echo \$DHCPOFFER_yiaddr`);
+	  if ($DHCPOFFER_siaddr) {
 	      print "$delimiter{\"star_line\"}\n";
-	      #print "Found class A or B private IP \"$IP\" in $ethx for your DRBL system! ".
-	      #colored ("$lang_deploy{\"class_c_IP_for_multicast_clonezilla\"}\n", "$color_warn");
-	      #print "$delimiter{\"star_line\"}\n".
-	      #      "$lang_deploy{\"press_enter_to_continue\"}";
-	      #      chomp($line=<STDIN>);
-            }
-	  };
-	  print "$delimiter{\"star_line\"}\n";
+	      print colored ("$lang_deploy{\"found_dhcp_service_on_nic\"}: $DHCPOFFER_eth\n", "$color_warn").
+                    colored ("$lang_deploy{\"do_you_want_to_lease_ip_addr_from_existing_dhcp_srv\"}: $DHCPOFFER_siaddr\n", "$color_warn").
+	            colored ("$lang_deploy{\"will_use_available_ip_addr_from_dhcp_srv\"}: $DHCPOFFER_yiaddr\n", "$color_warn").
+	            colored ("$lang_deploy{\"note_you_have_to_make_sure_enough_no_of_ip_addr\"}\n", "$color_warn").
+	            "[Y/n] ";
+              chomp($use_proxy_dhcp=<STDIN>);
+	  }
+          SWITCH: for ($use_proxy_dhcp) {
+            /^n$|^no$/i && do {
+	      # Format the variable use_proxy_dhcp
+	      $use_proxy_dhcp="no";
+	      print colored ("Do not use proxy DHCP.\n","$color_warn");
+              last SWITCH;
+            };
+            /.*/ && do {
+	      # Format the variable use_proxy_dhcp
+	      $use_proxy_dhcp="yes";
+	      print colored ("Use proxy DHCP. Adding virtual network drblvir0...\n","$color_warn");
+	      system("drbl-add-vir-netdev $ethernet_sys[0] drblvir0");
+	      my $detect_dhcp_rlt2=256;
+              while ($detect_dhcp_rlt2 == 256) { 
+	         $detect_dhcp_rlt2=system("drbl-find-dhcp-srv -i drblvir0 $drblpush_wd/dhcp-detect-vir0.txt");
+	         if ($detect_dhcp_rlt2 == 256) { 
+                   print "\n$delimiter{\"star_line\"}\n";
+	           print colored ("$lang_deploy{\"failed_to_detect_dhcp_service\"}\n", "$color_warn").
+                                  "$lang_deploy{\"do_you_want_to_try_it_again\"}\n".
+                                  "[Y/n] ";
+	           chomp(my $try_again=<STDIN>);
+	           if ($try_again eq "n" || $try_again eq "N" || $try_again eq "no" || $try_again eq "NO") {
+	             $detect_dhcp_rlt2=0;
+                   }
+                 }
+              }
+              # Reset variables before loading them.
+              $DHCPOFFER_eth="";
+              $DHCPOFFER_siaddr="";
+              $DHCPOFFER_yiaddr="";
+	      chomp($DHCPOFFER_eth=`. $drblpush_wd/dhcp-detect-vir0.txt; echo \$DHCPOFFER_eth`);
+	      chomp($DHCPOFFER_siaddr=`. $drblpush_wd/dhcp-detect-vir0.txt; echo \$DHCPOFFER_siaddr`);
+	      chomp($DHCPOFFER_yiaddr=`. $drblpush_wd/dhcp-detect-vir0.txt; echo \$DHCPOFFER_yiaddr`);
+	      if ($DHCPOFFER_yiaddr) {
+	        chomp(my $vdev_inet_prefix=`LC_ALL=C ip -o -f inet addr show $ethernet_sys[0] | awk -F" " '{print \$4}' | awk -F"/" '{print \$2}'`);
+                system("ip addr add $DHCPOFFER_yiaddr/$vdev_inet_prefix dev drblvir0");
+		# TODO: check if new dirvir0 exists.
+		# TODO: Write system config file for virtual network card (Debian/Ubuntu, Fedora...)
+		# Put new virtual network card in $ethernet_sys
+  	        push @ethernet_sys, drblvir0;
+		# Since virtual network card is pushed, now we should remove $pub_port_NAT or $public_ip_port
+		if ($pub_port_NAT) {
+                  @ethernet_sys = grep { $_ ne "$pub_port_NAT" } @ethernet_sys;
+		} elsif ($public_ip_port) {
+                  @ethernet_sys = grep { $_ ne "$public_ip_port" } @ethernet_sys;
+		}
+	      }
+              last SWITCH;
+            };
+          }
         }
 
 # detect the mac address
-    print "$delimiter{\"star_line\"}\n".
-          "$lang_deploy{\"collect_MAC_prompt\"}\n".
-	  "[y/N] ";
-    chomp($line=<STDIN>);
-    SWITCH: for ($line) {
-	    /^y$|^yes$/i && do {
-		  $collect_mac="yes";
-                  print "$delimiter{\"star_line\"}\n".
-                        "$lang_deploy{\"ok_let_do_it\"}\n";
-                  my $whoiam = `LC_ALL=C id -nu`;
-                  chomp($whoiam);
-                  if ("$whoiam" eq "root") { 
-                    system("LC_ALL=C drbl-collect-mac -n -l $language @ethernet_sys");
-  	            print colored ("$lang_deploy{\"saved_mac_address_files_in_etc\"}\n", "$color_warn");
-                  }else{
-                     print "$lang_deploy{\"you_are_not_root\"},\n". 
-                           "$lang_word{\"please_enter\"} ". colored("$lang_word{\"root_passwd\"} ","$color_warn"). "to collect those MAC addresses...\n"; 
-                     my $su_rlt=system("LC_ALL=C su -c \"drbl-collect-mac @ethernet_sys\" root");
-                     while ($su_rlt == 256) { 
-                            $su_rlt=system("LC_ALL=C su -c \"drbl-collect-mac @ethernet_sys\" root");
-                     }
-                  }
-		  last SWITCH;
-	    };
-	    /.*/ && do {
-		  $collect_mac="no";
-		  last SWITCH;
-	    };
+    # Only when there are two or more ethernet ports we should collect MAC.
+    if ( $one_ethernet_port_server eq "no" ) {
+      print "$delimiter{\"star_line\"}\n".
+            "$lang_deploy{\"collect_MAC_prompt\"}\n".
+            "[y/N] ";
+      chomp($line=<STDIN>);
+      SWITCH: for ($line) {
+              /^y$|^yes$/i && do {
+          	  $collect_mac="yes";
+                    print "$delimiter{\"star_line\"}\n".
+                          "$lang_deploy{\"ok_let_do_it\"}\n";
+                    my $whoiam = `LC_ALL=C id -nu`;
+                    chomp($whoiam);
+                    if ("$whoiam" eq "root") { 
+                      system("LC_ALL=C drbl-collect-mac -n -l $language @ethernet_sys");
+                      print colored ("$lang_deploy{\"saved_mac_address_files_in_etc\"}\n", "$color_warn");
+                    }else{
+                       print "$lang_deploy{\"you_are_not_root\"},\n". 
+                             "$lang_word{\"please_enter\"} ". colored("$lang_word{\"root_passwd\"} ","$color_warn"). "to collect those MAC addresses...\n"; 
+                       my $su_rlt=system("LC_ALL=C su -c \"drbl-collect-mac @ethernet_sys\" root");
+                       while ($su_rlt == 256) { 
+                              $su_rlt=system("LC_ALL=C su -c \"drbl-collect-mac @ethernet_sys\" root");
+                       }
+                    }
+          	  last SWITCH;
+              };
+              /.*/ && do {
+          	  $collect_mac="no";
+          	  last SWITCH;
+              };
+      }
     }
 
     print "$delimiter{\"star_line\"}\n".
@@ -658,11 +749,16 @@ sub interactive_mode {
           $ip_sys_prefix[$i]="$ip_sys_sp[0].$ip_sys_sp[1].$ip_sys_sp[2]";
           $ip_sys[$i]=$ip_sys_tmp;
 
-  	  print "$lang_deploy{\"fix_eth_IP_prompt\"} ".
-	         colored("$ethx","$color_warn").
-		 " ?\n".
-	  "[y/N] ";
-	  chomp($MAC=<STDIN>);
+	  if ( $use_proxy_dhcp eq "no" ) {
+	    # Only when it's not proxy mode we will ask about using fixed IP address
+  	    print "$lang_deploy{\"fix_eth_IP_prompt\"} ".
+	           colored("$ethx","$color_warn").
+	           " ?\n".
+	    "[y/N] ";
+	    chomp($MAC=<STDIN>);
+	  } else { 
+	    $MAC="no";
+	  }
           my $mac_f_tmp="";
 	  if ($MAC eq "y" || $MAC eq "Y" || $MAC eq "yes" || $MAC eq "YES") {
             # User wants to fix the IP addresses for DRBL clients 
@@ -1581,14 +1677,21 @@ sub drbl_server_parse {
   print "The hostname_prefix from config file: \"$hostname_prefix\".\n" if $verbosity >= 2;
 
   # Try to get setting from system also
-  my $nameserver_sys=`LC_ALL=C grep ^nameserver $DNS_sys | awk -F\" \" '{print \$2}'`;
-  chomp $nameserver_sys;  # clean the last \n before substitute them as ","
+  chomp(my $nameserver_sys=`LC_ALL=C grep ^nameserver $DNS_sys | awk -F\" \" '{print \$2}'`);
   $nameserver_sys =~ s/\n/,/g;
   if ( "$nameserver_sys" eq "127.0.0.1" || "$nameserver_sys" eq "127.0.1.1"  ) {
     # On Ubuntu, dnsmasq with network-manager, the result might 127.0.0.1. We use nm-tool to get the real one
-    $nameserver_sys=`LC_ALL=C nm-tool -v 2>/dev/null | grep -i "DNS:" | awk -F " " '{print \$2}'`;
-    chomp $nameserver_sys;  # clean the last \n before substitute them as ","
+    # Ubuntu <= 14.04, use "nmcli dev list", while > 14.04, "nmcli dev show".
+    chomp($nameserver_sys=`LC_ALL=C nmcli dev show 2>&1 >/dev/null | grep -i "IP4.DNS" | awk -F " " '{print \$2}'`);
     $nameserver_sys =~ s/\n/,/g;
+    if ( ! $nameserver ) {
+      chomp($nameserver_sys=`LC_ALL=C nmcli dev list 2>&1 >/dev/null | grep -i "IP4.DNS" | awk -F " " '{print \$2}'`);
+      $nameserver_sys =~ s/\n/,/g;
+    }
+    if ( ! $nameserver ) {
+      # Last posibility, dnsmasq
+      chomp($nameserver_sys=`LC_ALL=C grep ^nameserver /var/run/dnsmasq/resolv.conf 2>/dev/null | awk -F\" \" '{print \$2}'`);
+    }
   }
   print "nameserver in system is $nameserver_sys\n" if $verbosity >= 2;
 
@@ -2039,6 +2142,9 @@ done
 # in the drblpush DRBL server.
 
 cp -f dhcpd.conf $DHCPDCONF_DIR/
+# Generate the dnsmasq config file
+gen_dnsmasq_cfg $dnsmasq_cfg
+
 cp -f mkswapfile $SYSCONF_PATH/mkswapfile
 
 for icfg in yp.conf netgroup; do
@@ -4497,6 +4603,14 @@ else
   [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
   echo $msg_drbl_related_services_not_added_started
   [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+fi
+
+#
+if [ "$use_existing_dhcp_srv" = "yes" ]; then
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+  echo "Use existing DHCP service, so now enable proxy DHCP mode..."
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+  drbl-proxy-dhcp enable
 fi
 
 # set the boot prompt for clients if set
