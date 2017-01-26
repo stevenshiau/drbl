@@ -2287,6 +2287,8 @@ is_boot_from_live() {
 }
 #
 config_drbl_live_network(){
+  local eth_port_no configured_ip_no eth_port configured_port_list configured_ip_no 
+  local IP_no dhcp_detect_bond_tmp vdev_inet_prefix dhcp_find_rc
   # This function only works for Debian based network setting.
   # drbl_live_private_IP_alias_eth_def is global variable from drbl.conf.
   echo "Detecting the network status..."
@@ -2296,9 +2298,9 @@ config_drbl_live_network(){
     [ -n "$(LC_ALL=C route -n | grep -E "^0.0.0.0")" ] && config_gw_opt="--ignore-gw"
     [ -n "$(LC_ALL=C grep -E "^[[:space:]]*nameserver[[:space:]]+\b(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\b" /etc/resolv.conf 2>/dev/null)" ] && config_dns_opt="--ignore-dns"
     # find the configured ports, we will exclude them.
-    eth_ports="$(LC_ALL=C get-nic-devs)"
+    eth_port="$(LC_ALL=C get-nic-devs)"
     configured_port_list=""
-    for i in $eth_ports; do
+    for i in $eth_port; do
       if [ -n "$(LC_ALL=C drbl-get-ipadd $i)" ]; then
        configured_port_list="$configured_port_list $i"
       fi
@@ -2329,51 +2331,169 @@ config_drbl_live_network(){
     [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
     echo "$msg_program_stop"
     exit 1
-  elif [ "$IP_no" -eq 1 ]; then
-    if [ -z "$limit_pxe_drbl_client" ]; then
-      [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
-      echo "$msg_one_NIC_one_IP_limitation_prompt"
-      echo "$msg_if_lease_IP_add_to_pxe_etherboot_only"
-      [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
-      echo -n "[Y/n] "
-      read limit_pxe_drbl_client_ans
-      case "$limit_pxe_drbl_client_ans" in
-         n|N|[nN][oO]) limit_pxe_drbl_client="no" ;;
-         *) limit_pxe_drbl_client="yes" ;;
-      esac
-    else
-      case "$limit_pxe_drbl_client" in
-         n|N|[nN][oO]|y|Y|[yY][eE][sS]) true ;;
-         *) 
-            [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
-            echo "\"$limit_pxe_drbl_client\" is an unknown or unsupported option for limit_pxe_drbl_client."
-            [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
-            echo "$msg_program_stop"
-            exit 1
-            ;;
-      esac
-    fi
-    echo -n "$msg_only_one_IP_so_create_alias_IP "
-    alias_done="no"
-    # Get the NIC device name for the only one device
-    nic_dev_only="$(get-nic-devs | head -n 1)"
-    i="$drbl_live_private_IP_alias_eth_def"
-    while [ "$alias_done" = "no" ]; do
-      if ! ping -c 3 192.168.$i.254 &>/dev/null; then
-        ifconfig ${nic_dev_only}:1 192.168.$i.254 netmask 255.255.255.0
-        alias_done="yes"
-      else
-        i=$((i+1))
+  fi
+  if [ "$IP_no" -eq 1 ]; then
+    eth_port="$(LC_ALL=C get-nic-devs | head -n 1)"
+    dhcp_detect_bond_tmp="$(mktemp /tmp/dhcp_detect_bond_tmp.XXXXXX)"
+    dhcp_find_rc=1
+    while [ "$dhcp_find_rc" -ne 0 ]; do
+      drbl-find-dhcp-srv -i $eth_port $dhcp_detect_bond_tmp
+      dhcp_find_rc=$?
+      if [ "$dhcp_find_rc" -ne 0 ]; then
+        echo
+        echo "$msg_failed_to_find_any_dhcp_srv: $eth_port"
+	echo "$msg_do_u_want_to_do_it_again"
+	echo -n "[Y/n] "
+	read try_dhcp_again
+        case "$try_dhcp_again" in
+          n|N|[nN][oO])
+             echo "$msg_program_stop"
+             dhcp_find_rc=0
+             ;;
+          *)
+             echo "$msg_ok_let_do_it"
+             dhcp_find_rc=1
+             ;;
+        esac
       fi
     done
-    if ! egrep -e "^auto[[:space:]]+${nic_dev_only}:1" /etc/network/interfaces; then
-      cat <<-NET_END >> /etc/network/interfaces
+    . $dhcp_detect_bond_tmp
+    # Example for file dhcp_detect_bond_tmp:
+    # DHCPOFFER_eth="eth0"
+    # DHCPOFFER_siaddr="192.168.22.254"
+    # DHCPOFFER_yiaddr="192.168.22.3"
+    rm -f $dhcp_detect_bond_tmp
+    if [ -n "$DHCPOFFER_siaddr" ]; then
+      echo $msg_delimiter_star_line
+      echo "$msg_found_dhcp_service_on_nic: $DHCPOFFER_eth"
+      echo "$msg_do_you_want_to_lease_ip_addr_from_existing_dhcp_srv: $DHCPOFFER_siaddr"
+      echo "$msg_will_use_available_ip_addr_from_dhcp_srv: $DHCPOFFER_yiaddr"
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+      echo "$msg_note_you_have_to_make_sure_enough_no_of_ip_addr"
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+      echo -n "[Y/n] "
+      read use_existing_dhcp_srv_ans
+      case "$use_existing_dhcp_srv_ans" in
+         n|N|[nN][oO]) use_existing_dhcp_srv="no" ;;
+         *) use_existing_dhcp_srv="yes" ;;
+      esac
+    fi
+
+    if [ "$use_existing_dhcp_srv" = "yes" ]; then
+      # Add a virtual network device on physical net device
+      drbl-add-vir-netdev $eth_port drblvir0
+      echo "Leasing IP address for virtual device drblvir0..."
+      dhcp_detect_vir_tmp="$(mktemp /tmp/dhcp_detect_vir_tmp.XXXXXX)"
+      dhcp_find_rc=1
+      while [ "$dhcp_find_rc" -ne 0 ]; do
+        drbl-find-dhcp-srv -i drblvir0 $dhcp_detect_vir_tmp
+        dhcp_find_rc=$?
+        if [ "$dhcp_find_rc" -ne 0 ]; then
+          echo
+          echo "$msg_failed_to_find_any_dhcp_srv: drblvir0"
+          echo "$msg_do_u_want_to_do_it_again"
+          echo -n "[Y/n] "
+          read try_dhcp_again
+          case "$try_dhcp_again" in
+            n|N|[nN][oO])
+               echo "$msg_program_stop"
+               dhcp_find_rc=0
+               ;;
+            *)
+               echo "$msg_ok_let_do_it"
+               dhcp_find_rc=1
+               ;;
+          esac
+        fi
+      done
+      # Reset variables before loading them.
+      DHCPOFFER_eth=""
+      DHCPOFFER_siaddr=""
+      DHCPOFFER_yiaddr=""
+      . $dhcp_detect_vir_tmp
+      # Instead of using "dhclient -v drblvir0" which will set routing table, we do not want. Here we use static address without routing table.
+      if [ -n "$DHCPOFFER_yiaddr" ]; then
+        # Since check_dhcp does not provide netmask/inet prefix length info, borrow it from bond card's info
+	# ip command only accepts prefix length, not netmask. E.g.
+	# 2: eth0    inet 192.168.76.254/24 brd 192.168.76.255 scope global eth0...
+	vdev_inet_prefix="$(LC_ALL=C ip -o -f inet addr show $eth_port | awk -F" " '{print $4}' | awk -F"/" '{print $2}')"
+        ip addr add $DHCPOFFER_yiaddr/$vdev_inet_prefix dev drblvir0
+	# Only for Debian/Ubuntu
+        if ! grep -Eq "^auto[[:space:]]+drblvir0" /etc/network/interfaces; then
+        cat <<-NET_END >> /etc/network/interfaces
+auto drblvir0
+iface drblvir0 inet static
+	address $DHCPOFFER_yiaddr
+	netmask $vdev_inet_prefix
+NET_END
+        fi
+      else
+        [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+        echo "Failed to lease DHCP IP address for network interface drblvir0!"
+        [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+        echo "$msg_program_stop!"
+        my_ocs_exit 1
+      fi
+      # Write result for later use in drblpush.
+      if grep -Eq "^use_existing_dhcp_srv=.*" /etc/drbl/drbl.conf; then
+        perl -pi -e "s/^use_existing_dhcp_srv=.*/use_existing_dhcp_srv=yes # Modified by drbl-live/g" /etc/drbl/drbl.conf
+      else
+        echo "use_existing_dhcp_srv=yes # Modified by drbl-live" >> /etc/drbl/drbl.conf
+      fi
+      rm -f $dhcp_detect_vir_tmp
+    elif [ "$use_existing_dhcp_srv" = "no" ]; then
+      # Write result for later use in drblpush.
+      if grep -Eq "^use_existing_dhcp_srv=.*" /etc/drbl/drbl.conf; then
+        perl -pi -e "s/^use_existing_dhcp_srv=.*/use_existing_dhcp_srv=no # Modified by drbl-live/g" /etc/drbl/drbl.conf
+      else
+        echo "use_existing_dhcp_srv=no # Modified by drbl-live" >> /etc/drbl/drbl.conf
+      fi
+      if [ -z "$limit_pxe_drbl_client" ]; then
+        [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+        echo "$msg_one_NIC_one_IP_limitation_prompt"
+        echo "$msg_if_lease_IP_add_to_pxe_etherboot_only"
+        [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+        echo -n "[Y/n] "
+        read limit_pxe_drbl_client_ans
+        case "$limit_pxe_drbl_client_ans" in
+           n|N|[nN][oO]) limit_pxe_drbl_client="no" ;;
+           *) limit_pxe_drbl_client="yes" ;;
+        esac
+      else
+        case "$limit_pxe_drbl_client" in
+           n|N|[nN][oO]|y|Y|[yY][eE][sS]) true ;;
+           *) 
+              [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+              echo "\"$limit_pxe_drbl_client\" is an unknown or unsupported option for limit_pxe_drbl_client."
+              [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+              echo "$msg_program_stop"
+              exit 1
+              ;;
+        esac
+      fi
+      echo -n "$msg_only_one_IP_so_create_alias_IP "
+      alias_done="no"
+      # Get the NIC device name for the only one device
+      nic_dev_only="$(get-nic-devs | head -n 1)"
+      i="$drbl_live_private_IP_alias_eth_def"
+      while [ "$alias_done" = "no" ]; do
+        if ! ping -c 3 192.168.$i.254 &>/dev/null; then
+          ifconfig ${nic_dev_only}:1 192.168.$i.254 netmask 255.255.255.0
+          alias_done="yes"
+        else
+          i=$((i+1))
+        fi
+      done
+      if ! egrep -e "^auto[[:space:]]+${nic_dev_only}:1" /etc/network/interfaces; then
+        cat <<-NET_END >> /etc/network/interfaces
 auto ${nic_dev_only}:1
 iface ${nic_dev_only}:1 inet static
 	address 192.168.$i.254
 	netmask 255.255.255.0
 NET_END
+      fi
     fi
+
     echo "$msg_done!"
   else
     # More than one IP address, so it's not necessary to use alias IP address.
@@ -2381,6 +2501,7 @@ NET_END
     echo $msg_more_than_1_IP_some_for_DRBL_clients
     [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
   fi
+
   if [ -z "$(LC_ALL=C route -n | grep -E "^0.0.0.0")" ]; then
     [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
     echo "No default gateway was configured! Did you enter it or the input gateway is the correct one ?"
@@ -4409,3 +4530,44 @@ deploy_pxecfg_grubefi_files(){
     clean_stale_node_grub_efi_cfg
   fi
 } # end of deploy_pxecfg_grubefi_files
+#
+gen_dnsmasq_cfg() {
+  local srv_cfg="$1"
+  if [ -z "$srv_cfg" ]; then
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+    echo "No config file assigned in function gen_dnsmasq_cfg!"
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+    echo "$msg_program_stop"
+    exit 1
+  fi
+  # Generate dnsmasq.conf
+  cat <<-DNSMQSQ_END > $dnsmasq_cfg
+# Configured by DRBL
+port=0
+log-dhcp
+dhcp-no-override
+enable-tftp
+tftp-root=$pxecfg_pd
+DNSMQSQ_END
+
+  all_eth_dev="$(LC_ALL=C get-all-nic-ip -d)"
+  uplink_eth="$(LC_ALL=C get-all-nic-ip -u)"
+  for inet in $all_eth_dev; do
+    [ "$inet" = "$uplink_eth" ] && continue
+    ip="$(LC_ALL=C drbl-get-ipadd $inet)"
+    echo "dhcp-range=$ip,proxy" >> $dnsmasq_cfg
+  done
+  
+  cat <<-DNSMQSQ_END >> $dnsmasq_cfg 
+## PXEClient:Arch:00000
+pxe-service=X86PC, "Boot BIOS PXE", pxelinux.0
+
+## PXEClient:Arch:00007
+pxe-service=BC_EFI, "Boot UEFI BC", bootx64.efi
+
+## PXEClient:Arch:00009
+pxe-service=X86-64_EFI, "Boot UEFI X86-64", bootx64.efi
+
+pxe-prompt="Booting DRBL Client", 1
+DNSMQSQ_END
+} # end of gen_dnsmasq_cfg
