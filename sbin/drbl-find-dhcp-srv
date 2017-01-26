@@ -1,0 +1,149 @@
+#!/bin/bash
+# License: GPL 
+# Author: Steven Shiau <steven _at_ clonezilla org>
+# Description: Program to detect DHCP service.
+
+# Load DRBL setting and functions
+# Setting
+# Source function library.
+[ -f /etc/rc.d/init.d/functions ] && . /etc/rc.d/init.d/functions
+
+# Load DRBL setting and functions
+DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/usr/share/drbl}"
+
+. $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
+
+# Settings
+timeout_def="30"
+
+#
+USAGE() {
+    echo "$ocs - To detect DHCP service"
+    echo "Usage:"
+    echo "To run $ocs:"
+    echo "$ocs [OPTION] OUTPUT_FILE"
+    echo "Options:"
+    echo "-i, --interface DEV  Specify the ethernet dev for detecting DHCP service"
+    echo "-t, --timeout TIME   Specify the timeout (sec) for detecting DHCP service"
+    echo "OUTPUT_FILE is for saving the info, including: Ethernet card, DHCP server, available DHCP client. If no file is assigned, the results will be shown on stdout only."
+    echo "Ex:"
+    echo "To detect DHCP service on network card eth1, and output the results to file \"dhcp.txt\", run:"
+    echo "   $ocs -i eth1 dhcp.txt"
+    echo
+} # end of USAGE
+
+####################
+### Main program ###
+####################
+
+ocs_file="$0"
+ocs=`basename $ocs_file`
+#
+while [ $# -gt 0 ]; do
+ case "$1" in
+   -i|--interface) 
+           shift; 
+           if [ -z "$(echo $1 |grep ^-.)" ]; then
+             # skip the -xx option, in case 
+             eth_port="$1"
+             shift;
+           fi
+           [ -z "$eth_port" ] && USAGE && exit 1
+           ;;
+   -t|--timeout) 
+           shift; 
+           if [ -z "$(echo $1 |grep ^-.)" ]; then
+             # skip the -xx option, in case 
+             timeout="$1"
+             shift;
+           fi
+           [ -z "$timeout" ] && USAGE && exit 1
+           ;;
+   -*)     echo "${0}: ${1}: invalid option" >&2
+           USAGE >& 2
+           exit 2 ;;
+   *)      break ;;
+ esac
+done
+out_f="$1"
+
+#
+[ -z "$timeout" ] && timeout="$timeout_def"
+#
+ask_and_load_lang_set
+
+#
+if [ ! -e /usr/lib/nagios/plugins/check_dhcp ]; then
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+  echo "File /usr/lib/nagios/plugins/check_dhcp not found!"
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+  echo "Please install Nagios plugins. On Debian/Ubuntu system, the required package is monitoring-plugins-basic."
+  echo "$msg_program_stop!"
+  my_ocs_exit 1
+fi
+#
+if [ -z "$eth_port" ]; then
+  # Detect on all ethernet ports
+  eth_port="$(LC_ALL=C get-nic-devs)"
+else
+  # Check if device exists
+  for i in $eth_port; do
+    if [ ! -e /sys/class/net/$i ]; then
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+      echo "Interface $i not found!"
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+      echo "$msg_program_stop!"
+      my_ocs_exit 1
+    fi
+  done
+fi
+dhcp_req_result="$(mktemp /tmp/DHCP_REQ.XXXXXX)"
+rc=1
+for ieth in $eth_port; do
+  ip link set $ieth up
+  # Clean content first.
+  > $dhcp_req_result
+  echo -n "Detecting DHCP services... "
+  # TODO: check_dhcp might quit very quickly. How to run it until we find the results, but not keep it too long?
+  /usr/lib/nagios/plugins/check_dhcp -v -i $ieth > $dhcp_req_result &
+  time_left="$timeout"
+  while [ "$time_left" -ne 0 ]; do
+    echo -n "$time_left "
+    # Result is like:
+    # recv_result: 300
+    # receive_dhcp_packet() result: 300
+    # receive_dhcp_packet() source: 192.168.22.254
+    # Result=OK
+    # DHCPOFFER from IP address 192.168.22.254 via 192.168.22.254
+    # DHCPOFFER XID: 699683243 (0x29B451AB)
+    # DHCPOFFER chaddr: 000C2992D4D0
+    # DHCPOFFER ciaddr: 0.0.0.0
+    # DHCPOFFER yiaddr: 192.168.22.1
+    # DHCPOFFER siaddr: 192.168.22.254
+    # DHCPOFFER giaddr: 0.0.0.0
+    dhcp_srv_ip="$(LC_ALL=C grep -E "^DHCPOFFER siaddr:" $dhcp_req_result 2>/dev/null | awk -F":" '{print $2}')"
+    dhcp_client_ip="$(LC_ALL=C grep -E "^DHCPOFFER yiaddr:" $dhcp_req_result 2>/dev/null | awk -F":" '{print $2}')"
+    if [ -n "$dhcp_srv_ip" -a -n "$dhcp_client_ip" ]; then
+      dhcp_srv_ip="$(echo $dhcp_srv_ip)"  # Strip leading spaces.
+      dhcp_client_ip="$(echo $dhcp_client_ip)"  # Strip leading spaces.
+      echo
+      echo "Found DHCP service. Ethernet card, DHCP server, Available DHCP client: $ieth, $dhcp_srv_ip, $dhcp_client_ip"
+      if [ -n "$out_f" ]; then
+        cat <<-DHCP_END > $out_f
+DHCPOFFER_eth="$ieth"
+DHCPOFFER_siaddr="$dhcp_srv_ip"
+DHCPOFFER_yiaddr="$dhcp_client_ip"
+DHCP_END
+      fi
+      rc=0
+      break
+    fi
+    sleep 1
+    time_left="$((time_left - 1))" 
+  done
+done
+
+# Clean temp file
+rm -f $dhcp_req_result
+#
+exit $rc
