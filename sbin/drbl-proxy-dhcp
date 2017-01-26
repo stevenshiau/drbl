@@ -13,9 +13,6 @@ DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/usr/share/drbl}"
 
 . $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
 
-# Settings
-dnsmasq_cfg=/etc/dnsmasq.conf
-
 #
 USAGE() {
     echo "$ocs - To enable or disable DHCP relay/proxy mode"
@@ -60,36 +57,7 @@ enable_proxy_dhcp() {
   systemctl disable $DHCP_SRV_NAME
   systemctl disable $TFTPD_SRVNAME
   
-  # Generate dnsmasq.conf
-  cat <<-DNSMQSQ_END > $dnsmasq_cfg
-# Configured by DRBL
-port=0
-log-dhcp
-dhcp-no-override
-enable-tftp
-tftp-root=$pxecfg_pd
-DNSMQSQ_END
-
-  all_eth_dev="$(LC_ALL=C get-all-nic-ip -d)"
-  uplink_eth="$(LC_ALL=C get-all-nic-ip -u)"
-  for inet in $all_eth_dev; do
-    [ "$inet" = "$uplink_eth" ] && continue
-    ip="$(LC_ALL=C drbl-get-ipadd $inet)"
-    echo "dhcp-range=$ip,proxy" >> $dnsmasq_cfg
-  done
-  
-  cat <<-DNSMQSQ_END >> $dnsmasq_cfg 
-## PXEClient:Arch:00000
-pxe-service=X86PC, "Boot BIOS PXE", pxelinux.0
-
-## PXEClient:Arch:00007
-pxe-service=BC_EFI, "Boot UEFI BC", bootx64.efi
-
-## PXEClient:Arch:00009
-pxe-service=X86-64_EFI, "Boot UEFI X86-64", bootx64.efi
-
-pxe-prompt="Booting DRBL Client", 1
-DNSMQSQ_END
+  gen_dnsmasq_cfg $dnsmasq_cfg
 
   # Disable DHCP server name checking
   echo $msg_delimiter_star_line
