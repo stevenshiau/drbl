@@ -2333,9 +2333,14 @@ config_drbl_live_network(){
     exit 1
   fi
   if [ "$IP_no" -eq 1 ]; then
+    echo $msg_delimiter_star_line
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+    echo "Only one network interface was found and configured."
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
     eth_port="$(LC_ALL=C get-nic-devs | head -n 1)"
     dhcp_detect_bond_tmp="$(mktemp /tmp/dhcp_detect_bond_tmp.XXXXXX)"
     dhcp_find_rc=1
+    echo "Trying to find if existing DHCP service available on local network via ${eth_port}..."
     while [ "$dhcp_find_rc" -ne 0 ]; do
       drbl-find-dhcp-srv -i $eth_port $dhcp_detect_bond_tmp
       dhcp_find_rc=$?
