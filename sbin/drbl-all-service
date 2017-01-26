@@ -140,10 +140,34 @@ if [ -n "$(echo $drbl_service | grep -Ew nfs-kernel-server)" -a \
      -n "$(echo $drbl_service | grep -Ew nfs-server)" ]; then
   drbl_service="$(echo $drbl_service | sed -r -e "s|[[:space:]]*nfs-kernel-server||")"
 fi
-# tftp is a pseudo service (depending on xinetd) in CentOS7 
+# tftp is a pseudo service (depending on xinetd) in CentOS 7
 if [ -n "$(echo $drbl_service | grep -Ew "[[:space:]]*tftp" |\
   grep -Ew "[[:space:]]*xinetd")" ]; then
   drbl_service="$(echo $drbl_service | sed -r -e "s|[[:space:]]*tftp||")"
+fi
+
+# Final decision for the services
+if [ "$use_existing_dhcp_srv" = "yes" ]; then
+  # Use dnsmasq to provide dhcp and tftp services.
+  drbl_service="$(echo "$drbl_service" | sed -e "s/$DHCP_SRV_NAME//g" \
+		  -e "s/tftpd-hpa//")" 
+  # Disable conflicting services, while later dnsmasq will be enabled.
+  systemctl disable $DHCP_SRV_NAME
+  service $DHCP_SRV_NAME stop
+  if [ -e /etc/debian_version ]; then
+    systemctl disable tftpd-hpa
+    service tftpd-hpa stop
+  else
+    # RH-like & SuSE
+    perl -p -i -e "s/disable.*=.*/disable                 = yes/g" /etc/xinetd.d/tftp 
+    service xinetd restart
+  fi
+else
+  # Use dhcpd and tftpd
+  # Disable conflicting service, while later dhcpd and tftpd will be enabled.
+  drbl_service="$(echo "$drbl_service" | sed -e "s/dnsmasq//g")"
+  systemctl disable dnsmasq
+  service dnsmasq stop
 fi
 
 #
