@@ -74,7 +74,7 @@ $lang_charset = 'iso-8859-1';
    but_not_private_IP_or_configured => 'but it\'s not private IP, not well configured, or not up now!!!',
    enter_public_IP_for_the_client => "Enter the public IP for this client",
    its_IP_in_DRBL_is => "Its IP in DRBL is",
-   wrong_entered_IP => "The IP you entered is wrong, please enter it again!",
+   wrong_entered_IP => "The IP address you entered is wrong, please enter it again!",
    enter_gateway_for_client => "Enter the gateway for this client",
    enter_netmask_for_client => "Enter the netmask for this client",
    wrong_entered_netmask => "The NETMASK you entered is wrong, please enter it again!",
@@ -249,5 +249,12 @@ $lang_charset = 'iso-8859-1';
    which_live_client_cpu_mode_for_ubuntu => "What's the CPU arch for the clients when running Clonezilla job with Clonezilla live?\n[0]: i386\n[1]: amd64\nIf unsure, choose i386.",
    live_client_branch_set=> "The Clonezilla live branch is chosen as",
    live_client_cpu_arch_is_set => "The CPU arch for clients when running Clonezilla job",
+   # Tag on 2017/01/26
+   found_dhcp_service_on_nic => "Found DHCP service on the network interface",
+   do_you_want_to_lease_ip_addr_from_existing_dhcp_srv => "Do you want to lease IP address from the existing DHCP service? The DHCP server IP address is",
+   will_use_available_ip_addr_from_dhcp_srv => "'If so, we will use the available IP address leased from DHCP server. If not, we will run a DHCP service in this machine, which might conflict with the existing one. Therefore it is recommended to choose yes.",
+   note_you_have_to_make_sure_enough_no_of_ip_addr => "//NOTE// If you choose yes, you have to make sure your DHCP server provides enough number of IP address for all the clients.",
+   failed_to_detect_dhcp_service => "Failed to find any DHCP service on this network card",
+   do_you_want_to_try_it_again => "Do you want to try it again?",
    mark_the_end_of_lang =>"."
    );

@@ -257,5 +257,12 @@
    which_live_client_cpu_mode_for_ubuntu => "當使用Clonezilla live來執行Clonezilla的工作時，用戶端的CPU架構要選用那一種?\n[0]: i386\n[1]: amd64\n如果不確認，請選用i386.",
    live_client_branch_set=> "Clonezilla live分類選定為",
    live_client_cpu_arch_is_set => "用戶端執行Clonezilla的工作時，選用的CPU架構是",
+   # Tag on 2017/01/26
+   found_dhcp_service_on_nic => "在這張網卡上有發現DHCP服務",
+   do_you_want_to_lease_ip_addr_from_existing_dhcp_srv => "你是否要使用區域網路中>現有的DHCP服務? 該DHCP伺服器的IP位址是",
+   will_use_available_ip_addr_from_dhcp_srv => "如果選擇是，我們將使用從現有的DHCP服務取得的IP位址。若選擇否，我們將在此機器另外跑一個DHCP服務，不過此服務可能會與現有的DHCP服務相衝突。因此建議選擇使用現有的DHCP服務。",
+   note_you_have_to_make_sure_enough_no_of_ip_addr => "//注意// 若選擇是，你必須確認現有的DHCP服務提供足夠多的IP位址給用戶端機器使用。",
+   failed_to_detect_dhcp_service => "無法在此張網卡找到任何DHCP服務",
+   do_you_want_to_try_it_again => "你是否要再試一次?",
    mark_the_end_of_lang =>"."
    );

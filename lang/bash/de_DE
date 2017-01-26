@@ -1034,3 +1034,9 @@ msg_warning_selinux_is_enabled='Warning! SELinux on this system is enabled! If y
 msg_bittorent_restore="bittorrent restore"
 # Tag on 2017/01/03
 msg_ocs_param_noabo='Image not only accessible by owner'
+# Tag on 2017/01/24
+msg_found_dhcp_service_on_nic='Found DHCP service on this network interface'
+msg_do_you_want_to_lease_ip_addr_from_existing_dhcp_srv='Do you want to lease IP address from the existing DHCP service? The DHCP server IP address is'
+msg_will_use_available_ip_addr_from_dhcp_srv='If so, we will use the available IP address leased from DHCP server. If not, we will run a DHCP service in this machine, which might conflict with the existing one. Therefore it is recommended to choose yes.'
+msg_note_you_have_to_make_sure_enough_no_of_ip_addr='//NOTE// If you choose "yes", you have to make sure your DHCP server provides enough number of IP address for all the clients.'
+msg_failed_to_find_any_dhcp_srv='Failed to find any DHCP service on this network card'

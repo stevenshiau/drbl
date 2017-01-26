@@ -2367,7 +2367,7 @@ config_drbl_live_network(){
       echo $msg_delimiter_star_line
       echo "$msg_found_dhcp_service_on_nic: $DHCPOFFER_eth"
       echo "$msg_do_you_want_to_lease_ip_addr_from_existing_dhcp_srv: $DHCPOFFER_siaddr"
-      echo "$msg_will_use_available_ip_addr_from_dhcp_srv: $DHCPOFFER_yiaddr"
+      echo "$msg_will_use_available_ip_addr_from_dhcp_srv"
       [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
       echo "$msg_note_you_have_to_make_sure_enough_no_of_ip_addr"
       [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
