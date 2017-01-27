@@ -4538,6 +4538,7 @@ deploy_pxecfg_grubefi_files(){
 #
 gen_dnsmasq_cfg() {
   local srv_cfg="$1"
+  local dnsmasq_v pxelinux_fn
   if [ -z "$srv_cfg" ]; then
     [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
     echo "No config file assigned in function gen_dnsmasq_cfg!"
@@ -4562,10 +4563,22 @@ DNSMQSQ_END
     ip="$(LC_ALL=C drbl-get-ipadd $inet)"
     echo "dhcp-range=$ip,proxy" >> $dnsmasq_cfg
   done
+
+  # Older dnsmasq (<2.75) will automatically append ".0" to pxelinux
+  dnsmasq_v="$(query_pkg_ver dnsmasq)"
+  if [ "$dnsmasq_v" \> "2.75" -o "$dnsmasq_v" = "2.75" ]; then
+    pxelinux_fn="pxelinux.0"
+  else
+    pxelinux_fn="pxelinux"
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+    echo "Warning!"
+    echo "Package dnsmasq is too old. It's recommended to use version >= 2.75."
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+  fi
   
   cat <<-DNSMQSQ_END >> $dnsmasq_cfg 
 ## PXEClient:Arch:00000
-pxe-service=X86PC, "Boot BIOS PXE", pxelinux.0
+pxe-service=X86PC, "Boot BIOS PXE", $pxelinux_fn
 
 ## PXEClient:Arch:00007
 pxe-service=BC_EFI, "Boot UEFI BC", bootx64.efi
@@ -4576,3 +4589,24 @@ pxe-service=X86-64_EFI, "Boot UEFI X86-64", bootx64.efi
 pxe-prompt="Booting DRBL Client", 1
 DNSMQSQ_END
 } # end of gen_dnsmasq_cfg
+#
+query_pkg_ver() {
+  local pkg_ rc
+  pkg_="$1"
+  if [ -z $"pkg_" ]; then
+    return 1
+  fi
+  if [ -e /etc/debian_version ]; then
+    # Debian, Ubuntu
+    ver_="$(LC_ALL=C dpkg-query -W -f='${Version}\n' ${pkg_} 2>/dev/null)"
+    rc=$?
+  else
+    # Fedora, CentOS, RHEL, SuSE...
+    ver_="$(LC_ALL=C rpm -q --qf "%{VERSION}\n" ${pkg_} 2>/dev/null)"
+    rc=$?
+  fi
+  if [ "$rc" -eq 0 ]; then
+    echo "$ver_"
+  fi
+  return $rc
+} # end of query_pkg_ver
