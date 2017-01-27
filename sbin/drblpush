@@ -661,10 +661,11 @@ sub interactive_mode {
 	      chomp($DHCPOFFER_siaddr=`. $drblpush_wd/dhcp-detect-vir0.txt; echo \$DHCPOFFER_siaddr`);
 	      chomp($DHCPOFFER_yiaddr=`. $drblpush_wd/dhcp-detect-vir0.txt; echo \$DHCPOFFER_yiaddr`);
 	      if ($DHCPOFFER_yiaddr) {
-	        chomp(my $vdev_inet_prefix=`LC_ALL=C ip -o -f inet addr show $ethernet_sys[0] | awk -F" " '{print \$4}' | awk -F"/" '{print \$2}'`);
+	        chomp(my $vdev_inet_prefix=`LC_ALL=C ip -o -f inet addr show $ethernet_sys[0] | awk -F" " '{print \$4}' | awk -F"/" '{print \$2}' | head -n 1`);
                 system("ip addr add $DHCPOFFER_yiaddr/$vdev_inet_prefix dev drblvir0");
 		# TODO: check if new dirvir0 exists.
 		# TODO: Write system config file for virtual network card (Debian/Ubuntu, Fedora...)
+                system("perl -p -i -e \"s/^use_existing_dhcp_srv=.*/use_existing_dhcp_srv=yes/g\" $drbl_syscfg/drbl.conf");
 		# Put new virtual network card in $ethernet_sys
   	        push @ethernet_sys, drblvir0;
 		# Since virtual network card is pushed, now we should remove $pub_port_NAT or $public_ip_port
