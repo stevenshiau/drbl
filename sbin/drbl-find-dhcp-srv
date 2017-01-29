@@ -228,6 +228,7 @@ for ieth in $eth_port; do
     echo ""
     echo "Trying another method, i.e., Nagios method..."
     get_dhcpsrv_info_from_nagios $ieth $dhcp_req_result
+    rc=$?
   fi
 done
 
