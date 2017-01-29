@@ -22,8 +22,8 @@ USAGE() {
     echo "NET_INTERFACE is the existing physical network device which the virtual network device will be bound to"
     echo "VIR_NET_INTERFACE is the virtual network device name" 
     echo "Ex:"
-    echo "To add a virtual network device drblvir0 on existing network card \"eth1\", run:"
-    echo "   $ocs eth1 drblvir0"
+    echo "To add a virtual network device drbl0 on existing network card \"eth1\", run:"
+    echo "   $ocs eth1 drbl0"
     echo
 } # end of USAGE
 
@@ -53,7 +53,8 @@ if [ -z "$phy_ethdev" -o -z "$vir_netdev" ]; then
 fi
 random_MAC="$(LC_ALL=C echo -n 02; od -t x1 -An -N 5 /dev/urandom | tr ' ' ':')"
 if [ -n "$random_MAC" ]; then
-  ip link add link $phy_ethdev address $random_MAC $vir_netdev type macvlan mode bridge
+  ip link add link $phy_ethdev name $vir_netdev address $random_MAC type macvlan mode bridge
+  ip link set $phy_ethdev promisc on
   ip link set $vir_netdev up
 fi
 
