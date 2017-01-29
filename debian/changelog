@@ -1,3 +1,9 @@
+drbl (2.23.15-drbl1) unstable; urgency=medium
+
+  * Bug fixed: return code fixed in drbl-find-dhcp-srv.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sun, 29 Jan 2017 23:01:37 +0800
+
 drbl (2.23.14-drbl1) unstable; urgency=medium
 
   * Add nmap mechanism as the primary method to detect DHCP service.

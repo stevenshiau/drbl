@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.23.14
+Version:	2.23.15
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Sun Jan 29 2017 Steven Shiau <steven _at_ nchc org tw> 2.23.15-drbl1
+  - Bug fixed: return code fixed in drbl-find-dhcp-srv.
+
 * Sun Jan 29 2017 Steven Shiau <steven _at_ nchc org tw> 2.23.14-drbl1
   - Add nmap mechanism as the primary method to detect DHCP service.
   - Change macvlan device name to drbl0 from drblvir0.
