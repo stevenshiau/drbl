@@ -2288,7 +2288,7 @@ is_boot_from_live() {
 #
 config_drbl_live_network(){
   local eth_port_no configured_ip_no eth_port configured_port_list configured_ip_no 
-  local IP_no dhcp_detect_bond_tmp vdev_inet_prefix dhcp_find_rc
+  local IP_no dhcp_detect_bond_tmp DHCPOFFER_netmask DHCPOFFER_prefix dhcp_find_rc
   # This function only works for Debian based network setting.
   # drbl_live_private_IP_alias_eth_def is global variable from drbl.conf.
   echo "Detecting the network status..."
@@ -2367,6 +2367,8 @@ config_drbl_live_network(){
     # DHCPOFFER_eth="eth0"
     # DHCPOFFER_siaddr="192.168.22.254"
     # DHCPOFFER_yiaddr="192.168.22.3"
+    # DHCPOFFER_netmask="255.255.255.0"
+    # DHCPOFFER_prefix="24"
     rm -f $dhcp_detect_bond_tmp
     if [ -n "$DHCPOFFER_siaddr" ]; then
       echo $msg_delimiter_star_line
@@ -2386,16 +2388,16 @@ config_drbl_live_network(){
 
     if [ "$use_existing_dhcp_srv" = "yes" ]; then
       # Add a virtual network device on physical net device
-      drbl-add-vir-netdev $eth_port drblvir0
-      echo "Leasing IP address for virtual device drblvir0..."
+      drbl-add-vir-netdev $eth_port drbl0
+      echo "Leasing IP address for virtual device drbl0..."
       dhcp_detect_vir_tmp="$(mktemp /tmp/dhcp_detect_vir_tmp.XXXXXX)"
       dhcp_find_rc=1
       while [ "$dhcp_find_rc" -ne 0 ]; do
-        drbl-find-dhcp-srv -i drblvir0 $dhcp_detect_vir_tmp
+        drbl-find-dhcp-srv -i drbl0 $dhcp_detect_vir_tmp
         dhcp_find_rc=$?
         if [ "$dhcp_find_rc" -ne 0 ]; then
           echo
-          echo "$msg_failed_to_find_any_dhcp_srv: drblvir0"
+          echo "$msg_failed_to_find_any_dhcp_srv: drbl0"
           echo "$msg_do_u_want_to_do_it_again"
           echo -n "[Y/n] "
           read try_dhcp_again
@@ -2415,26 +2417,30 @@ config_drbl_live_network(){
       DHCPOFFER_eth=""
       DHCPOFFER_siaddr=""
       DHCPOFFER_yiaddr=""
+      DHCPOFFER_netmask=""
+      DHCPOFFER_prefix=""
       . $dhcp_detect_vir_tmp
-      # Instead of using "dhclient -v drblvir0" which will set routing table, we do not want. Here we use static address without routing table.
+      # Instead of using "dhclient -v drbl0" which will set routing table, we do not want. Here we use static address without routing table.
       if [ -n "$DHCPOFFER_yiaddr" ]; then
-        # Since check_dhcp does not provide netmask/inet prefix length info, borrow it from bond card's info
-	# ip command only accepts prefix length, not netmask. E.g.
-	# 2: eth0    inet 192.168.76.254/24 brd 192.168.76.255 scope global eth0...
-	vdev_inet_prefix="$(LC_ALL=C ip -o -f inet addr show $eth_port | awk -F" " '{print $4}' | awk -F"/" '{print $2}')"
-        ip addr add $DHCPOFFER_yiaddr/$vdev_inet_prefix dev drblvir0
+        if [ -z "$DHCPOFFER_prefix" ]; then
+          # Since check_dhcp does not provide netmask/inet prefix length info, borrow it from bond card's info
+	  # ip command only accepts prefix length, not netmask. E.g.
+	  # 2: eth0    inet 192.168.76.254/24 brd 192.168.76.255 scope global eth0...
+	  DHCPOFFER_prefix="$(LC_ALL=C ip -o -f inet addr show $eth_port | awk -F" " '{print $4}' | awk -F"/" '{print $2}')"
+        fi
+        ip addr add $DHCPOFFER_yiaddr/$DHCPOFFER_prefix dev drbl0
 	# Only for Debian/Ubuntu
-        if ! grep -Eq "^auto[[:space:]]+drblvir0" /etc/network/interfaces; then
+        if ! grep -Eq "^auto[[:space:]]+drbl0" /etc/network/interfaces; then
         cat <<-NET_END >> /etc/network/interfaces
-auto drblvir0
-iface drblvir0 inet static
+auto drbl0
+iface drbl0 inet static
 	address $DHCPOFFER_yiaddr
-	netmask $vdev_inet_prefix
+	netmask $DHCPOFFER_netmask
 NET_END
         fi
       else
         [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
-        echo "Failed to lease DHCP IP address for network interface drblvir0!"
+        echo "Failed to lease DHCP IP address for network interface drbl0!"
         [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
         echo "$msg_program_stop!"
         my_ocs_exit 1
