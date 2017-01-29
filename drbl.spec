@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.23.12
+Version:	2.23.14
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,18 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Sun Jan 29 2017 Steven Shiau <steven _at_ nchc org tw> 2.23.14-drbl1
+  - Add nmap mechanism as the primary method to detect DHCP service.
+  - Change macvlan device name to drbl0 from drblvir0.
+  - Add nmap to PKG_FROM_DBN_WHICH_OCS_LIVE_NEED and PKG_TO_QUERY in
+    drbl.conf.
+
+* Fri Jan 27 2017 Steven Shiau <steven _at_ nchc org tw> 2.23.13-drbl1
+  - Program drblpush should set use_existing_dhcp_srv in drbl.conf if
+    it enables proxy DHCP mode.
+  - Make proxy DHCP work for dnsmasq < 2.75 but give warning.
+  - Add monitoring-plugins-basic in PKG_TO_QUERY of drbl.conf.
+
 * Thu Jan 26 2017 Steven Shiau <steven _at_ nchc org tw> 2.23.12-drbl1
   - Add a mechanism to enable proxy DHCP as 1 NIC.
   - Bug fixed: "IPAPPEND 1" should not be global in pxelinux.cfg. 

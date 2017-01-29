@@ -1,3 +1,21 @@
+drbl (2.23.14-drbl1) unstable; urgency=medium
+
+  * Add nmap mechanism as the primary method to detect DHCP service.
+  * Change macvlan device name to drbl0 from drblvir0.
+  * Add nmap to PKG_FROM_DBN_WHICH_OCS_LIVE_NEED and PKG_TO_QUERY in
+    drbl.conf.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sun, 29 Jan 2017 22:47:06 +0800
+
+drbl (2.23.13-drbl1) unstable; urgency=medium
+
+  * Program drblpush should set use_existing_dhcp_srv in drbl.conf if
+    it enables proxy DHCP mode.
+  * Make proxy DHCP work for dnsmasq < 2.75 but give warning.
+  * Add monitoring-plugins-basic in PKG_TO_QUERY of drbl.conf.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 27 Jan 2017 22:16:47 +0800
+
 drbl (2.23.12-drbl1) unstable; urgency=medium
 
   * Add a mechanism to enable proxy DHCP as 1 NIC.
