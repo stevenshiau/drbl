@@ -380,6 +380,7 @@ sub interactive_mode {
 	my $use_proxy_dhcp="no";
 	my $DHCPOFFER_siaddr="";
 	my $DHCPOFFER_yiaddr="";
+	my $DHCPOFFER_prefix="";
 	my $DHCPOFFER_eth="";
 
         # Try to get setting from system 
@@ -637,11 +638,11 @@ sub interactive_mode {
             /.*/ && do {
 	      # Format the variable use_proxy_dhcp
 	      $use_proxy_dhcp="yes";
-	      print colored ("Use proxy DHCP. Adding virtual network drblvir0...\n","$color_warn");
-	      system("drbl-add-vir-netdev $ethernet_sys[0] drblvir0");
+	      print colored ("Use proxy DHCP. Adding virtual network drbl0...\n","$color_warn");
+	      system("drbl-add-vir-netdev $ethernet_sys[0] drbl0");
 	      my $detect_dhcp_rlt2=256;
               while ($detect_dhcp_rlt2 == 256) { 
-	         $detect_dhcp_rlt2=system("drbl-find-dhcp-srv -i drblvir0 $drblpush_wd/dhcp-detect-vir0.txt");
+	         $detect_dhcp_rlt2=system("drbl-find-dhcp-srv -i drbl0 $drblpush_wd/dhcp-detect-vir0.txt");
 	         if ($detect_dhcp_rlt2 == 256) { 
                    print "\n$delimiter{\"star_line\"}\n";
 	           print colored ("$lang_deploy{\"failed_to_detect_dhcp_service\"}\n", "$color_warn").
@@ -657,17 +658,21 @@ sub interactive_mode {
               $DHCPOFFER_eth="";
               $DHCPOFFER_siaddr="";
               $DHCPOFFER_yiaddr="";
+              $DHCPOFFER_prefix="";
 	      chomp($DHCPOFFER_eth=`. $drblpush_wd/dhcp-detect-vir0.txt; echo \$DHCPOFFER_eth`);
 	      chomp($DHCPOFFER_siaddr=`. $drblpush_wd/dhcp-detect-vir0.txt; echo \$DHCPOFFER_siaddr`);
 	      chomp($DHCPOFFER_yiaddr=`. $drblpush_wd/dhcp-detect-vir0.txt; echo \$DHCPOFFER_yiaddr`);
+	      chomp($DHCPOFFER_prefix=`. $drblpush_wd/dhcp-detect-vir0.txt; echo \$DHCPOFFER_prefix`);
 	      if ($DHCPOFFER_yiaddr) {
-	        chomp(my $vdev_inet_prefix=`LC_ALL=C ip -o -f inet addr show $ethernet_sys[0] | awk -F" " '{print \$4}' | awk -F"/" '{print \$2}' | head -n 1`);
-                system("ip addr add $DHCPOFFER_yiaddr/$vdev_inet_prefix dev drblvir0");
+	        if (!$DHCPOFFER_prefix) {
+	          chomp($DHCPOFFER_prefix=`LC_ALL=C ip -o -f inet addr show $ethernet_sys[0] | awk -F" " '{print \$4}' | awk -F"/" '{print \$2}' | head -n 1`);
+		}
+                system("ip addr add $DHCPOFFER_yiaddr/$DHCPOFFER_prefix dev drbl0");
 		# TODO: check if new dirvir0 exists.
 		# TODO: Write system config file for virtual network card (Debian/Ubuntu, Fedora...)
                 system("perl -p -i -e \"s/^use_existing_dhcp_srv=.*/use_existing_dhcp_srv=yes/g\" $drbl_syscfg/drbl.conf");
 		# Put new virtual network card in $ethernet_sys
-  	        push @ethernet_sys, drblvir0;
+  	        push @ethernet_sys, drbl0;
 		# Since virtual network card is pushed, now we should remove $pub_port_NAT or $public_ip_port
 		if ($pub_port_NAT) {
                   @ethernet_sys = grep { $_ ne "$pub_port_NAT" } @ethernet_sys;
