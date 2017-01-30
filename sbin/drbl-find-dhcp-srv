@@ -45,6 +45,10 @@ get_dhcpsrv_info_from_nagios() {
     echo "Variable d_result was not assigned in function get_dhcpsrv_info_from_nagios."
     exit 1
   fi
+  if [ ! -x /usr/lib/nagios/plugins/check_dhcp ]; then
+    echo "File /usr/lib/nagios/plugins/check_dhcp was not found. Skip Nagios method."
+    return 1
+  fi
   # TODO: check_dhcp might quit very quickly. How to run it until we find the results, but not keep it too long?
   /usr/lib/nagios/plugins/check_dhcp -v -i $eth_ > $d_result &
   time_left="$timeout"
@@ -64,6 +68,9 @@ get_dhcpsrv_info_from_nagios() {
     # DHCPOFFER giaddr: 0.0.0.0
     dhcp_srv_ip="$(LC_ALL=C grep -E "^DHCPOFFER siaddr:" $d_result 2>/dev/null | awk -F":" '{print $2}')"
     dhcp_client_ip="$(LC_ALL=C grep -E "^DHCPOFFER yiaddr:" $d_result 2>/dev/null | awk -F":" '{print $2}')"
+    # Strip the leading white spaces
+    dhcp_srv_ip="$(echo $dhcp_srv_ip)"
+    dhcp_client_ip="$(echo $dhcp_client_ip)"
     if [ -n "$dhcp_srv_ip" -a -n "$dhcp_client_ip" ]; then
       dhcp_srv_ip="$(echo $dhcp_srv_ip)"  # Strip leading spaces.
       dhcp_client_ip="$(echo $dhcp_client_ip)"  # Strip leading spaces.
@@ -100,6 +107,10 @@ get_dhcpsrv_info_from_nmap() {
     echo "Variable d_result was not assigned in function get_dhcpsrv_info_from_nmap."
     exit 1
   fi
+  if ! type nmap >/dev/null 2>&1; then
+    echo "Program nmap was not found. Skip nmap method."
+    return 1
+  fi
   LC_ALL=C nmap --script broadcast-dhcp-discover -e $eth_ > $d_result 2>&1 &
   time_left="$timeout"
   while [ "$time_left" -ne 0 ]; do
@@ -122,9 +133,13 @@ get_dhcpsrv_info_from_nmap() {
     dhcp_srv_ip="$(LC_ALL=C grep -E "^\|[[:space:]]*Server Identifier:" $d_result 2>/dev/null | awk -F":" '{print $2}')"
     dhcp_client_ip="$(LC_ALL=C grep -E "^\|[[:space:]]*IP Offered:" $d_result 2>/dev/null | awk -F":" '{print $2}')"
     dhcp_client_nm="$(LC_ALL=C grep -E "^\|[[:space:]]*Subnet Mask:" $d_result 2>/dev/null | awk -F":" '{print $2}')"
+    # Strip the leading white spaces
+    dhcp_srv_ip="$(echo $dhcp_srv_ip)"
+    dhcp_client_ip="$(echo $dhcp_client_ip)"
+    dhcp_client_nm="$(echo $dhcp_client_nm)"
     # convert netmask to prefix length
     if [ -n "$dhcp_client_nm" ]; then
-      dhcp_client_prefix="$(LC_ALL=C ipcalc 0.0.0.0 $dhcp_client_nm | awk -F" " '/^Netmask:/ {print $4}')"
+      dhcp_client_prefix="$(LC_ALL=C drbl-ipcalc 0.0.0.0 $dhcp_client_nm | awk -F" " '/^Netmask:/ {print $4}')"
     fi
     if [ -n "$dhcp_srv_ip" -a -n "$dhcp_client_ip" ]; then
       dhcp_srv_ip="$(echo $dhcp_srv_ip)"  # Strip leading spaces.
@@ -226,7 +241,7 @@ for ieth in $eth_port; do
   rc=$?
   if [ "$rc" -ne 0 ]; then
     echo ""
-    echo "Trying another method, i.e., Nagios method..."
+    echo "Trying another method, i.e., Nagios one..."
     get_dhcpsrv_info_from_nagios $ieth $dhcp_req_result
     rc=$?
   fi
