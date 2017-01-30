@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.23.15
+Version:	2.23.16
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,12 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Mon Jan 30 2017 Steven Shiau <steven _at_ nchc org tw> 2.23.16-drbl1
+  - Add more prompts in program drbl-find-dhcp-srv.
+  - Package dnsmasq should be included for DRBL live only, not for
+    Clonezilla live.
+  - Update perl language files about only_one_network_card_in_system.
+
 * Sun Jan 29 2017 Steven Shiau <steven _at_ nchc org tw> 2.23.15-drbl1
   - Bug fixed: return code fixed in drbl-find-dhcp-srv.
 

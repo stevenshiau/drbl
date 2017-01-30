@@ -1,3 +1,12 @@
+drbl (2.23.16-drbl1) unstable; urgency=medium
+
+  * Add more prompts in program drbl-find-dhcp-srv.
+  * Package dnsmasq should be included for DRBL live only, not for
+    Clonezilla live.
+  * Update perl language files about only_one_network_card_in_system.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 30 Jan 2017 17:26:30 +0800
+
 drbl (2.23.15-drbl1) unstable; urgency=medium
 
   * Bug fixed: return code fixed in drbl-find-dhcp-srv.
