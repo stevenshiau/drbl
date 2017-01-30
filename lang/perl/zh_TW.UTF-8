@@ -247,7 +247,6 @@
    drbl_server_as_NAT_server => "你是否要讓DRBL伺服器也能提供NAT服務(也就是一般俗稱的IP分享器功能)? 如果不要的話，DRBL用戶端電腦將無法連到網際網路.",
    drbl_server_is_NOT_NAT_server => "這台DRB伺服器未提供NAT服務(也就是一般俗稱的IP分享器功能)，DRBL用戶端電腦將無法連到網際網路.",
    both_drbl_clonezilla_are_none => "由於企鵝龍drbl與再生龍clonezilla模式都被指定為不使用，因而此系統只有提供一些基本的功能，例如netinstall(如果有安裝相關的程式的話)與drbl-sl!",
-   only_one_network_card_in_system => "///警告/// 在這台機器上只有找到一張有設定好的網路卡，我們不建議你這樣做。因為這台DRBL伺服器將會提供DHCP服務，只有一張網路卡可能會擾亂你現有的網路環境，特別是如果你已經有一個現存的DHCP服務和這張網卡透過網路交換器連接在一起。建議你至少使用兩張網路卡來避免這個問題。",
    are_you_sure_you_want_to_continue => "你確認要繼續執行?" ,
    # Tag on 2010/12/13
    which_clonezilla_mode_for_client => "本系統中，Clonezilla再生龍有4個模式可以選用:\n[0] 完全模式(Full clonezilla mode)，每個用戶端都有自己的/etc與/var (基於NFS).\n[1] 再生龍盒模式(Clonezilla box mode), 每個用戶端都使用tmpfs(以記憶體來當虛擬磁碟)的/etc與/var。此模式中，Clonezilla伺服器的負載與所需要的硬碟空間會少一些。但是請注意！這個模式中，用戶端電腦的系統設定檔並不會回存到伺服器中。所有開機後的系統設定只會使用一次然後關機後就消失!\n[2] 我不要使用再生龍.\n[3] 使用Clonezilla live當作用戶端做clonezilla工作時候的作業系統(測試中).\n你要選用哪一個模式?",
@@ -258,6 +257,7 @@
    live_client_branch_set=> "Clonezilla live分類選定為",
    live_client_cpu_arch_is_set => "用戶端執行Clonezilla的工作時，選用的CPU架構是",
    # Tag on 2017/01/26
+   only_one_network_card_in_system => "///警告/// 在這台機器上只有找到一張有設定好的網路卡。",
    found_dhcp_service_on_nic => "在這張網卡上有發現DHCP服務",
    do_you_want_to_lease_ip_addr_from_existing_dhcp_srv => "你是否要使用區域網路中>現有的DHCP服務? 該DHCP伺服器的IP位址是",
    will_use_available_ip_addr_from_dhcp_srv => "如果選擇是，我們將使用從現有的DHCP服務取得的IP位址。若選擇否，我們將在此機器另外跑一個DHCP服務，不過此服務可能會與現有的DHCP服務相衝突。因此建議選擇使用現有的DHCP服務。",

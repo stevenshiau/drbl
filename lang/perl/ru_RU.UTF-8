@@ -239,7 +239,6 @@ $lang_charset = 'iso-8859-1';
    drbl_server_as_NAT_server => "Вы хотите, чтобы DRBL сервер был NAT сервером? Если нет, DRBL клиент НЕ будет иметь доступ к Интернет",
    drbl_server_is_NOT_NAT_server => "Этот сервер DRBL НЕ предоставляет услугу NAT, так что ваши DRBL клиент НЕ будет иметь доступ к Интернет",
    both_drbl_clonezilla_are_none => "DRBL и Clonezilla недоступны, в систему доступны лишь весьма ограниченные функции (такие как netinstall, если вы установите эти необходимые файлы и drbl-sl) !",
-   only_one_network_card_in_system => "/// ВНИМАНИЕ /// Только одна настроенная сетевая карта была найдена в этой системе, это не рекомендуется, так как этот сервер DRBL предоставляет сервис DHCP, который может испортить вашей сетевой среде при наличии существующих услуг в DHCP сетевой среде, где эта сетевая карта подключена! Рекомендуется использовать как минимум две сетевые карты в этом сервере, чтобы избежать этой проблемы. ",
    are_you_sure_you_want_to_continue => "Вы уверены, что хотите продолжить?",
    # Tag on 2010/12/13
    which_clonezilla_mode_for_client => "В системе есть 4 режима для Clonezilla: \n[0] Полный режим Clonezilla, каждый клиент имеет свою собственную NFS расположенную в /etc и /var. \n[1] Ограниченный режим Clonezilla, каждый клиент использует tmpfs расположенную в /etc и /var. В этом режиме нагрузка и необходимое дисковое пространство на сервере меньше, чем в обычном режиме Clonezilla. Внимание! В ограниченном режиме Clonezilla, настройки и файлы конфигурации клиента не будут сохранены на DRBL сервере! Они будут использованы один раз и исчезнут после выключения компьютера клиента! \n[2] Я не хочу использовать Clonezilla. \n[3] Использование Clonezilla live как ОС для клиентов (тестово). \ nКакой режиме вы предпочитаете? ",
@@ -250,6 +249,7 @@ $lang_charset = 'iso-8859-1';
    live_client_branch_set=> "Выбранный вариант Clonezilla live - ",
    live_client_cpu_arch_is_set => "Архитектура процессора для клиентов при работе Clonezilla",
    # Tag on 2017/01/26
+   only_one_network_card_in_system => "/// ВНИМАНИЕ /// Только одна настроенная сетевая карта была найдена в этой системе.",
    found_dhcp_service_on_nic => "Found DHCP service on the network interface",
    do_you_want_to_lease_ip_addr_from_existing_dhcp_srv => "Do you want to lease IP address from the existing DHCP service? The DHCP server IP address is",
    will_use_available_ip_addr_from_dhcp_srv => "'If so, we will use the available IP address leased from DHCP server. If not, we will run a DHCP service in this machine, which might conflict with the existing one. Therefore it is recommended to choose yes.",

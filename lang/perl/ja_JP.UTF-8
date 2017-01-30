@@ -256,7 +256,6 @@ $lang_charset = 'UTF-8';
    drbl_server_as_NAT_server => "DRBL サーバを NAT サーバとしますか? no の場合、DRBL クライアントはインターネットにアクセス出来ません。",
    drbl_server_is_NOT_NAT_server => "この DRBL サーバは NAT サービスを提供しませんので、DRBL クライアントはインターネットアクセスが出来ません。",
    both_drbl_clonezilla_are_none => "DRBL と Clonezilla モードの両方が利用不可に設定されていますので、このシステムでは(必要なファイルと drbl-sl をインストールした場合、netinstall のような)非常に限定された機能しか利用できません。",
-   only_one_network_card_in_system => "【警告】このマシンで設定済みのネットワークカードが1枚だけ見つかりました、この状態は推薦されません。このDRBLサーバはDHCPサービスを提供するので、ネットワークカードが1枚だけならば、あなたのネットワーク環境が混乱するかもしれません。特に、既存のDHCPサービスがこのネットワークカードに設定されていました。この問題を回避する為に、このサーバに少なくとも2枚のネットワークカードを使用することをお勧めします。",
    are_you_sure_you_want_to_continue => "本当に続けてもよろしいですか?",
    # Tag on 2010/12/13
    # which_clonezilla_mode_for_client => "このシステムでは、Clonezilla 用に3つのモードがあります：\n[0] 完全 Clonezilla モード。各クライアントは専用の NFS ベースの /etc, /var があります。\n[1] Clonezilla box モード。各クライアントは tmpfs ベースの /etc、/var があります。このモードでは、サーバの負荷と必要なディスク空間は完全 Clonezilla モードより軽くなります。注意! Clonezilla box モードでは、クライアントの設定ファイルは DRBL サーバに保存されません! 設定は一度のみ使用され、マシン停止後に失われます!\n[2] Clonezilla を使用しません。\nどのモードが良いですか?",
@@ -268,6 +267,7 @@ $lang_charset = 'UTF-8';
    live_client_branch_set=> "選択されたClonezilla Live ブランチ：",
    live_client_cpu_arch_is_set => "Clonezilla ジョブ実行時のクライアント用 CPU アーキテクチャ：",
    # Tag on 2017/01/26
+   only_one_network_card_in_system => "【警告】このマシンで設定済みのネットワークカードが1枚だけ見つかりました。",
    found_dhcp_service_on_nic => "Found DHCP service on the network interface",
    do_you_want_to_lease_ip_addr_from_existing_dhcp_srv => "Do you want to lease IP address from the existing DHCP service? The DHCP server IP address is",
    will_use_available_ip_addr_from_dhcp_srv => "'If so, we will use the available IP address leased from DHCP server. If not, we will run a DHCP service in this machine, which might conflict with the existing one. Therefore it is recommended to choose yes.",

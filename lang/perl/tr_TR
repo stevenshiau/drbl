@@ -239,7 +239,6 @@ $lang_charset = 'utf-8';
    drbl_server_as_NAT_server => "DRBL sunucunun bir NAT sunucu gibi çalışmasına izin veriyor musunuz? Vermiyorsanız, DRBL istemciniz internata erişemeyecek.",
    drbl_server_is_NOT_NAT_server => "Bu DRBL sunucu NAT hizmeti sağlamıyor, bu yüzden DRBL istemciniz internata erişemeyecek.",
    both_drbl_clonezilla_are_none => "drbl ve clonezilla modunun her ikiside uygun bir şekilde atanmadı, bu sistemde sadece limitli fonksiyonlar(netinstall ve drbl-sl gibi) kullanılabilir!",
-   only_one_network_card_in_system => "///UYARI/// Sisteminizde sadece bir adet yapılandırılmış network kartı bulundu, Network kartın bağlı olduğu network ortamında bir DHCP servisi varsa, DRBL sunucu sizin network ortamınızı karıştıran bir DHCP servisi sağlayacağından dolayı bu önerilmez!!! Bu problemden kaçınmak için en az iki network kartı önerilir.",
    are_you_sure_you_want_to_continue => "Devam etmek istediğinize emin misiniz?",
    # Tag on 2010/12/13
    which_clonezilla_mode_for_client => "Sistemde, clonezilla için uygun 4 mod var:\n[0] Full Clonezilla mod, her istemci kendi NFS tabanlı /etc ve /var dizinlerine sahiptir.\n[1] Clonezilla box mod, her istemci tmpfs temelli /etc ve /var dizinlerini kullanır. In this mode, Bu modda, yükleme ve sunucu için gerekli disk alanı Full moddan daha açık olacaktır. Uyarı! Clonezilla box modda,istemcinin yapılandırma ve ayar dosyaları DRBL sunucu üzerinde kaydedilmeyecek! Bir kere kullanılacakla makine baştan başlatıldığında silinecekler!\n[2] Clonezilla istemiyorum.\n[3] Clonezilla live istemcinin bir işletim sistemi gibi kullanılsın (Test ediliyor).\nHangi modu tercih edersiniz?",
@@ -250,6 +249,7 @@ $lang_charset = 'utf-8';
    live_client_branch_set=> "Clonezilla live dalı seçildi",
    live_client_cpu_arch_is_set => "İstemci için seçilen işlemci mimarisi",
    # Tag on 2017/01/26
+   only_one_network_card_in_system => "///WARNING/// Only one configured network card was found in this system.",
    found_dhcp_service_on_nic => "Found DHCP service on the network interface",
    do_you_want_to_lease_ip_addr_from_existing_dhcp_srv => "Do you want to lease IP address from the existing DHCP service? The DHCP server IP address is",
    will_use_available_ip_addr_from_dhcp_srv => "'If so, we will use the available IP address leased from DHCP server. If not, we will run a DHCP service in this machine, which might conflict with the existing one. Therefore it is recommended to choose yes.",

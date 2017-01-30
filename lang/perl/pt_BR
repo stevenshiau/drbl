@@ -241,7 +241,6 @@ $lang_charset = 'iso-8859-1';
    drbl_server_as_NAT_server => "Deseja deixar o servidor DRBL como um servidor NAT ? Se não, seu cliente DRBL NÃO será capaz de acessar a Internet.",
    drbl_server_is_NOT_NAT_server => "Este servidor DRBL NÃO fornece serviço NAT, por isso seu cliente DRBL NÃO será capaz de acessar a Internet.",
    both_drbl_clonezilla_are_none => "Tanto o modo drbl quanto o clonezilla não estão disponíveis, apenas funções muito limitadas (como netinstall, se instalar os arquivos necessários, e drbl-sl) estão disponíveis neste sistema!",
-   only_one_network_card_in_system => "///ATENÇÃO/// Somente foi encontrada uma placa de rede configurada neste computador, isto não é recomendado já que este servidor DRBL fornecerá um serviço DHCP que poderá bagunçar seu ambiente de rede se já houver um serviço DHCP existente no ambiente de rede ao que está conectada a placa de rede!!! Se recomenda usar ao menos 2 placas de rede neste servidor para evitar este problema.",
    are_you_sure_you_want_to_continue => "Seguro que deseja continuar ?" ,
    # Tag on 2010/12/13
    which_clonezilla_mode_for_client => "No sistema, há 4 modos disponíveis para clonezilla:\n[0] Modo Clonezilla completo, cada cliente tem seu próprio NFS baseado em /etc e /var.\n[1] Modo Clonezilla box, cada cliente usa tmpfs baseado em /etc e /var. Neste modo, a carga e o espaço de disco do servidor necessários é inferior ao Modo Clonezilla completo. Nota! No modo Clonezilla box, a configuração e os arquivos de configuração do cliente não serão salvos no servidor DRBL! Serão usados apenas uma vez e descartados depois que a máquina desligar!\n[2] Não quero clonezilla.\n[3] Usar Clonezilla live como o S.O. (Sistema Operacional) dos clientes (Teste).\nQual modo prefere?",
@@ -252,6 +251,7 @@ $lang_charset = 'iso-8859-1';
    live_client_branch_set=> "A versão estabelecida para Clonezilla live é",
    live_client_cpu_arch_is_set => "A arquitetura de CPU para clientes quando se executa uma tarefa Clonezilla",
    # Tag on 2017/01/26
+   only_one_network_card_in_system => "///ATENÇÃO/// Somente foi encontrada uma placa de rede configurada neste computador.",
    found_dhcp_service_on_nic => "Found DHCP service on the network interface",
    do_you_want_to_lease_ip_addr_from_existing_dhcp_srv => "Do you want to lease IP address from the existing DHCP service? The DHCP server IP address is",
    will_use_available_ip_addr_from_dhcp_srv => "'If so, we will use the available IP address leased from DHCP server. If not, we will run a DHCP service in this machine, which might conflict with the existing one. Therefore it is recommended to choose yes.",
