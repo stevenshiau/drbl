@@ -5,6 +5,15 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.23.17-drbl1) unstable; urgency=medium
+
+  * Detect if terminal supports color output before using color outputs in the
+    terminal. Thanks to TF for asking this.
+    Rref:
+    https://sourceforge.net/p/clonezilla/discussion/Clonezilla_live/thread/ec46f3a3/
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 31 Jan 2017 20:45:18 +0800
+
 drbl (2.23.16-drbl1) unstable; urgency=medium
 
   * Add more prompts in program drbl-find-dhcp-srv.
