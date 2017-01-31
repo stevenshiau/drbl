@@ -30,12 +30,17 @@ ocs_batch_mode="false"
 prog="$(basename $0)"
 path_of_prog="$(LC_ALL=C cd "$(dirname "$0")/../../"; pwd)"
 
-#
-[ -z ${SETCOLOR_SUCCESS:-''} ] && SETCOLOR_SUCCESS="echo -en \\033[1;32m"
-[ -z ${SETCOLOR_FAILURE:-''} ] && SETCOLOR_FAILURE="echo -en \\033[1;31m"
-[ -z ${SETCOLOR_WARNING:-''} ] && SETCOLOR_WARNING="echo -en \\033[1;33m"
-[ -z ${SETCOLOR_NORMAL:-''}  ] && SETCOLOR_NORMAL="echo -en \\033[0;39m"
-BOOTUP="color"
+# Check if terminal supports colors output
+colors_no="$(LC_ALL=C tput colors)"
+
+BOOTUP=""
+if [ "$colors_no" -ge 8 ]; then
+  [ -z ${SETCOLOR_SUCCESS:-''} ] && SETCOLOR_SUCCESS="echo -en \\033[1;32m"
+  [ -z ${SETCOLOR_FAILURE:-''} ] && SETCOLOR_FAILURE="echo -en \\033[1;31m"
+  [ -z ${SETCOLOR_WARNING:-''} ] && SETCOLOR_WARNING="echo -en \\033[1;33m"
+  [ -z ${SETCOLOR_NORMAL:-''}  ] && SETCOLOR_NORMAL="echo -en \\033[0;39m"
+  BOOTUP="color"
+fi
 
 #
 msg_are_u_sure_u_want_to_continue='Are you sure you want to continue?'
