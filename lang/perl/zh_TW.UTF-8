@@ -261,7 +261,7 @@
    found_dhcp_service_on_nic => "在這張網卡上有發現DHCP服務",
    do_you_want_to_lease_ip_addr_from_existing_dhcp_srv => "你是否要使用區域網路中>現有的DHCP服務? 該DHCP伺服器的IP位址是",
    will_use_available_ip_addr_from_dhcp_srv => "如果選擇是，我們將使用從現有的DHCP服務取得的IP位址。若選擇否，我們將在此機器另外跑一個DHCP服務，不過此服務可能會與現有的DHCP服務相衝突。因此建議選擇使用現有的DHCP服務。",
-   note_you_have_to_make_sure_enough_no_of_ip_addr => "//注意// 若選擇是，你必須確認現有的DHCP服務提供足夠多的IP位址給用戶端機器使用。",
+   note_you_have_to_make_sure_enough_no_of_ip_addr => "//注意// 若選擇是，你必須確認現有的DHCP服務提供足夠多的IP位址給用戶端機器使用。此外，這個機制有其風險，因為在此區域網域的PXE或者uEFI網路開機用戶端都會進入DRBL或者Clonezilla模式。請確認這是你要的模式。",
    failed_to_detect_dhcp_service => "無法在此張網卡找到任何DHCP服務",
    do_you_want_to_try_it_again => "你是否要再試一次?",
    mark_the_end_of_lang =>"."
