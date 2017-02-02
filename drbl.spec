@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.23.17
+Version:	2.23.18
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,10 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Thu Feb 02 2017 Steven Shiau <steven _at_ nchc org tw> 2.23.18-drbl1
+  - Update language files about using proxy DHCP mode. Give warning about
+    the risk. 
+
 * Tue Jan 31 2017 Steven Shiau <steven _at_ nchc org tw> 2.23.17-drbl1
   - Detect if terminal supports color output before using color outputs in the
     terminal. Thanks to TF for asking this.

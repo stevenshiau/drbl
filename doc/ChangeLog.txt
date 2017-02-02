@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.23.18-drbl1) unstable; urgency=medium
+
+  * Update language files about using proxy DHCP mode. Give warning about
+    the risk. 
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 02 Feb 2017 08:45:12 +0800
+
 drbl (2.23.17-drbl1) unstable; urgency=medium
 
   * Detect if terminal supports color output before using color outputs in the
