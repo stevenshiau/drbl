@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.23.18
+Version:	2.23.19
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Mon Feb 06 2017 Steven Shiau <steven _at_ nchc org tw> 2.23.19-drbl1
+  - Remove unnecessary prompt about relay dhcp in drblpush.
+
 * Thu Feb 02 2017 Steven Shiau <steven _at_ nchc org tw> 2.23.18-drbl1
   - Update language files about using proxy DHCP mode. Give warning about
     the risk. 
