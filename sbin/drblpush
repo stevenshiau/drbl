@@ -623,7 +623,7 @@ sub interactive_mode {
 	      print "$delimiter{\"star_line\"}\n";
 	      print colored ("$lang_deploy{\"found_dhcp_service_on_nic\"}: $DHCPOFFER_eth\n", "$color_warn").
                     colored ("$lang_deploy{\"do_you_want_to_lease_ip_addr_from_existing_dhcp_srv\"}: $DHCPOFFER_siaddr\n", "$color_warn").
-	            colored ("$lang_deploy{\"will_use_available_ip_addr_from_dhcp_srv\"}: $DHCPOFFER_yiaddr\n", "$color_warn").
+	            colored ("$lang_deploy{\"will_use_available_ip_addr_from_dhcp_srv\"}\n", "$color_warn").
 	            colored ("$lang_deploy{\"note_you_have_to_make_sure_enough_no_of_ip_addr\"}\n", "$color_warn").
 	            "[Y/n] ";
               chomp($use_proxy_dhcp=<STDIN>);
