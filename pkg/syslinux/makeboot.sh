@@ -34,12 +34,14 @@ path_of_prog="$(LC_ALL=C cd "$(dirname "$0")/../../"; pwd)"
 colors_no="$(LC_ALL=C tput colors 2>/dev/null)"
 
 BOOTUP=""
-if [ -n "$colors_no" -a "$colors_no" -ge 8 ]; then
-  [ -z ${SETCOLOR_SUCCESS:-''} ] && SETCOLOR_SUCCESS="echo -en \\033[1;32m"
-  [ -z ${SETCOLOR_FAILURE:-''} ] && SETCOLOR_FAILURE="echo -en \\033[1;31m"
-  [ -z ${SETCOLOR_WARNING:-''} ] && SETCOLOR_WARNING="echo -en \\033[1;33m"
-  [ -z ${SETCOLOR_NORMAL:-''}  ] && SETCOLOR_NORMAL="echo -en \\033[0;39m"
-  BOOTUP="color"
+if [ -n "$colors_no" ]; then
+  if [ "$colors_no" -ge 8 ]; then
+    [ -z ${SETCOLOR_SUCCESS:-''} ] && SETCOLOR_SUCCESS="echo -en \\033[1;32m"
+    [ -z ${SETCOLOR_FAILURE:-''} ] && SETCOLOR_FAILURE="echo -en \\033[1;31m"
+    [ -z ${SETCOLOR_WARNING:-''} ] && SETCOLOR_WARNING="echo -en \\033[1;33m"
+    [ -z ${SETCOLOR_NORMAL:-''}  ] && SETCOLOR_NORMAL="echo -en \\033[0;39m"
+    BOOTUP="color"
+  fi
 fi
 
 #
