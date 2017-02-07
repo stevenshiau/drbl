@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.23.21-drbl1) unstable; urgency=medium
+
+  * Suppress the tput error during booting in makeboot.sh and
+    drbl-functions.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 08 Feb 2017 04:19:35 +0800
+
 drbl (2.23.20-drbl1) unstable; urgency=medium
 
   * Suppress the tput error during booting in makeboot.sh and
