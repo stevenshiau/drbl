@@ -2439,14 +2439,13 @@ config_drbl_live_network(){
         fi
         ip addr add $DHCPOFFER_yiaddr/$DHCPOFFER_prefix dev drbl0
 	# Only for Debian/Ubuntu
-        if ! grep -Eq "^auto[[:space:]]+drbl0" /etc/network/interfaces; then
-        cat <<-NET_END >> /etc/network/interfaces
+        cat <<-NET_END >> /etc/network/interfaces.d/drbl0
 auto drbl0
 iface drbl0 inet static
 	address $DHCPOFFER_yiaddr
 	netmask $DHCPOFFER_netmask
+	pre-up ip link add drbl0 link $eth_port type macvlan mode bridge
 NET_END
-        fi
       else
         [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
         echo "Failed to lease DHCP IP address for network interface drbl0!"
