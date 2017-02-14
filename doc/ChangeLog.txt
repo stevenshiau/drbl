@@ -5,6 +5,16 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.23.22-drbl1) unstable; urgency=medium
+
+  * Write macvlan network config file in /etc/network/interfaces.d/drbl0
+    instead of /etc/network/interfaces in config_drbl_live_network of
+    ocs-functions.
+  * Disable dnsmasq service when uninstall DRBL.
+  * Add package sshpass and keychain in DRBL/Clonezilla live.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 14 Feb 2017 18:02:08 +0800
+
 drbl (2.23.21-drbl1) unstable; urgency=medium
 
   * Suppress the tput error during booting in makeboot.sh and

@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.23.21
+Version:	2.23.22
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,13 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Tue Feb 14 2017 Steven Shiau <steven _at_ nchc org tw> 2.23.22-drbl1
+  - Write macvlan network config file in /etc/network/interfaces.d/drbl0
+    instead of /etc/network/interfaces in config_drbl_live_network of
+    ocs-functions.
+  - Disable dnsmasq service when uninstall DRBL.
+  - Add package sshpass and keychain in DRBL/Clonezilla live.
+
 * Wed Feb 08 2017 Steven Shiau <steven _at_ nchc org tw> 2.23.21-drbl1
   - Suppress the tput error during booting in makeboot.sh and
     drbl-functions.
