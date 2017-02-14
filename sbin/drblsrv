@@ -94,6 +94,15 @@ do_some_cleanup_before_uninstall() {
     echo "Disabling drbl-clients-nat service..."
     systemctl disable /lib/systemd/system/drbl-clients-nat.service
     rm -f /lib/systemd/system/drbl-clients-nat.service
+
+    if [ -e "$dnsmasq_cfg" ]; then
+      # Stop dnsmasq
+      echo $msg_delimiter_star_line
+      echo "Stop and disable service dnsmasq..."
+      service dnsmasq stop
+      systemctl disable dnsmasq
+      mv ${dnsmasq_cfg} ${dnsmasq_cfg}.drblsave
+    fi
   fi
 
   echo "$msg_delimiter_star_line"
