@@ -1,3 +1,15 @@
+drbl (2.23.23-drbl1) unstable; urgency=medium
+
+  * Spanish language files were revised. Thanks to
+    Pablo Hinojosa Nava <pablohn6 _at_ gmail com>
+    and
+    Juan Ramón Martínez <jrmc_77 _at_ hotmail com>
+    Ref:
+    https://github.com/Pablohn26/clonezilla/commit/4f6b492b91a92f08d1e1d1626b209a3fdfc8ed73
+    https://github.com/Pablohn26/clonezilla/commit/46d1d104d46e56b0f5efc9630ea8e9293747b15f
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 20 Feb 2017 14:29:56 +0800
+
 drbl (2.23.22-drbl1) unstable; urgency=medium
 
   * Write macvlan network config file in /etc/network/interfaces.d/drbl0

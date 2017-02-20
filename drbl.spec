@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.23.22
+Version:	2.23.23
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,15 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Mon Feb 20 2017 Steven Shiau <steven _at_ nchc org tw> 2.23.23-drbl1
+  - Spanish language files were revised. Thanks to
+    Pablo Hinojosa Nava <pablohn6 _at_ gmail com>
+    and
+    Juan Ramón Martínez <jrmc_77 _at_ hotmail com>
+    Ref:
+    https://github.com/Pablohn26/clonezilla/commit/4f6b492b91a92f08d1e1d1626b209a3fdfc8ed73
+    https://github.com/Pablohn26/clonezilla/commit/46d1d104d46e56b0f5efc9630ea8e9293747b15f
+
 * Tue Feb 14 2017 Steven Shiau <steven _at_ nchc org tw> 2.23.22-drbl1
   - Write macvlan network config file in /etc/network/interfaces.d/drbl0
     instead of /etc/network/interfaces in config_drbl_live_network of
