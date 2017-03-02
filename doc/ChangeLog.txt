@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.23.26-drbl1) unstable; urgency=medium
+
+  * The input network settings for drbl0 will be confirmed before continue in
+    drbl live.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 02 Mar 2017 20:01:16 +0800
+
 drbl (2.23.25-drbl1) unstable; urgency=medium
 
   * Add a mechanism to manually configure drbl0 network settings if DHCP

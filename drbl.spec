@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.23.25
+Version:	2.23.26
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,10 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Thu Mar 02 2017 Steven Shiau <steven _at_ nchc org tw> 2.23.26-drbl1
+  - The input network settings for drbl0 will be confirmed before continue in
+    drbl live.
+
 * Thu Mar 02 2017 Steven Shiau <steven _at_ nchc org tw> 2.23.25-drbl1
   - Add a mechanism to manually configure drbl0 network settings if DHCP
     server use MAC address to provide fixed address.
