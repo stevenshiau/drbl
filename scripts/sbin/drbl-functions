@@ -2408,12 +2408,37 @@ config_drbl_live_network(){
           echo
           echo "$msg_failed_to_find_any_dhcp_srv: drbl0"
           echo "$msg_do_u_want_to_do_it_again"
+	  echo "$msg_say_no_to_manually_config_it"
           echo -n "[Y/n] "
           read try_dhcp_again
           case "$try_dhcp_again" in
             n|N|[nN][oO])
-               echo "$msg_program_stop"
-               dhcp_find_rc=0
+               echo -n "$msg_do_you_want_to_manually_configure_it? (Y/n) " 
+               read manually_configure_ans
+               case "$manually_configure_ans" in
+                    n|N|[nN][oO])
+                       echo "$msg_program_stop"
+                       dhcp_find_rc=0
+                       # Saving mode, always copy error log to image dir.
+                       copy_error_log
+                       exit 1
+                       ;;
+                    *)
+                       echo "$msg_what_is_the_ip_add_for_virtual_nic_drbl0"
+                       read drbl0_ip_prefix
+		       # Write to file     
+		       drbl0_ip="$(echo $drbl0_ip_prefix | awk -F"/" '{print $1}')"
+		       drbl0_prefix="$(echo $drbl0_ip_prefix | awk -F"/" '{print $2}')"
+        	       cat <<-DHCP_END > $dhcp_detect_vir_tmp
+DHCPOFFER_eth="drbl0"
+DHCPOFFER_siaddr=""
+DHCPOFFER_yiaddr="$drbl0_ip"
+DHCPOFFER_netmask=""
+DHCPOFFER_prefix="$drbl0_prefix"
+DHCP_END
+                       dhcp_find_rc=0
+                       ;;
+               esac
                ;;
             *)
                echo "$msg_ok_let_do_it"
