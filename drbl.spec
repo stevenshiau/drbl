@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.23.23
+Version:	2.23.25
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,16 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Thu Mar 02 2017 Steven Shiau <steven _at_ nchc org tw> 2.23.25-drbl1
+  - Add a mechanism to manually configure drbl0 network settings if DHCP
+    server use MAC address to provide fixed address.
+  - Update language files for manually set drbl0.
+  - Bug fixed: Add username=user in GParted live PXE config in drbl-sl.
+
+* Fri Feb 24 2017 Steven Shiau <steven _at_ nchc org tw> 2.23.24-drbl1
+  - Move archivemount to be one of required packages for drbl,
+    not only for live system. It might be used in the future for BT.
+
 * Mon Feb 20 2017 Steven Shiau <steven _at_ nchc org tw> 2.23.23-drbl1
   - Spanish language files were revised. Thanks to
     Pablo Hinojosa Nava <pablohn6 _at_ gmail com>

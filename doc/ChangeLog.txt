@@ -5,6 +5,22 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.23.25-drbl1) unstable; urgency=medium
+
+  * Add a mechanism to manually configure drbl0 network settings if DHCP
+    server use MAC address to provide fixed address.
+  * Update language files for manually set drbl0.
+  * Bug fixed: Add username=user in GParted live PXE config in drbl-sl.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 02 Mar 2017 11:48:35 +0800
+
+drbl (2.23.24-drbl1) unstable; urgency=medium
+
+  * Move archivemount to be one of required packages for drbl,
+    not only for live system. It might be used in the future for BT.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 24 Feb 2017 10:03:29 +0800
+
 drbl (2.23.23-drbl1) unstable; urgency=medium
 
   * Spanish language files were revised. Thanks to
