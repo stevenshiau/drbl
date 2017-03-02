@@ -1031,3 +1031,7 @@ msg_do_you_want_to_lease_ip_addr_from_existing_dhcp_srv='¿Quieres obtener la di
 msg_will_use_available_ip_addr_from_dhcp_srv='En ese caso, nosotros utilizaremos la dirección IP disponible obtenida del servidor DHCP. En caso contrario, nosotros lanzaremos un servicio DHCP en esta máquina, lo que puede entrar en conflicto con el existente. Por lo tanto se recomienda seleccionar sí.'
 msg_note_you_have_to_make_sure_enough_no_of_ip_addr='//NOTA// Si seleccionas sí, tienes que estar seguro de que tu servidor DHCP provee suficiente número de direcciones IP para todos los clientes. Además, este mecanismo tiene riesgo debido a que todos los PXE o clientes de arranque de red uEFI entrarán en DRBL o modo Clonezilla. Por favor estate seguro de que esto es lo que tú quieres.'
 msg_failed_to_find_any_dhcp_srv='Falló el encontrar un servicio DHCP en esta tarjeta de red'
+# Tag on 2017/03/02
+msg_say_no_to_manually_config_it='If you say no, you will have a chance to manually configure it later.'
+msg_do_you_want_to_manually_configure_it='Do you want to manually configure the network settings for virtual network device drbl0'
+msg_what_is_the_ip_add_for_virtual_nic_drbl0='What is the IP address and prefix for virtual network interface drbl0? The format is like: 192.168.167.101/24'
