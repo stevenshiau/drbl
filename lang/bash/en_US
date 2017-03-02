@@ -1044,3 +1044,5 @@ msg_failed_to_find_any_dhcp_srv='Failed to find any DHCP service on this network
 msg_say_no_to_manually_config_it='If you say no, you will have a chance to manually configure it later.'
 msg_do_you_want_to_manually_configure_it='Do you want to manually configure the network settings for virtual network device drbl0'
 msg_what_is_the_ip_add_for_virtual_nic_drbl0='What is the IP address and prefix for virtual network interface drbl0? The format is like: 192.168.167.101/24'
+msg_your_input_config_is='The setting you have entered is'
+msg_is_that_correct='Is that correct?'

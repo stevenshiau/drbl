@@ -2298,6 +2298,7 @@ is_boot_from_live() {
 config_drbl_live_network(){
   local eth_port_no configured_ip_no eth_port configured_port_list configured_ip_no 
   local IP_no dhcp_detect_bond_tmp DHCPOFFER_netmask DHCPOFFER_prefix dhcp_find_rc
+  local run_net_cfg try_dhcp_again manually_configure_ans
   # This function only works for Debian based network setting.
   # drbl_live_private_IP_alias_eth_def is global variable from drbl.conf.
   echo "Detecting the network status..."
@@ -2413,6 +2414,7 @@ config_drbl_live_network(){
           read try_dhcp_again
           case "$try_dhcp_again" in
             n|N|[nN][oO])
+               echo $msg_delimiter_star_line
                echo -n "$msg_do_you_want_to_manually_configure_it? (Y/n) " 
                read manually_configure_ans
                case "$manually_configure_ans" in
@@ -2424,8 +2426,19 @@ config_drbl_live_network(){
                        exit 1
                        ;;
                     *)
-                       echo "$msg_what_is_the_ip_add_for_virtual_nic_drbl0"
-                       read drbl0_ip_prefix
+                       run_net_cfg="yes"
+                       while [ "$run_net_cfg" = "yes" ]; do
+                         echo $msg_delimiter_star_line
+                         echo "$msg_what_is_the_ip_add_for_virtual_nic_drbl0"
+                         read drbl0_ip_prefix
+                         echo "$msg_your_input_config_is: $drbl0_ip_prefix"
+                         echo -n "$msg_is_that_correct (Y/n) " 
+			 read input_check_ans
+		         case "$input_check_ans" in
+                           n|N|[nN][oO]) run_net_cfg="yes"  ;;
+		                      *) run_net_cfg="no" ;;
+		         esac
+		       done
 		       # Write to file     
 		       drbl0_ip="$(echo $drbl0_ip_prefix | awk -F"/" '{print $1}')"
 		       drbl0_prefix="$(echo $drbl0_ip_prefix | awk -F"/" '{print $2}')"
