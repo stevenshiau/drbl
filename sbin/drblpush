@@ -1688,10 +1688,10 @@ sub drbl_server_parse {
   if ( "$nameserver_sys" eq "127.0.0.1" || "$nameserver_sys" eq "127.0.1.1"  ) {
     # On Ubuntu, dnsmasq with network-manager, the result might 127.0.0.1. We use nm-tool to get the real one
     # Ubuntu <= 14.04, use "nmcli dev list", while > 14.04, "nmcli dev show".
-    chomp($nameserver_sys=`LC_ALL=C nmcli dev show 2>&1 >/dev/null | grep -i "IP4.DNS" | awk -F " " '{print \$2}'`);
+    chomp($nameserver_sys=`LC_ALL=C nmcli dev show 2>/dev/null | grep -i "IP4.DNS" | awk -F " " '{print \$2}'`);
     $nameserver_sys =~ s/\n/,/g;
     if ( ! $nameserver ) {
-      chomp($nameserver_sys=`LC_ALL=C nmcli dev list 2>&1 >/dev/null | grep -i "IP4.DNS" | awk -F " " '{print \$2}'`);
+      chomp($nameserver_sys=`LC_ALL=C nmcli dev list 2>/dev/null | grep -i "IP4.DNS" | awk -F " " '{print \$2}'`);
       $nameserver_sys =~ s/\n/,/g;
     }
     if ( ! $nameserver ) {
