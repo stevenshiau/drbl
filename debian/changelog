@@ -1,3 +1,9 @@
+drbl (2.23.27-drbl1) unstable; urgency=medium
+
+  * Bug fixed: failed to get DNS setting in drblpush.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 10 Mar 2017 09:36:03 +0800
+
 drbl (2.23.26-drbl1) unstable; urgency=medium
 
   * The input network settings for drbl0 will be confirmed before continue in
