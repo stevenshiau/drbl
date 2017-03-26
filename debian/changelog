@@ -1,3 +1,12 @@
+drbl (2.23.28-drbl1) unstable; urgency=medium
+
+  * Bug fixed: ocs_prerun* are run twice.
+    Ocs_prerun1 and ocs_prerun2 used by drbl live are changed to
+    drbl_prerun1 and drbl_prerun2. Otherwise they will be run by S06pre-run
+    in drbl-live.d and ocs-live-run-menu.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sun, 26 Mar 2017 21:59:35 +0800
+
 drbl (2.23.27-drbl1) unstable; urgency=medium
 
   * Bug fixed: failed to get DNS setting in drblpush.
