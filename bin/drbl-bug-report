@@ -58,7 +58,7 @@ case "$OS_Version" in
       ;;
    *)
       echo "This version in this distribution is NOT supported by DRBL, maybe you can try to use the drbl in testing or unstable repository. Program terminated!"
-      exit 1 
+      exit 1
 esac
 
 echo -n .
@@ -100,7 +100,7 @@ output_filename="DRBL-BUG-RPT-${time_now}.txt"
 
 # dump it
   cat <<-REP_END > $output_filename
-To report the bug, fill the contents in the following table, then send it to DRBL mailing list or post it on the DRBL forum."
+To report the bug, fill out the contents in the following table, then send it to DRBL mailing list or post it on the DRBL forum."
 -------CUT BEGIN HERE--------------------------------------------
 Description of problem:
 

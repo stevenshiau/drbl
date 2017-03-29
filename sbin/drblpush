@@ -20,7 +20,7 @@
 # Version 0.1, by K. L. Huang, klhaung _at_ gmail com, especially for Debian
 # Modified by Steven Shiau, steven _at_ nchc org tw DRBL for Redhat
 
-# setting 
+# setting
 # timed login to GDM default time (seconds)
 our $TIMED_GDM_TIME_DEFAULT="30";
 
@@ -35,7 +35,7 @@ our $DEFAULT_CLIENT_NO_EACH_PORT="12";
 # $assign_client_no_each_port is assign by -p or --port_client_no
 our $assign_client_no_each_port;
 
-# default boot prompt timeout for PXE client 
+# default boot prompt timeout for PXE client
 our $DEFAULT_CLIENT_SYSTEM_BOOT_TIMEOUT="70";
 
 #
@@ -143,7 +143,7 @@ sub set_client_public_ip {
   # $_[1]: file to output containing client public IPs parameters (return)
   my @drbl_ip=`cat $_[0]`;
   my $public_ip_file="$_[1]";
-  
+
   my $saved_ip="";
   my $saved_gw="";
   my $saved_netmask="255.255.255.0";
@@ -159,7 +159,7 @@ sub check_net_digit {
     my @check_ip_each=split(/\./,$check_ip);
     if (@check_ip_each != "4") { return "failed"; }
     if ($check_type eq "IP") {
-      # check the first and last digit, it can not be 255 or 0. 
+      # check the first and last digit, it can not be 255 or 0.
       if ($check_ip_each[$#$check_ip_each] eq "0" || $check_ip_each[$#$check_ip_each] eq "255" ) {
          print "$check_ip_each[$#$check_ip_each] $lang_deploy{\"can_not_be_the_last_IP\"}!!!\n";
          return "failed";
@@ -200,14 +200,14 @@ sub get_network_param {
        $chk_rlt=check_net_digit($public_ip,"IP");
     }
     print "public_ip $public_ip\n" if $verbosity >=2;
-    
+
     @networkIp=split(/\./,$public_ip);
     my $IP_PREFIX=$networkIp[0].".".$networkIp[1].".".$networkIp[2];
     $saved_ip=$IP_PREFIX.".".++$networkIp[3];
     print "network $IP_PREFIX.0\n" if $verbosity >=2;
     print "saved_ip $saved_ip\n" if $verbosity >=2;
     $saved_gw=$IP_PREFIX.".".254;
-    
+
     # public ip gateway
     print "$lang_deploy{\"enter_gateway_for_client\"} ($lang_deploy{\"its_IP_in_DRBL_is\"} $IP) \n[$saved_gw] ";
     chomp($public_gw=<STDIN>);
@@ -221,8 +221,8 @@ sub get_network_param {
     $saved_gw=$public_gw;
     print "public_gw is $public_gw\n" if $verbosity >=2;
     print "saved_gw is $saved_gw\n" if $verbosity >=2;
-    
-    
+
+
     # public ip netmask
     print "$lang_deploy{\"enter_netmask_for_client\"} ($lang_deploy{\"its_IP_in_DRBL_is\"} $IP) \n[$saved_netmask] ";
     chomp($public_netmask=<STDIN>);
@@ -236,16 +236,16 @@ sub get_network_param {
     $saved_netmask=$public_netmask;
     print "public_netmask is $public_netmask\n" if $verbosity >=2;
     print "saved_netmask is $saved_netmask\n" if $verbosity >=2;
-    
+
     return $saved_ip, $saved_gw, $saved_netmask, $public_ip, $public_gw, $public_netmask;
 } # end of sub get_network_param
-  
+
   chomp($public_ip_tmp=`LC_ALL=C mktemp /tmp/public_ip_tmp.XXXXXX`);
   chomp($public_ip_guess=`LC_ALL=C mktemp /tmp/public_ip_guess.XXXXXX`);
   open(PUBLIC_IP_FILE,">$public_ip_tmp") or die "$lang_deploy{\"failed_to_open_file\"}  \"$public_ip_tmp\"\n";
   open(PUBLIC_IP_GUESS_FILE,">$public_ip_guess") or die "$lang_deploy{\"failed_to_open_file\"}  \"$public_ip_guess\"\n";
   print "Clients' IPs: @drbl_ip\n" if $verbosity >=2;
-  
+
 # prepare the public ip file, one for guessed from first input, the other for
 # entering one by one.
   print PUBLIC_IP_FILE <<END_PUBLIC_IP;
@@ -261,12 +261,12 @@ END_PUBLIC_IP
 #------------------------------------------------------------
 #private IP \t public IP \t netmask \t gateway
 END_PUBLIC_IP_GUESS
-  
+
   chomp($IP=@drbl_ip[0]);
   # get first public ip for client
   get_network_param($IP, $saved_ip, $saved_gw, $saved_netmask);
   $first_saved_ip=$saved_ip;
-  
+
   print PUBLIC_IP_FILE <<END_PUBLIC_IP;
 $IP \t $public_ip \t $public_netmask \t $public_gw
 END_PUBLIC_IP
@@ -274,21 +274,21 @@ END_PUBLIC_IP
   print PUBLIC_IP_GUESS_FILE <<END_PUBLIC_IP_GUESS;
 $IP \t $public_ip \t $public_netmask \t $public_gw
 END_PUBLIC_IP_GUESS
-  
+
   foreach $IP (@drbl_ip[1..$#drbl_ip]) {
     chomp($IP);
     $public_ip=$saved_ip;
     @networkIp=split(/\./,$public_ip);
     my $IP_PREFIX=$networkIp[0].".".$networkIp[1].".".$networkIp[2];
     $saved_ip=$IP_PREFIX.".".++$networkIp[3];
-   
+
     $public_netmask=$saved_netmask;
     $public_gw=$saved_gw;
     print PUBLIC_IP_GUESS_FILE <<END_PUBLIC_IP_GUESS;
 $IP \t $public_ip \t $public_netmask \t $public_gw
 END_PUBLIC_IP_GUESS
   }
-  
+
   print "#$delimiter{\"dash_line\"}\n";
   print "$lang_deploy{\"set_client_public_IP_as\"}\n";
   print "#$delimiter{\"dash_line\"}\n";
@@ -321,7 +321,7 @@ END_PUBLIC_IP
             last SWITCH;
 	  };
   }
-  
+
   unlink ($public_ip_tmp) if -f $public_ip_tmp;
   unlink ($public_ip_guess) if -f $public_ip_guess;
 } # end of sub set_client_public_ip
@@ -336,7 +336,7 @@ sub set_autologin_passwd{
       # we set 2 different passwords to make while loop works.
       $client_autologin_passwd1="init1";
       $client_autologin_passwd2="init2";
-      while ($client_autologin_passwd1 ne $client_autologin_passwd2 || ($client_autologin_passwd1 eq "" && $client_autologin_passwd2 eq "" )) { 
+      while ($client_autologin_passwd1 ne $client_autologin_passwd2 || ($client_autologin_passwd1 eq "" && $client_autologin_passwd2 eq "" )) {
            print "$lang_deploy{\"whats_client_autologin_passwd\"}\n";
   	 # turn off echo
            system "LC_ALL=C stty -echo";
@@ -347,9 +347,9 @@ sub set_autologin_passwd{
            system "LC_ALL=C stty -echo";
            chomp($client_autologin_passwd2=<STDIN>);
            system "LC_ALL=C stty echo";
-        if ($client_autologin_passwd1 ne $client_autologin_passwd2) { 
+        if ($client_autologin_passwd1 ne $client_autologin_passwd2) {
   	  print colored ("$lang_deploy{\"sorry_passwd_not_match\"}\n", "$color_warn");
-        }elsif ($client_autologin_passwd1 eq "" && $client_autologin_passwd2 eq "" ){ 
+        }elsif ($client_autologin_passwd1 eq "" && $client_autologin_passwd2 eq "" ){
   	  print colored ("$lang_deploy{\"sorry_passwd_can_not_empty\"}\n", "$color_warn");
         }
       }
@@ -365,7 +365,7 @@ sub set_autologin_passwd{
 sub interactive_mode {
         my $dnsdomain_sys, $nisdomain_sys, $hostname_sys;
 	#we will scan the ethernet from $ethernet_list[0]...
-	#use public IP in alias interface, private IP in real interface, 
+	#use public IP in alias interface, private IP in real interface,
 	#Ex: eth0: 192.168.0.254, eth0:1 61.216.116.23
 
 	my $ethernet_list_;
@@ -383,7 +383,7 @@ sub interactive_mode {
 	my $DHCPOFFER_prefix="";
 	my $DHCPOFFER_eth="";
 
-        # Try to get setting from system 
+        # Try to get setting from system
         chomp($dnsdomain_sys=`dnsdomainname`);
         chomp($nisdomain_sys=`nisdomainname`);
 	chomp($hostname_sys=`hostname`);
@@ -451,7 +451,7 @@ sub interactive_mode {
               $client_hostname_prefix=$_;
 	      if ( "$client_hostname_prefix" =~ / |\/|\\|\./ ) {
 		# "-" should be ok, but we need to parse the /etc/dhcpd.conf
-		# then if make it like fc1-1=00:2A:00:AB:CD:EF, run 
+		# then if make it like fc1-1=00:2A:00:AB:CD:EF, run
 		#  fc1-1=00:2A:00:AB:CD:EF in shell will fail. So we skip
 		#  "-"
   	        print "\" \" ($lang_text{\"space\"}), \"/\", \".\", \"\\\" $lang_text{\"or\"} \"$lang_word{\"initial_digit\"}\" $lang_deploy{\"not_allowed_hostname\"} $lang_deploy{\"enter_it_again\"}!\n".
@@ -489,8 +489,8 @@ sub interactive_mode {
  	  print "$lang_deploy{\"no_NIC_setup\"}\n".
 	        "$lang_deploy{\"we_can_NOT_continue\"}\n";
 	  exit;
-	} else { 
-       	  print "$lang_deploy{\"configured_nic\"} ". 
+	} else {
+       	  print "$lang_deploy{\"configured_nic\"} ".
 	         colored ("@ethernet_sys \n", "$color_warn");
           print "$delimiter{\"dash_line\"}\n";
 
@@ -530,7 +530,7 @@ sub interactive_mode {
 	          # if empty, use default name
 	          $pub_port_NAT=$pub_ans;
                   last;
-                } 
+                }
 	      }
 	      if ( $pub_port_NAT ) {
 		 last;
@@ -587,7 +587,7 @@ sub interactive_mode {
 	  #  chomp($IP);
 	  #  if ( "$IP" =~ /^(172\.(1[6-9]|2[0-9]|3[01])\..*|10\..*)/ ) {
           #    # Class A: 10.0.0.0 - 10.255.255.255
-          #    # Class B: 172.16.0.0  - 172.31.255.255 
+          #    # Class B: 172.16.0.0  - 172.31.255.255
 	  #    print "$delimiter{\"star_line\"}\n";
 	  #    #print "Found class A or B private IP \"$IP\" in $ethx for your DRBL system! ".
 	  #    #colored ("$lang_deploy{\"class_c_IP_for_multicast_clonezilla\"}\n", "$color_warn");
@@ -602,9 +602,9 @@ sub interactive_mode {
 	  # Ask if proxy DHCP when there is existing DHCP
 	  # Detect DHCP service first
 	  my $detect_dhcp_rlt1=256;
-          while ($detect_dhcp_rlt1 == 256) { 
+          while ($detect_dhcp_rlt1 == 256) {
 	     $detect_dhcp_rlt1=system("drbl-find-dhcp-srv -i $ethernet_sys[0] $drblpush_wd/dhcp-detect.tmp");
-	     if ($detect_dhcp_rlt1 == 256) { 
+	     if ($detect_dhcp_rlt1 == 256) {
                print "\n$delimiter{\"star_line\"}\n";
 	       print colored ("$lang_deploy{\"failed_to_detect_dhcp_service\"}\n", "$color_warn").
                               "$lang_deploy{\"do_you_want_to_try_it_again\"}\n".
@@ -641,9 +641,9 @@ sub interactive_mode {
 	      print colored ("Use proxy DHCP. Adding virtual network drbl0...\n","$color_warn");
 	      system("drbl-add-vir-netdev $ethernet_sys[0] drbl0");
 	      my $detect_dhcp_rlt2=256;
-              while ($detect_dhcp_rlt2 == 256) { 
+              while ($detect_dhcp_rlt2 == 256) {
 	         $detect_dhcp_rlt2=system("drbl-find-dhcp-srv -i drbl0 $drblpush_wd/dhcp-detect-vir0.txt");
-	         if ($detect_dhcp_rlt2 == 256) { 
+	         if ($detect_dhcp_rlt2 == 256) {
                    print "\n$delimiter{\"star_line\"}\n";
 	           print colored ("$lang_deploy{\"failed_to_detect_dhcp_service\"}\n", "$color_warn").
                                   "$lang_deploy{\"do_you_want_to_try_it_again\"}\n".
@@ -699,14 +699,14 @@ sub interactive_mode {
                           "$lang_deploy{\"ok_let_do_it\"}\n";
                     my $whoiam = `LC_ALL=C id -nu`;
                     chomp($whoiam);
-                    if ("$whoiam" eq "root") { 
+                    if ("$whoiam" eq "root") {
                       system("LC_ALL=C drbl-collect-mac -n -l $language @ethernet_sys");
                       print colored ("$lang_deploy{\"saved_mac_address_files_in_etc\"}\n", "$color_warn");
                     }else{
-                       print "$lang_deploy{\"you_are_not_root\"},\n". 
-                             "$lang_word{\"please_enter\"} ". colored("$lang_word{\"root_passwd\"} ","$color_warn"). "to collect those MAC addresses...\n"; 
+                       print "$lang_deploy{\"you_are_not_root\"},\n".
+                             "$lang_word{\"please_enter\"} ". colored("$lang_word{\"root_passwd\"} ","$color_warn"). "to collect those MAC addresses...\n";
                        my $su_rlt=system("LC_ALL=C su -c \"drbl-collect-mac @ethernet_sys\" root");
-                       while ($su_rlt == 256) { 
+                       while ($su_rlt == 256) {
                               $su_rlt=system("LC_ALL=C su -c \"drbl-collect-mac @ethernet_sys\" root");
                        }
                     }
@@ -730,7 +730,7 @@ sub interactive_mode {
         for($i=0;$i<=$#ethernet_sys;$i++) {
 	 $ethx="$ethernet_sys[$i]";
           # Try to get setting from system also
-          # get the ipaddress of NIC "eth1, eth2..." 
+          # get the ipaddress of NIC "eth1, eth2..."
           my $ip_sys_tmp;
           my $netmask_sys_tmp;
           chomp($ip_sys_tmp=`drbl-get-ipadd $ethx`);
@@ -762,12 +762,12 @@ sub interactive_mode {
 	           " ?\n".
 	    "[y/N] ";
 	    chomp($MAC=<STDIN>);
-	  } else { 
+	  } else {
 	    $MAC="no";
 	  }
           my $mac_f_tmp="";
 	  if ($MAC eq "y" || $MAC eq "Y" || $MAC eq "yes" || $MAC eq "YES") {
-            # User wants to fix the IP addresses for DRBL clients 
+            # User wants to fix the IP addresses for DRBL clients
 	    print "$delimiter{\"star_line\"}\n".
 	          "$lang_deploy{\"MAC_file_prompt\"} $ethx.\n".
 		  "[macadr-$ethx.txt] ";
@@ -835,13 +835,13 @@ sub interactive_mode {
               }
 	    }
 	  } else {
-            # User wants to use floating IP addresses for DRBL clients 
+            # User wants to use floating IP addresses for DRBL clients
 	    print "$delimiter{\"star_line\"}\n".
 	          "$lang_deploy{\"range_prompt\"}\n";
             my $range_start_default = `echo $ip_hostmin | awk -F"." '{print \$4}'`;
 	    chomp($range_start_default);
 
-            # user does NOT want to fix the IP address for DRBL client 
+            # user does NOT want to fix the IP address for DRBL client
             # get the client no from user input
 	    print "$delimiter{\"star_line\"}\n".
 	          "$lang_deploy{\"IP_start_prompt\"} $ethx.\n",
@@ -863,7 +863,7 @@ sub interactive_mode {
             }
             # count the clients no which already exist to prompt user
             my $client_no;
-	    if ( ! $assign_client_no_each_port ) { 
+	    if ( ! $assign_client_no_each_port ) {
               $client_no=`LC_ALL=C unalias ls 2> /dev/null; ls -d /tftpboot/nodes/$ip_sys_prefix[$i].* 2>/dev/null |wc -w|sed -e "s/ //g"`;
               chomp($client_no);
               # if 0, set the default no for user
@@ -893,7 +893,7 @@ sub interactive_mode {
 	  $ip_sys_start[$i]=$ip_sys_prefix[$i].".".$range_start[$i];
           chomp($ip_sys_end[$i]=`drbl-ipcalc-list -c $total_client[$i] $ip_sys_start[$i] $netmask_sys_tmp | head -n $total_client[$i] | tail -n 1`);
 
-          if ( ! $MAC_file[$i] ){ 
+          if ( ! $MAC_file[$i] ){
             # use the range for clients.
 	    print "$delimiter{\"star_line\"}\n".
   	          "$lang_deploy{\"set_the_IP_connected_to_eth\"} ".
@@ -945,25 +945,25 @@ sub interactive_mode {
           for($i=0;$i<=$#ethernet_sys;$i++) {
 	   $ethx="$ethernet_sys[$i]";
 	   my $grp=$ethx;
-	   # extract group for ethx, i.e. group 1 for eth1, group 3 for eth3... 
+	   # extract group for ethx, i.e. group 1 for eth1, group 3 for eth3...
 	   # For interface like vmnet1, we will not extract that so that the
 	   # hostname will not conflict.
 	   $grp=~ s/eth//;
 	   # get the total client number. total_client[$i] is only for those connecting to ethx
            $total_client_no += $total_client[$i];
 	   #
-           print 
+           print
 "|    +-- [$ethx] $ip_sys[$i] +- to clients group $grp [ $total_client[$i] clients, their IP \n".
 "|                             |            from $ip_sys_start[$i] - $ip_sys_end[$i]]\n";
           }
-  
+
 	  print
 "+-----------------------------+\n";
           print color 'reset';
           print
 		"$delimiter{\"star_line\"}\n";
 
-        print "Total clients: ". 
+        print "Total clients: ".
 	      colored ("$total_client_no\n", "$color_warn").
               "$delimiter{\"star_line\"}\n".
               "$lang_deploy{\"press_enter_to_continue\"}";
@@ -1149,7 +1149,7 @@ sub interactive_mode {
              } else {
 	       # if empty, use default name
                if ($ocs_img_repo_dir eq "") { $ocs_img_repo_dir="$ocs_img_repo_dir_default"; }
-	       print colored ("Directory for clonezilla saved images: $ocs_img_repo_dir\n", "$color_warn");
+	       print colored ("Directory for Clonezilla saved images: $ocs_img_repo_dir\n", "$color_warn");
                last;
              }
           }
@@ -1244,7 +1244,7 @@ sub interactive_mode {
 	    # we set 2 different passwords to make while loop works.
 	    $client_root_passwd_1="init1";
 	    $client_root_passwd_2="init2";
-	    while ($client_root_passwd_1 ne $client_root_passwd_2 || ($client_root_passwd_1 eq "" && $client_root_passwd_2 eq "" )) { 
+	    while ($client_root_passwd_1 ne $client_root_passwd_2 || ($client_root_passwd_1 eq "" && $client_root_passwd_2 eq "" )) {
                  print "$lang_deploy{\"whats_client_root_passwd\"}\n";
 		 # turn off echo
                  system "LC_ALL=C stty -echo";
@@ -1255,9 +1255,9 @@ sub interactive_mode {
                  system "LC_ALL=C stty -echo";
                  chomp($client_root_passwd_2=<STDIN>);
                  system "LC_ALL=C stty echo";
-	      if ($client_root_passwd_1 ne $client_root_passwd_2) { 
+	      if ($client_root_passwd_1 ne $client_root_passwd_2) {
 		  print colored ("$lang_deploy{\"sorry_passwd_not_match\"}\n", "$color_warn");
-	      }elsif ($client_root_passwd_1 eq "" && $client_root_passwd_2 eq "" ){ 
+	      }elsif ($client_root_passwd_1 eq "" && $client_root_passwd_2 eq "" ){
 		  print colored ("$lang_deploy{\"sorry_passwd_can_not_empty\"}\n", "$color_warn");
 	      }
 	    }
@@ -1282,7 +1282,7 @@ sub interactive_mode {
 	    # we set 2 different passwords to make while loop works.
 	    $client_pxelinux_passwd_1="pxeinit1";
 	    $client_pxelinux_passwd_2="pxeinit2";
-	    while ($client_pxelinux_passwd_1 ne $client_pxelinux_passwd_2 || ($client_pxelinux_passwd_1 eq "" && $client_pxelinux_passwd_2 eq "" )) { 
+	    while ($client_pxelinux_passwd_1 ne $client_pxelinux_passwd_2 || ($client_pxelinux_passwd_1 eq "" && $client_pxelinux_passwd_2 eq "" )) {
                  print "$lang_deploy{\"whats_client_pxelinux_passwd\"}\n";
 		 # turn off echo
                  system "LC_ALL=C stty -echo";
@@ -1293,9 +1293,9 @@ sub interactive_mode {
                  system "LC_ALL=C stty -echo";
                  chomp($client_pxelinux_passwd_2=<STDIN>);
                  system "LC_ALL=C stty echo";
-	      if ($client_pxelinux_passwd_1 ne $client_pxelinux_passwd_2) { 
+	      if ($client_pxelinux_passwd_1 ne $client_pxelinux_passwd_2) {
 		  print colored ("$lang_deploy{\"sorry_passwd_not_match\"}\n", "$color_warn");
-	      }elsif ($client_pxelinux_passwd_1 eq "" && $client_pxelinux_passwd_2 eq "" ){ 
+	      }elsif ($client_pxelinux_passwd_1 eq "" && $client_pxelinux_passwd_2 eq "" ){
 		  print colored ("$lang_deploy{\"sorry_passwd_can_not_empty\"}\n", "$color_warn");
 	      }
 	    }
@@ -1322,13 +1322,13 @@ sub interactive_mode {
 	    };
 	    /.*/ && do {
               $set_client_system_select="yes";
-	      while ($client_system_boot_timeout eq "") { 
+	      while ($client_system_boot_timeout eq "") {
                    print "$lang_deploy{\"whats_client_system_boot_timeout\"}\n".
                          "[$DEFAULT_CLIENT_SYSTEM_BOOT_TIMEOUT] ";
                    chomp($client_system_boot_timeout_=<STDIN>);
-	        if ( "$client_system_boot_timeout_" =~ /[^0-9]/ ) { 
+	        if ( "$client_system_boot_timeout_" =~ /[^0-9]/ ) {
 	  	  print colored ("$lang_deploy{\"sorry_timeout_must_be_number\"}\n", "$color_warn");
-	        } else { 
+	        } else {
 	            # if empty, use default timeout
                     if ($client_system_boot_timeout_ eq "") {
                       $client_system_boot_timeout_="$DEFAULT_CLIENT_SYSTEM_BOOT_TIMEOUT";
@@ -1539,7 +1539,7 @@ END_CFG
 
         for($i=0;$i<=$#ethernet_sys;$i++) {
           my $ethx=$ethernet_sys[$i];
-          if ( ! $MAC_file[$i] ){ 
+          if ( ! $MAC_file[$i] ){
 	    # output the range format
   	    print CONFIG_FILE <<END_CFG;
 #Setup for $ethx
@@ -1579,7 +1579,7 @@ END_CFG
 
 # subroutine to read file, parse them as parameters
 # in: config_file
-# out: hash of hash reference 
+# out: hash of hash reference
 sub read_config {
 
   my %HoH = ();
@@ -1593,16 +1593,16 @@ sub read_config {
       #print "ignore $_\n";
     }
     elsif($_=~/\[.*\]/) {
-      # has key 
+      # has key
       chop;
       my $key_ = $_;
       # skip the comments
       $key_ =~ s/#.*//;
       # delete the spaces
       $key_ =~ s/ //g;
-      $KoH=substr($key_,1,length($key_)-2); 
+      $KoH=substr($key_,1,length($key_)-2);
     }
-    else { 
+    else {
       # hash value
       chop;
       if( 0 == length($_) ) { next; }
@@ -1619,7 +1619,7 @@ sub read_config {
   }
   close(CONFIG);
 
-  return( \%HoH );  
+  return( \%HoH );
 }
 
 sub drbl_server_parse {
@@ -1657,7 +1657,7 @@ sub drbl_server_parse {
   my $drbl_mode=$rHoH->{"general"}{"DRBL_MODE"};
   my $drbl_server_as_NAT_server=$rHoH->{"general"}{"DRBL_SERVER_AS_NAT_SERVER"};
   # Note! We do not write and read $sh_debug and $verbose_opt to and from config file, since they are runtime parameter
-  
+
   # for login GDM
   my $login_gdm_opt=$rHoH->{"general"}{"LOGIN_GDM_OPT"};
   my $timed_login_time=$rHoH->{"general"}{"TIMED_LOGIN_TIME"};
@@ -1680,7 +1680,7 @@ sub drbl_server_parse {
   print "passwd_length: $passwd_length\n" if $verbosity >=2;
   print "maxswapsize in system is $maxswapsize\n" if $verbosity >= 2;
   print "ocs_img_repo_dir in system is $ocs_img_repo_dir\n" if $verbosity >= 2;
-  print "The hostname_prefix from config file: \"$hostname_prefix\".\n" if $verbosity >= 2;
+  print "Hostname_prefix from config file: \"$hostname_prefix\".\n" if $verbosity >= 2;
 
   # Try to get setting from system also
   chomp(my $nameserver_sys=`LC_ALL=C grep ^nameserver $DNS_sys | awk -F\" \" '{print \$2}'`);
@@ -1707,19 +1707,19 @@ sub drbl_server_parse {
   chomp($nisdomain_sys=`nisdomainname`);
   print "DNSDOMAIN in system is $dnsdomain_sys\n" if $verbosity >= 2;
   print "NISDOMAIN in system is $nisdomain_sys\n" if $verbosity >= 2;
-  
+
   # set nameserver, domain, nisdomain, the priority: use the config file first, if unset, then use the value in system
-  if ( ! $nameserver ) { 
-   $nameserver = $nameserver_sys; 
-   print "* nameserver is not set in config file, \nthe one \"$nameserver\" got from system will be used.\n" if $verbosity >= 2;   
+  if ( ! $nameserver ) {
+   $nameserver = $nameserver_sys;
+   print "* nameserver is not set in config file, \nthe one \"$nameserver\" got from system will be used.\n" if $verbosity >= 2;
   }
-  if ( ! $nisdomain ) { 
-   $nisdomain = $nisdomain_sys; 
-   print "* nisdomain is not set in config file, \nthe one \"$nisdomain\" got from system will be used.\n" if $verbosity >= 2;   
+  if ( ! $nisdomain ) {
+   $nisdomain = $nisdomain_sys;
+   print "* nisdomain is not set in config file, \nthe one \"$nisdomain\" got from system will be used.\n" if $verbosity >= 2;
   }
-  if ( ! $domain ) { 
-   $domain = $dnsdomain_sys; 
-   print "* dnsdomain is not set in config file, \nthe one got \"$domain\" from system will be used.\n" if $verbosity >= 2;   
+  if ( ! $domain ) {
+   $domain = $dnsdomain_sys;
+   print "* dnsdomain is not set in config file, \nthe one got \"$domain\" from system will be used.\n" if $verbosity >= 2;
   }
 
   # check if the values are set in config file or system, just in case
@@ -1730,12 +1730,12 @@ sub drbl_server_parse {
   }
 
   if ( ! $nisdomain ) {
-     print "Error! NISDOMAIN is unset!\n"; 
+     print "Error! NISDOMAIN is unset!\n";
      print "Please set it in config file \"$_[0]\" or system config file.\n";
      exit;
   }
   if ( ! $domain ) {
-     print "Error! DOMAIN unset!\n"; 
+     print "Error! DOMAIN unset!\n";
      print "Please set it in config file \"$_[0]\" or system config file.\n";
      exit;
   }
@@ -1761,14 +1761,14 @@ sub drbl_server_parse {
   }
 
   if ( "$login_gdm_opt" eq "timed_login" && ! $timed_login_time ) {
-     print "You set to timed login GDM, but there is no timed time!\n". 
-           "We will set the timed time as $TIMED_GDM_TIME_DEFAULT seconds.\n";
+     print "You set config to timed login GDM, but there is no set time!\n".
+           "We will set the time as $TIMED_GDM_TIME_DEFAULT seconds.\n";
   }
 
   # detect kernel in server support udp over NFS or tcp over NFS (tcp is the default seting one for DRBL environment)
   # try to get if the kernel running the server supports NFS over TCP, if not, ust NFS over UDP
   $nfsd_tcp_rlt=system("#!/bin/bash; . $DRBL_SCRIPT_PATH/sbin/drbl-functions; check_kernel_nfsd_tcp_config");
-  if ($nfsd_tcp_rlt == 256) { 
+  if ($nfsd_tcp_rlt == 256) {
   	# set the protocol as udp
           $nfs_protocol="udp";
   }else{
@@ -1820,20 +1820,20 @@ sub drbl_server_parse {
 
   # some general option in dhcpd.conf, hosts, $main_sh
   print DHCPD_OUT <<EOF;
-# Generated by DRBL. 
+# Generated by DRBL.
 # Do NOT modify this file unless you know what you are doing!
 
 default-lease-time			$DHCPD_DEFAULT_LEASE_TIME;
 max-lease-time				$DHCPD_MAX_LEASE_TIME;
 option subnet-mask			255.255.255.0;
 option domain-name-servers  		$nameserver;
-option domain-name			"$domain";	
+option domain-name			"$domain";
 ddns-update-style                       none;
 server-name 				drbl;
 
 allow booting;
 allow bootp;
-    
+
 option arch code 93 = unsigned integer 16;
 option space pxelinux;
 option pxelinux.magic      code 208 = string;
@@ -1876,7 +1876,7 @@ if option arch = 00:06 {
 #     # **************************************************************
 #     # For annoying sis900 network card, maybe it is 00:07:95, 00:0C:6E...
 #     if substring (hardware, 1, 3) = 00:0C:6E {
-#         # sis900.zpxe is specially for sis900 NIC, you can download it from 
+#         # sis900.zpxe is specially for sis900 NIC, you can download it from
 #         # http://rom-o-matic.net/etherboot/etherboot-5.4.4/contrib/rom-o-matic
 #         filename = "sis900.zpxe";
 #     }
@@ -1914,7 +1914,7 @@ if option arch = 00:06 {
 
 # The DRBL client class: PXE, Etherboot or DRBL client
 class "DRBL-Client" {
-  match if 
+  match if
   (substring(option vendor-class-identifier, 0, 9) = "PXEClient") or
   (substring(option vendor-class-identifier, 0, 9) = "Etherboot") or
   (substring(option vendor-class-identifier, 0, 10) = "DRBLClient") ;
@@ -1999,7 +1999,7 @@ system("mkdir -p $drbl_syscfg; cp -f drbl_deploy.conf $drbl_syscfg/");
   print DISKLESS_OUT <<EOF;
 #!/bin/bash $sh_debug
 # **********************************************************************
-# File automatically created by drblpush, 
+# File automatically created by drblpush,
 # better not to modify this file manually.
 # "drblpush" is written by K. L. Huang, klhaung _at_ gmail com,
 # especially for Debian, then modified to use with Redhat by
@@ -2023,7 +2023,7 @@ else
    echo "Not such language option!!!"
    exit 1
 fi
- 
+
 # store the orig LC_ALL, then set it as C
 LC_ALL_org=\$LC_ALL
 export LC_ALL=C
@@ -2041,7 +2041,7 @@ if [ -e /etc/debian_version ]; then
   # otherwise for Clonezilla SE the uEFI clients will always enter Clonezilla
   # mode after finishing the previous Clonezilla job. One day when Debian/Ubuntu
   # applies the patch, we will enable it.
-  # //NOTE// Sep/19/2015 We have used grub embedded preconfig way in drbl-gen-grub-efi-nb 
+  # //NOTE// Sep/19/2015 We have used grub embedded preconfig way in drbl-gen-grub-efi-nb
   # to solve this issue:
   # http://lists.gnu.org/archive/html/help-grub/2015-09/msg00035.html
   # Therefore disable this.
@@ -2098,7 +2098,7 @@ if [ "$(dirname $drbl_common_root)" = "/" ]; then
 fi
 
 # varlib_NOT_2_be_copied_2_each_client and varcache_2_be_copied_2_common_root are loaded from drbl.conf
-# varlib_NOT_2_be_copied_2_each_client -> varlib_opts_common_to_each is processed in 
+# varlib_NOT_2_be_copied_2_each_client -> varlib_opts_common_to_each is processed in
 # sbin/drbl-gen-client-files
 
 # "$DISTRIB_ID" is from /etc/lsb-release
@@ -2199,7 +2199,7 @@ if [ -z "$OS_Version" ]; then
   echo "$msg_press_ctrl_c_stop!"
   [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
   read
-  exit 1 
+  exit 1
 fi
 echo "The version number for your GNU/Linux: $OS_Version"
 
@@ -2231,13 +2231,13 @@ fi
 
 case "$purge_client" in
    [yY][eE][sS])
-      echo -n "Completely cleaning old common root files if they exist... " 
+      echo -n "Completely cleaning old common root files if they exist... "
       # Clean the stalled files...
       [ -d $drbl_common_root/etc ] && rm -rf $drbl_common_root/etc
       [ -d $drbl_common_root/var ] && rm -rf $drbl_common_root/var
       echo "done !"
-      
-      echo -n "Completely cleaning old nodes if they exist... " 
+
+      echo -n "Completely cleaning old nodes if they exist... "
       # Clean old node files
       for iclient in $drblroot/[0-9]*; do
         [ -d "$iclient" -a -n "$(echo "$iclient" | grep -E "[0-9]")" ] && rm -rf $iclient
@@ -2246,8 +2246,8 @@ case "$purge_client" in
       echo "done !"
       ;;
    *)
-      echo "Keeping the old common root files if they exist... " 
-      echo "Keeping old nodes if they exist... " 
+      echo "Keeping the old common root files if they exist... "
+      echo "Keeping old nodes if they exist... "
       ;;
 esac
 
@@ -2268,8 +2268,8 @@ done
 # locale en_US.UTF-8 will be the default locale for clonezilla dialog in console. Therefore we have to create that.
 gen_locale_if_not_found en_US en_US.UTF-8
 
-# 1/7/2006, since B2D does not have /media, but it will create and use that 
-# once you plug the usb devices, so now we mkdir media for DRBL B2D client 
+# 1/7/2006, since B2D does not have /media, but it will create and use that
+# once you plug the usb devices, so now we mkdir media for DRBL B2D client
 echo -n "."
 if [ -e /etc/b2d-release ]; then
   mkdir -p $drbl_common_root/media
@@ -2281,7 +2281,7 @@ for ir in .bashrc .bash_profile .profile .viminfo; do
   [ -f /root/$ir ] && rsync -a $RSYNC_OPT_EXTRA /root/$ir $drbl_common_root/root/
 done
 
-# create the console so that client can output message when entering init. This is especially for Debian. 
+# create the console so that client can output message when entering init. This is especially for Debian.
 echo -n "."
 # force to clean the old ones
 for i in console null; do
@@ -2299,7 +2299,7 @@ echo -n "."
 
 # Note!!! For rsync, do NOT to append "/" in the /sbin, .i.e. NO /sbin/
 rsync -a $RSYNC_OPT_EXTRA /sbin/* $drbl_common_root/sbin/
-# put the real init into common root as init.orig, DRBL client will have 
+# put the real init into common root as init.orig, DRBL client will have
 # an "init" to run before this init.orig
 rsync -aL $RSYNC_OPT_EXTRA /sbin/init $drbl_common_root/sbin/init.orig
 # Because Ubuntu 15.04 hides insserv in /usr/lib/insserv/insserv due to switch
@@ -2344,7 +2344,7 @@ export DESTDIR="$drbl_common_root"
 [ -e "$(LC_ALL=C which gawk)" ] && copy_exec_drbl "$(LC_ALL=C which gawk)" /bin/
 
 echo -n "."
-# Creat a file $drbl_common_root/sbin/fsck.nfs to let rc.sysinit use 
+# Creat a file $drbl_common_root/sbin/fsck.nfs to let rc.sysinit use
 # "fsck.nfs" always successfully
 echo "#!/bin/bash
 # dummy fsck.nfs file that always returns success.
@@ -2384,7 +2384,7 @@ for d in lib32 lib64; do
      echo -n "Copying symbolic link dir /$d to $drbl_common_root/..."
      rsync -a /$d $drbl_common_root/
      # 2nd, we copy the source file, e.g. "/emul" in the following.
-     # E.g. For amd64 Debian Lenny 
+     # E.g. For amd64 Debian Lenny
      # ls -alFh /lib32
      # lrwxrwxrwx 1 root root 20 2008-11-11 22:49 /lib32 -> /emul/ia32-linux/lib/
      # ls -alFh /lib64
@@ -2415,7 +2415,7 @@ done
 echo "Copying the directory /etc/ to clients common root $drbl_common_root..."
 rsync -a $etc_rsync_opt $RSYNC_OPT_EXTRA /etc $drbl_common_root
 
-# For Ubuntu 6.10 (edgy), there is no /etc/inittab, but upstart still respect 
+# For Ubuntu 6.10 (edgy), there is no /etc/inittab, but upstart still respect
 # inittab. We will create one for client, but for edgy+1 or later, maybe not respect /etc/inittab, then we have to follow upstart in the future.
 #if [ ! -f /etc/inittab ]; then
 #  cat <<-INIT_END > $drbl_common_root/etc/inittab
@@ -2428,7 +2428,7 @@ rsync -a $etc_rsync_opt $RSYNC_OPT_EXTRA /etc $drbl_common_root
 #fi
 #
 
-# clean the ssh key, so that client will create its own. 
+# clean the ssh key, so that client will create its own.
 key_file="ssh_host_dsa_key ssh_host_dsa_key.pub ssh_host_key ssh_host_key.pub ssh_host_rsa_key ssh_host_rsa_key.pub"
 for ik in $key_file; do
   if diff /etc/ssh/$ik $drbl_common_root/etc/ssh/$ik &>/dev/null; then
@@ -2453,7 +2453,7 @@ if [ -n "$(unalias ls 2>/dev/null; ls $drbl_common_root/etc/udev/rules.d/*persis
   rm -f $drbl_common_root/etc/udev/rules.d/*persistent-net.rules
 fi
 
-# make sure the hostname of server in 127.0.0.1 in /etc/hosts 
+# make sure the hostname of server in 127.0.0.1 in /etc/hosts
 # is not copied to clients.
 # like
 #-----------------------------------------------------------
@@ -2469,7 +2469,7 @@ fi
 # create mkswapfile to $drbl_common_root/etc/init.d/
 # This must before service to add
 cp -f $drbl_setup_path/files/misc/{mkswapfile,drblthincli,arm-wol} $drbl_common_root/etc/init.d/
-# ocs-run is a script to start clone for clonezilla, it only will be put in 
+# ocs-run is a script to start clone for clonezilla, it only will be put in
 # client's rc1.d when clonezilla save/restart start.
 cp -f $drbl_setup_path/files/ocs/ocs-run $drbl_common_root/etc/init.d/
 # For Debian, there is no gdm-safe-restart script, we just copy it from drbl
@@ -2496,12 +2496,12 @@ if is_systemd_init; then
       cp -a /usr/share/systemd/tmp.mount $drbl_common_root/lib/systemd/system/tmp.mount
       # Manuall link the tmp.mount since systemctl fails to run in chroot.
       mkdir -p $drbl_common_root/etc/systemd/system/local-fs.target.wants/
-      ln -fs /lib/systemd/system/tmp.mount $drbl_common_root/etc/systemd/system/local-fs.target.wants/tmp.mount 
+      ln -fs /lib/systemd/system/tmp.mount $drbl_common_root/etc/systemd/system/local-fs.target.wants/tmp.mount
     fi
   fi
 fi
 
-# For MDK/Debian/SuSE, we put the one we wrote "firstboot.XXX.drbl" to 
+# For MDK/Debian/SuSE, we put the one we wrote "firstboot.XXX.drbl" to
 # common root /etc/init.d as firstboot.
 # There is already firstboot comes with RH/FC/CentOS.
 # We do NOT use the firstboot comes with yast2-firstboot in SuSE.
@@ -2532,7 +2532,7 @@ if [ -e /etc/debian_version ]; then
     # To avoid $DIR is noting.
     # Ref: https://lists.ubuntu.com/archives/ubuntu-users/2006-May/079378.html
     perl -pi -e 's|^([[:space:]]*)(umount -r -d \$DIRS*)|$1 [ -n "\$DIRS" ] && $2 # Modified by DRBL|g' $drbl_common_root/etc/init.d/umountfs
-    # For Debian Squeeze, by default it uses parallel start service "startpar" (i.e. CONCURRENCY=makefile). We disable it in the client so that we won't have to modify the services. E.g. /etc/rc1.d/*ssh when running clonezilla SE job. 
+    # For Debian Squeeze, by default it uses parallel start service "startpar" (i.e. CONCURRENCY=makefile). We disable it in the client so that we won't have to modify the services. E.g. /etc/rc1.d/*ssh when running clonezilla SE job.
   fi
   if [ -e $drbl_common_root/etc/init.d/rc ]; then
     LC_ALL=C perl -pi -e "s|^CONCURRENCY=.*|CONCURRENCY=none # Mofified by DRBL|g" $drbl_common_root/etc/init.d/rc
@@ -2556,7 +2556,7 @@ elif [ -e /etc/SuSE-release ]; then
   perl -pi -e 's/^[[:space:]]*#+[[:space:]]*Default-Start:.*/# Default-Start:     B 1/g' $drbl_common_root/etc/init.d/boot.udev
   # 3. boot.localfs, we add -l when umount in "boot.udev stop" (called by reboot/halt)
   perl -pi -e 's/^([[:space:]]*umount) -avt (noproc,nonfs.*)/$1 -avtl nosysfs,$2 # Modified by DRBL/g' $drbl_common_root/etc/init.d/boot.localfs
-  # 3. nfs client, 
+  # 3. nfs client,
   # (a) For OpenSuSE 11.1, it seems if we do not restart dbus after NFS is run, something weird. E.g. When xdm start, an error:
   # Starting service gdm ** (gdm:2916): WARNING **: Couldn't connect to system bus: Failed to connect to socket /var/run/dbus/system_bus_socket: Connection refused startproc:  exit status of parent of /usr/sbin/gdm: 1 failed
   # Therefore we force to restart dbus after nfs dirs are mounted:
@@ -2564,17 +2564,17 @@ elif [ -e /etc/SuSE-release ]; then
   # (b) We do not want to recreate ld.so.cache, it is only provided
   # by DRBL server.
   # Note! recreate here will take a long time.
-  # Note2: boot.ldconfig is run before nfs. 
-  # It will not include some remote NFS directory 
+  # Note2: boot.ldconfig is run before nfs.
+  # It will not include some remote NFS directory
   # (like /opt/kde/lib... /opt/gnome/lib...
   # we have to turn off boot.ldconfig in /etc/init.d/boot.d also.
   # Here we put "true" so that if there is only one command in the if/else block, the nfs start script won't fail.
   perl -pi -e 's|^([[:space:]]*#+)[[:space:]]*check if ld.so.cache needs to be refreshed.*|$1 DRBL comment this, we will not let boot.ldconfig run in DRBL client.|g' $drbl_common_root/etc/init.d/nfs
   perl -pi -e 's|/etc/init.d/(boot.ldconfig start.*)|true #$1|g' $drbl_common_root/etc/init.d/nfs
-  rm -f $drbl_common_root/etc/init.d/boot.d/[SK][0-9][0-9]boot.ldconfig 
+  rm -f $drbl_common_root/etc/init.d/boot.d/[SK][0-9][0-9]boot.ldconfig
 fi
 
-# Remove the unnecessary service, 
+# Remove the unnecessary service,
 # First, remove all the service
 # Prepare the necessary env for chkconfig, update-rc.d or insserv
 if [ -e /etc/debian_version ]; then
@@ -2596,7 +2596,7 @@ service_to_be_kept="dualconf functions reboot halt killall single mandrake_consm
 isrv_list="$(cd $drbl_common_root/etc/init.d; ls *)"
 # For systemd-like , E.g. FC17
 if is_systemd_init; then
-  isrv_list="$isrv_list $(find $drbl_common_root/lib/systemd/system -name "*.service" -type f -exec basename {} \;| sed -e "s/\.service$//g")"	
+  isrv_list="$isrv_list $(find $drbl_common_root/lib/systemd/system -name "*.service" -type f -exec basename {} \;| sed -e "s/\.service$//g")"
 fi
 
 for isrv in $isrv_list ; do
@@ -2622,8 +2622,8 @@ for isrv in $isrv_list ; do
     # For Debian
     # We should keep the services in rcS.d, but "update-rc.d remove" does
     # not support this. It will also clean all the services in rcS.d.
-    # So we will copy those services of rcS.d to client's common root 
-    # after this. NOTE! This can only be done after all updata-rc.d 
+    # So we will copy those services of rcS.d to client's common root
+    # after this. NOTE! This can only be done after all updata-rc.d
     # finished. Otherwise it will affect the update-rc.d
     if [ "$dbn_ubn_serv_control_prog" = "use-insserv" ]; then
       chroot $drbl_common_root/ insserv -f -r $isrv &> /dev/null
@@ -2633,7 +2633,7 @@ for isrv in $isrv_list ; do
   elif [ -e /etc/SuSE-release ]; then
     # For SuSE
     # There are a lot of boot.* services, we must exclude them also.
-    # Special case: boot.udev, which only starts in boot, 2, 3, 5, but we need 
+    # Special case: boot.udev, which only starts in boot, 2, 3, 5, but we need
     # it to start in 1 also. So we remove boot.udev here, then modify it, then
     # add it later.
     [ "$isrv" = "boot.udev" ] && chroot $drbl_common_root/ /sbin/insserv -f -r $isrv
@@ -2646,7 +2646,7 @@ for isrv in $isrv_list ; do
   else
     # For RH-like
     chroot $drbl_common_root/ /sbin/chkconfig --del $isrv
-    # Maybe it will fail to delete the service, so try to delete brutely. 
+    # Maybe it will fail to delete the service, so try to delete brutely.
     # This happens in Mandriva 2007.0. Bugs report:
     # http://qa.mandriva.com/show_bug.cgi?id=24409
     # http://qa.mandriva.com/show_bug.cgi?id=23104
@@ -2666,11 +2666,11 @@ done
 # SystemMaxUse=20M
 # SystemMaxFileSize=20M
 
-if [ -e "$drbl_common_root/etc/systemd/journald.conf" ]; then 
-  sed -i -e "/SystemMaxUse\=/d" -e "/SystemMaxFileSize\=/d" -e "/Storage\=/d" $drbl_common_root/etc/systemd/journald.conf 
-  echo "Storage=volatile" >> $drbl_common_root/etc/systemd/journald.conf 
-  echo "SystemMaxUse=20M" >> $drbl_common_root/etc/systemd/journald.conf 
-  echo "SystemMaxFileSize=20M" >> $drbl_common_root/etc/systemd/journald.conf 
+if [ -e "$drbl_common_root/etc/systemd/journald.conf" ]; then
+  sed -i -e "/SystemMaxUse\=/d" -e "/SystemMaxFileSize\=/d" -e "/Storage\=/d" $drbl_common_root/etc/systemd/journald.conf
+  echo "Storage=volatile" >> $drbl_common_root/etc/systemd/journald.conf
+  echo "SystemMaxUse=20M" >> $drbl_common_root/etc/systemd/journald.conf
+  echo "SystemMaxFileSize=20M" >> $drbl_common_root/etc/systemd/journald.conf
 fi
 
 # Get the gdm or kdm config filename
@@ -2729,9 +2729,9 @@ client_services=""
 # firstboot is always necessary. Even for MDK, there is no firstboot in /etc/init.d, we will add it which is provided by DRBL. It will control the run level
 # via chkconfig (i.e. for rc3, although the service is added, but it will
 # not run.
-# Note by Steven Shiau on 2006/09/26, we put firstboot in the beginning 
-# (hence it's in front of the dm service of Mandriva), since in LSB based 
-# service, we need to put firstboot before dm, otherwise dm might run 
+# Note by Steven Shiau on 2006/09/26, we put firstboot in the beginning
+# (hence it's in front of the dm service of Mandriva), since in LSB based
+# service, we need to put firstboot before dm, otherwise dm might run
 # before firstboot.
 client_services="$client_services firstboot"
 
@@ -2914,14 +2914,14 @@ for i in $client_services; do
           chroot $drbl_common_root/ /usr/sbin/update-rc.d $i defaults &> /dev/null
           ;;
       esac
-    fi 
+    fi
   elif [ -e /etc/SuSE-release ]; then
     # SuSE
     chroot $drbl_common_root/ /sbin/insserv -f $i
   else
     # RH-like
     # Note by Steven Shiau on 2006/9/26
-    # Mandriva 2007 uses LSB service config and parallel init. 
+    # Mandriva 2007 uses LSB service config and parallel init.
     # We have to modify some services
     case "$i" in
       ypbind)
@@ -2960,7 +2960,7 @@ for i in $client_services; do
 done
 # deal with ocs-run service in systemd environemnt on Fedora 17 and later
 #	1. create rescue.target and services files
-#	2. make a link of rescue.service to ocsd-rescue.service 
+#	2. make a link of rescue.service to ocsd-rescue.service
 #	3. remove /etc/rc*.d/S*ocs-run to avoid ocs-run service competition
 if is_systemd_init; then
   [ ! -d "$drbl_common_root/etc/systemd/system/rescue.target.wants" ] && mkdir "$drbl_common_root/etc/systemd/system/rescue.target.wants"
@@ -2968,7 +2968,7 @@ if is_systemd_init; then
   if [ -d $drbl_setup_path/files/${OS_type}/${OS_Version}/systemd/system ]; then
     cp $drbl_setup_path/files/${OS_type}/${OS_Version}/systemd/system/ocsd-*.service $drbl_common_root/etc/systemd/system/
   else
-    # Can not find fine-tune file, show warning, and use the most related one. 
+    # Can not find fine-tune file, show warning, and use the most related one.
     OS_Version_Major="${OS_Version:0:3}"  # E.g. CO7.1.1503 -> CO7
     most_related_ver_d="$(LC_ALL=C find $drbl_setup_path/files/$OS_type/${OS_Version_Major}* -type d -maxdepth 1 -exec dirname {} \; 2>/dev/null | sort | uniq | tail -n 1)"
     [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
@@ -3023,13 +3023,13 @@ if [ -e /etc/debian_version ]; then
 fi
 
 vmware_as_server="$(grep "VMWare Inc" /proc/pci 2>/dev/null)"
-# for VMWare, you have better to install the VMWare tools, 
+# for VMWare, you have better to install the VMWare tools,
 if [ -n "$vmware_as_server" ]; then
   [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
   echo "It is VMWare as DRBL server ..., If you want to use X Window, make sure you already installed VMWare tools."
   [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
 fi
-# First, clean the XF86Config, 
+# First, clean the XF86Config,
 # let configure (like redhat-cfg-xfree86) in /etc/init.d/firstboot
 # to create the first one.
 # Remove XF86Config and xorg.conf (Both for RH/MDK) in common root
@@ -3039,7 +3039,7 @@ if [ -e /etc/debian_version ]; then
   for ix in XF86Config-4 xorg.conf; do
     [ -e "$drbl_common_root/etc/X11/$ix" ] && mv -f $drbl_common_root/etc/X11/${ix} $drbl_common_root/etc/X11/${ix}.drbl.template
   done
-  # Debian Sarge does not sync the locale setting of gdm with system. do it 
+  # Debian Sarge does not sync the locale setting of gdm with system. do it
   if [ -f /etc/default/gdm ]; then
     # use subshell to avoid the running shell
     (
@@ -3064,7 +3064,7 @@ else
 fi
 
 # Remove the firstboot setting to aviod it says NO
-[ -f $drbl_common_root/etc/sysconfig/firstboot ] && rm -f $drbl_common_root/etc/sysconfig/firstboot 
+[ -f $drbl_common_root/etc/sysconfig/firstboot ] && rm -f $drbl_common_root/etc/sysconfig/firstboot
 # Remove the /etc/reconfigSys to avoid firstboot run reconfig
 [ -f $drbl_common_root/etc/reconfigSys ] && rm -f $drbl_common_root/etc/reconfigSys
 # Disable the /usr/sbin/firstboot in the firstboot service, we should not reconfig ntp, user accounts for clients... This is for Redhat, Fedora...
@@ -3090,7 +3090,7 @@ if [ -e /etc/debian_version ]; then
 # Note from DRBL:
 # These modules are cleaned by DRBL drblpush so that we have a clean file.
 # You can add any module you need here. But do not force to put ide-cd ide-disk ide-generic modules here, this will result chip driver (like piix and ide_core) is loaded afther them (by /etc/rcS.d/S40hotplut). This will cause a problem: unable to turn on IDE HD DMA ("HDIO_SET-DMA failed: Operation not permitted")
-# DRBL will load ide-* in /etc/rcS.d/S41force-load-ide 
+# DRBL will load ide-* in /etc/rcS.d/S41force-load-ide
 
 MOD_END
   fi
@@ -3135,7 +3135,7 @@ elif [ -e /etc/SuSE-release ]; then
     perl -pi -e 's/(^#[[:space:]]*Required-Start:.*)haldaemon/$1/g' $drbl_common_root/etc/init.d/network
     chroot $drbl_common_root/ /sbin/insserv -f network
   fi
-  # modify haldaemon service to make it after nfs, since 
+  # modify haldaemon service to make it after nfs, since
   # ldd /usr/sbin/hald:
   #  ...
   #  libgobject-2.0.so.0 => /opt/gnome/lib/libgobject-2.0.so.0 (0xb7ec9000)
@@ -3166,7 +3166,7 @@ if [ -e /etc/debian_version ]; then
 elif [ -e /etc/SuSE-release ]; then
   # SuSE
   client_halt_reboot_runlevel_must_remove_srv="nfs network"
-  for i in $client_halt_reboot_runlevel_must_remove_srv; do 
+  for i in $client_halt_reboot_runlevel_must_remove_srv; do
      # Note! Only for K[0-9][0-9]*, since nfs is nfs client in SuSE, we need it
      # to start, but do not want it to be killed when change runlevel, reboot
      # or halt.
@@ -3175,7 +3175,7 @@ elif [ -e /etc/SuSE-release ]; then
 else
   # RH-like
   client_halt_reboot_runlevel_must_remove_srv="netfs network killall"
-  for i in $client_halt_reboot_runlevel_must_remove_srv; do 
+  for i in $client_halt_reboot_runlevel_must_remove_srv; do
      rm -f $drbl_common_root/etc/rc[06].d/[SK][0-9][0-9]$i
   done
 fi
@@ -3187,7 +3187,7 @@ for ise in /etc/selinux/config /etc/sysconfig/selinux; do
   fi
 done
 
-# switch the link in $drblcommont_root/sbin, some distributions, 
+# switch the link in $drblcommont_root/sbin, some distributions,
 # like B2D, will link poweroff to init, for we have make it link to init.orig
 # lnkfiles="halt poweroff reboot telinit"
 lnkfiles="$(find $drbl_common_root/sbin/ -type l -lname "init" -print)"
@@ -3238,9 +3238,9 @@ mkdir -p $drbl_common_root/etc/diskless-image
 # For older version of udev, we test udevd, for newer one, we test udevadm
 if [ -x "$drbl_common_root/sbin/udevadm" -o \
      -x "$drbl_common_root/sbin/udevd" ]; then
-  echo -n "Using udev for clients... " 
+  echo -n "Using udev for clients... "
 elif [ -f "$drbl_pkgdir/dev.tgz" ]; then
-  echo -n "Using old-style dev for clients... " 
+  echo -n "Using old-style dev for clients... "
   cp -f $drbl_pkgdir/dev.tgz $drbl_common_root/etc/diskless-image
 else
   [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
@@ -3248,7 +3248,7 @@ else
   echo "Please press Ctrl-C to stop the program!"
   [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
   read
-  exit 1 
+  exit 1
 fi
 
 # Switch client graphic/text mode
@@ -3320,7 +3320,7 @@ if [ -e /etc/debian_version ]; then
     # It need /usr/share/perl5/DebianNet.pm, but it depends on perl version.
     #chroot $drbl_common_root /usr/sbin/update-inetd --remove tftp
     # Here we use easier method, just delete the tftp in /etc/inetd.conf
-    # It looks like: 
+    # It looks like:
     # tftp           dgram   udp     wait    root  /usr/sbin/in.tftpd /usr/sbin/in.tftpd -s /var/lib/tftpboot
     perl -pi -e "s/^tftp[[:space:]]+.*//g" $drbl_common_root/etc/inetd.conf
   fi
@@ -3335,7 +3335,7 @@ if [ -e /etc/debian_version ]; then
   fi
 else
   # RH-like & SuSE
-  perl -p -i -e "s/disable.*=.*/disable                 = yes/g" $drbl_common_root/etc/xinetd.d/tftp 
+  perl -p -i -e "s/disable.*=.*/disable                 = yes/g" $drbl_common_root/etc/xinetd.d/tftp
 fi
 
 # (2) for server
@@ -3344,7 +3344,7 @@ if [ -n "$(getenforce 2>/dev/null)" -a "$(getenforce 2>/dev/null)" = "Enforcing"
   echo "SELinux is 'Enabled' !! Please disable it or make it to work with DRBL relative service "
   sleep 10
   [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
-fi 
+fi
 # Disable FirewallD
 if [ "$(LC_ALL=C firewall-cmd --state 2>/dev/null)" = "running" ]; then
   [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
@@ -3353,13 +3353,13 @@ if [ "$(LC_ALL=C firewall-cmd --state 2>/dev/null)" = "running" ]; then
   systemctl disable firewalld.service
   sleep 10
   [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
-fi 
+fi
 
 # set the tftp to on when xinetd/inted starts and portmap or rpcbind settings in server.
 if [ -e /etc/debian_version ]; then
   # Debian
   # (1) tftpd
-  # Force to remove tftpd in inetd if it's set, and we will add it later 
+  # Force to remove tftpd in inetd if it's set, and we will add it later
   # and put our arguments "-s /tftpboot/nbi_img"
   if grep -q "^tftp" /etc/inetd.conf 2>/dev/null; then
     /usr/sbin/update-inetd --remove tftp
@@ -3394,22 +3394,22 @@ TFTP_END
     # (2) Portmap. From portmap (6.0-11), when new installation, default the question whether to bind to the loopback interface only. We have to open it.
     if [ -e /etc/default/portmap ]; then
       perl -pi -e 's/^(OPTIONS=.*)/#$1 # Commented by DRBL/g' /etc/default/portmap
-    fi 
+    fi
   else
     # it's a daemon in inetd, set it in inetd.conf
-    /usr/sbin/update-inetd --group BOOT --add 'tftp	dgram	udp	wait	root	/usr/sbin/in.tftpd	/usr/sbin/in.tftpd	-s /tftpboot/nbi_img' 
+    /usr/sbin/update-inetd --group BOOT --add 'tftp	dgram	udp	wait	root	/usr/sbin/in.tftpd	/usr/sbin/in.tftpd	-s /tftpboot/nbi_img'
   fi
 else
   # RH-like & SuSE
   if [ -e /etc/xinetd.d/tftp ]; then
-    # set the tftp working directory to be /tftpboot/nbi_img 
+    # set the tftp working directory to be /tftpboot/nbi_img
     # to have higher security.
-    perl -p -i -e "s/disable.*=.*/disable                 = no/g" /etc/xinetd.d/tftp 
+    perl -p -i -e "s/disable.*=.*/disable                 = no/g" /etc/xinetd.d/tftp
     perl -p -i -e "s/server_arg.*=.*/server_args		= -s \/tftpboot\/nbi_img/g"  /etc/xinetd.d/tftp
   fi
-  # For systemd distr. , ex: Fedora 21 
+  # For systemd distr. , ex: Fedora 21
   if [ -e /usr/lib/systemd/system/tftp.service ]; then
-    perl -p -i -e "s/^(ExecStart=\S*)[[:space:]]+.*$/\$1 -s \/tftpboot\/nbi_img/g" /usr/lib/systemd/system/tftp.service 
+    perl -p -i -e "s/^(ExecStart=\S*)[[:space:]]+.*$/\$1 -s \/tftpboot\/nbi_img/g" /usr/lib/systemd/system/tftp.service
   fi
 fi
 
@@ -3424,7 +3424,7 @@ nameserver=$nameserver
 
 CONFIG_END
 
-# for clients' public IP 
+# for clients' public IP
 # if the file $public_ip_list is created, copy it
 [ -f "$public_ip_list" ] && cp -f $public_ip_list $drbl_common_root/etc/diskless-image/
 
@@ -3433,11 +3433,11 @@ if [ "$collect_mac" = "yes" ]; then
   cp -f macadr-eth*.txt $drbl_syscfg/ &> /dev/null
 fi
 
-# write the resolv.conf 
+# write the resolv.conf
 # //NOTE// For resolvconf on Ubuntu 12.04, the /etc/resolv.conf is linked to /run/resolvconf/resolv.conf, which is a tmpfs file system. Here just remove it.
 rm -f $drbl_common_root/etc/resolv.conf
 
-for nameserver in $nameserver_; do 
+for nameserver in $nameserver_; do
   echo "nameserver $nameserver" >> $drbl_common_root/etc/resolv.conf
 done
 
@@ -3466,7 +3466,7 @@ case "$OS_type" in
     ;;
 esac
 
-# "ln -fs tmp/boot/ boot" in template 
+# "ln -fs tmp/boot/ boot" in template
 # insert "mkdir tmp/boot" in rc.sysinit of other clients, because it's tmpfs
 # so that /sbin/mkkerneldoth in rc.sysinit can creat file "/boot/boot.h"
 if [ ! -L "$drbl_common_root/boot" ]; then
@@ -3484,10 +3484,10 @@ elif [ -e /etc/SuSE-release ]; then
   fi
 else
   # RH-like
-  # 1st, clean rc.local 
+  # 1st, clean rc.local
   [ -f $drbl_common_root/etc/rc.d/rc.local ] && rm -f $drbl_common_root/etc/rc.d/rc.local
-  
-  # 2nd, create a clean rc.local 
+
+  # 2nd, create a clean rc.local
   cat <<-RC_LOCAL > $drbl_common_root/etc/rc.d/rc.local
 #!/bin/bash
 #
@@ -3534,7 +3534,7 @@ if [ -e /etc/debian_version ]; then
     perl -pi -e 's/^([[:space:]]*halt .*)-i(.*)/$1 $2 # Modified by DRBL/' $drbl_common_root/etc/init.d/halt
   fi
   # For B2D, the reboot and halt is a little different, except the above,
-  # we have to comment umount -a 
+  # we have to comment umount -a
   if [ -e $drbl_common_root/etc/init.d/reboot ]; then
     perl -pi -e 's/^([[:space:]]*umount -a.*)/#$1 # Modified by DRBL/' $drbl_common_root/etc/init.d/reboot
   fi
@@ -3576,7 +3576,7 @@ if [ -e /etc/debian_version ]; then
 
   if [ -x "$drbl_common_root/etc/init.d/linux-restricted-modules-common" ]; then
     # $drbl_common_root/lib/modules/$KERNEL_VER/volatile is already created in drblsrv-offline for Ubuntu. Here we have to modify linux-restricted-modules-common service so that it can write in /lib/modules/$KERNEL_VER/volatile, otherwise it is Read-Only NFS filesystem.
-    # /sbin/lrm-manager --quick -> 
+    # /sbin/lrm-manager --quick ->
     # mount -n -t tmpfs tmpfs /lib/modules/`uname -r`/volatile; /sbin/lrm-manager --quick # Modified by DRBL
     perl -pi -e 's|^([[:space:]]*)(/sbin/lrm-manager --quick.*)|$1mount -n -t tmpfs tmpfs /lib/modules/`uname -r`/volatile; $2 # Modified by DRBL|g' $drbl_common_root/etc/init.d/linux-restricted-modules-common
   fi
@@ -3615,7 +3615,7 @@ if [ -e /etc/debian_version ]; then
       # case (1): The function name is do_start (dapper)
       perl -pi -e 's|(^[[:space:]]*)do_start([[:space:]]*$)|$1/etc/init.d/start-srv-after-ifup; mkdir -p /tmp/boot; do_start # Modified by DRBL $2|' $drbl_common_root/etc/init.d/$infsf
       # case (2): The function name is do_wait_async_mount (etch), in this case
-      # We'd better to force ASYNCMOUNTNFS=yes in /etc/default/rcS 
+      # We'd better to force ASYNCMOUNTNFS=yes in /etc/default/rcS
       perl -pi -e 's|(^[[:space:]]*)do_wait_async_mount([[:space:]]*$)|$1/etc/init.d/start-srv-after-ifup; mkdir -p /tmp/boot; do_wait_async_mount # Modified by DRBL $2|' $drbl_common_root/etc/init.d/$infsf
       # mountnfs.sh is buggy, too. Actually it's mountpoint bug, which failed to identify some mount point as mount point, e.g. /usr/ and /var (mounted in init.drbl)
       # https://bugs.launchpad.net/ubuntu/+source/sysvinit/+bug/93634
@@ -3714,8 +3714,8 @@ if [ -e /etc/debian_version ]; then
           cp -af $drbl_setup_path/files/Ubuntu/$DISTRIB_RELEASE/plymouth.conf $drbl_common_root/etc/init/plymouth.conf
 	else
           if [ "$DISTRIB_RELEASE" \< 13.10 ]; then
-            # Here if we use the override file like the following for 
-	    # Ubuntu 13.10, 
+            # Here if we use the override file like the following for
+	    # Ubuntu 13.10,
 	    # the client won't be able to enter lightdm, only stay in text mode.
 	    # This is OK for Clonezilla mode, but not for DRBL mode. This issue
 	    # is fixed on Ubuntu 13.10.
@@ -3730,14 +3730,14 @@ if [ -e /etc/debian_version ]; then
 	    # For Ubuntu 14.04 or later, a command about plymouth was added in /etc/init/rc.conf. We have to disable it otherwise it will switch to vt7 but rc1 (where S19ocs-run is, especially for select-in-client mode of clonezilla) is still in vt1.
 	    perl -pi -e 's|^([[:space:]]*)(status plymouth-shutdown.*start wait-for-state WAITER=rc WAIT_FOR=plymouth-shutdown.*)|$1true #$2 # Commented by DRBL to keep the services in rc in same console|g' $drbl_common_root/etc/init/rc.conf
 	  else
-            # Ubuntu 14.10 or later. 
+            # Ubuntu 14.10 or later.
 	    # For Ubuntu 14.10 plymouth service is a must for client to start all required service,
 	    # Therefore we can not disable it.
 	    # For Ubuntu 14.04 or later, a command about plymouth was added in /etc/init/rc.conf. We have to disable it otherwise it will switch to vt7 but rc1 (where S19ocs-run is, especially for select-in-client mode of clonezilla) is still in vt1.
 	    perl -pi -e 's|^([[:space:]]*)(status plymouth-shutdown.*start wait-for-state WAITER=rc WAIT_FOR=plymouth-shutdown.*)|$1true #$2 # Commented by DRBL to keep the services in rc in same console|g' $drbl_common_root/etc/init/rc.conf
 	    # Somehow the unnecessary services in client's /etc/rcS.d/ cause the console behaves weird... like:
 	    # (1) The TUI output of partclone is distored
-	    # (2) Keyboard does not work well in the mode "select-in-client" 
+	    # (2) Keyboard does not work well in the mode "select-in-client"
 	    # Therefore we just remove all of them except S00wait-drbl. It's OK to do so because all the required services are actually started by upstart already.
 	    # //NOTE// This workaround does not work well. It will cause client fails to reboot/shtudown. Therefore we can not use it.
             # if [ "$DISTRIB_RELEASE" = "14.10" ]; then
@@ -3746,7 +3746,7 @@ if [ -e /etc/debian_version ]; then
             #     rm -f $isr
             #   done
             # fi
-	  fi 
+	  fi
 	fi
 	;;
     esac
@@ -3794,7 +3794,7 @@ if [ -e /etc/debian_version ]; then
 	  else
             # For : LinuxMint 18 or later (pre-expected)
 	    perl -pi -e 's|^([[:space:]]*)(status plymouth-shutdown.*start wait-for-state WAITER=rc WAIT_FOR=plymouth-shutdown.*)|$1true #$2 # Commented by DRBL to keep the services in rc in same console|g' $drbl_common_root/etc/init/rc.conf
-	  fi 
+	  fi
         fi
       ;;
       *)
@@ -3814,7 +3814,7 @@ if [ -e /etc/debian_version ]; then
     #start on (local-filesystems
     #          and net-device-up IFACE=lo)
     # upstart_conf_2_be_startup is for those conf will be "start on startup"
-    # So the sequence: 
+    # So the sequence:
     # 1st group: startup -> udev.conf and portmap.conf
     # 2nd group: drbl-client-boot (which contains virtual fs, dubs, hal, nfs...)
     # 3rd group: after drbl-client-boot -> rc-sysinit.conf
@@ -3856,7 +3856,7 @@ elif [ -e /etc/SuSE-release ]; then
   # halt.
   perl -pi -e 's|^(> /success.*)|#$1 # Modified by DRBL|' $drbl_common_root/etc/init.d/halt
   perl -pi -e 's|^(umount -anvt proc.*)|#$1 # Modified by DRBL|' $drbl_common_root/etc/init.d/halt
-  perl -pi -e 's|^(test -z.*fuser -sk -HUP $hupon)|#$1 # Modified by DRBL|' $drbl_common_root/etc/init.d/halt 
+  perl -pi -e 's|^(test -z.*fuser -sk -HUP $hupon)|#$1 # Modified by DRBL|' $drbl_common_root/etc/init.d/halt
   # 2. Do not clean or remove etc/mtab when boots
   perl -pi -e 's|^([[:space:]]*)(rm -f /etc/mtab.*)|$1# $2 # Modified by DRBL|' $drbl_common_root/etc/init.d/boot.rootfsck
   # 3. For OpenSuSE 10.0, clean /fastboot in boot.localfs is:
@@ -3876,7 +3876,7 @@ elif [ -e /etc/SuSE-release ]; then
   perl -pi -e 's|^([[:space:]]*)(mount -f /)|$1# $2 # Modified by DRBL|g' $drbl_common_root/etc/init.d/boot.rootfsck
 
   # 5. Force /etc/init.d/rc1.d/S*single to be at S90, not too early. In OpenSuSE 11.1, it's S10single, while ocs-run is S19.
-  ( 
+  (
     if ls $drbl_common_root/etc/init.d/rc1.d/S*single >/dev/null 2>&1; then
       cd $drbl_common_root/etc/init.d/rc1.d/
       mv S*single S90single
@@ -3920,7 +3920,7 @@ else
   fi
 fi
 
-# delete the users in template, i.e. we will use the YP, not local account 
+# delete the users in template, i.e. we will use the YP, not local account
 # in clients
 echo -n "Deleting the accounts (except root) in the clients common root template... "
 usrdel_file_need="/usr/sbin/userdel"
@@ -3928,19 +3928,19 @@ cp --parents -d $usrdel_file_need $drbl_common_root
 if ldd $usrdel_file_need &>/dev/null; then
   usrdel_lib_need=$(LC_ALL=C ldd /usr/sbin/userdel | sed -e "s/.*=> //g" -e "s/(0x.*)//g" | awk '{print $1}')
   for imod in $usrdel_lib_need; do
-    # Skip linux-vdso.so.1 and linux-gate.so.1, the virtual DSO, a shared object exposed by the kernel. They do not exist on the file system. Ref: http://ilivetoseek.wordpress.com/2011/10/24/linux-gate-so-1-or-linux-vdso-so-1/ 
+    # Skip linux-vdso.so.1 and linux-gate.so.1, the virtual DSO, a shared object exposed by the kernel. They do not exist on the file system. Ref: http://ilivetoseek.wordpress.com/2011/10/24/linux-gate-so-1-or-linux-vdso-so-1/
     [ "$imod" = "linux-vdso.so.1" ] && continue
     [ "$imod" = "linux-gate.so.1" ] && continue
     cp --parents -d $imod $drbl_common_root
   done
 fi
-# UGLY... For SuSE, we need to copy /usr/lib/pwdutils/ to $drbl_common_root, 
+# UGLY... For SuSE, we need to copy /usr/lib/pwdutils/ to $drbl_common_root,
 # but why ? Here it's just a lots of try-and-errors...
 [ -d /usr/lib/pwdutils/ ] && cp --parents -d -r /usr/lib/pwdutils $drbl_common_root
-[ -x /usr/sbin/userdel-pre.local ] && cp --parents -d /usr/sbin/userdel-pre.local $drbl_common_root 
-[ -x /usr/sbin/userdel-post.local ] && cp --parents -d /usr/sbin/userdel-post.local $drbl_common_root 
+[ -x /usr/sbin/userdel-pre.local ] && cp --parents -d /usr/sbin/userdel-pre.local $drbl_common_root
+[ -x /usr/sbin/userdel-post.local ] && cp --parents -d /usr/sbin/userdel-post.local $drbl_common_root
 # /usr/bin/crontab exists in /usr/sbin/userdel-pre.local in SuSE
-[ -x /usr/bin/crontab ] && cp --parents -d /usr/bin/crontab $drbl_common_root 
+[ -x /usr/bin/crontab ] && cp --parents -d /usr/bin/crontab $drbl_common_root
 
 user_to_del="$(drbl-get-common-username 2>/dev/null)"
 for u in $user_to_del; do
@@ -3984,15 +3984,15 @@ fi
 echo "done!"
 
 # Enable the NIS client for this template
-# For Mandrake/Debian, there is no authconfig, 
+# For Mandrake/Debian, there is no authconfig,
 # Mandrake use drakauth, but not interactive ?
 echo -n "Enabling the NIS client in the common root template... "
 # For RH-like, used to use /usr/sbin/authconfig, but in FC5, it's python... not easy to create the "create_authconfig_env $drbl_common_root/"
-# turn on the nis in common root's /etc/nsswitch.conf, this is necessary for MDK/DBN since MDK/DBN does NOT have /usr/sbin/authconfig 
-perl -pi -e "s/^passwd:.*/passwd:     files nis/" $drbl_common_root/etc/nsswitch.conf 
-perl -pi -e "s/^shadow:.*/shadow:     files nis/" $drbl_common_root/etc/nsswitch.conf 
-perl -pi -e "s/^group:.*/group:     files nis/" $drbl_common_root/etc/nsswitch.conf 
-perl -pi -e "s/^hosts:.*/hosts:     files nis dns/" $drbl_common_root/etc/nsswitch.conf 
+# turn on the nis in common root's /etc/nsswitch.conf, this is necessary for MDK/DBN since MDK/DBN does NOT have /usr/sbin/authconfig
+perl -pi -e "s/^passwd:.*/passwd:     files nis/" $drbl_common_root/etc/nsswitch.conf
+perl -pi -e "s/^shadow:.*/shadow:     files nis/" $drbl_common_root/etc/nsswitch.conf
+perl -pi -e "s/^group:.*/group:     files nis/" $drbl_common_root/etc/nsswitch.conf
+perl -pi -e "s/^hosts:.*/hosts:     files nis dns/" $drbl_common_root/etc/nsswitch.conf
 
 # Patch for mandriva, e.g. 2009 or 2010, the /etc/init.d/sound is using /root/tmp/ as the temp dir. This will make /etc/init.d/sound not work in client because it's early before NFS /root is mounted. We have filed a bug report in https://qa.mandriva.com/show_bug.cgi?id=55929 to suggest to use /tmp/ instead of /root/tmp/.
 if [ -e "$drbl_common_root/etc/init.d/sound" ]; then
@@ -4041,7 +4041,7 @@ fi
 #fi
 
 echo -n "."
-# Create the /var in template, only directory 
+# Create the /var in template, only directory
 # Other directories in /var/lib/ are important for some applications.
 # /var/lib/rpm/* is necessary for rpm database,
 # /var/spool/mail is necessary for each user.
@@ -4110,12 +4110,12 @@ foreach my $k1 ( sort(keys %$rHoH) ) {
   my $nfsserver_sys;
   chomp($nfsserver_sys=`drbl-get-ipadd $interface`);
   # set nfsserver, the priority: use the config file first, if unset, then use the value in system
-  if ( ! $nfsserver ) { 
-   $nfsserver = $nfsserver_sys; 
-   print "* nfsserver is not set in config file, \nthe one \"$nfsserver\" got from system will be used.\n" if $verbosity >= 2;   
+  if ( ! $nfsserver ) {
+   $nfsserver = $nfsserver_sys;
+   print "* nfsserver is not set in config file, \nthe one \"$nfsserver\" got from system will be used.\n" if $verbosity >= 2;
   }
-  
-  # check if the values are set in config file or system  
+
+  # check if the values are set in config file or system
   unless ( $nfsserver ) {
      print "Error! NFSSERVER is unset!\n";
      print "Please set nfsserver in config file \"$_[0]\" or IPADDR in system config file.\n";
@@ -4172,11 +4172,11 @@ echo "done!"
     my $bootserver_sys=$nfsserver_sys;
     my $nisserver_sys=$nfsserver_sys;
     # set nfsserver, bootserver, nisserver address, the priority: use the config file first, if unset, then use the value in system
-   
+
     # If hostname_prefix unset, try to set it as that of server
-    if ( ! $hostname_prefix ) { 
+    if ( ! $hostname_prefix ) {
       @hostname_sp_sys=split(/\./,$hostname_sys);
-      $hostname_prefix="$hostname_sp_sys[0]"; 
+      $hostname_prefix="$hostname_sp_sys[0]";
     }
 
     unless ( $netmask_sys ) {
@@ -4185,7 +4185,7 @@ echo "done!"
        exit;
     }
 
-    if ( ! $network ) { 
+    if ( ! $network ) {
       # Since there are two versions of ipcalc, we use the perl one, which is
       # from http://jodies.de/ipcalc
       $network = `drbl-ipcalc $ipaddr_sys $netmask_sys | awk -F' ' '/Network:/ {print \$2}' | sed -e "s|/.*||g"`;
@@ -4193,29 +4193,29 @@ echo "done!"
       print colored ("The calculated NETWORK for $interface is $network.\n", "$color_warn");
     }
 
-    if ( ! $hostname ) { 
-     $hostname = $hostname_sys; 
-     print "* hostname is not set in config file, \nthe one \"$hostname\" got from system will be used.\n" if $verbosity >= 2;   
+    if ( ! $hostname ) {
+     $hostname = $hostname_sys;
+     print "* hostname is not set in config file, \nthe one \"$hostname\" got from system will be used.\n" if $verbosity >= 2;
     }
 
-    if ( ! $nfsserver ) { 
-     $nfsserver = $nfsserver_sys; 
-     print "* nfsserver is not set in config file, \nthe one \"$nfsserver\" got from system will be used.\n" if $verbosity >= 2;   
+    if ( ! $nfsserver ) {
+     $nfsserver = $nfsserver_sys;
+     print "* nfsserver is not set in config file, \nthe one \"$nfsserver\" got from system will be used.\n" if $verbosity >= 2;
     }
-    if ( ! $bootserver ) { 
-     $bootserver = $bootserver_sys; 
-     print "* bootserver is not set in config file, \nthe one \"$bootserver\" got from system will be used.\n" if $verbosity >= 2;   
+    if ( ! $bootserver ) {
+     $bootserver = $bootserver_sys;
+     print "* bootserver is not set in config file, \nthe one \"$bootserver\" got from system will be used.\n" if $verbosity >= 2;
     }
-    if ( ! $nisserver ) { 
-     $nisserver = $nisserver_sys; 
-     print "* nisserver is not set in config file, \nthe one \"$nisserver\" got from system will be used.\n" if $verbosity >= 2;   
+    if ( ! $nisserver ) {
+     $nisserver = $nisserver_sys;
+     print "* nisserver is not set in config file, \nthe one \"$nisserver\" got from system will be used.\n" if $verbosity >= 2;
     }
-    if ( ! $gateway ) { 
-     $gateway = $bootserver; 
-     print "* gateway is not set in config file, \nUse bootserver as gateway.\n" if $verbosity >= 2;   
+    if ( ! $gateway ) {
+     $gateway = $bootserver;
+     print "* gateway is not set in config file, \nUse bootserver as gateway.\n" if $verbosity >= 2;
     }
-    
-    # Last check if the values are set in config file or system  
+
+    # Last check if the values are set in config file or system
     unless ( $hostname ) {
        print "Error! HOSTNAME is unset!\n";
        print "Please set hostname in config file \"$_[0]\" or HOSTNAME in system config file.\n";
@@ -4241,8 +4241,8 @@ echo "done!"
        print "Please set gateway in config file \"$_[0]\"\n";
        exit;
     }
-    
-    # go 
+
+    # go
     @nfsserverIp=split(/\./,$nfsserver);
     @networkIp=split(/\./,$network);
 
@@ -4284,7 +4284,7 @@ EOF
 	# so $rs=1, $re=15
         ($rs,$re)=split(/-/,$range,2);
         $total_count=$re-$rs+1;
-        # get the initial value in the last set of digits in the IP address 
+        # get the initial value in the last set of digits in the IP address
         # from range starting no.
         $ip_start=$rs;
     } else {
@@ -4331,7 +4331,7 @@ EOF
       # hostname for client
       # The default name will like fc192-168-0-1, fc10-0-0-1...,
       # i.e. $prefix{IP Address//./-}
-      # If the hostname is assigned in /etc/drbl/client-ip-hostname, 
+      # If the hostname is assigned in /etc/drbl/client-ip-hostname,
       # we will ust that.
       my $ip_shown = $ip;
       $ip_shown =~ s/\./-/g;
@@ -4344,9 +4344,9 @@ EOF
       }
       print "label:$label\n" if $verbosity >=2;
 
-      if( length($mac)!=0 ) { 
-	# MAC addresses list 
-        # generate dhcpd.conf      
+      if( length($mac)!=0 ) {
+	# MAC addresses list
+        # generate dhcpd.conf
 	# without nbi set in config file
         chomp (my $macadd=`perl -ne "$i..$i and print" $mac`);
         print DHCPD_OUT <<EOF;
@@ -4356,12 +4356,12 @@ EOF
 	# option host-name "$label";
     }
 EOF
-      } elsif( length($range)!=0 ) { 
+      } elsif( length($range)!=0 ) {
 	# range list
 	# do nothing
         print "In range loop with line $i\n" if $verbosity >=2;
       }
-      
+
       # generate netgroup
       print NETGROUP_OUT "($label,,) ";
 
@@ -4391,10 +4391,10 @@ EOF
       print "Process line $i\n" if $verbosity >=2;
     }
 
-    # generate dhcpd.conf 
-    if( length($mac)!=0 ) { # mac - just close it 
+    # generate dhcpd.conf
+    if( length($mac)!=0 ) { # mac - just close it
       print DHCPD_OUT "}\n";
-    } 
+    }
     elsif( length($range)!=0 ) { # range - generate range & filename
         # without nbi set in config file
 	# HERE
@@ -4503,7 +4503,7 @@ fi
 # before restart NIS, force the variable NISDOMAIN now is that set in config file
 nisdomainname $nisdomain
 
-# Since we set tcp as the default NFS protocol, if tcp over NFS is not supported in the server running kernel, make a switch for client to use udp. 
+# Since we set tcp as the default NFS protocol, if tcp over NFS is not supported in the server running kernel, make a switch for client to use udp.
 # Ex:for RH9, tcp over NFS is not supported in the runnking kernel 2.4.20-8
 if [ "$nfs_protocol" = "udp" ]; then
   [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
@@ -4541,7 +4541,7 @@ case "$drbl_server_as_NAT_server" in
      echo "$msg_drbl_server_is_NOT_NAT_server"
      [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
      drbl-nat-rules clean ;;
-  *) 
+  *)
      drbl-nat-rules generate ;;
 esac
 
@@ -4744,7 +4744,7 @@ fi
 
 #
 #echo "$msg_delimiter_star_line"
-#echo "Now syncing - flush filesystem buffers..." 
+#echo "Now syncing - flush filesystem buffers..."
 sync;sync;sync
 #
 export LC_ALL=$LC_ALL_org
@@ -4757,8 +4757,8 @@ echo "$msg_delimiter_star_line"
 
 # ask user to reboot after first time upgrade the nfs-utils in
 # drblsrv_desktop.sh or get_drbl_kernel.sh
-# if not, user will see a lot of 
-# "kernel: lockd: rejected NSM callback from 7f000001:1027" 
+# if not, user will see a lot of
+# "kernel: lockd: rejected NSM callback from 7f000001:1027"
 # in the server console and /var/log/messages in some Linux (RH8 ?).
 echo "$msg_if_you_like_you_can_reboot_to_make_sure_everthing"
 echo "$msg_delimiter_star_line"
@@ -4822,7 +4822,7 @@ sub check_MAC_file{
    my $macfile_check=`for ifile in $macfile_dir/$macfile_prefix*; do grep -v -E '([[:alnum:]]|:|^[[:space:]]*\$)' \$ifile; done`;
    chomp($macfile_check);
    if ( $macfile_check ) {
-      print "$lang_deploy{\"illegal_char_in_MAC\"},". 
+      print "$lang_deploy{\"illegal_char_in_MAC\"},".
             colored ("\"$macfile_check\"\n", "$color_fail").
             "$lang_deploy{\"fix_wrong_MAC_file\"} \n".
             "$lang_word{\"program_stop\"}!!!\n";
@@ -4843,13 +4843,13 @@ sub usage_details{
   "-b, --not-add-start-drbl-srvi Do NOT add and start DRBL related services after the configuration is done\n".
   "-c, --config      The DRBL config file, text format\n".
   "-d, --debug       Turn on debug mode when run shell script\n".
-  "-e, --accept-one-nic   Accept to run DRBL service in only one network card. ///NOTE/// This might mess up your network environment especially if there is an existing DHCP service in your network environment.\n".
+  "-e, --accept-one-nic   Accept to run DRBL service on only one network card. ///NOTE/// This might mess up your network environment especially if there is an existing DHCP service in your local network environment.\n".
   "-h, --help        Show this help message\n".
   "-i, --interactive Interactive mode, setup step by step.\n".
   "-k, --keep_clients Y/n Keep previously saved files for clients.\n".
   "-m, --client_startup_mode [1|2] Assign client mode, 1 for graphic mode, 2 for text mode.\n".
   "-n, --no_deploy   Just create files, do NOT deploy the files into system\n".
-  "-o, --clonezilla_home DIR  Use DIR as the clonezilla image directory\n".
+  "-o, --clonezilla_home DIR  Use DIR as the Clonezilla image directory\n".
   "-p, --port_client_no number The client no. in each NIC port.\n".
   "-q, --quiet             Be less verbose\n".
   "-r, --drbl_mode [0|1|2] Assign DRBL mode (0: Full DRBL mode, 1: DRBL SSI mode, 2: Do NOT provide diskless Linux service to clients)\n".
@@ -4857,7 +4857,7 @@ sub usage_details{
   "-t, --live_client_branch [0|1|2|3] Assign the Clonezilla live release branch to be used, 0 is stable branch (Debian-based), 1 is testing branch (Debian-based), 2 is alternative stable branch (Ubuntu-based), 3 is alternative testing branch (Ubuntu-based). This option should be used when -z|--clonezilla_mode = 3\n".
   "-u, --live_client_cpu_mode [0|1|2]  Assign the CPU mode for client when doing Clonezilla job with Clonezilla live (0: i586, 1: i686, 2: amd64)\n".
   "-v, --verbose           Be more verbose\n".
-  "-z, --clonezilla_mode [0|1|2|3] Assign Clonezilla mode (0: Full DRBL mode, 1: Clonezilla box mode, 2: Do NOT provide clonezilla service to clients, 3: Use Clonezilla live as the OS of clients)\n".
+  "-z, --clonezilla_mode [0|1|2|3] Assign Clonezilla mode (0: Full DRBL mode, 1: Clonezilla box mode, 2: Do NOT provide Clonezilla service to clients, 3: Use Clonezilla live as the OS of clients)\n".
   "--skip-drbl-ocs-live-prep  Force to skip running drbl-ocs-live-prep\n".
   "--drbl-ocs-live-server IP  Assign the Clonezilla live server as IP when running drbl-ocs-live-prep\n".
   "-l, --language INDEX  Set the language to be shown (deprecated! Use environmental LC_ALL or LANG instead).\n".
@@ -4884,7 +4884,7 @@ while ($#ARGV != -1) {
    } elsif (lc($arg) =~ /^(-)?(-)?ln$/) {
      $language = shift(@ARGV);
    } elsif (lc($arg) =~ /^(-)?(-)?n(o_deploy)?$/) {
-     $no_deploy = 1; 
+     $no_deploy = 1;
    } elsif (lc($arg) =~ /^(-)?(-)?c(config)?$/) {
      $config_file = shift(@ARGV);
      $mode="load_config_file";
@@ -4924,7 +4924,7 @@ while ($#ARGV != -1) {
    } elsif (lc($arg) =~ /^--drbl-ocs-live-server$/) {
      $drbl_ocs_live_server = shift(@ARGV);
    } elsif (lc($arg) =~ /^(-)?(-)?d(ebug)?$/) {
-     $sh_debug = "-x"; 
+     $sh_debug = "-x";
    } else {
      usage_details();
    }
@@ -4999,7 +4999,7 @@ drbl_server_parse($config_file);
 
 print "$delimiter{\"star_line\"}\n";
 print "purge_client: $purge_client\n" if $verbosity >=2;
-if ( $client_exist_flag = "0" && $purge_client eq "no" ) { 
+if ( $client_exist_flag = "0" && $purge_client eq "no" ) {
    # old clients exist and we want to keep them, show warning messages
    print colored ("$lang_deploy{\"note_for_keep_client_setting\"}\n", "$color_warn").
          "$lang_deploy{\"press_enter_to_continue\"}";
@@ -5007,7 +5007,7 @@ if ( $client_exist_flag = "0" && $purge_client eq "no" ) {
 }
 
 # ready to go
-if ( $no_deploy ) { 
+if ( $no_deploy ) {
 	print "$delimiter{\"warning_line\"}\n".
 	      "$lang_deploy{\"no_deploy_prompt\"}\n";
 }
@@ -5031,17 +5031,17 @@ else {
          # Also copy the $DRBLPUSH_CONF to system so that we can re-run the
          # program by "drblpush -c $drbl_syscfg/$DRBLPUSH_CONF"
          my $run_main="LC_ALL=C ./$main_sh";
-	 if ("$whoiam" eq "root") { 
+	 if ("$whoiam" eq "root") {
 	     system("$run_main");
          }else{
-             print "$lang_deploy{\"you_are_not_root\"},\n". 
-	           "$lang_word{\"please_enter\"} ". colored("$lang_word{\"root_passwd\"} ","$color_warn") ."$lang_word{\"to_deploy_them\"}...\n"; 
+             print "$lang_deploy{\"you_are_not_root\"},\n".
+	           "$lang_word{\"please_enter\"} ". colored("$lang_word{\"root_passwd\"} ","$color_warn") ."$lang_word{\"to_deploy_them\"}...\n";
 	     my $su_rlt=system("su -c '$run_main' root");
-	     while ($su_rlt == 256) { 
+	     while ($su_rlt == 256) {
 	            $su_rlt=system("su -c '$run_main' root");
 	     }
 	     # copy the config file to DRBL server
-         } 
+         }
         }
 }
 #

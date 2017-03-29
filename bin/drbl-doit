@@ -16,11 +16,11 @@ USAGE() {
    langue_help_prompt_by_idx_no
   echo "-b, --batch       Batch mode, same with -n/--no-ping"
   echo "-h, --hosts IP_LIST  Instead of all DRBL clients, assign the clients by IP address, like: -h \"192.168.0.1 192.168.0.2\" NOTE!!! You must put \" \" before and after the IP_LIST!"
-  echo "-n, --no-ping     Do NOT ping machine to check if hosts is alive before running command"
+  echo "-n, --no-ping     Do NOT ping machine to check if hosts are alive before running command"
   echo "-p, --password PASSWD  Assign the plain text password of the USER (option -u|--user) to be used. //NOTE// This is not secure. It's recommended to avoid using this option. Better to use the ssh public key method."
   echo "-u, --user USER   Execute command on all drbl clients as username USER"
   echo "-v, --verbose:    Verbose mode."
-  echo "-w, --wol         Use Wake On LAN to wake up all drbl clients (Clients must be soft shutdown"
+  echo "-w, --wol         Use Wake On LAN to wake up all drbl clients (Clients must be soft shutdown)"
   echo "Examples:"
   echo "  To poweroff all DRBL clients"
   echo "  `basename $0` -u root /sbin/poweroff"
@@ -37,7 +37,7 @@ while [ $# -gt 0 ]; do
     -l|--language)
 	shift
         if [ -z "$(echo $1 |grep ^-.)" ]; then
-          # skip the -xx option, in case 
+          # skip the -xx option, in case
 	  specified_lang="$1"
 	  shift
         fi
@@ -49,7 +49,7 @@ while [ $# -gt 0 ]; do
 	LIST_HOST="on"
 	shift
         if [ -z "$(echo $1 |grep ^-.)" ]; then
-          # skip the -xx option, in case 
+          # skip the -xx option, in case
 	  IP_LIST="$1"
 	  shift
         fi
@@ -58,7 +58,7 @@ while [ $# -gt 0 ]; do
     -u|--user)
 	shift
         if [ -z "$(echo $1 |grep ^-.)" ]; then
-          # skip the -xx option, in case 
+          # skip the -xx option, in case
 	  specified_user="$1"
 	  shift
         fi
@@ -67,7 +67,7 @@ while [ $# -gt 0 ]; do
     -p|--password)
 	shift
         if [ -z "$(echo $1 |grep ^-.)" ]; then
-          # skip the -xx option, in case 
+          # skip the -xx option, in case
 	  specified_passwd="$1"
 	  shift
         fi
@@ -92,10 +92,10 @@ CMD=$1
 #
 ask_and_load_lang_set $specified_lang
 
-# The reasone we do not to use $HOME is that sudo will not change 
+# The reasone we do not to use $HOME is that sudo will not change
 # environmental variable $HOME, but it will change the $USER
 # we need to know who is really running this after applying sudo.
-# say, sudo echo "$HOME", it will show user's home, instead of root's home, 
+# say, sudo echo "$HOME", it will show user's home, instead of root's home,
 REALHOME=$(LC_ALL=C grep -Ew "^$USER" /etc/passwd | cut -d":" -f6)
 
 # get client IP lists
@@ -271,7 +271,7 @@ for IP in $drbl_client_list; do
           [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
       else
           [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
-          echo "$IP is unreachable... Abort command." 
+          echo "$IP is unreachable... Abort command."
           [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
       fi
     fi
