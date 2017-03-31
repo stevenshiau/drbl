@@ -19,7 +19,7 @@ Copyright (C) 2002-2005 Steven Shiau and K. L. Huang
 -------------------------------------------------------------
 DRBL (Diskless Remote Boot in Linux) is an open source environment to to manage GNU/Linux operating system deployment. Imagine the time required to install GNU/Linux on 40, 30, or even 10 client machines individually. DRBL will allow you to configure all of your client computers by installing just one server machine. The features of DRBL are:
 
-* Coexist with other Operating Systems
+* Coexists with other Operating Systems
 * Install one server, you have all clients ready
 * Save hardware budget and maintenance fee
 

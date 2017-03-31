@@ -30,7 +30,7 @@ usage() {
     echo " --stdin PASSWORD     set the root's password for clients as PASSWORD"
     echo " -h, --host IP_ADDRESS:  set only for the host with IP_ADDRESS instead of all DRBL clients"
     echo " -g, --no-gen-ssi Do NOT generate DRBL SSI template tarball."
-    echo " -v, --verbose        prints out verbose information"
+    echo " -v, --verbose        prints out extra information"
     echo "If option is not given, the interactive mode will be used."
 }
 
@@ -43,10 +43,10 @@ unalias ls 2>/dev/null
 # Parse command-line options
 while [ $# -gt 0 ]; do
   case "$1" in
-    --stdin)  
+    --stdin)
             shift;
             if [ -z "$(echo $1 |grep ^-.)" ]; then
-              # skip the -xx option, in case 
+              # skip the -xx option, in case
 	      client_root_password="$1"
             fi
             shift ;;

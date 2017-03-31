@@ -38,7 +38,7 @@ check_if_repository_in_blacklist() {
     # If the url is in blacklist (like: http://ftp.isu.edu.tw), some problems! Terminated!
     if [ -n "$(echo "$yum_repo_blacklists" | grep -E "\<$iu")" ]; then
       [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
-      if [ -n "$(echo "$iu" | grep -E "http://ftp.isu.edu.tw")" ]; then 
+      if [ -n "$(echo "$iu" | grep -E "http://ftp.isu.edu.tw")" ]; then
        # For some known site, output the reason
        echo "$msg_http_isu_edu_tw_not_compatible"
       fi
@@ -60,7 +60,7 @@ find_yum_repos_dir_path_for_opensuse() {
     yum_conf_dir_path=/etc/yum/repos.d
   else
     [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
-    echo "Yum repository conf dir NOT found!!!" 
+    echo "Yum repository conf dir NOT found!!!"
     [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
     echo "$msg_program_stop"
     exit 1
@@ -78,12 +78,12 @@ do_some_cleanup_before_uninstall() {
     echo "Stop vblade (for AoE) service ?"
     echo -n "[Y/n] "
     read stop_vblade_answer
-    case "$SL_remove_answer" in 
+    case "$SL_remove_answer" in
        n|N|[nN][oO]) continue ;;
        *) drbl-aoe-serv stop ;;
     esac
   fi
-  
+
   echo "$msg_delimiter_star_line"
   # rm the YP securenets
   drbl-yp-securenets clean
@@ -109,7 +109,7 @@ do_some_cleanup_before_uninstall() {
   echo "$msg_remove_SmallLinuxs_question"
   echo -n "[Y/n] "
   read SL_remove_answer
-  case "$SL_remove_answer" in 
+  case "$SL_remove_answer" in
      n|N|[nN][oO]) continue ;;
      *) drbl-sl -l $lang_answer -u all ;;
   esac
@@ -143,7 +143,7 @@ run_drblsrv_offline() {
   	  DBN)
 	    # ${latest_drbl_kernel_in_rep} is global variable when downloading kernel from apt repository
 	    # How about there are 2 kernel debs in /var/cache/apt/archives like:
-	    # linux-image-2.6.18-5-486_2.6.18.dfsg.1-13etch4_i386.deb 
+	    # linux-image-2.6.18-5-486_2.6.18.dfsg.1-13etch4_i386.deb
 	    # linux-image-2.6.18-5-486_2.6.18.dfsg.1-13etch5_i386.deb
 	    # and $latest_drbl_kernel_in_rep=linux-image-2.6.18-5-486
 	    # Sol: use pkg-ver-latest to parse the latest one, since it's the same version no, just minor changes. It shouldn't cause any problem.
@@ -190,7 +190,7 @@ echo "$msg_os_ayo_repository_enter_by_yourself"
 echo -n "[0] "
 read os_ayo_repo_answer
 echo "$msg_delimiter_star_line"
-parse_RH_os_yum_repo_answer $OS_Version $os_ayo_repo_answer 
+parse_RH_os_yum_repo_answer $OS_Version $os_ayo_repo_answer
 
 # drbl AYO repository
 echo "$msg_delimiter_star_line"
@@ -230,7 +230,7 @@ echo "$msg_os_ayo_repository_5"
 echo -n "[0] "
 read os_ayo_repo_answer
 echo "$msg_delimiter_star_line"
-parse_RH_os_apt_repo_answer $OS_Version $os_ayo_repo_answer 
+parse_RH_os_apt_repo_answer $OS_Version $os_ayo_repo_answer
 
 #
 echo "$msg_delimiter_star_line"
@@ -253,7 +253,7 @@ ask_and_parse_rpm_ayo_repo_options
 
 # install wget if not installed, which is always necessary
 rpm -q wget &>/dev/null
-if [ "$?" -gt 0 ]; then 
+if [ "$?" -gt 0 ]; then
   echo "$msg_no_wget_get_it"
   WGET_idx=$(echo $OS_Version | tr "\." "_")
   # we will get the variables like wget_rpm_RH8_0, wget_rpm_FC1, wget_rpm_MDK9_2
@@ -275,17 +275,17 @@ if [ "$?" -gt 0 ]; then
 fi
 # check if apt is installed or not
 rpm -q apt &>/dev/null
-if [ "$?" -gt 0 ]; then 
+if [ "$?" -gt 0 ]; then
    echo "$msg_install_apt"
    # install apt
    echo "$msg_no_apt_get_it"
    case "$ayo_repo_answer" in
-   # if local apt repository, do not use url in the network 
+   # if local apt repository, do not use url in the network
    3)
      # local apt repository
      rpm -Uvh $url_drbl_collect_root/RPMS.drbl-collect/apt-[0-9]*.i386.rpm
      RETVAL=$?
-     if [ "$RETVAL" -gt 0 ]; then 
+     if [ "$RETVAL" -gt 0 ]; then
         echo "$msg_Failed_to_install $pkg_file..."
         return $RETVAL
      fi
@@ -311,7 +311,7 @@ backup_apt_sources_list
 # set the apt sources.list
 # OS
 case "$os_ayo_repo_answer" in
-    3) 
+    3)
       #local harddisk dir
 cat <<-APT_END > /etc/apt/sources.list
 rpm copy:$url_os/$os_ayo_path . $core_dir updates $FRESHRPMS
@@ -327,23 +327,23 @@ esac
 
 # DRBL
 case "$drbl_ayo_repo_answer" in
-    3) 
+    3)
       #local harddisk dir
 cat <<-APT_END >> /etc/apt/sources.list
-rpm copy:$url_drbl/$drbl_ayo_path . drbl-stable $DRBL_TEST $DRBL_UNSTABLE $CJK_REPOSITORY $DRBL_EXTRA 
-#rpm-src copy:$url_drbl/$drbl_ayo_path . drbl-stable $DRBL_TEST $DRBL_UNSTABLE $CJK_REPOSITORY $DRBL_EXTRA 
+rpm copy:$url_drbl/$drbl_ayo_path . drbl-stable $DRBL_TEST $DRBL_UNSTABLE $CJK_REPOSITORY $DRBL_EXTRA
+#rpm-src copy:$url_drbl/$drbl_ayo_path . drbl-stable $DRBL_TEST $DRBL_UNSTABLE $CJK_REPOSITORY $DRBL_EXTRA
 APT_END
     ;;
     *)
 cat <<-APT_END >> /etc/apt/sources.list
-rpm $url_drbl/$drbl_ayo_path . drbl-stable $DRBL_TEST $DRBL_UNSTABLE $CJK_REPOSITORY $DRBL_EXTRA 
+rpm $url_drbl/$drbl_ayo_path . drbl-stable $DRBL_TEST $DRBL_UNSTABLE $CJK_REPOSITORY $DRBL_EXTRA
 rpm $url_drbl_collect_root . drbl-collect
-#rpm-src $url_drbl/$drbl_ayo_path . drbl-stable $DRBL_TEST $DRBL_UNSTABLE $CJK_REPOSITORY $DRBL_EXTRA 
+#rpm-src $url_drbl/$drbl_ayo_path . drbl-stable $DRBL_TEST $DRBL_UNSTABLE $CJK_REPOSITORY $DRBL_EXTRA
 #rpm-src $url_drbl_collect_root . drbl-collect
 APT_END
 esac
 
-# append some examples to sources.list 
+# append some examples to sources.list
 append_RH_apt_sources_list_example
 
 echo "--------------------------------------------------------------------"
@@ -394,7 +394,7 @@ case "$OS_Version" in
      for iblack in $grub2_blacklist_v; do
        if [ -n "$(echo $grub2_ver_rel | grep -iw "$iblack")" ]; then
          [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
-         echo "This version of grub2 ($iblack) is buggy. You have to downgrade or upgrade it to bug free version, otherwise your uEFI client won't be able to make uEFI network boot, and its error in clients is like:"
+         echo "This version of grub2 ($iblack) is buggy. You have to downgrade or upgrade it to bug free version, otherwise your uEFI client won't be able to make uEFI network boot, and its error in clients is as follows:"
          echo "error: timeout: could not resolve hardware address."
 	 echo "Or"
 	 echo "Blank screen for a while, then show an error about \"Could not find config file\" on tftp server."
@@ -402,7 +402,7 @@ case "$OS_Version" in
          echo "E.g. you can run these commands as root to downgrade the bug free version of grub2 on CentOS:"
          if [ -n "$(rpm -q grub2-efi-modules)" ]; then
            echo "yum remove grub2-efi-modules"
-         fi 
+         fi
          echo "yum downgrade http://vault.centos.org/7.0.1406/os/x86_64/Packages/grub2-2.02-0.2.10.el7.centos.1.x86_64.rpm http://vault.centos.org/7.0.1406/os/x86_64/Packages/grub2-efi-2.02-0.2.10.el7.centos.1.x86_64.rpm http://vault.centos.org/7.0.1406/os/x86_64/Packages/grub2-tools-2.02-0.2.10.el7.centos.1.x86_64.rpm"
          echo "$msg_delimiter_star_line"
          confirm_continue_or_not_default_quit
@@ -420,7 +420,7 @@ if [ -z "$select_repository" ]; then
   echo "$msg_set_yum_conf_no_prompt"
   [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
   echo -n "[y/N] "
-  read set_repo_ans 
+  read set_repo_ans
   case "$set_repo_ans" in
      y|Y|[yY][eE][sS])
        select_repository="yes"
@@ -446,7 +446,7 @@ if [ "$installer" = "yum" ]; then
   fi
 fi
 
-if [ "$select_repository" = "yes" ]; then 
+if [ "$select_repository" = "yes" ]; then
   # Since we might for to install rpm package, it's better to import RPM key for yum, the default setting of yum enables key check.
   [ "$installer" = "yum" ] && import_rpm_key
   # For RH8/9.0/FC1-2, already set $select_repository=yes, so this will be run
@@ -463,7 +463,7 @@ else
   if [ ! -f "/etc/yum.repos.d/$FC_CORE_REPO" -a ! -f "/etc/yum.repos.d/CentOS-Base.repo" ]; then
      echo "$msg_delimiter_star_line"
      [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
-     echo "No yum repository setting found!" 
+     echo "No yum repository setting found!"
      echo "You must set the yum repository in /etc/yum.repos.d/!"
      [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
      echo "$msg_delimiter_star_line"
@@ -520,7 +520,7 @@ ask_and_parse_client_extra_setting
 # parse the setting of client archi.
 parse_client_archi_setting
 
-# It's important to remove the cache of apt, otherwise 
+# It's important to remove the cache of apt, otherwise
 # the RPM::Architecture will not take effect. check this:
 # http://distro2.conectiva.com.br/pipermail/apt-rpm/2003-November/002015.html
 # ... RPM::Architecture, is what he's looking for. His problem was that the cache was built before he set the architecture. Doing "rm -f /var/cache/apt/*.bin; apt-get update" would make it work.
@@ -579,7 +579,7 @@ if [ -z "$upgrade_system_answer" ]; then
   read upgrade_system_answer
 fi
 
-case "$upgrade_system_answer" in 
+case "$upgrade_system_answer" in
    y|Y|[yY][eE][sS])
       do_upgrade_system_for_RH
       ;;
@@ -611,7 +611,7 @@ case "$OS_Version" in
 	$inst_prog -y install system-config-display
         ;;
   "FC4")
-        # in FC4, sfdisk, rpm and nc are buggy, 
+        # in FC4, sfdisk, rpm and nc are buggy,
 	# sfdisk can not work with clonezilla,
 	# https://bugzilla.redhat.com/bugzilla/show_bug.cgi?id=159418
 	# Original nc is buggy since it will skip some input tail...
@@ -621,7 +621,7 @@ case "$OS_Version" in
 	$inst_prog -y install rpm util-linux nc
         ;;
   "FC5")
-        # released lftp (3.4.2-5) is buggy, can not work 
+        # released lftp (3.4.2-5) is buggy, can not work
 	# with http://free.nchc.org.tw/fedora
         echo "$msg_OS_version: $OS_Version."
 	echo "$msg_force_to_upgrade_some_pkgs"
@@ -642,7 +642,7 @@ echo "$msg_prepare_kernel_for_clients"
 prepare_install_RH_MDK_client_kernel
 
 # 5.
-# Install the necessary packages for DRBL 
+# Install the necessary packages for DRBL
 echo "$msg_delimiter_star_line"
 [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
 echo "$msg_install_DRBL_necesary_files"
@@ -698,7 +698,7 @@ fi
 
 # 7.b
 # Creat dev tarball in $drbl_pkgdir,
-# which will be copied to /tftpboot/node_root/etc/diskless-image 
+# which will be copied to /tftpboot/node_root/etc/diskless-image
 # in deploy script
 tmp_dev_dir="$(mktemp -d -q /tmp/devtmp.XXXXXX)"
 dev_wgettmp="$(mktemp -d -q /tmp/dev_wgettmp.XXXXXX)"
@@ -736,7 +736,7 @@ else
    for idir in $RH_RPMS_os_update_dir; do
      Is_ipkg_avail="$(list_available_rpm $url_os_coreroot/$idir/ | grep -E "^$ipkg-[0-9]+.*.i386.rpm" 2>/dev/null)"
      if [ -n "$Is_ipkg_avail" ]; then
-       echo "Downloading $ipkg rpm from $url_os_coreroot/$idir/..." 
+       echo "Downloading $ipkg rpm from $url_os_coreroot/$idir/..."
        wget -r -l1 --no-parent --passive-ftp -e robots=off -q -nd --retr-symlinks -P "$dev_wgettmp" -A "$ipkg-[0-9]*.i386.rpm" $url_os_coreroot/${idir}/
      fi
      # once it's done, skip the next search
@@ -827,14 +827,14 @@ drbl-netinstall -u all -s
 
 #
 # skip removing dialog, rsync, curl... which are usually necessary.
-# TODO, separate ntp, it seems that to remove ntp together will fail in FC3 
+# TODO, separate ntp, it seems that to remove ntp together will fail in FC3
 # with yum.
 $inst_prog remove $PKG_TO_UNINSTALL_PART1_RH $PKG_FROM_DRBL
 [ -n "$PKG_TO_UNINSTALL_PART2_RH" ] && $inst_prog remove $PKG_TO_UNINSTALL_PART2_RH
 
 # rename some config files if they still exist
 for icfg in dhcpd.conf dhcpd.conf.etherboot.include exports sysconfig/iptables; do
-  [ -f "/etc/${icfg}" ] && mv -f /etc/${icfg} /etc/${icfg}.drblsave 
+  [ -f "/etc/${icfg}" ] && mv -f /etc/${icfg} /etc/${icfg}.drblsave
 done
 
 # remove the stale files
@@ -844,7 +844,7 @@ rm -f $SYSCONF_PATH/mkswapfile
 echo "$msg_remove_drbl_setup_question"
 echo -n "[y/N] "
 read drbl_remove_answer
-case "$drbl_remove_answer" in 
+case "$drbl_remove_answer" in
    y|Y|[yY][eE][sS])
       $inst_prog remove drbl
       drbl_remove_answer=y
@@ -854,7 +854,7 @@ if [ "$installer" = "apt" ]; then
   echo "$msg_remove_apt_question"
   echo -n "[y/N] "
   read apt_answer
-  case "$apt_answer" in 
+  case "$apt_answer" in
      y|Y|[yY][eE][sS])
         rpm -e apt
         [ -d /var/cache/apt/ ] && echo "$msg_cleaning_apt_cache" && rm -rf /var/cache/apt/
@@ -864,7 +864,7 @@ elif [ "$installer" = "yum" ]; then
   echo "$msg_remove_yum_repo_question"
   echo -n "[y/N] "
   read yum_repo_answer
-  case "$yum_repo_answer" in 
+  case "$yum_repo_answer" in
    y|Y|[yY][eE][sS])
      repo_lists="$drbl_yum_repo_list"
      for ifile in $repo_lists; do
@@ -1003,7 +1003,7 @@ install_drbl_MDK() {
 # parse os to set the repository
 parse_os_to_set_repository
 
-if [ "$select_repository" = "yes" ]; then 
+if [ "$select_repository" = "yes" ]; then
   setup_${OS_type}_${installer}
 else
   # we need $url_os, "$os_ayo_path"and "$url_os_coreroot for kernel and dev
@@ -1036,7 +1036,7 @@ echo "$msg_upgrade_system_question"
 [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
 echo -n "[y/N] "
 read upgrade_system_answer
-case "$upgrade_system_answer" in 
+case "$upgrade_system_answer" in
   y|Y|[yY][eE][sS])
       do_upgrade_system_for_MDK
       ;;
@@ -1049,7 +1049,7 @@ echo "$msg_prepare_kernel_for_clients"
 prepare_install_RH_MDK_client_kernel
 
 # 4.
-# Install the necessary packages for DRBL 
+# Install the necessary packages for DRBL
 echo "$msg_delimiter_star_line"
 [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
 echo "$msg_install_DRBL_necesary_files"
@@ -1057,7 +1057,7 @@ echo "$msg_install_DRBL_necesary_files"
 echo "$msg_delimiter_star_line"
 
 # $PKG_FROM_MDK, $PKG_TO_QUERY and $PKG_FROM_DRBL are loaded from conf/drbl.conf
-# Check if lvm2 is available, if so, add it, we need this for 
+# Check if lvm2 is available, if so, add it, we need this for
 # clonezilla to save or restore LVM2 PV/VG/LV.
 # Check lzop also.
 echo "Searching if $PKG_TO_QUERY available... "
@@ -1108,7 +1108,7 @@ else
   if ! rpm -q --quiet udev; then
     echo -n "Try to install udev..."
     $inst_prog $inst_opt $inst_action udev
-    echo "done!"
+    echo "Done!"
   fi
   if ! rpm -q --quiet udev; then
     [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
@@ -1160,7 +1160,7 @@ $uninst_prog $uninst_action $PKG_TO_UNINSTALL_PART1_MDK $PKG_FROM_DRBL
 
 # rename some config files if they exist
 for icfg in dhcpd.conf dhcpd.conf.etherboot.include exports sysconfig/iptables; do
-  [ -f "/etc/${icfg}" ] && mv -f /etc/${icfg} /etc/${icfg}.drblsave 
+  [ -f "/etc/${icfg}" ] && mv -f /etc/${icfg} /etc/${icfg}.drblsave
 done
 
 # remove the stale files
@@ -1170,7 +1170,7 @@ rm -f $SYSCONF_PATH/mkswapfile
 echo "$msg_remove_drbl_setup_question"
 echo -n "[y/N] "
 read drbl_remove_answer
-case "$drbl_remove_answer" in 
+case "$drbl_remove_answer" in
   y|Y|[yY][eE][sS])
     $uninst_prog $uninst_action drbl
     ;;
@@ -1179,7 +1179,7 @@ esac
 echo "$msg_remove_urpmi_media_question"
 echo -n "[y/N] "
 read urpmi_media_answer
-case "$urpmi_media_answer" in 
+case "$urpmi_media_answer" in
    y|Y|[yY][eE][sS])
      urpmi.removemedia -a
    ;;
@@ -1216,12 +1216,12 @@ drbl-netinstall -u all -s
 # do not remove rsync, bc, iptables, curl since this will remove a lots in B2D.
 # $PKG_TO_UNSINSTALL_PART*_DBN and $PKG_FROM_DRBL loaded from conf/drbl.conf
 apt-get --purge remove $PKG_TO_UNINSTALL_PART1_DBN $PKG_FROM_DRBL
-# Separate the dhcp3-server/dhcp3-common as an another package to be removed, othewise something went wrong in Woody. Do not put --purge 
+# Separate the dhcp3-server/dhcp3-common as an another package to be removed, othewise something went wrong in Woody. Do not put --purge
 [ -n "$PKG_TO_UNINSTALL_PART2_DBN" ] && apt-get remove $PKG_TO_UNINSTALL_PART2_DBN
 
 # rename some config files if they exist
 for icfg in exports drbl-nat.up.rules; do
-  [ -f "/etc/${icfg}" ] && mv -f /etc/${icfg} /etc/${icfg}.drblsave 
+  [ -f "/etc/${icfg}" ] && mv -f /etc/${icfg} /etc/${icfg}.drblsave
 done
 for icfg in dhcpd.conf dhcpd.conf.etherboot.include; do
   # For distribution <= lenny
@@ -1250,7 +1250,7 @@ rm -f $SYSCONF_PATH/mkswapfile
 echo "$msg_remove_drbl_setup_question"
 echo -n "[y/N] "
 read drbl_remove_answer
-case "$drbl_remove_answer" in 
+case "$drbl_remove_answer" in
   y|Y|[yY][eE][sS])
     apt-get --purge remove drbl
     ;;
@@ -1281,7 +1281,7 @@ fi
 
 # rename some config files if they exist
 for icfg in dhcpd.conf dhcpd.conf.etherboot.include exports; do
-  [ -f "/etc/${icfg}" ] && mv -f /etc/${icfg} /etc/${icfg}.drblsave 
+  [ -f "/etc/${icfg}" ] && mv -f /etc/${icfg} /etc/${icfg}.drblsave
 done
 
 # remove the stale files
@@ -1293,7 +1293,7 @@ if [ "$installer" = "apt" ]; then
   echo "$msg_remove_apt_question"
   echo -n "[y/N] "
   read apt_answer
-  case "$apt_answer" in 
+  case "$apt_answer" in
      y|Y|[yY][eE][sS])
         rpm -e apt-libs apt
         [ -d /var/cache/apt/ ] && echo "$msg_cleaning_apt_cache" && rm -rf /var/cache/apt/
@@ -1303,7 +1303,7 @@ elif [ "$installer" = "yum" ]; then
   echo "$msg_remove_yum_repo_question"
   echo -n "[y/N] "
   read yum_repo_answer
-  case "$yum_repo_answer" in 
+  case "$yum_repo_answer" in
    y|Y|[yY][eE][sS])
      # we won't touch the existing one, just copied by drbl.
      repo_lists="$drbl_yum_repo_list opensuse-${OS_VER_NO}.repo opensuse-updates-${OS_VER_NO}.repo"
@@ -1316,7 +1316,7 @@ fi
 echo "$msg_remove_drbl_setup_question"
 echo -n "[y/N] "
 read drbl_remove_answer
-case "$drbl_remove_answer" in 
+case "$drbl_remove_answer" in
   y|Y|[yY][eE][sS])
    [ "$installer" = "apt" ] && apt-get --purge remove drbl
    [ "$installer" = "yum" ] && yum remove drbl
@@ -1336,23 +1336,23 @@ echo "$msg_Done!!!"
 #
 apt_install_result_msg() {
   RETVAL="$1"
-  if [ "$RETVAL" -gt 0 ]; then 
+  if [ "$RETVAL" -gt 0 ]; then
     echo "$msg_failed_to_install_pkgs"
     echo "$msg_please $msg_browse $drbl_url_zh_TW $msg_or $drbl_url_en_US $msg_for_more_details. "
     echo "$msg_press_ctrl_c_stop"
     read
-    exit 1 
+    exit 1
   fi
 }
 #
 check_apt_install() {
   local RETVAL=$1
-  if [ "$RETVAL" -gt 0 ]; then 
+  if [ "$RETVAL" -gt 0 ]; then
     echo "$msg_failed_to_install_pkgs"
     echo "$msg_please $msg_browse $drbl_url_zh_TW $msg_or $drbl_url_en_US $msg_for_more_details. "
     echo "$msg_press_ctrl_c_stop"
     read
-    exit 1 
+    exit 1
   fi
 }
 
@@ -1368,7 +1368,7 @@ check_rpm_install() {
   fi
 }
 
-# define a function get_inst_rpm to get and install rpm package which 
+# define a function get_inst_rpm to get and install rpm package which
 # apt can not process now. ie. only i386 rpms
 get_inst_rpm() {
   # Note! the last / in $url must be kept!!!
@@ -1443,7 +1443,7 @@ get_inst_rpm() {
     if [ -n "$pkg_file" ]; then
       $rpm_run_and_opt $opt $pkg_file
       RETVAL=$?
-      if [ "$RETVAL" -gt 0 ]; then 
+      if [ "$RETVAL" -gt 0 ]; then
          if [ -z "$(echo $pkg | grep -E "\<glibc\>")" ]; then
            # UGLY!!!
            # For glibc, with --force, although the reinstallation is successful,
@@ -1480,7 +1480,7 @@ LATEST_KTMP="$(mktemp /tmp/latest_ktmp.XXXXXX)"
 # For Fedora Core 5 with x86_64 arch, all kernels have SMP support, even though the name will not contain smp.
 case "$OS_Version" in
    FC[12][0123456789])
-     # From Fedora Core 6, one kernel fits single processor and SMP (including 
+     # From Fedora Core 6, one kernel fits single processor and SMP (including
      # i386 and x86_64 distributions).
      SMP_OPTION=""
      ;;
@@ -1516,7 +1516,7 @@ esac
 # Makdrake 10.1/10.2, MDV2005/2006.0 uses kernel-i586-up-1GB for 586 CPU,
 # The kernel rpm kernel-2.6.11.6mdk-1-1mdk.i586.rpm is only working with i686 CPU.
 # BUG REPORTED, but they do NOT care!
-# So I have to put a special case here. 
+# So I have to put a special case here.
 # http://qa.mandrakesoft.com/show_bug.cgi?id=14581
 # http://qa.mandrakesoft.com/show_bug.cgi?id=15383
 # SHIT! Why MDK 10.1/10.2/2006.0 kernel arch does NOT consistent with rpm name ?
@@ -1528,7 +1528,7 @@ case "$OS_Version" in
      i[35]86)
        if [ -z "$SMP_OPTION" ]; then
          KEXTRA="-i586-up-1GB"
-         echo "Since there is a bug in Mandarke 10.1, Mandriva 2005 and Mandriva 2006.0, we need to use the kernel rpm package "kernel${KEXTRA}" for i586 CPU client!"
+         echo "Since there is a bug in Mandrake 10.1, Mandriva 2005 and Mandriva 2006.0, we need to use the kernel rpm package "kernel${KEXTRA}" for i586 CPU client!"
        fi
        ;;
     esac
@@ -1561,9 +1561,9 @@ esac
 
 # Mandriva i586 version is not consistent. We have to overwrite the above rules.
 # Ex: Makdrake 10.1/10.2 uses kernel-i586-up-1GB for 586 CPU,
-# The kernel rpm kernel-2.6.11.6mdk-1-1mdk.i586.rpm is only working 
+# The kernel rpm kernel-2.6.11.6mdk-1-1mdk.i586.rpm is only working
 # with i686 CPU.
-# STUPID!!! We have to force the rpm package tag (KARCH_RPM) as i586, 
+# STUPID!!! We have to force the rpm package tag (KARCH_RPM) as i586,
 # but actually it for i686 (KARCH). SHIT!!!
 case "$OS_Version" in
   MDK10.[1-2]|MDV*)
@@ -1601,7 +1601,7 @@ esac
 klist_no=
 i=1
 for idir in $RPMS_os_update_dir; do
-  kgot="$(list_available_rpm $url_os_coreroot/${idir}/  | grep -E "^kernel${KEXTRA}${SMP_OPTION}-[2-9]\.[0-9]+\.[0-9]+" | grep -v "test" | $cpu_filter | sort -V -r | uniq)" 
+  kgot="$(list_available_rpm $url_os_coreroot/${idir}/  | grep -E "^kernel${KEXTRA}${SMP_OPTION}-[2-9]\.[0-9]+\.[0-9]+" | grep -v "test" | $cpu_filter | sort -V -r | uniq)"
   # store the url to show error msg later if no kernel available.
   klist_ar[$i]="$url_os_coreroot/${idir}/"
   i=$((i+1))
@@ -1709,7 +1709,7 @@ case "$client_kernel_install_mode" in
     client_kernel_ver=`uname -r`
     ;;
   from_downloaded_pkg)
-    # Use RPM to install kernel. 
+    # Use RPM to install kernel.
     # Try to find that in RPMS.core or RPMS.updates...
 
     avail_krpm=""
@@ -1724,7 +1724,7 @@ case "$client_kernel_install_mode" in
         # just download it
         get_inst_rpm -f $kgot_url_rpm -t $client_kernel_tmp_dir
 	 rc=$?
-         # FC 22 or later use kernel-core-`uname -r`*.rpm as real  package , but kernel-`uname-r`*.rpm only be meta package 
+         # FC 22 or later use kernel-core-`uname -r`*.rpm as real  package , but kernel-`uname-r`*.rpm only be meta package
          if [ -z "$(LC_ALL=C rpm -qpl $client_kernel_tmp_dir/${avail_krpm} 2>/dev/null | grep vmlinuz )" ] ; then
             kcore_rpm="$(LC_ALL=C rpm -qpR $client_kernel_tmp_dir/${avail_krpm} | grep -E '^kernel[-PAE]*-core' | sed -e 's/uname-r\ *=\ *//g' -e 's/+PAE$//g').rpm"
             kmodules_rpm="$(LC_ALL=C rpm -qpR $client_kernel_tmp_dir/${avail_krpm} | grep -E '^kernel[-PAE]*-modules' | sed -e 's/uname-r\ *=\ *//g' -e 's/+PAE$//g').rpm"
@@ -1732,7 +1732,7 @@ case "$client_kernel_install_mode" in
             kmodulesgot_url_rpm="$url_os_coreroot/${idir}/${kmodules_rpm}"
             get_inst_rpm -f $kcoregot_url_rpm -t $client_kernel_tmp_dir
             get_inst_rpm -f $kmodulesgot_url_rpm -t $client_kernel_tmp_dir
-             if [ -n "$(LC_ALL=C rpm -qpl $client_kernel_tmp_dir/${kcore_rpm} 2>/dev/null | grep vmlinuz )" ] ; then 
+             if [ -n "$(LC_ALL=C rpm -qpl $client_kernel_tmp_dir/${kcore_rpm} 2>/dev/null | grep vmlinuz )" ] ; then
                 chosen_kernel_for_client=${kcore_rpm}
                 drblsrv_offline_extra_opt="$drblsrv_offline_extra_opt -e $client_kernel_tmp_dir/$kmodules_rpm"
               else
@@ -1790,7 +1790,7 @@ case "$set_proxy_answer" in
           http_proxy_server_port="3128"
       fi
 
-      # use the one use input for DEFAULT value. 
+      # use the one use input for DEFAULT value.
       echo "$msg_ftp_proxy_server"
       echo -n "[$http_proxy_server_name] "
       read ftp_proxy_server_name
@@ -1826,7 +1826,7 @@ if [ -z "$drbl_unstable_answer" ]; then
   echo -n "[y/N] "
   read drbl_unstable_answer
 fi
-  
+
 #
 case "$drbl_unstable_answer" in
   y|Y|[yY][eE][sS]) true ;;
@@ -2039,7 +2039,7 @@ clean_tftpboot_and_misc() {
   find /tftpboot/nbi_img/ ! -name "*netinstall*" ! -type d -exec rm -f {} \;
   [ -d "/tftpboot/nodes/" ] && rm -rf /tftpboot/nodes
   [ -d "/tftpboot/node_root/" ] && rm -rf /tftpboot/node_root
-  [ -d "$drbl_syscfg" -a "$drbl_remove_answer" = "y" ] && rm -rf $drbl_syscfg 
+  [ -d "$drbl_syscfg" -a "$drbl_remove_answer" = "y" ] && rm -rf $drbl_syscfg
   [ -f "$ocs_lock_dir/clonezilla.lock" ] && rm -f $ocs_lock_dir/clonezilla.lock
   # For old version, we have to remove the old tag, now we use $ocs_lock_dir/clonezilla.lock instead of $ocsroot/clonezilla.lock
   [ -f "$ocsroot/clonezilla.lock" ] && rm -f $ocsroot/clonezilla.lock
@@ -2065,10 +2065,10 @@ cat <<-APT_END >> /etc/apt/sources.list
 #rpm-src http://free.nchc.org.tw//redhat/apt/ redhat/9/i386 os updates drbl
 
 # DRBL for FC1 in linux.nchc.org.tw, including DRBL packages and FC1 pacakges
-#rpm http://free.nchc.org.tw//fedora/apt/ fedora/linux/1/i386 core updates drbl  
-#rpm-src http://free.nchc.org.tw//fedora/apt/ fedora/linux/1/i386 core updates drbl  
+#rpm http://free.nchc.org.tw//fedora/apt/ fedora/linux/1/i386 core updates drbl
+#rpm-src http://free.nchc.org.tw//fedora/apt/ fedora/linux/1/i386 core updates drbl
 
-### Dag Apt Repository for Red Hat Fedora Core 
+### Dag Apt Repository for Red Hat Fedora Core
 #rpm http://apt.sw.be fedora/3/en/i386 dag
 #rpm http://apt.sw.be fedora/2/en/i386 dag
 #rpm http://apt.sw.be fedora/1/en/i386 dag
@@ -2102,7 +2102,7 @@ if [ -z "$OS_Version" ]; then
   echo -n "$msg_press_ctrl_c_stop! "
   [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
   read
-  exit 1 
+  exit 1
 fi
 
 case "$OS_Version" in
@@ -2113,7 +2113,7 @@ case "$OS_Version" in
      echo "$msg_OS_version: $OS_Version"
      # core_dir is for the core program, for RH8 and 9, RPMS.os, set it as "os"
      core_dir="os"
-     # RH_RPMS_os_update_dir indicates in apt repository, 
+     # RH_RPMS_os_update_dir indicates in apt repository,
      # where OS and updates pakcage (rpms) exist,
      # We will use it to search glibc & openssl only, not
      # for apt repository (not for /etc/apt/sources.list)
@@ -2133,7 +2133,7 @@ case "$OS_Version" in
      echo "$msg_OS_version: $OS_Version"
      # core_dir is for the core program, for FC1, RPMS.core, set it as "core". Note! variable core_dir is only used for apt repository
      core_dir="core"
-     # RH_RPMS_os_update_dir indicates in apt repository, 
+     # RH_RPMS_os_update_dir indicates in apt repository,
      # where OS and updates pakcage (rpms) exist,
      # We will use it to search glibc & openssl only, not
      # for apt repository (not for /etc/apt/sources.list)
@@ -2160,7 +2160,7 @@ case "$OS_Version" in
    CO*)
      CO_VER=${OS_Version:2}
      echo "$msg_OS_version: $OS_Version"
-     # RH_RPMS_os_update_dir indicates in apt repository, 
+     # RH_RPMS_os_update_dir indicates in apt repository,
      # where OS and updates pakcage (rpms) exist,
      # We will use it to search kernel, glibc & openssl only, not
      # for apt repository (not for /etc/apt/sources.list)
@@ -2185,7 +2185,7 @@ case "$OS_Version" in
      # SHIT!!! why Mandrake use differnet name for 2005 (LE2005) in updates ?
      # To make it more clear, we add an empty variable update_extra_code_name
      update_extra_code_name=""
-     # MDK_RPMS_os_update_dir indicates in rpm repository, 
+     # MDK_RPMS_os_update_dir indicates in rpm repository,
      # where OS and update rpms exists
      # We will use MDK_RPMS_os_update_dir for search glibc & openssl only, not
      # for apt repository (not for /etc/apt/sources.list)
@@ -2210,7 +2210,7 @@ case "$OS_Version" in
      else
 	update_extra_code_name=""
      fi
-     # MDK_RPMS_os_update_dir indicates in rpm repository, 
+     # MDK_RPMS_os_update_dir indicates in rpm repository,
      # where OS and update rpms exists
      # We will use MDK_RPMS_os_update_dir to search kernel, not for urpmi
      MDK_RPMS_os_update_dir="updates/$MDK_VER_PATH/main_updates $MDK_VER_PATH/$ARCH/media/main"
@@ -2229,7 +2229,7 @@ case "$OS_Version" in
      # For 2007.0, ftp://mdk.linux.org.tw//pub/mandrake-linux/official/updates/2007.0/i586/media/main/updates/media_info
      update_rpmdir_info="/$ARCH/media/main/updates"
 
-     # MDK_RPMS_os_update_dir indicates in rpm repository, 
+     # MDK_RPMS_os_update_dir indicates in rpm repository,
      # where OS and update rpms exists
      # We will use MDK_RPMS_os_update_dir to search kernel, not for urpmi
      # Note by Steven Shiau on 2006/09/26
@@ -2246,7 +2246,7 @@ case "$OS_Version" in
      [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
      echo -n "$msg_press_ctrl_c_stop! "
      read
-     exit 1 
+     exit 1
 esac
 
 #
@@ -2263,7 +2263,7 @@ preset_client_archi_ans() {
     client_archi_ans=2
     return 0
   fi
-  
+
   # if SMP for client -> best_optimization.
   # Not SMP -> ask user.
   case "$drbl_SMP_answer" in
@@ -2274,11 +2274,11 @@ preset_client_archi_ans() {
      echo "$msg_smp_optimization_kernel"
      client_archi_ans="2"
      echo -n "$msg_press_enter_to_continue"
-     read 
+     read
      return 0
      ;;
   esac
-  
+
   # Ugly! For CentOS 5.0, when it's initial release, only i686 kernel supported! For more info, check this: http://wiki.centos.org/QaWiki/CentOS5PentiumSupport
   # This will be removed when CentOS 5 officially supports i586 CPU.
   case "$OS_Version" in
@@ -2289,7 +2289,7 @@ preset_client_archi_ans() {
       [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
       client_archi_ans="2"
       echo -n "$msg_press_enter_to_continue"
-      read 
+      read
       return 0
       ;;
     FC*)
@@ -2314,7 +2314,7 @@ preset_client_archi_ans() {
         [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
         client_archi_ans="2"
         echo -n "$msg_press_enter_to_continue"
-        read 
+        read
 	;;
     esac
     return 0
@@ -2323,9 +2323,9 @@ preset_client_archi_ans() {
 
 #
 parse_client_archi_setting() {
-  # 
+  #
   preset_client_archi_ans
-  
+
   # if $client_archi_ans is not set (i.e. NOT x86_64, NOT SMP), ask user.
   [ -z "$client_archi_ans_def" ] && client_archi_ans_def="2"
   if [ -z "$client_archi_ans" ]; then
@@ -2355,7 +2355,7 @@ parse_client_archi_setting() {
          client_archi_ans=1
          ;;
   esac
-  
+
   # check if the answer fits to the distribution
   # This is based on the kernel rpm: kernel-.*.i[356]86.rpm
   # client_archi_ans: (1) i386 (2) i586 (3) optimization
@@ -2376,7 +2376,7 @@ parse_client_archi_setting() {
           ;;
     esac
   fi
-  
+
   # for Debian woody/sarge/breezy-> i386 and i686 are available, i586 is not available.
   if [ "$client_archi_ans" = "1" ]; then
     case "$OS_Version" in
@@ -2388,7 +2388,7 @@ parse_client_archi_setting() {
           ;;
     esac
   fi
-  # 
+  #
   case "$client_archi_ans" in
    2)
      # use default, let apt-rpm decide, so we do not have to change anything in
@@ -2469,13 +2469,13 @@ install_client_archi_glibc_openssl_RH() {
       # is not available. So we have to check it first.
       Is_i386_pkg_available="$(list_available_rpm $url_os_coreroot/$irpm/ | grep "^${installed_pkg}.i386.rpm" 2>/dev/null)"
       if [ -n "$Is_i386_pkg_available" ]; then
-        echo "Installing i386 $ipkg from $url_os_coreroot/$irpm/${installed_pkg}.i386.rpm..." 
+        echo "Installing i386 $ipkg from $url_os_coreroot/$irpm/${installed_pkg}.i386.rpm..."
         # since rpm does not support file://..., we use get_inst_rpm
         #rpm -Uvh --force --quiet $url_os_coreroot/$irpm/${installed_pkg}.i386.rpm 2>/dev/null
         get_inst_rpm -f $url_os_coreroot/$irpm/${installed_pkg}.i386.rpm -r "rpm -Uvh --force --quiet"
       fi
-      # it seems that even if rpm successfully install glibc with 
-      # -Uvh --force, the return code is still 1... 
+      # it seems that even if rpm successfully install glibc with
+      # -Uvh --force, the return code is still 1...
       # So we have to use rpm -q --qf to check
       #RETVAL=$?
       #[ $RETVAL -eq 0 ] && break
@@ -2528,7 +2528,7 @@ case "$client_archi_set" in
         eval ipkg_ARCH=\$${ipkg_arch_var}_ARCH
         [ -z "$ipkg_ARCH" ] && continue
 	echo "$ipkg arch: $ipkg_ARCH."
-        if [ "$ipkg_ARCH" != "i586" ]; then 
+        if [ "$ipkg_ARCH" != "i586" ]; then
          echo "Finding the i586 $ipkg in apt repository..."
          case "$installer" in
           apt)
@@ -2551,9 +2551,9 @@ case "$client_archi_set" in
            fi
 	   ;;
          esac
-        
-         # it seems that even if rpm successfully install glibc with 
-         # -Uvh --force, the return code is still 1... 
+
+         # it seems that even if rpm successfully install glibc with
+         # -Uvh --force, the return code is still 1...
          # So we have to use rpm -q --qf to check, not by return code.
          rpm -q --qf '%{ARCH}' ${ipkg} > /dev/null && ipkg_ARCH_now=`rpm -q --qf '%{ARCH}' ${ipkg}`
          [ "$ipkg_ARCH_now" = "i586" ] && continue
@@ -2659,12 +2659,12 @@ case "$answer" in
       #enter by user
       url_drbl_default="http://drbl.sourceforge.net"
       drbl_ayo_path_default="/drbl-core/i386/"
-      echo "Please enter the hostname or IP address of yum reposity with http or ftp prefix where DRBL packages exists..."
+      echo "Please enter the hostname or IP address of yum repository with http or ftp prefix where DRBL packages exists..."
       echo -n "[$url_drbl_default] "
       read url_drbl
       [ -z "$url_drbl" ] && url_drbl="$url_drbl_default"
 
-      echo "Enter the path where directory \"RPMS.drbl\" exists..." 
+      echo "Enter the path where directory \"RPMS.drbl\" exists..."
       echo -n "[$drbl_ayo_path_default] "
       read drbl_ayo_path
       [ -z "$drbl_ayo_path" ] && drbl_ayo_path="$drbl_ayo_path_default"
@@ -2702,7 +2702,7 @@ case "$answer" in
       esac
       FRESHRPMS="freshrpms"
       ;;
-    3) 
+    3)
       # local repository
       url_os="/"
       url_os_coreroot_default="/opt/mirror/fedora/linux/core"
@@ -2712,7 +2712,7 @@ case "$answer" in
       read url_os_coreroot
       [ -z "$url_os_coreroot" ] && url_os_coreroot="$url_os_coreroot_default"
       while [ ! -e "$url_os_coreroot/$ver_no" ]; do
-	echo "No such directory \"$url_os_coreroot/$ver_no\" or \"$url_os_coreroot/updates/$ver_no\"!" 
+	echo "No such directory \"$url_os_coreroot/$ver_no\" or \"$url_os_coreroot/updates/$ver_no\"!"
 	echo "Please enter it again!"
         read url_os_coreroot
       done
@@ -2722,17 +2722,17 @@ case "$answer" in
       read os_ayo_path
       [ -z "$os_ayo_path" ] && os_ayo_path="$os_ayo_path_default"
       while [ ! -e "$os_ayo_path/RPMS.$core_dir" ] || [ ! -e "$os_ayo_path/RPMS.drbl" ]; do
-	echo "No such directory $os_ayo_path/RPMS.$core_dir or $os_ayo_path/RPMS.drbl!" 
+	echo "No such directory $os_ayo_path/RPMS.$core_dir or $os_ayo_path/RPMS.drbl!"
 	echo "Please enter it again!"
         read os_ayo_path
       done
       ;;
-    5) 
+    5)
       # enter by user
       url_os_default="http://ayo.freshrpms.net"
       os_coreroot_default="/fedora/linux/"
       os_ayo_path_default="/fedora/linux/$ver_no/i386"
-      echo "Enter the hostname or IP address of $os_ver packages reposity with http or ftp prefix."
+      echo "Enter the hostname or IP address of $os_ver packages repository with http or ftp prefix."
       echo -n "[$url_os_default] "
       read url_os
       [ -z "$url_os" ] && url_os="$url_os_default"
@@ -2771,7 +2771,7 @@ echo "------------------------------------------------------"
 parse_RH_drbl_apt_repo_answer() {
 # url_drbl_rpmroot is where the RPMS.drbl, RPMS.drbl-testing, RPMS.drbl-unstable... exist
 # url_os_rpmroot is where the RPMS.os, RPMS.core, RPMS.update... exist
-# try to set url_drbl_rpmroot and url_os, we need 
+# try to set url_drbl_rpmroot and url_os, we need
 # url_drbl_rpmroot to get wget and apt
 # url_os_rpmroot to get glibc/openssl/kernel
 # os_ayo_path is under $url_os where RPMS.os/RPMS.core exists
@@ -2788,7 +2788,7 @@ case "$answer" in
       url_drbl="http://drbl.sourceforge.net"
       drbl_ayo_path="drbl-core/i386"
       ;;
-    3) 
+    3)
       # local repository
       url_drbl_default="/"
       drbl_ayo_path_default="/drbl-core/i386"
@@ -2798,17 +2798,17 @@ case "$answer" in
       read drbl_ayo_path
       [ -z "$drbl_ayo_path" ] && os_ayo_path="$drbl_ayo_path_default"
       while [ ! -e "$drbl_ayo_path/RPMS.$core_dir" ] || [ ! -e "$drbl_ayo_path/RPMS.drbl" ]; do
-	echo "No such directory $drbl_ayo_path/RPMS.$core_dir or $drbl_ayo_path/RPMS.drbl!" 
+	echo "No such directory $drbl_ayo_path/RPMS.$core_dir or $drbl_ayo_path/RPMS.drbl!"
 	echo "Please enter it again!"
         read drbl_ayo_path
       done
       ;;
-    5) 
+    5)
       # enter by user
       url_drbl_default="http://drbl.sourceforge.net"
       drbl_ayo_path_default="/drbl-core/i386"
 
-      echo "Enter the hostname or IP address of DRBL packages reposity with http or ftp prefix."
+      echo "Enter the hostname or IP address of DRBL packages repository with http or ftp prefix."
       echo -n "[$url_drbl_default] "
       read url_drbl
       [ -z "$url_drbl" ] && url_drbl="$url_drbl_default"
@@ -2841,7 +2841,7 @@ echo "------------------------------------------------------"
 parse_MDK_os_ayo_repo_answer() {
 # url_drbl_rpmroot is where the RPMS.drbl, RPMS.drbl-testing, RPMS.drbl-unstable... exist
 # url_os_rpmroot is where the rpm files (lernel-2.6.8-24mdk-1-1mdk.i586.rpm)... exist
-# try to set url_drbl_rpmroot and url_os, we need 
+# try to set url_drbl_rpmroot and url_os, we need
 # url_drbl_rpmroot to get wget and apt
 # url_os_rpmroot to get glibc/openssl/kernel
 # url_os_rpmroot is to the path where "official" exists.
@@ -2878,12 +2878,12 @@ case "$answer" in
       #enter by user
       url_os_default="http://mirrors.kernel.org"
       os_ayo_path_default="/mandrake/Mandrakelinux/official/"
-      echo "Please enter the hostname or IP address of OS packages reposity with http or ftp prefix..."
+      echo "Please enter the hostname or IP address of OS packages repository with http or ftp prefix..."
       echo -n "[$url_os_default] "
       read url_os
       [ -z "$url_os" ] && url_os="$url_os_default"
 
-      echo "Enter the path where directories \"${OS_Version:3}\" and \"updates\"exist..." 
+      echo "Enter the path where directories \"${OS_Version:3}\" and \"updates\"exist..."
       echo -n "[$os_ayo_path_default] "
       read os_ayo_path
       [ -z "$os_ayo_path" ] && os_ayo_path="$os_ayo_path_default"
@@ -2906,7 +2906,7 @@ echo "------------------------------------------------------"
 parse_MDK_drbl_ayo_repo_answer() {
 # url_drbl_rpmroot is where the RPMS.drbl, RPMS.drbl-testing, RPMS.drbl-unstable... exist
 # url_os_rpmroot is where the rpm files (lernel-2.6.8-24mdk-1-1mdk.i586.rpm)... exist
-# try to set url_drbl_rpmroot and url_os, we need 
+# try to set url_drbl_rpmroot and url_os, we need
 # url_drbl_rpmroot to get wget and apt
 # url_os_rpmroot to get glibc/openssl/kernel
 # url_os_rpmroot is to the path where "official" exists.
@@ -2926,12 +2926,12 @@ case "$answer" in
       #enter by user
       url_drbl_default="ftp://free.nchc.org.tw"
       drbl_ayo_path_default="/drbl-core/i386"
-      echo "Please enter the hostname or IP address of apt reposity with http or ftp prefix..."
+      echo "Please enter the hostname or IP address of apt repository with http or ftp prefix..."
       echo -n "[$url_drbl_default] "
       read url_drbl
       [ -z "$url_drbl" ] && url_drbl="$url_drbl_default"
 
-      echo "Enter the path where directory RPMS.drbl exist..." 
+      echo "Enter the path where directory RPMS.drbl exist..."
       echo -n "[$drbl_ayo_path_default] "
       read drbl_ayo_path
       [ -z "$drbl_ayo_path" ] && drbl_ayo_path="$drbl_ayo_path_default"
@@ -3064,7 +3064,7 @@ echo "$msg_upgrade_whole_system"
 [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
 echo "$msg_delimiter_star_line"
 
-# we must keep drbl 
+# we must keep drbl
 APT_KEEP_OPT='-o RPM::Hold::=drbl'
 YUM_KEEP_OPT='--exclude=drbl'
 case "$RH_upgrade_option" in
@@ -3078,7 +3078,7 @@ case "$RH_upgrade_option" in
      APT_KEEP_OPT="$APT_KEEP_OPT -o RPM::Hold::=glibc"
      YUM_KEEP_OPT="$YUM_KEEP_OPT --exclude=glibc --exclude=glibc-common --exclude=glibc-devel --exclude=glibc-headers"
      ;;
-  2) 
+  2)
      # upgrade glibc, keep openssl
      APT_KEEP_OPT="$APT_KEEP_OPT -o RPM::Hold::=openssl"
      YUM_KEEP_OPT="$YUM_KEEP_OPT --exclude=openssl"
@@ -3090,7 +3090,7 @@ case "$RH_upgrade_option" in
 esac
 
 # do it
-[ "$installer" = "apt" ] && apt-get dist-upgrade $APT_KEEP_OPT 
+[ "$installer" = "apt" ] && apt-get dist-upgrade $APT_KEEP_OPT
 [ "$installer" = "yum" ] && yum $YUM_KEEP_OPT update
 } # end of do_upgrade_system_for_RH
 
@@ -3224,7 +3224,7 @@ esac
 # ask some setting for client, such as SMP, serial console...
 ask_and_parse_client_extra_setting
 
-# 
+#
 parse_client_archi_setting
 
 # In Debian, the installer is apt.
@@ -3247,10 +3247,10 @@ $inst_prog update
 
 # UGLY
 obsolete_pkgs="mkinitrd-net partimage-server knoppix-terminalserver"
-# mkinitrd-net is replaced by mkpxeinitrd-net in this version. Although 
+# mkinitrd-net is replaced by mkpxeinitrd-net in this version. Although
 # mkinitrd-net is set as one of the obsoletes in mkpxeinitrd-net.spec.
-# However, we use alien to convert drbl rpm to drbl deb, the obsolete is not 
-# converted. 
+# However, we use alien to convert drbl rpm to drbl deb, the obsolete is not
+# converted.
 # Same for partimage-server (The partimage released by DRBL containing partimaged), knoppix-terminalserver
 for i in $obsolete_pkgs; do
   if [ -n "$(dpkg -s $i 2>/dev/null | grep -Ei "^Status: install ok installed")" ]; then
@@ -3269,14 +3269,14 @@ if [ -z "$upgrade_system_answer" ]; then
   echo -n "[y/N] "
   read upgrade_system_answer
 fi
-case "$upgrade_system_answer" in 
+case "$upgrade_system_answer" in
    y|Y|[yY][eE][sS])
       do_upgrade_system_for_DBN
       ;;
 esac
 
 # 3.
-# Install the necessary packages for DRBL 
+# Install the necessary packages for DRBL
 [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
 echo "$msg_delimiter_star_line"
 echo "$msg_install_DRBL_necesary_files"
@@ -3300,8 +3300,8 @@ for ipkg in $PKG_TO_QUERY; do
     PKG_FROM_DBN="$PKG_FROM_DBN $ipkg"
   fi
 done
-# Detect if discover/discover1 is installed or not, if installed, 
-# do not install it. If not, we need discover (not discover1) for clients. 
+# Detect if discover/discover1 is installed or not, if installed,
+# do not install it. If not, we need discover (not discover1) for clients.
 # The package name "discover" exists both in woody and sarge.
 # The reason we have to check is that we prefer to keep the installed package, maybe discover or discover1.
 if ! chk_deb_installed discover && ! chk_deb_installed discover1; then
@@ -3335,7 +3335,7 @@ fi
 
 # From ntfs-3g 1:2011.4.12AR.4-2, it will provide all the files of ntfsprogs.
 # Package: ntfs-3g
-# Version: 1:2011.4.12AR.4-2   
+# Version: 1:2011.4.12AR.4-2
 # Installed-Size: 1492
 # Maintainer: Daniel Baumann <daniel.baumann@progress-technologies.net>
 # Architecture: i386
@@ -3437,7 +3437,7 @@ if [ "$client_archi_set" = "best_optimization" ]; then
   KARCH_LIST="$(drbl-check-kernel-cpu-arch `uname -r`)"
   # KARCH_LIST will be nothing if we can not find the kernel config file, so we choose to use the same arch of server for client.
   [ -z "$KARCH_LIST" ] && KARCH_LIST="$(uname -m)"
-  # convert the arch name from server to client, 
+  # convert the arch name from server to client,
   # This is the lists for Debian Sarge:
   # -----------------------------------------------
   # kernel-image-2.6.8-3-686-smp 2.6.8-16sarge2
@@ -3463,16 +3463,16 @@ if [ "$client_archi_set" = "best_optimization" ]; then
   # -----------------------------------------------
   # Updated on 2006/10/28, for Ubuntu 6.10, there is no name tag for 686 or amd64-k8, they are like:
   # -----------------------------------------------
-  # linux-image-2.6.17-10-386_2.6.17-10.33_i386.deb             
-  # linux-image-2.6.17-10-generic_2.6.17-10.33_amd64.deb        
-  # linux-image-2.6.17-10-generic_2.6.17-10.33_i386.deb         
-  # linux-image-2.6.17-10-powerpc-smp_2.6.17-10.33_powerpc.deb  
+  # linux-image-2.6.17-10-386_2.6.17-10.33_i386.deb
+  # linux-image-2.6.17-10-generic_2.6.17-10.33_amd64.deb
+  # linux-image-2.6.17-10-generic_2.6.17-10.33_i386.deb
+  # linux-image-2.6.17-10-powerpc-smp_2.6.17-10.33_powerpc.deb
   # linux-image-2.6.17-10-powerpc64-smp_2.6.17-10.33_powerpc.deb
-  # linux-image-2.6.17-10-powerpc_2.6.17-10.33_powerpc.deb      
-  # linux-image-2.6.17-10-server-bigiron_2.6.17-10.33_i386.deb  
-  # linux-image-2.6.17-10-server_2.6.17-10.33_amd64.deb         
-  # linux-image-2.6.17-10-server_2.6.17-10.33_i386.deb          
-  # linux-image-2.6.17-10-sparc64-smp_2.6.17-10.33_sparc.deb    
+  # linux-image-2.6.17-10-powerpc_2.6.17-10.33_powerpc.deb
+  # linux-image-2.6.17-10-server-bigiron_2.6.17-10.33_i386.deb
+  # linux-image-2.6.17-10-server_2.6.17-10.33_amd64.deb
+  # linux-image-2.6.17-10-server_2.6.17-10.33_i386.deb
+  # linux-image-2.6.17-10-sparc64-smp_2.6.17-10.33_sparc.deb
   # -----------------------------------------------
   # and "apt-cache pkgnames linux-image | grep -E "^linux-image-[0-9]+\.[0-9]+\.[0-9]+" | sort" will give:
   # linux-image-2.6.15-23-386 <-- forget the stale one
@@ -3486,19 +3486,19 @@ if [ "$client_archi_set" = "best_optimization" ]; then
   # Hence now basically only linux-image-2.6.17-10-386 (for i386) or linux-image-2.6.17-10-generic (for i586/686)
   # -----------------------------------------------
   # However, for Debian etch in testing (on 2006/10/28), it's like:
-  # linux-image-2.6-486_2.6.18+3_i386.deb           
-  # linux-image-2.6-686-bigmem_2.6.18+3_i386.deb    
-  # linux-image-2.6-686-smp_2.6.18+3_i386.deb       
-  # linux-image-2.6-686_2.6.18+3_i386.deb           
+  # linux-image-2.6-486_2.6.18+3_i386.deb
+  # linux-image-2.6-686-bigmem_2.6.18+3_i386.deb
+  # linux-image-2.6-686-smp_2.6.18+3_i386.deb
+  # linux-image-2.6-686_2.6.18+3_i386.deb
   # linux-image-2.6-alpha-generic_2.6.18+3_alpha.deb
-  # linux-image-2.6-alpha-legacy_2.6.18+3_alpha.deb 
-  # linux-image-2.6-alpha-smp_2.6.18+3_alpha.deb    
+  # linux-image-2.6-alpha-legacy_2.6.18+3_alpha.deb
+  # linux-image-2.6-alpha-smp_2.6.18+3_alpha.deb
   # linux-image-2.6-amd64-generic_2.6.18+3_amd64.deb
-  # linux-image-2.6-amd64-k8-smp_2.6.18+3_amd64.deb 
-  # linux-image-2.6-amd64-k8_2.6.18+3_amd64.deb     
-  # linux-image-2.6-amd64_2.6.18+3_amd64.deb        
-  # linux-image-2.6-em64t-p4-smp_2.6.18+3_amd64.deb 
-  # linux-image-2.6-em64t-p4_2.6.18+3_amd64.deb     
+  # linux-image-2.6-amd64-k8-smp_2.6.18+3_amd64.deb
+  # linux-image-2.6-amd64-k8_2.6.18+3_amd64.deb
+  # linux-image-2.6-amd64_2.6.18+3_amd64.deb
+  # linux-image-2.6-em64t-p4-smp_2.6.18+3_amd64.deb
+  # linux-image-2.6-em64t-p4_2.6.18+3_amd64.deb
   case "$KARCH_LIST" in
   i[0-9]86)
      KARCH_LIST="i686"
@@ -3516,7 +3516,7 @@ if [ "$client_archi_set" = "best_optimization" ]; then
      ;;
   esac
   # UGLY! Any better method ?
-  # For Ubuntu 6.10 or later, there is no name tag for 686 or amd64-k8, 
+  # For Ubuntu 6.10 or later, there is no name tag for 686 or amd64-k8,
   # it's generic, for earlier version, it uses 386, 686 or amd64-k8
   # We will not use this for Debian etch.
   if [ "$DISTRIB_ID" = "Ubuntu" ]; then
@@ -3534,7 +3534,7 @@ if [ "$client_archi_set" = "best_optimization" ]; then
     client_archi="generic"
   fi
 else
-  # For Debian, only i386 is available we decided. Maybe in the future, we 
+  # For Debian, only i386 is available we decided. Maybe in the future, we
   # will add K7 ?
   # For Debian Etch/Ubuntu Dapper... the kernel is like linux-image-2.6.15-1-486, only 486
   KARCH_LIST="i[345]86"
@@ -3561,7 +3561,7 @@ fi
 # linux-image-2.6.17-2-xen-686      <--
 # linux-image-2.6.17-2-xen-k7       <--
 # For Lenny, openvz:
-# linux-image-2.6.26-2-openvz-686   <-- 
+# linux-image-2.6.26-2-openvz-686   <--
 # i.e. exclude: xen, vserver, openvz, rt, dbg...
 seldom_kernel_filter="grep -Ev (xen|vserver|openvz|rt|dbg|grsec|unsigned)"
 
@@ -3570,7 +3570,7 @@ seldom_kernel_filter="grep -Ev (xen|vserver|openvz|rt|dbg|grsec|unsigned)"
 # Actually this is useless, since in ask_and_parse_client_extra_setting(), for DBN-TU, we will not ask SMP or not. Therefore maybe we should remove this!
 if [ -n "$SMP_OPTION" -a "$DISTRIB_ID" = "Ubuntu" ]; then
   if [ "$DISTRIB_RELEASE" != "5.10" ]; then
-     echo "Since all the kernel image in Ubuntu $DISTRIB_RELEASE supports SMP, we do not have to specify the kernel with SMP tag for clients."
+     echo "Since all the kernel images in Ubuntu $DISTRIB_RELEASE support SMP, we do not have to specify the kernel with SMP tag for clients."
      smp_filter="grep -iv smp"
   fi
 fi
@@ -3666,7 +3666,7 @@ case "$use_kernel_from" in
       echo "$msg_program_stop"
       exit 1
     fi
-    
+
     # download it
     apt-get $inst_opt --reinstall --download-only install $latest_drbl_kernel_in_rep
     rc_get_kernel=$?
@@ -3697,7 +3697,7 @@ case "$use_kernel_from" in
       apt-get $inst_opt --reinstall --download-only install linux-ubuntu-modules-$drbl_kernel_ver
       # find the ubuntu kernel
       # The "_" is important, since the file names in the cache dir are like
-      # linux-ubuntu-modules-2.6.22-14-generic_2.6.22-14.38_i386.deb 
+      # linux-ubuntu-modules-2.6.22-14-generic_2.6.22-14.38_i386.deb
       # linux-ubuntu-modules-2.6.22-14-386_2.6.22-14.38_i386.deb
       if [ -n "$(ls /var/cache/apt/archives/linux-ubuntu-modules-${drbl_kernel_ver}_*.deb 2>/dev/null)" ]; then
         latest_drbl_ubuntu_kernel_in_rep_deb="$(unalias ls 2>/dev/null; ls /var/cache/apt/archives/linux-ubuntu-modules-${drbl_kernel_ver}_*.deb 2>/dev/null | pkg-ver-latest)"
@@ -3717,10 +3717,10 @@ case "$use_kernel_from" in
         drblsrv_offline_extra_opt="$drblsrv_offline_extra_opt -e $latest_drbl_ubuntu_kernel_in_rep_deb"
       fi
     fi
-    
+
     # The "_" is important, since the file names in the cache dir are like
-    # kernel-image-2.6.8-2-386_2.6.8-16_i386.deb, 
-    # kernel-image-2.6.8-2-686_2.6.8-16_i386.deb, 
+    # kernel-image-2.6.8-2-386_2.6.8-16_i386.deb,
+    # kernel-image-2.6.8-2-686_2.6.8-16_i386.deb,
     # kernel-image-2.6.8-2-686-smp_2.6.8-16_i386.deb
     if [ -n "$(unalias ls 2>/dev/null; ls /var/cache/apt/archives/${latest_drbl_kernel_in_rep}_*.deb 2>/dev/null)" ]; then
       client_kernel_tmp_dir="/var/cache/apt/archives"
@@ -3780,7 +3780,7 @@ echo "$msg_delimiter_star_line"
 # ugly...might be not my fault...
 # for some distribution some version, we have to force upgrading some packages.
 
-# SuSE/OpenSuSE 10.0 with kernel 2.6.13-15-default is BUGGY 
+# SuSE/OpenSuSE 10.0 with kernel 2.6.13-15-default is BUGGY
 # in DRBL server!!! Since it's a kernel upgrade, we wont' do that for
 # user, just prompt them
 if [ "$(uname -r)" = "2.6.13-15-default" ]; then
@@ -3817,7 +3817,7 @@ if [ "$installer" = "apt" ] && ! rpm -q apt &>/dev/null; then
 fi
 if [ "$installer" = "yum" ] && ! rpm -q yum &>/dev/null; then
   # From SuSE 10.0, yum is available
-  if [ "$OS_Version" != "SUSE9.3" ]; then 
+  if [ "$OS_Version" != "SUSE9.3" ]; then
     echo "$msg_delimiter_star_line"
     echo "Try to install yum first..."
     yast2 -i yum
@@ -3925,7 +3925,7 @@ ask_and_parse_client_extra_setting
 # parse the setting of client archi.
 parse_client_archi_setting
 
-# It's important to remove the cache of apt, otherwise 
+# It's important to remove the cache of apt, otherwise
 # the RPM::Architecture will not take effect. check this:
 # http://distro2.conectiva.com.br/pipermail/apt-rpm/2003-November/002015.html
 # ... RPM::Architecture, is what he's looking for. His problem was that the cache was built before he set the architecture. Doing "rm -f /var/cache/apt/*.bin; apt-get update" would make it work.
@@ -3981,7 +3981,7 @@ if [ -z "$upgrade_system_answer" ]; then
   read upgrade_system_answer
 fi
 
-case "$upgrade_system_answer" in 
+case "$upgrade_system_answer" in
    y|Y|[yY][eE][sS])
       [ "$installer" = "apt" ] && $inst_prog $inst_opt dist-upgrade
       [ "$installer" = "yum" ] && yum upgrade
@@ -3992,7 +3992,7 @@ esac
 # 4.
 # lftp & curl are necessary here, we install it first
 if ! rpm -q --quiet lftp || ! rpm -q --quiet curl || ! rpm -q --quiet wget ; then
-  echo "lftp and curl are necessary so that we can find some program in apt or yum repository. Install them now if not installed..."
+  echo "lftp and curl are necessary so that we can find some programs in apt or yum repository. Install them now if not installed..."
   # we need lftp to parse the repo setting if it's in ftp://
   if [ "$ARCH" = "x86_64" -a "$installer" = "yum" ]; then
     lftp_curl_etc="lftp.x86_64 curl.x86_64 wget.x86_64"
@@ -4001,7 +4001,7 @@ if ! rpm -q --quiet lftp || ! rpm -q --quiet curl || ! rpm -q --quiet wget ; the
   fi
   $inst_prog $inst_opt install $lftp_curl_etc
 fi
-# After the dist upgrade, check the ARCH for glibc, db... which are different 
+# After the dist upgrade, check the ARCH for glibc, db... which are different
 # from i586 and are found in ftp://ftp.twaren.net/Linux/SuSE/i386/9.3/suse/i686
 for ipkg in $i686_pkg_check_list_SUSE; do
   # i686_pkg_check_list_SUSE is: glibc glibc-devel db db-devel...
@@ -4067,7 +4067,7 @@ elif [ "$installer" = "zypper" ]; then
    sub_cmd="if ($begin_line..$end_line) {s/ /-/g}"
    LC_ALL=C perl -pi -e "$sub_cmd" ${opensuse_rpm_md_repo}.repo
   done
-  
+
   # Find the possible blocks
   # We will get something like:
   # [drbl]
@@ -4079,7 +4079,7 @@ elif [ "$installer" = "zypper" ]; then
   # [repo-debug]
   # [repo-source]
   # [repo-update]
-  
+
   possible_blks="$(LC_ALL=C grep -E "^\[.*\]" ${opensuse_rpm_md_repo}.repo | sed -e "s/\[//g" -e "s/\]//g")"
 
   # The export file is ${opensuse_rpm_md_repo}.repo
@@ -4102,7 +4102,7 @@ elif [ "$installer" = "zypper" ]; then
     # In this case, we will get:
     # url_tmp='http://download.opensuse.org update'
     # we should skip this one, and find the next one.
-    [ -n "$(echo $url_tmp | grep -Ew "update")" ] && continue 
+    [ -n "$(echo $url_tmp | grep -Ew "update")" ] && continue
     if [ -n "$url_tmp" ]; then
       url_os="$(echo $url_tmp | awk -F' ' '{print $1}')"
       # We have to remove the last "/" in the path,
@@ -4135,7 +4135,7 @@ elif [ "$installer" = "zypper" ]; then
     # ========================
     # In this case, we will get:
     # url_tmp='http://download.opensuse.org update'
-    [ -z "$(echo $url_update_tmp | grep -Ew "update")" ] && continue 
+    [ -z "$(echo $url_update_tmp | grep -Ew "update")" ] && continue
     if [ -n "$url_update_tmp" ]; then
       # Ex:
       # url_updates_root will be like:
@@ -4165,14 +4165,14 @@ if [ -z "$url_os_coreroot" ]; then
   echo "SuSE RPM release repository NOT found!"
   [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
   echo -n "$msg_press_enter_to_continue"
-  read 
+  read
 fi
 if [ -z "$url_updates_root" ]; then
   [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
   echo "SuSE RPM updates repository NOT found!"
   [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
   echo -n "$msg_press_enter_to_continue"
-  read 
+  read
 fi
 
 install_client_archi_glibc_etc_SUSE
@@ -4233,7 +4233,7 @@ check_apt_install $RETVAL
 
 # 7.
 # Creat dev tarball in $drbl_pkgdir,
-# which will be copied to /tftpboot/node_root/etc/diskless-image 
+# which will be copied to /tftpboot/node_root/etc/diskless-image
 # in deploy script
 [ ! -d $drbl_pkgdir ] && mkdir -p $drbl_pkgdir
 
@@ -4295,9 +4295,9 @@ get_url_ocs_then_install_curl_etc_via_yum_if_necessary() {
 	# Since earlier version 4.2/4.1 is no more, forget about them.
 	# Actually, for CentOS, the latest version in 4.x is linked to 4, so use 4 is the latest release.
         #QUERY_OS_VER="$(echo ${OS_Version:2} | sed -e "s/\.[[:digit:]]*//g")"
-	# Note by Steven Shiau on 2006/10/10, now we should query releasever=4.4 for 4.4, then this will be consistent with find-url-in-yum-set. 
+	# Note by Steven Shiau on 2006/10/10, now we should query releasever=4.4 for 4.4, then this will be consistent with find-url-in-yum-set.
 	# Now with ?release=4
-	# curl 'http://mirrorlist.centos.org/?release=4&arch=i386&repo=os' 
+	# curl 'http://mirrorlist.centos.org/?release=4&arch=i386&repo=os'
 	# We got:
 	# http://ftp2.tnc.edu.tw/pub1/centos/4.4/os/i386/
 	# http://ftp.cs.pu.edu.tw/Linux/CentOS/4.4/os/i386/
@@ -4351,9 +4351,9 @@ if [ "$client_archi_set" = "best_optimization" ]; then
   KARCH="$(drbl-check-kernel-cpu-arch `uname -r`)"
   # KARCH will be nothing if we can not find the kernel config file, so we choose to use the same arch of server for client.
   [ -z "$KARCH" ] && KARCH="$(uname -m)"
-  # convert the arch name from server to client, 
+  # convert the arch name from server to client,
   # Note:
-  # "KARCH_RPM_URL_PATH" is for RPM repository PATH use only, like 
+  # "KARCH_RPM_URL_PATH" is for RPM repository PATH use only, like
   # http://opensource.nchc.org.tw/opensuse/distribution/SL-10.1/inst-source/suse/i586/
   # of
   # http://opensource.nchc.org.tw/opensuse/distribution/SL-10.1/inst-source/suse/x86_64/
@@ -4377,7 +4377,7 @@ if [ "$client_archi_set" = "best_optimization" ]; then
      ;;
   esac
 else
-  # For SuSE, only i586 is available we decided. Maybe in the future, we 
+  # For SuSE, only i586 is available we decided. Maybe in the future, we
   # will add K7 ?
   KARCH="i586"
   # skip the leading "i"
@@ -4402,7 +4402,7 @@ else
   # -----------
   # kernel-pae-2.6.27.7-9.1.i586.rpm
   # kernel-pae-base-2.6.27.7-9.1.i586.rpm
-  # kernel-pae-extra-2.6.27.7-9.1.i586.rpm          
+  # kernel-pae-extra-2.6.27.7-9.1.i586.rpm
   # -----------
   # "NOT SMP" filter
   smp_filter="grep -iv smp"
@@ -4492,7 +4492,7 @@ case "$use_kernel_from" in
       # Before download it, clean the kernel-image in the cache dir so that we can fin
       # the download one by ls.
       rm -f /var/cache/apt/archives/${latest_drbl_kernel_in_rep}*.rpm 2>/dev/null
-      
+
       # download it
       $inst_prog $inst_opt --reinstall --download-only install $latest_drbl_kernel_in_rep
       RC=$?
@@ -4504,7 +4504,7 @@ case "$use_kernel_from" in
         echo "$msg_program_stop"
         exit 1
       fi
-      
+
       # The "_" is important, since the file names in the cache dir are like
       # kernel-default_2.6.11.4-21.7_i586.rpm
       if [ -n "$(ls /var/cache/apt/archives/${latest_drbl_kernel_in_rep}_*.rpm 2>/dev/null)" ]; then
@@ -4546,11 +4546,11 @@ case "$use_kernel_from" in
         # pkg_name=preload-kmp-desktop
         # For "pkg_ver" we have to use the version number same with kernel of client
         pkg_name="$(LC_ALL=C rpm -q --qf '%{NAME}\n' $ipkg)"
-	echo "Found $pkg_name installed on the server, will try to install it with client's kernel version for clients later..."       
+	echo "Found $pkg_name installed on the server, will try to install it with client's kernel version for clients later..."
         # The version should be consistent with kernel
         pkg_ver="$(LC_ALL=C rpm -qp --qf '%{VERSION}\n' $client_kernel_tmp_dir/$(basename $suse_latest_kernel_url))"
         pkg_2_be_inst_for_cli="$(echo $pkg_name | sed -r -e "s/(-desktop|-default)/-${suse_client_kernel_tag}/g")"
-        if [ -n "$pkg_2_be_inst_for_cli" ]; then 
+        if [ -n "$pkg_2_be_inst_for_cli" ]; then
           # Find the kernel module package on the repository...
           pkg_2_be_inst_for_cli_ver="$(cat $suse_rpm_list_tmp | grep -E "${pkg_2_be_inst_for_cli}" | grep -E "${pkg_ver}" | pkg-ver-latest)"
           if [ -n "$pkg_2_be_inst_for_cli_ver" ]; then
@@ -4571,7 +4571,7 @@ case "$use_kernel_from" in
        done
       fi
       ;;
-    esac  
+    esac
     ;;
   "local")
     # kernel for client already exists in /tftpboot/node_root.
@@ -4588,9 +4588,9 @@ Usage() {
   echo "Usage:"
   echo "$0 [Option]"
   echo "Option:"
-  echo "-f, --force-yes:  force yes, only for Debian-like distribution. It  should  not  be used except in very special situations. Using force-yes can potentially destroy your system!" 
-  echo "-i, --install:    install DRBL." 
-  echo "-u, --uninstall:  uninstall DRBL." 
+  echo "-f, --force-yes:  force yes, only for Debian-like distribution. It  should  not  be used except in very special situations. Using force-yes can potentially destroy your system!"
+  echo "-i, --install:    install DRBL."
+  echo "-u, --uninstall:  uninstall DRBL."
   echo "-v, --verbose:    verbose mode."
   echo "-t, --testing [y/n]:    use packages in testing branch or not."
   echo "-a, --unstable [y/n]:   use packages in unstable branch or not."
@@ -4676,7 +4676,7 @@ while [ $# -gt 0 ]; do
 	exit 1
   esac
 done
-     
+
 # mode is essential
 [ -z "$mode" ] && Usage && exit 1
 
@@ -4776,7 +4776,7 @@ case "$OS_Version" in
       # For OpenSuSE 10.0, the path in yum repo is like
       # http://opensource.nchc.org.tw/opensuse/distribution/SL-10.0-OSS/inst-source/suse/
       # For OpenSuSE 10.1, it's like (no -OSS):
-      # http://opensource.nchc.org.tw/opensuse/distribution/SL-10.1/inst-source/suse/ 
+      # http://opensource.nchc.org.tw/opensuse/distribution/SL-10.1/inst-source/suse/
       # For OpenSuSE 10.2, it's like (no SL-):
       # http://opensource.nchc.org.tw/opensuse/distribution/10.2/repo/oss/suse/i586/
       # Hope SuSE will keep this rule.
@@ -4801,7 +4801,7 @@ case "$OS_Version" in
       echo "This version in this distribution is NOT supported by DRBL, maybe you can try to use the drbl in testing or unstable repository."
       [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
       echo "$msg_program_stop"
-      exit 1 
+      exit 1
 esac
 
 #
@@ -4820,7 +4820,7 @@ case "$installer" in
 esac
 
 # select_repository is for RH-like and CentOS repository selection.
-# for CentOS, we force to make select_repository="no", we will not put centos 
+# for CentOS, we force to make select_repository="no", we will not put centos
 # yum config in this file
 # for some distributions, we have to force user select the repository
 # for FC3-6, the question is open. For FC7 and later, make select_repository="no". i.e. let use handle the yum repository by himself. Otherwise it's too complicated, it's better to use the one in the system.

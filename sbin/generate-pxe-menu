@@ -19,7 +19,7 @@ USAGE() {
   echo "-d, --dir DIR:     Assign the netinstall files are in DIR instead of default dir $pxecfg_pd"
   echo "-s, --serial OPT:  set the PXE menu to work with serial console output."
   echo "-g, --graphic [y|n]:  Option to set client to use graphical mode or not when booting GNU/Linux (now only for Fedora Core)"
-  echo "-m, --pxe-mode [text|graphic]:  Set the default PXE linux menu mode to text or graphic"
+  echo "-m, --pxe-mode [text|graphic]:  Set the default PXE Linux menu mode to text or graphic"
   echo "-p, --pxelinux-dir DIR:  Assign PXELINUX config dir as DIR instead of deafult dir $PXELINUX_DIR."
   echo "-v, --verbose:  verbose mode."
   echo "Ex:"
@@ -40,7 +40,7 @@ while [ $# -gt 0 ]; do
     -s|--serial)
             shift
             if [ -z "$(echo $1 |grep ^-.)" ]; then
-              # skip the -xx option, in case 
+              # skip the -xx option, in case
               PXE_SERIAL_OUTPUT="$1"
               shift
             fi
@@ -49,7 +49,7 @@ while [ $# -gt 0 ]; do
     -c|--console)
             shift
             if [ -z "$(echo $1 |grep ^-.)" ]; then
-              # skip the -xx option, in case 
+              # skip the -xx option, in case
               CONSOLE_OUTPUT="$1"
               shift
             fi
@@ -58,7 +58,7 @@ while [ $# -gt 0 ]; do
     -f|--fdos)
             shift
             if [ -z "$(echo $1 |grep ^-.)" ]; then
-              # skip the -xx option, in case 
+              # skip the -xx option, in case
               fdos_img_output="$1"
               shift
             fi
@@ -67,15 +67,15 @@ while [ $# -gt 0 ]; do
     -g|--graphic)
             shift
             if [ -z "$(echo $1 |grep ^-.)" ]; then
-              # skip the -xx option, in case 
+              # skip the -xx option, in case
               graphical_boot="$1"
               shift
             fi
 	    [ -z "$graphical_boot" ] && USAGE && exit 1
 	    ;;
-    -m|--pxe-mode)  
+    -m|--pxe-mode)
             shift;
-            # skip the -xx option, in case 
+            # skip the -xx option, in case
 	    if [ -z "$(echo $1 |grep ^-.)" ]; then
 	      pxe_mode="$1"
 	      shift
@@ -85,7 +85,7 @@ while [ $# -gt 0 ]; do
     -d|--dir)
             shift
             if [ -z "$(echo $1 |grep ^-.)" ]; then
-              # skip the -xx option, in case 
+              # skip the -xx option, in case
               TDIR="$1"
               shift
             fi
@@ -94,7 +94,7 @@ while [ $# -gt 0 ]; do
     -p|--pxelinux-dir)
             shift
             if [ -z "$(echo $1 |grep ^-.)" ]; then
-              # skip the -xx option, in case 
+              # skip the -xx option, in case
               PXECFG_DIR="$1"
               shift
             fi
@@ -146,7 +146,7 @@ case "$graphical_boot" in
     ;;
 esac
 case "$OS_Version" in
-  DBN*) 
+  DBN*)
     # Put quiet for Debian and Ubuntu clients.
     quiet_opt="quiet"
     ;;
@@ -176,7 +176,7 @@ echo "Use com32 module: $MENUC32"
 [ "$drbl_mode" = "drbl_ssi_mode" ] && drbl_mode_opt="clientdir=node_root"
 [ "$clonezilla_mode" = "clonezilla_box_mode" ] && clonezilla_mode_opt="clientdir=node_root"
 
-# Get version number. 
+# Get version number.
 case "$OS_Version" in
    RH*|FC*|CO*|MDK*|MDV*|SUSE*)
       drbl_ver="$(rpm -q drbl | sed -e "s/^drbl-//g")"
@@ -218,7 +218,7 @@ now_year="$(LC_ALL=C date +%Y)"
 pxe_ver="$(LC_ALL=C awk -F" " '{print $2}' $pxecfg_pd/PXELINUX_VERSION)"
 echo "Adding menus for DRBL, local boot, memtest86+, FreeDOS..."
 cat <<-PXE_END > $PXECFG_DIR/default
-# Created by generate-pxe-menu! Do NOT edit unless you know what you are doing! 
+# Created by generate-pxe-menu! Do NOT edit unless you know what you are doing!
 # Keep those comment "MENU DEFAULT" and "MENU HIDE"! Do NOT remove them.
 # Note!!! If "serial" directive exists, it must be the first directive
 $PXE_SERIAL_OUTPUT
@@ -318,7 +318,7 @@ label local
   Boot local OS from first hard disk if it's available
   ENDTEXT
 
-# Note! *.bin is specially purpose for syslinux, 
+# Note! *.bin is specially purpose for syslinux,
 # Do NOT use memtest86.bin, use memtest86 instead of memtest86.bin
 label memtest
   # MENU DEFAULT
@@ -372,7 +372,7 @@ label AoE-client
 # label Xen client
 #   # MENU DEFAULT
 #   MENU HIDE
-#   MENU LABEL Xen client 
+#   MENU LABEL Xen client
 #   # MENU PASSWD
 #   kernel mboot.c32
 #   append xen-3.0.3-1-i386-pae.gz --- vmlinuz-2.6.18-6-xen-vserver-686 root=/dev/sda1 ro console=tty0 --- initrd-pxe.2.6.18-6-xen-vserver-686.img
