@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.23.29-drbl1) unstable; urgency=medium
+
+  * Add package lighttpd for Clonezilla/DRBL live.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 07 Apr 2017 07:40:21 +0800
+
 drbl (2.23.28-drbl1) unstable; urgency=medium
 
   * Bug fixed: ocs_prerun* are run twice.

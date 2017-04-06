@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.23.28
+Version:	2.23.29
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Fri Apr 07 2017 Steven Shiau <steven _at_ nchc org tw> 2.23.29-drbl1
+  - Add package lighttpd for Clonezilla/DRBL live.
+
 * Sun Mar 26 2017 Steven Shiau <steven _at_ nchc org tw> 2.23.28-drbl1
   - Bug fixed: ocs_prerun* are run twice.
     Ocs_prerun1 and ocs_prerun2 used by drbl live are changed to
