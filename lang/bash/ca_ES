@@ -1053,3 +1053,5 @@ msg_do_you_want_to_manually_configure_it='Do you want to manually configure the 
 msg_what_is_the_ip_add_for_virtual_nic_drbl0='What is the IP address and prefix for virtual network interface drbl0? The format is like: 192.168.167.101/24'
 msg_your_input_config_is='The setting you have entered is'
 msg_is_that_correct='Is that correct?'
+# Tag on 2017/04/09
+msg_failed_to_get_file_from_this_URL='Failed to fetch file from this URL'
