@@ -1039,3 +1039,4 @@ msg_your_input_config_is='The setting you have entered is'
 msg_is_that_correct='Is that correct?'
 # Tag on 2017/04/09
 msg_failed_to_get_file_from_this_URL='Failed to fetch file from this URL'
+msg_boot_client_with_same_version_clonezilla_live='Now boot the clients with the same version of Clonezilla live, then run "sudo ocs-live-get-img", follow the wizard to configure its network, and assign the multicast server as'
