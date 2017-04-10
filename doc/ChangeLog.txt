@@ -5,6 +5,15 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.23.31-drbl1) unstable; urgency=medium
+
+  * Update functions about selecting parameters for ocs-live-feed-img and
+    drbl-ocs.
+  * Update language files for prompting booting in unattended mode about
+    ocs-live-feed-img.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 10 Apr 2017 12:08:27 +0800
+
 drbl (2.23.30-drbl1) unstable; urgency=medium
 
   * Update language files for multicast feeding mechanism.
