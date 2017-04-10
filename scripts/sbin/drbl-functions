@@ -1465,11 +1465,29 @@ del_param_in_pxelinux_cfg_drbl_related_block() {
 } # end of del_param_in_pxelinux_cfg_drbl_related_block
 #
 ocs_advanced_param_post_mode_after_clone() {
-  local ocs_parm="$1" # The file to output the result //NOTE// This is to be append, not overwritten.
+  local ocs_parm # The file to output the result //NOTE// This is to be append, not overwritten.
+  local default_postaction="reboot " # //NOTE// Extra space is required
   # For Clonezilla SE mode, we always ask this (reboot, poweroff...) no matter it's advanced or beginner mode.
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      -d|--default-menu) 
+           shift; 
+           if [ -z "$(echo $1 |grep ^-.)" ]; then
+             # skip the -xx option, in case 
+             default_postaction="$1"
+             shift;
+           fi
+           [ -z "$default_postaction" ] && USAGE && exit 1
+           ;;
+       *)   break ;;
+    esac
+  done
+  ocs_parm="$1"
   if [ -z "$ocs_postmode" ]; then
+    # //NOTE// Extra space is required in the --default-item.
     $DIA --backtitle "$msg_nchc_free_software_labs" --title  \
     "$msg_clonezilla_advanced_extra_param | $msg_mode: $ocs_mode_prompt" --menu "$msg_choose_post_mode_after_clone:" \
+    --default-item "-p $default_postaction " \
     0 0 0 $DIA_ESC \
     "-p reboot "    "$msg_ocs_param_p_reboot" \
     "-p poweroff "  "$msg_ocs_param_p_poweroff" \
@@ -1538,308 +1556,334 @@ show_z4_or_above_menu_or_not() {
 } # end show_z4_or_above_menu_or_not
 #
 set_drbl_ocs_extra_param() {
-local mode="$1"
-OCS_PARAM_TMP="$2"
-local dev_="$3"
-local vol_size_tmp
-local ASK_VOL_SIZE=1
-local inst_grub_opt
-vol_size_tmp="$(mktemp /tmp/vol_size_tmp.XXXXXX)"
-
-# If the mode is only for parts, we won't turn on "-g auto" option by default
-case "$dev_" in
-  parts) inst_grub_opt="off"
-	 # For restoreparts, forget about clean mbr
-	 skip_clean_mbr_opt="on"
-	 ;;
-      *) inst_grub_opt="on"
-	 # For restoredisk, do mbr cleaning
-	 skip_clean_mbr_opt="off"
-         ;;
-esac
-
-if [ "$mode" = "restore" ]; then
-  if [ "$ocs_user_mode" = "expert" ]; then
-    $DIA --separate-output --backtitle "$msg_nchc_free_software_labs" --title  \
-    "$msg_clonezilla_advanced_extra_param | $msg_mode: $ocs_mode_prompt" --checklist "$msg_choose_param_to_set_multiple_choices ($msg_press_space_to_mark_selection)" \
-    0 0 0 $DIA_ESC \
-    "-g auto"  "$msg_ocs_param_g_auto" $inst_grub_opt \
-    "-e1 auto" "$msg_ocs_param_e1_auto" on \
-    "-e2"      "$msg_ocs_param_e2" on \
-    "-x"       "$msg_ocs_param_x" on \
-    "-nogui"   "$msg_ocs_param_nogui" off \
-    "-hn0 $WIN_HOSTNAME_PREFIX"  "$msg_ocs_param_hn0" off \
-    "-hn1 $WIN_HOSTNAME_PREFIX"  "$msg_ocs_param_hn1" off \
-    "-v"       "$msg_ocs_param_v" off \
-    "-c"       "$msg_ocs_param_c" off \
-    "-u"       "$msg_ocs_param_u" off \
-    "-t"       "$msg_ocs_param_t" $skip_clean_mbr_opt \
-    "-t1"      "$msg_ocs_param_t1" off \
-    "-t2"      "$msg_ocs_param_t2" off \
-    "-r"       "$msg_ocs_param_r" on \
-    "-ns"      "$msg_ocs_param_ns" off \
-    "-e"       "$msg_ocs_param_e" off \
-    "-icrc"    "$msg_ocs_param_icrc" off \
-    "-irhr"    "$msg_ocs_param_irhr" off \
-    "-irvd"    "$msg_ocs_param_irvd" off \
-    "-ius"     "$msg_ocs_param_ius" off \
-    "-icds"    "$msg_ocs_param_icds" off \
-    "-iefi"    "$msg_ocs_param_iefi" off \
-    "-j1"      "$msg_ocs_param_j1" off \
-    "-j2"      "$msg_ocs_param_j2" on \
-    "-cm"      "$msg_ocs_param_cm" off \
-    "-cs"      "$msg_ocs_param_cs" off \
-    "-cmf"     "$msg_ocs_param_cmf" off \
-    "-f"       "$msg_ocs_param_f" off \
-    "-s"       "$msg_ocs_param_s" off \
-    "-a"       "$msg_ocs_param_a" off \
-    "-o0"      "$msg_ocs_param_o0" off \
-    "-o1"      "$msg_ocs_param_o1" off \
-    "-srel"    "$msg_ocs_param_srel" off \
-  2> $OCS_PARAM_TMP
-  else
-    # Beginner mode. Use default settings
-    if [ "$inst_grub_opt" = "on" ]; then
-      # restoredisk mode.
-      # "$inst_grub_opt" = "on" (-g auto) means skip_clean_mbr_opt="off" (no -t)
-      echo "-g auto" "-e1 auto" "-e2" "-r" "-x" "-j2" > $OCS_PARAM_TMP
-    else
-      # restoreparts mode.
-      # "$inst_grub_opt" = "off" (no "-g auto") means skip_clean_mbr_opt="on" (-t)
-      echo "-e1 auto" "-e2" "-t" "-r" "-x" "-j2" > $OCS_PARAM_TMP
-    fi
-  fi
-
-  # About partition table
-  case "$dev_" in 
-  parts)
-    # Partition restore only. default NOT to create partition table
+  local mode
+  # OCS_PARAM_TMP is global variable
+  local dev_
+  local vol_size_tmp
+  local ASK_VOL_SIZE=1
+  local inst_grub_opt
+  local set_y_opt="yes"  # Option to set option y* (y0/y1/y2)
+  local default_postaction postaction_opt
+  
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      -s|--skip-y) set_y_opt="no"; shift;;
+      -p|--default-postaction) 
+           shift; 
+           if [ -z "$(echo $1 |grep ^-.)" ]; then
+             # skip the -xx option, in case 
+             default_postaction="$1"
+             shift;
+           fi
+           [ -z "$default_postaction" ] && USAGE && exit 1
+	   ;;
+       *)  break ;;
+    esac
+  done
+  
+  mode="$1"
+  OCS_PARAM_TMP="$2"
+  dev_="$3"
+  vol_size_tmp="$(mktemp /tmp/vol_size_tmp.XXXXXX)"
+  
+  # If the mode is only for parts, we won't turn on "-g auto" option by default
+  case "$dev_" in
+    parts) inst_grub_opt="off"
+  	 # For restoreparts, forget about clean mbr
+  	 skip_clean_mbr_opt="on"
+  	 ;;
+        *) inst_grub_opt="on"
+  	 # For restoredisk, do mbr cleaning
+  	 skip_clean_mbr_opt="off"
+           ;;
+  esac
+  
+  if [ "$mode" = "restore" ]; then
     if [ "$ocs_user_mode" = "expert" ]; then
-      $DIA --backtitle "$msg_nchc_free_software_labs" --title  \
-      "$msg_clonezilla_advanced_extra_param | $msg_mode: $ocs_mode_prompt" --menu "$msg_choose_param_to_set_single_choice $msg_hint_for_fdisk:" \
+      $DIA --separate-output --backtitle "$msg_nchc_free_software_labs" --title  \
+      "$msg_clonezilla_advanced_extra_param | $msg_mode: $ocs_mode_prompt" --checklist "$msg_choose_param_to_set_multiple_choices ($msg_press_space_to_mark_selection)" \
       0 0 0 $DIA_ESC \
-      "-k "      "$msg_ocs_param_k"  \
-      "-k1 "     "$msg_ocs_param_k1"  \
-      "-k2 "     "$msg_ocs_param_k2"  \
-      "-j0 "     "$msg_ocs_param_j0" \
-      " "        "$msg_use_the_part_table_from_image"  \
-      "exit "    "$msg_exit" \
-      2>> $OCS_PARAM_TMP
+      "-g auto"  "$msg_ocs_param_g_auto" $inst_grub_opt \
+      "-e1 auto" "$msg_ocs_param_e1_auto" on \
+      "-e2"      "$msg_ocs_param_e2" on \
+      "-x"       "$msg_ocs_param_x" on \
+      "-nogui"   "$msg_ocs_param_nogui" off \
+      "-hn0 $WIN_HOSTNAME_PREFIX"  "$msg_ocs_param_hn0" off \
+      "-hn1 $WIN_HOSTNAME_PREFIX"  "$msg_ocs_param_hn1" off \
+      "-v"       "$msg_ocs_param_v" off \
+      "-c"       "$msg_ocs_param_c" off \
+      "-u"       "$msg_ocs_param_u" off \
+      "-t"       "$msg_ocs_param_t" $skip_clean_mbr_opt \
+      "-t1"      "$msg_ocs_param_t1" off \
+      "-t2"      "$msg_ocs_param_t2" off \
+      "-r"       "$msg_ocs_param_r" on \
+      "-ns"      "$msg_ocs_param_ns" off \
+      "-e"       "$msg_ocs_param_e" off \
+      "-icrc"    "$msg_ocs_param_icrc" off \
+      "-irhr"    "$msg_ocs_param_irhr" off \
+      "-irvd"    "$msg_ocs_param_irvd" off \
+      "-ius"     "$msg_ocs_param_ius" off \
+      "-icds"    "$msg_ocs_param_icds" off \
+      "-iefi"    "$msg_ocs_param_iefi" off \
+      "-j1"      "$msg_ocs_param_j1" off \
+      "-j2"      "$msg_ocs_param_j2" on \
+      "-cm"      "$msg_ocs_param_cm" off \
+      "-cs"      "$msg_ocs_param_cs" off \
+      "-cmf"     "$msg_ocs_param_cmf" off \
+      "-f"       "$msg_ocs_param_f" off \
+      "-s"       "$msg_ocs_param_s" off \
+      "-a"       "$msg_ocs_param_a" off \
+      "-o0"      "$msg_ocs_param_o0" off \
+      "-o1"      "$msg_ocs_param_o1" off \
+      "-srel"    "$msg_ocs_param_srel" off \
+    2> $OCS_PARAM_TMP
     else
-      echo "-k " >> $OCS_PARAM_TMP
+      # Beginner mode. Use default settings
+      if [ "$inst_grub_opt" = "on" ]; then
+        # restoredisk mode.
+        # "$inst_grub_opt" = "on" (-g auto) means skip_clean_mbr_opt="off" (no -t)
+        echo "-g auto" "-e1 auto" "-e2" "-r" "-x" "-j2" > $OCS_PARAM_TMP
+      else
+        # restoreparts mode.
+        # "$inst_grub_opt" = "off" (no "-g auto") means skip_clean_mbr_opt="on" (-t)
+        echo "-e1 auto" "-e2" "-t" "-r" "-x" "-j2" > $OCS_PARAM_TMP
+      fi
     fi
-    ;;
-  *)
-    # Disk restore, default to create partition table
-    if [ "$ocs_user_mode" = "expert" ]; then
+  
+    # About partition table
+    case "$dev_" in 
+    parts)
+      # Partition restore only. default NOT to create partition table
+      if [ "$ocs_user_mode" = "expert" ]; then
+        $DIA --backtitle "$msg_nchc_free_software_labs" --title  \
+        "$msg_clonezilla_advanced_extra_param | $msg_mode: $ocs_mode_prompt" --menu "$msg_choose_param_to_set_single_choice $msg_hint_for_fdisk:" \
+        0 0 0 $DIA_ESC \
+        "-k "      "$msg_ocs_param_k"  \
+        "-k1 "     "$msg_ocs_param_k1"  \
+        "-k2 "     "$msg_ocs_param_k2"  \
+        "-j0 "     "$msg_ocs_param_j0" \
+        " "        "$msg_use_the_part_table_from_image"  \
+        "exit "    "$msg_exit" \
+        2>> $OCS_PARAM_TMP
+      else
+        echo "-k " >> $OCS_PARAM_TMP
+      fi
+      ;;
+    *)
+      # Disk restore, default to create partition table
+      if [ "$ocs_user_mode" = "expert" ]; then
+        $DIA --backtitle "$msg_nchc_free_software_labs" --title  \
+        "$msg_clonezilla_advanced_extra_param | $msg_mode: $ocs_mode_prompt" --menu "$msg_choose_param_to_set_single_choice $msg_hint_for_fdisk:" \
+        0 0 0 $DIA_ESC \
+        " "        "$msg_use_the_part_table_from_image"  \
+        "-k "      "$msg_ocs_param_k"  \
+        "-k1 "     "$msg_ocs_param_k1"  \
+        "-k2 "     "$msg_ocs_param_k2"  \
+        "-j0 "     "$msg_ocs_param_j0" \
+        "exit "    "$msg_exit" \
+        2>> $OCS_PARAM_TMP
+      else
+        echo " " >> $OCS_PARAM_TMP
+      fi
+      ;;
+    esac
+    # Question about checking the image is restorable or not. By default, no matter it's beginner or advanced mode, 
+    # we will ask.
+    if [ -z "$chk_img_restoreable_on_srv" ]; then
       $DIA --backtitle "$msg_nchc_free_software_labs" --title  \
-      "$msg_clonezilla_advanced_extra_param | $msg_mode: $ocs_mode_prompt" --menu "$msg_choose_param_to_set_single_choice $msg_hint_for_fdisk:" \
+      "$msg_clonezilla_advanced_extra_param | $msg_mode: $ocs_mode_prompt" --menu "$msg_choose_if_checking_image_restorable_before_restoring_on_this_server" \
       0 0 0 $DIA_ESC \
-      " "        "$msg_use_the_part_table_from_image"  \
-      "-k "      "$msg_ocs_param_k"  \
-      "-k1 "     "$msg_ocs_param_k1"  \
-      "-k2 "     "$msg_ocs_param_k2"  \
-      "-j0 "     "$msg_ocs_param_j0" \
-      "exit "    "$msg_exit" \
+      " "     "$msg_ocs_param_check_img_restorable_before_restoring" \
+      "-sc0 " "$msg_ocs_param_skip_checking_img_restorable_before_restoring" \
       2>> $OCS_PARAM_TMP
     else
       echo " " >> $OCS_PARAM_TMP
     fi
-    ;;
-  esac
-  # Question about checking the image is restorable or not. By default, no matter it's beginner or advanced mode, 
-  # we will ask.
-  if [ -z "$chk_img_restoreable_on_srv" ]; then
-    $DIA --backtitle "$msg_nchc_free_software_labs" --title  \
-    "$msg_clonezilla_advanced_extra_param | $msg_mode: $ocs_mode_prompt" --menu "$msg_choose_if_checking_image_restorable_before_restoring_on_this_server" \
-    0 0 0 $DIA_ESC \
-    " "     "$msg_ocs_param_check_img_restorable_before_restoring" \
-    "-sc0 " "$msg_ocs_param_skip_checking_img_restorable_before_restoring" \
-    2>> $OCS_PARAM_TMP
-  else
-    echo " " >> $OCS_PARAM_TMP
-  fi
-  if grep -Ew "exit" $OCS_PARAM_TMP &>/dev/null; then
-    echo "$msg_program_stop"
-    exit 1
-  fi
-  if LC_ALL=C grep -Ew -- "(-k1|-k2)" $OCS_PARAM_TMP &>/dev/null; then
-    # Option -k1 or -k2 is for different partition size, turn on -r and -icds by default
-    if [ -z "$(LC_ALL=C grep -Ew -- "-r" $OCS_PARAM_TMP)" ]; then
-      echo "Since the mode you choose might resize partition size, we turn on file system resize funtion automatically (-r)..."
-      echo "-r " >> $OCS_PARAM_TMP
+    if grep -Ew "exit" $OCS_PARAM_TMP &>/dev/null; then
+      echo "$msg_program_stop"
+      exit 1
     fi
-    if [ -z "$(LC_ALL=C grep -Ew -- "-icds" $OCS_PARAM_TMP)" ]; then
-      echo "Since the mode you choose might resize partition size, we now enable option \"-icds\" to ignore the partition size checking in Partclone..."
-      echo "-icds ">> $OCS_PARAM_TMP
-    fi
-  fi
-
-  # about y[0-2]
-  if [ "$ocs_user_mode" = "expert" ]; then
-    $DIA --backtitle "$msg_nchc_free_software_labs" --title  \
-    "$msg_clonezilla_advanced_extra_param | $msg_mode: $ocs_mode_prompt" --menu "$msg_if_always_provide_clonezilla_srv" \
-    0 0 0 $DIA_ESC \
-    " "         "$msg_ocs_param_skip" \
-    "-y0 "      "$msg_ocs_param_y0" \
-    "-y1 "      "$msg_ocs_param_y1" \
-    "-y2 "      "$msg_ocs_param_y2" \
-    2>> $OCS_PARAM_TMP
-  else
-    echo " " >> $OCS_PARAM_TMP
-  fi
-else
-  # save
-  # about -q, -q1, -q2
-  if [ "$ocs_user_mode" = "expert" ]; then
-    $DIA --backtitle "$msg_nchc_free_software_labs" --title  \
-    "$msg_clonezilla_advanced_extra_param | $msg_mode: $ocs_mode_prompt" --menu "$msg_choose_param_for_clone_prog" \
-    0 0 0 $DIA_ESC \
-    "-q2 "       "$msg_ocs_param_q2" \
-    "-q1 "       "$msg_ocs_param_q1" \
-    "-q "        "$msg_ocs_param_q" \
-    " "          "$msg_ocs_param_none_ie_partimage" \
-    2> $OCS_PARAM_TMP
-  else
-    echo "-q2 " > $OCS_PARAM_TMP
-  fi
-
-  if [ "$ocs_user_mode" = "expert" ]; then
-    $DIA --separate-output --backtitle "$msg_nchc_free_software_labs" --title  \
-    "$msg_clonezilla_advanced_extra_param | $msg_mode: $ocs_mode_prompt" --checklist "$msg_choose_param_to_set_multiple_choices ($msg_press_space_to_mark_selection):" \
-    0 0 0 $DIA_ESC \
-    "-c "        "$msg_ocs_param_c" off \
-    "-j2 "       "$msg_ocs_param_j2" on \
-    "-nogui "    "$msg_ocs_param_nogui" off \
-    "-a "        "$msg_ocs_param_a" off \
-    "-batch "    "$msg_ocs_param_b" off \
-    "-f "        "$msg_ocs_param_f" off \
-    "-s "        "$msg_ocs_param_s" off \
-    "-rm-win-swap-hib " "$msg_ocs_param_rm_win_swap_hib" off \
-    "-ntfs-ok "  "$msg_ocs_param_ntfs_ok" off \
-    "-rescue "   "$msg_ocs_param_rescue" off \
-    "-gm "       "$msg_ocs_param_gm" off \
-    "-gs "       "$msg_ocs_param_gs" off \
-    "-gmf "      "$msg_ocs_param_gmf" off \
-    "-noabo"     "$msg_ocs_param_noabo" off \
-    "-o0 "       "$msg_ocs_param_o0" off \
-    "-o1 "       "$msg_ocs_param_o1" off \
-    2>> $OCS_PARAM_TMP
-  else
-    echo "-j2 " >> $OCS_PARAM_TMP
-  fi
-  # Question about fsck the source partition. By default, no matter it's beginner or advanced mode, we will ask.
-  if [ -z "$fsck_src_part_intr" -a -z "$fsck_src_part_auto" ]; then
-    $DIA --backtitle "$msg_nchc_free_software_labs" --title  \
-    "$msg_clonezilla_advanced_extra_param | $msg_mode: $ocs_mode_prompt" --menu "$msg_choose_if_fsck_the_source_part" \
-    0 0 0 $DIA_ESC \
-    " "     "$msg_skip_check_source_fs" \
-    "-fsck "   "$msg_ocs_param_fsck_src_part" \
-    "-fsck-y " "$msg_ocs_param_fsck_src_part_yes" \
-    2>> $OCS_PARAM_TMP
-  else
-    case "$fsck_src_part_intr" in
-      yes) echo "-fsck " >> $OCS_PARAM_TMP;;
-        *) echo " " >> $OCS_PARAM_TMP;;
-    esac
-    case "$fsck_src_part_auto" in
-      yes) echo "-fsck-y " >> $OCS_PARAM_TMP;;
-        *) echo " " >> $OCS_PARAM_TMP;;
-    esac
-  fi
-
-  # Question about checking the image is restorable or not. By default, no matter it's beginner or advanced mode, 
-  # we will ask.
-  if [ -z "$chk_img_restoreable_mod_save" ]; then
-    $DIA --backtitle "$msg_nchc_free_software_labs" --title  \
-    "$msg_clonezilla_advanced_extra_param | $msg_mode: $ocs_mode_prompt" --menu "$msg_choose_if_checking_image_restorable" \
-    0 0 0 $DIA_ESC \
-    " "     "$msg_ocs_param_check_img_restorable" \
-    "-scs " "$msg_ocs_param_skip_checking_img_restorable" \
-    2>> $OCS_PARAM_TMP
-  else
-    case "$chk_img_restoreable_mod_save" in
-      yes) echo " " >> $OCS_PARAM_TMP;;
-       no) echo "-scs " >> $OCS_PARAM_TMP;;
-    esac
-  fi
-fi
-
-ocs_advanced_param_post_mode_after_clone $OCS_PARAM_TMP
-
-# if -hn0|-hn1 is chosen, 
-# (1). prompt the warning about ntfs-3g/nfsmount for ntfs is necessary
-# (2). ask if the hostname prefix want to change
-if grep -qE "\-hn[01]" $OCS_PARAM_TMP; then
-  # part 1.
-  $DIA --title "$msg_change_hostname_of_MS_WIN_on_the_fly" --clear \
-       --msgbox "$msg_write_MS_WIN_is_necessary" 15 70
-
-  # part 2.
-  HNTMP="$(mktemp /tmp/winhn.XXXXXX)"
-  $DIA --backtitle "$msg_nchc_free_software_labs" --title "$msg_nchc_clonezilla" \
-  --inputbox "$msg_What_the_win_hostname_prefix ?" 0 0 "$WIN_HOSTNAME_PREFIX" 2> $HNTMP
-  HN_PREFIX="$(cat $HNTMP)"
-  if [ -z "$HN_PREFIX" ]; then
-     echo "You did not specify the hostname prefix for M$ windows! We use the default value in drbl-ocs.conf"
-  else
-     perl -pi -e "s|(-hn.*) $WIN_HOSTNAME_PREFIX|\$1 $HN_PREFIX|g" $OCS_PARAM_TMP
-  fi
-  [ -f "$HNTMP" ] && rm -f $HNTMP
-fi
-
-if [ "$mode" = "save" ]; then
-  # save
-  show_z4_or_above_menu_or_not
-  if [ "$ocs_user_mode" = "expert" ]; then
-    $DIA --backtitle "$msg_nchc_free_software_labs" --title  \
-    "$msg_clonezilla_advanced_extra_param | $msg_mode: $ocs_mode_prompt" --menu "$msg_choose_one_compression_param_to_save" \
-    0 0 0 $DIA_ESC \
-    "-z1p"     "$msg_ocs_param_z1p" \
-    "-z1"      "$msg_ocs_param_z1" \
-    "-z2p"     "$msg_ocs_param_z2p" \
-    "-z2"      "$msg_ocs_param_z2" \
-    "-z3"      "$msg_ocs_param_z3" \
-    $ocs_z4_option_1      $ocs_z4_option_2 \
-    $ocs_z5p_option_1     $ocs_z5p_option_2 \
-    $ocs_z5_option_1      $ocs_z5_option_2 \
-    $ocs_z6p_option_1     $ocs_z6p_option_2 \
-    $ocs_z6_option_1      $ocs_z6_option_2 \
-    $ocs_z7_option_1      $ocs_z7_option_2 \
-    "-z0"      "$msg_ocs_param_z0" \
-    2>> $OCS_PARAM_TMP
-    # We need to append a space after this parameter so it won't be connected to next parameter.
-    echo -n " " >> $OCS_PARAM_TMP
-  else
-    echo "-z1p " >> $OCS_PARAM_TMP
-  fi
-  # About image volume size
-  if [ -z "$dcs_img_vol_limit" ]; then
-    trap "[ -f "$vol_size_tmp" ] && rm -f $vol_size_tmp" HUP INT QUIT TERM EXIT
-    while [ "$ASK_VOL_SIZE" -ne 0 ]; do
-      $DIA --backtitle "$msg_nchc_free_software_labs" --title  \
-      "$msg_clonezilla_advanced_extra_param | $msg_mode: $ocs_mode_prompt" --inputbox "$msg_set_image_volume_size" \
-      0 0 $VOL_LIMIT_DEFAULT \
-      2> $vol_size_tmp
-      if [ -n "$(cat $vol_size_tmp | grep -iE "[^[:digit:]]")" ]; then
-        ASK_VOL_SIZE=1
-        $DIA --backtitle "$msg_nchc_free_software_labs" --title "$msg_nchc_clonezilla | $msg_mode: $ocs_mode_prompt" \
-        --msgbox "$msg_enter_digits_only\n$msg_please_do_it_again!!!" 0 0 
-      else
-        ASK_VOL_SIZE=0
+    if LC_ALL=C grep -Ew -- "(-k1|-k2)" $OCS_PARAM_TMP &>/dev/null; then
+      # Option -k1 or -k2 is for different partition size, turn on -r and -icds by default
+      if [ -z "$(LC_ALL=C grep -Ew -- "-r" $OCS_PARAM_TMP)" ]; then
+        echo "Since the mode you choose might resize partition size, we turn on file system resize funtion automatically (-r)..."
+        echo "-r " >> $OCS_PARAM_TMP
       fi
-    done
-    echo "-i $(cat $vol_size_tmp)" >> $OCS_PARAM_TMP
+      if [ -z "$(LC_ALL=C grep -Ew -- "-icds" $OCS_PARAM_TMP)" ]; then
+        echo "Since the mode you choose might resize partition size, we now enable option \"-icds\" to ignore the partition size checking in Partclone..."
+        echo "-icds ">> $OCS_PARAM_TMP
+      fi
+    fi
+  
+    # about y[0-2]
+    if [ "$set_y_opt" = "yes" ]; then
+      if [ "$ocs_user_mode" = "expert" ]; then
+        $DIA --backtitle "$msg_nchc_free_software_labs" --title  \
+        "$msg_clonezilla_advanced_extra_param | $msg_mode: $ocs_mode_prompt" --menu "$msg_if_always_provide_clonezilla_srv" \
+        0 0 0 $DIA_ESC \
+        " "         "$msg_ocs_param_skip" \
+        "-y0 "      "$msg_ocs_param_y0" \
+        "-y1 "      "$msg_ocs_param_y1" \
+        "-y2 "      "$msg_ocs_param_y2" \
+        2>> $OCS_PARAM_TMP
+      else
+        echo " " >> $OCS_PARAM_TMP
+      fi
+    fi
   else
-    echo "-i $dcs_img_vol_limit" >> $OCS_PARAM_TMP
+    # save
+    # about -q, -q1, -q2
+    if [ "$ocs_user_mode" = "expert" ]; then
+      $DIA --backtitle "$msg_nchc_free_software_labs" --title  \
+      "$msg_clonezilla_advanced_extra_param | $msg_mode: $ocs_mode_prompt" --menu "$msg_choose_param_for_clone_prog" \
+      0 0 0 $DIA_ESC \
+      "-q2 "       "$msg_ocs_param_q2" \
+      "-q1 "       "$msg_ocs_param_q1" \
+      "-q "        "$msg_ocs_param_q" \
+      " "          "$msg_ocs_param_none_ie_partimage" \
+      2> $OCS_PARAM_TMP
+    else
+      echo "-q2 " > $OCS_PARAM_TMP
+    fi
+  
+    if [ "$ocs_user_mode" = "expert" ]; then
+      $DIA --separate-output --backtitle "$msg_nchc_free_software_labs" --title  \
+      "$msg_clonezilla_advanced_extra_param | $msg_mode: $ocs_mode_prompt" --checklist "$msg_choose_param_to_set_multiple_choices ($msg_press_space_to_mark_selection):" \
+      0 0 0 $DIA_ESC \
+      "-c "        "$msg_ocs_param_c" off \
+      "-j2 "       "$msg_ocs_param_j2" on \
+      "-nogui "    "$msg_ocs_param_nogui" off \
+      "-a "        "$msg_ocs_param_a" off \
+      "-batch "    "$msg_ocs_param_b" off \
+      "-f "        "$msg_ocs_param_f" off \
+      "-s "        "$msg_ocs_param_s" off \
+      "-rm-win-swap-hib " "$msg_ocs_param_rm_win_swap_hib" off \
+      "-ntfs-ok "  "$msg_ocs_param_ntfs_ok" off \
+      "-rescue "   "$msg_ocs_param_rescue" off \
+      "-gm "       "$msg_ocs_param_gm" off \
+      "-gs "       "$msg_ocs_param_gs" off \
+      "-gmf "      "$msg_ocs_param_gmf" off \
+      "-noabo"     "$msg_ocs_param_noabo" off \
+      "-o0 "       "$msg_ocs_param_o0" off \
+      "-o1 "       "$msg_ocs_param_o1" off \
+      2>> $OCS_PARAM_TMP
+    else
+      echo "-j2 " >> $OCS_PARAM_TMP
+    fi
+    # Question about fsck the source partition. By default, no matter it's beginner or advanced mode, we will ask.
+    if [ -z "$fsck_src_part_intr" -a -z "$fsck_src_part_auto" ]; then
+      $DIA --backtitle "$msg_nchc_free_software_labs" --title  \
+      "$msg_clonezilla_advanced_extra_param | $msg_mode: $ocs_mode_prompt" --menu "$msg_choose_if_fsck_the_source_part" \
+      0 0 0 $DIA_ESC \
+      " "     "$msg_skip_check_source_fs" \
+      "-fsck "   "$msg_ocs_param_fsck_src_part" \
+      "-fsck-y " "$msg_ocs_param_fsck_src_part_yes" \
+      2>> $OCS_PARAM_TMP
+    else
+      case "$fsck_src_part_intr" in
+        yes) echo "-fsck " >> $OCS_PARAM_TMP;;
+          *) echo " " >> $OCS_PARAM_TMP;;
+      esac
+      case "$fsck_src_part_auto" in
+        yes) echo "-fsck-y " >> $OCS_PARAM_TMP;;
+          *) echo " " >> $OCS_PARAM_TMP;;
+      esac
+    fi
+  
+    # Question about checking the image is restorable or not. By default, no matter it's beginner or advanced mode, 
+    # we will ask.
+    if [ -z "$chk_img_restoreable_mod_save" ]; then
+      $DIA --backtitle "$msg_nchc_free_software_labs" --title  \
+      "$msg_clonezilla_advanced_extra_param | $msg_mode: $ocs_mode_prompt" --menu "$msg_choose_if_checking_image_restorable" \
+      0 0 0 $DIA_ESC \
+      " "     "$msg_ocs_param_check_img_restorable" \
+      "-scs " "$msg_ocs_param_skip_checking_img_restorable" \
+      2>> $OCS_PARAM_TMP
+    else
+      case "$chk_img_restoreable_mod_save" in
+        yes) echo " " >> $OCS_PARAM_TMP;;
+         no) echo "-scs " >> $OCS_PARAM_TMP;;
+      esac
+    fi
   fi
-fi
-# Force to strip the unnecessary quotation ', this is specially for dialog (from cdialog) in Mandriva and same reason to strip the unnecessary double quotation ", this is sepcially for dialog in OpenSuSE 11.1. Otherwise it will cause -p reboot become (containing space) '-p reboot', which is wrong option in dcs.
-LC_ALL=C perl -pi -e "s/\'//g" $OCS_PARAM_TMP
-LC_ALL=C perl -pi -e "s/\"//g" $OCS_PARAM_TMP
-#
-[ -e "$vol_size_tmp" ] && rm -f $vol_size_tmp
-
+  
+  if [ -n "$default_postaction" ]; then
+    postaction_opt="-d $default_postaction"
+  fi
+  ocs_advanced_param_post_mode_after_clone $postaction_opt $OCS_PARAM_TMP
+  
+  # if -hn0|-hn1 is chosen, 
+  # (1). prompt the warning about ntfs-3g/nfsmount for ntfs is necessary
+  # (2). ask if the hostname prefix want to change
+  if grep -qE "\-hn[01]" $OCS_PARAM_TMP; then
+    # part 1.
+    $DIA --title "$msg_change_hostname_of_MS_WIN_on_the_fly" --clear \
+         --msgbox "$msg_write_MS_WIN_is_necessary" 15 70
+  
+    # part 2.
+    HNTMP="$(mktemp /tmp/winhn.XXXXXX)"
+    $DIA --backtitle "$msg_nchc_free_software_labs" --title "$msg_nchc_clonezilla" \
+    --inputbox "$msg_What_the_win_hostname_prefix ?" 0 0 "$WIN_HOSTNAME_PREFIX" 2> $HNTMP
+    HN_PREFIX="$(cat $HNTMP)"
+    if [ -z "$HN_PREFIX" ]; then
+       echo "You did not specify the hostname prefix for M$ windows! We use the default value in drbl-ocs.conf"
+    else
+       perl -pi -e "s|(-hn.*) $WIN_HOSTNAME_PREFIX|\$1 $HN_PREFIX|g" $OCS_PARAM_TMP
+    fi
+    [ -f "$HNTMP" ] && rm -f $HNTMP
+  fi
+  
+  if [ "$mode" = "save" ]; then
+    # save
+    show_z4_or_above_menu_or_not
+    if [ "$ocs_user_mode" = "expert" ]; then
+      $DIA --backtitle "$msg_nchc_free_software_labs" --title  \
+      "$msg_clonezilla_advanced_extra_param | $msg_mode: $ocs_mode_prompt" --menu "$msg_choose_one_compression_param_to_save" \
+      0 0 0 $DIA_ESC \
+      "-z1p"     "$msg_ocs_param_z1p" \
+      "-z1"      "$msg_ocs_param_z1" \
+      "-z2p"     "$msg_ocs_param_z2p" \
+      "-z2"      "$msg_ocs_param_z2" \
+      "-z3"      "$msg_ocs_param_z3" \
+      $ocs_z4_option_1      $ocs_z4_option_2 \
+      $ocs_z5p_option_1     $ocs_z5p_option_2 \
+      $ocs_z5_option_1      $ocs_z5_option_2 \
+      $ocs_z6p_option_1     $ocs_z6p_option_2 \
+      $ocs_z6_option_1      $ocs_z6_option_2 \
+      $ocs_z7_option_1      $ocs_z7_option_2 \
+      "-z0"      "$msg_ocs_param_z0" \
+      2>> $OCS_PARAM_TMP
+      # We need to append a space after this parameter so it won't be connected to next parameter.
+      echo -n " " >> $OCS_PARAM_TMP
+    else
+      echo "-z1p " >> $OCS_PARAM_TMP
+    fi
+    # About image volume size
+    if [ -z "$dcs_img_vol_limit" ]; then
+      trap "[ -f "$vol_size_tmp" ] && rm -f $vol_size_tmp" HUP INT QUIT TERM EXIT
+      while [ "$ASK_VOL_SIZE" -ne 0 ]; do
+        $DIA --backtitle "$msg_nchc_free_software_labs" --title  \
+        "$msg_clonezilla_advanced_extra_param | $msg_mode: $ocs_mode_prompt" --inputbox "$msg_set_image_volume_size" \
+        0 0 $VOL_LIMIT_DEFAULT \
+        2> $vol_size_tmp
+        if [ -n "$(cat $vol_size_tmp | grep -iE "[^[:digit:]]")" ]; then
+          ASK_VOL_SIZE=1
+          $DIA --backtitle "$msg_nchc_free_software_labs" --title "$msg_nchc_clonezilla | $msg_mode: $ocs_mode_prompt" \
+          --msgbox "$msg_enter_digits_only\n$msg_please_do_it_again!!!" 0 0 
+        else
+          ASK_VOL_SIZE=0
+        fi
+      done
+      echo "-i $(cat $vol_size_tmp)" >> $OCS_PARAM_TMP
+    else
+      echo "-i $dcs_img_vol_limit" >> $OCS_PARAM_TMP
+    fi
+  fi
+  # Force to strip the unnecessary quotation ', this is specially for dialog (from cdialog) in Mandriva and same reason to strip the unnecessary double quotation ", this is sepcially for dialog in OpenSuSE 11.1. Otherwise it will cause -p reboot become (containing space) '-p reboot', which is wrong option in dcs.
+  LC_ALL=C perl -pi -e "s/\'//g" $OCS_PARAM_TMP
+  LC_ALL=C perl -pi -e "s/\"//g" $OCS_PARAM_TMP
+  #
+  [ -e "$vol_size_tmp" ] && rm -f $vol_size_tmp
 } # end of set_drbl_ocs_extra_param
 
 #
