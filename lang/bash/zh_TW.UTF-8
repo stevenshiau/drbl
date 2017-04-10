@@ -1049,3 +1049,4 @@ msg_is_that_correct='這正確嗎?'
 # Tag on 2017/04/09
 msg_failed_to_get_file_from_this_URL='無法從此網址下載檔案'
 msg_boot_client_with_same_version_clonezilla_live='現在將用戶端用同樣版本的Clonezilla live開機，進入命令列後執行"sudo ocs-live-get-img"。然後依照指示設定網路連線資訊，接著將群播主機設為'
+msg_append_parameter_for_unattended_mode="若你要自動化用戶端，你可以將這些開機參數加在Clonezilla live上"
