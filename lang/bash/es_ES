@@ -1041,3 +1041,5 @@ msg_is_that_correct='Is that correct?'
 msg_failed_to_get_file_from_this_URL='Failed to fetch file from this URL'
 msg_boot_client_with_same_version_clonezilla_live='Now boot the clients with the same version of Clonezilla live, then run "sudo ocs-live-get-img", follow the wizard to configure its network, and assign the multicast server as'
 msg_append_parameter_for_unattended_mode="If you want to boot Clonezilla live in unattended mode, you can assign these options in boot parameters"
+# Tag on 2017/04/14
+msg_client_program_is_run_on_lite_server="It looks like you are running the client restoring program on Clonezilla live lite server."
