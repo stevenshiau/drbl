@@ -1,3 +1,10 @@
+drbl (2.23.32-drbl1) unstable; urgency=medium
+
+  * Update language files to give warning about run ocs-live-get-img
+    on clonezilla live lite server.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 14 Apr 2017 21:37:05 +0800
+
 drbl (2.23.31-drbl1) unstable; urgency=medium
 
   * Update functions about selecting parameters for ocs-live-feed-img and
