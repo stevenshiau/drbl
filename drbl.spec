@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.23.33
+Version:	2.23.34
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Mon Apr 17 2017 Steven Shiau <steven _at_ nchc org tw> 2.23.34-drbl1
+  - Update language files about To_upstream and In_isolation modes.
+
 * Sat Apr 15 2017 Steven Shiau <steven _at_ nchc org tw> 2.23.33-drbl1
   - Move dnsmasq to drbl/clonezilla live only. Not for installed system.
     It caused DNS resolving failure in Ubuntu 16.04.

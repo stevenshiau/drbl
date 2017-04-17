@@ -1,3 +1,9 @@
+drbl (2.23.34-drbl1) unstable; urgency=medium
+
+  * Update language files about To_upstream and In_isolation modes.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 17 Apr 2017 13:52:03 +0800
+
 drbl (2.23.33-drbl1) unstable; urgency=medium
 
   * Move dnsmasq to drbl/clonezilla live only. Not for installed system.
