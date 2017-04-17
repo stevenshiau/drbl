@@ -23,6 +23,7 @@ usage() {
     echo " -a, --public-ip-address:  Show only the public IP address."
     echo " -r, --private-ip-address: Show only the public IP address."
     echo " -i, --all-ip-address:  Show all the IP addresses."
+    echo " -g, --gateway-ip-add:      Show the gateway IP address"
     echo " -u, --uplink-eth-port:     Show the uplink eth port (Used in DRBL server)"
     echo " -v, --verbose           prints out verbose information"
 }
@@ -43,6 +44,7 @@ get_uplink_and_client_eth_port() {
     # If by the above method eth_ports_for_drbl_clients is nothing, then the server must be with only 1 NIC.
     eth_ports_for_drbl_clients="$uplink_eth_port"
   fi
+  gateway_IP_addr="$(LC_ALL=C drbl-get-ipadd $uplink_eth_port)"
 } # end of get_uplink_and_client_eth_port
 
 show_mode=""
@@ -56,6 +58,7 @@ while [ $# -gt 0 ]; do
     -r|--private-ip-address) shift; show_mode="private_ip_address" ;;
     -t|--private-ip-port) shift; show_mode="private_ip_eth_port" ;;
     -u|--uplink-eth-port) shift; show_mode="uplink_eth_port" ;;
+    -g|--gateway-ip-add) shift; show_mode="gateway_ip_address" ;;
     -c|--drbl-client-eth-port) shift; show_mode="drbl_client_eth_port" ;;
     -b|--drbl-client-ip) shift; show_mode="drbl_client_ip" ;;
     -v|--verbose) shift; VERBOSE="on" ;;
@@ -142,7 +145,7 @@ done
 
 # Find the uplink ethernet port. This is only useful in DRBL server
 case "$show_mode" in
-  uplink_eth_port|drbl_client_eth_port) get_uplink_and_client_eth_port ;;
+  uplink_eth_port|drbl_client_eth_port|gateway_ip_address) get_uplink_and_client_eth_port ;;
   drbl_client_ip)
      get_uplink_and_client_eth_port
      drbl_client_ip=""
@@ -163,4 +166,5 @@ case "$show_mode" in
   uplink_eth_port) echo $uplink_eth_port ;;
   drbl_client_eth_port) echo $eth_ports_for_drbl_clients ;;
   drbl_client_ip)  echo $drbl_client_ip ;;
+  gateway_ip_address) echo $gateway_IP_addr ;;
 esac
