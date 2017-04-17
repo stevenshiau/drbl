@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.23.35-drbl1) unstable; urgency=medium
+
+  * Add option "-g, --gateway-ip-add" to get-all-nic-ip.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 17 Apr 2017 21:26:35 +0800
+
 drbl (2.23.34-drbl1) unstable; urgency=medium
 
   * Update language files about To_upstream and In_isolation modes.
