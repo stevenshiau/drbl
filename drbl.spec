@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.23.35
+Version:	2.23.36
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Tue Apr 18 2017 Steven Shiau <steven _at_ nchc org tw> 2.23.36-drbl1
+  - Update language files for lite server/client.
+
 * Mon Apr 17 2017 Steven Shiau <steven _at_ nchc org tw> 2.23.35-drbl1
   - Add option "-g, --gateway-ip-add" to get-all-nic-ip.
 
