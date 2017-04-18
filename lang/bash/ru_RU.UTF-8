@@ -1061,3 +1061,6 @@ msg_client_program_is_run_on_lite_server="It looks like you are running the clie
 msg_which_network_senario='What is the network environment mode you will use?\nThe "To_upstream" mode is this Clonezilla live lite server will be connected to upstream network, like router or another DHCP server.\nThe "In_isolation" mode is the network environment will be in an isolated environment, i.e., no communication with any upstream. Hence with "In_isolation" mode this Clonezilla live lite server will be assigned an private IP address and will start its own DHCP service.'
 msg_connect_to_upstream_network='This machine will connect to upstream network'
 msg_in_isolated_environment='This machine will be in an isolated network environment'
+# Tag on 2017/04/18
+msg_clonezilla_live_lite_server='Start Clonezilla live lite server'
+msg_clonezilla_live_lite_client='Start Clonezilla live lite client'
