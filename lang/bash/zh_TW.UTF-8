@@ -1059,3 +1059,5 @@ msg_in_isolated_environment='這機器將會在封閉的網路環境中'
 # Tag on 2017/04/18
 msg_clonezilla_live_lite_server='啟動再生龍輕量伺服器'
 msg_clonezilla_live_lite_client='啟動再生龍輕量用戶端'
+# Tag on 2017/04/19
+msg_convert_encrypted_img_not_supported='此程式並不支援將加密的檔案轉換成BT使用的切片檔.'

@@ -1066,3 +1066,5 @@ msg_in_isolated_environment='This machine will be in an isolated network environ
 # Tag on 2017/04/18
 msg_clonezilla_live_lite_server='Start Clonezilla live lite server'
 msg_clonezilla_live_lite_client='Start Clonezilla live lite client'
+# Tag on 2017/04/19
+msg_convert_encrypted_img_not_supported='Converting encrypted image to bittorrent slice files is not supported.'
