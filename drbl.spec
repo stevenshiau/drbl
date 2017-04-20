@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.23.38
+Version:	2.24.1
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,11 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Thu Apr 20 2017 Steven Shiau <steven _at_ nchc org tw> 2.24.1-drbl1
+  - Initial support for Ubuntu 17.04.
+  - Move net-tools to the required package for Debian/Ubuntu.
+  - Update netinstall Ubuntu and Fedora version number in drbl.conf.
+
 * Thu Apr 20 2017 Steven Shiau <steven _at_ nchc org tw> 2.23.38-drbl1
   - Update language files about lite server.
 

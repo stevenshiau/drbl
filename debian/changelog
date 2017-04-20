@@ -1,3 +1,11 @@
+drbl (2.24.1-drbl1) unstable; urgency=medium
+
+  * Initial support for Ubuntu 17.04.
+  * Move net-tools to the required package for Debian/Ubuntu.
+  * Update netinstall Ubuntu and Fedora version number in drbl.conf.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 20 Apr 2017 21:34:05 +0800
+
 drbl (2.23.38-drbl1) unstable; urgency=medium
 
   * Update language files about lite server.
