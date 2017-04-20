@@ -4655,6 +4655,12 @@ DNSMQSQ_END
 
   # Older dnsmasq (<2.75) will automatically append ".0" to pxelinux
   dnsmasq_v="$(query_pkg_ver dnsmasq)"
+  if [ -z "$dnsmasq_v" ]; then
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+    echo "Package dnsmasq is not installed. Skip generating dnsmasq.conf."
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+    return 1
+  fi
   if [ "$dnsmasq_v" \> "2.75" -o "$dnsmasq_v" = "2.75" ]; then
     pxelinux_fn="pxelinux.0"
   else
