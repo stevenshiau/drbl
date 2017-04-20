@@ -44,7 +44,7 @@ get_uplink_and_client_eth_port() {
     # If by the above method eth_ports_for_drbl_clients is nothing, then the server must be with only 1 NIC.
     eth_ports_for_drbl_clients="$uplink_eth_port"
   fi
-  gateway_IP_addr="$(LC_ALL=C drbl-get-ipadd $uplink_eth_port)"
+  gateway_IP_addr="$(LC_ALL=C route -n | awk '/^0.0.0.0/ {print $2}' | sort | head -n 1)"
 } # end of get_uplink_and_client_eth_port
 
 show_mode=""
