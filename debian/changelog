@@ -1,3 +1,9 @@
+drbl (2.23.38-drbl1) unstable; urgency=medium
+
+  * Update language files about lite server.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 20 Apr 2017 15:32:39 +0800
+
 drbl (2.23.37-drbl1) unstable; urgency=medium
 
   * Update language files about not support for converting encrypted image.
