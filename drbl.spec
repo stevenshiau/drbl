@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.24.1
+Version:	2.24.2
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,11 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Fri Apr 21 2017 Steven Shiau <steven _at_ nchc org tw> 2.24.2-drbl1
+  - Add grub-efi-amd64-bin in Clonezilla live
+  - Add option "-r" to function gen_dnsmasq_cfg in drbl-functions so
+    that it can be used in Clonezilla live, not only in DRBL live.
+
 * Thu Apr 20 2017 Steven Shiau <steven _at_ nchc org tw> 2.24.1-drbl1
   - Initial support for Ubuntu 17.04.
   - Move net-tools to the required package for Debian/Ubuntu.

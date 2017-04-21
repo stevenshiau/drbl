@@ -1,3 +1,11 @@
+drbl (2.24.2-drbl1) unstable; urgency=medium
+
+  * Add grub-efi-amd64-bin in Clonezilla live
+  * Add option "-r" to function gen_dnsmasq_cfg in drbl-functions so
+    that it can be used in Clonezilla live, not only in DRBL live.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Fri, 21 Apr 2017 19:42:53 +0800
+
 drbl (2.24.1-drbl1) unstable; urgency=medium
 
   * Initial support for Ubuntu 17.04.
