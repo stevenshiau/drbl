@@ -4627,6 +4627,7 @@ deploy_pxecfg_grubefi_files(){
 #
 gen_dnsmasq_cfg() {
   local srv_cfg="$1"
+  local gen_mode="proxy"  # default mode is proxy
   local dnsmasq_v pxelinux_fn
   if [ -z "$srv_cfg" ]; then
     [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
@@ -4635,9 +4636,28 @@ gen_dnsmasq_cfg() {
     echo "$msg_program_stop"
     exit 1
   fi
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      -r|--range)
+          shift; gen_mode="range"
+          if [ -z "$(echo $1 |grep ^-.)" ]; then
+            # skip the -xx option, in case 
+            dhcp_range="$1"
+            shift
+          fi
+          [ -z "$dhcp_range" ] && echo "-m is used, but no dhcp_range was assigned." && exit 1
+          shift
+          ;;
+      -*) echo "${0}: ${1}: invalid option in gen_dnsmasq_cfg." | tee -a ${OCS_LOGFILE} >&2
+          echo "$msg_program_stop" | tee -a ${OCS_LOGFILE}
+          [ "$save_restore_error_log" = "yes" ] && copy_error_log
+          exit 2 ;;
+      *)  break ;;
+    esac
+  done
   # Generate dnsmasq.conf
   cat <<-DNSMQSQ_END > $dnsmasq_cfg
-# Configured by DRBL
+# Configured by DRBL/Clonezilla
 port=0
 log-dhcp
 dhcp-no-override
@@ -4645,13 +4665,21 @@ enable-tftp
 tftp-root=$pxecfg_pd
 DNSMQSQ_END
 
-  all_eth_dev="$(LC_ALL=C get-all-nic-ip -d)"
-  uplink_eth="$(LC_ALL=C get-all-nic-ip -u)"
-  for inet in $all_eth_dev; do
-    [ "$inet" = "$uplink_eth" ] && continue
-    ip="$(LC_ALL=C drbl-get-ipadd $inet)"
-    echo "dhcp-range=$ip,proxy" >> $dnsmasq_cfg
-  done
+  case "$gen_mode" in
+    proxy) all_eth_dev="$(LC_ALL=C get-all-nic-ip -d)"
+           uplink_eth="$(LC_ALL=C get-all-nic-ip -u)"
+           for inet in $all_eth_dev; do
+             [ "$inet" = "$uplink_eth" ] && continue
+             ip="$(LC_ALL=C drbl-get-ipadd $inet)"
+             echo "dhcp-range=$ip,proxy" >> $dnsmasq_cfg
+           done
+           ;;
+    range) echo "dhcp-range=$dhcp_range" >> $dnsmasq_cfg;;
+        *) echo "${0}: ${1}: Unknown gen_mode in gen_dnsmasq_cfg." | tee -a ${OCS_LOGFILE} >&2
+           echo "$msg_program_stop" | tee -a ${OCS_LOGFILE}
+           [ "$save_restore_error_log" = "yes" ] && copy_error_log
+           exit 2 ;;
+  esac
 
   # Older dnsmasq (<2.75) will automatically append ".0" to pxelinux
   dnsmasq_v="$(query_pkg_ver dnsmasq)"
