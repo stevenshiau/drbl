@@ -9,12 +9,16 @@ DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/usr/share/drbl}"
 [ -e /etc/drbl/drbl-ocs.conf ] && . /etc/drbl/drbl-ocs.conf
 [ -e $DRBL_SCRIPT_PATH/sbin/ocs-functions ] && . $DRBL_SCRIPT_PATH/sbin/ocs-functions
 
+# Default settings
+pxe_mode="graphic"
+
 export LC_ALL=C
 #
 USAGE() {
   echo "Generate the PXELINUX menu for DRBL clients."
   echo "Usage: $(basename $0) [OPTION]"
   echo "Options:"
+  echo "-b, --background PIC: set the background picture as picture file PIC."
   echo "-c, --console OPT: set the console output parameters."
   echo "-d, --dir DIR:     Assign the netinstall files are in DIR instead of default dir $pxecfg_pd"
   echo "-s, --serial OPT:  set the PXE menu to work with serial console output."
@@ -28,23 +32,20 @@ USAGE() {
   echo "Note! You must put the \" before and after your serial OPT and console OPT."
 }
 
-# default settings
-pxe_mode="graphic"
-
 #
 check_if_root
 
 # Parse command-line options
 while [ $# -gt 0 ]; do
   case "$1" in
-    -s|--serial)
+    -b|--background)
             shift
             if [ -z "$(echo $1 |grep ^-.)" ]; then
               # skip the -xx option, in case
-              PXE_SERIAL_OUTPUT="$1"
+              background_pic="$1"
               shift
             fi
-	    [ -z "$PXE_SERIAL_OUTPUT" ] && USAGE && exit 1
+	    [ -z "$background_pic" ] && USAGE && exit 1
 	    ;;
     -c|--console)
             shift
@@ -54,6 +55,15 @@ while [ $# -gt 0 ]; do
               shift
             fi
 	    [ -z "$CONSOLE_OUTPUT" ] && USAGE && exit 1
+	    ;;
+    -d|--dir)
+            shift
+            if [ -z "$(echo $1 |grep ^-.)" ]; then
+              # skip the -xx option, in case
+              TDIR="$1"
+              shift
+            fi
+	    [ -z "$TDIR" ] && USAGE && exit 1
 	    ;;
     -f|--fdos)
             shift
@@ -82,15 +92,6 @@ while [ $# -gt 0 ]; do
             fi
 	    [ -z "$pxe_mode" ] && USAGE && exit 1
             ;;
-    -d|--dir)
-            shift
-            if [ -z "$(echo $1 |grep ^-.)" ]; then
-              # skip the -xx option, in case
-              TDIR="$1"
-              shift
-            fi
-	    [ -z "$TDIR" ] && USAGE && exit 1
-	    ;;
     -p|--pxelinux-dir)
             shift
             if [ -z "$(echo $1 |grep ^-.)" ]; then
@@ -100,9 +101,16 @@ while [ $# -gt 0 ]; do
             fi
 	    [ -z "$PXECFG_DIR" ] && USAGE && exit 1
 	    ;;
-    -v|--verbose)
-            shift; verbose="on"
-            ;;
+    -s|--serial)
+            shift
+            if [ -z "$(echo $1 |grep ^-.)" ]; then
+              # skip the -xx option, in case
+              PXE_SERIAL_OUTPUT="$1"
+              shift
+            fi
+	    [ -z "$PXE_SERIAL_OUTPUT" ] && USAGE && exit 1
+	    ;;
+    -v|--verbose) shift; verbose="on" ;;
     -*)     echo "${0}: ${1}: invalid option" >&2
             USAGE >& 2
             exit 2 ;;
@@ -161,10 +169,17 @@ case "$pxe_mode" in
   text*|TEXT*) MENUC32="menu.c32" ;;
   graphic*|GRAPHIC*) MENUC32="vesamenu.c32" ;;
 esac
-# find the drbl background logo and memtest
-drbl_logo="$(basename $pxelinux_bg_img)"
+
+# background logo and memtest
+if [ -n "$background_pic" ]; then
+  drbl_logo="$background_pic"
+else
+  drbl_logo="$(basename $pxelinux_bg_img)"
+fi
 # get memtest filename
-memtest_filename="$(basename $memtest86_file)"
+if [ -e "$memtest_filename" ]; then
+  memtest_filename="$(basename $memtest86_file)"
+fi
 # show some prompts
 echo "Use com32 module: $MENUC32"
 [ -n "$PXE_SERIAL_OUTPUT" ] && echo "PXE serial output param: $PXE_SERIAL_OUTPUT"
@@ -181,12 +196,12 @@ case "$OS_Version" in
    RH*|FC*|CO*|MDK*|MDV*|SUSE*)
       drbl_ver="$(rpm -q drbl | sed -e "s/^drbl-//g")"
       ocs_ver="$(rpm -q clonezilla | sed -e "s/^clonezilla-//g")"
-      memtest_ver="$(cat $TDIR/MEMTEST86+_VERSION)"
+      memtest_ver="$(cat $TDIR/MEMTEST86+_VERSION 2>/dev/null)"
       ;;
    DBN*)
       drbl_ver="$(dpkg -l drbl | tail -n 1 | awk -F" " '{print $3}')"
       ocs_ver="$(dpkg -l clonezilla | tail -n 1 | awk -F" " '{print $3}')"
-      memtest_ver="$(cat $TDIR/MEMTEST86+_VERSION)"
+      memtest_ver="$(cat $TDIR/MEMTEST86+_VERSION 2>/dev/null)"
       ;;
 esac
 [ -z "$drbl_ver" ] && drbl_ver="Unknown"
@@ -203,13 +218,13 @@ edd_opt=""
 if [ -e "$pxecfg_pd/kernel_version_in_initrd.txt" ]; then
   # Client's kernel config exists, i.e. this program is run after client's kernel is copied.
   client_kver="$(cat $pxecfg_pd/kernel_version_in_initrd.txt 2>/dev/null)"
-  if [ -n "$(grep -Ew "CONFIG_EDD=y" $drbl_common_root/boot/config-${client_kver})" ] && [ -n "$(grep -Ew "CONFIG_EDD_OFF=y" $drbl_common_root/boot/config-${client_kver})" ]; then
+  if [ -n "$(grep -Ew "CONFIG_EDD=y" $drbl_common_root/boot/config-${client_kver} 2>/dev/null)" ] && [ -n "$(grep -Ew "CONFIG_EDD_OFF=y" $drbl_common_root/boot/config-${client_kver} 2>/dev/null)" ]; then
      edd_opt="edd=on"
   fi
 else
   # Client's kernel config does not exists, i.e. this program is run BEFORE client's kernel is copied. Here we assume the running kernel on server has the same config with that on client.
   client_kver="$(uname -r)"
-  if [ -n "$(grep -Ew "CONFIG_EDD=y" /boot/config-${client_kver})" ] && [ -n "$(grep -Ew "CONFIG_EDD_OFF=y" /boot/config-${client_kver})" ]; then
+  if [ -n "$(grep -Ew "CONFIG_EDD=y" /boot/config-${client_kver} 2>/dev/null)" ] && [ -n "$(grep -Ew "CONFIG_EDD_OFF=y" /boot/config-${client_kver} 2>/dev/null)" ]; then
      edd_opt="edd=on"
   fi
 fi
@@ -318,6 +333,9 @@ label local
   Boot local OS from first hard disk if it's available
   ENDTEXT
 
+PXE_END
+if [ -n "$memtest_filename" ]; then
+cat <<-PXE_END >> $PXECFG_DIR/default
 # Note! *.bin is specially purpose for syslinux,
 # Do NOT use memtest86.bin, use memtest86 instead of memtest86.bin
 label memtest
@@ -330,6 +348,11 @@ label memtest
   Run memory test using Memtest86+ $memtest_ver
   ENDTEXT
 
+PXE_END
+fi
+
+if [ -e "$pxecfg_pd/$fdos_img_output" ]; then
+cat <<-PXE_END >> $PXECFG_DIR/default
 # ref: http://syslinux.zytor.com/memdisk.php
 label fdos
   # MENU DEFAULT
@@ -342,6 +365,9 @@ label fdos
   Run FreeDOS
   ENDTEXT
 
+PXE_END
+fi
+cat <<-PXE_END >> $PXECFG_DIR/default
 label drbl-terminal
   # MENU DEFAULT
   MENU HIDE
