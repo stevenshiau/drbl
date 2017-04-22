@@ -42,6 +42,8 @@ booting_messages="on"
 
 # By default when Clonezilla live is used, not to add ocs_server
 add_ocs_server="no"
+# By default when in fetch mode, the squashfs file will be copied, not link
+use_link_in_fetch_mode="no"
 
 # Functions
 USAGE() {
@@ -394,7 +396,11 @@ put_kernel_initrd_root_fs_on_pxe_server() {
   case "$rootfs_location" in
     "fetch") 
              echo "Copying root image $isomnt/$rootfile to $pxecfg_pd... $msg_this_might_take_several_minutes"
-	     rsync -aP $isomnt/$rootfile $pxecfg_pd/$squashfs_file ;;
+	     case "$use_link_in_fetch_mode" in
+               yes) ln -fsv $isomnt/$rootfile $pxecfg_pd/$squashfs_file ;;
+	        no) rsync -aP $isomnt/$rootfile $pxecfg_pd/$squashfs_file ;;
+	     esac
+	     ;;
     "nfsroot")
              echo "Copying root image $isomnt/$rootfile to $drbl_common_root/clonezilla-live/... $msg_this_might_take_several_minutes"
 	     mkdir -p $drbl_common_root/clonezilla-live/live/
@@ -888,6 +894,7 @@ check_if_root
 while [ $# -gt 0 ]; do
   case "$1" in
     -b|--batch-mode) shift; batch_mode="on" ;;
+    -e|--fetch-link) shift; use_link_in_fetch_mode="yes" ;;
     -l|--language)
             shift
             if [ -z "$(echo $1 |grep ^-.)" ]; then
