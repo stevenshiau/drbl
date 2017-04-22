@@ -4700,6 +4700,7 @@ DNSMQSQ_END
   fi
   
   cat <<-DNSMQSQ_END >> $dnsmasq_cfg 
+
 ## PXEClient:Arch:00000
 pxe-service=X86PC, "Boot BIOS PXE", $pxelinux_fn
 
@@ -4709,7 +4710,7 @@ pxe-service=BC_EFI, "Boot UEFI BC", bootx64.efi
 ## PXEClient:Arch:00009
 pxe-service=X86-64_EFI, "Boot UEFI X86-64", bootx64.efi
 
-pxe-prompt="Booting DRBL Client", 1
+pxe-prompt="Booting DRBL/Clonezilla Client", 1
 DNSMQSQ_END
 } # end of gen_dnsmasq_cfg
 #
