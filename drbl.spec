@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.24.2
+Version:	2.24.3
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,11 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Sat Apr 22 2017 Steven Shiau <steven _at_ nchc org tw> 2.24.3-drbl1
+  - Add option -e|--fetch-link to drbl-sl.
+  - When file (e.g. memtest) does not exist, the PXE/uEFI menu
+    won't be created.
+
 * Fri Apr 21 2017 Steven Shiau <steven _at_ nchc org tw> 2.24.2-drbl1
   - Add grub-efi-amd64-bin in Clonezilla live
   - Add option "-r" to function gen_dnsmasq_cfg in drbl-functions so

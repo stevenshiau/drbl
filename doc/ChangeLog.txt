@@ -5,6 +5,14 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.24.3-drbl1) unstable; urgency=medium
+
+  * Add option -e|--fetch-link to drbl-sl.
+  * When file (e.g. memtest) does not exist, the PXE/uEFI menu
+    won't be created.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sat, 22 Apr 2017 15:50:50 +0800
+
 drbl (2.24.2-drbl1) unstable; urgency=medium
 
   * Add grub-efi-amd64-bin in Clonezilla live
