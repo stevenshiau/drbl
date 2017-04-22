@@ -178,13 +178,13 @@ edd_opt=""
 if [ -e "$pxecfg_pd/kernel_version_in_initrd.txt" ]; then
   # Client's kernel config exists, i.e. this program is run after client's kernel is copied.
   client_kver="$(cat $pxecfg_pd/kernel_version_in_initrd.txt 2>/dev/null)"
-  if [ -n "$(grep -Ew "CONFIG_EDD=y" $drbl_common_root/boot/config-${client_kver})" ] && [ -n "$(grep -Ew "CONFIG_EDD_OFF=y" $drbl_common_root/boot/config-${client_kver})" ]; then
+  if [ -n "$(grep -Ew "CONFIG_EDD=y" $drbl_common_root/boot/config-${client_kver} 2>/dev/null)" ] && [ -n "$(grep -Ew "CONFIG_EDD_OFF=y" $drbl_common_root/boot/config-${client_kver} 2>/dev/null)" ]; then
      edd_opt="edd=on"
   fi
 else
   # Client's kernel config does not exists, i.e. this program is run BEFORE client's kernel is copied. Here we assume the running kernel on server has the same config with that on client.
   client_kver="$(uname -r)"
-  if [ -n "$(grep -Ew "CONFIG_EDD=y" /boot/config-${client_kver})" ] && [ -n "$(grep -Ew "CONFIG_EDD_OFF=y" /boot/config-${client_kver})" ]; then
+  if [ -n "$(grep -Ew "CONFIG_EDD=y" /boot/config-${client_kver} 2>/dev/null)" ] && [ -n "$(grep -Ew "CONFIG_EDD_OFF=y" /boot/config-${client_kver} 2>/dev/null)" ]; then
      edd_opt="edd=on"
   fi
 fi
