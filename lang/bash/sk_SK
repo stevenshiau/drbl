@@ -1048,19 +1048,15 @@ msg_what_is_the_ip_add_for_virtual_nic_drbl0='What is the IP address and prefix 
 msg_your_input_config_is='The setting you have entered is'
 msg_is_that_correct='Is that correct?'
 # Tag on 2017/04/09
+msg_ocs_live_lite_server_des='Clonezilla live lite server is a Clonezilla service mode, which runs multicast/broadcast service for client machines. Therefore it is easier to use in the existing network enviornment because it can just fit the network environment without changing any existing network settings in LAN. If you use this in an isolated network environment without any communication with upstream, this lite server will runs its own DHCP and PXE service. You can boot the client machines with the same version of Clonezilla live, either by using CD/USB flash drive or PXE to restore the image provided by this lite server.'
+msg_which_network_senario='What is the network environment mode you will use?\nThe "To_upstream" mode is this Clonezilla live lite server will be connected to upstream network, like router or another DHCP server.\nThe "In_isolation" mode is the network environment will be in an isolated environment, i.e., no communication with any upstream. Hence with "In_isolation" mode this Clonezilla live lite server will be assigned an private IP address and will start its own DHCP and PXE service.'
 msg_failed_to_get_file_from_this_URL='Failed to fetch file from this URL'
-msg_boot_client_with_same_version_clonezilla_live='Now boot the clients with the same version of Clonezilla live, then run "sudo ocs-live-get-img", follow the wizard to configure its network, and assign the multicast server as'
+msg_boot_client_with_same_version_clonezilla_live='Now boot the clients with the same version of Clonezilla live, then run "sudo ocs-live-get-img", follow the wizard to configure its network, and assign the server as'
 msg_append_parameter_for_unattended_mode="If you want to boot Clonezilla live in unattended mode, you can assign these options in boot parameters"
-# Tag on 2017/04/14
 msg_client_program_is_run_on_lite_server="It looks like you are running the client restoring program on Clonezilla live lite server."
-# Tag on 2017/04/16
-msg_which_network_senario='What is the network environment mode you will use?\nThe "To_upstream" mode is this Clonezilla live lite server will be connected to upstream network, like router or another DHCP server.\nThe "In_isolation" mode is the network environment will be in an isolated environment, i.e., no communication with any upstream. Hence with "In_isolation" mode this Clonezilla live lite server will be assigned an private IP address and will start its own DHCP service.'
 msg_connect_to_upstream_network='This machine will connect to upstream network'
 msg_in_isolated_environment='This machine will be in an isolated network environment'
-# Tag on 2017/04/18
-msg_clonezilla_live_lite_server='Start Clonezilla live lite server'
-msg_clonezilla_live_lite_client='Start Clonezilla live lite client'
-# Tag on 2017/04/19
+msg_clonezilla_live_lite_server='Enter Clonezilla live lite server'
+msg_clonezilla_live_lite_client='Enter Clonezilla live lite client'
 msg_convert_encrypted_img_not_supported='Converting encrypted image to bittorrent slice files is not supported.'
-# Tag on 2017/04/20
-ocs_live_lite_server_des='Clonezilla live lite server is a Clonezilla service mode, which only runs multicast/broadcast service for client machines. No providing PXE booting service. Therefore it is easier to use in the existing network enviornment because it can just fit the network environment without changing any existing network settings in LAN. On the other hand, you will have to deal with the booting mechanism in the client machines, either by using CD/USB flash drive or PXE mechanism to boot the same version of Clonezilla live.'
+msg_if_boot_from_locaL_media='If you want to boot client machines with CD or USB flash drive'
