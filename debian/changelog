@@ -1,3 +1,9 @@
+drbl (2.24.4-drbl1) unstable; urgency=medium
+
+  * Sort out the language files about lite server.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sun, 23 Apr 2017 13:01:45 +0800
+
 drbl (2.24.3-drbl1) unstable; urgency=medium
 
   * Add option -e|--fetch-link to drbl-sl.
