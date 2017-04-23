@@ -61,13 +61,16 @@ done
 if [ -z "$dhcpd_conf" ]; then
   dhcpd_conf="$dhcpd_conf_def"
 fi
+if [ ! -e "$dhcpd_conf" ]; then
+  exit 1
+fi
 #
 IPLIST="$(mktemp /tmp/iplist.XXXXXX)"
 hn_ip_mac="$(mktemp /tmp/hn_ip_mac.XXXXXX)"
 ip_range_nm="$(mktemp /tmp/ip_range_nm.XXXXXX)"
 
 # (1) for MAC address part
-parse_dhcpd_conf $hn_ip_mac
+parse_dhcpd_conf $hn_ip_mac >/dev/null 2>&1
 LC_ALL=C grep -E "^[[:space:]]*[^#]" $hn_ip_mac | awk -F" " '{print $2}' | cat > $IPLIST
 
 # (2) For range part
