@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.24.4
+Version:	2.24.5
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Mon Apr 26 2017 Steven Shiau <steven _at_ nchc org tw> 2.24.5-drbl1
+  - Update language files about device to remote device cloning.
+
 * Sun Apr 23 2017 Steven Shiau <steven _at_ nchc org tw> 2.24.4-drbl1
   - Sort out the language files about lite server.
 
