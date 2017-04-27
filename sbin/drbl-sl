@@ -52,6 +52,7 @@ USAGE() {
   echo "OPTION:"
   language_help_prompt_by_idx_no
   echo "-b, --batch-mode   Run clone in batch mode."
+  echo "-e, --fetch-link   Use symbolic link when the mode is fetch for root file system."
   echo "-i, --install ISO:        Load Small Linux ISO into DRBL environment, you must put the iso file in the current working dir. This conflicts with \"-p\" option." 
   echo "-d, --distribution DIST:  Assign the small GNU/Linux distribution as DIST. Available names are: $supported_SL_dists."
   echo "-f, --use-nfsroot      By default the boot parameter to load the root file system (e.g. filesystem.squashfs) is fetch. With this option, nfsroot is used. //NOTE// This function only works for live-initramfs based system. E.g. Clonezilla live or GParted live."
