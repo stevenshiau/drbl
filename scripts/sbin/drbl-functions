@@ -4658,7 +4658,6 @@ gen_dnsmasq_cfg() {
   # Generate dnsmasq.conf
   cat <<-DNSMQSQ_END > $dnsmasq_cfg
 # Configured by DRBL/Clonezilla
-port=0
 log-dhcp
 dhcp-no-override
 enable-tftp
