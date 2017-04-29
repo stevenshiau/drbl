@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.24.5
+Version:	2.24.6
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,13 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Sat Apr 29 2017 Steven Shiau <steven _at_ nchc org tw> 2.24.6-drbl1
+  - Update language files about clonezilla menus.
+  - Bug fixed: remove port=0 in gen_dnsmasq_cfg of drbl-functions so that
+    DNS query will take effect.
+  - Add dnsmasq back to PKG_TO_QUERY in drbl.conf since we have fixed the
+    issue that DNS query is not working after dnsmasq is installed.
+
 * Mon Apr 26 2017 Steven Shiau <steven _at_ nchc org tw> 2.24.5-drbl1
   - Update language files about device to remote device cloning.
 
