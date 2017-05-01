@@ -1052,3 +1052,4 @@ msg_convert_encrypted_img_not_supported='Converting encrypted image to bittorren
 msg_if_boot_from_locaL_media='If you want to boot client machines with CD or USB flash drive'
 msg_remote_clone_source='Enter source mode of remote device cloning'
 msg_remote_clone_destination='Enter destination mode of remote device cloning'
+msg_now_wait_for_client_to_connect='Now waiting for clients to connect...'

@@ -1061,3 +1061,4 @@ msg_convert_encrypted_img_not_supported='此程式並不支援將加密的檔案
 msg_if_boot_from_locaL_media='若是在用戶端您要使用光碟或者隨身碟開機'
 msg_remote_clone_source='進入遠端裝置複製之來源碟端'
 msg_remote_clone_destination='進入遠端裝置複製之目的碟端'
+msg_now_wait_for_client_to_connect='現在等待用戶端來連線... '
