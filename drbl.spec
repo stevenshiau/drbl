@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.24.7
+Version:	2.24.8
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Tue May 02 2017 Steven Shiau <steven _at_ nchc org tw> 2.24.8-drbl1
+  * Update language files about wait command for ocs-onthefly.
+
 * Sat Apr 29 2017 Steven Shiau <steven _at_ nchc org tw> 2.24.7-drbl1
   * Update language files about wait command for ocs-live-feed-img.
 
