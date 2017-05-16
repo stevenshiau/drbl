@@ -1,5 +1,6 @@
 #!/usr/bin/perl -T
 # Translated by Ömer YILDIZ <oyildiz _at_ linux org tr> for DRBL
+# Translated by Volkan Gezer <volkan gezer _at_ gmail dot com> for DRBL
 # License: GPL
 #
 
@@ -23,7 +24,7 @@ $lang_charset = 'utf-8';
    as         => 'olarak',
    login      => 'giriş',
    clear      => 'temizle',
-   of         => 'nun',
+   of         => '/',
    logout     => 'çıkış',
    page       => 'sayfa',
    move       => 'taşı',
@@ -41,137 +42,137 @@ $lang_charset = 'utf-8';
    delete     => 'sil',
    uninstall  => 'kaldır',
    done       => 'tamamlandı',
-   finish     => 'bitiş',
+   finish     => 'son',
    space      => 'boşluk',
    );
 
 %lang_word =
    (
-   please_enter => "Lütfen giriniz",
+   please_enter => "lütfen girin",
    to_deploy_them => "yerleştir",
-   root_passwd => "root\'s parolası",
+   root_passwd => "yönetici parolası",
    initial_digit => "ilk basamak",
-   unable_to_find_the => "bulamadı",
+   unable_to_find_the => "Bulunamadı:",
    program_stop => "Program sonlandırıldı",
    );
 
 %lang_deploy =
    (
-   interactive_mode_prompt => 'İnteraktif mod sizin DRBL ortamınızın bilgisini sağlamanıza izin verir.',
-   domain_unset_prompt => 'DOMAIN ayarlı değil, lütfen domain giriniz:',
-   domain_prompt => 'Lütfen DNS domaini giriniz (drbl.sf.net gibi):',
-   nisdomain_unset_prompt => 'NISDOMAIN ayarlı değil, lütfen NISDOMAIN giriniz:',
-   nisdomain_prompt => 'Lütfen NIS/YP domain adını giriniz:',
-   not_allowed_domainname => 'DOMAINNAME olarak kullanılamaz, lütfen tekrar giriniz!',
-   not_allowed_nisdomainname => 'NISDOMAINNAME olarak kullanılamaz, tekrar giriniz!',
-   set_domain_as => 'Domain olarak şunu',
-   enter_client_hostname_prefix => "Lütfen istemci bilgisayar adının ön ekini giriniz:\nBu ön ad istemciler için bilgisayar adı oluşturmak için otomatik olarak kullanılmıştı. Otomatik olarak oluşturulan bazı adları veya hepsini silmek istiyorsanız, bu programdan çıkmak için şimdi Ctrl-C tuşuna basınız, /etc/drbl/client-ip-hostname dosyasını düzenleyiniz, daha sonra bu programı tekrar çalıştırınız.",
-   not_allowed_hostname => 'istemci adı ön eki olarak izin verilmedi, tekrar giriniz!',
+   interactive_mode_prompt => 'Etkileşimli kip sizin DRBL ortamınızın bilgisini sağlamanıza izin verir.',
+   domain_unset_prompt => 'ALANADI ayarlı değil, lütfen alan adı girin:',
+   domain_prompt => 'Lütfen DNS alan adı giriniz (drbl.sf.net gibi):',
+   nisdomain_unset_prompt => 'NISDOMAIN ayarlı değil, lütfen NISDOMAIN girin:',
+   nisdomain_prompt => 'Lütfen NIS/YP alan adını girin:',
+   not_allowed_domainname => 'ALANADI olarak kullanılamaz, lütfen tekrar girin!',
+   not_allowed_nisdomainname => 'NISDOMAINNAME olarak kullanılamaz, tekrar girin!',
+   set_domain_as => 'Alan adı olarak şunu ayarla',
+   enter_client_hostname_prefix => "Lütfen istemci bilgisayar adının ön ekini giriniz:\nBu ön ad istemciler için bilgisayar adı oluşturmak üzere otomatik olarak kullanılıe. Otomatik olarak oluşturulan bazı adları veya hepsini silmek istiyorsanız, bu programdan çıkmak için şimdi Ctrl-C tuşuna basın, /etc/drbl/client-ip-hostname dosyasını düzenleyin, daha sonra bu programı tekrar çalıştırın.",
+   not_allowed_hostname => 'istemci adı ön eki olarak izin verilmedi, tekrar girin!',
    set_client_hostname_prefix => 'İstemci adı ön eki olarak ayarla',
-   no_NIC_setup =>  ' Internet bağlantı ayarlarını yapmadınız veya bir şeyler yanlış gitti!',
-   configured_nic => 'Sisteminizde ayarlanmış ethernet kart ayarları bulundu:',
+   no_NIC_setup =>  'İstemciler için ağ kartları için herhangi bir İnternet ağı ayarı yapmadınız (örneğin, IP adresi eth1, eth2 ...), veya bir şey yanlış!',
+   configured_nic => 'Sisteminizde ayarlanmış ethernet kart(lar)ı bulundu:',
    we_can_NOT_continue => 'Devam edemeyiz...',
-   but_not_private_IP_or_configured => 'but it\'s not private IP, not well configured, or not up now!!!',
-   enter_public_IP_for_the_client => "Bu istemci için public IP giriniz",
-   its_IP_in_DRBL_is => "DRBL deki IP",
+   but_not_private_IP_or_configured => 'fakat özel bir IP değil, iyi yapılandırılmamış veya şu an çalışmıyor!!!',
+   enter_public_IP_for_the_client => "Bu istemci için erişilebilir bir IP girin",
+   its_IP_in_DRBL_is => "DRBL'deki IP",
    wrong_entered_IP => "Girdiğiniz IP hatalı, lütfen tekrar deneyin!",
-   enter_gateway_for_client => "Bu istemci için ağ geçidi giriniz",
-   enter_netmask_for_client => "Bu istemci için alt ağ maskesi giriniz",
+   enter_gateway_for_client => "Bu istemci için ağ geçidi girin",
+   enter_netmask_for_client => "Bu istemci için alt ağ maskesi girin",
    wrong_entered_netmask => "Alt ağ maskesini hatalı girdiniz. Lütfen tekrar deneyin!",
-   set_client_public_IP_as => "İstemcinin network parametrelerini şu şekilde ayarlayacağız: ",
-   we_will_skip => 'Geçeceğiz',
-   for_internet_access_prompt => 'DRBL bağlantısı için olmayan, genel internet adresi için olan bu sunucudaki hangi ethernet portudur? ',
-   drbl_website_prompt => 'Detaylar için http://drbl.nchc.org.tw/redhat veya http://drbl.sf.net/redhat adreslerine bakınız.',
-   ethernet_port_for_internet => 'Internet erişimi için ethernet portu:',
-   ethernet_port_for_DRBL => 'DRBL ortamı için ethernet portu: ',
+   set_client_public_IP_as => "İstemcinin ağ parametrelerini şu şekilde ayarlayacağız: ",
+   we_will_skip => 'Atlayacağız',
+   for_internet_access_prompt => 'DRBL bağlantısı için olmayan, genel İnternet adresi için olan bu sunucudaki hangi ethernet bağlantı noktasıdır? ',
+   drbl_website_prompt => 'Detaylar için http://drbl.nchc.org.tw/redhat veya http://drbl.sf.net/redhat adreslerine bakın.',
+   ethernet_port_for_internet => 'İnternet erişimi için ethernet bağlantı noktası/noktaları:',
+   ethernet_port_for_DRBL => 'DRBL ortamı için ethernet bağlantı noktası: ',
    only_1_IP_for_eth0 => 'eth0 için sadece 1 IP adresi, DRBL ortamı için eth0 kullanmayacağız!',
-   no_DRBL_port => 'DRBL ortamı için uygun ethernet portu yok!',
+   no_DRBL_port => 'DRBL ortamı için uygun ethernet bağlantı noktası yok!',
    saved_mac_address_files_in_etc => "Bu dosyalar $drbl_syscfg dizininde kaydedildi.",
    collect_MAC_prompt => 
           "Şimdi istemcilerin MAC adreslerini toplayabiliriz!\n".
-          "İstemci boot edildiğinde DRBL sunucudaki DHCP servisinin her zaman aynı ip adresini sunmasını istiyorsanız ve bu prosedürü yapmadıysanız, şimdi yapmalısınız!\n".
-          "Eğer istemcilerin MAC adreslerine sahipseniz, onları farklı grup dosyalarına koyabilirsiniz (DRBL hizmeti için bu dosya numaraları network kartlarının numarasıyla aynıdır.). Bu durumda, bu adımı atlayabilirsiniz.\n".
-          "Bu adım istemcilerin MAC adresini kaydetmenize yardım eder, daha sonra onları farklı gruplara ayırır. Bu size zaman kazandıracak ve tiplere indirgeyecek.\n".
-	  "MAC adresleri istemcilerin boot edilmesine göre sırayla kaydedilmiş olacaklar,\n".
-	  "ve sunucudaki network kartına göre farklı dosyalara dönüştürülecekler, dosya adı macadr-eth1.txt, macadr-eth2.txt gibi olacak... Onları $drbl_syscfg dizini içinde bulabilirisiniz.\n".
-     "Lütfen istemcileri sırayla boot ediniz, etherboot veya PXE den boot edildiklerine emin olun!\n". 
-          "Onları toplamak istiyor musunuz?",
-   ok_let_do_it => 'Tamam! Hadi yap şunu!',
-   you_are_not_root => 'Root değilsin',
-   ok_let_continue => 'TAMAM! Hadi devam et...',
-   fix_eth_IP_prompt => "Do you want to let the DHCP service in DRBL server offer same IP address to the client every time when client boots (If you want this function, you have to collect the MAC addresses of clients, and save them in file(s) (as in the previous procedure)). This is for the clients connected to DRBL server's ethernet network interface",
+          "İstemci önyüklendiğinde DRBL sunucudaki DHCP servisinin her zaman aynı IP adresini sunmasını istiyorsanız ve bu işlemi yapmadıysanız, şimdi yapmalısınız!\n".
+          "İstemcilerin MAC adreslerine sahipseniz, onları farklı grup dosyalarına koyabilirsiniz (DRBL hizmeti için bu dosya numaraları ağ kartlarının numarasıyla aynıdır.). Bu durumda, bu adımı atlayabilirsiniz.\n".
+          "Bu adım istemcilerin MAC adresini kaydetmenize yardım eder, ardından bunları farklı gruplara ayırır. Bu size zaman kazandıracak ve hataları azaltacak.\n".
+	  "MAC adresleri istemcilerin önyüklemelerine göre sırayla kaydedilmiş olacaklar,\n".
+	  "ve sunucudaki ağ kartına göre farklı dosyalara dönüştürülecekler, dosya adı macadr-eth1.txt, macadr-eth2.txt gibi olacak... Onları $drbl_syscfg dizini içinde bulabilirisiniz.\n".
+      "Lütfen istemcileri sırayla önyükleyin, etherboot veya PXE'den önyüklendiğinden edildiklerine emin olun!\n". 
+          "Biriktirmek istiyor musunuz?",
+   ok_let_do_it => 'Tamam! Hadi yapalım!',
+   you_are_not_root => 'Yönetici değilsiniz',
+   ok_let_continue => 'Tamam! Hadi devam et...',
+   fix_eth_IP_prompt => "DRBL sunucusundaki DHCP hizmetinin, istemci önyüklendiğinde her zaman müşteriye aynı IP adresini sunmasına izin vermek istiyor musunuz (Bu işlevi isterseniz, istemcilerin MAC adreslerini toplamalı ve dosyaya/dosyalara kaydetmelisiniz (örn. Önceki prosedürde)). Bu, DRBL sunucusunun ethernet ağ arayüzüne bağlı istemciler içindir.",
    MAC_file_prompt => "Tamam! Lütfen bana istemcilerin MAC adreslerini satır satır içeren dosya adını söyle",
-   range_prompt => "Tamam! Devam et, Sabit bir ip yerine ilk boot yapılırken IP aldırarak istemcilerin IPlerini ayarlayacağız!",
+   range_prompt => "Tamam! Devam et, Sabit bir IP yerine \"ilk açılan ilk IP'yi alır\" yöntemi istemcilerin IP'lerini ayarlayacağız!",
    client_number_connected_to_eth => "DRBL sunucunun ethernet ağ arayüzüne bağlı kaç tane DRBL istemcisi var?",
-   enter_the_no => "Lütfen sayı giriniz",
+   enter_the_no => "Lütfen sayı girin",
    the_value_you_set => "İstemcinin IP adresindeki basamakların son kümesindeki final sayısı",
    set_the_IP_connected_to_eth => "DRBL sunucunun ethernet arayüzüne bağlı olan istemciler için IP adresleri ayarlayacağız",
    do_you_want_to_continue => "Devam etmek istiyor musunuz?",
-   reenter_or_accept => "tekrar enter tuşuna bas, veya bu değeri kabul etmek için herhangi bir tuşa bas ve devam et!",
+   reenter_or_accept => "tekrar girmek için, veya bu değeri kabul etmek için herhangi bir tuşa bas ve devam et!",
    filename_you_set => "Ayarladığınız dosya adı",
-   by_MAC_file => "MAC adres dosyasını ayarlamanızla birlikte, DRBL sunucusunun ethernet ağ arayüzüne istemcilerin ip adresileri bağlandı.",
-   let_restart_it_again => "Tamam! hadi onu tekrar baştan başlat!",
+   by_MAC_file => "MAC adres dosyasını ayarlamanızla birlikte, DRBL sunucusunun ethernet ağ arayüzüne istemcilerin IP adresleri bağlandı.",
+   let_restart_it_again => "Tamam! Hadi onu tekrar baştan başlatalım!",
    layout_for_DRBL => "Sizin DRBL ortamınız için düzen:",
    swap_prompt =>
-              "Sizin istemci makinenizde yerel harddiskle birlikte swap alanı veya yazılabilir dosya sistemi  varsa,\n".
-              "swap alanını kullanmak veya yazılabilir dosya sisteminde bir swap alanı oluşturmak ister misiniz böylelikle istemci daha fazla hafızaya sahip olur? (Bu adım harddiskteki hiçbir bilgiye zarar vermeyecek)",
+              "İstemci makinenizde yerel sabit diskle birlikte takas alanı veya yazılabilir dosya sistemi varsa,\n".
+              "takas alanını kullanmak veya yazılabilir dosya sisteminde bir takas alanı oluşturmak ister misiniz? Böylelikle istemci daha fazla hafızaya sahip olur. (Bu adım sabit diskteki hiçbir bilgiye zarar vermeyecek)",
    try_to_create_swap =>
-                "TAMAM! İstemcinizde yerel harrdisk varsa swap alanı oluşturmayı deneyeceğiz!",
+                "Tamam! İstemcinizde yerel sabit disk varsa takas alanı oluşturmayı deneyeceğiz!",
    max_swap_size =>
-                "Swap alanı için maksimum boyut nedir(Megabyte olarak)\n".
-                "Swap alanı ayırmayı deniyoruz, yeterli değilse, boş alanın %60 ı kullanılacak.",
+                "Takas alanı için maksimum boyut nedir (megabayt cinsinden)\n".
+                "Takas alanı ayırmayı deniyoruz, yeterli değilse, boş alanın %60'ı kullanılacak.",
    mode_for_client_init =>
-              "Boot edildikten sonra hangi modu kullanmak istersiniz?\n".
+              "Önyüklendikten sonra hangi modu kullanmak istersiniz?\n".
               "\"1\": Grafik mod (X pencere sistemi) (varsayılan),\n".
-              "\"2\": Text mod.",
-   client_text_mode => "Boot edildiğinde, istemciler text modu kullanacaklar.",
-   client_graphic_mode => "İstemciler baştan başlatma işleminden sonra grafik moda girecek.",
+              "\"2\": Metin modu.",
+   client_text_mode => "İstemciler önyükleme işleminden metin modu kullanacaklar.",
+   client_graphic_mode => "İstemciler önyükleme işleminden sonra grafik moda girecek.",
    login_mode_for_client =>
                   "İstemci grafiksel olarak baştan başlatıldıktan sonra hangi modu istersiniz?\n".
-                  "0: normal login, 1: auto login, 2: timed login",
-   auto_login => "İstemciler boot edildiklerinde auto login olacaklar.",
+                  "0: normal oturum açma, 1: otomatik oturum açma, 2: zamanlı oturum açma",
+   auto_login => "İstemciler önyüklendikten sonra otomatik oturum açacaklar.",
    created_account_for_auto_login =>
-                      "auto login için istemci makinelerinin hesaplar oluşturulacak.\n".
-		      "auto login ID istemcinin host ismiyle aynıdır.\n".
+                      "otomatik oturum için istemci makinelerinde hesaplar oluşturulacak.\n".
+		      "otomatik oturum kimliği istemcinin sunucu ismiyle aynıdır.\n".
                       "Hesap ve parola bilgileri dosya içinde listelenecek",
-   time_for_countdown => "Geri sayımın saniyesi kaç?",
-   timed_login_prompt => "Zaman dolduktan sonra istemciler auto login yapacaklar.",
-   normal_login_prompt => "İstemciler boot edildiklerinde kullanıcıların login olması için bekleyecekler.",
-   keep_client_setting_question => "Eğer versa DRBL istemcinin eski ayarlarını korumak ister misiniz?",
-   remove_client_setting => "Eğer çoktan varsa DRBL ayarlarının hepsini kaldıracağız.",
-   keep_client_setting => "Eğer varsa DRBL istemcilerinin ayarlarını komayı deneyeceğiz.",
-   set_client_root_passwd => " root parolası ayarlamak yerine sunucudan aynı kopyalanmış root parolası kullanmak ister misiniz? (Daha fazla güvenlik için)",
-   whats_client_root_passwd => "İstemciler için root parolası (Ekranda gösterilmeyecek)?",
-   set_client_pxelinux_passwd => "İstemciler için pxelinux parolası ayarlamak ister misiniz? İstemci boot ettiğinde, başlamak için parola girilmelidir.(Daha fazla güvenlik sağlar)",
-   whats_client_pxelinux_passwd => "İstemciler için yeni pxelinux parolası nedir?(Ekrana yansıtılmayacaktır)",
-   retype_root_passwd => "Parolayı tekrar giriniz(Ekrana yansıtılmayacaktır).",
+   time_for_countdown => "Kaçtan geri sayılacak?",
+   timed_login_prompt => "Zaman dolduktan sonra istemciler otomatik oturum açma yapacaklar.",
+   normal_login_prompt => "İstemciler önyüklendikten sonra kullanıcıların oturum açması için bekleyecekler.",
+   keep_client_setting_question => "Varsa DRBL istemcinin eski ayarlarını korumak ister misiniz?",
+   remove_client_setting => "Varsa istemcilerin DRBL ayarlarının hepsini kaldıracağız.",
+   keep_client_setting => "Varsa DRBL istemcilerinin ayarlarını korumayı deneyeceğiz.",
+   set_client_root_passwd => "Yönetici parolası ayarlamak yerine sunucudan aynı kopyalanmış yönetici parolası kullanmak ister misiniz? (Daha fazla güvenlik için)",
+   whats_client_root_passwd => "İstemciler için yönetici parolası (Ekranda gösterilmeyecek)?",
+   set_client_pxelinux_passwd => "İstemciler için pxelinux parolası ayarlamak ister misiniz? İstemci önyüklendiğinde, başlamak için parola girilmelidir.(Daha fazla güvenlik sağlar)",
+   whats_client_pxelinux_passwd => "İstemciler için yeni pxelinux parolası nedir? (Ekranda gösterilmeyecek)",
+   retype_root_passwd => "Parolayı tekrar girin (Ekrana yansıtılmayacaktır).",
    sorry_passwd_not_match => "Üzgünüz, parolalar birbirleriyle eşleşmediler",
    sorry_passwd_can_not_empty => "Üzgünüz, parola kısmı boş bırakılamaz",
    set_client_alias_IP =>
-      "Her istemci arayüz takma adı kullanarak iki Ip sahibi olabilir,\n".
-      "Birisi DRBL sunucuya bağlanmak için istemciler için özel olan ip, diğeri switch üzerinden ağa doğrudan bağlanmak için kullanılan genel ip!\n".
-      "İstemciler için genel ip ayarlamak ister misiniz?",
-   searching_installed_drbl_packages => "DRBL sunucusu için kurulmuş paketler aranıyor...Bu birkaç dakika alabilir...",
+      "Her istemci arayüz takma adı kullanarak iki IP sahibi olabilir,\n".
+      "Birisi DRBL sunucuya bağlanmak için istemciler için özel olan IP, diğeri switch üzerinden ağa doğrudan bağlanmak için kullanılan genel IP!\n".
+      "İstemciler için genel IP ayarlamak ister misiniz?",
+   searching_installed_drbl_packages => "DRBL sunucusu için kurulmuş paketler aranıyor... Bu birkaç dakika sürebilir...",
    no_drbl_server_package_found =>
 	      "Kurulmuş DRBL sunucusu paketi yok!!!\n". 
-	      "İlk olarak bir başka script olan(drblsrv -i) komutunu DRBL sunucusunu ayarlamak için kullanmalısınız !!!, Yoksa sistem çalışmaz!!!\n".
-	      "Devam etmek istediğinize emin misiniz?  Devam etmek için \"yes\" veya \"y\" , çıkmak için herhangi bir tuşa basınız!",
-   but_you_will_see_errors => "Çok fazla hata mesajı göreceksiniz...!!!",
+	      "İlk olarak bir başka betik olan (drblsrv -i) komutunu DRBL sunucusunu ayarlamak için kullanmalısınız!!! Yoksa sistem ÇALIŞMAZ!!!\n".
+	      "Devam etmek istediğinize emin misiniz?  Devam etmek için \"yes\" veya \"y\" yazın, çıkmak için herhangi bir tuşa basın!",
+   but_you_will_see_errors => "Fakat çok fazla hata mesajı göreceksiniz...!!!",
    smart_decision => "Tamam, akıllıca bir karar verdiniz, Şimdi çıkıyorum!",
    finished_searching_installed_drbl_packages => "DRBL sunucu için kurulmuş paketleri aramyı bitirdi.",
-   note_for_keep_client_setting => "Uyarı! DRBL istemcilerinin ayarlarını korumayı deniyorsunuz eğer mevcutsa DRBL istemcileri script bittiğinde bazen hataya gidebilir! Bu durumda, DRBL istemcilerini baştan başlatmak çalışmalarını sağlayabilir!",
+   note_for_keep_client_setting => "Uyarı! Mevcutsa DRBL istemcilerinin ayarlarını korumayı deniyorsunuz. Bazen DRBL istemcileri betik bittiğinde yanlış şeyler yapabilir! Bu durumda, DRBL istemcilerini baştan başlatmak çalışmalarını sağlayabilir!",
    press_enter_to_continue => "Devam etmek için Enter tuşuna basınız... ",
    no_deploy_prompt =>
 	      "Bütün ayar dosyaları bu çalışma dizininde oluşturulur,\n".
-	      "ama sisteme yerleştirilmezler! \n".
-	      "Eğer sisteme yerleştirmek istiyorsanız, \"-n\" veya \"--no_deploy\" seçeneklerini kullanmayın",
+	      "ama sisteme YERLEŞTİRİLMEZLER! \n".
+	      "Sisteme yerleştirmek istiyorsanız, \"-n\" veya \"--no_deploy\" seçeneklerini kullanmayın",
    ready_to_deploy =>
-	      "Dosyalarınızı sisteme yerleştirmek için hazırız \n".
+	      "Dosyalarınızı sisteme yerleştirmek için hazırız! \n".
 	      "Devam etmek istiyor musunuz?",
-   overwrite_firewall_rule => "Uyarı! Eğer devam ederseniz firewall kurallarınız ayarlama sırasında silinecektir!",
-   backup_firewall_rule => "Orjinal kurallar iptables.drblsave dosyası olarak, sistem ayar dosyası içine (/etc/sysconfig veya /etc/default) yedeklenecektir.",
-   oh_quit_now => "Tüh, Şimdi çıkacağım,inşallah!",
-   accept_or_enter => " Kabul etmek için \"Y\" tuşuna veya tek tek girmek için herhangi bir tuşa basınız...",
+   overwrite_firewall_rule => "Uyarı! Devam ederseniz güvenlik duvarı kurallarınız kurulum sırasında silinecektir!",
+   backup_firewall_rule => "Özgün kurallar iptables.drblsave dosyası olarak, sistem ayar dosyası içine (/etc/sysconfig veya /etc/default) yedeklenecektir.",
+   oh_quit_now => "Tüh, Şimdi çıkacağım!",
+   accept_or_enter => " Kabul etmek için \"Y\" tuşuna veya tek tek girmek için herhangi bir tuşa basın...",
    failed_to_open_file => "Dosya açma işlemi başarısız",
    #
    analyzing_rpm_info => "rpm paket bilgileri analiz ediliyor... Bu birkaç dakika alabilir...",
@@ -179,82 +180,82 @@ $lang_charset = 'utf-8';
    apt_pkg_not_installed =>  "\"apt\" paketi kurulmamış!!!", 
    we_are_now_ready_to => "Şimdi gitmeye hazırız",
    the_files_for_DRBL_server => "DRBL sunucu için dosyalar!",
-   say_yes_to_continue_other_to_quit => "Devam etmek için \"yes\" veya \"y\" , veya çıkmak için herhangi bir tuşa basınız!",
-   say_no_to_quit_other_to_continue => " Çıkmak için \"no\" veya \"n\" tuşuna , veya devam etmek için herhangi bir tuşa basınız!",
-   syncing_flush => "Şimdi eşitleniyor - dosya sistem bufferı boşaltılıyor...", 
+   say_yes_to_continue_other_to_quit => "Devam etmek için \"yes\" veya \"y\" , veya çıkmak için herhangi bir tuşa basın!",
+   say_no_to_quit_other_to_continue => " Çıkmak için \"no\" veya \"n\" tuşuna , veya devam etmek için herhangi bir tuşa basın!",
+   syncing_flush => "Şimdi eşitleniyor - dosya sistem tamponu boşaltılıyor...", 
    install_and_upgrade => "kur ve güncelle",
-   IP_start_prompt => "Bu ethernet portuna DRBL istemcilerinin bağlanması için IP adresinin en sonundaki basamak kümesi için kullanmak istediğin başlangıç numarası nedir (a.b.c.d gibi bir IP adresinde d harfinin yerine gelecek değer)?",
-   client_no_in_MAC_file => "Bu dosyadaki istemci numaraları ",
-   not_initial_value => "Geçerli bir değer girmediniz! Lütfen tekrar deneyiniz!!!",
-   can_not_be_the_last_IP => "değeri bir ip adresinin son basamağı olamaz!!!",
-   can_not_be_the_first_IP => "değer bir ip adresinin ilk basamağı olamaz!!",
-   set_client_system_select => " İstemciler için boot istemi ayarlamak ister misiniz?",
-   use_graphic_pxelinux_menu => "İstemci boot ettiğinde PXE menu için grafik arkaplan kullanmak ister misiniz?",
-   note_for_use_graphic_pxelinux_menu => "Uyarı! Eğer grafik PXELinux menu kullanırsanız, istemcinin boot işlemi başarısız olmasına rağmen, \"switch-pxe-bg-mode -m text\" komutunu çalıştırarak, text moda değiştirebilirsiniz.",
-   whats_client_system_boot_timeout => " İstemciler için kaç 1/10 saniyede boot istemi zaman aşımına uğramalıdır?",
+   IP_start_prompt => "Bu ethernet bağlantı noktasına DRBL istemcilerinin bağlanması için IP adresinin en sonundaki basamak kümesi için kullanmak istediğiniz başlangıç numarası nedir (a.b.c.d gibi bir IP adresinde d harfinin yerine gelecek değer)?",
+   client_no_in_MAC_file => "Bu dosyadaki istemci numaraları",
+   not_initial_value => "Geçerli bir değer girmediniz! Lütfen tekrar deneyin!!!",
+   can_not_be_the_last_IP => "değeri bir IP adresinin son basamağı OLAMAZ!!!",
+   can_not_be_the_first_IP => "değer bir IP adresinin ilk basamağı OLAMAZ!!!",
+   set_client_system_select => " İstemciler için önyükleme istemi ayarlamak ister misiniz?",
+   use_graphic_pxelinux_menu => "İstemci önyüklendiğinde PXE menüsü için grafik arkaplan kullanmak ister misiniz?",
+   note_for_use_graphic_pxelinux_menu => "Uyarı! Grafik PXELinux menü kullanırsanız, istemcinin önyüklemesi işlemi başarısız olmasına rağmen, \"switch-pxe-bg-mode -m text\" komutunu çalıştırarak, metin moduna değiştirebilirsiniz.",
+   whats_client_system_boot_timeout => " İstemciler için kaç 1/10 saniyede önyükleme istemi zaman aşımına uğramalıdır?",
    sorry_timeout_must_be_number => "Zaman aşımı bir sayı olmalıdır (70 gibi)!!!",
-   unable_to_get_ethx_IP => " Ip adresi almak olanaksız!!!\ C sınıfı sabit özel ip ayarlamalısınız (192.168.1.1 gibi), ve kayan noktalı ip adresi olamaz (DHCP istemcisi gibi)! Bu hata network kartınızdadır:",
+   unable_to_get_ethx_IP => " IP adresi almak olanaksız!!!\ C sınıfı sabit özel ip ayarlamalısınız (192.168.1.1 gibi), ve kayan noktalı IP adresi olamaz (DHCP istemcisi gibi)! Bu hata şu ağ kartınızdadır:",
    program_stop => "Program Duruyor!!!",
    open_thin_client_option => 
-        "DRBL istemcilerine terminal modda çalıştırmak için seçenek sunmak ister misiniz? Yani uzak ekran istemciye izin vermek istiyorsanız (server kaynaklarının çoğunu kullanacak), buraya \"Y\" yazın .\n".
+        "DRBL istemcilerine uçbirim modunda çalıştırmak için seçenek sunmak ister misiniz? Yani uzak ekran istemciye izin vermek istiyorsanız (sunucu kaynaklarının çoğunu kullanacak), buraya \"Y\" yazın.\n".
         "Uyarı!\n".
-	"0. Bu seçeneğe evet diyorsanız, istemci için kısıtlı bir ortam olacaktır, örneğin istemcide USB, CD, ses, printer gibi aygıtlara erişim olmayacak vb..\n".
+	"0. Bu seçeneğe evet diyorsanız, istemci için kısıtlı bir ortam olacaktır, örneğin istemcide USB, CD, ses, yazıcı vb. gibi aygıtlara erişim olmayacak.\n".
 	"1. Sunucunuz güçlü değilse, buraya \"no\" yazın.\n".
-	"2. Buraya \"yes\" demekle,  xdmcp ye döndüreceksiniz,\n".
-	"Şuna çevirmek güvenli bir şey değildir.  /etc/hosts.allow ve /etc/hosts.deny dosyalarını ayarlamak sadece local adreslere izin veren başka bir alternatiftir fakat en güvenlisi değildir.\n".
-	"xdmcp açmayı umuyorsanız port 177 için Firewall kullanmak en güvenli yoldur.\n".
-	" XDMCP güvenliğinde daha fazla bilgi almak için klavuzu okuyun.\n".
+	"2. Buraya \"yes\" demekle, xdmcp'yi açacağız,\n".
+	"Bunu açmak hiç güvenli bir şey değildir. /etc/hosts.allow ve /etc/hosts.deny dosyalarını ayarlamak sadece yerel adreslere izin veren başka bir alternatiftir fakat en güvenlisi değildir.\n".
+	"xdmcp açmayı umuyorsanız bağlantı noktası 177 için güvenlik duvarı kullanmak en güvenli yoldur.\n".
+	"XDMCP güvenliğinde daha fazla bilgi almak için kılavuzu okuyun.\n".
 	"Lütfen, kendiniz ayarlayın!\n".
 	"3. Eğer burada \"yes\" diyorsanız, daha sonra masaüstü yöneticisini baştan başlatmalısınız, Uygulamaları kapatmadan önce bilgilerinizi kaydetmeyi unutmayın!\n".
-	"Terminal modda çalışmak için istemciye seçenek sunmak ister misiniz?",
-   server_kernel_nfsd_support => "The running kernel in the server supports",
-   change_kernel_notes => "Uyarı! Sunucuda çalışan kerneli değiştirmek istiyorsanız, ve kernelin NFS üzerinde udp veya tcp destekleyip desteklemediğinden emin değilseniz, \"drblpush -i\" komutunu çalıştırmanız boot hatalarından kaçınmak için daha iyi olacaktır!",
-   hint_for_answer => "İpucu!  yes/no seçeneği uygun olduğunda, varsayılan değer büyük harflidir, Örn. (y/N),  \"N\" defult değerdir,  \"Enter\" tuşuna basarsanız, \"N\" kullanmış olursunuz. Hangisini seçeceğinizden emin değilseniz, sadece \"Enter\" tuşuna basınız.",
-   hint_for_detect_MAC => "DRBL istemcilerinin statik ip adreslerini kullanmak isterseniz,  \"drblpush\" interaktif modda komutunu çalıştırmalısınız(-i seçeneğiyle) ve bu istemcilerin mac adreslerini toplar!",
+	"Uçbirim modunda çalışmak için istemciye seçenek sunmak ister misiniz?",
+   server_kernel_nfsd_support => "Sunucunun desteklediği çalışma çekirdeği",
+   change_kernel_notes => "Uyarı! Sunucuda çalışan çekirdeği değiştirmek istiyorsanız, ve çekirdeğin NFS üzerinde udp veya tcp destekleyip desteklemediğinden emin değilseniz, \"drblpush -i\" komutunu çalıştırmanız önyükleme hatalarından kaçınmak için daha iyi olacaktır!",
+   hint_for_answer => "İpucu!  yes/no seçeneği uygun olduğunda, varsayılan değer büyük harflidir, Örn. (y/N),  \"N\" varsayılan değerdir,  \"Enter\" tuşuna basarsanız, \"N\" kullanmış olursunuz. Hangisini seçeceğinizden emin değilseniz, sadece \"Enter\" tuşuna basınız.",
+   hint_for_detect_MAC => "DRBL istemcilerinin statik IP adreslerini kullanmak isterseniz,  \"drblpush\" etkileşimli modda komutunu çalıştırmalısınız(-i seçeneğiyle) ve bu istemcilerin MAC adreslerini toplar!",
    illegal_char_in_MAC => "MAC adres dosyaları yasak karakterler içeriyor",
-   fix_wrong_MAC_file => "Lütfen MAC adres dosyasını kontrol et ve düzelt.",
-   unable_to_find_public_IP => "Bu sunucunun genel ip adresi bulunamadı.",
-   available_eth_ports => "Bu sunucudaki uygun ethernet portları",
+   fix_wrong_MAC_file => "Lütfen girdiğiniz MAC adres dosyasını kontrol edin ve düzeltin.",
+   unable_to_find_public_IP => "Bu sunucunun genel IP adresi BULUNAMADI.",
+   available_eth_ports => "Bu sunucudaki uygun ethernet bağlantı noktaları",
    is_not_in_the_lists => "listede değil",
    enter_it_again => "Lütfen tekrar girin",
-   the_eth_port_you_choose_for_wan => "WAN bağlantısı için seçtiğiniz ethernet portu",
-   set_DBN_client_audio_plugdev_etc_open_to_all => "DRBL sunucusu üzerindeki tüm kullanıcılara ses, cdrom, floopy, video ve plugdev aygıtlarını kullanabilmeleri için izin vermek istiyor musunuz? Evetse, sunucu ve istemcide bu araç gruplarına bütün kullanıcıları ekleyeceğiz.",
-   use_random_password => "Auto login hesapları için *RANDOM* parola kullanmak ister misiniz?",
-   enter_password_for_autologin_accounts => " Auto login hesapları için parola giriniz",
-   whats_client_autologin_passwd => "İstemcilerin auto login parolaları nedir (ekranda gösterilmeyecek)?",
-   retype_autologin_passwd => "Parolayı tekrar yazınız(Ekranda gösterilmeyecek).",
+   the_eth_port_you_choose_for_wan => "WAN bağlantısı için seçtiğiniz ethernet bağlantı noktası",
+   set_DBN_client_audio_plugdev_etc_open_to_all => "DRBL sunucusu üzerindeki tüm kullanıcılara ses, cdrom, floopy, video ve plugdev aygıtlarını (USB aygıtı gibi) kullanabilmeleri için izin vermek istiyor musunuz? Evetse, sunucu ve istemcide bu araç gruplarına bütün kullanıcıları ekleyeceğiz.",
+   use_random_password => "Otomatik oturum açma hesapları için *RASTGELE* parola kullanmak ister misiniz?",
+   enter_password_for_autologin_accounts => "Otomatik oturum açma hesapları için parola girin",
+   whats_client_autologin_passwd => "İstemcilerin otomatik oturum açma parolaları nedir (ekranda gösterilmeyecek)?",
+   retype_autologin_passwd => "Parolayı tekrar yazın (Ekranda gösterilmeyecek).",
    clonezilla_box_mode_for_client => "Clonezillayı sadece box modda kullanmak ister misiniz? İstiyorsanız, DRBL hakkında bazı fonksiyonlar baskılanmış olacaklar ve clonezilla yapmak için elegant modunuz olacak. Uyarı! Bu modda, istemcinin ayar ve yapılandırma dosyaları DRBL sunucuya kaydedilmeyecek! Bir kere kullanılacaklar ve makine baştan başlatıldığında temizlenecekler!",
-   clonezilla_box_mode_is_set => " Clonezilla box modu ayarlandığında, elegant mod yolda demektir!",
-   full_clonezilla_mode_is_set => "Full clonezila modu ayarlı!",
-   clonezilla_box_mode_not_set => "Clonezilla box moda ayarlı değil, DRBL box tam fonksiyonlarına sahip olacaksınız!",
+   clonezilla_box_mode_is_set => " Clonezilla box modu ayarlandığında, zarif mod yolda demektir!",
+   full_clonezilla_mode_is_set => "Tam Clonezilla modu ayarlı!",
+   clonezilla_box_mode_not_set => "Clonezilla box moda ayarlı değil, DRBL box'ın tam fonksiyonlarına sahip olacaksınız!",
    no_clonezilla_in_system => "Clonezilla bir sistem değildir!",
-   class_c_IP_for_multicast_clonezilla => "Multicast clonezilla kullanmak istiyorsanız, özel ip sınıfı C sınıfını kullanmak zorundasınız (192.168.*.*)! Öte yandan multicast klonun performası çok kötü olacaktır!",
-   drbl_ssi_mode_for_client => "DRBL SSI(Tek Sistem imajı) modunu kullanmak ister misiniz? Evetse, sunucunun yüklenmesi ve gerekli disk alanı daha açık olacak. Uyarı! Bu modda, (1) İstemci makine hafızası en az 256 mb olmalı. (2) İstemcinin ayar ve yapılandırma dosyaları DRBL sunucusu üzerine kaydedilmeyecek! Sadece bir kere kullanılacaklar ve makine baştan başlatıldığında silenecekler! Bunun yanında, eğer template istemcideki her dosyayı($drblroot içinde yer alır) düzenlerseniz, drbl-gen-ssi-files komutunu $drbl_common_root/drbl_ssi/ içinde tarball template oluşturmak için çalıştırmak zorundasınız. (3) İstemci ön yüklendiğinde template tarball içindeki ayarlamaların üzerine yazmak için bazı dosyalar sağlanmasını isterseniz, daha fazla bilgi için $drbl_common_root/drbl_ssi/clients/00_README dosyasını kontrol ediniz.",
-   which_drbl_mode_for_client => "Sistemde disksiz linux hizmetleri için 3 mod var:\n[0] Full DRBL mod, her istemci kendi NFS si üzerinde /etc ve /var dizinlerine sahiptir.\n[1] DRBL SSI (Single system image) mod, her istemci tmpfs temelli /etc ve /var dizinlerini kullanır. Bu modda, yükleme ve sunucu için gerekli disk alanı daha açık olacaktır. UYARI! (a) İstemci makine için en az 256 mb hafıza önerilir. (b) İstemcinin yapılandırma ve ayar dosyaları DRBL sunucu üzerinde kaydedilmeyecek! Bir kere kullanılacakla makine baştan başlatıldığında silinecekler! Bunun yanında, eğer template istemcideki her dosyayı($drblroot içinde yer alır) düzenlerseniz, drbl-gen-ssi-files komutunu $drbl_common_root/drbl_ssi/ içinde tarball template oluşturmak için çalıştırmak zorundasınız. (c) İstemci ön yüklendiğinde template tarball içindeki ayarlamaların üzerine yazmak için bazı dosyalar sağlanmasını isterseniz, daha fazla bilgi için $drbl_common_root/drbl_ssi/clients/00_README dosyasını kontrol ediniz.\n[2] İstemciye disksiz Linux hizmeti sağlamak istemiyorum.\nHangi modu tercih edersiniz?",
-   drbl_ssi_mode_is_set => "DRBL SSI mod ayarlandığnda, DRBL için bir elegant mod yolda demektir!",
-   full_drbl_mode_is_set => "Full DRBL mod seçildi!",
-   no_drbl_mode_in_system => "İstemci için disksiz linux sistem değil.",
-   where_is_ocs_img_repo_dir => "clonezilla kullandığınızda, kaydedilmiş imajı sunucudaki hangi dizinde saklamak istersiniz (Lütfen belirli bir yol belirtiniz, bunu /mnt/, /media/ veya /tmp/ altına atamayınız)?",
-   not_allowed_ocs_img_repo_dir => "clonezilla imajlarınızı kaydetmek için izin verilen bir dizin değil, lütfen tekrar deneyin.",
-   drbl_server_as_NAT_server => "DRBL sunucunun bir NAT sunucu gibi çalışmasına izin veriyor musunuz? Vermiyorsanız, DRBL istemciniz internata erişemeyecek.",
-   drbl_server_is_NOT_NAT_server => "Bu DRBL sunucu NAT hizmeti sağlamıyor, bu yüzden DRBL istemciniz internata erişemeyecek.",
-   both_drbl_clonezilla_are_none => "drbl ve clonezilla modunun her ikiside uygun bir şekilde atanmadı, bu sistemde sadece limitli fonksiyonlar(netinstall ve drbl-sl gibi) kullanılabilir!",
+   class_c_IP_for_multicast_clonezilla => "Çok yönlü Clonezilla kullanmak istiyorsanız, özel IP sınıfı C sınıfını kullanmak zorundasınız (192.168.*.*)! Öte yandan çok yönlü klonun performası çok kötü olacaktır!",
+   drbl_ssi_mode_for_client => "DRBL SSI (Tek Sistem Kalıbı) modunu kullanmak ister misiniz? Evetse, sunucunun yüklenmesi ve gerekli disk alanı daha hafif olacak. Uyarı! Bu modda, (1) İstemci makine hafızası en az 256 mb olmalı. (2) İstemcinin ayar ve yapılandırma dosyaları DRBL sunucusu üzerine kaydedilmeyecek! Sadece bir kere kullanılacaklar ve makine baştan başlatıldığında silenecekler! Bunun yanında, eğer şablon istemcideki her dosyayı ($drblroot içinde yer alır) düzenlerseniz, drbl-gen-ssi-files komutunu $drbl_common_root/drbl_ssi/ içinde tarball şablonu oluşturmak için çalıştırmak zorundasınız. (3) İstemci ön yüklendiğinde şablon tarball içindeki ayarlamaların üzerine yazmak için bazı dosyalar sağlanmasını isterseniz, daha fazla bilgi için $drbl_common_root/drbl_ssi/clients/00_README dosyasını kontrol edin.",
+   which_drbl_mode_for_client => "Sistemde disksiz Linux hizmetleri için 3 mod var:\n[0] Tam DRBL modu, her istemci kendi'NFS si üzerinde /etc ve /var dizinlerine sahiptir.\n[1] DRBL SSI (Tek Sistem Kalıbı) mod, her istemci tmpfs temelli /etc ve /var dizinlerini kullanır. Bu modda, yükleme ve sunucu için gerekli disk alanı daha hafif olacaktır. UYARI! (a) İstemci makine için en az 256 mb hafıza önerilir. (b) İstemcinin yapılandırma ve ayar dosyaları DRBL sunucu üzerinde kaydedilmeyecek! Bir kere kullanılacakla makine baştan başlatıldığında silinecekler! Bunun yanında, eğer şablon istemcideki her dosyayı ($drblroot içinde yer alır) düzenlerseniz, drbl-gen-ssi-files komutunu $drbl_common_root/drbl_ssi/ içinde tarball şablon oluşturmak için çalıştırmak zorundasınız. (c) İstemci ön yüklendiğinde şablon tarball içindeki ayarlamaların üzerine yazmak için bazı dosyalar sağlanmasını isterseniz, daha fazla bilgi için $drbl_common_root/drbl_ssi/clients/00_README dosyasını kontrol edin.\n[2] İstemciye disksiz Linux hizmeti sağlamak İSTEMİYORUM.\nHangi modu tercih edersiniz?",
+   drbl_ssi_mode_is_set => "DRBL SSI mod ayarlandığnda, DRBL için bir zarif mod yolda demektir!",
+   full_drbl_mode_is_set => "Tam DRBL mod seçildi!",
+   no_drbl_mode_in_system => "İstemci için disksiz Linux sistem değil.",
+   where_is_ocs_img_repo_dir => "Clonezilla kullandığınızda, kaydedilmiş kalıbı sunucudaki hangi dizinde saklamak istersiniz (Lütfen belirli bir yol belirtiniz, bunu /mnt/, /media/ veya /tmp/ altına ATAMAYIN)?",
+   not_allowed_ocs_img_repo_dir => "Clonezilla kalıplarınızı kaydetmek için izin verilen bir dizin değil, lütfen tekrar deneyin.",
+   drbl_server_as_NAT_server => "DRBL sunucunun bir NAT sunucu gibi çalışmasına izin veriyor musunuz? Vermiyorsanız, DRBL istemciniz İnternet'e erişemeyecek.",
+   drbl_server_is_NOT_NAT_server => "Bu DRBL sunucu NAT hizmeti sağlamıyor, bu yüzden DRBL istemciniz İnternet'e erişemeyecek.",
+   both_drbl_clonezilla_are_none => "drbl ve clonezilla modunun her ikisi de uygun bir şekilde atanmadı, bu sistemde sadece sınırlı fonksiyonlar (netinstall ve drbl-sl gibi) kullanılabilir!",
    are_you_sure_you_want_to_continue => "Devam etmek istediğinize emin misiniz?",
    # Tag on 2010/12/13
-   which_clonezilla_mode_for_client => "Sistemde, clonezilla için uygun 4 mod var:\n[0] Full Clonezilla mod, her istemci kendi NFS tabanlı /etc ve /var dizinlerine sahiptir.\n[1] Clonezilla box mod, her istemci tmpfs temelli /etc ve /var dizinlerini kullanır. In this mode, Bu modda, yükleme ve sunucu için gerekli disk alanı Full moddan daha açık olacaktır. Uyarı! Clonezilla box modda,istemcinin yapılandırma ve ayar dosyaları DRBL sunucu üzerinde kaydedilmeyecek! Bir kere kullanılacakla makine baştan başlatıldığında silinecekler!\n[2] Clonezilla istemiyorum.\n[3] Clonezilla live istemcinin bir işletim sistemi gibi kullanılsın (Test ediliyor).\nHangi modu tercih edersiniz?",
-   clonezilla_live_mode_is_set => " Clonezilla job çalışırkekn, Clonezilla live istemcinin işletim sistemi gibi çalışsın.",
-   which_clonezilla_live_branch => "İstemci için hangi Clonezilla live kolunu seçersiniz?\n[0]: stable (Debian-tabanlı)\n[1]: test (Debian-tabanlı)\n[2]: alternatif stable (Ubuntu-tabanlı)\n[3]: alternatif test (Ubuntu-tabanlı)\nEmin değilseniz, [2]: alternatif stable seçeneğini seçin.",
+   which_clonezilla_mode_for_client => "Sistemde, clonezilla için uygun 4 mod var:\n[0] Tam Clonezilla modu, her istemci kendi NFS tabanlı /etc ve /var dizinlerine sahiptir.\n[1] Clonezilla box modu, her istemci tmpfs temelli /etc ve /var dizinlerini kullanır. Bu modda, yükleme ve sunucu için gerekli disk alanı Tam Clonezilla modundan daha açık olacaktır. Uyarı! Clonezilla box modda, istemcinin yapılandırma ve ayar dosyaları DRBL sunucu üzerinde kaydedilmeyecek! Bir kere kullanılacakla makine baştan başlatıldığında silinecekler!\n[2] Clonezilla İSTEMİYORUM.\n[3] Clonezilla live istemcinin bir işletim sistemi gibi kullanılsın (Test ediliyor).\nHangi modu tercih edersiniz?",
+   clonezilla_live_mode_is_set => " Clonezilla görevi çalışırkekn, Clonezilla live istemcinin işletim sistemi gibi çalışsın.",
+   which_clonezilla_live_branch => "İstemci için hangi Clonezilla live kolunu seçersiniz?\n[0]: kararlı (Debian-tabanlı)\n[1]: test (Debian-tabanlı)\n[2]: alternatif kararlı (Ubuntu-tabanlı)\n[3]: alternatif test (Ubuntu-tabanlı)\nEmin değilseniz, [2]: alternatif kararlı seçeneğini seçin.",
    which_live_client_cpu_mode => "Clonezilla live ile birlikte Clonezilla job çalıştığında istemciler için kullanılacak işlemci mimarisi nedir?\n[0]: i586\n[1]: i686\n[2]: amd64\nEmin değilseniz, i586 seçin.",
-   which_live_client_cpu_mode_for_ubuntu => "Clonezilla live ile birlikte Clonezilla job çalıştığında istemciler için kullanılacak işlemci mimarisi nedir?\n[0]: i386\n[1]: amd64\nEmin değilseniz, i386 seçin.",
+   which_live_client_cpu_mode_for_ubuntu => "Clonezilla live ile birlikte Clonezilla görevi çalıştığında istemciler için kullanılacak işlemci mimarisi nedir?\n[0]: i386\n[1]: amd64\nEmin değilseniz, i386 seçin.",
    live_client_branch_set=> "Clonezilla live dalı seçildi",
    live_client_cpu_arch_is_set => "İstemci için seçilen işlemci mimarisi",
    # Tag on 2017/01/26
-   only_one_network_card_in_system => "///WARNING/// Only one configured network card was found in this system.",
-   found_dhcp_service_on_nic => "Found DHCP service on the network interface",
-   do_you_want_to_lease_ip_addr_from_existing_dhcp_srv => "Do you want to lease IP address from the existing DHCP service? The DHCP server IP address is",
-   will_use_available_ip_addr_from_dhcp_srv => "'If so, we will use the available IP address leased from DHCP server. If not, we will run a DHCP service in this machine, which might conflict with the existing one. Therefore it is recommended to choose yes.",
-   note_you_have_to_make_sure_enough_no_of_ip_addr => "//NOTE// If you choose 'yes', you have to make sure your DHCP server provides enough number of IP address for all the clients. Besides, this mechanism is risky because all the PXE or uEFI network booting clients will enter DRBL or Clonezilla mode. Please make sure this is what you want.",
-   failed_to_detect_dhcp_service => "Failed to find any DHCP service on this network card",
-   do_you_want_to_try_it_again => "Do you want to try it again?",
+   only_one_network_card_in_system => "///Uyarı/// Bu sistemde sadece tek yapılandırılmış ağ kartı bulundu.",
+   found_dhcp_service_on_nic => "Ağ arayüzünde DHCP servisi bulundu",
+   do_you_want_to_lease_ip_addr_from_existing_dhcp_srv => "IP adresini varolan DHCP hizmetinden kiralamak istiyor musunuz? DHCP sunucusu IP adresi:",
+   will_use_available_ip_addr_from_dhcp_srv => "Eğer öyleyse, DHCP sunucusundan kiralanan mevcut IP adresini kullanacağız. Değilse, bu makinede mevcut bir DHCP hizmetiyle çakışabilecek bir DHCP hizmeti çalıştırırız. Bu nedenle evet seçilmesi önerilir.",
+   note_you_have_to_make_sure_enough_no_of_ip_addr => "//NOT// 'evet' seçeneğini seçerseniz, DHCP sunucunuzun tüm istemciler için yeterli sayıda IP adresi sağladığından emin olmanız gerekir. Ayrıca, bu mekanizma risklidir çünkü tüm PXE veya uEFI ağ önyükleme istemcileri DRBL veya Clonezilla moduna girer. Lütfen bunu istediğinizden emin olun.",
+   failed_to_detect_dhcp_service => "Bu ağ kartında hiç DHCP servisi bulunamadı",
+   do_you_want_to_try_it_again => "Yeniden denemek ister misiniz?",
    mark_the_end_of_lang =>"."
    );

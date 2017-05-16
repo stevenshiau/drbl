@@ -1047,7 +1047,7 @@ msg_your_input_config_is='你所輸入的設定是'
 msg_is_that_correct='這正確嗎?'
 # Tag on 2017/04/09
 msg_ocs_live_lite_server_des='再生龍輕量伺服器是再生龍服務的一個簡單模式，提供印象檔群播/廣播服務給用戶端。因此可以較為簡單的使用在現有的網路環境中，最主要就是不需改變現有的區域網路環境設定，直接使用現有的網路設定。若您的網路是一個封閉的環境，不對外連接，這個再生龍輕量伺服器將會提供DHCP與PXE服務。您可以用光碟，隨身碟或者PXE來將同樣版本的再生龍單機版在用戶端的機器開機來接收這個輕量伺服器提供印象檔來做還原。'
-msg_which_network_senario='你將使用哪種網路環境?\n"To_upstream"模式是你的這台再生龍輕量級伺服器將會連接到上游的網路，例如網路路由器或者DHCP伺服器。\n"In_isolation"模式是網路環境將會是在一個封閉的網路中，不對外做任何連接。亦即在"In_isolation"模式下，再生龍輕量級伺服器將會被指定一個私有網路IP位址，然後跑一個自己的DHCP與PXE服務。'
+msg_which_network_senario='你將使用哪種網路環境?\n"to-upstream"模式是你的這台再生龍輕量級伺服器將會連接到上游的網路，例如網路路由器或者DHCP伺服器。\n"in-isolation"模式是網路環境將會是在一個封閉的網路中，不對外做任何連接。亦即在"in-isolation"模式下，再生龍輕量級伺服器將會被指定一個私有網路IP位址，然後跑一個自己的DHCP與PXE服務。'
 msg_failed_to_get_file_from_this_URL='無法從此網址下載檔案'
 msg_boot_client_with_same_version_clonezilla_live='現在將用戶端用同樣版本的Clonezilla live開機，進入命令列後執行"sudo ocs-live-get-img"。然後依照指示設定網路連線資訊，接著將伺服器主機設為'
 msg_append_parameter_for_unattended_mode="若你要自動化用戶端，你可以將這些開機參數加在Clonezilla live上"
@@ -1062,3 +1062,4 @@ msg_remote_clone_source='進入遠端裝置複製之來源碟端'
 msg_remote_clone_destination='進入遠端裝置複製之目的碟端'
 msg_now_wait_for_client_to_connect='現在等待用戶端來連線... '
 msg_now_run_this_cmd_in_target_machine='現在你可以用Clonezilla live把目的碟機器開機，然後在目的碟機器上進入再生龍模式，選取"remote-dest"然後依照對話視窗執行，或者手動執行這樣的指令來開始遠端複製'
+msg_insert_storage_dev_now='若有需要，你現在就可以將儲存裝置插入此機器中，然後等待系統偵測到它.'
