@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.24.9
+Version:	2.24.10
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,12 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Wed May 24 2017 Steven Shiau <steven _at_ nchc org tw> 2.24.10-drbl1
+  * Separate detect_dhcp_srv_in_lan in drbl-functions.
+    Add option -a|--allow-1-nic to function gen_dnsmasq_cfg in
+    drbl-functions.
+  * Update language files about ocs-live-feed-img.
+
 * Tue May 16 2017 Steven Shiau <steven _at_ nchc org tw> 2.24.9-drbl1
   * Merge language file tr_TR from Volkan Gezer <volkangeyer _at_ gmail dot
     com>.

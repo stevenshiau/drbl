@@ -1,3 +1,12 @@
+drbl (2.24.10-drbl1) unstable; urgency=medium
+
+  * Separate detect_dhcp_srv_in_lan in drbl-functions.
+    Add option -a|--allow-1-nic to function gen_dnsmasq_cfg in
+    drbl-functions.
+  * Update language files about ocs-live-feed-img.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 24 May 2017 10:56:01 +0800
+
 drbl (2.24.9-drbl1) unstable; urgency=medium
 
   * Merge language file tr_TR from Volkan Gezer <volkangeyer _at_ gmail dot
