@@ -2339,6 +2339,59 @@ is_boot_from_live() {
   fi
 }
 #
+detect_dhcp_srv_in_lan() {
+  # Return global variable "use_existing_dhcp_srv"
+  local eth_port dhcp_detect_bond_tmp dhcp_find_rc
+  eth_port="$(LC_ALL=C get-nic-devs | head -n 1)"
+  dhcp_detect_bond_tmp="$(mktemp /tmp/dhcp_detect_bond_tmp.XXXXXX)"
+  dhcp_find_rc=1
+  echo "Trying to find if existing DHCP service available on local network via ${eth_port}..."
+  while [ "$dhcp_find_rc" -ne 0 ]; do
+    drbl-find-dhcp-srv -i $eth_port $dhcp_detect_bond_tmp
+    dhcp_find_rc=$?
+    if [ "$dhcp_find_rc" -ne 0 ]; then
+      echo
+      echo "$msg_failed_to_find_any_dhcp_srv: $eth_port"
+      echo "$msg_do_u_want_to_do_it_again"
+      echo -n "[Y/n] "
+      read try_dhcp_again
+      case "$try_dhcp_again" in
+        n|N|[nN][oO])
+           echo "$msg_program_stop"
+           dhcp_find_rc=0
+           ;;
+        *)
+           echo "$msg_ok_let_do_it"
+           dhcp_find_rc=1
+           ;;
+      esac
+    fi
+  done
+  . $dhcp_detect_bond_tmp
+  # Example for file dhcp_detect_bond_tmp:
+  # DHCPOFFER_eth="eth0"
+  # DHCPOFFER_siaddr="192.168.22.254"
+  # DHCPOFFER_yiaddr="192.168.22.3"
+  # DHCPOFFER_netmask="255.255.255.0"
+  # DHCPOFFER_prefix="24"
+  rm -f $dhcp_detect_bond_tmp
+  if [ -n "$DHCPOFFER_siaddr" ]; then
+    echo $msg_delimiter_star_line
+    echo "$msg_found_dhcp_service_on_nic: $DHCPOFFER_eth"
+    echo "$msg_do_you_want_to_lease_ip_addr_from_existing_dhcp_srv: $DHCPOFFER_siaddr"
+    echo "$msg_will_use_available_ip_addr_from_dhcp_srv"
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+    echo "$msg_note_you_have_to_make_sure_enough_no_of_ip_addr"
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+    echo -n "[Y/n] "
+    read use_existing_dhcp_srv_ans
+    case "$use_existing_dhcp_srv_ans" in
+       n|N|[nN][oO]) use_existing_dhcp_srv="no" ;;
+       *) use_existing_dhcp_srv="yes" ;;
+    esac
+  fi
+} # end of detect_dhcp_srv_in_lan
+#
 config_drbl_live_network(){
   local eth_port_no configured_ip_no eth_port configured_port_list configured_ip_no 
   local IP_no dhcp_detect_bond_tmp DHCPOFFER_netmask DHCPOFFER_prefix dhcp_find_rc
@@ -2391,54 +2444,7 @@ config_drbl_live_network(){
     [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
     echo "Only one network interface was found and configured."
     [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
-    eth_port="$(LC_ALL=C get-nic-devs | head -n 1)"
-    dhcp_detect_bond_tmp="$(mktemp /tmp/dhcp_detect_bond_tmp.XXXXXX)"
-    dhcp_find_rc=1
-    echo "Trying to find if existing DHCP service available on local network via ${eth_port}..."
-    while [ "$dhcp_find_rc" -ne 0 ]; do
-      drbl-find-dhcp-srv -i $eth_port $dhcp_detect_bond_tmp
-      dhcp_find_rc=$?
-      if [ "$dhcp_find_rc" -ne 0 ]; then
-        echo
-        echo "$msg_failed_to_find_any_dhcp_srv: $eth_port"
-	echo "$msg_do_u_want_to_do_it_again"
-	echo -n "[Y/n] "
-	read try_dhcp_again
-        case "$try_dhcp_again" in
-          n|N|[nN][oO])
-             echo "$msg_program_stop"
-             dhcp_find_rc=0
-             ;;
-          *)
-             echo "$msg_ok_let_do_it"
-             dhcp_find_rc=1
-             ;;
-        esac
-      fi
-    done
-    . $dhcp_detect_bond_tmp
-    # Example for file dhcp_detect_bond_tmp:
-    # DHCPOFFER_eth="eth0"
-    # DHCPOFFER_siaddr="192.168.22.254"
-    # DHCPOFFER_yiaddr="192.168.22.3"
-    # DHCPOFFER_netmask="255.255.255.0"
-    # DHCPOFFER_prefix="24"
-    rm -f $dhcp_detect_bond_tmp
-    if [ -n "$DHCPOFFER_siaddr" ]; then
-      echo $msg_delimiter_star_line
-      echo "$msg_found_dhcp_service_on_nic: $DHCPOFFER_eth"
-      echo "$msg_do_you_want_to_lease_ip_addr_from_existing_dhcp_srv: $DHCPOFFER_siaddr"
-      echo "$msg_will_use_available_ip_addr_from_dhcp_srv"
-      [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
-      echo "$msg_note_you_have_to_make_sure_enough_no_of_ip_addr"
-      [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
-      echo -n "[Y/n] "
-      read use_existing_dhcp_srv_ans
-      case "$use_existing_dhcp_srv_ans" in
-         n|N|[nN][oO]) use_existing_dhcp_srv="no" ;;
-         *) use_existing_dhcp_srv="yes" ;;
-      esac
-    fi
+    detect_dhcp_srv_in_lan
 
     if [ "$use_existing_dhcp_srv" = "yes" ]; then
       # Add a virtual network device on physical net device
@@ -4629,6 +4635,7 @@ gen_dnsmasq_cfg() {
   local srv_cfg="$1"
   local gen_mode="proxy"  # default mode is proxy
   local dnsmasq_v pxelinux_fn
+  local allow_1_nic="no" # By default should be in DRBL mode, i.e., 2 or more NICs.
   if [ -z "$srv_cfg" ]; then
     [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
     echo "No config file assigned in function gen_dnsmasq_cfg!"
@@ -4638,6 +4645,7 @@ gen_dnsmasq_cfg() {
   fi
   while [ $# -gt 0 ]; do
     case "$1" in
+      -a|--allow-1-nic) allow_1_nic="yes"; shift;;
       -r|--range)
           shift; gen_mode="range"
           if [ -z "$(echo $1 |grep ^-.)" ]; then
@@ -4668,7 +4676,10 @@ DNSMQSQ_END
     proxy) all_eth_dev="$(LC_ALL=C get-all-nic-ip -d)"
            uplink_eth="$(LC_ALL=C get-all-nic-ip -u)"
            for inet in $all_eth_dev; do
-             [ "$inet" = "$uplink_eth" ] && continue
+             if [ "$allow_1_nic" = "no" ]; then
+               # Do not allow 1 NIC, so skip if uplink is the same with all NIC.
+               [ "$inet" = "$uplink_eth" ] && continue
+             fi
              ip="$(LC_ALL=C drbl-get-ipadd $inet)"
              echo "dhcp-range=$ip,proxy" >> $dnsmasq_cfg
            done
