@@ -12,6 +12,8 @@
 DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/usr/share/drbl}"
 
 . $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
+. /etc/drbl/drbl-ocs.conf
+. $DRBL_SCRIPT_PATH/sbin/ocs-functions
 
 # Settings
 timeout_def="30"
@@ -163,6 +165,45 @@ DHCP_END
   done
   return $rc_
 } # end of get_dhcpsrv_info_from_nmap
+#
+get_dhcpsrv_info_from_udhcpc(){
+  local dhcp_srv_ip dhcp_client_ip rc_
+  local eth_
+  eth_="$1"
+  rc_="1"
+  # Check if busybox supports udhcpc
+  if [ -z "$(LC_ALL=C busybox 2>/dev/null | grep -Ewo "udhcpc")" ]; then
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+    echo "Busybox does not porvide applet udhcpc!"
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+    return 1
+  fi
+  # Generate the script for udhcpc to run
+  # Try 5 times
+  # The output file for udhcpc-find-dhcp-record: udhdpc_query_result is defined in drbl.conf
+  ocs_log_rotate $udhdpc_query_result
+  busybox udhcpc -t 5 -n -q -s $DRBL_SCRIPT_PATH/bin/udhcpc-find-dhcp-record -i $eth_ >/dev/null 2>&1 &
+  time_left="$timeout"
+  while [ "$time_left" -ne 0 ]; do
+    echo -n "$time_left "
+    dhcp_srv_ip=""
+    dhcp_client_ip=""
+    [ -e "$udhdpc_query_result" ] && . $udhdpc_query_result
+    dhcp_srv_ip="$DHCPOFFER_siaddr"
+    dhcp_client_ip="$DHCPOFFER_yiaddr"
+    if [ -n "$dhcp_srv_ip" -a -n "$dhcp_client_ip" ]; then
+      echo
+      echo "Found DHCP service. Ethernet card, DHCP server, Available DHCP client: $eth_, $dhcp_srv_ip, $dhcp_client_ip"
+      rc_=0
+      # Save the output file before exiting
+      cp -a $udhdpc_query_result $out_f
+      break
+    fi
+    sleep 1
+    time_left="$((time_left - 1))" 
+  done
+  return $rc_
+} # end of get_dhcpsrv_info_from_udhcpc
 
 ####################
 ### Main program ###
@@ -237,13 +278,19 @@ for ieth in $eth_port; do
   # Clean content first.
   > $dhcp_req_result
   echo -n "Detecting DHCP services... "
-  get_dhcpsrv_info_from_nmap $ieth $dhcp_req_result
+  get_dhcpsrv_info_from_udhcpc $ieth $dhcp_req_result
   rc=$?
   if [ "$rc" -ne 0 ]; then
     echo ""
-    echo "Trying another method, i.e., Nagios one..."
-    get_dhcpsrv_info_from_nagios $ieth $dhcp_req_result
+    echo "Trying another method, i.e., Nmap way..."
+    get_dhcpsrv_info_from_nmap $ieth $dhcp_req_result
     rc=$?
+    if [ "$rc" -ne 0 ]; then
+      echo ""
+      echo "Trying another method, i.e., Nagios way..."
+      get_dhcpsrv_info_from_nagios $ieth $dhcp_req_result
+      rc=$?
+    fi
   fi
 done
 
