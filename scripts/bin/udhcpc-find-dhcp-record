@@ -1,0 +1,20 @@
+#!/bin/bash
+#!/bin/bash
+# License: GPL 
+# Author: Steven Shiau <steven _at_ clonezilla org>
+# Description: Script to be run with busybox udhcpc.
+# Ref: https://udhcp.busybox.net/README.udhcpc for the variables used in udhcpc script
+# Load DRBL setting and functions
+DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/usr/share/drbl}"
+
+. $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
+
+# Because the script for udhdpc does not accept input options, we have to hardcode the output file.
+# The output file udhdpc_query_result is defined in drbl.conf
+cat <<-DHCP_END > $udhdpc_query_result
+DHCPOFFER_eth="$interface"
+DHCPOFFER_siaddr="$serverid"
+DHCPOFFER_yiaddr="$ip"
+DHCPOFFER_netmask=""
+DHCPOFFER_prefix=""
+DHCP_END
