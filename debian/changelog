@@ -1,3 +1,19 @@
+drbl (2.24.12-drbl1) unstable; urgency=medium
+
+  * Update language file zh_TW.UTF-8. Jfbterm crashes due to shown "，"
+    and long description in zh_TW.UTF-8 in the console promt.
+    Replace "，" with "," for
+    msg_note_you_have_to_make_sure_enough_no_of_ip_addr.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 29 May 2017 17:23:42 +0800
+
+drbl (2.24.11-drbl1) unstable; urgency=medium
+
+  * Implement a better way in drbl-find-dhcp-srv to detect
+    DHCP service based on busybox udhcpc.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Thu, 25 May 2017 10:28:58 +0800
+
 drbl (2.24.10-drbl1) unstable; urgency=medium
 
   * Separate detect_dhcp_srv_in_lan in drbl-functions.

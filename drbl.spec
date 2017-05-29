@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.24.10
+Version:	2.24.12
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,16 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Mon May 29 2017 Steven Shiau <steven _at_ nchc org tw> 2.24.12-drbl1
+  * Update language file zh_TW.UTF-8. Jfbterm crashes due to shown "，"
+    and long description in zh_TW.UTF-8 in the console promt.
+    Replace "，" with "," for
+    msg_note_you_have_to_make_sure_enough_no_of_ip_addr.
+
+* Thu May 25 2017 Steven Shiau <steven _at_ nchc org tw> 2.24.11-drbl1
+  * Implement a better way in drbl-find-dhcp-srv to detect
+    DHCP service based on busybox udhcpc.
+
 * Wed May 24 2017 Steven Shiau <steven _at_ nchc org tw> 2.24.10-drbl1
   * Separate detect_dhcp_srv_in_lan in drbl-functions.
     Add option -a|--allow-1-nic to function gen_dnsmasq_cfg in
