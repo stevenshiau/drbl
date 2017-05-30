@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.24.12
+Version:	2.24.13
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,10 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Tue May 30 2017 Steven Shiau <steven _at_ nchc org tw> 2.24.13-drbl1
+  * Bug fixed: dnsmasq.conf with proxy settings should be only created
+    when proxy mode is required. Not to be created by default.
+
 * Mon May 29 2017 Steven Shiau <steven _at_ nchc org tw> 2.24.12-drbl1
   * Update language file zh_TW.UTF-8. Jfbterm crashes due to shown "，"
     and long description in zh_TW.UTF-8 in the console promt.
