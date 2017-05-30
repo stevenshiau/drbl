@@ -1986,6 +1986,7 @@ CLIENT_IP_HOSTNAME_LIST="$CLIENT_IP_HOSTNAME_LIST"
 drbl_server_as_NAT_server="$drbl_server_as_NAT_server"
 add_start_drbl_services_after_cfg="$add_start_drbl_services_after_cfg"
 continue_with_one_port="$continue_with_one_port"
+use_proxy_dhcp="$use_proxy_dhcp"
 ##################################
 # End of global setting
 ##################################
@@ -2149,7 +2150,10 @@ done
 
 cp -f dhcpd.conf $DHCPDCONF_DIR/
 # Generate the dnsmasq config file
-gen_dnsmasq_cfg $dnsmasq_cfg
+if [ "$use_proxy_dhcp" = "yes" ]; then
+  # Only create dnsmasq.conf when use_proxy_dhcp is set as yes.
+  gen_dnsmasq_cfg $dnsmasq_cfg
+fi
 
 cp -f mkswapfile $SYSCONF_PATH/mkswapfile
 
@@ -3560,7 +3564,7 @@ if [ -e /etc/debian_version ]; then
   # Do not clean or remove etc/mtab when boots, and force not to update etc/mtab
   if [ -e $drbl_common_root/etc/init.d/checkroot.sh ]; then
     perl -pi -e 's|^([[:space:]]*:> $MTAB_PATH.*)|#$1 # Modified by DRBL|' $drbl_common_root/etc/init.d/checkroot.sh
-    perl -pi -e 's|^([[:space:]]*rm -f \${MTAB_PATH}~.*)|#$1 # Modified by DRBL|' $drbl_common_root/etc/init.d/checkroot.sh
+    perl -pi -e 's|^([[:space:]]*rm -f \$\{MTAB_PATH\}~.*)|#$1 # Modified by DRBL|' $drbl_common_root/etc/init.d/checkroot.sh
     perl -pi -e 's|^([[:space:]]*)INIT_MTAB_FILE=yes|$1 INIT_MTAB_FILE=no # Modified by DRBL|' $drbl_common_root/etc/init.d/checkroot.sh
   fi
   if [ -e $drbl_common_root/etc/init.d/checkfs.sh ]; then
