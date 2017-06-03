@@ -1,3 +1,10 @@
+drbl (2.24.14-drbl1) unstable; urgency=medium
+
+  * Language files es_ES for both bash and perl was updated. Thanks to 
+    Juan Ramón Martínez (jrmc_77 _at_ hotmail com)
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sat, 03 Jun 2017 15:44:11 +0800
+
 drbl (2.24.13-drbl1) unstable; urgency=medium
 
   * Bug fixed: dnsmasq.conf with proxy settings should be only created
