@@ -255,10 +255,10 @@ $lang_charset = 'iso-8859-1';
    # Tag on 2017/01/26
    only_one_network_card_in_system => "///ATENCIÓN/// Sólo se ha encontrado una tarjeta de red configurada en este equipo.",
    found_dhcp_service_on_nic => "Servicio DHCP encontrado en esta interfaz de red",
-   do_you_want_to_lease_ip_addr_from_existing_dhcp_srv => "¿Quieres obtener la dirección IP del servicio DHCP existente? La dirección IP del servidor DHCP es",
+   do_you_want_to_lease_ip_addr_from_existing_dhcp_srv => "¿Quiere obtener la dirección IP del servicio DHCP existente? La dirección IP del servidor DHCP es",
    will_use_available_ip_addr_from_dhcp_srv => "'En ese caso, nosotros utilizaremos la dirección IP disponible obtenida del servidor DHCP. En caso contrario, nosotros lanzaremos un servicio DHCP en esta máquina, lo que puede entrar en conflicto con el existente. Por lo tanto se recomienda seleccionar sí.",
-   note_you_have_to_make_sure_enough_no_of_ip_addr => "//NOTA// Si seleccionas sí, tienes que estar seguro de que tu servidor DHCP provee suficiente número de direcciones IP para todos los clientes. Además, este mecanismo tiene riesgo debido a que todos los PXE o clientes de arranque de red uEFI entrarán en DRBL o modo Clonezilla. Por favor estate seguro de que esto es lo que tú quieres.",
+   note_you_have_to_make_sure_enough_no_of_ip_addr => "//NOTA// Si selecciona sí, tiene que estar seguro de que su servidor DHCP provee suficiente número de direcciones IP para todos los clientes. Además, este mecanismo tiene riesgo debido a que todos los PXE o clientes de arranque de red uEFI entrarán en DRBL o modo Clonezilla. Por favor asegúrese de que esto es lo que quiere.",
    failed_to_detect_dhcp_service => "Falló el encontrar un servicio DHCP en esta tarjeta de red",
-   do_you_want_to_try_it_again => "¿Quieres intentarlo de nuevo?",
+   do_you_want_to_try_it_again => "¿Quiere intentarlo de nuevo?",
    mark_the_end_of_lang =>"."
    );
