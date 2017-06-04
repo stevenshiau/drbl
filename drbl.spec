@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.24.14
+Version:	2.24.16
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,14 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Sun Jun 04 2017 Steven Shiau <steven _at_ nchc org tw> 2.24.16-drbl1
+  * Add alsa-utils to Clonezilla live.
+
+* Sun Jun 04 2017 Steven Shiau <steven _at_ nchc org tw> 2.24.15-drbl1
+  - Add package espeakup in Clonezilla/DRBL live. Thanks to 
+    Nick Gawronski (nick _at_ nickgawronski com) for suggesting
+    this for the blind to use Clonezilla live.
+
 * Sat Jun 03 2017 Steven Shiau <steven _at_ nchc org tw> 2.24.14-drbl1
   - Language files es_ES for both bash and perl was updated. Thanks to 
     Juan Ramón Martínez (jrmc_77 _at_ hotmail com)

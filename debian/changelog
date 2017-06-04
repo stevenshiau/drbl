@@ -1,3 +1,17 @@
+drbl (2.24.16-drbl1) unstable; urgency=medium
+
+  * Add alsa-utils to Clonezilla live.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sun, 04 Jun 2017 22:16:55 +0800
+
+drbl (2.24.15-drbl1) unstable; urgency=medium
+
+  * Add package espeakup in Clonezilla/DRBL live. Thanks to 
+    Nick Gawronski (nick _at_ nickgawronski com) for suggesting
+    this for the blind to use Clonezilla live.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sun, 04 Jun 2017 12:49:24 +0800
+
 drbl (2.24.14-drbl1) unstable; urgency=medium
 
   * Language files es_ES for both bash and perl was updated. Thanks to 
