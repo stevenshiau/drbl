@@ -4699,7 +4699,9 @@ DNSMQSQ_END
     [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
     return 1
   fi
-  if [ "$dnsmasq_v" \> "2.75" -o "$dnsmasq_v" = "2.75" ]; then
+  # dnsmasq version >= 2.76 will not append ".0" to basename.
+  # Ref: http://www.thekelleys.org.uk/dnsmasq/CHANGELOG (search basename)
+  if [ "$dnsmasq_v" \> "2.75" -o "$dnsmasq_v" = "2.76" ]; then
     pxelinux_fn="pxelinux.0"
   else
     pxelinux_fn="pxelinux"
