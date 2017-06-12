@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.25.2-drbl1) unstable; urgency=medium
+
+  * Collected MAC address file with NIC device name not in the form eth*
+    was not copied to /etc/drbl/ by drblpush.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 12 Jun 2017 16:37:48 +0800
+
 drbl (2.25.1-drbl1) unstable; urgency=medium
 
   * Language file hu_HU was updated. Thanks to Greg Marki.
