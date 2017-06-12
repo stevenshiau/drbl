@@ -134,8 +134,8 @@ require "$DRBL_SCRIPT_PATH/sbin/drbl-perl-functions";
 
 chomp($orig_wd=`LC_ALL=C pwd`);
 chomp($drblpush_wd=`LC_ALL=C mktemp -d /tmp/drblpush_wd.tmp.XXXXXX`);
-# before changing to working directory, we copy the macadr-eth* into working dir
-system("cp -f macadr-eth*.txt $drblpush_wd > /dev/null 2>&1");
+# before changing to working directory, we copy the macadr-* into working dir
+system("cp -f macadr-*.txt $drblpush_wd > /dev/null 2>&1");
 chdir ($drblpush_wd) || die ("Could not change to new working directory!!!");
 
 sub set_client_public_ip {
@@ -1750,7 +1750,7 @@ sub drbl_server_parse {
         print "$delimiter{\"dash_line\"}\n";
     }
     # check MAC address files
-    if ("$collect_mac" eq "yes" ){ check_MAC_file("$drbl_syscfg","macadr-eth"); }
+    if ("$collect_mac" eq "yes" ){ check_MAC_file("$drbl_syscfg","macadr-"); }
   }
 
   #
@@ -2183,7 +2183,7 @@ echo "done!"
 if [ "$collect_mac" = "yes" ]; then
   echo -n "Backuping the old MAC address files... "
   now=$(date +%F-%k-%M)
-  find $drbl_syscfg -name "macadr-eth*.txt" -exec mv {} {}.saved_$now \;
+  find $drbl_syscfg -name "macadr-*.txt" -exec mv {} {}.saved_$now \;
   echo "done!"
 fi
 
@@ -3434,7 +3434,7 @@ CONFIG_END
 
 # copy the collected MAC addresses to drbl sysconfig
 if [ "$collect_mac" = "yes" ]; then
-  cp -f macadr-eth*.txt $drbl_syscfg/ &> /dev/null
+  cp -f macadr-*.txt $drbl_syscfg/ &> /dev/null
 fi
 
 # write the resolv.conf
@@ -4993,7 +4993,7 @@ if ("$mode" eq "create_config_file") {
        # public IP setting
        system("[ -f $drbl_syscfg/$public_ip_list ] && cp -f $drbl_syscfg/$public_ip_list $public_ip_list");
        # MAC address files
-       system("cp -f $drbl_syscfg/macadr-eth*.txt . > /dev/null 2>&1");
+       system("cp -f $drbl_syscfg/macadr-*.txt . > /dev/null 2>&1");
 
 }
 unless ( $config_file ) { die "$usage\n"; }
