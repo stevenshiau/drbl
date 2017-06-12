@@ -1,3 +1,15 @@
+drbl (2.25.1-drbl1) unstable; urgency=medium
+
+  * Language file hu_HU was updated. Thanks to Greg Marki.
+    Language file ja_JP.UTF-8 was updated. Thanks to Akira YOSHIYAMA.
+    Language file tr_TR updated. Thanks to Volkan Gezer.
+    Language file de_DE was updated. Thanks to Michael Vinzenz.
+    Language file fr_FR was updated. Thanks to Jean-Francois Nifenecker.
+    Language file it_IT was updated. Thanks to Gianfranco Gentili.
+  * Add stretch in Debian netinstall list.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 12 Jun 2017 13:49:53 +0800
+
 drbl (2.24.16-drbl1) unstable; urgency=medium
 
   * Add alsa-utils to Clonezilla live.
