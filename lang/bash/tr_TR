@@ -1074,3 +1074,10 @@ msg_how_to_run_dhcpd='DHCP nasıl çalıştırılmalı? "auto-dhcpd" modu için,
 msg_auto_detect_dhcpd='DHCP hizmetini otomatik algıla'
 msg_use_existing_dhcpd='LAN üzerindeki mevcut DHCP hizmetini kullan'
 msg_start_new_dhcpd='LAN üzerinde yeni DHCP hizmeti başlat'
+# Tag on 2017/06/13
+msg_ocs_live_mount_smb_protocol_ver='Which version of SMB protocol do you want? If not sure, try the default one (v1.0).'
+msg_ocs_use_smbv1_0='SMB protocol 1.0'
+msg_ocs_use_smbv2_0='SMB protocol 2.0'
+msg_ocs_use_smbv2_1='SMB protocol 2.1'
+msg_ocs_use_smbv3_0='SMB protocol 3.0'
+msg_you_must_select_a_ver='You must select a version!'

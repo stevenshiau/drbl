@@ -1075,3 +1075,10 @@ msg_how_to_run_dhcpd='How to run the DHCP service? For "auto-dhcpd" mode, Clonez
 msg_auto_detect_dhcpd='Detect DHCP service automatically'
 msg_use_existing_dhcpd='Use existing DHCP service in LAN'
 msg_start_new_dhcpd='Start new DHCP service in LAN'
+# Tag on 2017/06/13
+msg_ocs_live_mount_smb_protocol_ver='Which version of SMB protocol do you want? If not sure, try the default one (v1.0).'
+msg_ocs_use_smbv1_0='SMB protocol 1.0'
+msg_ocs_use_smbv2_0='SMB protocol 2.0'
+msg_ocs_use_smbv2_1='SMB protocol 2.1'
+msg_ocs_use_smbv3_0='SMB protocol 3.0'
+msg_you_must_select_a_ver='You must select a version!'
