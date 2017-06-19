@@ -2,7 +2,7 @@
 # Written by Steven Shiau <steven _at_ nchc org tw> to use in DRBL 
 # License: GPL
 # Merged some of those revised by Dylan Pack <sarpulhu _at_ gmail com> on 26/Feb/2009.
-# Translated by Ondrej Dzivy Balucha <balucha _at_ horizon sk> on 2014/05/29.
+# Translated by Ondrej Dzivy Balucha <ondrej _at_ odb sk> on 2017/06/18.
 
 #-----------------------------------------
 # some words
@@ -1012,7 +1012,7 @@ msg_which_dir_as_clonezilla_img_home='Vyberte adresár pre(s) Clonezilla obraz(o
 msg_path_on_the_resource='Path on the resource'
 msg_current_selected_dir_name='Aktuálne vybraný adresár'
 msg_when_current_selected_dir_name_is_ok='Keď "Aktuálne vybraný adresár" je ten, ktorý chcete, použite "Tab" klávesu pre vybratie možnosti "Hotovo"'
-msg_not_chosing_CZ_IMG_dir='//Poznámka// You should not choose the directory tagged with CZ_IMG. They are just for you to know the images list in the current dir.'
+msg_not_chosing_CZ_IMG_dir='//Poznámka// Nemali by ste vybrať adresáre označené s CZ_IMG. Tieto sú len pre vás aby ste videli zoznam obrazov v aktuálnom adresári.'
 msg_no_any_image_found='V tomto adresári sa nenachádza žiaden obraz'
 msg_this_directory_is_not_mountpoint='Tento adresár nieje prípojným bodom'
 msg_there_is_no_way_to_mount_subdirectory='Nieje možné primontovať podadresár.'
@@ -1029,54 +1029,54 @@ msg_ocs_param_p_choose_1='Vybrať akciu (vypnúť/reštartovať/...) až po doko
 msg_remove_source_or_destination_disk_after_cloning='///Poznámka/// Nezabudnite odpojiť zdrojový disk alebo cieľový naklonovaný disk pred nabootovaním tohto počítača.'
 msg_2_identical_systems_will_confuse_restored_os='Pretože ak dva identické systémy existujú na jedno počítači, tak obnovený operačný systém bude zmätený a bootovanie môže zlyhať.'
 # Tag on 2016/11/01
-msg_warning_selinux_is_enabled='Warning! SELinux on this system is enabled! If you have no idea how to configure it for DRBL server, before going on, please (1) Disable it by setting "SELINUX=disabled" in /etc/selinux/config, (2) Reboot the system (3) Run drblsrv program again.'
+msg_warning_selinux_is_enabled='Varovanie! SELinux je na tomto systéme aktívny! Ak nemáte predstavu ako ho nakonfigurovať pre DRBL server, pred pokračovaním, prosím (1) Deaktivujte ho nastavením "SELINUX=disabled" v /etc/selinux/config, (2) Reštartujte systém (3) Spusťte drblsrv program znovu.'
 # Tag on 2016/12/06
-msg_bittorent_restore="bittorrent restore"
+msg_bittorent_restore="bittorrent obnova"
 # Tag on 2017/01/03
 msg_ocs_param_noabo='Image not only accessible by owner'
 # Tag on 2017/01/24
-msg_found_dhcp_service_on_nic='Found DHCP service on this network interface'
-msg_do_you_want_to_lease_ip_addr_from_existing_dhcp_srv='Do you want to lease IP address from the existing DHCP service? The DHCP server IP address is'
-msg_will_use_available_ip_addr_from_dhcp_srv='If so, we will use the available IP address leased from DHCP server. If not, we will run a DHCP service in this machine, which might conflict with the existing one. Therefore it is recommended to choose yes.'
-msg_note_you_have_to_make_sure_enough_no_of_ip_addr='//NOTE// If you choose "yes", you have to make sure your DHCP server provides enough number of IP address for all the clients. Besides, this mechanism is risky because all the PXE or uEFI network booting clients will enter DRBL or Clonezilla mode. Please make sure this is what you want.'
-msg_failed_to_find_any_dhcp_srv='Failed to find any DHCP service on this network card'
+msg_found_dhcp_service_on_nic='Nájdený DHCP server na sieťovej karte'
+msg_do_you_want_to_lease_ip_addr_from_existing_dhcp_srv='Chcete získať IP adresu z existujúceho DHCP servera? IP adresa DHCP servera je'
+msg_will_use_available_ip_addr_from_dhcp_srv='Ak áno, použije sa IP adresa získaná z DHCP servera. Ak nie, spustí sa DHPC server na tom stroji, ktorý ale môže byť v konflikte s existujúcim DHCP serverom. Preto je odporúčané vybrať možnosť áno.'
+msg_note_you_have_to_make_sure_enough_no_of_ip_addr='//POZNÁMKA// Ak ste si vybrali 'áno', uistite sa, že DHCP server má dostatok IP adries pre všetkých klientov. Taktiež, tento mechanizmus je nebezpečný, pretože všetci PXE alebo uEFI sieťoví klienti nabootujú do DRBL alebo Clonezilla módu. Prosím uistite sa, že to je to, čo chcete.'
+msg_failed_to_find_any_dhcp_srv='Nebol nájdený žiaden DHCP server na tejto sieťovej karte'
 # Tag on 2017/03/02
-msg_say_no_to_manually_config_it='If you say no, you will have a chance to manually configure it later.'
-msg_do_you_want_to_manually_configure_it='Do you want to manually configure the network settings for virtual network device drbl0'
-msg_what_is_the_ip_add_for_virtual_nic_drbl0='What is the IP address and prefix for virtual network interface drbl0? The format is like: 192.168.167.101/24'
-msg_your_input_config_is='The setting you have entered is'
-msg_is_that_correct='Is that correct?'
+msg_say_no_to_manually_config_it='Ak si vyberiete nie, budete mať neskôr možnosť nastaviť to.'
+msg_do_you_want_to_manually_configure_it='Chcete manuálne nakonfigurovať virtuálne sieťové rozhranie drbl0'
+msg_what_is_the_ip_add_for_virtual_nic_drbl0='Aká je IP adresa a prefix pre virtuálne sieťové rozhranie drbl0? Formát je v tvare: 192.168.167.101/24'
+msg_your_input_config_is='Nastavenie, ktoré ste zadali je'
+msg_is_that_correct='Je to v poriadku?'
 # Tag on 2017/04/09
-msg_ocs_live_lite_server_des='Clonezilla live lite server is a Clonezilla service mode, which runs multicast/broadcast service for client machines. Therefore it is easier to use in the existing network enviornment because it can just fit the network environment without changing any existing network settings in LAN. If you use this in an isolated network environment without any communication with upstream, this lite server will runs its own DHCP and PXE service. You can boot the client machines with the same version of Clonezilla live, either by using CD/USB flash drive or PXE to restore the image provided by this lite server.'
-msg_failed_to_get_file_from_this_URL='Failed to fetch file from this URL'
-msg_boot_client_with_same_version_clonezilla_live='Now boot the clients with the same version of Clonezilla live, then run "sudo ocs-live-get-img", follow the wizard to configure its network, and assign the server as'
-msg_append_parameter_for_unattended_mode="If you want to boot Clonezilla live in unattended mode, you can assign these options in boot parameters"
-msg_client_program_is_run_on_lite_server="It looks like you are running the client restoring program on Clonezilla live lite server."
-msg_connect_to_upstream_network='This machine will connect to upstream network'
-msg_in_isolated_environment='This machine will be in an isolated network environment'
-msg_clonezilla_live_lite_server='Enter Clonezilla live lite server'
-msg_clonezilla_live_lite_client='Enter Clonezilla live lite client'
-msg_start_clonezilla_live_lite_server='Start Clonezilla live lite server'
-msg_stop_clonezilla_live_lite_server='Stop Clonezilla live lite server'
-msg_convert_encrypted_img_not_supported='Converting encrypted image to bittorrent slice files is not supported.'
-msg_if_boot_from_locaL_media='If you want to boot client machines with CD or USB flash drive'
-msg_remote_clone_source='Enter source mode of remote device cloning'
-msg_remote_clone_destination='Enter destination mode of remote device cloning'
-msg_now_wait_for_client_to_connect='Now waiting for clients to connect...'
-msg_now_run_this_cmd_in_target_machine='Now you can boot the destination machine via Clonezilla live, then enter clonezilla mode, and choose "remote-dest" then follow the wizard, or you can run the following command(s) on the destination machine to start the remote cloning'
-msg_insert_storage_dev_now='You can insert storage device into this machine now if you want to use that, then wait for it to be detected.'
-msg_which_mode_for_client_boot='How will you boot your client machines?'
-msg_boot_client_with_network='Boot client with network boot, e.g., PXE or uEFI network boot'
-msg_boot_with_local_media='Clients boot from local media, like USB stick or CD'
-msg_boot_client_with_network_and_local_media='Clients boot from both network and local media'
-msg_how_to_run_dhcpd='How to run the DHCP service? For "auto-dhcpd" mode, Clonezilla will detect if there is a DHCP service existing in the LAN. For "use-existing-dhcpd" mode, the existing DHCP service in the LAN will be used. Hence you have to make sure the existing DHCP service is well configured, and it provides enough IP addresses for your clients. For "start-new-dhcpd" mode, a new DHCP service will be started for network booting mechanism in the LAN. If you choose "start-new-dhcpd" mode, you have to make sure there is no existing DHCP service in the LAN otherwise the DHCP services will conflict with each other.'
-msg_auto_detect_dhcpd='Detect DHCP service automatically'
-msg_use_existing_dhcpd='Use existing DHCP service in LAN'
-msg_start_new_dhcpd='Start new DHCP service in LAN'
+msg_ocs_live_lite_server_des='Clonezilla live lite server je Clonezilla service mód, v ktorom beží multicast/broadcast služba pre klientské zariadenia. Je ho možné jednoduchšie použiť v existujúcom sieťovom prostredí pretože vie fungovať bez potreby čokoľvek meniť v existujúcom nastavení LAN. Ak ho ppoužijete v izolovanom sieťovom prostredí bez možnej komunikácie mimo neho, na tomto lite serveri bude spustená DHCP a PXE služba. Môžte nabootovať klientské zariadenia s rovnakou verziou Clonezilla live buď použitím CD/USB flash disku alebo PXE pre obnovu obrazu poskytnutého týtmto lite serverom.'
+msg_failed_to_get_file_from_this_URL='Získanie súboru z tejto URL zlyhalo'
+msg_boot_client_with_same_version_clonezilla_live='Teraz nabootujte klientov s rovnakou verziou Clonezilla live, následne spusťte "sudo ocs-live-get-img", nasledujte sprievodcu pre nakonfigurovanie ich siete, a nastavte server ako'
+msg_append_parameter_for_unattended_mode="Ak chcete nabootovať Clonezilla live v bezobslužnom móde, pridajte tieto voľby/parametre do bootovacích paramterov"
+msg_client_program_is_run_on_lite_server="Vizerá to, že beží klientský obnovovací program na Clonezilla live lite serveri."
+msg_connect_to_upstream_network='Toto zariadenie sa pripojí doThis machine will connect to upstream network'
+msg_in_isolated_environment='Toto zariadenie bude v izolovanom sieťovom prostredí'
+msg_clonezilla_live_lite_server='Zadajte Clonezilla live lite server'
+msg_clonezilla_live_lite_client='Zadajte Clonezilla live lite klienta'
+msg_start_clonezilla_live_lite_server='Spustiť Clonezilla live lite server'
+msg_stop_clonezilla_live_lite_server='Zastaviť Clonezilla live lite server'
+msg_convert_encrypted_img_not_supported='Konverzia zašifrovaného obrazu na bittorrent slice súbory nieje podporované.'
+msg_if_boot_from_locaL_media='Ak chcete chcete nabootovať klientske zariadenia s CD alebo USB flash didkom'
+msg_remote_clone_source='Zadajte zdrojový mód pre klonovanie vzdialeného zariadenia'
+msg_remote_clone_destination='Zadajte cieľový mód pre klonovanie vzdialeného zariadenia'
+msg_now_wait_for_client_to_connect='Čakám na pripojenie klientov...'
+msg_now_run_this_cmd_in_target_machine='Teraz môžte nabootovať cieľové zariadenie pomocou Clonezilla live, následne zadajte clonezilla mód a vyberte "remote-dest" , následne nasledujte sprievodcu alebo môžte spustiť nasledujúci príkaz(y) na cieľovom zariadení pre začatie vzdialeného klonovania'
+msg_insert_storage_dev_now='Teraz môžte zapojiť disk do tohot zariadenia ak ho chcete použiť, následne čakajte kým ho systém nenájde.'
+msg_which_mode_for_client_boot='Ako budete bootovať klientské zariadenia?'
+msg_boot_client_with_network='Klienti budú bootovať cez sieť, pomocou PXE alebo uEFI'
+msg_boot_with_local_media='Klienti budú bootovať z lokálneho média ako pnapríklad USB klúč alebo CD'
+msg_boot_client_with_network_and_local_media='Klienti budú bootovať oboma spôsobmi, aj cez sieť aj z lokálneho média'
+msg_how_to_run_dhcpd='V akom móde sa má spustiť DHCP server? V "auto-dhcpd" móde sa Clonezilla bude snažiť zistiť, či na LAN nieje dostupný nejaký DHCP server. V "use-existing-dhcpd" móde sa použije existujúci DHCP server v LAN. Mali by ste sa uistiť, či daný DHCP server je dobre nakonfigurovaný a je schopný poskytnúť dostatok IP adries pre vašich klientov. V "start-new-dhcpd" móde, bude pre účely bootovania cez sieť spustený nový DHCP server. Ak si vyberiete "start-new-dhcpd" mód,  mali by ste sa uistiť, že v LAN nieje žiaden iný DHCP server. Ináč budú v konflikte.'
+msg_auto_detect_dhcpd='Detekovať DHCP server automaticky'
+msg_use_existing_dhcpd='Použiť existujúci DHCP server v LAN'
+msg_start_new_dhcpd='Spustiť nový DHCP server v LAN'
 # Tag on 2017/06/13
-msg_ocs_live_mount_smb_protocol_ver='Which version of SMB protocol do you want? If not sure, try the default one (v1.0).'
+msg_ocs_live_mount_smb_protocol_ver=' Ktorú verziu SMB protokolu chcete použiť? Ak si nieste istý, tak použite prednastavenú (v1.0).'
 msg_ocs_use_smbv1_0='SMB protocol 1.0'
 msg_ocs_use_smbv2_0='SMB protocol 2.0'
 msg_ocs_use_smbv2_1='SMB protocol 2.1'
 msg_ocs_use_smbv3_0='SMB protocol 3.0'
-msg_you_must_select_a_ver='You must select a version!'
+msg_you_must_select_a_ver='Musíte si vybrať verziu!'
