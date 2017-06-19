@@ -1,3 +1,14 @@
+drbl (2.25.4-drbl1) unstable; urgency=medium
+
+  * Language file sk_SK was updated. Thanks to Ondrej Dzivy Balucha.
+    Language file es_ES was updated. Thanks to Juan Ramón Martínez.
+    Language file de_DE was updated. Thanks to Michael Vinzenz.
+    Language file fr_FR was updated. Thanks to Jean-Francois Nifenecker.
+    Language file it_IT was updated. Thanks to Gianfranco Gentili.
+    Language file tr_TR was updated. Thanks to Volkan Gezer.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Tue, 20 Jun 2017 07:51:12 +0800
+
 drbl (2.25.3-drbl1) unstable; urgency=medium
 
   * Update language files about SMB versions.
