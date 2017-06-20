@@ -2,7 +2,7 @@
 # Written by Steven Shiau <steven _at_ nchc org tw> to use in DRBL 
 # Hungarian translation by Greg <greg.hefty _at_ freemail hu>
 # License: GPL
-# Last updated: 08 June. 2017
+# Last updated: 18 June. 2017
 
 #-----------------------------------------
 # some words
@@ -1074,9 +1074,9 @@ msg_auto_detect_dhcpd='DHCP szerver automatikus felismerése'
 msg_use_existing_dhcpd='LAN meglévő DHCP szerverének használata'
 msg_start_new_dhcpd='Új DHCP szerver indítása a LAN-on'
 # Tag on 2017/06/13
-msg_ocs_live_mount_smb_protocol_ver='Which version of SMB protocol do you want? If not sure, try the default one (v1.0).'
-msg_ocs_use_smbv1_0='SMB protocol 1.0'
-msg_ocs_use_smbv2_0='SMB protocol 2.0'
-msg_ocs_use_smbv2_1='SMB protocol 2.1'
-msg_ocs_use_smbv3_0='SMB protocol 3.0'
-msg_you_must_select_a_ver='You must select a version!'
+msg_ocs_live_mount_smb_protocol_ver='Mely SMB protokoll verziót szeretné használni? Ha bizonytalan, válassza az alapértelmezettet (v1.0).'
+msg_ocs_use_smbv1_0='SMB protokoll 1.0'
+msg_ocs_use_smbv2_0='SMB protokoll 2.0'
+msg_ocs_use_smbv2_1='SMB protokoll 2.1'
+msg_ocs_use_smbv3_0='SMB protokoll 3.0'
+msg_you_must_select_a_ver='Válasszon egy verziót!'
