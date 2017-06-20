@@ -62,17 +62,9 @@ create_dev(){
      # * Thu Apr 13 2006 Harald Hoyer <harald redhat com> - 089-1
      # - version 089
      # - start_udev uses udevtrigger now instead of udevstart 
-     if [ -x /sbin/udevadm ]; then
-       # From FC12, it's /sbin/udevadm trigger
-       /sbin/udevadm trigger
-     elif [ -x /sbin/udevtrigger ]; then
-       # From FC6, it's udevtrigger
-       /sbin/udevtrigger
-     elif [ -x /sbin/udevstart ]; then
-     # i.e. for FC2-FC5, it's udevstart
-        /sbin/udevstart
-     fi
-     # Debian Etch, no more udevstart
+     # From FC12, it's udevadm trigger
+     udevadm trigger
+
      # Create console, null, since in FC5, udevstart won't create them.
      [ ! -e /dev/console ] && mknod -m 600 /dev/console c 5 1
      [ ! -e /dev/null ] && mknod -m 666 /dev/null c 1 3
