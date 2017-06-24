@@ -5,6 +5,14 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.25.6-drbl1) unstable; urgency=medium
+
+  * Applied the patch from Georges Khaznadar which addresses the udevadm
+    path hard-code issue.
+    Ref: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=852562
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sat, 24 Jun 2017 09:24:11 +0800
+
 drbl (2.25.5-drbl1) unstable; urgency=medium
 
   * Language file hu_HU was updated. Thanks to Greg Marki.
