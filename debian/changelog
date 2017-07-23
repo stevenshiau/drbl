@@ -1,3 +1,10 @@
+drbl (2.25.8-drbl1) unstable; urgency=medium
+
+  * Suppress lite server and lite client in the main menu of the
+    Clonezilla live icon Clonezilla-live.desktop of DRBL live.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Sun, 23 Jul 2017 22:29:08 +0800
+
 drbl (2.25.7-drbl1) unstable; urgency=medium
 
   * Language file ca_ES was updated. Thanks to René Mérou.
