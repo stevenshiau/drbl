@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.25.9-drbl1) unstable; urgency=medium
+
+  * Add package casync to DRBL/Clonezilla live.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Mon, 31 Jul 2017 20:00:04 +0800
+
 drbl (2.25.8-drbl1) unstable; urgency=medium
 
   * Suppress lite server and lite client in the main menu of the

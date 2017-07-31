@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.25.8
+Version:	2.25.9
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Mon Jul 31 2017 Steven Shiau <steven _at_ nchc org tw> 2.25.9-drbl1
+  * Add package casync to DRBL/Clonezilla live.
+
 * Sun Jul 23 2017 Steven Shiau <steven _at_ nchc org tw> 2.25.8-drbl1
   * Suppress lite server and lite client in the main menu of the
     Clonezilla live icon Clonezilla-live.desktop of DRBL live.
