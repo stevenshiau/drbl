@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.25.10-drbl1) unstable; urgency=medium
+
+  * Add support for CentOS 7.3.
+
+ -- Steven Shiau <steven@nchc.org.tw>  Wed, 02 Aug 2017 10:31:16 +0800
+
 drbl (2.25.9-drbl1) unstable; urgency=medium
 
   * Add package casync to DRBL/Clonezilla live.
