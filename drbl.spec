@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.25.10
+Version:	2.25.11
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Thu Sep 14 2017 Steven Shiau <steven _at_ nchc org tw> 2.25.11-drbl1
+  * Improve the mechanism to get dns in drblpush.
+
 * Wed Aug 02 2017 Steven Shiau <steven _at_ nchc org tw> 2.25.10-drbl1
   * Add support for CentOS 7.3.
 
