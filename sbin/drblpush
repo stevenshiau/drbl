@@ -1683,20 +1683,17 @@ sub drbl_server_parse {
   print "Hostname_prefix from config file: \"$hostname_prefix\".\n" if $verbosity >= 2;
 
   # Try to get setting from system also
-  chomp(my $nameserver_sys=`LC_ALL=C grep ^nameserver $DNS_sys | awk -F\" \" '{print \$2}'`);
-  $nameserver_sys =~ s/\n/,/g;
+  chomp(my $nameserver_sys=`LC_ALL=C grep -Ew "^nameserver" $DNS_sys | awk -F\" \" '{print \$2}' | xargs echo | sed -r -e \"s/[[:space:]]+/, /g\"`);
   if ( "$nameserver_sys" eq "127.0.0.1" || "$nameserver_sys" eq "127.0.1.1"  ) {
     # On Ubuntu, dnsmasq with network-manager, the result might 127.0.0.1. We use nm-tool to get the real one
     # Ubuntu <= 14.04, use "nmcli dev list", while > 14.04, "nmcli dev show".
-    chomp($nameserver_sys=`LC_ALL=C nmcli dev show 2>/dev/null | grep -i "IP4.DNS" | awk -F " " '{print \$2}'`);
-    $nameserver_sys =~ s/\n/,/g;
+    chomp($nameserver_sys=`LC_ALL=C nmcli dev show 2>/dev/null | grep -i "IP4.DNS" | awk -F " " '{print \$2}' | xargs echo | sed -r -e \"s/[[:space:]]+/, /g\"`);
     if ( ! $nameserver ) {
-      chomp($nameserver_sys=`LC_ALL=C nmcli dev list 2>/dev/null | grep -i "IP4.DNS" | awk -F " " '{print \$2}'`);
-      $nameserver_sys =~ s/\n/,/g;
+      chomp($nameserver_sys=`LC_ALL=C nmcli dev list 2>/dev/null | grep -i "IP4.DNS" | awk -F " " '{print \$2}' | xargs echo | sed -r -e \"s/[[:space:]]+/, /g\"`);
     }
     if ( ! $nameserver ) {
       # Last posibility, dnsmasq
-      chomp($nameserver_sys=`LC_ALL=C grep ^nameserver /var/run/dnsmasq/resolv.conf 2>/dev/null | awk -F\" \" '{print \$2}'`);
+      chomp($nameserver_sys=`LC_ALL=C grep -Ew "^nameserver" /var/run/dnsmasq/resolv.conf 2>/dev/null | awk -F\" \" '{print \$2}' | xargs echo | sed -r -e \"s/[[:space:]]+/, /g\"`);
     }
   }
   print "nameserver in system is $nameserver_sys\n" if $verbosity >= 2;
