@@ -1101,3 +1101,5 @@ msg_ocs_use_smbv2_0='SMB protocol 2.0'
 msg_ocs_use_smbv2_1='SMB protocol 2.1'
 msg_ocs_use_smbv3_0='SMB protocol 3.0'
 msg_you_must_select_a_ver='You must select a version!'
+# Tag on 2017/09/24
+msg_lite_server_and_client_are_provided='Besides, Clonezilla lite server and client modes are also available. You can use them for massive deployment'

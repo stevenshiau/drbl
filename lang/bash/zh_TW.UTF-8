@@ -1079,3 +1079,5 @@ msg_ocs_use_smbv2_0='SMB協定2.0'
 msg_ocs_use_smbv2_1='SMB協定2.1'
 msg_ocs_use_smbv3_0='SMB協定3.0'
 msg_you_must_select_a_ver='你必須選擇一個版本!'
+# Tag on 2017/09/24
+msg_lite_server_and_client_are_provided='此外，亦有再生龍輕量伺服器可以使用，你可以使用它來做大量佈署'

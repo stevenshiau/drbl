@@ -1081,3 +1081,5 @@ msg_ocs_use_smbv2_0='SMB protokolü 2.0'
 msg_ocs_use_smbv2_1='SMB protokolü 2.1'
 msg_ocs_use_smbv3_0='SMB protokolü 3.0'
 msg_you_must_select_a_ver='Bir sürüm seçmeniz gerekli!'
+# Tag on 2017/09/24
+msg_lite_server_and_client_are_provided='Besides, Clonezilla lite server and client modes are also available. You can use them for massive deployment'
