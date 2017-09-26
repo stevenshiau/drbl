@@ -51,6 +51,8 @@ menuentry \"Local operating system (if available)\" --id local-disk {
     chainloader /EFI/fedora/shim.efi +1
   elif [ -e /EFI/fedora/grubx64.efi ]; then
     chainloader /EFI/fedora/grubx64.efi +1
+  elif [ -e /EFI/centos/grubx64.efi ]; then
+    chainloader /EFI/centos/grubx64.efi +1
   elif [ -e /EFI/debian/grubx64.efi ]; then
     chainloader /EFI/debian/grubx64.efi +1
   elif [ -e /EFI/ubuntu/grubx64.efi ]; then
