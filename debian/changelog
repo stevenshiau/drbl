@@ -1,3 +1,11 @@
+drbl (2.25.13-drbl1) unstable; urgency=medium
+
+  * Language file zh_CN.UTF-8 was updated. Thanks to Zhiqiang Zhang.
+  * Add /EFI/centos/grubx64.efi for local booting test in function
+    LOCAL_EFI_BOOT_GRUB_CFG of drbl-functions.
+
+ -- Steven Shiau <steven@clonezilla.org>  Wed, 27 Sep 2017 08:20:57 +0800
+
 drbl (2.25.12-drbl1) unstable; urgency=medium
 
   * Update language files for more hints about Clonezilla command.

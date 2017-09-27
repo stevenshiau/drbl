@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.25.12
+Version:	2.25.13
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,11 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Wed Sep 27 2017 Steven Shiau <steven _at_ clonezilla org> 2.25.13-drbl1
+  * Language file zh_CN.UTF-8 was updated. Thanks to Zhiqiang Zhang.
+  * Add /EFI/centos/grubx64.efi for local booting test in function
+    LOCAL_EFI_BOOT_GRUB_CFG of drbl-functions.
+
 * Mon Sep 25 2017 Steven Shiau <steven _at_ clonezilla org> 2.25.12-drbl1
   * Update language files for more hints about Clonezilla command.
 
