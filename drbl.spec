@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.25.13
+Version:	2.25.14
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,12 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Fri Sep 29 2017 Steven Shiau <steven _at_ clonezilla org> 2.25.14-drbl1
+  * Add option -t|--tftp-server to drbl-gen-grub-efi-nb so that we can
+    assign the IP address for tftp server. It's intended to make it work for
+    grub network boot loader can work with uEFI network booting client.
+    # Ref: http://lists.thekelleys.org.uk/pipermail/dnsmasq-discuss/2017q1/011124.html
+
 * Wed Sep 27 2017 Steven Shiau <steven _at_ clonezilla org> 2.25.13-drbl1
   * Language file zh_CN.UTF-8 was updated. Thanks to Zhiqiang Zhang.
   * Add /EFI/centos/grubx64.efi for local booting test in function

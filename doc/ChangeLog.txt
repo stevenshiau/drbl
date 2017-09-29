@@ -5,6 +5,15 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.25.14-drbl1) unstable; urgency=medium
+
+  * Add option -t|--tftp-server to drbl-gen-grub-efi-nb so that we can
+    assign the IP address for tftp server. It's intended to make it work for
+    grub network boot loader can work with uEFI network booting client.
+    # Ref: http://lists.thekelleys.org.uk/pipermail/dnsmasq-discuss/2017q1/011124.html
+
+ -- Steven Shiau <steven@clonezilla.org>  Fri, 29 Sep 2017 22:58:04 +0800
+
 drbl (2.25.13-drbl1) unstable; urgency=medium
 
   * Language file zh_CN.UTF-8 was updated. Thanks to Zhiqiang Zhang.
