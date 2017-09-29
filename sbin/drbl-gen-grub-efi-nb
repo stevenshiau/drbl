@@ -19,11 +19,49 @@ serial part_gpt part_msdos boot multiboot progress search \
 $GRUB_FS_MOD_drbl_ocs configfile test sleep tr reboot halt"
 
 prog="$0"
+
+#
+USAGE() {
+  echo "Generate the Grub EFI network boot loader for DRBL clients."
+  echo "Usage: $prog [OPTION]"
+  echo "Options:"
+  echo "-t, --tftp-server IPADD:  Assign the IP address IPADD for the TFTP server. If not assigned, automatically obtain from network boot server. Howerver, grub <= 2.0.2 does not support receiving that. Not sure if newer version will support it or not. Hence this is a workaround."
+  echo "Ex:"
+  echo "To create Grub EFI network boot loader for DRBL clients with TFTP server IP address 192.168.67.254:"
+  echo "$prog -t 192.168.67.254"
+}
+
 ################
 ##### Main #####
 ################
 check_if_root
 ask_and_load_lang_set
+
+# Parse command-line options
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -t|--tftp-server)
+            shift
+            if [ -z "$(echo $1 |grep ^-.)" ]; then
+              # skip the -xx option, in case 
+              tftp_server_ip="$1"
+              shift
+            fi
+	    [ -z "$tftp_server_ip" ] && USAGE && exit 1
+	    ;;
+    -*)     echo "${0}: ${1}: invalid option" >&2
+            USAGE >& 2
+            exit 2 ;;
+    *)      break ;;
+  esac
+done
+
+# Decide if it's something like (tftp,192.168.22.254) or (tftp) in grub config.
+if [ -n "$tftp_server_ip" ]; then
+  tftp_srv_opt="tftp,$tftp_server_ip"
+else
+  tftp_srv_opt="tftp"
+fi
 
 # Find the grub2 commands: grub-mkimage, grub-mknetdir
 if type grub2-mkimage >/dev/null 2>&1; then
@@ -69,7 +107,7 @@ grub_efi_tmpd="$(mktemp -d /tmp/grub-efi.XXXXXX)"
 # http://dev.gentoo.org/~floppym/grub.html
 
 cat <<-GRUB_END > $grub_efi_tmpd/grub-header.cfg
-set prefix=(tftp)/grub-efi.cfg
+set prefix=($tftp_srv_opt)/grub-efi.cfg
 echo "Grub CPU and platform: \$grub_cpu, \$grub_platform"
 echo 'Network status: '
 net_ls_cards
@@ -169,7 +207,7 @@ for i in $dest_bootloader; do
     fi
   done
   echo "Creating the uEFI network booting bootable image $out_f..."
-  $GRUB_MKIMG $grub_mkimg_compress_opt -O ${EFI_ARCH}-efi -o $out_f --prefix='(tftp)/grub-efi.cfg/' -c $grub_efi_tmpd/grub-header.cfg $efi_required_mod
+  $GRUB_MKIMG $grub_mkimg_compress_opt -O ${EFI_ARCH}-efi -o $out_f --prefix="($tftp_srv_opt)/grub-efi.cfg/" -c $grub_efi_tmpd/grub-header.cfg $efi_required_mod
   rc=$?
   if [ "$rc" -ne 0 ]; then
     # When grub-mkimage fails, an empty output file will still be created. We'd better to clean it.
