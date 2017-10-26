@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.25.15-drbl1) unstable; urgency=medium
+
+  * Include xorriso instead of genisoimage in clonezilla live.
+  * Update netinstall for OpenSuSE as 42.3, and Ubuntu as artful.
+
+ -- Steven Shiau <steven@clonezilla.org>  Thu, 26 Oct 2017 22:10:46 +0800
+
 drbl (2.25.14-drbl1) unstable; urgency=medium
 
   * Add option -t|--tftp-server to drbl-gen-grub-efi-nb so that we can

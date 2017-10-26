@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.25.14
+Version:	2.25.15
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,10 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Thu Oct 26 2017 Steven Shiau <steven _at_ clonezilla org> 2.25.15-drbl1
+  * Include xorriso instead of genisoimage in clonezilla live.
+  * Update netinstall for OpenSuSE as 42.3, and Ubuntu as artful.
+
 * Fri Sep 29 2017 Steven Shiau <steven _at_ clonezilla org> 2.25.14-drbl1
   * Add option -t|--tftp-server to drbl-gen-grub-efi-nb so that we can
     assign the IP address for tftp server. It's intended to make it work for
