@@ -3565,22 +3565,29 @@ get_latest_pkg_in_drbl_repository() {
   ktmp="$(mktemp -d /tmp/live_pver.XXXXXX || exit 1)"
     echo "Downloading $drbl_mirror_url/dists/drbl/$branch/binary-amd64/Packages.xz to finding latest $pkg version..."
     LC_ALL=C wget -q -P $ktmp/ $drbl_mirror_url/dists/drbl/$branch/binary-amd64/Packages.xz
-    pver="$(xzgrep -Ew -A 10 "^Package: $pkg" $ktmp/Packages.xz | grep -E "^Version:" | sed -e "s/^Version: //g" | sort -V -r | uniq | head -n 1)"
+    # The versions might be with epoch like:
+    # 4.0.2-1.drbl15
+    # 1:20170623.drbl1
+    # Hence we add all of them as:
+    # 0:4.0.2-1.drbl15
+    # 1:20170623.drbl1
+    pver="$(xzgrep -Ew -A 30 "^Package: $pkg([[:space:]]+|$)" $ktmp/Packages.xz | grep -E "^Version:" | sed -e "s/^Version: //g" | sed -r -e "s/^([^:]+)$/0:\1/g" | sort -V -r | uniq | head -n 1)"
     if [ -z "$pver" ]; then
       # Clean Packages.xz to avoid wget using another name like Packages.xz.1 then search the next again
       rm -f $ktmp/Packages.xz
       return 1
     fi
   if [ -n "$pver" ]; then
-    release_kernel_ver="$pver"
+    # After the comparision is done, we have to change it back, i.e.,
+    # 0:4.0.2-1.drbl15 -> 4.0.2-1.drbl15
+    pver="$(echo $pver | sed -r -e "s/^0://g")"
   else
     [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
     echo "Warning!"
-    echo "Unable to find the latest kernel version in $drbl_mirror_url/dists/$i/main/binary-amd64/Packages.xz. Use the pre-defined one."
+    echo "Unable to find the latest package version in $drbl_mirror_url/dists/$i/main/binary-amd64/Packages.xz."
     [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
     echo -n "$msg_press_enter_to_continue"
     read 
-    eval release_kernel_ver="\$${i}_release_kernel_ver_def"
   fi
   [ -d "$ktmp" -a -n "$(echo $ktmp | grep "live_pver")" ] && rm -rf $ktmp
   return 0
