@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.25.16-drbl1) unstable; urgency=medium
+
+  * Bug fixed: Make version comparison with epoch work in the function
+    get_latest_pkg_in_drbl_repository of drbl-functions.
+
+ -- Steven Shiau <steven@clonezilla.org>  Fri, 27 Oct 2017 08:34:04 +0800
+
 drbl (2.25.15-drbl1) unstable; urgency=medium
 
   * Include xorriso instead of genisoimage in clonezilla live.

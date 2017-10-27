@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.25.15
+Version:	2.25.16
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,10 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Fri Oct 27 2017 Steven Shiau <steven _at_ clonezilla org> 2.25.16-drbl1
+  * Bug fixed: Make version comparison with epoch work in the function
+    get_latest_pkg_in_drbl_repository of drbl-functions.
+
 * Thu Oct 26 2017 Steven Shiau <steven _at_ clonezilla org> 2.25.15-drbl1
   * Include xorriso instead of genisoimage in clonezilla live.
   * Update netinstall for OpenSuSE as 42.3, and Ubuntu as artful.
