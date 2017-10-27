@@ -3578,7 +3578,7 @@ get_latest_pkg_in_drbl_repository() {
       return 1
     fi
   if [ -n "$pver" ]; then
-    # After the comparision is done, we have to change it back, i.e.,
+    # After the comparison is done, we have to change it back, i.e.,
     # 0:4.0.2-1.drbl15 -> 4.0.2-1.drbl15
     pver="$(echo $pver | sed -r -e "s/^0://g")"
   else
