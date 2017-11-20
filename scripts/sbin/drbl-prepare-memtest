@@ -131,6 +131,10 @@ put_distribution_memtest() {
 ### MAIN ###
 ############
 
+check_if_root
+ask_and_load_lang_set
+
+#
 while [ $# -gt 0 ]; do
   case "$1" in
     -u|--from-upstream) shift; mode="from-upstream" ;;
@@ -147,6 +151,18 @@ while [ $# -gt 0 ]; do
     *)  USAGE && exit 1 ;;
   esac
 done
+
+# Check arch
+cpu_arch="$(LC_ALL=C uname -m)"
+if [ "$cpu_arch" != "i686" -a "$cpu_arch" != "x86_64" ]; then
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+  echo "CPU arch is not i386/i686 or x86_64!"
+  echo "Skipping preparing memtest+!"
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+  echo "$msg_program_stop"
+  exit 3
+fi
+
 # mode is essential
 [ -z "$mode" ] && mode="from-distribution"
 [ -z "$memtest_ver_requested" ] && memtest_ver_requested="$MEMTEST86_VER_DEF"
