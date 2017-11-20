@@ -1,3 +1,22 @@
+drbl (2.25.17-drbl1) unstable; urgency=medium
+
+  * drbl-prepare-memtest should not run in arm64 arch.
+  * Add initial add support for arm64 in drbl-gen-grub-efi-nb. Not tested yet.
+
+ -- Steven Shiau <steven@clonezilla.org>  Mon, 20 Nov 2017 21:01:05 +0800
+
+drbl (2.25.16-drbl3) unstable; urgency=medium
+
+  * Make drbl depends on syslinux-common, not syslinux.
+
+ -- Steven Shiau <steven@clonezilla.org>  Sun, 19 Nov 2017 19:48:46 +0800
+
+drbl (2.25.16-drbl2) unstable; urgency=medium
+
+  * Remove the depends for syslinux. For ARM64 it does not exist. 
+
+ -- Steven Shiau <steven@clonezilla.org>  Sun, 19 Nov 2017 15:30:57 +0800
+
 drbl (2.25.16-drbl1) unstable; urgency=medium
 
   * Bug fixed: Make version comparison with epoch work in the function
