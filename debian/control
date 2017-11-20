@@ -10,7 +10,7 @@ Homepage: http://drbl.org/
 Package: drbl
 Architecture: all
 Depends: ${misc:Depends}, perl, bash (>= 4.0.0), ipcalc, wakeonlan,
- syslinux (>= 6.0)
+ syslinux-common (>= 6.0)
 Description: diskless remote boot, and a disk cloning utility
  DRBL (Diskless Remote Boot in Linux) provides a diskless or
  systemless environment for client machines. It works on Debian,
