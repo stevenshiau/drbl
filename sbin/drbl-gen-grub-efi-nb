@@ -170,36 +170,48 @@ gen-grub-efi-nb-menu
 # For x86-64 arch, we create bootx64.efi and bootia32.efi.
 # For i386 arch, we only create bootia32.efi.
 # First we find the installed OS arch
+# //NOTE// This could be in the chroot environment, therefore we have to use "getconf LONG_BIT" instead of "uname -m"
+# E.g., if on X86_64 OS, the chroot env is i386: "getconf LONG_BIT" will give 32, while "uname -m" will give x86_64
+sys_cputype="$(LC_ALL=C uname -m)"
 sys_arch="$(LC_ALL=C getconf LONG_BIT)"
 dest_bootloader=""
-case "$sys_arch" in 
-  32)  echo "System architecture is 32-bit."
-       dest_bootloader="i386"
-       ;;
-  64)  echo "System architecture is 64-bit."
-       dest_bootloader="i386 x86_64";;
-   *) 
-       [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
-       echo "Unknown system architecture in drbl-gen-grub-efi-nb!"
-       [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
-       echo "$msg_program_stop!"
-       exit 1
+case "$sys_cputype" in
+  i686|x86_64)
+    case "$sys_arch" in 
+      32)  echo "System architecture is 32-bit."
+           dest_bootloader="i386"
+           ;;
+      64)  echo "System architecture is 64-bit."
+           dest_bootloader="i386 x86_64";;
+       *) 
+           [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+           echo "Unknown system architecture in drbl-gen-grub-efi-nb!"
+           [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+           echo "$msg_program_stop!"
+           exit 1
+           ;;
+    esac
+    ;;
+  aarch64)
+    dest_bootloader="arm64"
+    ;;
 esac
 
 for i in $dest_bootloader; do
   export EFI_ARCH=$i
   case "$EFI_ARCH" in
     i386)   
-            if [ ! -e /usr/lib/grub/i386-efi/moddep.lst ]; then
-	      # On some system, like CentOS 7, there is no i386 efi from grub2.
-	      continue
-	    fi 
-            out_f="$pxecfg_pd/bootia32.efi" ;;
-    x86_64) out_f="$pxecfg_pd/bootx64.efi" ;;
+             if [ ! -e /usr/lib/grub/i386-efi/moddep.lst ]; then
+	       # On some system, like CentOS 7, there is no i386 efi from grub2.
+	       continue
+	     fi 
+             out_f="$pxecfg_pd/bootia32.efi" ;;
+    x86_64)  out_f="$pxecfg_pd/bootx64.efi"  ;;
+    arm64)   out_f="$pxecfg_pd/bootaa64.efi" ;;
   esac
   # Checking the required modules
   for im in $efi_required_mod; do
-    if [ ! -e "/usr/lib/grub/$EFI_ARCH-efi/${im}.mod" ]; then
+    if [ ! -e "/usr/lib/grub/${EFI_ARCH}-efi/${im}.mod" ]; then
       [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
       echo "Missing grub2 module ${im}.mod... Exluding ${im}.mod..."
       [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
