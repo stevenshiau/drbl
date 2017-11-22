@@ -1,7 +1,7 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
 Version:	2.25.17
-Release:	drbl1
+Release:	drbl3
 License:	GPL
 Group:		Development/DRBL
 Source0:	drbl-%{version}.tar.xz
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Wed Nov 22 2017 Steven Shiau <steven _at_ clonezilla org> 2.25.17-drbl3
+  * Make drbl depend on pxelinux, while clonezilla depends on isolinux.
+
 * Mon Nov 20 2017 Steven Shiau <steven _at_ clonezilla org> 2.25.17-drbl1
   * drbl-prepare-memtest should not run in arm64 arch.
   * Add initial add support for arm64 in drbl-gen-grub-efi-nb. Not tested yet.

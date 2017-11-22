@@ -1,3 +1,15 @@
+drbl (2.25.17-drbl3) unstable; urgency=medium
+
+  * Make drbl depend on pxelinux, while clonezilla depends on isolinux.
+
+ -- Steven Shiau <steven@clonezilla.org>  Wed, 22 Nov 2017 13:00:50 +0800
+
+drbl (2.25.17-drbl2) unstable; urgency=medium
+
+  * Add pxelinux and isolinux in the depends for deb package.
+
+ -- Steven Shiau <steven@clonezilla.org>  Tue, 21 Nov 2017 14:27:15 +0800
+
 drbl (2.25.17-drbl1) unstable; urgency=medium
 
   * drbl-prepare-memtest should not run in arm64 arch.
