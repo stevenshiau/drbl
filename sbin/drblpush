@@ -3409,7 +3409,7 @@ cat <<-CONFIG_END > $drbl_common_root/etc/diskless-image/config
 nfsserver_default=$nfsserver_default
 nfsimagedir=$drbl_common_root
 nfshostsdir=$drblroot
-nameserver=$nameserver
+nameserver="$nameserver"
 
 CONFIG_END
 
