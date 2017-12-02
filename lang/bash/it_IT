@@ -861,7 +861,7 @@ msg_destination_disk_too_small='Il disco di destinazione è troppo piccolo!'
 msg_destination_disk_size='Dimensione del disco di destinazione'
 msg_src_disk_size_from_image='Dimensione del disco sorgente per l'\''immagine'
 # Tag on 2011/11/29
-msg_ocs_param_z7='compressione lrzip (In prova. Lenta ma l'\''immagine è piccola)'
+msg_ocs_param_z7='compressione lrzip (Lenta ma l'\''immagine è piccola)'
 msg_mismatched_GPT_MBR_partition='Questo disco contiene un disallineamento fra le partizioni GPT e MBR'
 msg_confuse_clonezilla_and_saved_image_useless='Questo confonderà Clonezilla e potrebbe rendere inutilizzabile l'\''immagine salvata oppure far fallire la clonazione del disco.'
 msg_description_to_fix_mismatched_GPT_and_MBR_partition='Per risolvere questa segnalazione, potete usare gdisk o sgdisk. Cioè, se siete sicuri che quello che volete è la sola partizione MBR, potete eseguire questo comando per distruggere la tavola della partizione GPT e mantenere la tavola della partizione MBR'
@@ -1083,3 +1083,5 @@ msg_ocs_use_smbv3_0='SMB protocol 3.0'
 msg_you_must_select_a_ver='Dovete selezionare una versione!'
 # Tag on 2017/09/24
 msg_lite_server_and_client_are_provided='Besides, Clonezilla lite server and client modes are also available. You can use them for massive deployment'
+# Tag on 2017/12/02
+msg_ocs_param_z8='lz4 compression (Fast but also larger image)'

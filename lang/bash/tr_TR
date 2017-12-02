@@ -861,7 +861,7 @@ msg_destination_disk_too_small='Hedef disk çok küçük!'
 msg_destination_disk_size='Hedef disk boyutu'
 msg_src_disk_size_from_image='Kalıptaki kaynak disk boyutu'
 # Tag on 2011/11/29
-msg_ocs_param_z7='lrzip sıkıştırma (Test ediliyor. Yavaş fakat küçük kalıp)'
+msg_ocs_param_z7='lrzip sıkıştırma (Yavaş fakat küçük kalıp)'
 msg_mismatched_GPT_MBR_partition='Bu disk uyumsuz GPT ve MBR bölümleri içeriyor.'
 msg_confuse_clonezilla_and_saved_image_useless='Bu clonezillayı karıştıracaktır ve kaydedilen kalıbı kullanışsız ya da diski klonlama yı başarısız yapabilir.'
 msg_description_to_fix_mismatched_GPT_and_MBR_partition='Hataları düzeltmek için gdisk veya sdisk kullanabilirsiniz. Örneğin, yalnızca istediğiniz MBR bölüm tablosu olduğundan eminseniz, MBR bölüm tablosunu tutarken GPT bölüm tablosunu yok etmek için bu komutu çalıştırabilirsiniz '
@@ -1083,3 +1083,5 @@ msg_ocs_use_smbv3_0='SMB protokolü 3.0'
 msg_you_must_select_a_ver='Bir sürüm seçmeniz gerekli!'
 # Tag on 2017/09/24
 msg_lite_server_and_client_are_provided='Besides, Clonezilla lite server and client modes are also available. You can use them for massive deployment'
+# Tag on 2017/12/02
+msg_ocs_param_z8='lz4 compression (Fast but also larger image)'

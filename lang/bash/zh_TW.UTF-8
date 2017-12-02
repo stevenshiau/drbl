@@ -860,7 +860,7 @@ msg_destination_disk_too_small='目的碟空間太小!'
 msg_destination_disk_size='目的碟大小'
 msg_src_disk_size_from_image='印象檔中來源碟的大小'
 # Tag on 2011/11/29
-msg_ocs_param_z7='使用lrzip壓縮(測試中。較慢但是相對小的印象檔)'
+msg_ocs_param_z7='使用lrzip壓縮(較慢但是相對小的印象檔)'
 msg_mismatched_GPT_MBR_partition='這個硬碟存在有不匹配的GPT與MBR分割表'
 msg_confuse_clonezilla_and_saved_image_useless='這將會搞混再生龍，使得產生的印象檔無法使用，或者無法複製硬碟。'
 msg_description_to_fix_mismatched_GPT_and_MBR_partition='你可以使用gdisk或者sgdisk來修正這個問題。例如，如果你確認MBR分割表才是你要的，你可以使用這個指令來將GPT的分割表消除，而保留MBR分割表'
@@ -1081,3 +1081,5 @@ msg_ocs_use_smbv3_0='SMB協定3.0'
 msg_you_must_select_a_ver='你必須選擇一個版本!'
 # Tag on 2017/09/24
 msg_lite_server_and_client_are_provided='此外，亦有再生龍輕量伺服器可以使用，你可以使用它來做大量佈署'
+# Tag on 2017/12/02
+msg_ocs_param_z8='使用lz4壓縮(快速但相對大的印象檔)'

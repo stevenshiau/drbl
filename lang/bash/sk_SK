@@ -861,7 +861,7 @@ msg_destination_disk_too_small='Cieľový disk je príliš malý!'
 msg_destination_disk_size='Veľkosť cieľového disku'
 msg_src_disk_size_from_image='Veľkosť disku z obrazu'
 # Tag on 2011/11/29
-msg_ocs_param_z7='lrzip kompresia (Testovacia. Pomalá ale tiež malá veľkosť obrazu)'
+msg_ocs_param_z7='lrzip kompresia (Pomalá ale tiež malá veľkosť obrazu)'
 msg_mismatched_GPT_MBR_partition='Tento disk obsahuje nezodpovedajúcu GPT a MBR partíciu'
 msg_confuse_clonezilla_and_saved_image_useless='To môže zmiasť Clonezillu a uložený obraz môže byť nepoužiteľný alebo môže zlyhať klonovanie disku.'
 msg_description_to_fix_mismatched_GPT_and_MBR_partition='Môžte použiť gdisk alebo sgdisk pre opravu tohto problému. Napríklad ak ste si istý, že MBR tabuľka partícií je tá, ktorú chcete, môžte spustiť tento príkaz pre vymazanie GPT tabuľky partícií a ponechanie MBR tabuľky partícií'
@@ -1082,3 +1082,5 @@ msg_ocs_use_smbv3_0='SMB protocol 3.0'
 msg_you_must_select_a_ver='Musíte si vybrať verziu!'
 # Tag on 2017/09/24
 msg_lite_server_and_client_are_provided='Besides, Clonezilla lite server and client modes are also available. You can use them for massive deployment'
+# Tag on 2017/12/02
+msg_ocs_param_z8='lz4 compression (Fast but also larger image)'

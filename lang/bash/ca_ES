@@ -863,7 +863,7 @@ msg_destination_disk_too_small="El disc destinació és massa petit!"
 msg_destination_disk_size="Grandària del disc destinació"
 msg_src_disk_size_from_image="Grandària del disc origen a la imatge"
 # Tag on 2011/11/29
-msg_ocs_param_z7="compressió lrzip (En proves. Lent però també una imatge menor)"
+msg_ocs_param_z7="compressió lrzip (Lent però també una imatge menor)"
 msg_mismatched_GPT_MBR_partition="El disc conté particions GPT i MBR desajustades"
 msg_confuse_clonezilla_and_saved_image_useless="Confondrà a Clonezilla i podria desar imatges inútils o fallar en clonar el disc."
 msg_description_to_fix_mismatched_GPT_and_MBR_partition="Pot usar gdisk o sgdisk per resoldre el problema. P.ex.: Si està segur de voler únicament la taula de particions MBR, pot executar aquesta ordre per destruir la taula de particions GPT i mantenir la taula MBR"
@@ -1088,3 +1088,5 @@ msg_ocs_use_smbv3_0="SMB protocol 3.0"
 msg_you_must_select_a_ver="Ha de seleccionar una versió!"
 # Tag on 2017/09/24
 msg_lite_server_and_client_are_provided='Besides, Clonezilla lite server and client modes are also available. You can use them for massive deployment'
+# Tag on 2017/12/02
+msg_ocs_param_z8='lz4 compression (Fast but also larger image)'

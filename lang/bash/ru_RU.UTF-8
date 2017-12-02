@@ -861,7 +861,7 @@ msg_destination_disk_too_small='Целевой диск слишком мал!'
 msg_destination_disk_size='Размер целевого диска'
 msg_src_disk_size_from_image='Исходный размер диска из образа'
 # Tag on 2011/11/29
-msg_ocs_param_z7='lrzip сжатие (Тестирование. Медленно, но и небольшой образ)'
+msg_ocs_param_z7='lrzip сжатие (Медленно, но и небольшой образ)'
 msg_mismatched_GPT_MBR_partition='Этот диск содержит несоответствие таблиц разделов GPT и MBR'
 msg_confuse_clonezilla_and_saved_image_useless='Это собьет с толку Clonezilla и может сделать сохраненный образ бесполезным или не клонировать диск.'
 msg_description_to_fix_mismatched_GPT_and_MBR_partition='Вы можете использовать gdisk или sgdisk чтобы устранить эту проблему. Например, если вы уверены, что вы хотите только таблицу разделов MBR, то вы можете запустить эту команду для удаления таблицы разделов GPT, сохранив таблицу разделов MBR'
@@ -1086,3 +1086,5 @@ msg_ocs_use_smbv3_0='SMB protocol 3.0'
 msg_you_must_select_a_ver='You must select a version!'
 # Tag on 2017/09/24
 msg_lite_server_and_client_are_provided='Besides, Clonezilla lite server and client modes are also available. You can use them for massive deployment'
+# Tag on 2017/12/02
+msg_ocs_param_z8='lz4 compression (Fast but also larger image)'

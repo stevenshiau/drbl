@@ -862,7 +862,7 @@ msg_destination_disk_too_small='目标磁盘空间太小！'
 msg_destination_disk_size='目标磁盘大小'
 msg_src_disk_size_from_image='镜像文件中来源磁盘的大小'
 # Tag on 2011/11/29
-msg_ocs_param_z7='使用lrzip压缩(测试中。较慢但是相对小的镜像文件)'
+msg_ocs_param_z7='使用lrzip压缩(较慢但是相对小的镜像文件)'
 msg_mismatched_GPT_MBR_partition='这个磁盘存在不匹配的GPT和MBR分割表'
 msg_confuse_clonezilla_and_saved_image_useless='这将会搞混再生龙，使得产生的镜像文件无法使用，或者无法复制磁盘。'
 msg_description_to_fix_mismatched_GPT_and_MBR_partition='你可以使用gdisk或者sgdisk来修复这个问题。例如，如何你确认MBR分割表才是你要的，你可以使用这个指令来将GPT的分割表清除，而保留MBR分割表'
@@ -1084,3 +1084,5 @@ msg_ocs_use_smbv3_0='SMB协议3.0'
 msg_you_must_select_a_ver='你必须选择一个版本！'
 # Tag on 2017/09/24
 msg_lite_server_and_client_are_provided='Besides, Clonezilla lite server and client modes are also available. You can use them for massive deployment'
+# Tag on 2017/12/02
+msg_ocs_param_z8='lz4 compression (Fast but also larger image)'
