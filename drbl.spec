@@ -1,7 +1,7 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.25.17
-Release:	drbl3
+Version:	2.26.1
+Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
 Source0:	drbl-%{version}.tar.xz
@@ -45,6 +45,17 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Sun Dec 02 2017 Steven Shiau <steven _at_ clonezilla org> 2.26.1-drbl1
+  * Separate variables of drbl.conf so it can be used with creating ARM64
+    live system in clonezilla programs: create-debian-live and
+    create-ubuntu-live.
+  * Add "" to the variable nameserver in
+    $drbl_common_root/etc/diskless-image/config in drblpush.
+  * Use drbl-get-dnsserver in drblpush.
+  * Drop support for Ubuntu 14.10, 15.04, 15.10,
+    Add files required by Ubuntu 17.04 and 17.10.
+  * This release supports Ubuntu 17.10.
+
 * Wed Nov 22 2017 Steven Shiau <steven _at_ clonezilla org> 2.25.17-drbl3
   * Make drbl depend on pxelinux, while clonezilla depends on isolinux.
 
