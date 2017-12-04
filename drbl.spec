@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.26.1
+Version:	2.26.3
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,7 +45,15 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
-* Sun Dec 02 2017 Steven Shiau <steven _at_ clonezilla org> 2.26.1-drbl1
+* Mon Dec 04 2017 Steven Shiau <steven _at_ clonezilla org> 2.26.3-drbl1
+  * Add variable PKG_FROM_DBN_WHICH_OCS_LIVE_NEED_ARM64_ONLY for ARM64 live
+    system in drbl.conf.
+
+* Sun Dec 03 2017 Steven Shiau <steven _at_ clonezilla org> 2.26.2-drbl1
+  * Update language files for lz4-related variables.
+  * Add -z8 (lz4) in the wizard menu.
+
+* Sun Dec 03 2017 Steven Shiau <steven _at_ clonezilla org> 2.26.1-drbl1
   * Separate variables of drbl.conf so it can be used with creating ARM64
     live system in clonezilla programs: create-debian-live and
     create-ubuntu-live.

@@ -1,3 +1,17 @@
+drbl (2.26.3-drbl1) unstable; urgency=medium
+
+  * Add variable PKG_FROM_DBN_WHICH_OCS_LIVE_NEED_ARM64_ONLY for ARM64 live
+    system in drbl.conf.
+
+ -- Steven Shiau <steven@clonezilla.org>  Mon, 04 Dec 2017 20:37:16 +0800
+
+drbl (2.26.2-drbl1) unstable; urgency=medium
+
+  * Update language files for lz4-related variables.
+  * Add -z8 (lz4) in the wizard menu.
+
+ -- Steven Shiau <steven@clonezilla.org>  Sat, 02 Dec 2017 21:35:34 +0800
+
 drbl (2.26.1-drbl1) unstable; urgency=medium
 
   * Separate variables of drbl.conf so it can be used with creating ARM64
