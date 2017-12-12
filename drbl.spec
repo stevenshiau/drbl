@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.26.3
+Version:	2.26.4
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Wed Dec 13 2017 Steven Shiau <steven _at_ clonezilla org> 2.26.4-drbl1
+  * Update netinstall for Fedora as version 27.
+
 * Mon Dec 04 2017 Steven Shiau <steven _at_ clonezilla org> 2.26.3-drbl1
   * Add variable PKG_FROM_DBN_WHICH_OCS_LIVE_NEED_ARM64_ONLY for ARM64 live
     system in drbl.conf.

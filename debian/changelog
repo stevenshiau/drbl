@@ -1,3 +1,9 @@
+drbl (2.26.4-drbl1) unstable; urgency=medium
+
+  * Update netinstall for Fedora as version 27.
+
+ -- Steven Shiau <steven@clonezilla.org>  Wed, 13 Dec 2017 03:02:17 +0800
+
 drbl (2.26.3-drbl1) unstable; urgency=medium
 
   * Add variable PKG_FROM_DBN_WHICH_OCS_LIVE_NEED_ARM64_ONLY for ARM64 live
