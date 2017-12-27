@@ -1083,3 +1083,6 @@ msg_you_must_select_a_ver='你必須選擇一個版本!'
 msg_lite_server_and_client_are_provided='此外，亦有再生龍輕量伺服器可以使用，你可以使用它來做大量佈署'
 # Tag on 2017/12/02
 msg_ocs_param_z8='使用lz4壓縮(快速但相對大的印象檔)'
+# Tag on 2017/12/27
+msg_ocs_param_z9='使用zstd壓縮'
+msg_ocs_param_z9p='使用pzstd壓縮'

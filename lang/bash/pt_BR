@@ -1086,3 +1086,6 @@ msg_you_must_select_a_ver='You must select a version!'
 msg_lite_server_and_client_are_provided='Besides, Clonezilla lite server and client modes are also available. You can use them for massive deployment'
 # Tag on 2017/12/02
 msg_ocs_param_z8='lz4 compression (Fast but also larger image)'
+# Tag on 2017/12/27
+msg_ocs_param_z9='zstd compression'
+msg_ocs_param_z9p='pzstd compression'
