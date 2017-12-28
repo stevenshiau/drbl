@@ -1560,6 +1560,11 @@ show_z4_or_above_menu_or_not() {
     ocs_z8_option_1="-z8"
     ocs_z8_option_2="$(rep_whspc_w_udrsc "$msg_ocs_param_z8")"
   fi
+  if type lz4mt &>/dev/null; then
+    # "-z8p"      "$msg_ocs_param_z8p" \
+    ocs_z8p_option_1="-z8p"
+    ocs_z8p_option_2="$(rep_whspc_w_udrsc "$msg_ocs_param_z8p")"
+  fi
   if type zstd &>/dev/null; then
     # "-z9"      "$msg_ocs_param_z9" \
     ocs_z9_option_1="-z9"
@@ -1869,6 +1874,7 @@ set_drbl_ocs_extra_param() {
       $ocs_z6_option_1      $ocs_z6_option_2 \
       $ocs_z7_option_1      $ocs_z7_option_2 \
       $ocs_z8_option_1      $ocs_z8_option_2 \
+      $ocs_z8p_option_1     $ocs_z8p_option_2 \
       $ocs_z9_option_1      $ocs_z9_option_2 \
       $ocs_z9p_option_1     $ocs_z9p_option_2 \
       "-z0"      "$msg_ocs_param_z0" \
@@ -2153,6 +2159,7 @@ if [ "$mode" = "save" ]; then
       $ocs_z6_option_1      $ocs_z6_option_2 \
       $ocs_z7_option_1      $ocs_z7_option_2 \
       $ocs_z8_option_1      $ocs_z8_option_2 \
+      $ocs_z8p_option_1     $ocs_z8p_option_2 \
       $ocs_z9_option_1      $ocs_z9_option_2 \
       $ocs_z9p_option_1     $ocs_z9p_option_2 \
       "-z0"            "$msg_ocs_param_z0" \

@@ -1089,3 +1089,4 @@ msg_ocs_param_z8='lz4 compression (Fast but also larger image)'
 # Tag on 2017/12/27
 msg_ocs_param_z9='zstd compression'
 msg_ocs_param_z9p='pzstd compression'
+msg_ocs_param_z8p='lz4mt compression (Fast but also larger image)'
