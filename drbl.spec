@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.26.7
+Version:	2.26.8
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Thu Dec 28 2017 Steven Shiau <steven _at_ clonezilla org> 2.26.8-drbl1
+  * Include lz4mt package in Clonezilla live.
+
 * Thu Dec 28 2017 Steven Shiau <steven _at_ clonezilla org> 2.26.7-drbl1
   * Add support for lz4mt (-z8p).
 

@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.26.8-drbl1) unstable; urgency=medium
+
+  * Include lz4mt package in Clonezilla live.
+
+ -- Steven Shiau <steven@clonezilla.org>  Thu, 28 Dec 2017 14:44:26 +0800
+
 drbl (2.26.7-drbl1) unstable; urgency=medium
 
   * Add support for lz4mt (-z8p).
