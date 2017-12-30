@@ -3759,10 +3759,11 @@ check_if_system_support_ecryptfs(){
 #
 task_ecryptfs_mount_point() {
   local task_type="$1"
-  local passwd_ecryptfs pass1 pass2 ecryptfs_pf
+  local pass1 pass2 ecryptfs_pf
   local TMP grc rc ask_ ans_ rc_bindfs ocs_ecryptfs_opt
+  local enc_cmd_
   # ecrypt_mntpnt, bindfs_mntpnt, webdav_bindfs_flag, target_dir_orig and
-  # target_dir are gloable variables.
+  # target_dir, passwd_ecryptfs and passwd_file_ecryptfs are gloable variables.
   # Change the ocsroot to /tmp now since we will create the mount point in /tmp
 
   if `is_s3fs_ocsroot` || `is_cloudfuse_ocsroot`; then
@@ -3784,52 +3785,65 @@ task_ecryptfs_mount_point() {
   chmod 600 $ecryptfs_pf
   TMP=$(mktemp /tmp/ecryptfs_tmp.XXXXXX)
   trap "[ -f "$TMP" ] && rm -f $TMP" HUP INT QUIT TERM EXIT
-  passwd_ecryptfs=""
   grc="1" # grand rc for the really working return code
   # Collect the password for ecryptfs. This is because for ecryptfs it only 
   # ask once, no confirmation.
 
   while [ "$grc" -ne 0 ]; do
-    rc="1"
-    echo $msg_delimiter_star_line | tee --append ${OCS_LOGFILE}
-    case "$task_type" in
-     *save*) 
-            # For saving, we ask twice.
-            [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING | tee --append ${OCS_LOGFILE}
-	    echo "$msg_remember_passphrase_of_ecryptfs" | tee --append ${OCS_LOGFILE}
-            [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL | tee --append ${OCS_LOGFILE}
-	    echo -e "*** $msg_enter_passphrase_to_encrypt_img: ${target_dir} ***\n($msg_it_will_not_be_echoed)" | tee --append ${OCS_LOGFILE}
-            read -s pass1
-	    echo -e "*** $msg_reenter_passphrase_to_encrypt_img: ${target_dir} ***\n($msg_it_will_not_be_echoed)" | tee --append ${OCS_LOGFILE}
-            read -s pass2
-            while [ "$pass1" != "$pass2" ]; do
-              [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
-              echo "$msg_passphrases_not_match" | tee --append ${OCS_LOGFILE}
-              [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
-	      echo -e "*** $msg_enter_passphrase_to_encrypt_img: ${target_dir} ***\n($msg_it_will_not_be_echoed)" | tee --append ${OCS_LOGFILE}
+    if [ -z "$passwd_ecryptfs" -a -z "$passwd_file_ecryptfs" ]; then
+      # Not spedified by user. Ask passwd_ecryptfs
+      rc="1"
+      echo $msg_delimiter_star_line | tee --append ${OCS_LOGFILE}
+      case "$task_type" in
+       *save*) 
+              # For saving, we ask twice.
+              [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING | tee --append ${OCS_LOGFILE}
+  	    echo "$msg_remember_passphrase_of_ecryptfs" | tee --append ${OCS_LOGFILE}
+              [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL | tee --append ${OCS_LOGFILE}
+  	    echo -e "*** $msg_enter_passphrase_to_encrypt_img: ${target_dir} ***\n($msg_it_will_not_be_echoed)" | tee --append ${OCS_LOGFILE}
               read -s pass1
-	      echo -e "*** $msg_reenter_passphrase_to_encrypt_img: ${target_dir} ***\n($msg_it_will_not_be_echoed)" | tee --append ${OCS_LOGFILE}
+  	    echo -e "*** $msg_reenter_passphrase_to_encrypt_img: ${target_dir} ***\n($msg_it_will_not_be_echoed)" | tee --append ${OCS_LOGFILE}
               read -s pass2
-            done
-            if [ -z "$pass1" ]; then
-              [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
-	      echo "$msg_passphrase_empty" | tee --append ${OCS_LOGFILE}
-              [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
-              echo "$msg_program_stop!" | tee --append ${OCS_LOGFILE}
-	      my_ocs_exit 1
-            fi
-            # set the matched passphrase
-            passwd_ecryptfs="$pass1"
-            ;;
-        *)
-            # For restoring, we ask once only.
-	    echo -e "*** $msg_enter_passphrase_for_decrypt_img: ${target_dir} ***\n($msg_it_will_not_be_echoed)" | tee --append ${OCS_LOGFILE}
-            read -s passwd_ecryptfs
-            ;;
-    esac
-    
-    # Put it in the file
-    echo "passphrase_passwd=$passwd_ecryptfs" > $ecryptfs_pf
+              while [ "$pass1" != "$pass2" ]; do
+                [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+                echo "$msg_passphrases_not_match" | tee --append ${OCS_LOGFILE}
+                [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+  	      echo -e "*** $msg_enter_passphrase_to_encrypt_img: ${target_dir} ***\n($msg_it_will_not_be_echoed)" | tee --append ${OCS_LOGFILE}
+                read -s pass1
+  	      echo -e "*** $msg_reenter_passphrase_to_encrypt_img: ${target_dir} ***\n($msg_it_will_not_be_echoed)" | tee --append ${OCS_LOGFILE}
+                read -s pass2
+              done
+              if [ -z "$pass1" ]; then
+                [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+  	        echo "$msg_passphrase_empty" | tee --append ${OCS_LOGFILE}
+                [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+                echo "$msg_program_stop!" | tee --append ${OCS_LOGFILE}
+  	        my_ocs_exit 1
+              fi
+              # set the matched passphrase
+              passwd_ecryptfs="$pass1"
+              ;;
+          *)
+              # For restoring, we ask once only.
+  	    echo -e "*** $msg_enter_passphrase_for_decrypt_img: ${target_dir} ***\n($msg_it_will_not_be_echoed)" | tee --append ${OCS_LOGFILE}
+              read -s passwd_ecryptfs
+              ;;
+      esac
+    fi
+    # Now at least there is passwd_ecryptfs or passwd_file_ecryptfs
+    if [ -n "$passwd_ecryptfs" ]; then
+      # Put it in the file
+      echo "passphrase_passwd=$passwd_ecryptfs" > $ecryptfs_pf
+    elif [ -e "$passwd_file_ecryptfs" ]; then
+      cat $passwd_file_ecryptfs > $ecryptfs_pf
+    else
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+      echo "Not password for ecryptfs was inputted or assigned in a file." | tee --append ${OCS_LOGFILE}
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+      echo "$msg_program_stop!" | tee --append ${OCS_LOGFILE}
+      my_ocs_exit 1
+    fi
+
     #
     webdav_bindfs_flag="no"
     ask_="true"
@@ -3845,7 +3859,9 @@ task_ecryptfs_mount_point() {
 	rc_bindfs="$?"
 	if [ "$rc_bindfs" -eq 0 ]; then
           webdav_bindfs_flag="yes"
-          LC_ALL=C mount -t ecryptfs $bindfs_mntpnt $ecrypt_mntpnt -o $ocs_ecryptfs_opt,key=passphrase:passphrase_passwd_file=$ecryptfs_pf
+	  enc_cmd_="LC_ALL=C mount -t ecryptfs $bindfs_mntpnt $ecrypt_mntpnt -o $ocs_ecryptfs_opt,key=passphrase:passphrase_passwd_file=$ecryptfs_pf"
+	  echo "Running: $enc_cmd_"
+	  eval $enc_cmd_
           rc="$?"
         else
           [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
@@ -3857,7 +3873,9 @@ task_ecryptfs_mount_point() {
           exit 1
         fi
       else
-        LC_ALL=C mount -t ecryptfs $ocsroot/${target_dir} $ecrypt_mntpnt -o $ocs_ecryptfs_opt,key=passphrase:passphrase_passwd_file=$ecryptfs_pf
+        enc_cmd_="LC_ALL=C mount -t ecryptfs $ocsroot/${target_dir} $ecrypt_mntpnt -o $ocs_ecryptfs_opt,key=passphrase:passphrase_passwd_file=$ecryptfs_pf"
+	echo "Running: $enc_cmd_"
+	eval $enc_cmd_
         rc="$?"
       fi
       # Even wrong passphrase could give rc=0. However, the data are not really
@@ -3906,6 +3924,9 @@ task_ecryptfs_mount_point() {
         fi
         grc=1
         confirm_continue_or_not_default_continue
+	# Reset the value passwd_ecryptfs and passwd_file_ecryptfs so user can input it again
+	passwd_ecryptfs=""
+	passwd_file_ecryptfs=""
       fi
     else
       # For saving task, the return code for "mount -t ecryptfs" can be used.
