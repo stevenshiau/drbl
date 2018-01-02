@@ -685,13 +685,13 @@ msg_now_input_in_server='これからイメージ名とデバイス名を入力�
 msg_later_input_in_client='後でクライアントのイメージ名とデバイス名を入力して下さい'
 msg_drbl_related_services_not_added_started="【注意】DRBL サーバで DRBL 関連のサービスを追加・開始する事を選択していません。DRBL 関連のサービスを開始する場合、'drbl-all-service start' の実行を忘れないで下さい。"
 
-msg_one_NIC_one_IP_limitation_prompt="【注意】このサーバには単一のネットワークカードと１つの IP アドレスがあります。エイリアス IP アドレスの使用により、DRBL サービスを単一のネットワークカードで提供できます。しかしながら、eth0 (このマシンの最初のネットワークカード)で接続したこれらのクライアントに対して注意する必要がある状況があります。このマシンで DHCP サービスが動作する為、どのクライアントに対する IP アドレスもリ?スしない方が良いです。任意のクライアント(他の M$ Windows か GNU/Linux クライアントかも知れません)ではなく、eth0 に接続した PXE/Etherboot クライアントのみ IP アドレスをリースする方が良いでしょう。しかしながら、この制限が設定され、DRBL Clonezilla サーバを使用している場合、Clonezilla で復元された OS はこの DRBL サーバから IP アドレスをリース出来なくなります。"
+msg_one_NIC_one_IP_limitation_prompt="【注意】このサーバには単一のネットワークカードと１つの IP アドレスがあります。エイリアス IP アドレスの使用により、DRBL サービスを単一のネットワークカードで提供できます。しかしながら、eth0 (このマシンの最初のネットワークカード)で接続したこれらのクライアントに対して注意する必要がある状況があります。このマシンで DHCP サービスが動作する為、どのクライアントに対する IP アドレスもリ?スしない方が良いです。任意のクライアント(他の MS Windows か GNU/Linux クライアントかも知れません)ではなく、eth0 に接続した PXE/Etherboot クライアントのみ IP アドレスをリースする方が良いでしょう。しかしながら、この制限が設定され、DRBL Clonezilla サーバを使用している場合、Clonezilla で復元された OS はこの DRBL サーバから IP アドレスをリース出来なくなります。"
 msg_if_lease_IP_add_to_pxe_etherboot_only="PXE/Etherboot クライアントのみ IP アドレスをリースしますか?【注意】no を回答した場合、eth0 に接続されたどのマシンもこの DRBL サーバから IP アドレスがリースされるでしょう。DRBL 環境に接続したくない他のマシンがある場合、これは非常に迷惑です!!これらはこの DRBL サーバから IP アドレスをリースされてしまいます。従って、eth0 で接続されたマシンが全て DRBL/Clonezilla クライアントとして使用される事が確認されている場合のみ、ここで「no」を回答して下さい。"
 msg_drbl_env_is_not_ready_now_config='DRBL 環境は準備されていません。これから、このような環境をセットアップする為、(1)ネットワーク設定 (2)Clonezilla イメージのホームディレクトリ を含むいくつかの情報を入力しなければなりません。'
 msg_drbl_env_is_ready='DRBL 環境が準備できましたので、ここで Clonezilla サーバを開始できます。'
 msg_ntfs_in_this_part_is_corrupt='このパーティションの NTFS は障害があります'
 msg_two_options_for_you_now='ここで２つのオプションがあります'
-msg_boot_win_run_chkdsk="M$ Windows で一時マシンを起動してみて、(M$ XP リカバリコンソールあるいは他のもの用に)'chkdsk /f' または 'chkdsk /p /r' を実行し、２回再起動します!!重要：/f と /p /r パラメータを忘れないで下さい!!これらのオプションはお薦めです!!"
+msg_boot_win_run_chkdsk="MS Windows で一時マシンを起動してみて、(MS XP リカバリコンソールあるいは他のもの用に)'chkdsk /f' または 'chkdsk /p /r' を実行し、２回再起動します!!重要：/f と /p /r パラメータを忘れないで下さい!!これらのオプションはお薦めです!!"
 msg_run_ntfsfix_then_force_save='ntfsfix でファイルシステムを修正し、パーティションを保存するよう CLonezilla に試行させてください。【注意】ntfsfix はいくつかの基本的な NTFS の非一貫性の修復と、NTFS ジャーナルファイルのリセット、Windows の初回起動時の NTFS 一貫性チェックのスケジュール設定しか出来ません。一言で言えば、ntfsfix は chkdsk の Linux 版ではありません。このオプションはお薦めしません!!'
 msg_stay_in_this_console_1='このコンソール(console 1)のままで、コマンドラインプロンプトに入ります'
 msg_run_cmd_exit='exit または logout コマンドを実行して下さい'

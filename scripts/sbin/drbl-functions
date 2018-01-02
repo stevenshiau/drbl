@@ -1848,7 +1848,7 @@ set_drbl_ocs_extra_param() {
     --inputbox "$msg_What_the_win_hostname_prefix ?" 0 0 "$WIN_HOSTNAME_PREFIX" 2> $HNTMP
     HN_PREFIX="$(cat $HNTMP)"
     if [ -z "$HN_PREFIX" ]; then
-       echo "You did not specify the hostname prefix for M$ windows! We use the default value in drbl-ocs.conf"
+       echo "You did not specify the hostname prefix for MS windows! We use the default value in drbl-ocs.conf"
     else
        perl -pi -e "s|(-hn.*) $WIN_HOSTNAME_PREFIX|\$1 $HN_PREFIX|g" $OCS_PARAM_TMP
     fi
@@ -2114,7 +2114,7 @@ if grep -qE "\-hn[01]" $OCS_PARAM_TMP; then
   --inputbox "$msg_What_the_win_hostname_prefix ?" 0 0 "$WIN_HOSTNAME_PREFIX" 2> $HNTMP
   HN_PREFIX="$(cat $HNTMP)"
   if [ -z "$HN_PREFIX" ]; then
-     echo "You did not specify the hostname prefix for M$ windows! We use the default value in drbl-ocs.conf"
+     echo "You did not specify the hostname prefix for MS windows! We use the default value in drbl-ocs.conf"
   else
      perl -pi -e "s|(-hn.*) $WIN_HOSTNAME_PREFIX|\$1 $HN_PREFIX|g" $OCS_PARAM_TMP
   fi
