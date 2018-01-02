@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.26.9
+Version:	2.26.10
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Tue Jan 02 2018 Steven Shiau <steven _at_ clonezilla org> 2.26.10-drbl1
+  * Replace all words "M$" by MS. 
+
 * Sat Dec 30 2017 Steven Shiau <steven _at_ clonezilla org> 2.26.9-drbl1
   * Update task_ecryptfs_mount_point in drbl-functions to work with the
     options -pe and -pfe of ocs-sr. This allows user to enter password in
