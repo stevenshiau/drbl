@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.26.10
+Version:	2.26.11
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,10 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Thu Jan 04 2018 Steven Shiau <steven _at_ clonezilla org> 2.26.11-drbl1
+  * Use "lpxelinux.0" instead of "pxelinux.0" in dhcpd.conf. It has more
+    features, like support both http and tftp.
+
 * Tue Jan 02 2018 Steven Shiau <steven _at_ clonezilla org> 2.26.10-drbl1
   * Replace all words "M$" by MS. 
 

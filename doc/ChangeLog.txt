@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.26.11-drbl1) unstable; urgency=medium
+
+  * Use "lpxelinux.0" instead of "pxelinux.0" in dhcpd.conf. It has more
+    features, like support both http and tftp.
+
+ -- Steven Shiau <steven@clonezilla.org>  Thu, 04 Jan 2018 22:07:15 +0800
+
 drbl (2.26.10-drbl1) unstable; urgency=medium
 
   * Replace all words "M$" by MS. 
