@@ -1847,7 +1847,7 @@ if option arch = 00:06 {
     # Thanks to Danny Russ for providing this.
     filename "bootx64.efi";
 } else {
-    filename "pxelinux.0";
+    filename "lpxelinux.0";
 }
 
 ## Uncomment the following "if block" when you have some buggy PXE NIC card (such as annoying sis900 NIC). Remember to modify the MAC vendor prefix and restart dhcpd service!!!
