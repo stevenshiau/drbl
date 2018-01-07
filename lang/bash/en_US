@@ -1007,7 +1007,7 @@ msg_ocs_param_t2='Client skip restoring the EBR (Extended Boot Record)'
 # Tag on 2016/07/03
 msg_parent_directory='Parent directory'
 msg_dir_browser_for_img='Directory Browser for Clonezilla image repository'
-msg_which_dir_as_clonezilla_img_home='Which directory is for the Clonezilla image repositry? (If there is a space in the directory name, it will _NOT_ be shown)'
+msg_which_dir_as_clonezilla_img_home='Which directory is for the Clonezilla image repository? (If there is a space in the directory name, it will _NOT_ be shown)'
 msg_path_on_the_resource='Path on the resource'
 msg_current_selected_dir_name='Current selected dir name'
 msg_when_current_selected_dir_name_is_ok='When the "Current selected dir name" is what you want, use "Tab" key to choose "Done"'
