@@ -5,6 +5,14 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.26.12-drbl1) unstable; urgency=medium
+
+  * Typo fixed: repositry -> repository, in "Directory Browser for Clonezilla
+    image repository" for English language file.
+    Thanks to Ronald F. Guilmette.
+
+ -- Steven Shiau <steven@clonezilla.org>  Sun, 07 Jan 2018 18:18:14 +0800
+
 drbl (2.26.11-drbl1) unstable; urgency=medium
 
   * Use "lpxelinux.0" instead of "pxelinux.0" in dhcpd.conf. It has more
