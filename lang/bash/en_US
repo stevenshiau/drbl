@@ -1087,3 +1087,6 @@ msg_ocs_param_z8='lz4 compression (Fast but also larger image)'
 msg_ocs_param_z9='zstd compression'
 msg_ocs_param_z9p='pzstd compression'
 msg_ocs_param_z8p='lz4mt compression (Fast but also larger image)'
+# Tag on 2018/01/09
+msg_use_channel_bonding='Use channel bonding'
+msg_select_nics_for_channel_bonding='Select the network cards for channel bonding. You should choose two or more cards.'
