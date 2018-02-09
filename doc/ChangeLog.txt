@@ -5,6 +5,14 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.26.15-drbl1) unstable; urgency=medium
+
+  * Let plymouth run in drbl client of Ubuntu 14.04 so that lightdm can
+    start.
+  * Better way to deal with update-rc.d and chpasswd in chroot.
+
+ -- Steven Shiau <steven@clonezilla.org>  Fri, 09 Feb 2018 20:51:08 +0800
+
 drbl (2.26.14-drbl1) unstable; urgency=medium
 
   * Use iproute2 instead of iproute for Debian-based clonezilla live.

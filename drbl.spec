@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.26.14
+Version:	2.26.15
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,11 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Fri Feb 09 2018 Steven Shiau <steven _at_ clonezilla org> 2.26.15-drbl1
+  * Let plymouth run in drbl client of Ubuntu 14.04 so that lightdm can
+    start.
+  * Better way to deal with update-rc.d and chpasswd in chroot.
+
 * Tue Jan 30 2018 Steven Shiau <steven _at_ clonezilla org> 2.26.14-drbl1
   * Use iproute2 instead of iproute for Debian-based clonezilla live.
 
