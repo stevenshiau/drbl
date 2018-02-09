@@ -3713,11 +3713,13 @@ if [ -e /etc/debian_version ]; then
 	    #perl -pi -e 's|^([[:space:]]*)(exec /sbin/plymouthd --mode=boot --attach-to-session)|$1true #$2 # Commented by DRBL to avoid no Clonezilla SE output messages on console 1|g' $drbl_common_root/etc/init/plymouth.conf
 	    #perl -pi -e 's|^([[:space:]]*)(exec /bin/plymouth show-splash)|$1true #$2 # Commented by DRBL to avoid no Clonezilla SE output messages on console 1|g' $drbl_common_root/etc/init/plymouth.conf
           elif [ "$DISTRIB_RELEASE" \< 14.10 ]; then
+	    # 2018/02/09 Comment all. It seems for Ubuntu 14.04 the default behavior is OK now.
             # Ubuntu 13.10 - 14.04.
             # For upstart (>1.3) service, we can use override file (Ref: http://upstart.ubuntu.com/cookbook/#override-files)
-            echo "manual" > $drbl_common_root/etc/init/plymouth.override
+	    # echo "manual" > $drbl_common_root/etc/init/plymouth.override
 	    # For Ubuntu 14.04 or later, a command about plymouth was added in /etc/init/rc.conf. We have to disable it otherwise it will switch to vt7 but rc1 (where S19ocs-run is, especially for select-in-client mode of clonezilla) is still in vt1.
-	    perl -pi -e 's|^([[:space:]]*)(status plymouth-shutdown.*start wait-for-state WAITER=rc WAIT_FOR=plymouth-shutdown.*)|$1true #$2 # Commented by DRBL to keep the services in rc in same console|g' $drbl_common_root/etc/init/rc.conf
+	    # perl -pi -e 's|^([[:space:]]*)(status plymouth-shutdown.*start wait-for-state WAITER=rc WAIT_FOR=plymouth-shutdown.*)|$1true #$2 # Commented by DRBL to keep the services in rc in same console|g' $drbl_common_root/etc/init/rc.conf
+	    true
 	  else
             # Ubuntu 14.10 or later.
 	    # For Ubuntu 14.10 plymouth service is a must for client to start all required service,
