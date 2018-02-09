@@ -250,13 +250,15 @@ create_depmod_env() {
   [ -e "$newroot/sbin/depmod" ] && rm -f $newroot/sbin/depmod
   # -L: always follow symbolic links
   cp -L --parents /sbin/depmod* $newroot
+  export DESTDIR="$newroot"
   if ldd /sbin/depmod &>/dev/null; then
     depmod_lib_need=$(LC_ALL=C ldd /sbin/depmod | sed -e "s/.*=> //g" -e "s/(0x.*)//g" | awk '{print $1}')
     for imod in $depmod_lib_need; do
       # Skip linux-vdso.so.1 and linux-gate.so.1, the virtual DSO, a shared object exposed by the kernel. They do not exist on the file system. Ref: http://ilivetoseek.wordpress.com/2011/10/24/linux-gate-so-1-or-linux-vdso-so-1/ 
       [ "$imod" = "linux-vdso.so.1" ] && continue
       [ "$imod" = "linux-gate.so.1" ] && continue
-      cp --parents -d $imod $newroot
+      #cp --parents -d $imod $newroot
+      copy_exec_drbl $imod "$(LC_ALL=C dirname $imod)"
     done
   fi
 }
@@ -282,13 +284,15 @@ create_chkconfig_env() {
   local newroot="$1"
   [ -z "$newroot" ] && exit 1
   cp --parents /sbin/chkconfig $newroot
+  export DESTDIR="$newroot"
   if ldd /sbin/chkconfig &>/dev/null; then
     chkconfig_lib_need=$(LC_ALL=C ldd /sbin/chkconfig | sed -e "s/.*=> //g" -e "s/(0x.*)//g" | awk '{print $1}')
     for imod in $chkconfig_lib_need; do
       # Skip linux-vdso.so.1 and linux-gate.so.1, the virtual DSO, a shared object exposed by the kernel. They do not exist on the file system. Ref: http://ilivetoseek.wordpress.com/2011/10/24/linux-gate-so-1-or-linux-vdso-so-1/ 
       [ "$imod" = "linux-vdso.so.1" ] && continue
       [ "$imod" = "linux-gate.so.1" ] && continue
-      cp --parents -d $imod $newroot
+      #cp --parents -d $imod $newroot
+      copy_exec_drbl $imod "$(LC_ALL=C dirname $imod)"
     done
   fi
 }
@@ -309,13 +313,15 @@ create_insserv_env() {
   local newroot="$1"
   [ -z "$newroot" ] && exit 1
   cp --parents -d /sbin/insserv $newroot
+  export DESTDIR="$newroot"
   if ldd /sbin/insserv &>/dev/null; then
     insserv_lib_need=$(LC_ALL=C ldd /sbin/insserv | sed -e "s/.*=> //g" -e "s/(0x.*)//g" | awk '{print $1}')
     for imod in $insserv_lib_need; do
       # Skip linux-vdso.so.1 and linux-gate.so.1, the virtual DSO, a shared object exposed by the kernel. They do not exist on the file system. Ref: http://ilivetoseek.wordpress.com/2011/10/24/linux-gate-so-1-or-linux-vdso-so-1/ 
       [ "$imod" = "linux-vdso.so.1" ] && continue
       [ "$imod" = "linux-gate.so.1" ] && continue
-      cp --parents -d $imod $newroot
+      #cp --parents -d $imod $newroot
+      copy_exec_drbl $imod "$(LC_ALL=C dirname $imod)"
     done
   fi
 }
@@ -449,11 +455,13 @@ create_chpasswd_env() {
   PAM_need_files="/lib*/security/ /usr/lib*/libcrack*.so* /usr/lib*/cracklib_dict.* /lib*/libnss_files*.so* /lib/*/libnss_files*.so* /usr/lib/*/libnss_files*.so* /lib*/libnsl*.so* /lib/*/libnss_nis*.so* /usr/lib/*/libnss_nis*.so*  /usr/lib/pwdutils/*.so* /lib*/libcrypt*.so* /usr/lib*/libcrypto*.so* /lib/xcrypt/libxcrypt*.so* /lib/*/security/*pam*.so* /lib/security/*pam*.so* /lib/*/libnsl*.so*  /lib/*/tls/i686/sse2/cmov/libnsl*.so* /lib/*/tls/cmov/libnsl*.so* /usr/lib/*/tls/i686/sse2/cmov/libnsl*.so* /usr/lib/*/tls/cmov/libnsl*.so* /lib/tls/*/libnsl*.so* /lib/tls/sse2/cmov/libnsl*.so* /lib/tls/cmov/libnsl*.so* /lib/*/libdbus*.so* /lib/*/tls/libdbus*.so*  /usr/lib/*/i686/libnsl*.so* /usr/lib*/libdbus*.so* /usr/lib/cmov/libdbus*.so* /lib/*/libcap*.so* /lib/libcap*.so* /usr/lib/libcap*.so* /lib/libck-connector*.so* /lib/*/libck-connector*.so* /usr/lib/libck-connector*.so* /lib/*/librt*.so* /usr/lib/*/librt*.so* /lib/*/libcgmanager*.so* /lib/*/libnih*.so* /lib/*/*pam*.so* /lib/*/libpthread*.so*"
   chpasswd_lib_need="$(LC_ALL=C ldd /usr/sbin/chpasswd | sed -e "s/.*=> //g" -e "s/(0x.*)//g" | awk '{print $1}')"
   echo_lib_need="$(LC_ALL=C ldd /bin/echo | sed -e "s/.*=> //g" -e "s/(0x.*)//g" | awk '{print $1}')"
+  export DESTDIR="$newroot"
   for imod in $chpasswd_lib_need $echo_lib_need; do
     # Skip linux-vdso.so.1 and linux-gate.so.1, the virtual DSO, a shared object exposed by the kernel. They do not exist on the file system. Ref: http://ilivetoseek.wordpress.com/2011/10/24/linux-gate-so-1-or-linux-vdso-so-1/ 
     [ "$imod" = "linux-vdso.so.1" ] && continue
     [ "$imod" = "linux-gate.so.1" ] && continue
-    cp --parents -d $imod $newroot
+    #cp --parents -d $imod $newroot
+    copy_exec_drbl $imod "$(LC_ALL=C dirname $imod)"
   done
   # /bin/echo is necessary for chpasswd
   cp --parents -d /bin/echo $newroot
@@ -1187,19 +1195,21 @@ prepare_update_rc_d_env() {
   cp -f --parents /usr/sbin/update-rc.d $newroot
   cp -f --parents /usr/bin/perl $newroot
   perl_lib_need="$(LC_ALL=C ldd /usr/bin/perl | sed -e "s/.*=> //g" -e "s/(0x.*)//g" | awk '{print $1}')"
+  export DESTDIR="$newroot"
   for imod in $perl_lib_need; do
     # Skip linux-vdso.so.1 and linux-gate.so.1, the virtual DSO, a shared object exposed by the kernel. They do not exist on the file system. Ref: http://ilivetoseek.wordpress.com/2011/10/24/linux-gate-so-1-or-linux-vdso-so-1/ 
     [ "$imod" = "linux-vdso.so.1" ] && continue
     [ "$imod" = "linux-gate.so.1" ] && continue
-    cp --parents -d $imod $newroot
+    #cp --parents -d $imod $newroot
+    copy_exec_drbl $imod "$(LC_ALL=C dirname $imod)"
   done
   # Ugly! we need some perl pm...
   mkdir -p $newroot/usr/{share,lib}
   # For perl >=5.20 in Debian, multi-arch is enabled
   # e.g. /usr/lib/i386-linux-gnu/perl, /usr/lib/x86_64-linux-gnu/perl/
   rsync -a /usr/share/perl $newroot/usr/share/
-  if [ -d "/usr/lib/perl" ]; then
-    rsync -a /usr/lib/perl $newroot/usr/lib/
+  if [ -n "$(ls /usr/lib/*perl* 2>/dev/null)" ]; then
+    rsync -a /usr/lib/*perl* $newroot/usr/lib/
   fi
   if [ -d "/usr/lib/i386-linux-gnu/perl" ]; then
     mkdir -p $newroot/usr/lib/i386-linux-gnu/
@@ -3373,6 +3383,9 @@ copy_exec_drbl() {
 
 	source="${1}"
 	if [ -n "${2}" ]; then
+		if [ ! -d "${DESTDIR}/${2}" ]; then
+			mkdir -p "${DESTDIR}/${2}"
+		fi
 		target="${2}"
 	else
 		if [ ! -e "${DESTDIR}/$(dirname "${1}")" ]; then
