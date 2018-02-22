@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.26.16-drbl1) unstable; urgency=medium
+
+  * Add those known ARM64 EFI boot files in LOCAL_EFI_BOOT_GRUB_CFG
+    of drbl-functions.
+
+ -- Steven Shiau <steven@clonezilla.org>  Thu, 22 Feb 2018 08:05:00 +0800
+
 drbl (2.26.15-drbl1) unstable; urgency=medium
 
   * Let plymouth run in drbl client of Ubuntu 14.04 so that lightdm can
