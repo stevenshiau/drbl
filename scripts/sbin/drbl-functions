@@ -72,6 +72,21 @@ menuentry \"Local operating system (if available)\" --id local-disk {
     chainloader /EFI/Boot/bootx64.efi +1
   elif [ -e /EFI/Microsoft/Boot/bootmgfw.efi ]; then
     chainloader	/EFI/Microsoft/Boot/bootmgfw.efi +1
+  elif [ -e /EFI/centos/grubaa64.efi ]; then
+    chainloader /EFI/centos/grubaa64.efi +1
+  elif [ -e /EFI/debian/grubaa64.efi ]; then
+    chainloader /EFI/debian/grubaa64.efi +1
+  elif [ -e /EFI/ubuntu/grubaa64.efi ]; then
+    chainloader /EFI/ubuntu/grubaa64.efi +1
+  elif [ -e /EFI/fedora/grubaa64.efi ]; then
+    chainloader /EFI/fedora/grubaa64.efi +1
+  elif [ -e /EFI/redhat/grubaa64.efi ]; then
+    chainloader /EFI/redhat/grubaa64.efi +1
+  elif [ -e /EFI/opensuse/grubaa64.efi ]; then
+    chainloader /EFI/opensuse/grubaa64.efi +1
+  elif [ -e /EFI/Boot/bootaa64.efi ]; then
+    # MS Windows
+    chainloader /EFI/Boot/bootaa64.efi +1
   else
     echo \"No uEFI image was found!\"
     sleep 15
