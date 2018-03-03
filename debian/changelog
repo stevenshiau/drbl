@@ -1,3 +1,11 @@
+drbl (2.26.17-drbl1) unstable; urgency=medium
+
+  * Add grub2-efi-x64-modules and grub2-efi-ia32-modules in PKG_TO_QUERY of drbl.conf.
+    Due to CentOS 7.4 has separated grub2-efi-modules as grub2-efi-x64-modules and
+    grub2-efi-ia32-modules.
+
+ -- Steven Shiau <steven@clonezilla.org>  Sat, 03 Mar 2018 09:56:27 +0800
+
 drbl (2.26.16-drbl1) unstable; urgency=medium
 
   * Add those known ARM64 EFI boot files in LOCAL_EFI_BOOT_GRUB_CFG

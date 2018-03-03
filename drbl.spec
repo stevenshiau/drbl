@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.26.16
+Version:	2.26.17
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,11 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Sat Mar 03 2018 Steven Shiau <steven _at_ clonezilla org> 2.26.17-drbl1
+  * Add grub2-efi-x64-modules and grub2-efi-ia32-modules in PKG_TO_QUERY of drbl.conf.
+    Due to CentOS 7.4 has separated grub2-efi-modules as grub2-efi-x64-modules and
+    grub2-efi-ia32-modules.
+
 * Thu Feb 22 2018 Steven Shiau <steven _at_ clonezilla org> 2.26.16-drbl1
   * Add those known ARM64 EFI boot files in LOCAL_EFI_BOOT_GRUB_CFG
     of drbl-functions.
