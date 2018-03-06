@@ -1095,3 +1095,6 @@ msg_ocs_param_z8p='lz4mt compression (Fast but also larger image)'
 # Tag on 2018/01/09
 msg_use_channel_bonding='Use channel bonding'
 msg_select_nics_for_channel_bonding='Select the network cards for channel bonding. You should choose two or more cards.'
+# Tag on 2018/03/06
+msg_it_might_stop_required_restoring_service='It might terminate the required services for restoring.'
+msg_do_all_clients_finish_jobs='Do all clients finish restoring jobs? //NOTE// DO NOT ANSWER "y" IF ALL CLIENTS HAVE _NOT_ FINISHED JOBS.'

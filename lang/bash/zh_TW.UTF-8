@@ -1090,3 +1090,6 @@ msg_ocs_param_z8p='使用lz4mt壓縮(快速但相對大的印象檔)'
 # Tag on 2018/01/09
 msg_use_channel_bonding='使用通道捆合技術'
 msg_select_nics_for_channel_bonding='選擇要拿來做通道捆合技術的網路卡，你必須選兩張或兩張以上的網卡。'
+# Tag on 2018/03/06
+msg_it_might_stop_required_restoring_service='這有可能中斷所有還原所需要的服務。'
+msg_do_all_clients_finish_jobs='所有用戶端都完成還原工作了嗎? //注意// 在用戶端還沒完成所有還原工作時，絕對不要回答"y"。'
