@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.26.18-drbl1) unstable; urgency=medium
+
+  * Update language files for new prompt in ocs-live-feed-img.
+
+ -- Steven Shiau <steven@clonezilla.org>  Tue, 06 Mar 2018 16:28:41 +0800
+
 drbl (2.26.17-drbl1) unstable; urgency=medium
 
   * Add grub2-efi-x64-modules and grub2-efi-ia32-modules in PKG_TO_QUERY of drbl.conf.
