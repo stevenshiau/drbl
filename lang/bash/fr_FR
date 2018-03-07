@@ -1082,16 +1082,16 @@ msg_ocs_use_smbv2_1='Protocole SMB v.2.1'
 msg_ocs_use_smbv3_0='Protocole SMB v.3.0'
 msg_you_must_select_a_ver='Vous devez choisir une version !'
 # Tag on 2017/09/24
-msg_lite_server_and_client_are_provided='Besides, Clonezilla lite server and client modes are also available. You can use them for massive deployment'
+msg_lite_server_and_client_are_provided='Clonezilla existe aussi en mode lite server et client. Utilisez-les pour du déploiement massif'
 # Tag on 2017/12/02
-msg_ocs_param_z8='lz4 compression (Fast but also larger image)'
+msg_ocs_param_z8='compression lz4 (rapide mais image plus volumineuse)'
 # Tag on 2017/12/27
-msg_ocs_param_z9='zstd compression'
-msg_ocs_param_z9p='pzstd compression'
-msg_ocs_param_z8p='lz4mt compression (Fast but also larger image)'
+msg_ocs_param_z9='compression zstd'
+msg_ocs_param_z9p='compression pzstd'
+msg_ocs_param_z8p='compression lz4mt (rapide mais image plus volumineuse)'
 # Tag on 2018/01/09
-msg_use_channel_bonding='Use channel bonding'
-msg_select_nics_for_channel_bonding='Select the network cards for channel bonding. You should choose two or more cards.'
+msg_use_channel_bonding='Utiliser l'\''agrégation de canaux'
+msg_select_nics_for_channel_bonding='Choisissez les cartes réseau pour l'\''agrégation des canaux. Vous pouvez choisir deux cartes, voire plus.'
 # Tag on 2018/03/06
-msg_it_might_stop_required_restoring_service='It might terminate the required services for restoring.'
-msg_do_all_clients_finish_jobs='Do all clients finish restoring jobs? //NOTE// DO NOT ANSWER "y" IF ALL CLIENTS HAVE _NOT_ FINISHED JOBS.'
+msg_it_might_stop_required_restoring_service='Ceci pourrait arrêter les services nécessaires à la restauration.'
+msg_do_all_clients_finish_jobs='Tous les clients ont-ils terminé les processus de restauration ? //NOTE// NE RÉPONDEZ PAS "y" SI TOUS LES CLIENTS N'\''ONT PAS TERMINÉ LES PROCESSUS.'
