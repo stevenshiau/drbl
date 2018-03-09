@@ -5,6 +5,14 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.26.19-drbl1) unstable; urgency=medium
+
+  * Update language files de_DE, es_ES, fr_FR, hu_HU, it_IT and sk_SK.
+    Thanks to Michael Vinzenz, Juan Ramón Martínez, Jean-Francois Nifenecker,
+    Greg Hefty, Gianfranco Gentili, and Ondrej Dzivy Balucha.
+
+ -- Steven Shiau <steven@clonezilla.org>  Fri, 09 Mar 2018 09:00:43 +0800
+
 drbl (2.26.18-drbl1) unstable; urgency=medium
 
   * Update language files for new prompt in ocs-live-feed-img.
