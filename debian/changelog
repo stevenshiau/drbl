@@ -1,3 +1,10 @@
+drbl (2.26.20-drbl1) unstable; urgency=medium
+
+  * Language file ja_JP.UTF-8 was updated. Thanks to Akira YOSHIYAMA.
+  * Language file tr_TR updated. Thanks to Volkan Gezer.
+
+ -- Steven Shiau <steven@clonezilla.org>  Tue, 13 Mar 2018 09:57:42 +0800
+
 drbl (2.26.19-drbl1) unstable; urgency=medium
 
   * Update language files de_DE, es_ES, fr_FR, hu_HU, it_IT and sk_SK.
