@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.26.21-drbl1) unstable; urgency=medium
+
+  * Bug fixed: When netowrk eth0 is configured, config_drbl_live_network
+    failed to start virtual NIC drbl0.
+
+ -- Steven Shiau <steven@clonezilla.org>  Sun, 18 Mar 2018 17:04:52 +0800
+
 drbl (2.26.20-drbl1) unstable; urgency=medium
 
   * Language file ja_JP.UTF-8 was updated. Thanks to Akira YOSHIYAMA.

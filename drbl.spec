@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.26.20
+Version:	2.26.21
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,10 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Sun Mar 18 2018 Steven Shiau <steven _at_ clonezilla org> 2.26.21-drbl1
+  * Bug fixed: When netowrk eth0 is configured, config_drbl_live_network
+    failed to start virtual NIC drbl0.
+
 * Tue Mar 13 2018 Steven Shiau <steven _at_ clonezilla org> 2.26.20-drbl1
   * Language file ja_JP.UTF-8 was updated. Thanks to Akira YOSHIYAMA.
   * Language file tr_TR updated. Thanks to Volkan Gezer.
