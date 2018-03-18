@@ -2397,18 +2397,19 @@ is_boot_from_live() {
 }
 #
 detect_dhcp_srv_in_lan() {
-  # Return global variable "use_existing_dhcp_srv"
-  local eth_port dhcp_detect_bond_tmp dhcp_find_rc
-  eth_port="$(LC_ALL=C get-nic-devs | head -n 1)"
+  # Return global variable "use_existing_dhcp_srv", "DHCPOFFER_eth", "DHCPOFFER_siaddr",
+  # "DHCPOFFER_yiaddr", "DHCPOFFER_netmask", "DHCPOFFER_prefix"
+  local eth_pt dhcp_detect_bond_tmp dhcp_find_rc
+  eth_pt="$(LC_ALL=C get-nic-devs | head -n 1)"
   dhcp_detect_bond_tmp="$(mktemp /tmp/dhcp_detect_bond_tmp.XXXXXX)"
   dhcp_find_rc=1
-  echo "Trying to find if existing DHCP service available on local network via ${eth_port}..."
+  echo "Trying to find if existing DHCP service available on local network via ${eth_pt}..."
   while [ "$dhcp_find_rc" -ne 0 ]; do
-    drbl-find-dhcp-srv -i $eth_port $dhcp_detect_bond_tmp
+    drbl-find-dhcp-srv -i $eth_pt $dhcp_detect_bond_tmp
     dhcp_find_rc=$?
     if [ "$dhcp_find_rc" -ne 0 ]; then
       echo
-      echo "$msg_failed_to_find_any_dhcp_srv: $eth_port"
+      echo "$msg_failed_to_find_any_dhcp_srv: $eth_pt"
       echo "$msg_do_u_want_to_do_it_again"
       echo -n "[Y/n] "
       read try_dhcp_again
@@ -2501,7 +2502,8 @@ config_drbl_live_network(){
     [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
     echo "Only one network interface was found and configured."
     [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
-    detect_dhcp_srv_in_lan
+    detect_dhcp_srv_in_lan  # Get use_existing_dhcp_srv and DHCPOFFER_eth
+    eth_port="$DHCPOFFER_eth"
 
     if [ "$use_existing_dhcp_srv" = "yes" ]; then
       # Add a virtual network device on physical net device
@@ -2583,7 +2585,6 @@ DHCP_END
 	  DHCPOFFER_prefix="$(LC_ALL=C ip -o -f inet addr show $eth_port | awk -F" " '{print $4}' | awk -F"/" '{print $2}')"
         fi
         ip addr add $DHCPOFFER_yiaddr/$DHCPOFFER_prefix dev drbl0
-NET_END
       else
         [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
         echo "Failed to lease DHCP IP address for network interface drbl0!"
