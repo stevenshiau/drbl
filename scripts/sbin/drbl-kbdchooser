@@ -14,8 +14,12 @@ DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/usr/share/drbl}"
 # Loading settings 
 [ -e /etc/ocs/ocs-live.conf ] && . /etc/ocs/ocs-live.conf
 
-# Setting. In the future, we will swtich to keyboard_configuration. However, remember to make sure Ubuntu has it, too.
-preferred_configure="console_data"
+# Settings:
+# Before we used "console_data", however, there are some issues sometimes:
+# https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=570223
+# https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=893612
+# 2018/03/21 we switch to "keyboard_configuration" which is actively developed.
+preferred_configure="keyboard_configuration"
 
 #
 run_config_from_keyboard_configuration() {
@@ -42,7 +46,10 @@ run_config_from_keyboard_configuration() {
   if [ "$keymap_mode" = "Change" ]; then
     dpkg-reconfigure keyboard-configuration
     rc=$?
-    [ "$rc" -eq 0 ] && setupcon
+    if [ "$rc" -eq 0 ]; then
+      service keyboard-setup restart
+      setupcon -k
+    fi
   fi
 } # end of run_config_from_keyboard_configuration
 
