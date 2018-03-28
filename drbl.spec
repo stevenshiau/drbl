@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.26.21
+Version:	2.26.23
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,16 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Wed Mar 28 2018 Steven Shiau <steven _at_ clonezilla org> 2.26.23-drbl1
+  * Bug fixed: failed to correctly detect iso file in drbl-sl.
+
+* Wed Mar 21 2018 Steven Shiau <steven _at_ clonezilla org> 2.26.22-drbl1
+  * Switch keymap configuration method from console-data to
+    keyboard-configuration.
+    Ref:
+    https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=570223
+    https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=893612
+
 * Sun Mar 18 2018 Steven Shiau <steven _at_ clonezilla org> 2.26.21-drbl1
   * Bug fixed: When netowrk eth0 is configured, config_drbl_live_network
     failed to start virtual NIC drbl0.

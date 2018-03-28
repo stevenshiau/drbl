@@ -5,6 +5,22 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.26.23-drbl1) unstable; urgency=medium
+
+  * Bug fixed: failed to correctly detect iso file in drbl-sl.
+
+ -- Steven Shiau <steven@clonezilla.org>  Wed, 28 Mar 2018 22:52:07 +0800
+
+drbl (2.26.22-drbl1) unstable; urgency=medium
+
+  * Switch keymap configuration method from console-data to
+    keyboard-configuration.
+    Ref:
+    https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=570223
+    https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=893612
+
+ -- Steven Shiau <steven@clonezilla.org>  Wed, 21 Mar 2018 11:53:09 +0800
+
 drbl (2.26.21-drbl1) unstable; urgency=medium
 
   * Bug fixed: When netowrk eth0 is configured, config_drbl_live_network
