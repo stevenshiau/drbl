@@ -475,8 +475,8 @@ install_SL(){
     # For file version 5.17 in Jessie:
     # debian-7.4.0-i386-netinst.iso: DOS/MBR boot sector; partition 1 : ID=0x17, active, start-CHS (0x0,2,1), end-CHS (0x114,63,32), startsector 64, 567232 sectors
     if [ -z "$(LC_ALL=C file -Lsk $SL_ISO | grep -i "ISO 9660 CD-ROM filesystem data")" ] && \
-       [ -z "$(LC_ALL=C file -Lsk $SL_ISO | grep -i "x86 boot sector")" -a "$(echo $SL_ISO | grep -iE "\.iso")" ] && \
-       [ -z "$(LC_ALL=C file -Lsk $SL_ISO | grep -i "DOS/MBR boot sector")" -a "$(echo $SL_ISO | grep -iE "\.iso")" ]; then
+       [ -z "$(LC_ALL=C file -Lsk $SL_ISO | grep -i "x86 boot sector")" -a -z "$(echo $SL_ISO | grep -iE "\.iso")" ] && \
+       [ -z "$(LC_ALL=C file -Lsk $SL_ISO | grep -i "DOS/MBR boot sector")" -a -z "$(echo $SL_ISO | grep -iE "\.iso")" ]; then
       [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
       echo "$SL_ISO is not an ISO 9660 CD-ROM filesystem data file!"
       [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
