@@ -474,15 +474,30 @@ install_SL(){
     # x86 boot sector # file version 4.10
     # For file version 5.17 in Jessie:
     # debian-7.4.0-i386-netinst.iso: DOS/MBR boot sector; partition 1 : ID=0x17, active, start-CHS (0x0,2,1), end-CHS (0x114,63,32), startsector 64, 567232 sectors
-    if [ -z "$(LC_ALL=C file -Lsk $SL_ISO | grep -i "ISO 9660 CD-ROM filesystem data")" ] && \
-       [ -z "$(LC_ALL=C file -Lsk $SL_ISO | grep -i "x86 boot sector")" -a -z "$(echo $SL_ISO | grep -iE "\.iso")" ] && \
-       [ -z "$(LC_ALL=C file -Lsk $SL_ISO | grep -i "DOS/MBR boot sector")" -a -z "$(echo $SL_ISO | grep -iE "\.iso")" ]; then
-      [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
-      echo "$SL_ISO is not an ISO 9660 CD-ROM filesystem data file!"
-      [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
-      echo "Program terminated!"
-      exit 1
-    fi
+    case "$SL_ISO" in
+    *.iso)
+      if [ -z "$(LC_ALL=C file -Lsk $SL_ISO | grep -i "ISO 9660 CD-ROM filesystem data")" ] &&\
+      [ -z "$(LC_ALL=C file -Lsk $SL_ISO | grep -i "x86 boot sector")" ] &&\
+      [ -z "$(LC_ALL=C file -Lsk $SL_ISO | grep -i "DOS/MBR boot sector")" ]
+      then
+        [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+        echo "$SL_ISO is not an ISO 9660 CD-ROM filesystem data file!"
+        [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+        echo "Program terminated!"
+        exit 1
+      fi
+      ;;
+    *.zip)
+      if [ -z "$(LC_ALL=C file -Lsk $SL_ISO | grep -i "Zip archive data")" ]
+      then
+        [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+        echo "$SL_ISO is not a zip file!"
+        [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+        echo "Program terminated!"
+        exit 1
+      fi
+      ;;
+    esac
   elif [ "$source_mode" = "live-path" ]; then
     # Case (2): live-path. From the 1st line in file 
     # /lib/live/mount/medium/{Clonezilla-Live-Version,DRBL-Live-Version,GParted-Live-Version}
