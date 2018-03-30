@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.26.24-drbl1) unstable; urgency=medium
+
+  * Better way to check clonezilla live iso or zip in drbl-sl.
+
+ -- Steven Shiau <steven@clonezilla.org>  Fri, 30 Mar 2018 08:44:30 +0800
+
 drbl (2.26.23-drbl1) unstable; urgency=medium
 
   * Bug fixed: failed to correctly detect iso file in drbl-sl.
