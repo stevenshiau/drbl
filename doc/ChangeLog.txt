@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.26.25-drbl1) unstable; urgency=medium
+
+  * Add ipmitool to clonezilla live packages list.
+
+ -- Steven Shiau <steven@clonezilla.org>  Mon, 23 Apr 2018 20:40:36 +0800
+
 drbl (2.26.24-drbl1) unstable; urgency=medium
 
   * Better way to check clonezilla live iso or zip in drbl-sl.
