@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.26.26-drbl1) unstable; urgency=medium
+
+  * Add Polish language files. Thanks to kris <ski777000 _at_ gmail com>.
+
+ -- Steven Shiau <steven@clonezilla.org>  Mon, 07 May 2018 21:05:56 +0800
+
 drbl (2.26.25-drbl1) unstable; urgency=medium
 
   * Add ipmitool to clonezilla live packages list.
