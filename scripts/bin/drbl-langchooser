@@ -38,6 +38,7 @@ while [ "$ASK_LANG" -ne 0 ]; do
   fr_FR.UTF-8 "French | Français" \
   it_IT.UTF-8 "Italian | Italiano" \
   ja_JP.UTF-8 "Japanese | 日本語" \
+  pl_PL.UTF-8 "Polish | Polski" \
   pt_BR.UTF-8 "Brazilian Portuguese | Português do Brasil" \
   ru_RU.UTF-8 "Russian | Русский" \
   sk_SK.UTF-8 "Slovak | Slovenský" \
