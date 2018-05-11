@@ -343,7 +343,7 @@ msg_time_to_wait='Ustaw czas, po którym klienci będą mogli rozpocząć klonow
 msg_clients_to_wait='Ustaw liczbę klientów do sklonowania'
 msg_clients_time_to_wait='Ustaw liczbę klientów i maksymalny czas do rozpoczęcia klonowania'
 msg_how_many_clients_to_restore='Określ liczbę klientów do przywrócenia'
-msg_input_name_to_save_the_img='Wprowadź nazwę do zapisywanego obrazu, którą będziesz używać'
+msg_input_name_to_save_the_img='Wprowadź nazwę dla zapisywanego obrazu, którą będziesz używać'
 msg_time_to_wait_sec='Minimalny czas oczekiwania (Sec) (liczenie rozpoczyna się, gdy pierwszy klient połączy się)'
 msg_max_time_to_wait_sec="Maksymalny czas oczekiwania (Sec) (liczenie rozpoczyna się, gdy pierwszy klient połączy się). Jeśli nie ma wystarczającej liczby klientów połączonych (ale jest przynajmniej jeden), mimo wszystko proces rozpocznie się po [przydzielonych sekundach] od pierwszego połączenia klienta. (Lepiej >= $SLEEP_TIME_AFTER_PART_CLONED)"
 msg_you_must_input_filename='Musisz wpisać nazwę'
@@ -568,7 +568,7 @@ msg_target_dev_has_this_partition_table='Urządzenie docelowe, które chcesz zas
 msg_let_me_ask_you_again='Pozwól, że zapytam ponownie'
 msg_unable_to_mnt_ocsroot="Nie można zamontować zasobu jako $ocsroot"
 msg_mount_ocsroot_img_hint_short_des='Zamontuj katalog obrazów Clonezilli'
-msg_mount_ocsroo_img_hint_long_des="Przed klonowaniem należy przypisać miejsce, w którym zostanie zapisany/odczytany obraz Clonezilli. Zamontujemy to urządzenie lub zasób zdalny w $ocsroot. Obraz Clonezilli zostanie zapisany lub odczytany z $ocsroot."
+msg_mount_ocsroo_img_hint_long_des="Przed klonowaniem należy przypisać miejsce, w którym zostanie zapisany/odczytany obraz Clonezilli. Zamontujemy to urządzenie lub zasób zdalny w: $ocsroot. Obraz Clonezilli zostanie zapisany lub odczytany z: $ocsroot."
 msg_mount_local_dev='Użyj lokalnego urządzenia (np.: dysk twardy, napęd USB)'
 msg_mount_sshfs='Użyj serwera SSH'
 msg_mount_smbfs='Użyj serwera SAMBA (serwer Network Neighborhood)'
@@ -576,7 +576,7 @@ msg_mount_nfs='Użyj serwera NFS'
 msg_mount_ftpfs='Użyj serwera FTP'
 msg_do_it_manually='Zrób to ręcznie'
 msg_skip_this_use_existing_ocsroot="Użyj istniejącego $ocsroot"
-msg_device_to_mount_as_ocsroot_do_not_mount_target_dev="Teraz musimy zamontować urządzenie w $ocsroot (Repozytorium obrazów Clonezilla), abyśmy mogli odczytać lub zapisać obraz w $ocsroot.\n///UWAGA/// NIE powinieneś montować partycji, która ma być kopią zapasową w $ocsroot"
+msg_device_to_mount_as_ocsroot_do_not_mount_target_dev="Teraz musimy zamontować urządzenie w: $ocsroot (Repozytorium Obrazów Clonezilli), abyśmy mogli odczytać lub zapisać obraz w: $ocsroot.\n///UWAGA/// NIE powinieneś montować partycji, która ma być kopią zapasową w: $ocsroot"
 msg_ip_address_or_FQDN_of_server='Adres IP lub FQDN serwera. Na przykład. 192.168.120.254 lub hostname.domainname.org'
 msg_smb_domain_in_server='Domena na serwerze samby'
 msg_if_no_smb_domain_skip_this='Możesz to anulować, jeśli żadna domena nie jest ustawiona na serwerze Samby'
@@ -797,7 +797,7 @@ msg_mkisofs_unable_process_that="mkisofs lub genisoimage mogą nie być w stanie
 msg_ocs_param_t1='Klient przywraca fabrycznie zainstalowany bootloader z syslinux (tylko dla Windows)'
 # Tag on 2010/12/08
 msg_keyboard_configuration='Konfiguracja klawiatury'
-msg_change_keyboard_layout='Zmień układ klawiatury'
+msg_change_keyboard_layout='Zmienić układ klawiatury'
 msg_keep_the_default_US_keymap='Zachowaj domyślny układ klawiatury - klawiatura amerykańska'
 msg_ocs_onthefly_param_q1='Wymuszenie kopii sektor po sektorze (obsługuje wszystkie systemy plików, ale jest nieefektywne)'
 # Tag on 2011/02/15
@@ -851,7 +851,7 @@ msg_restore_1_image_to_multiple_local_disks='Restore an image to multiple local 
 msg_prompt_for_insert_USB_dev_as_destination_disks='Jeśli chcesz używać urządzeń USB jako dysków docelowych, podłącz urządzenia USB do tego komputera *teraz*. Poczekaj około 5 sekund, a następnie naciśnij klawisz Enter, aby system operacyjny mógł wykryć urządzenia USB.'
 msg_prompt_to_use_ask_user_for_later_choose='Jeśli chcesz wybrać urządzenie docelowe później, wpisz "ask_user".'
 # Tag on 2011/10/31
-msg_choose_if_fsck_the_source_part='Jeśli chcesz sprawdzić i naprawić system plików przed jego zapisaniem. Ta opcja jest przeznaczona tylko dla niektórych systemów plików, które są dobrze obsługiwane przez fsck na systemach GNU / Linux, takich jak ext2 / 3/4, reiserfs, xfs, jfs, vfat. Nie dla NTFS, HFS + ...'
+msg_choose_if_fsck_the_source_part='Jeśli chcesz sprawdzić i naprawić system plików przed jego zapisaniem. Ta opcja jest przeznaczona tylko dla niektórych systemów plików, które są dobrze obsługiwane przez fsck na systemach GNU / Linux, takich jak ext2 /3/4, reiserfs, xfs, jfs, vfat. Nie dla NTFS, HFS + ...'
 msg_skip_check_source_fs='Pomiń sprawdzanie/naprawianie źródłowego systemu plików'
 msg_ocs_onthefly_param_irhr='Nie usuwaj rekordu sprzętowego systemu Linux udev po przywróceniu.'
 msg_ocs_param_ius='Nie aktualizuj plików związanych z syslinux po przywróceniu.'
@@ -1081,7 +1081,7 @@ msg_ocs_use_smbv2_1='Protokół SMB 2.1'
 msg_ocs_use_smbv3_0='Protokół SMB 3.0'
 msg_you_must_select_a_ver='Musisz wybrać wersję!'
 # Tag on 2017/09/24
-msg_lite_server_and_client_are_provided='Ponadto dostępne są także tryby Clonezilla lite server / client. Możesz ich używać do masowego wdrażania/rozpowszechniania.'
+msg_lite_server_and_client_are_provided='Ponadto dostępne są także tryby Clonezilla lite server / client. Możesz ich używać do masowych instalacji zbiorczych.'
 # Tag on 2017/12/02
 msg_ocs_param_z8='kompresja lz4 (Szybka, ale daje większy obraz)'
 # Tag on 2017/12/27
