@@ -1242,6 +1242,17 @@ if [ -e /etc/init.d/drbl-clients-nat ]; then
   rm -f /etc/init.d/drbl-clients-nat
 fi
 
+# Revert the modifications about systemd-logind bug.
+# For Ubuntu 18.04 using systemd > 275, a bug for systemd-logind
+# Ref: https://sourceforge.net/p/drbl/mailman/message/36319119/
+#      https://github.com/systemd/systemd/issues/7074
+if [ -e /lib/systemd/system/systemd-logind.service ]; then
+  perl -pi -e "s/^#IPAddressDeny=any.*$/IPAddressDeny=any/g" /lib/systemd/system/systemd-logind.service
+fi
+if [ -e /lib/systemd/system/systemd-udevd.service ]; then
+  perl -pi -e "s/^#IPAddressDeny=any.*$/IPAddressDeny=any/g" /lib/systemd/system/systemd-udevd.service
+fi
+
 # remove the stale file
 rm -f /etc/init.d/ocs
 rm -f $SYSCONF_PATH/mkswapfile
@@ -3707,16 +3718,21 @@ case "$use_kernel_from" in
 
     # Download the linux-image-extra package from Ubuntu. This is for Ubuntu 12.04 or later (12.10, 13.04...)
     # Ref: https://lists.ubuntu.com/archives/kernel-team/2012-May/020448.html
-    if [ -n "$(apt-cache search linux-image-extra-$drbl_kernel_ver)" ]; then
-      apt-get $inst_opt --reinstall --download-only install linux-image-extra-$drbl_kernel_ver
-      # find the ubuntu kernel
-      # The "_" is important, since the file names in the cache dir are like
-      # linux-image-extra-3.5.0-17-generic_3.5.0-17.28_i386.deb
-      if [ -n "$(ls /var/cache/apt/archives/linux-image-extra-${drbl_kernel_ver}_*.deb 2>/dev/null)" ]; then
-        latest_drbl_ubuntu_kernel_in_rep_deb="$(unalias ls 2>/dev/null; ls /var/cache/apt/archives/linux-image-extra-${drbl_kernel_ver}_*.deb 2>/dev/null | pkg-ver-latest)"
-        drblsrv_offline_extra_opt="$drblsrv_offline_extra_opt -e $latest_drbl_ubuntu_kernel_in_rep_deb"
+    # Older Ubuntu linux (12.04-17.10) use linux-image-extra
+    # Newer Ubuntu linux (>=18.04) use linux-modules and linux-modules-extra
+    kernel_mod_extra_prefix_list="linux-modules linux-modules-extra linux-image-extra"
+    for ik in $kernel_mod_extra_prefix_list; do
+      if [ -n "$(apt-cache search ${ik}-$drbl_kernel_ver)" ]; then
+        apt-get $inst_opt --reinstall --download-only install ${ik}-$drbl_kernel_ver
+        # find the ubuntu kernel
+        # The "_" is important, since the file names in the cache dir are like
+        # linux-image-extra-3.5.0-17-generic_3.5.0-17.28_i386.deb
+        if [ -n "$(ls /var/cache/apt/archives/${ik}-${drbl_kernel_ver}_*.deb 2>/dev/null)" ]; then
+          latest_drbl_ubuntu_kernel_in_rep_deb="$(unalias ls 2>/dev/null; ls /var/cache/apt/archives/${ik}-${drbl_kernel_ver}_*.deb 2>/dev/null | pkg-ver-latest)"
+          drblsrv_offline_extra_opt="$drblsrv_offline_extra_opt -e $latest_drbl_ubuntu_kernel_in_rep_deb"
+        fi
       fi
-    fi
+    done
 
     # The "_" is important, since the file names in the cache dir are like
     # kernel-image-2.6.8-2-386_2.6.8-16_i386.deb,

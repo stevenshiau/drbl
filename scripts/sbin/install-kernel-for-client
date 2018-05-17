@@ -165,10 +165,11 @@ if [ "$rc" -eq 1 ]; then
 fi
 
 if [ ! "$just_cp_files" = "yes" ]; then 
-  # For FC 22 or later, rpm -ivh doesn't put /boot/System.map-$client_kernel_ver wit --noscripts
-  # Therefore we copy vmlinuz, 
-  # if package is "kernel-modules,[-extra]-* " skip this
-  if [ ! -e "$drbl_common_root/boot/System.map-$client_kernel_ver" ]; then
+  # For FC 22 or later, rpm -ivh doesn't put /boot/System.map-$client_kernel_ver with --noscripts
+  # Therefore we copy vmlinuz, System.map-$client_kernel_ver, config-$client_kernel_ver
+  # This is only required for Fedora rpm. Ubuntu's linux-modules deb contains System.map-$client_kernel_ver
+  if [ ! -e "$drbl_common_root/boot/System.map-$client_kernel_ver" -a \
+	 -n "$(ls $client_kernel_pkg | grep -iE "^.*.rpm")" ]; then
     KRC=0
     echo "Preparing client's /boot/System.map-$client_kernel_ver..."
     _ksystem_map_realpath="$(LC_ALL=C rpm -qpl $client_kernel_pkg | grep -E 'System.map' | grep -vE '^/boot/')"
@@ -181,7 +182,7 @@ if [ ! "$just_cp_files" = "yes" ]; then
       KRC=1
     fi
 
-    echo "Preparing client's /boot/linuz-$client_kernel_ver..."
+    echo "Preparing client's /boot/vmlinuz-$client_kernel_ver..."
     _kvmlinuz_realpath="$(LC_ALL=C rpm -qpl $client_kernel_pkg | grep -E 'vmlinuz$' | grep -vE '^/boot/')"
     _kvmlinuz_bootpath="$(LC_ALL=C rpm -qpl $client_kernel_pkg | grep -E '^/boot/vmlinuz' )"
     if [ -e "$drbl_common_root/$_kvmlinuz_realpath" \

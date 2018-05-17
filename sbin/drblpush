@@ -2096,6 +2096,14 @@ if [ "$DISTRIB_ID" = "Ubuntu" ]; then
         chown -R statd /var/lib/nfs/{sm,sm.bak}
       fi
     ;;
+   "18.04")
+      # systemd-logind's IP sandbox breaks nss-nis and suchlike #7074 
+      # Thanks to Robert Arkiletian for reporting this in drbl mailing list.
+      # Ref: https://sourceforge.net/p/drbl/mailman/message/36319119/
+      #      https://github.com/systemd/systemd/issues/7074
+      perl -pi -e "s/^IPAddressDeny=any/#IPAddressDeny=any # commented by DRBL/g" /lib/systemd/system/systemd-logind.service
+      perl -pi -e "s/^IPAddressDeny=any/#IPAddressDeny=any # commented by DRBL/g" /lib/systemd/system/systemd-udevd.service
+    ;;
   esac
 fi
 

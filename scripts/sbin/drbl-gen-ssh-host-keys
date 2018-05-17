@@ -70,7 +70,10 @@ do_dsa_keygen() {
 generate() {
 	# Create keys if necessary
 	echo -n "Generating SSH host keys for client $HOST_IP if they do not exist... "
-	do_rsa1_keygen
+	if [ -e /etc/ssh/ssh_host_key ]; then
+          # RSA1 exists on server, so create it in the clients, too. For newer GNU/Linux, RSA1 is no more.
+	  do_rsa1_keygen
+	fi
 	do_rsa_keygen
 	do_dsa_keygen
 	echo "done!"
