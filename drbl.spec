@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.27.1
+Version:	2.27.2
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,10 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Fri May 18 2018 Steven Shiau <steven _at_ clonezilla org> 2.27.2-drbl1
+  * New a variable drbl_client_debian_exclude_kernels in drbl.conf so that
+    seldom_kernel_filter in drblsrv can use that.
+
 * Thu May 17 2018 Steven Shiau <steven _at_ clonezilla org> 2.27.1-drbl1
   * Initial support for Ubuntu 18.04. Thanks to Robert Arkiletian.
 
