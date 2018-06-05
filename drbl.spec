@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.27.3
+Version:	2.27.4
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,12 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Wed Jun 06 2018 Steven Shiau <steven _at_ clonezilla org> 2.27.4-drbl1
+  *  Add bind-interfaces for dnsmasq.conf in the function gen_dnsmasq_cfg.
+     This will make dnsmasq work with the stub resolver without conflicting.
+     Otherwise dnsmasq won't start.
+     Ref: https://github.com/systemd/systemd/pull/4061
+
 * Thu May 24 2018 Steven Shiau <steven _at_ clonezilla org> 2.27.3-drbl1
   * Package name btrfs-tools was replaced by btrfs-progs in Debian and Ubuntu.
 

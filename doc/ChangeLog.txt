@@ -5,6 +5,15 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.27.4-drbl1) unstable; urgency=medium
+
+  *  Add bind-interfaces for dnsmasq.conf in the function gen_dnsmasq_cfg.
+     This will make dnsmasq work with the stub resolver without conflicting.
+     Otherwise dnsmasq won't start.
+     Ref: https://github.com/systemd/systemd/pull/4061
+
+ -- Steven Shiau <steven@clonezilla.org>  Wed, 06 Jun 2018 07:21:20 +0800
+
 drbl (2.27.3-drbl1) unstable; urgency=medium
 
   * Package name btrfs-tools was replaced by btrfs-progs in Debian and Ubuntu.
