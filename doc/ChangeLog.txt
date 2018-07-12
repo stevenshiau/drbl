@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.27.5-drbl1) unstable; urgency=medium
+
+  * Language file ca_ES was updated. Thanks to René Mérou.
+
+ -- Steven Shiau <steven@clonezilla.org>  Thu, 12 Jul 2018 20:24:40 +0800
+
 drbl (2.27.4-drbl1) unstable; urgency=medium
 
   *  Add bind-interfaces for dnsmasq.conf in the function gen_dnsmasq_cfg.
