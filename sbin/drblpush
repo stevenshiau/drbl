@@ -1801,6 +1801,13 @@ sub drbl_server_parse {
   #chomp(my $etherboot_zpxe=`$query_pkglist_cmd drbl-etherboot | grep -E "eb-.*-etherboot-pci.zpxe\$" | xargs basename`);
   #chomp(my $sis900_zpxe=`$query_pkglist_cmd drbl-etherboot | grep -E "sis900.zpxe\$" | xargs basename`);
   #print "done! \n";
+  my $pxe_file;
+  if (-e "$pxecfg_pd/lpxelinux.0"){
+    $pxe_file="lpxelinux.0";
+  }else{
+    $pxe_file="pxelinux.0";
+  }
+
   print "$delimiter{\"star_line\"}\n";
 
   # some general option in dhcpd.conf, hosts, $main_sh
@@ -1847,7 +1854,7 @@ if option arch = 00:06 {
     # Thanks to Danny Russ for providing this.
     filename "bootx64.efi";
 } else {
-    filename "lpxelinux.0";
+    filename "$pxe_file";
 }
 
 ## Uncomment the following "if block" when you have some buggy PXE NIC card (such as annoying sis900 NIC). Remember to modify the MAC vendor prefix and restart dhcpd service!!!
