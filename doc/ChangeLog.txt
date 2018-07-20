@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.27.6-drbl1) unstable; urgency=medium
+
+  * Test to see if pxelinux.0 or lpxelinux.0 should be used in drbl.conf.
+
+ -- Steven Shiau <steven@clonezilla.org>  Fri, 20 Jul 2018 16:33:48 +0800
+
 drbl (2.27.5-drbl1) unstable; urgency=medium
 
   * Language file ca_ES was updated. Thanks to René Mérou.
