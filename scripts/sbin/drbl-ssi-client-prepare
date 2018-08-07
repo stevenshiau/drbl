@@ -148,12 +148,12 @@ fi
 ############
 # This part is common for DRBL SSI and clonezilla box
 if [ -f /etc/fstab ]; then
-  # remove those /tftpboot/nodes/$IP.
+  # remove those ${drblroot}/$IP.
   # now it's single system image
   # First we find the template machine IP address:
-  template_host_ip="$(LANG=C grep -E "[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+:/tftpboot/nodes/.*/etc" /etc/fstab | cut -d":" -f 1)"
+  template_host_ip="$(LANG=C grep -E "[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+:${drblroot}/.*/etc" /etc/fstab | cut -d":" -f 1)"
   echo "# This fstab is modified by DRBL SSI (init.drbl)." > /etc/fstab.mod
-  grep -vE "[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+:/tftpboot/nodes/" /etc/fstab  >> /etc/fstab.mod
+  grep -vE "[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+:${drblroot}/" /etc/fstab  >> /etc/fstab.mod
   #perl -pi -e "s/^[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+:/$nfsserver:/g" /etc/fstab.mod
   perl -pi -e "s/^$template_host_ip:/$nfsserver:/g" /etc/fstab.mod
   mv -f /etc/fstab.mod /etc/fstab

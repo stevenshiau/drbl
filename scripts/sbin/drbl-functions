@@ -351,7 +351,7 @@ check_if_root() {
 }
 
 # function to get the autologin_account
-# input is the host dir, like /tftpboot/nodes/192.168.1.1, then
+# input is the host dir, like ${drblroot}/192.168.1.1, then
 # return the auto_login ID
 get_autologin_account() {
     local ihost="$1"

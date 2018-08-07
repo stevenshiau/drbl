@@ -336,7 +336,7 @@ fi
 [ ! -d /tftpboot ] && mkdir /tftpboot
 [ ! -d "${pxecfg_pd}" ] && mkdir -p "${pxecfg_pd}"
 [ ! -d "${drbl_common_root}" ] && mkdir -p "${drbl_common_root}"
-[ ! -d /tftpboot/nodes ] && mkdir -p /tftpboot/nodes
+[ ! -d "${drblroot}" ] && mkdir -p "${drblroot}"
 
 #
 echo "$drbl_kernel" > $pxecfg_pd/kernel_version_in_initrd.txt

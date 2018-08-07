@@ -2048,7 +2048,7 @@ clean_tftpboot_and_misc() {
   find /tftpboot/ -maxdepth 1 -type l -exec rm -f {} \;
   # we won't to affect those netinstall, maybe they are not removed previuosly. .
   find "${pxecfg_pd}" ! -name "*netinstall*" ! -type d -exec rm -f {} \;
-  [ -d "/tftpboot/nodes/" ] && rm -rf /tftpboot/nodes
+  [ -d "${drblroot}" ] && rm -rf "${drblroot}"
   [ -d "$drbl_common_root" ] && rm -rf "$drbl_common_root"
   [ -d "$drbl_syscfg" -a "$drbl_remove_answer" = "y" ] && rm -rf $drbl_syscfg
   [ -f "$ocs_lock_dir/clonezilla.lock" ] && rm -f $ocs_lock_dir/clonezilla.lock

@@ -866,7 +866,7 @@ sub interactive_mode {
             # count the clients no which already exist to prompt user
             my $client_no;
 	    if ( ! $assign_client_no_each_port ) {
-              $client_no=`LC_ALL=C unalias ls 2> /dev/null; ls -d /tftpboot/nodes/$ip_sys_prefix[$i].* 2>/dev/null |wc -w|sed -e "s/ //g"`;
+              $client_no=`LC_ALL=C unalias ls 2> /dev/null; ls -d $drblroot/$ip_sys_prefix[$i].* 2>/dev/null |wc -w|sed -e "s/ //g"`;
               chomp($client_no);
               # if 0, set the default no for user
 	      if ($client_no eq "0") { $client_no="$DEFAULT_CLIENT_NO_EACH_PORT";}
@@ -1466,7 +1466,7 @@ sub interactive_mode {
         }
 
 	# Ask if user want to purge client files if they exist
-        $client_exist_flag=system("LC_ALL=C ls -d /tftpboot/nodes/* >/dev/null 2>&1") / 256;
+        $client_exist_flag=system("LC_ALL=C ls -d $drblroot/* >/dev/null 2>&1") / 256;
         if ($client_exist_flag eq 0) {
 	   # old clients exist
 	   if ( ! $keep_client ) {
@@ -2167,7 +2167,7 @@ drbl-etc-hosts
 
 echo -n "Cleaning the stale files of the diskless nodes if they exist... "
 # clean the config or setting files in $drbl_common_root/etc/diskless-image
-# and /tftpboot/nodes/*/etc/diskless-image.
+# and $drblroot/*/etc/diskless-image.
 # This action is important, otherwise the stalled files will always exist.
 find $drbl_common_root/etc/diskless-image $drblroot/*/etc/diskless-image -name "config" -exec rm -f {} \; &> /dev/null
 find $drbl_common_root $drblroot -name "$public_ip_list" -exec rm -f {} \; &> /dev/null
@@ -4519,7 +4519,7 @@ echo "Now add necessary services to this DRBL server: DHCP, TFTP, NFS, NIS..."
 
 # set the restrict in ntp.conf, only the subnet of DRBL clients can access.
 #drbl_subnet=
-#for ihost in /tftpboot/nodes/*; do
+#for ihost in ${drblroot}/*; do
 #  ip="`basename $ihost`"
 #  subnet=$(echo $ip | cut -d"." -f1-3)
 #  if [ -z "$(echo $drbl_subnet | grep $subnet 2> /dev/null)" ]; then

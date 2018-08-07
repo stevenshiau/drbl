@@ -99,7 +99,7 @@ add_extra_nfs_opt_to_fstab() {
   echo "Try to add $NFS_OPT_TO_ADD in /etc/fstab..."
   if [ -z "$(grep -Ew "nosharecache" /etc/fstab)" ]; then
     # Make it like:
-    # 192.168.130.254:/tftpboot/nodes/192.168.130.1/etc      /etc    nfs     rw,rsize=65536,wsize=65536,tcp,nosharecache,defaults        0 0
+    # 192.168.130.254:${nfshostsdir}/192.168.130.1/etc      /etc    nfs     rw,rsize=65536,wsize=65536,tcp,nosharecache,defaults        0 0
     perl -pi -e "s|(^[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+\.[[:digit:]]+:.*[[:space:]]+.*nfs.*)(,defaults.*)|\$1,nosharecache\$2|g" /etc/fstab
   fi
 } # end of add_extra_nfs_opt_to_fstab
@@ -108,7 +108,7 @@ remove_extra_nfs_opt_to_fstab() {
   echo "Try to remove $NFS_OPT_TO_ADD in /etc/fstab..."
   if [ -n "$(grep -Ew "nosharecache" /etc/fstab)" ]; then
     # Make it like:
-    # 192.168.130.254:/tftpboot/nodes/192.168.130.1/etc      /etc    nfs     rw,rsize=65536,wsize=65536,tcp,defaults        0 0
+    # 192.168.130.254:${nfshostsdir}/192.168.130.1/etc      /etc    nfs     rw,rsize=65536,wsize=65536,tcp,defaults        0 0
     perl -pi -e "s|,nosharecache||g" /etc/fstab
   fi
 } # end of remove_extra_nfs_opt_to_fstab() {

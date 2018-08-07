@@ -155,7 +155,7 @@ check_distribution_name
 
 # varlib_NOT_2_be_copied_2_each_client is loaded from drbl.conf
 # prepare the options for rsync to exclude when copy files in
-# $drbl_common_root/var/lib/* to /tftpboot/nodes/$IP/var/lib/
+# $drbl_common_root/var/lib/* to ${drblroot}/$IP/var/lib/
 varlib_opts_common_to_each=""
 for iv in $varlib_NOT_2_be_copied_2_each_client; do
   varlib_opts_common_to_each="$varlib_opts_common_to_each --exclude=$iv/ "
