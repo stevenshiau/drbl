@@ -107,7 +107,7 @@ grub_efi_tmpd="$(mktemp -d /tmp/grub-efi.XXXXXX)"
 # http://dev.gentoo.org/~floppym/grub.html
 
 cat <<-GRUB_END > $grub_efi_tmpd/grub-header.cfg
-set prefix=($tftp_srv_opt)/grub-efi.cfg
+set prefix=($tftp_srv_opt)/${GRUB_EFINB_DIR##*/}
 echo "Grub CPU and platform: \$grub_cpu, \$grub_platform"
 echo 'Network status: '
 net_ls_cards
@@ -219,7 +219,7 @@ for i in $dest_bootloader; do
     fi
   done
   echo "Creating the uEFI network booting bootable image $out_f..."
-  $GRUB_MKIMG $grub_mkimg_compress_opt -O ${EFI_ARCH}-efi -o $out_f --prefix="($tftp_srv_opt)/grub-efi.cfg/" -c $grub_efi_tmpd/grub-header.cfg $efi_required_mod
+  $GRUB_MKIMG $grub_mkimg_compress_opt -O ${EFI_ARCH}-efi -o $out_f --prefix="($tftp_srv_opt)/${GRUB_EFINB_DIR##*/}/" -c $grub_efi_tmpd/grub-header.cfg $efi_required_mod
   rc=$?
   if [ "$rc" -ne 0 ]; then
     # When grub-mkimage fails, an empty output file will still be created. We'd better to clean it.
@@ -232,7 +232,7 @@ for i in $dest_bootloader; do
   else
     # Create a tag file
     echo "Created by program \"$prog\" with command:" > ${out_f}.info
-    echo "$GRUB_MKIMG $grub_mkimg_compress_opt -O ${EFI_ARCH}-efi -o $out_f --prefix='(tftp)/grub-efi.cfg/' -c $grub_efi_tmpd/grub-header.cfg $efi_required_mod" >> ${out_f}.info
+    echo "$GRUB_MKIMG $grub_mkimg_compress_opt -O ${EFI_ARCH}-efi -o $out_f --prefix='(tftp)/${GRUB_EFINB_DIR##*/}/' -c $grub_efi_tmpd/grub-header.cfg $efi_required_mod" >> ${out_f}.info
     echo "The contents of $grub_efi_tmpd/grub-header.cfg:" >> ${out_f}.info
     echo "$msg_delimiter_star_line" >> ${out_f}.info
     cat $grub_efi_tmpd/grub-header.cfg >> ${out_f}.info

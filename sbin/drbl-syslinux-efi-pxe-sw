@@ -78,9 +78,9 @@ done
 
 mode="$1"
 
-if [ -d "$pxecfg_pd/grub-efi.cfg" ]; then
+if [ -d "$GRUB_EFINB_DIR" ]; then
   [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
-  echo "Dir $pxecfg_pd/grub-efi.cfg exists. It already provides the ability to serve both uEFI and PXE network booting clients."
+  echo "Dir $GRUB_EFINB_DIR exists. It already provides the ability to serve both uEFI and PXE network booting clients."
   echo "No need to switch. This program is only for running pxelinux for uEFI or PXE network booting client."
   [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
   echo "$msg_program_stop!"

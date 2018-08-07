@@ -18,8 +18,8 @@ USAGE() {
   echo " -b, --efi-boot-file FILE  Assign the EFI boot file. This is for menuentry local-disk in reveal case only"  
   echo " -l, --efi-os-label LABEL  Assign the EFI OS label. This is for menuentry local-disk in reveal case only"
   echo " -p, --efi-sys-part-no PART_NO    Assign the EFI System Partition, or ESP. This is for menuentry local-disk in reveal case only"
-  echo "Ex: To hide the menuentry id local-disk in $pxecfg_pd/grub-efi.cfg/grub.cfg, run:"
-  echo "    $prog local-disk hide $pxecfg_pd/grub-efi.cfg/grub.cfg"
+  echo "Ex: To hide the menuentry id local-disk in $GRUB_EFINB_DIR/grub.cfg, run:"
+  echo "    $prog local-disk hide $GRUB_EFINB_DIR/grub.cfg"
 }
 
 ########################
