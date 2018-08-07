@@ -124,7 +124,7 @@ check_distribution_name() {
   OS_Version=
   FULL_OS_Version=
   # FULL_OS_Version is only used in the label
-  # like the files ${pxecfg_pd}/pxelinux.cfg/* (default or 0A....).
+  # like the files ${PXELINUX_DIR}/* (default or 0A....).
   # OS_Version is used in drblsrv and drblpush to judge the dist and version.
   if [ -f /etc/fedora-release ]; then
    VER=$(rpm -qf /etc/fedora-release --qf "%{VERSION}" | sed "s/[^0-9\.]//g")
@@ -1005,7 +1005,7 @@ get_pxecfg_image_block() {
      local PXE_CONF_TMP="$2"
      [ -z "$IMG_NAME" ] && exit 1
      # By using
-     # grep -Ei -n '^[[:space:]]*label[[:space:]]+.*([[:space:]]|$)+' ${pxecfg_pd}/pxelinux.cfg/default | grep -A1 -E "label[[:space:]]+drbl([[:space:]]|$)+"
+     # grep -Ei -n '^[[:space:]]*label[[:space:]]+.*([[:space:]]|$)+' ${PXELINUX_DIR}/default | grep -A1 -E "label[[:space:]]+drbl([[:space:]]|$)+"
      # 10:label drbl
      # 17:label local
      # so we know we can replace the one between line no. 10 and 17
@@ -2851,7 +2851,7 @@ parse_cmdline_option() {
 #
 output_netinstall_syslinux_pxelinux_menu() {
   local TDIR  # Where netinstall kernel/initrd exists (e.g. ${pxecfg_pd})
-  local NB_CFG_DIR_FNAME  # Where pxeliux cfg file exists (e.g. ${pxecfg_pd}/pxelinux.cfg/)
+  local NB_CFG_DIR_FNAME  # Where pxeliux cfg file exists (e.g. ${PXELINUX_DIR})
   local menu_hint ni_ver ni_arch boot_file_dir
   local nb_mode_="pxe" # Default mode if not assigned
   # output the netinstall menu
@@ -4673,9 +4673,9 @@ filter_cl_gp_boot_param(){
   # Function to filter the boot parameters which should not be used in PXE RAM based drbl/clonezilla/gparted client.
   # Used for programs drbl-sl and drbl-live
   # (1) For /proc/cmdline, it's like (customized by user):
-  # BOOT_IMAGE=/live/vmlinuz initrd=/live/initrd.img boot=live union=overlay username=user config components nomodeset quiet vga=785 ip= net.ifnames=0  nosplash i915.blacklist=yes radeonhd.blacklist=yes nouveau.blacklist=yes vmwgfx.enable_fbdev=1 keyboard-layouts=NONE locales=en_US.UTF-8 drbl_live_noconfx ocs_daemonon="ssh" ocs_prerun1="ifconfig eth0 192.168.120.3; route add default gw 192.168.120.254 eth0; ifconfig eth1 192.168.7.254 netmask 255.255.255.0; echo nameserver 8.8.8.8 > /etc/resolv.conf" ocs_prerun2="mount -t nfs 192.168.120.254:/home/partimag /home/partimag" ocs_prerun3="drbl-live --batch --skip-pause-in-the-end --no-prompt-drbl-live start" ocs_prerun5="perl -pi -e 's/timeout 70/timeout 10/' ${pxecfg_pd}/pxelinux.cfg/default"
+  # BOOT_IMAGE=/live/vmlinuz initrd=/live/initrd.img boot=live union=overlay username=user config components nomodeset quiet vga=785 ip= net.ifnames=0  nosplash i915.blacklist=yes radeonhd.blacklist=yes nouveau.blacklist=yes vmwgfx.enable_fbdev=1 keyboard-layouts=NONE locales=en_US.UTF-8 drbl_live_noconfx ocs_daemonon="ssh" ocs_prerun1="ifconfig eth0 192.168.120.3; route add default gw 192.168.120.254 eth0; ifconfig eth1 192.168.7.254 netmask 255.255.255.0; echo nameserver 8.8.8.8 > /etc/resolv.conf" ocs_prerun2="mount -t nfs 192.168.120.254:/home/partimag /home/partimag" ocs_prerun3="drbl-live --batch --skip-pause-in-the-end --no-prompt-drbl-live start" ocs_prerun5="perl -pi -e 's/timeout 70/timeout 10/' ${PXELINUX_DIR}/default"
   # (2) For isolinux.cfg or syslinux.cfg, it's like (customized by user):
-  # append initrd=/live/initrd.img boot=live union=overlay username=user config components nomodeset quiet vga=785 ip= net.ifnames=0  nosplash i915.blacklist=yes radeonhd.blacklist=yes nouveau.blacklist=yes vmwgfx.enable_fbdev=1 keyboard-layouts=NONE locales=en_US.UTF-8 drbl_live_noconfx ocs_daemonon="ssh" ocs_prerun1="ifconfig eth0 192.168.120.3; route add default gw 192.168.120.254 eth0; ifconfig eth1 192.168.7.254 netmask 255.255.255.0; echo nameserver 8.8.8.8 > /etc/resolv.conf" ocs_prerun2="mount -t nfs 192.168.120.254:/home/partimag /home/partimag" ocs_prerun3="drbl-live --batch --skip-pause-in-the-end --no-prompt-drbl-live start" ocs_prerun5="perl -pi -e 's/timeout 70/timeout 10/' ${pxecfg_pd}/pxelinux.cfg/default" 
+  # append initrd=/live/initrd.img boot=live union=overlay username=user config components nomodeset quiet vga=785 ip= net.ifnames=0  nosplash i915.blacklist=yes radeonhd.blacklist=yes nouveau.blacklist=yes vmwgfx.enable_fbdev=1 keyboard-layouts=NONE locales=en_US.UTF-8 drbl_live_noconfx ocs_daemonon="ssh" ocs_prerun1="ifconfig eth0 192.168.120.3; route add default gw 192.168.120.254 eth0; ifconfig eth1 192.168.7.254 netmask 255.255.255.0; echo nameserver 8.8.8.8 > /etc/resolv.conf" ocs_prerun2="mount -t nfs 192.168.120.254:/home/partimag /home/partimag" ocs_prerun3="drbl-live --batch --skip-pause-in-the-end --no-prompt-drbl-live start" ocs_prerun5="perl -pi -e 's/timeout 70/timeout 10/' ${PXELINUX_DIR}/default"
   sed -r -e "s|append||g" |\
   sed -r -e "s|BOOT_IMAGE=[^[:space:]]+[[:space:]]?||g" | \
   sed -r -e "s|initrd=[^[:space:]]+[[:space:]]?||g" | \

@@ -208,7 +208,7 @@ ask_and_load_lang_set $specified_lang
 
 echo "Copying pxelinux.0, gpxelinux.0, menu.c32, vesamenu.c32, chain.c32, mboot.c32, sanboot.c32 and memdisk to $pxecfg_pd..."
 
-[ ! -d $pxecfg_pd/pxelinux.cfg ] && mkdir -p $pxecfg_pd/pxelinux.cfg
+[ ! -d "$PXELINUX_DIR" ] && mkdir -p "$PXELINUX_DIR"
 
 # make a version tag in $pxecfg_pd
 cp -af $pxelinux_binsrc_dir/VERSION $pxecfg_pd/PXELINUX_VERSION

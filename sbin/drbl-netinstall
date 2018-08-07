@@ -318,7 +318,7 @@ get_freebsd_netinstall() {
   #  Add the following in /pxeroot/boot/loader.conf:
   #  vfs.root.mountfrom="ufs:/dev/md0c"
   #  which means that the later booting process will use a ramdisk as root instead of using NFS.
-  #  5. append the following in ${pxecfg_pd}/pxelinux.cfg/default
+  #  5. append the following in ${PXELINUX_DIR}/default
   #  ---------
   #  label FreeBSD 7.0 netinstall
   #  # MENU DEFAULT

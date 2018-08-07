@@ -12,8 +12,8 @@ prog="$(basename $0)"
 USAGE() {
   echo "Usage:"
   echo "$prog LABEL [hide|reveal] PXE_CONF_FILE"
-  echo "Ex: To hide the label drbl in ${pxecfg_pd}/pxelinux.cfg/default, run:"
-  echo "    $prog drbl hide ${pxecfg_pd}/pxelinux.cfg/default"
+  echo "Ex: To hide the label drbl in ${PXELINUX_DIR}/default, run:"
+  echo "    $prog drbl hide ${PXELINUX_DIR}/default"
 }
 
 lab="$1"

@@ -146,7 +146,7 @@ done
 ask_and_load_lang_set $specified_lang
 
 # Set the config files for all the process.
-PXE_CONF=$pxecfg_pd/pxelinux.cfg/default
+PXE_CONF=$PXELINUX_DIR/default
 GRUB_CONF=$GRUB_EFINB_DIR/grub.cfg
 
 case "$drbl_mode" in

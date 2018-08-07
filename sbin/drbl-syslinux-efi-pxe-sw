@@ -37,8 +37,8 @@ to_efi_client(){
   drbl-prepare-pxelinux -d -u -pv $syslinux_ver
   rm -f $pxecfg_pd/{hdt.c32,chain.c32,mboot.c32,menu.c32,sanboot.c32,vesamenu.c32}
   generate-pxe-menu
-  perl -pi -e "s/^PATH bios/#PATH bios/g" $pxecfg_pd/pxelinux.cfg/default 
-  perl -pi -e "s/^#+PATH efi64/PATH efi64/g" $pxecfg_pd/pxelinux.cfg/default
+  perl -pi -e "s/^PATH bios/#PATH bios/g" $PXELINUX_DIR/default 
+  perl -pi -e "s/^#+PATH efi64/PATH efi64/g" $PXELINUX_DIR/default
 }
 #
 to_pxe_client(){
@@ -47,8 +47,8 @@ to_pxe_client(){
   [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
   drbl-prepare-pxelinux -d -u -pv $syslinux_ver
   generate-pxe-menu
-  perl -pi -e "s/^#+PATH bios/PATH bios/g" $pxecfg_pd/pxelinux.cfg/default 
-  perl -pi -e "s/^PATH efi64/#PATH efi64/g" $pxecfg_pd/pxelinux.cfg/default
+  perl -pi -e "s/^#+PATH bios/PATH bios/g" $PXELINUX_DIR/default 
+  perl -pi -e "s/^PATH efi64/#PATH efi64/g" $PXELINUX_DIR/default
 }
 
 ####################

@@ -60,6 +60,7 @@ our $query_pkglist_cmd;
 our $DHCPD_DEFAULT_LEASE_TIME;
 our $DHCPD_MAX_LEASE_TIME;
 our $pxecfg_pd;
+our $PXELINUX_DIR;
 
 # First we need to get DRBL_SCRIPT_PATH.
 chomp($DRBL_SCRIPT_PATH=`LC_ALL=C get-drbl-conf-param DRBL_SCRIPT_PATH`);
@@ -78,6 +79,7 @@ chomp($query_pkglist_cmd=`LC_ALL=C get-drbl-conf-param query_pkglist_cmd`);
 chomp($DHCPD_DEFAULT_LEASE_TIME=`LC_ALL=C get-drbl-conf-param DHCPD_DEFAULT_LEASE_TIME`);
 chomp($DHCPD_MAX_LEASE_TIME=`LC_ALL=C get-drbl-conf-param DHCPD_MAX_LEASE_TIME`);
 chomp($pxecfg_pd=`LC_ALL=C get-drbl-conf-param pxecfg_pd`);
+chomp($PXELINUX_DIR=`LC_ALL=C get-drbl-conf-param PXELINUX_DIR`);
 chomp($ocs_img_repo_dir_default=`LC_ALL=C get-drbl-conf-param ocsroot`);
 
 # the created config filename
@@ -1347,9 +1349,9 @@ sub interactive_mode {
 	# When serial console is found in pxelinux config file, force to set
 	# $use_graphic_pxelinux_menu=no
 	# When CLIENT_INIT is chosen as text mode, default to use txt PXE menu
-        my $SERIAL_CONSOLE=`LC_ALL=C grep -Ewi "^serial" $pxecfg_pd/pxelinux.cfg/default 2>/dev/null`;
+        my $SERIAL_CONSOLE=`LC_ALL=C grep -Ewi "^serial" $PXELINUX_DIR/default 2>/dev/null`;
 	if ( $SERIAL_CONSOLE ){
-	  print "Serial console parameters are found in $pxecfg_pd/pxelinux.cfg/default. Force to use text PXELINUX menu, no graphic background.\n";
+	  print "Serial console parameters are found in $PXELINUX_DIR/default. Force to use text PXELINUX menu, no graphic background.\n";
 	  $use_graphic_pxelinux_menu="no"
 	}
         if ( "$CLIENT_INIT" eq "text"){
@@ -4655,9 +4657,9 @@ esac
 # if drbl_mode is none, disable drbl in pxelinux menu, and set default as local
 if [ "$drbl_mode" = "none" ]; then
   # disable the DRBL in pxelinux menu
-  hide_reveal_pxe_img drbl hide $pxecfg_pd/pxelinux.cfg/default
+  hide_reveal_pxe_img drbl hide $PXELINUX_DIR/default
   # set local as default
-  set-default-pxe-img -i local -c $pxecfg_pd/pxelinux.cfg/default
+  set-default-pxe-img -i local -c $PXELINUX_DIR/default
 fi
 
 # Force to update the pxelinux config
