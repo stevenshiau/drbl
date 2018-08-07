@@ -237,13 +237,13 @@ maybe_break drbl_prenfs
 
 # Check if single system image is on
 ssi_flag=0
-# For PXE, it's clientdir=node_root in /proc/cmdline, while 
-# for GRUB uEFI NB, it's clientdir=\"node_root\"
+# For PXE, it's clientdir=${drbl_common_root##*/} in /proc/cmdline, while
+# for GRUB uEFI NB, it's clientdir=\"${drbl_common_root##*/}\"
 #(added by function add_opt_in_grub_efi_cfg_block) in /proc/cmdline.
-# It should be converted to be clientdir="node_root" by grub, 
+# It should be converted to be clientdir="${drbl_common_root##*/}" by grub,
 # like the cases in the booting of CD or USB flash drive.
 # However somehow the GRUB uEFI NB has different behavior.
-# Therefore here we have to deal with clientdir=node_root or clientdir=\"node_root\"
+# Therefore here we have to deal with clientdir=${drbl_common_root##*/} or clientdir=\"${drbl_common_root##*/}\"
 clientdir="$(LC_ALL=C grep clientdir /proc/cmdline | sed -e "s/.*clientdir=\([^ ]\+\).*$/\1/" | sed -e 's|\"||g' -e 's|\\||g')"
 [ -n "$clientdir" ] && ssi_flag=1
 
@@ -319,11 +319,11 @@ if [ "$ssi_flag" = "1" ]; then
     # We need /var/lib/dpkg or /var/lib/rpm so that later in drbl-ssi-client-prepare, we can use dpkg or rpm to query package to get the GDM_CFG or KDE_CFG
     if [ -d /var/lib/dpkg ]; then
       echo -n "/var/lib/dpkg... "
-      do_nfs_mount $nfsserver:/tftpboot/node_root/var/lib/dpkg /var/lib/dpkg $RO_NFS_EXTRA_OPT $NFS_OPT_TO_ADD
+      do_nfs_mount $nfsserver:$nfsimagedir/var/lib/dpkg /var/lib/dpkg $RO_NFS_EXTRA_OPT $NFS_OPT_TO_ADD
       NFS_OPT_TO_ADD_FLAG=$((NFS_OPT_TO_ADD_FLAG + $?))
     elif [ -d /var/lib/rpm ]; then
       echo -n "/var/lib/rpm... "
-      do_nfs_mount $nfsserver:/tftpboot/node_root/var/lib/rpm /var/lib/rpm $RO_NFS_EXTRA_OPT 
+      do_nfs_mount $nfsserver:$nfsimagedir/var/lib/rpm /var/lib/rpm $RO_NFS_EXTRA_OPT
       NFS_OPT_TO_ADD_FLAG=$((NFS_OPT_TO_ADD_FLAG + $?))
     fi
   fi

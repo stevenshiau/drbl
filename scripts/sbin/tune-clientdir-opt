@@ -169,12 +169,12 @@ case "$drbl_mode" in
     echo "DRBL SSI mode. Set clientdir opt for label drbl in pxelinux config... "
     # For PXE
     hide_reveal_pxe_img drbl reveal $PXE_CONF
-    add_opt_in_pxelinux_cfg_block drbl clientdir node_root
+    add_opt_in_pxelinux_cfg_block drbl clientdir ${drbl_common_root##*/}
     # For uEFI
     # Older version of GNU/Linux, like CentOS 6 does not support grub uEFI network boot.
     if [ -e "$GRUB_CONF" ]; then
       hide_reveal_grub_efi_ent drbl-client reveal $GRUB_CONF
-      add_opt_in_grub_efi_cfg_block drbl-client clientdir node_root
+      add_opt_in_grub_efi_cfg_block drbl-client clientdir ${drbl_common_root##*/}
     fi
 
     set_drbl_mode drbl_ssi_mode
@@ -218,11 +218,11 @@ case "$clonezilla_mode" in
   1) # clonezilla box mode
     echo "Clonezilla box mode. Set clientdir opt for label clonezilla in pxelinux config... "
     # For PXE
-    add_opt_in_pxelinux_cfg_block clonezilla clientdir node_root
+    add_opt_in_pxelinux_cfg_block clonezilla clientdir ${drbl_common_root##*/}
     # For uEFI
     # Older version of GNU/Linux, like CentOS 6 does not support grub uEFI network boot.
     if [ -e "$GRUB_CONF" ]; then
-      add_opt_in_grub_efi_cfg_block clonezilla-se-client clientdir node_root
+      add_opt_in_grub_efi_cfg_block clonezilla-se-client clientdir ${drbl_common_root##*/}
     fi
 
     set_clonezilla_mode clonezilla_box_mode

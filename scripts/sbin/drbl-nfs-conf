@@ -104,7 +104,7 @@ if [ -n "$rsize" ]; then
      [ -f $itab/etc/fstab ] && perl -pi -e "$perl_str" $itab/etc/fstab
   done
   # change the drbl init in common root
-  perl -pi -e "$perl_str" $drblroot/../node_root/sbin/init
+  perl -pi -e "$perl_str" $drbl_common_root/sbin/init
 
   # change the mkinitrd mount
   perl -pi -e "$perl_str" /usr/lib/mkpxeinitrd-net/initrd-skel/sbin/udhcpc-post
@@ -124,7 +124,7 @@ if [ -n "$wsize" ]; then
      [ -f $itab/etc/fstab ] && perl -pi -e "$perl_str" $itab/etc/fstab
   done
   # change the drbl init in common root
-  perl -pi -e "$perl_str" $drblroot/../node_root/sbin/init
+  perl -pi -e "$perl_str" $drbl_common_root/sbin/init
 
   # change the mkinitrd mount
   perl -pi -e "$perl_str" /usr/lib/mkpxeinitrd-net/initrd-skel/sbin/udhcpc-post
@@ -144,7 +144,7 @@ if [ -n "$protocol" ]; then
      [ -f $itab/etc/fstab ] && perl -pi -e "$perl_str" $itab/etc/fstab
   done
   # change the drbl init in common root
-  perl -pi -e "$perl_str" $drblroot/../node_root/sbin/init
+  perl -pi -e "$perl_str" $drbl_common_root/sbin/init
 
   # change the mkinitrd mount
   perl -pi -e "$perl_str" /usr/lib/mkpxeinitrd-net/initrd-skel/sbin/udhcpc-post

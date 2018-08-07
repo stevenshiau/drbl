@@ -188,8 +188,8 @@ echo "Use com32 module: $MENUC32"
 
 # read drbl_deploy.conf if this program is run again after drblpush is done.
 [ -f /etc/drbl/drbl_deploy.conf ] && . /etc/drbl/drbl_deploy.conf
-[ "$drbl_mode" = "drbl_ssi_mode" ] && drbl_mode_opt="clientdir=node_root"
-[ "$clonezilla_mode" = "clonezilla_box_mode" ] && clonezilla_mode_opt="clientdir=node_root"
+[ "$drbl_mode" = "drbl_ssi_mode" ] && drbl_mode_opt="clientdir=${drbl_common_root##*/}"
+[ "$clonezilla_mode" = "clonezilla_box_mode" ] && clonezilla_mode_opt="clientdir=${drbl_common_root##*/}"
 
 # Get version number.
 case "$OS_Version" in

@@ -120,7 +120,7 @@ case "$mode" in
       # /lib/modules/2.6.27.7-9-default/...
       client_kernel_ver="$(rpm -qpl $client_kernel_pkg | grep -E "/lib/modules/[[:print:]]+" | awk -F" " '{print $NF}' | awk -F"/" '/\/lib\/modules/ {print $4}' | sort | uniq)"
     fi
-    # we might need /tftpboot/node_root/var/lock/rpm/ for locking in some dist (like CentOS 4.4).
+    # we might need $drbl_common_root/var/lock/rpm/ for locking in some dist (like CentOS 4.4).
     mkdir -p $drbl_common_root/var/lock/rpm/
     echo "Installing $client_kernel_pkg for clients... "
     echo "$msg_install_kernel_might_take_several_minutes "
@@ -216,7 +216,7 @@ if [ ! "$just_cp_files" = "yes" ]; then
   # Need to create the files
   # $pxecfg_pd/kernel_version_in_initrd.txt
   # $pxecfg_pd/client_kernel_arch.txt
-  # Only when we can find something like /tftpboot/node_root/boot/System.map-2.6.27.39-0.2-default we can find KARCH.
+  # Only when we can find something like $drbl_common_root/boot/System.map-2.6.27.39-0.2-default we can find KARCH.
   if [ -e "$drbl_common_root/boot/System.map-$client_kernel_ver" ]; then
     # make a tag in the system for client's kernel arch.
     KARCH="$(LC_ALL=C drbl-check-kernel-cpu-arch --drbl-client $client_kernel_ver)"

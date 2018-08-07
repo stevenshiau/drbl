@@ -335,7 +335,7 @@ fi
 # prepare the directories for DRBL clients
 [ ! -d /tftpboot ] && mkdir /tftpboot
 [ ! -d "${pxecfg_pd}" ] && mkdir -p "${pxecfg_pd}"
-[ ! -d /tftpboot/node_root ] && mkdir -p /tftpboot/node_root
+[ ! -d "${drbl_common_root}" ] && mkdir -p "${drbl_common_root}"
 [ ! -d /tftpboot/nodes ] && mkdir -p /tftpboot/nodes
 
 #

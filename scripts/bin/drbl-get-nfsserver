@@ -47,7 +47,7 @@ case "$mode" in
   "client")
     # On client side
     # 1st: try to use the mount status to get the nfs server, e.g.
-    #      192.168.120.183:/tftpboot/node_root /
+    #      192.168.120.183:${drbl_common_root} /
     # 2nd: Try to use gateway as NFS server
     nfsserver_cand="$(LC_ALL=C findmnt -nr -o source --target / | awk -F":" '{print $1}')"
     gateway="$(LC_ALL=C route -n | awk '/^0.0.0.0/ {print $2}')"

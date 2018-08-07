@@ -1450,7 +1450,7 @@ countdown () {
 #
 is_drbl_client() {
   root_src="$(LC_ALL=C mount | grep -Ew "on /" | awk -F" " '{print $1}')"
-  # Example for $root_src: 192.168.50.254:/tftpboot/node_root
+  # Example for $root_src: 192.168.50.254:${drbl_common_root}
   if [ -n "$(echo $root_src | grep -E "^[[:space:]]*([[:digit:]]+\.){3}[[:digit:]]+:/.*")" ] ; then
    rc=0
   else
@@ -2353,7 +2353,7 @@ dialog_like_prog_help_prompt() {
 }
 root_over_nfs() {
   local root_over_nfs
-  root_over_nfs="$(grep -Ew "^[[:space:]]*([[:digit:]]+\.){3}[[:digit:]]+:/tftpboot/node_root([[:space:]]+|$)" /proc/mounts | awk -F " " '{print $2}')"
+  root_over_nfs="$(grep -Ew "^[[:space:]]*([[:digit:]]+\.){3}[[:digit:]]+:${drbl_common_root}([[:space:]]+|$)" /proc/mounts | awk -F " " '{print $2}')"
   if [ "$root_over_nfs" = "/" ]; then
     echo "yes"
     rc=0
@@ -3727,7 +3727,7 @@ restore_lvm2_udevd_rules() {
 
 #
 disable_lvm2_udevd_rules() {
-  local node_rt="$1"  # E.g. /tftpboot/node_root/. If $node_rt is not assigned, it's for the running system. E.g. Clonezilla live. If assigned, it's for Clonezilla SE used normally.
+  local node_rt="$1"  # E.g. ${drbl_common_root}. If $node_rt is not assigned, it's for the running system. E.g. Clonezilla live. If assigned, it's for Clonezilla SE used normally.
   # 2012/Nov/20 Ubuntu's lvm2 has a udevd rules will automatically active VG, therefore before using "vgchange -an" to deactive the VG, we have to disable it, then restore it later.
   auto_active_rules="$(LC_ALL=C grep -Ew "^[^#].*vgchange -a y" $node_rt/lib/udev/rules.d/*.rules 2>/dev/null | awk -F":" '{print $1}')"
   if [ -n "$auto_active_rules" ]; then
@@ -3736,7 +3736,7 @@ disable_lvm2_udevd_rules() {
     for i in $auto_active_rules; do
       mv -v "${i}" "${i}.drblsave"
     done
-    # Reload the rules for udevd for running system, i.e. Clonezilla live. For Clonezilla SE, since it's in /tftpboot/node_root/, during the booting it won't be started.
+    # Reload the rules for udevd for running system, i.e. Clonezilla live. For Clonezilla SE, since it's in ${drbl_common_root}, during the booting it won't be started.
     if [ -z "$node_root" ]; then
       udevadm control --reload-rules
     fi
@@ -4451,7 +4451,7 @@ override_opt_in_grub_efi_cfg_block() {
   # menuentry "Debian Testing-Unstable Linux (DRBL mode, mostly local resources)" --id drbl-client {
   # echo "Enter DRBL..."
   # echo "Loading Linux vmlinuz-pxe..."
-  # linux vmlinuz-pxe boot=live union=overlay config components nomodeset quiet net.ifnames=0  nosplash username=drbl keyboard-layouts=us locales=en_US.UTF-8 drbl_live_noconfx ocs_daemonon="ssh" noeject netboot=nfs nfsroot=192.168.7.254:/tftpboot/node_root/clonezilla-live/ dcs_put_dticons="no"
+  # linux vmlinuz-pxe boot=live union=overlay config components nomodeset quiet net.ifnames=0  nosplash username=drbl keyboard-layouts=us locales=en_US.UTF-8 drbl_live_noconfx ocs_daemonon="ssh" noeject netboot=nfs nfsroot=192.168.7.254:${drbl_common_root}/clonezilla-live/ dcs_put_dticons="no"
   # echo "Loading initial ramdisk initrd-pxe.img..."
   # initrd initrd-pxe.img
   # }

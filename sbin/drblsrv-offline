@@ -155,8 +155,8 @@ check_installed_pkgs_arch() {
 #
 install_kernel_for_client_func() {
   # Create the necessary dirctories, UGLY...
-  # the /tftpboot/node_root/tmp/boot is for link only, refer to the /tftpboot/node_root/etc/rc.d/rc.sysinit, the code "# For DRBL, create the directory /tmp/boot, so that the link /tmp/boot /boot...
-  # /var/lib/rpm is necessary when try to install kernel for client with rpm --force ... in MDK. It need to create the lock file /tftpboot/node_root//var/lib/rpm/RPMLOCK
+  # the $drbl_common_root/tmp/boot is for link only, refer to the $drbl_common_root/etc/rc.d/rc.sysinit, the code "# For DRBL, create the directory /tmp/boot, so that the link /tmp/boot /boot...
+  # /var/lib/rpm is necessary when try to install kernel for client with rpm --force ... in MDK. It need to create the lock file $drbl_common_root/var/lib/rpm/RPMLOCK
   mkdir -p $drbl_common_root/tmp/boot/ $drbl_common_root/var/{lib,tmp} $drbl_common_root/var/lib/rpm $drbl_common_root/lib/modules/
   (cd $drbl_common_root; ln -fs tmp/boot boot)
 

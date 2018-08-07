@@ -2291,7 +2291,7 @@ mknod -m 666 $drbl_common_root/dev/null c 1 3
 
 #
 echo -n "."
-# copy /sbin, /bin to node_root
+# copy /sbin, /bin to $drbl_common_root
 # For FC17, since /sbin is linked to /usr/sbin, we have to create /sbin, /bin first
 [ -L "/sbin" ] && (rm -rf $drbl_common_root/sbin ; mkdir $drbl_common_root/sbin)
 [ -L "/bin" ] && (rm -rf $drbl_common_root/bin ; mkdir $drbl_common_root/bin)
@@ -4076,7 +4076,7 @@ echo -n "."
 # We force to sync that in the server to client.
 # varlib_NOT_2_be_copied_2_common_root is loaded from drbl.conf
 # prepare the options for rsync to exclude when copy files in
-# /var/lib/* to /tftpboot/node_root/var/lib/
+# /var/lib/* to ${drbl_common_root}/var/lib/
 varlib_opts_common_to_common=""
 for iv in $varlib_NOT_2_be_copied_2_common_root; do
   varlib_opts_common_to_common="$varlib_opts_common_to_common --exclude=$iv/ "

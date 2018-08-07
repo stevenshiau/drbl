@@ -92,7 +92,7 @@ else
   template="$drblroot/$template"
 fi
 echo "Using template host $template"
-# If any reason, some stale files are still in DRBL SSI /tftpboot/node_root/drbl_ssi/rc1.d, reset them
+# If any reason, some stale files are still in DRBL SSI $drbl_common_root/drbl_ssi/rc1.d, reset them
 [ "$copy_rc1d_for_drbl_ssi_clone_box" = "yes" ] && remove_rc1d_for_drbl_ssi $template
 
 # Generate the ssh hostkey for the template so that client won't have to generate.
