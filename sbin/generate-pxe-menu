@@ -394,7 +394,7 @@ label AoE-client
   Boot from AoE device
   ENDTEXT
 
-# Example for Xen client. ///NOTE/// You might have to copy the required file, e.g. xen-3.0.3-1-i386-pae.gz in this case, from /boot to /tftpboot/nbi_img manually.
+# Example for Xen client. ///NOTE/// You might have to copy the required file, e.g. xen-3.0.3-1-i386-pae.gz in this case, from /boot to ${pxecfg_pd} manually.
 # label Xen client
 #   # MENU DEFAULT
 #   MENU HIDE

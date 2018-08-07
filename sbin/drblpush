@@ -3357,7 +3357,7 @@ if [ -e /etc/debian_version ]; then
   # Debian
   # (1) tftpd
   # Force to remove tftpd in inetd if it's set, and we will add it later
-  # and put our arguments "-s /tftpboot/nbi_img"
+  # and put our arguments "-s $pxecfg_pd"
   if grep -q "^tftp" /etc/inetd.conf 2>/dev/null; then
     /usr/sbin/update-inetd --remove tftp
   fi
@@ -3376,7 +3376,7 @@ if [ -e /etc/debian_version ]; then
       # Version 5.0 or later.
       cat <<-TFTP_END > /etc/default/tftpd-hpa
 TFTP_USERNAME="tftp"
-TFTP_DIRECTORY="/tftpboot/nbi_img"
+TFTP_DIRECTORY="$pxecfg_pd"
 TFTP_ADDRESS="0.0.0.0:69"
 TFTP_OPTIONS="--secure --ipv4"
 TFTP_END
@@ -3385,7 +3385,7 @@ TFTP_END
       # it's a standalone daemon
       cat <<-TFTP_END > /etc/default/tftpd-hpa
 RUN_DAEMON="yes"
-OPTIONS="-l -s /tftpboot/nbi_img"
+OPTIONS="-l -s $pxecfg_pd"
 TFTP_END
     fi
     # (2) Portmap. From portmap (6.0-11), when new installation, default the question whether to bind to the loopback interface only. We have to open it.
@@ -3394,19 +3394,19 @@ TFTP_END
     fi
   else
     # it's a daemon in inetd, set it in inetd.conf
-    /usr/sbin/update-inetd --group BOOT --add 'tftp	dgram	udp	wait	root	/usr/sbin/in.tftpd	/usr/sbin/in.tftpd	-s /tftpboot/nbi_img'
+    /usr/sbin/update-inetd --group BOOT --add 'tftp	dgram	udp	wait	root	/usr/sbin/in.tftpd	/usr/sbin/in.tftpd	-s '"$pxecfg_pd"
   fi
 else
   # RH-like & SuSE
   if [ -e /etc/xinetd.d/tftp ]; then
-    # set the tftp working directory to be /tftpboot/nbi_img
+    # set the tftp working directory to be ${pxecfg_pd}
     # to have higher security.
     perl -p -i -e "s/disable.*=.*/disable                 = no/g" /etc/xinetd.d/tftp
-    perl -p -i -e "s/server_arg.*=.*/server_args		= -s \/tftpboot\/nbi_img/g"  /etc/xinetd.d/tftp
+    perl -p -i -e "s!server_arg.*=.*!server_args		= -s ${pxecfg_pd}!g"  /etc/xinetd.d/tftp
   fi
   # For systemd distr. , ex: Fedora 21
   if [ -e /usr/lib/systemd/system/tftp.service ]; then
-    perl -p -i -e "s/^(ExecStart=\S*)[[:space:]]+.*$/\$1 -s \/tftpboot\/nbi_img/g" /usr/lib/systemd/system/tftp.service
+    perl -p -i -e "s!^(ExecStart=\S*)[[:space:]]+.*$!\$1 -s ${pxecfg_pd}!g" /usr/lib/systemd/system/tftp.service
   fi
 fi
 

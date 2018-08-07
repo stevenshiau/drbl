@@ -78,7 +78,7 @@ get_and_put_linux_img() {
 
 #
 get_debian_netinstall() {
-  # output file format in /tftpboot/nbi_img/:
+  # output file format in ${pxecfg_pd}:
   # vmlinuz-netinstall-${dist}-${ver}-${arch)
   # initrd-netinstall-${dist}-${ver}-${i386}.img
   #
@@ -111,7 +111,7 @@ get_debian_netinstall() {
 
 #
 get_ubuntu_netinstall() {
-  # output file format in /tftpboot/nbi_img/:
+  # output file format in ${pxecfg_pd}:
   # vmlinuz-netinstall-${dist}-${ver}-${arch)
   # initrd-netinstall-${dist}-${ver}-${i386}.img
   #
@@ -137,7 +137,7 @@ get_ubuntu_netinstall() {
 
 #
 get_fedora_netinstall() {
-  # Example output file format in /tftpboot/nbi_img/:
+  # Example output file format in ${pxecfg_pd}:
   # vmlinuz-netinstall-Fedora-6-i386, initrd-netinstall-Fedora-6-i386.img
   # vmlinuz-netinstall-Fedora-6-x86_64, initrd-netinstall-Fedora-6-x86_64.img
   # i.e.
@@ -170,7 +170,7 @@ get_fedora_netinstall() {
 
 #
 get_centos_netinstall() {
-  # output file format in /tftpboot/nbi_img/:
+  # output file format in ${pxecfg_pd}:
   # vmlinuz-netinstall-${dist}-${ver}-${arch)
   # initrd-netinstall-${dist}-${ver}-${i386}.img
   #
@@ -199,7 +199,7 @@ get_centos_netinstall() {
 
 #
 get_redhat_netinstall() {
-  # output file format in /tftpboot/nbi_img/:
+  # output file format in ${pxecfg_pd}:
   # vmlinuz-netinstall-${dist}-${ver}-${arch)
   # initrd-netinstall-${dist}-${ver}-${i386}.img
   #
@@ -216,7 +216,7 @@ get_redhat_netinstall() {
 
 #
 get_mandriva_netinstall() {
-  # output file format in /tftpboot/nbi_img/:
+  # output file format in ${pxecfg_pd}:
   # vmlinuz-netinstall-${dist}-${ver}-${arch)
   # initrd-netinstall-${dist}-${ver}-${i386}.img
   #
@@ -233,7 +233,7 @@ get_mandriva_netinstall() {
 
 #
 get_mageia_netinstall() {
-  # output file format in /tftpboot/nbi_img/:
+  # output file format in ${pxecfg_pd}:
   # vmlinuz-netinstall-${dist}-${ver}-${arch)
   # initrd-netinstall-${dist}-${ver}-${i386}.img
   #
@@ -256,7 +256,7 @@ get_mageia_netinstall() {
 
 #
 get_scientific_netinstall() {
-  # output file format in /tftpboot/nbi_img/:
+  # output file format in ${pxecfg_pd}:
   # vmlinuz-netinstall-${dist}-${ver}-${arch)
   # initrd-netinstall-${dist}-${ver}-${i386}.img
   #
@@ -314,11 +314,11 @@ get_freebsd_netinstall() {
   #  2. mount -o loop 7.0-RELEASE-i386-bootonly.iso /mnt
   #  3. mkdir /pxeroot/
   #  4. cp -a /mnt/boot /pxeroot/
-  #  cp /mnt/boot/pxeboot /tftpboot/nbi_img/FreeBSD-7.0-pxeboot.0
+  #  cp /mnt/boot/pxeboot ${pxecfg_pd}/FreeBSD-7.0-pxeboot.0
   #  Add the following in /pxeroot/boot/loader.conf:
   #  vfs.root.mountfrom="ufs:/dev/md0c"
   #  which means that the later booting process will use a ramdisk as root instead of using NFS.
-  #  5. append the following in /tftpboot/nbi_img/pxelinux.cfg/default
+  #  5. append the following in ${pxecfg_pd}/pxelinux.cfg/default
   #  ---------
   #  label FreeBSD 7.0 netinstall
   #  # MENU DEFAULT
@@ -335,7 +335,7 @@ get_freebsd_netinstall() {
   #  Ref: http://www.hack.org/mc/freebsd-x60.html; http://www.fefe.de/netboot/how-to-netboot-installer.html
   #  For FreeBSD 8.0, ref: http://mark-oshea.blogspot.com/2009/11/installing-freebsd-8-using-pxe-and-nfs.html
 
-  # output file format in /tftpboot/nbi_img/:
+  # output file format in ${pxecfg_pd}:
   # FreeBSD-7.0-i386-pxeboot.0
   #
   # url ex:
@@ -394,7 +394,7 @@ LOAD_END
 } # end of get_freebsd_netinstall
 #
 get_openbsd_netinstall() {
-  # output file format in /tftpboot/nbi_img/:
+  # output file format in ${pxecfg_pd}:
   # OpenBSD-4.2-i386-pxeboot.0
   #
   # Two files need to be download: pxeboot and bsd.rd

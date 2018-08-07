@@ -19,7 +19,7 @@ DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/usr/share/drbl}"
 USAGE() {
    echo Usage:
    echo $0 LABEL PATTERN STRING PXE_CONF_FILE
-   echo "Ex. $0 AoE-client \"^([[:space:]]*)append aoe:.*\" \"\$1append aoe:e5.3\" /tftpboot/nbi_img/pxelinux.cfg/default"
+   echo "Ex. $0 AoE-client \"^([[:space:]]*)append aoe:.*\" \"\$1append aoe:e5.3\" ${pxecfg_pd}/pxelinux.cfg/default"
 }
 
 LABEL_NAME="$1"

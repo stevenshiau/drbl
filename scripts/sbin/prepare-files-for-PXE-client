@@ -132,7 +132,7 @@ put_free_dos_img() {
      # mount -t vfat -o loop $fdos_img_src $img_mt
      # cp -f $img_mt/kernel.sys .
      # umount $img_mt
-     # mknbi-fdos --output=/tftpboot/nbi_img/$fdos_nbi_output kernel.sys $fdos_img_src
+     # mknbi-fdos --output=${pxecfg_pd}/$fdos_nbi_output kernel.sys $fdos_img_src
      echo "Copying FreeDOS files to $pxecfg_pd/... "
      cp -f $fdos_img_src $pxecfg_pd/$fdos_img_output
      # [ -d "$img_mt" ] && rm -rf $img_mt

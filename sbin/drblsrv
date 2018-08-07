@@ -363,7 +363,7 @@ install_drbl_RH() {
 # clean the stale files and make necessary directories
 [ -f $drbl_pkgdir/dev.tgz ] && rm -f $drbl_pkgdir/dev.tgz
 # create the directory for diskless image
-[ ! -d "/tftpboot/nbi_img" ] && mkdir -p /tftpboot/nbi_img
+[ ! -d "${pxecfg_pd}" ] && mkdir -p "${pxecfg_pd}"
 
 # Check if selinux is enabled
 if [ -e /etc/selinux/config ]; then
@@ -996,7 +996,7 @@ install_drbl_MDK() {
 # clean the stale files and make necessary directories
 [ -f $drbl_pkgdir/dev.tgz ] && rm -f $drbl_pkgdir/dev.tgz
 # create the directory for diskless image
-[ ! -d "/tftpboot/nbi_img" ] && mkdir -p /tftpboot/nbi_img
+[ ! -d "${pxecfg_pd}" ] && mkdir -p "${pxecfg_pd}"
 
 # 1.
 # setup urpmi first
@@ -2047,7 +2047,7 @@ clean_tftpboot_and_misc() {
   # clean the nodes link, like 192.168.1.1...
   find /tftpboot/ -maxdepth 1 -type l -exec rm -f {} \;
   # we won't to affect those netinstall, maybe they are not removed previuosly. .
-  find /tftpboot/nbi_img/ ! -name "*netinstall*" ! -type d -exec rm -f {} \;
+  find "${pxecfg_pd}" ! -name "*netinstall*" ! -type d -exec rm -f {} \;
   [ -d "/tftpboot/nodes/" ] && rm -rf /tftpboot/nodes
   [ -d "/tftpboot/node_root/" ] && rm -rf /tftpboot/node_root
   [ -d "$drbl_syscfg" -a "$drbl_remove_answer" = "y" ] && rm -rf $drbl_syscfg
@@ -3227,7 +3227,7 @@ esac
 # clean the stale files and make necessary directories
 [ -f $drbl_pkgdir/dev.tgz ] && rm -f $drbl_pkgdir/dev.tgz
 # create the directory for diskless image
-[ ! -d "/tftpboot/nbi_img" ] && mkdir -p /tftpboot/nbi_img
+[ ! -d "${pxecfg_pd}" ] && mkdir -p "${pxecfg_pd}"
 
 # 1.
 # User has to setup apt/yum first by them self, so skip this.
