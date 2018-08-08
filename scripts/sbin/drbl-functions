@@ -3737,7 +3737,7 @@ disable_lvm2_udevd_rules() {
       mv -v "${i}" "${i}.drblsave"
     done
     # Reload the rules for udevd for running system, i.e. Clonezilla live. For Clonezilla SE, since it's in /tftpboot/node_root/, during the booting it won't be started.
-    if [ -z "$node_root" ]; then
+    if [ -z "$node_rt" ]; then
       udevadm control --reload-rules
     fi
   fi
