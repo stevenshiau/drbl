@@ -2203,7 +2203,7 @@ fi
 echo "The version number for your GNU/Linux: $OS_Version"
 
 # First, common root files
-[ ! -d /tftpboot ] && mkdir /tftpboot
+[ ! -d "${drbltopdir}" ] && mkdir -p "${drbltopdir}"
 
 # When user changes ocsroot, we need to modify drbl.conf (note: This must be after $drbl_common_root//$ocsroot is created)
 # If this script is rerun, maybe clonezilla.lock exists.

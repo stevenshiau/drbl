@@ -382,7 +382,7 @@ for nameserver in $nameserver_; do
 done
 
 # Comment this, it's not necessary now.
-#ln -fs $drbl_common_root /tftpboot/$ip
+#ln -fs $drbl_common_root $drbltopdir/$ip
 
 # For client login mode
 PASSWD_OPT=""

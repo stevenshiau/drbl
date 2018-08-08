@@ -2790,7 +2790,7 @@ parse_cmdline_option() {
     # Possible complicated commands:
     # ocs_prerun="sshfs -o nonempty -p 22 root@myhost.mymachine:/home/partimag/ /home/partimag"
     # ocs_prerun="mount -t cifs -o username=user,password=pass //127.0.0.1/test /home/partimag"
-    # ocs_prerun="sudo mount -t cifs -o user=ghost,password=ghost123 //192.168.1.1/tftpboot$/images/clonezilla /home/partimag" # Ref: https://sourceforge.net/projects/clonezilla/forums/forum/663168/topic/4589215, for samba share with hidden share, a "$" is in the end of dir name.
+    # ocs_prerun="sudo mount -t cifs -o user=ghost,password=ghost123 //192.168.1.1${drbltopdir}$/images/clonezilla /home/partimag" # Ref: https://sourceforge.net/projects/clonezilla/forums/forum/663168/topic/4589215, for samba share with hidden share, a "$" is in the end of dir name.
     # Therefore we have to add "/" ":" "=" "," "@", "\\$"
     #
     # For gurb2 1.99, although \" is put in boot parameter, it will be shown.
@@ -2806,7 +2806,7 @@ parse_cmdline_option() {
     # ocs_prerun2="ps -efw |grep '[a-z]'"
     # ocs_prerun3="sshfs -o nonempty -p 22 root@myhost.mymachine:/home/partimag/ /home/partimag"
     # ocs_prerun4="mount -t cifs -o username=user,password=pass //127.0.0.1/test /home/partimag"
-    # ocs_prerun5="sudo mount -t cifs -o user=ghost,password=ghost123 //192.168.1.1/tftpboot$/images/clonezilla /home/partimag" 
+    # ocs_prerun5="sudo mount -t cifs -o user=ghost,password=ghost123 //192.168.1.1${drbltopdir}$/images/clonezilla /home/partimag"
     # "ocs_prerun6=sleep 5"
     # "ocs_prerun7=sleep 5"
     # ocs_prerun8=\"sleep 5\"

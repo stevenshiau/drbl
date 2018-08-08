@@ -2032,10 +2032,10 @@ backup_apt_sources_list() {
 #
 clean_tftpboot_and_misc() {
   local bind_dirs
-  # Unmount those "--bind" dir under /tftpboot/
+  # Unmount those "--bind" dir under ${drbltopdir}
   # The results of "mount" command is like:
   # /usr on $drbl_common_root/usr type none (rw,bind)
-  bind_dirs="$(LC_ALL=C mount | awk -F" " '{print $3}' | grep -Ew "/tftpboot")"
+  bind_dirs="$(LC_ALL=C mount | awk -F" " '{print $3}' | grep -Ew "${drbltopdir}/")"
   bind_dirs="$(echo $bind_dirs)"  # make it in a line
   for i in $bind_dirs; do
     echo "Unmounting binding dir $i..."
@@ -2045,7 +2045,7 @@ clean_tftpboot_and_misc() {
   echo "$msg_cleaning_tftpboot_and_misc"
   echo "$msg_delimiter_star_line"
   # clean the nodes link, like 192.168.1.1...
-  find /tftpboot/ -maxdepth 1 -type l -exec rm -f {} \;
+  find ${drbltopdir} -maxdepth 1 -type l -exec rm -f {} \;
   # we won't to affect those netinstall, maybe they are not removed previuosly. .
   find "${pxecfg_pd}" ! -name "*netinstall*" ! -type d -exec rm -f {} \;
   [ -d "${drblroot}" ] && rm -rf "${drblroot}"

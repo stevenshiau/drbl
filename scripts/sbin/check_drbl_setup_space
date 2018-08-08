@@ -43,12 +43,11 @@ done
 
 [ -z "$client_no" ] && usage && exit 1
 
-# The extra space in front of /tftpboot is to exclude something like /mnt/tftpboot
-tftpboot_space=$(LC_ALL=C df --block-size 1M 2>/dev/null | awk -F" " '/ \/tftpboot/ {print $4}')
+tftpboot_space=$(LC_ALL=C df --block-size 1M ${drbltopdir} 2>/dev/null | awk -F" " '/^\// {print $4}')
 [ -z "$tftpboot_space" ] && tftpboot_space=0
-# we will overwrite the necessary directories in /tftpboot/, the space
+# we will overwrite the necessary directories in ${drbltopdir}, the space
 # will be released, so add it to $total_avail_space
-tftpboot_current_used=$(LC_ALL=C du -smc /tftpboot/ 2>/dev/null | cut -f1 | tail -n1)
+tftpboot_current_used=$(LC_ALL=C du -smc ${drbltopdir} 2>/dev/null | cut -f1 | tail -n1)
 [ -z "$tftpboot_current_used" ] && tftpboot_current_used=0
 
 # use $(NF-2) is safer than $4, because longer device name will use 2 lines like

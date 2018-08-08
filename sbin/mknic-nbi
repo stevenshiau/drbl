@@ -268,13 +268,13 @@ fi
 
 # If we do not specifie kernel, try to find in 
 # (1) /lib/modules (by rpm ...) - old way
-# (2) /tftpboot/lib/modules (by finding directory)
+# (2) ${drbltopdir}/lib/modules (by finding directory)
 if [ -z "$selected_kernel" ]; then
    echo "Searching the latest installed kernel for DRBL client... This might take several minutes..."
    kernel_mod_list=$(find $drbl_common_root/lib/modules/ -maxdepth 1 -mindepth 1 -name "[0-9].[0-9]*" -type d -print | sort -g | tail -n 1)
    if [ -n "$kernel_mod_list" ]; then
       # the kernel in drbl_common_root is found, 
-      # use method (2) (/tftpboot/lib/modules)
+      # use method (2) (${drbltopdir}/lib/modules)
       echo "Trying to find the kernel in $drbl_common_root "
       drbl_kernel="$(basename $kernel_mod_list)"
    else
@@ -292,7 +292,7 @@ else
    # (Here we assume the kernel modules will be created, not all buildin)
    # the kernel will exist in 
    # (1) /lib/modules - old way
-   # (2) /tftpboot/lib/modules
+   # (2) ${drbltopdir}/lib/modules
    [ ! -d "$drbl_common_root/lib/modules/$selected_kernel" -a ! -d "/lib/modules/$selected_kernel" ] && echo "Can NOT find the kernel \"$selected_kernel\" you specified! Program terminated!" && exit 1
    drbl_kernel="$selected_kernel"
    # if we can find the modules in the common_root, use it first.
@@ -333,7 +333,7 @@ else
 fi
 
 # prepare the directories for DRBL clients
-[ ! -d /tftpboot ] && mkdir /tftpboot
+[ ! -d "${drbltopdir}" ] && mkdir -p "${drbltopdir}"
 [ ! -d "${pxecfg_pd}" ] && mkdir -p "${pxecfg_pd}"
 [ ! -d "${drbl_common_root}" ] && mkdir -p "${drbl_common_root}"
 [ ! -d "${drblroot}" ] && mkdir -p "${drblroot}"
