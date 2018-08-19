@@ -279,6 +279,7 @@ fi
 
 # Get machine info:
 on_this_machine=""
+dev_model_shown=""
 if type dmidecode &>/dev/null; then
   machine_name="$(LANG=C dmidecode -s system-product-name 2>/dev/null | head -n 1)"
   if [ -z "$machine_name" -o "$machine_name" = "To Be Filled By O.E.M." ]; then
@@ -286,8 +287,8 @@ if type dmidecode &>/dev/null; then
   else
     dev_model_shown="$machine_name"
   fi
+  on_this_machine="on this machine \"$dev_model_shown\""
 fi
-on_this_machine="on this machine \"$dev_model_shown\""
 
 #
 if ! grep -qEw $pt_dev /proc/partitions; then
