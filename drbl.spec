@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.27.6
+Version:	2.27.7
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,11 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Sun Aug 19 2018 Steven Shiau <steven _at_ clonezilla org> 2.27.7-drbl1
+  * Make makeboot.sh work if dmidecode is not installed.
+    Thanks to Clemmitt Sigler for reporting this issue.
+    Ref: https://sourceforge.net/p/clonezilla/bugs/302/
+
 * Fri Jul 20 2018 Steven Shiau <steven _at_ clonezilla org> 2.27.6-drbl1
   * Test to see if pxelinux.0 or lpxelinux.0 should be used in drbl.conf.
 

@@ -1,3 +1,11 @@
+drbl (2.27.7-drbl1) unstable; urgency=medium
+
+  * Make makeboot.sh work if dmidecode is not installed.
+    Thanks to Clemmitt Sigler for reporting this issue.
+    Ref: https://sourceforge.net/p/clonezilla/bugs/302/
+
+ -- Steven Shiau <steven@clonezilla.org>  Sun, 19 Aug 2018 12:51:43 +0800
+
 drbl (2.27.6-drbl1) unstable; urgency=medium
 
   * Test to see if pxelinux.0 or lpxelinux.0 should be used in drbl.conf.
