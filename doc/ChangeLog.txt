@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.27.8-drbl1) unstable; urgency=medium
+
+  * Skip copying /var/lib/lxcfs to drbl clients.
+
+ -- Steven Shiau <steven@clonezilla.org>  Tue, 04 Sep 2018 22:49:07 +0800
+
 drbl (2.27.7-drbl1) unstable; urgency=medium
 
   * Make makeboot.sh work if dmidecode is not installed.
