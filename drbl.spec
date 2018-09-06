@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.27.8
+Version:	2.27.9
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,11 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Wed Sep 05 2018 Steven Shiau <steven _at_ clonezilla org> 2.27.9-drbl1
+  * Bug fixed: Varible node_root should be node_rt in function
+    disable_lvm2_udevd_rules. Thanks to vicamo for reporting. 
+    Ref: https://github.com/stevenshiau/drbl/pull/14
+
 * Tue Sep 04 2018 Steven Shiau <steven _at_ clonezilla org> 2.27.8-drbl1
   * Skip copying /var/lib/lxcfs to drbl clients.
 

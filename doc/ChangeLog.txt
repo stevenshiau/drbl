@@ -5,6 +5,14 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.27.9-drbl1) unstable; urgency=medium
+
+  * Bug fixed: Varible node_root should be node_rt in function
+    disable_lvm2_udevd_rules. Thanks to vicamo for reporting. 
+    Ref: https://github.com/stevenshiau/drbl/pull/14
+
+ -- Steven Shiau <steven@clonezilla.org>  Wed, 05 Sep 2018 21:34:58 +0800
+
 drbl (2.27.8-drbl1) unstable; urgency=medium
 
   * Skip copying /var/lib/lxcfs to drbl clients.
