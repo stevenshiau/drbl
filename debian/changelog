@@ -1,3 +1,9 @@
+drbl (2.28.1-drbl1) unstable; urgency=medium
+
+  * Make uEFI secure netboot work on Ubuntu system.
+
+ -- Steven Shiau <steven@clonezilla.org>  Tue, 11 Sep 2018 11:59:29 +0800
+
 drbl (2.27.9-drbl1) unstable; urgency=medium
 
   * Bug fixed: Varible node_root should be node_rt in function

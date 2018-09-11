@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.27.9
+Version:	2.28.1
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Tue Sep 11 2018 Steven Shiau <steven _at_ clonezilla org> 2.28.1-drbl1
+  * Make uEFI secure netboot work on Ubuntu system.
+
 * Wed Sep 05 2018 Steven Shiau <steven _at_ clonezilla org> 2.27.9-drbl1
   * Bug fixed: Varible node_root should be node_rt in function
     disable_lvm2_udevd_rules. Thanks to vicamo for reporting. 
