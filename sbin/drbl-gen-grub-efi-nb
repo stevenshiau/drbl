@@ -142,6 +142,8 @@ if [ -d "$GRUB_EFINB_DIR" ]; then
   rm -rf $GRUB_EFINB_DIR
 fi
 mkdir -p $GRUB_EFINB_DIR
+# link dir grub-efi.cfg as grub in /tftpboot/nbi_img/. This is to be compatible for secure booot for Ubuntu's grubnetx64.efi.signed
+ln -fs -r "$GRUB_EFINB_DIR" "$(dirname $GRUB_EFINB_DIR)"/grub
 
 # Get the grub version
 grub_v="$(LC_ALL=C $GRUB_MKIMG --version | awk -F" " '{print $NF}')"
@@ -200,43 +202,68 @@ esac
 for i in $dest_bootloader; do
   export EFI_ARCH=$i
   case "$EFI_ARCH" in
-    i386)   
-             if [ ! -e /usr/lib/grub/i386-efi/moddep.lst ]; then
+    i386)    if [ ! -e /usr/lib/grub/i386-efi/moddep.lst ]; then
 	       # On some system, like CentOS 7, there is no i386 efi from grub2.
 	       continue
 	     fi 
-             out_f="$pxecfg_pd/bootia32.efi" ;;
-    x86_64)  out_f="$pxecfg_pd/bootx64.efi"  ;;
-    arm64)   out_f="$pxecfg_pd/bootaa64.efi" ;;
+	     SB_EFI_NAME="ia32"
+             out_f="$pxecfg_pd/bootia32.efi"
+	     ;;
+    x86_64)  SB_EFI_NAME="x64"
+	     out_f="$pxecfg_pd/bootx64.efi"
+	     ;;
+    arm64)   SB_EFI_NAME="aa64"
+	     out_f="$pxecfg_pd/bootaa64.efi"
+	     ;;
   esac
-  # Checking the required modules
-  for im in $efi_required_mod; do
-    if [ ! -e "/usr/lib/grub/${EFI_ARCH}-efi/${im}.mod" ]; then
-      [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
-      echo "Missing grub2 module ${im}.mod... Exluding ${im}.mod..."
-      [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
-      efi_required_mod="$(echo $efi_required_mod | sed -r -e "s/$im //g")"
-    fi
-  done
-  echo "Creating the uEFI network booting bootable image $out_f..."
-  $GRUB_MKIMG $grub_mkimg_compress_opt -O ${EFI_ARCH}-efi -o $out_f --prefix="($tftp_srv_opt)/grub-efi.cfg/" -c $grub_efi_tmpd/grub-header.cfg $efi_required_mod
-  rc=$?
-  if [ "$rc" -ne 0 ]; then
-    # When grub-mkimage fails, an empty output file will still be created. We'd better to clean it.
-    rm -f $out_f
+  # For amd64 arch, the files for secure boot:
+  # /usr/lib/shim/shimx64.efi.signed -> /tftpboot/nbi_img/bootx64.efi
+  # /usr/lib/grub/x86_64-efi-signed/grubnetx64.efi.signed -> /tftpboot/nbi_img/grubx64.efi
+  # For arm64 arch,
+  # /usr/lib/shim/shimaa64.efi.signed -> /tftpboot/nbi_img/bootaa64.efi
+  # /usr/lib/grub/arm64-efi-signed/grubnetaa64.efi.signed -> /tftpboot/nbi_img/grubaa64.efi
+  if [ -e /usr/lib/shim/shim${SB_EFI_NAME}.efi.signed -a \
+       -e /usr/lib/grub/${EFI_ARCH}-efi-signed/grubnet${SB_EFI_NAME}.efi.signed ]; then
+    # Secure boot enabled. Use the one from upstream
     [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
-    echo "Warning! Failed to create $out_f!"
-    echo "This server won't be able to serve uEFI network boot clients."
+    echo "UEFI Secure Boot support enabled for ${EFI_ARCH} arch."
     [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
-    sleep 5
+    cp -fv /usr/lib/shim/shim${SB_EFI_NAME}.efi.signed $pxecfg_pd/boot${SB_EFI_NAME}.efi
+    cp -fv /usr/lib/grub/${EFI_ARCH}-efi-signed/grubnet${SB_EFI_NAME}.efi.signed $pxecfg_pd/grub${SB_EFI_NAME}.efi
   else
-    # Create a tag file
-    echo "Created by program \"$prog\" with command:" > ${out_f}.info
-    echo "$GRUB_MKIMG $grub_mkimg_compress_opt -O ${EFI_ARCH}-efi -o $out_f --prefix='(tftp)/grub-efi.cfg/' -c $grub_efi_tmpd/grub-header.cfg $efi_required_mod" >> ${out_f}.info
-    echo "The contents of $grub_efi_tmpd/grub-header.cfg:" >> ${out_f}.info
-    echo "$msg_delimiter_star_line" >> ${out_f}.info
-    cat $grub_efi_tmpd/grub-header.cfg >> ${out_f}.info
-    echo "$msg_delimiter_star_line" >> ${out_f}.info
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+    echo "UEFI Secure Boot support disabled for ${EFI_ARCH} arch becasue there is no /usr/lib/shim/shim${SB_EFI_NAME}.efi.signed and /usr/lib/grub/${EFI_ARCH}-efi-signed/grubnet${SB_EFI_NAME}.efi.signed installed."
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+    # Non-secure boot
+    # Checking the required modules
+    for im in $efi_required_mod; do
+      if [ ! -e "/usr/lib/grub/${EFI_ARCH}-efi/${im}.mod" ]; then
+        [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+        echo "Missing grub2 module ${im}.mod... Exluding ${im}.mod..."
+        [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+        efi_required_mod="$(echo $efi_required_mod | sed -r -e "s/$im //g")"
+      fi
+    done
+    echo "Creating the uEFI network booting bootable image $out_f..."
+    $GRUB_MKIMG $grub_mkimg_compress_opt -O ${EFI_ARCH}-efi -o $out_f --prefix="($tftp_srv_opt)/grub-efi.cfg/" -c $grub_efi_tmpd/grub-header.cfg $efi_required_mod
+    rc=$?
+    if [ "$rc" -ne 0 ]; then
+      # When grub-mkimage fails, an empty output file will still be created. We'd better to clean it.
+      rm -f $out_f
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+      echo "Warning! Failed to create $out_f!"
+      echo "This server won't be able to serve uEFI network boot clients."
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+      sleep 5
+    else
+      # Create a tag file
+      echo "Created by program \"$prog\" with command:" > ${out_f}.info
+      echo "$GRUB_MKIMG $grub_mkimg_compress_opt -O ${EFI_ARCH}-efi -o $out_f --prefix='(tftp)/grub-efi.cfg/' -c $grub_efi_tmpd/grub-header.cfg $efi_required_mod" >> ${out_f}.info
+      echo "The contents of $grub_efi_tmpd/grub-header.cfg:" >> ${out_f}.info
+      echo "$msg_delimiter_star_line" >> ${out_f}.info
+      cat $grub_efi_tmpd/grub-header.cfg >> ${out_f}.info
+      echo "$msg_delimiter_star_line" >> ${out_f}.info
+    fi
   fi
 done
 
