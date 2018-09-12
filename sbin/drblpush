@@ -4622,7 +4622,17 @@ if [ "$use_existing_dhcp_srv" = "yes" ]; then
   [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
   echo "Use existing DHCP service, so now enable proxy DHCP mode..."
   [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+  # This will use one program, i.e., dnsmasq proxy mode for dhcp+tftp.
   drbl-proxy-dhcp enable
+else
+  # This will use two programs, i.e., ISC dhcpd + tftpd.
+  # No issue about dnsmasq proxy mode.
+  # Ref: ocs-live-feed-img, check comments about "A workaround to fix the dnsmasq issue"
+  # Hence we can try to enable uEFI network secure boot for clients.
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+  echo "Not using existing DHCP service, so try to enable uEFI secure boot service for clients..."
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+  drbl-gen-grub-efi-nb -s
 fi
 
 # set the boot prompt for clients if set
