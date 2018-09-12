@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.28.1
+Version:	2.28.2
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,12 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Wed Sep 12 2018 Steven Shiau <steven _at_ clonezilla org> 2.28.2-drbl1
+  * Add a workaround to support uEFI secure netboot.
+    To enable uEFI network secure boot for clients, use
+    standalone DHCP service in Clonezilla lite server
+   (Ubuntu-based), not relaying to the existing DHCP service.
+
 * Tue Sep 11 2018 Steven Shiau <steven _at_ clonezilla org> 2.28.1-drbl1
   * Make uEFI secure netboot work on Ubuntu system.
 
