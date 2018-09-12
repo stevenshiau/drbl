@@ -17,6 +17,8 @@ efi_required_mod="normal tftp efinet chain echo net gzio xzio linux \
 efi_gop efi_uga png gfxterm gfxterm_background gfxterm_menu \
 serial part_gpt part_msdos boot multiboot progress search \
 $GRUB_FS_MOD_drbl_ocs configfile test sleep tr reboot halt"
+# Default values
+secure_boot="no"
 
 prog="$0"
 
@@ -49,6 +51,7 @@ while [ $# -gt 0 ]; do
             fi
 	    [ -z "$tftp_server_ip" ] && USAGE && exit 1
 	    ;;
+    -s|--secure-boot) secure_boot="yes"; shift;;
     -*)     echo "${0}: ${1}: invalid option" >&2
             USAGE >& 2
             exit 2 ;;
@@ -143,7 +146,9 @@ if [ -d "$GRUB_EFINB_DIR" ]; then
 fi
 mkdir -p $GRUB_EFINB_DIR
 # link dir grub-efi.cfg as grub in /tftpboot/nbi_img/. This is to be compatible for secure booot for Ubuntu's grubnetx64.efi.signed
-ln -fs -r "$GRUB_EFINB_DIR" "$(dirname $GRUB_EFINB_DIR)"/grub
+if [ ! -h "$(dirname $GRUB_EFINB_DIR)"/grub ]; then
+  ln -fs -r "$GRUB_EFINB_DIR" "$(dirname $GRUB_EFINB_DIR)"/grub
+fi
 
 # Get the grub version
 grub_v="$(LC_ALL=C $GRUB_MKIMG --version | awk -F" " '{print $NF}')"
@@ -222,17 +227,19 @@ for i in $dest_bootloader; do
   # For arm64 arch,
   # /usr/lib/shim/shimaa64.efi.signed -> /tftpboot/nbi_img/bootaa64.efi
   # /usr/lib/grub/arm64-efi-signed/grubnetaa64.efi.signed -> /tftpboot/nbi_img/grubaa64.efi
-  if [ -e /usr/lib/shim/shim${SB_EFI_NAME}.efi.signed -a \
+  if [ "$secure_boot" = "yes" -a \
+       -e /usr/lib/shim/shim${SB_EFI_NAME}.efi.signed -a \
        -e /usr/lib/grub/${EFI_ARCH}-efi-signed/grubnet${SB_EFI_NAME}.efi.signed ]; then
     # Secure boot enabled. Use the one from upstream
     [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
-    echo "UEFI Secure Boot support enabled for ${EFI_ARCH} arch."
+    echo "UEFI Secure Boot support enabled for ${EFI_ARCH} clients."
     [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
     cp -fv /usr/lib/shim/shim${SB_EFI_NAME}.efi.signed $pxecfg_pd/boot${SB_EFI_NAME}.efi
     cp -fv /usr/lib/grub/${EFI_ARCH}-efi-signed/grubnet${SB_EFI_NAME}.efi.signed $pxecfg_pd/grub${SB_EFI_NAME}.efi
+    echo "Copied from /usr/lib/shim/shim${SB_EFI_NAME}.efi.signed" > ${out_f}.info
   else
     [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
-    echo "UEFI Secure Boot support disabled for ${EFI_ARCH} arch becasue there is no /usr/lib/shim/shim${SB_EFI_NAME}.efi.signed and /usr/lib/grub/${EFI_ARCH}-efi-signed/grubnet${SB_EFI_NAME}.efi.signed installed."
+    echo "UEFI Secure Boot support disabled for ${EFI_ARCH} clients becasue there is no /usr/lib/shim/shim${SB_EFI_NAME}.efi.signed and /usr/lib/grub/${EFI_ARCH}-efi-signed/grubnet${SB_EFI_NAME}.efi.signed installed."
     [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
     # Non-secure boot
     # Checking the required modules
