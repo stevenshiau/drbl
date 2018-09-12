@@ -4801,7 +4801,12 @@ DNSMQSQ_END
     [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
   fi
   
-  cat <<-DNSMQSQ_END >> $dnsmasq_cfg 
+  # pxe-service mode does not work for non-proxy mode. It fails for supporting uEFI secure netboot
+  # Hence we use dhcp-boot for non-proxy mode. This is a workaround to support uEFI secure netboot.
+  # Ref: http://lists.thekelleys.org.uk/pipermail/dnsmasq-discuss/2018q3/012476.html
+  case "$gen_mode" in
+    proxy) 
+     cat <<-DNSMQSQ_END >> $dnsmasq_cfg 
 
 ## PXEClient:Arch:00000
 pxe-service=X86PC, "Boot BIOS PXE", $pxelinux_fn
@@ -4814,6 +4819,15 @@ pxe-service=X86-64_EFI, "Boot UEFI X86-64", bootx64.efi
 
 pxe-prompt="Booting DRBL/Clonezilla Client", 1
 DNSMQSQ_END
+     ;;
+    range) 
+     cat <<-DNSMQSQ_END >> $dnsmasq_cfg 
+dhcp-boot=$pxelinux_fn
+dhcp-match=set:efi-x86_64,option:client-arch,7
+dhcp-boot=tag:efi-x86_64,bootx64.efi
+DNSMQSQ_END
+     ;;
+   esac
 } # end of gen_dnsmasq_cfg
 #
 query_pkg_ver() {
