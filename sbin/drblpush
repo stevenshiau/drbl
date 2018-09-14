@@ -4628,11 +4628,13 @@ else
   # This will use two programs, i.e., ISC dhcpd + tftpd.
   # No issue about dnsmasq proxy mode.
   # Ref: ocs-live-feed-img, check comments about "A workaround to fix the dnsmasq issue"
-  # Hence we can try to enable uEFI network secure boot for clients.
-  [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
-  echo "Not using existing DHCP service, so try to enable uEFI secure boot service for clients..."
-  [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
-  drbl-gen-grub-efi-nb -s
+  # Hence we can try to enable uEFI network secure boot for clients if it is assigned to enable.
+  if [ "$secure_boot" = "yes" ]; then
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+    echo "Not using existing DHCP service, so try to enable uEFI secure boot service for clients..."
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+    drbl-gen-grub-efi-nb -s
+  fi
 fi
 
 # set the boot prompt for clients if set

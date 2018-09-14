@@ -4822,6 +4822,7 @@ DNSMQSQ_END
      ;;
     range) 
      cat <<-DNSMQSQ_END >> $dnsmasq_cfg 
+
 dhcp-boot=$pxelinux_fn
 dhcp-match=set:efi-x86_64,option:client-arch,7
 dhcp-boot=tag:efi-x86_64,bootx64.efi

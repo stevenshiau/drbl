@@ -18,7 +18,7 @@ efi_gop efi_uga png gfxterm gfxterm_background gfxterm_menu \
 serial part_gpt part_msdos boot multiboot progress search \
 $GRUB_FS_MOD_drbl_ocs configfile test sleep tr reboot halt"
 # Default values
-secure_boot="no"
+# secure_boot is from drbl.conf.
 
 prog="$0"
 
