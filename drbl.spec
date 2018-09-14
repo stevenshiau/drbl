@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.28.2
+Version:	2.28.3
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,14 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Fri Sep 14 2018 Steven Shiau <steven _at_ clonezilla org> 2.28.3-drbl1
+  * Make variable secure_boot to be global, hence it's moved to drbl.conf
+    from drbl-gen-grub-efi-nb. Hence both drbl-gen-grub-efi-nb and drblpush
+    will use the same setting. By default secure_boot is not enabled due to
+    this issue for secure grub boot loader:
+    https://lists.gnu.org/archive/html/grub-devel/2016-04/msg00051.html
+    It can be enabled in the future if it's patched in the upstream.
+
 * Wed Sep 12 2018 Steven Shiau <steven _at_ clonezilla org> 2.28.2-drbl1
   * Add a workaround to support uEFI secure netboot.
     To enable uEFI network secure boot for clients, use
