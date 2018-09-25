@@ -18,7 +18,7 @@ efi_gop efi_uga png gfxterm gfxterm_background gfxterm_menu \
 serial part_gpt part_msdos boot multiboot progress search \
 $GRUB_FS_MOD_drbl_ocs configfile test sleep tr reboot halt"
 # Default values
-# secure_boot is from drbl.conf.
+# secure_boot_client is from drbl.conf.
 
 prog="$0"
 
@@ -27,6 +27,7 @@ USAGE() {
   echo "Generate the Grub EFI network boot loader for DRBL clients."
   echo "Usage: $prog [OPTION]"
   echo "Options:"
+  echo "-s, --secure-boot-client: Enabled secure boot for uEFI network boot client. This is still in testing."
   echo "-t, --tftp-server IPADD:  Assign the IP address IPADD for the TFTP server. If not assigned, automatically obtain from network boot server. Howerver, grub <= 2.0.2 does not support receiving that. Not sure if newer version will support it or not. Hence this is a workaround."
   echo "Ex:"
   echo "To create Grub EFI network boot loader for DRBL clients with TFTP server IP address 192.168.67.254:"
@@ -51,7 +52,7 @@ while [ $# -gt 0 ]; do
             fi
 	    [ -z "$tftp_server_ip" ] && USAGE && exit 1
 	    ;;
-    -s|--secure-boot) secure_boot="yes"; shift;;
+    -s|--secure-boot-client) secure_boot_client="yes"; shift;;
     -*)     echo "${0}: ${1}: invalid option" >&2
             USAGE >& 2
             exit 2 ;;
@@ -227,7 +228,7 @@ for i in $dest_bootloader; do
   # For arm64 arch,
   # /usr/lib/shim/shimaa64.efi.signed -> /tftpboot/nbi_img/bootaa64.efi
   # /usr/lib/grub/arm64-efi-signed/grubnetaa64.efi.signed -> /tftpboot/nbi_img/grubaa64.efi
-  if [ "$secure_boot" = "yes" -a \
+  if [ "$secure_boot_client" = "yes" -a \
        -e /usr/lib/shim/shim${SB_EFI_NAME}.efi.signed -a \
        -e /usr/lib/grub/${EFI_ARCH}-efi-signed/grubnet${SB_EFI_NAME}.efi.signed ]; then
     # Secure boot enabled. Use the one from upstream
