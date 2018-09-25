@@ -1096,4 +1096,4 @@ msg_do_all_clients_finish_jobs='所有用戶端都完成還原工作了嗎? //�
 # Tag on 2018/09/25
 msg_clonezilla_massive_deployment='使用群播，廣播或者位元洪流來做大量系統佈署'
 msg_netboot_interactive_client='用戶端網路開機進再生龍互動模式'
-msg_secure_boot_for_clients_is_enabled='uEFI用戶端安全開機模式已經關閉。將在這台機器啟動DHCP服務，來供再生龍輕量伺服器使用。請務必確認在區域網路上沒有其他DHCP服務。'
+msg_secure_boot_for_clients_is_enabled='uEFI用戶端的安全開機模式已經關閉。將在這台機器啟動DHCP服務，供再生龍輕量伺服器使用。請務必確認在區域網路上沒有其他DHCP服務。'

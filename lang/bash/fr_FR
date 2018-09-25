@@ -1098,4 +1098,4 @@ msg_do_all_clients_finish_jobs='Tous les clients ont-ils terminé les processus 
 # Tag on 2018/09/25
 msg_clonezilla_massive_deployment='Massive deployment by multicast, broadcast or bittorrent'
 msg_netboot_interactive_client='Network boot clients and enter Clonezilla live interactive mode'
-msg_secure_boot_for_clients_is_enabled='uEFI Secure boot for clients is enabled. The DHCP service will be started in this machine for Clonezilla lite server. Please make sure there is no secondary DHCP service exists in the LAN.'
+msg_secure_boot_for_clients_is_enabled='uEFI Secure boot for clients is enabled. The DHCP service will be started in this machine for Clonezilla lite server. Please make sure there is no secondary DHCP service existing in the LAN.'
