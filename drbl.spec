@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.28.4
+Version:	2.28.5
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Wed Sep 26 2018 Steven Shiau <steven _at_ clonezilla org> 2.28.5-drbl1
+  * Minor update for language files. 
+
 * Tue Sep 25 2018 Steven Shiau <steven _at_ clonezilla org> 2.28.4-drbl1
   * Variable secure_boot in the programs was renamed to secure_boot_client.
   * Move curl to PKG_FROM_DBN_MINIMAL_NEED from PKG_FROM_DBN in drbl.conf,

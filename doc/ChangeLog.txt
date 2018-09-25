@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.28.5-drbl1) unstable; urgency=medium
+
+  * Minor update for language files. 
+
+ -- Steven Shiau <steven@clonezilla.org>  Wed, 26 Sep 2018 05:28:20 +0800
+
 drbl (2.28.4-drbl1) unstable; urgency=medium
 
   * Variable secure_boot in the programs was renamed to secure_boot_client.
