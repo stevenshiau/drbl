@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.28.5
+Version:	2.28.6
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,11 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Sun Sep 29 2018 Steven Shiau <steven _at_ clonezilla org> 2.28.6-drbl1
+  * Add network-manager to packages list of Clonezilla live so that user
+    can use nmtui to configure network if it's necessary, especially
+    for wifi.
+
 * Wed Sep 26 2018 Steven Shiau <steven _at_ clonezilla org> 2.28.5-drbl1
   * Minor update for language files. 
 

@@ -1,3 +1,11 @@
+drbl (2.28.6-drbl1) unstable; urgency=medium
+
+  * Add network-manager to packages list of Clonezilla live so that user
+    can use nmtui to configure network if it's necessary, especially
+    for wifi.
+
+ -- Steven Shiau <steven@clonezilla.org>  Sat, 29 Sep 2018 16:21:44 +0800
+
 drbl (2.28.5-drbl1) unstable; urgency=medium
 
   * Minor update for language files. 
