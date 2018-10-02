@@ -1,3 +1,9 @@
+drbl (2.28.7-drbl1) unstable; urgency=medium
+
+  * Add ldmtool to packages list of Clonezilla live.
+
+ -- Steven Shiau <steven@clonezilla.org>  Tue, 02 Oct 2018 20:47:46 +0800
+
 drbl (2.28.6-drbl1) unstable; urgency=medium
 
   * Add network-manager to packages list of Clonezilla live so that user
