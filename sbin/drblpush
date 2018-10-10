@@ -2452,6 +2452,9 @@ done
 # clean the mtab in $drbl_common_root copied from server
 rm -f $drbl_common_root/etc/mtab*
 
+# clean the netplan file copied from server
+rm -f $drbl_common_root/etc/netplan/*.yaml
+
 # For Debian udev, if $drbl_common_root/etc/udev/rules.d/z25_persistent-net.rules exists, remove it. Since it contains the network MAC address from drbl server, and we should let client automatically create that.
 if [ -n "$(unalias ls 2>/dev/null; ls $drbl_common_root/etc/udev/rules.d/*persistent-net.rules 2>/dev/null)" ]; then
   rm -f $drbl_common_root/etc/udev/rules.d/*persistent-net.rules
