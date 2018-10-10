@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.28.8-drbl1) unstable; urgency=medium
+
+  * Clean client's netplan file that are copied from server. Thanks to
+    Robert Arkiletian for reporting that.
+
+ -- Steven Shiau <steven@clonezilla.org>  Wed, 10 Oct 2018 22:16:22 +0800
+
 drbl (2.28.7-drbl1) unstable; urgency=medium
 
   * Add ldmtool to packages list of Clonezilla live.

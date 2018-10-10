@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.28.7
+Version:	2.28.8
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,10 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Wed Oct 10 2018 Steven Shiau <steven _at_ clonezilla org> 2.28.8-drbl1
+  * Clean client's netplan file that are copied from server. Thanks to
+    Robert Arkiletian for reporting that.
+
 * Tue Oct 02 2018 Steven Shiau <steven _at_ clonezilla org> 2.28.7-drbl1
   * Add ldmtool to packages list of Clonezilla live.
 
