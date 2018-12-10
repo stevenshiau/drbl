@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.28.9
+Version:	2.28.10
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,10 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Mon Dec 19 2018 Steven Shiau <steven _at_ clonezilla org> 2.28.10-drbl1
+  * Adding support for Debian 9.5 and 9.6. This release should be ready for
+    Ubuntu 18.10, except the DM should be changed to lightdm instead of gdm3.
+
 * Sun Nov 18 2018 Steven Shiau <steven _at_ clonezilla org> 2.28.9-drbl1
   * Update netinstall in drbl.conf.
 
