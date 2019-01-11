@@ -1047,7 +1047,6 @@ msg_what_is_the_ip_add_for_virtual_nic_drbl0='Jaki jest adres IP i prefiks dla w
 msg_your_input_config_is='Wprowadzone ustawienie to'
 msg_is_that_correct='Czy to jest poprawne?'
 # Tag on 2017/04/09
-msg_ocs_live_lite_server_des='Serwer Clonezilla Live Lite to tryb usługi Clonezilli, który uruchamia usługę multicast/broadcast dla komputerów klienckich. Dlatego łatwiej jest go używać w istniejącym środowisku sieciowym, ponieważ może on po prostu dopasować się do środowiska sieciowego bez zmiany jakichkolwiek ustawień sieciowych w sieci LAN. Jeśli użyjesz tego w odizolowanym środowisku sieciowym bez komunikacji z dostawcą, Lite Serwer uruchomi własną usługę DHCP i PXE. Możesz uruchomić maszyny klienckie z tą samą wersją Clonezilli live, używając napędu CD/USB lub PXE, aby przywrócić obraz dostarczony przez Lite Serwer.'
 msg_failed_to_get_file_from_this_URL='Nie udało się pobrać pliku z tego adresu URL'
 msg_boot_client_with_same_version_clonezilla_live='Teraz uruchom klientów z tą samą wersją Clonezilli live, następnie uruchom "sudo ocs-live-get-img", postępuj zgodnie z instrukcjami kreatora, aby skonfigurować sieć i przypisz serwer jako'
 msg_append_parameter_for_unattended_mode="Jeśli chcesz uruchomić Clonezillę live w trybie nienadzorowanym, możesz przypisać te opcje w parametrach rozruchowych"
@@ -1098,3 +1097,10 @@ msg_do_all_clients_finish_jobs='Czy wszyscy klienci zakończyli pracę przywraca
 msg_clonezilla_massive_deployment='Massive deployment by multicast, broadcast or bittorrent'
 msg_netboot_interactive_client='Network boot clients and enter Clonezilla live interactive mode'
 msg_secure_boot_for_clients_is_enabled='uEFI Secure boot for clients is enabled. The DHCP service will be started in this machine for Clonezilla lite server. Please make sure there is no secondary DHCP service existing in the LAN.'
+# Tag on 2019/01/08
+msg_ocs_live_lite_server_des='Serwer Clonezilla Live Lite to tryb usługi Clonezilli, który uruchamia usługę multicast/broadcast dla komputerów klienckich. Dlatego łatwiej jest go używać w istniejącym środowisku sieciowym, ponieważ może on po prostu dopasować się do środowiska sieciowego bez zmiany jakichkolwiek ustawień sieciowych w sieci LAN. Jeśli użyjesz tego w odizolowanym środowisku sieciowym bez komunikacji z dostawcą, Lite Serwer uruchomi własną usługę DHCP i PXE. Możesz uruchomić maszyny klienckie z tą samą wersją Clonezilli live, używając napędu CD/USB lub PXE, aby przywrócić obraz dostarczony przez Lite Serwer.'
+msg_img_massive_deploy='Massive deployment from an image'
+msg_dev_massive_deploy='Massive deployment directly from partition(s) or disk(s) (BT only)'
+msg_disk_to_mdisk_by_BT='Disk(s) to disks of multiple machines using BT protocol'
+msg_part_to_mpart_by_BT='Part(s) to partitions of multiple machines using BT protocol'
+msg_save_temp_img_for_BT='Before conducting massive deployment directly from a source device, we still need to save the source device as a temporary image.'

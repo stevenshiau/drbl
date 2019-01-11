@@ -1,8 +1,6 @@
 #!/bin/bash
 # Written by Steven Shiau <steven _at_ nchc org tw> to use in DRBL and translated by Gianfranco Gentili <gf.gentili _at_ libero it>.
 # License: GPL
-
-
 #-----------------------------------------
 # some words
 msg_text_Enter='Invio'
@@ -1048,7 +1046,6 @@ msg_what_is_the_ip_add_for_virtual_nic_drbl0='Quale è l'\''indirizzo IP ed il p
 msg_your_input_config_is='L'\''impostazione che avete immesso è'
 msg_is_that_correct='E'\'' corretto?'
 # Tag on 2017/04/09
-msg_ocs_live_lite_server_des='Clonezilla live lite server è una modalità del servizio Clonezilla, che esegue un servizio multicast/broadcast per le macchine client. Perciò è facile da usare nella configurazione di rete esistente poiché può adattarsi alla configurazione di rete senza modificare nessuna impostazione di rete esistente in LAN. Se usate questo in una configurazione di rete isolata senza nessuna comunicazione a monte, questo lite server eseguirà un proprio servizio DHCP e PXE. Potete avviare le macchine client con la stessa versione di Clonezilla live, sia usando un CD/USB flash drive o PXE per ripritinare l'\''immagine con questo lite server.'
 msg_failed_to_get_file_from_this_URL='Non riesco a trovare il file da questo URL'
 msg_boot_client_with_same_version_clonezilla_live='Ora avviate i client con la stessa versione di Clonezilla live, poi eseguite "sudo ocs-live-get-img", seguito dal wizard per configurare la sua rete, assegnate il server come'
 msg_append_parameter_for_unattended_mode="Se volete avviare Clonezilla live in una modalità inaspettata, potete assegnare queste opzioni nei parametri di boot"
@@ -1099,3 +1096,10 @@ msg_do_all_clients_finish_jobs='TUTTI i client hanno finito i lavori di ripristi
 msg_clonezilla_massive_deployment='Massive deployment by multicast, broadcast or bittorrent'
 msg_netboot_interactive_client='Network boot clients and enter Clonezilla live interactive mode'
 msg_secure_boot_for_clients_is_enabled='uEFI Secure boot for clients is enabled. The DHCP service will be started in this machine for Clonezilla lite server. Please make sure there is no secondary DHCP service existing in the LAN.'
+# Tag on 2019/01/08
+msg_ocs_live_lite_server_des='Clonezilla live lite server è una modalità del servizio Clonezilla, che esegue un servizio multicast/broadcast per le macchine client. Perciò è facile da usare nella configurazione di rete esistente poiché può adattarsi alla configurazione di rete senza modificare nessuna impostazione di rete esistente in LAN. Se usate questo in una configurazione di rete isolata senza nessuna comunicazione a monte, questo lite server eseguirà un proprio servizio DHCP e PXE. Potete avviare le macchine client con la stessa versione di Clonezilla live, sia usando un CD/USB flash drive o PXE per ripritinare l'\''immagine con questo lite server.'
+msg_img_massive_deploy='Massive deployment from an image'
+msg_dev_massive_deploy='Massive deployment directly from partition(s) or disk(s) (BT only)'
+msg_disk_to_mdisk_by_BT='Disk(s) to disks of multiple machines using BT protocol'
+msg_part_to_mpart_by_BT='Part(s) to partitions of multiple machines using BT protocol'
+msg_save_temp_img_for_BT='Before conducting massive deployment directly from a source device, we still need to save the source device as a temporary image.'

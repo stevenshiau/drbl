@@ -1047,7 +1047,6 @@ msg_what_is_the_ip_add_for_virtual_nic_drbl0='Mi legyen a drbl0 virtuális hál�
 msg_your_input_config_is='A kívánt beállítás'
 msg_is_that_correct='Ez helyes?'
 # Tag on 2017/04/09
-msg_ocs_live_lite_server_des='A Clonezilla live lite szerver voltaképp a Clonezilla szerver mója, mely multicast/broadcast szervert futtat a kliensgépek számára. Meglévő hálózati környezetben azért egyszerűbb az alkalmazása, mert úgy illeszthető a hálózati környezethez, hogy nem szükséges a LAN hálózat beállításainak módosítása. Ha olyan elkülönített hálózati környezetben használja, ahol nincs feltöltést igénylő kommunikáció, ez a lite szerver saját DHCP és PXE szolgáltatást fog futtatni. Az ezen lite szerver által biztosított kép visszaállításához, a kliensgépek indítása azonos verziójú Clonezilla live-val kell történjen, CD/USB flash eszköz, vagy PXE használatával is.'
 msg_failed_to_get_file_from_this_URL='Sikertelen a fájl lekérése erről az URL-ről'
 msg_boot_client_with_same_version_clonezilla_live='A klienseket most azonos verziójú Clonezilla live-val indítsa, majd futtassa a "sudo ocs-live-get-img" parancsot, a varázslóval állítsa be a hálózatát és rendelje hozzá a szervert, mint'
 msg_append_parameter_for_unattended_mode="Ha felügyelet nélküli módban indítaná a Clonezilla live-ot, boot paraméterként is megadhatja a beállításokat"
@@ -1098,3 +1097,10 @@ msg_do_all_clients_finish_jobs='Minden kliens végzett a visszaállítási műve
 msg_clonezilla_massive_deployment='Massive deployment by multicast, broadcast or bittorrent'
 msg_netboot_interactive_client='Network boot clients and enter Clonezilla live interactive mode'
 msg_secure_boot_for_clients_is_enabled='uEFI Secure boot for clients is enabled. The DHCP service will be started in this machine for Clonezilla lite server. Please make sure there is no secondary DHCP service existing in the LAN.'
+# Tag on 2019/01/08
+msg_ocs_live_lite_server_des='A Clonezilla live lite szerver voltaképp a Clonezilla szerver mója, mely multicast/broadcast szervert futtat a kliensgépek számára. Meglévő hálózati környezetben azért egyszerűbb az alkalmazása, mert úgy illeszthető a hálózati környezethez, hogy nem szükséges a LAN hálózat beállításainak módosítása. Ha olyan elkülönített hálózati környezetben használja, ahol nincs feltöltést igénylő kommunikáció, ez a lite szerver saját DHCP és PXE szolgáltatást fog futtatni. Az ezen lite szerver által biztosított kép visszaállításához, a kliensgépek indítása azonos verziójú Clonezilla live-val kell történjen, CD/USB flash eszköz, vagy PXE használatával is.'
+msg_img_massive_deploy='Massive deployment from an image'
+msg_dev_massive_deploy='Massive deployment directly from partition(s) or disk(s) (BT only)'
+msg_disk_to_mdisk_by_BT='Disk(s) to disks of multiple machines using BT protocol'
+msg_part_to_mpart_by_BT='Part(s) to partitions of multiple machines using BT protocol'
+msg_save_temp_img_for_BT='Before conducting massive deployment directly from a source device, we still need to save the source device as a temporary image.'

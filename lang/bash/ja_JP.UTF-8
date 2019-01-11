@@ -2,7 +2,6 @@
 # Much of this work was translated to Japanese by Akira YOSHIYAMA <yosshy _at_ debian or jp>. Downloaded from: http://www.debian.or.jp/~yosshy/clonezilla/
 # Some of the translations were done by Annie Wei <annie _at_ nchc org tw>
 
-
 #-----------------------------------------
 # some words
 msg_text_Enter='入力'
@@ -1068,7 +1067,6 @@ msg_what_is_the_ip_add_for_virtual_nic_drbl0='仮想ネットワーク I/F drbl0
 msg_your_input_config_is='入力された設定：'
 msg_is_that_correct='これで正しいですか？'
 # Tag on 2017/04/09
-msg_ocs_live_lite_server_des='Clonezilla Live Lite サーバは Clonezilla サーバモードの一種で、クライアントマシン用のマルチキャスト/ブロードキャストサービスを実行します。この為、LAN 上の既存のネットワーク設定の変更なしにネットワーク環境にフィットできるので、既存のネットワーク環境で簡単に使用できます。これを、上位 LAN との通信のない独立したネットワーク環境で使用する場合、Lite サーバは独自の DHCP と PXE サービスを実行します。この Lite サーバが提供するイメージのリストアでは、CD/USB メモリ又は PXE のいずれかで同じバージョンの Clonezilla Live でクライアントマシンを起動できます。'
 msg_failed_to_get_file_from_this_URL='このURLからのファイル取得に失敗しました'
 msg_boot_client_with_same_version_clonezilla_live='これから同じバージョンの Clonezilla Live を用いてクライアントを起動し、その後 "sudo ocs-live-get-img" を実行し、ウィザードに従ってネットワークを設定し、次のサーバをアサインして下さい：'
 msg_append_parameter_for_unattended_mode="Clonezilla Live を自動モードで起動する場合、ブートパラメータにこれらのオプションを追加して下さい。"
@@ -1119,3 +1117,10 @@ msg_do_all_clients_finish_jobs='全クライアントのリストアジョブが
 msg_clonezilla_massive_deployment='Massive deployment by multicast, broadcast or bittorrent'
 msg_netboot_interactive_client='Network boot clients and enter Clonezilla live interactive mode'
 msg_secure_boot_for_clients_is_enabled='uEFI Secure boot for clients is enabled. The DHCP service will be started in this machine for Clonezilla lite server. Please make sure there is no secondary DHCP service existing in the LAN.'
+# Tag on 2019/01/08
+msg_ocs_live_lite_server_des='Clonezilla Live Lite サーバは Clonezilla サーバモードの一種で、クライアントマシン用のマルチキャスト/ブロードキャストサービスを実行します。この為、LAN 上の既存のネットワーク設定の変更なしにネットワーク環境にフィットできるので、既存のネットワーク環境で簡単に使用できます。これを、上位 LAN との通信のない独立したネットワーク環境で使用する場合、Lite サーバは独自の DHCP と PXE サービスを実行します。この Lite サーバが提供するイメージのリストアでは、CD/USB メモリ又は PXE のいずれかで同じバージョンの Clonezilla Live でクライアントマシンを起動できます。'
+msg_img_massive_deploy='Massive deployment from an image'
+msg_dev_massive_deploy='Massive deployment directly from partition(s) or disk(s) (BT only)'
+msg_disk_to_mdisk_by_BT='Disk(s) to disks of multiple machines using BT protocol'
+msg_part_to_mpart_by_BT='Part(s) to partitions of multiple machines using BT protocol'
+msg_save_temp_img_for_BT='Before conducting massive deployment directly from a source device, we still need to save the source device as a temporary image.'
