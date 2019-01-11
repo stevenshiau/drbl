@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.28.11-drbl1) unstable; urgency=medium
+
+  * Update language files required for BT deployment from source device. 
+
+ -- Steven Shiau <steven@clonezilla.org>  Fri, 11 Jan 2019 20:45:15 +0800
+
 drbl (2.28.10-drbl1) unstable; urgency=medium
 
   * Adding support for Debian 9.5 and 9.6. This release should be ready for
