@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.28.12
+Version:	2.28.13
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,10 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Sun Jan 13 2019 Steven Shiau <steven _at_ clonezilla org> 2.28.13-drbl1
+  * Typo fixed in the USAGE of get-all-nic-ip.
+  * Add nuttcp in Clonezilla live packages list.
+
 * Sat Jan 12 2019 Steven Shiau <steven _at_ clonezilla org> 2.28.12-drbl1
   * Update language files about RAM disk in prep-ocsroot.
 
