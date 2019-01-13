@@ -21,7 +21,7 @@ usage() {
     echo " -p, --public-ip-port:  Show only the public IP address ethernet port."
     echo " -t, --private-ip-port: Show only the private IP address ethernet port."
     echo " -a, --public-ip-address:  Show only the public IP address."
-    echo " -r, --private-ip-address: Show only the public IP address."
+    echo " -r, --private-ip-address: Show only the private IP address."
     echo " -i, --all-ip-address:  Show all the IP addresses."
     echo " -g, --gateway-ip-add:      Show the gateway IP address"
     echo " -u, --uplink-eth-port:     Show the uplink eth port (Used in DRBL server)"
