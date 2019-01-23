@@ -1100,8 +1100,8 @@ msg_secure_boot_for_clients_is_enabled='uEFI用戶端的安全開機模式已經
 msg_ocs_live_lite_server_des='再生龍輕量伺服器是再生龍服務的一個簡單模式，提供印象檔群播/廣播/位元洪流(BT)服務給用戶端。因此可以較為簡單的使用在現有的網路環境中，最主要就是不需改變現有的區域網路環境設定，直接使用現有的網路設定。若您的網路是一個封閉的環境，不對外連接，這個再生龍輕量伺服器將會提供DHCP與PXE服務。您可以用光碟，隨身碟或者PXE來將同樣版本的再生龍單機版在用戶端的機器開機來接收這個輕量伺服器提供印象檔來做還原。'
 msg_img_massive_deploy='從印象檔來做大量佈署'
 msg_dev_massive_deploy='直接從硬碟或分割區來做大量佈署(僅適用BT機制)'
-msg_disk_to_mdisk_by_BT='使用BT機制從直接從整顆硬碟佈署到多台機器的整顆硬碟'
-msg_part_to_mpart_by_BT='使用BT機制從直接從硬碟分割區佈署到多台機器的硬碟分割區'
+msg_disk_to_mdisk_by_BT='使用BT機制直接從整顆硬碟佈署到多台機器的整顆硬碟'
+msg_part_to_mpart_by_BT='使用BT機制直接從硬碟分割區佈署到多台機器的硬碟分割區'
 msg_save_temp_img_for_BT='在直接從硬碟或分割區讀取資料來做大量佈署之前，我們還是要先存一個暫時的小印象檔。'
 # Tag on 2019/01/12
 msg_mount_ramdisk='使用記憶體 (可用於BT機制來源直接從硬碟或分割區的模式)) '
