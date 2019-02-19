@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.28.14
+Version:	2.28.16
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,16 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Tue Feb 19 2019 Steven Shiau <steven _at_ clonezilla org> 2.28.16-drbl1
+  * Optimization for Ubuntu 18.04:
+    Add systemd-timesyncd in client_services_chklist, man in
+    varcache_2_be_copied_2_common_root, and
+    snapd in varlib_NOT_2_be_copied_2_each_client
+    Thanks to Prof. Yu from NCTU for these suggestions.
+
+* Wed Jan 23 2019 Steven Shiau <steven _at_ clonezilla org> 2.28.15-drbl1
+  * Typos in language file zh_TW.UTF-8 were fixed. 
+
 * Wed Jan 16 2019 Steven Shiau <steven _at_ clonezilla org> 2.28.14-drbl1
   * Update language files for ocs-onthefly.
 
