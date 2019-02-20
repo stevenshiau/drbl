@@ -41,7 +41,7 @@ done
 service=$1
 switch=$2
 
-[ -z "$service" ] && USAGE && exit 1
+[ -z "${service}" ] && USAGE && exit 1
 [ -z "$switch" ] && USAGE && exit 1
 
 #
@@ -67,60 +67,88 @@ fi
 for ihost in $host_list; do
   case "$switch" in
   on)
-     echo "Turning on the service \"$service\" for DRBL client `basename $ihost`..."
-     if [ -e /etc/debian_version ]; then
+     echo "Turning on the service \"${service}\" for DRBL client `basename $ihost`..."
+     if is_systemd_init; then
+       if [ -e "$drbl_common_root/lib/systemd/system/${service}.service" ]; then
+         # systemctl can't work in chroot environment :`chroot $drbl_common_root/ /sbin/chkconfig --add $i`
+         # Therefore manually link it:
+         _systemctl_target=$(grep -e "^WantedBy=" $drbl_common_root/lib/systemd/system/${service}.service | sed -e "s/WantedBy=//")
+         if [ ! -z "$_systemctl_target" ]; then
+           echo "to target: '$_systemctl_target'";
+           for ti in $_systemctl_target; do
+             ln -s -v /lib/systemd/system/${service}.service $ihost/etc/systemd/system/$ti.wants/${service}.service
+           done
+         else
+           echo "Skip ...";
+         fi
+       fi
+     elif [ -e /etc/debian_version ]; then
        # Debian-like
        get_debian_ubuntu_init_serv_control_prog
        # prepare the update-rc.d env, perl is necessary for update-rc.d
        prepare_update_rc_d_env $ihost
        if [ "$dbn_ubn_serv_control_prog" = "use-insserv" ]; then
          # Use insserv
-         chroot $ihost/ insserv $service &> /dev/null
+         chroot $ihost/ insserv ${service} &> /dev/null
        else
          # Use update-rc.d
-         chroot $ihost/ /usr/sbin/update-rc.d $service defaults &> /dev/null
+         chroot $ihost/ /usr/sbin/update-rc.d ${service} defaults &> /dev/null
        fi
        #clean_update_rc_d_env $ihost
      elif [ -e /etc/SuSE-release ]; then
        # SuSE
        create_insserv_env $ihost
-       chroot $ihost/ /sbin/insserv -f $service
+       chroot $ihost/ /sbin/insserv -f ${service}
      else
        # RH-like
        create_chkconfig_env $ihost
-       chroot $ihost/ /sbin/chkconfig $service on
+       chroot $ihost/ /sbin/chkconfig ${service} on
        #clean_chkconfig_env $ihost
        echo "done!"
      fi
      ;;
   off)
-     echo "Turning off the service \"$service\" for DRBL client `basename $ihost`..."
-     if [ -e /etc/debian_version ]; then
+     echo "Turning off the service \"${service}\" for DRBL client `basename $ihost`..."
+     if is_systemd_init; then
+       if [ -e "$drbl_common_root/lib/systemd/system/${service}.service" ]; then
+         # systemctl can't work in chroot environment :`chroot $drbl_common_root/ /sbin/chkconfig --add $i`
+         # Therefore manually link it:
+         _systemctl_target=$(grep -e "^WantedBy=" $drbl_common_root/lib/systemd/system/${service}.service | sed -e "s/WantedBy=//")
+         if [ ! -z "$_systemctl_target" ]; then
+           echo "to target: '$_systemctl_target'";
+           for ti in $_systemctl_target; do
+             rm -fv $ihost/etc/systemd/system/$ti.wants/${service}.service
+           done
+         else
+           echo "Skip ...";
+         fi
+       fi
+     elif [ -e /etc/debian_version ]; then
        # Debian-like
        get_debian_ubuntu_init_serv_control_prog
        # prepare the update-rc.d env, perl is necessary for update-rc.d
        prepare_update_rc_d_env $ihost
        if [ "$dbn_ubn_serv_control_prog" = "use-insserv" ]; then
          # Use insserv
-         chroot $ihost/ insserv -r $service &> /dev/null
+         chroot $ihost/ insserv -r ${service} &> /dev/null
        else
          # Use update-rc.d
-         chroot $ihost/ /usr/sbin/update-rc.d -f $service remove &> /dev/null
+         chroot $ihost/ /usr/sbin/update-rc.d -f ${service} remove &> /dev/null
        fi
        #clean_update_rc_d_env $ihost
      elif [ -e /etc/SuSE-release ]; then
        # SuSE
        create_insserv_env $ihost
-       chroot $ihost/ /sbin/insserv -f -r $service
+       chroot $ihost/ /sbin/insserv -f -r ${service}
      else
        create_chkconfig_env $ihost
-       chroot $ihost/ /sbin/chkconfig $service off
+       chroot $ihost/ /sbin/chkconfig ${service} off
        #clean_chkconfig_env $ihost
        echo "done!"
      fi
      ;;
   reset)
-     echo "Resetting the service \"$service\" for DRBL client `basename $ihost`..."
+     echo "Resetting the service \"${service}\" for DRBL client `basename $ihost`..."
      if [ -e /etc/debian_version ]; then
        echo "Reset service in DRBL clients is not supported! Sorry!"
      elif [ -e /etc/SuSE-release ]; then
@@ -128,13 +156,13 @@ for ihost in $host_list; do
        echo "Reset service in DRBL clients is not supported! Sorry!"
      else
        create_chkconfig_env $ihost
-       chroot $ihost/ /sbin/chkconfig $service reset
+       chroot $ihost/ /sbin/chkconfig ${service} reset
        #clean_chkconfig_env $ihost
        echo "done!"
      fi
      ;;
   add)
-     echo "Adding the service \"$service\" for DRBL client `basename $ihost`..."
+     echo "Adding the service \"${service}\" for DRBL client `basename $ihost`..."
      if [ -e /etc/debian_version ]; then
        echo "Add service for DRBL clients in not supported! Sorry!"
      elif [ -e /etc/SuSE-release ]; then
@@ -142,13 +170,13 @@ for ihost in $host_list; do
        echo "Add service for DRBL clients in not supported! Sorry!"
      else
        create_chkconfig_env $ihost
-       chroot $ihost/ /sbin/chkconfig --add $service
+       chroot $ihost/ /sbin/chkconfig --add ${service}
        #clean_chkconfig_env $ihost
        echo "done!"
      fi
      ;;
   del)
-     echo "Deleting the service \"$service\" for DRBL client `basename $ihost`..."
+     echo "Deleting the service \"${service}\" for DRBL client `basename $ihost`..."
      if [ -e /etc/debian_version ]; then
        echo "Reset service in DRBL clients is not supported! Sorry!"
      elif [ -e /etc/SuSE-release ]; then
@@ -156,13 +184,13 @@ for ihost in $host_list; do
        echo "Reset service in DRBL clients is not supported! Sorry!"
      else
        create_chkconfig_env $ihost
-       chroot $ihost/ /sbin/chkconfig --del $service
+       chroot $ihost/ /sbin/chkconfig --del ${service}
        #clean_chkconfig_env $ihost
        echo "done!"
      fi
      ;;
   list)
-     echo "Listing the service \"$service\" for DRBL client `basename $ihost`..."
+     echo "Listing the service \"${service}\" for DRBL client `basename $ihost`..."
      if [ -e /etc/debian_version ]; then
        echo "Reset service in DRBL clients is not supported! Sorry!"
      elif [ -e /etc/SuSE-release ]; then
@@ -170,7 +198,7 @@ for ihost in $host_list; do
        echo "Reset service in DRBL clients is not supported! Sorry!"
      else
        create_chkconfig_env $ihost
-       chroot $ihost/ /sbin/chkconfig --list $service
+       chroot $ihost/ /sbin/chkconfig --list ${service}
        #clean_chkconfig_env $ihost
        echo "done!"
      fi
