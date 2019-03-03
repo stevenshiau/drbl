@@ -1007,6 +1007,18 @@ msg_choose_the_image_to_be_checked_for_checksum='Elija la imagen para verificar 
 # Tag on 2016/06/14
 msg_failed_to_clone_the_boot_loader_on_EBR="Fallo al clonar el boot loader a la partición extendida"
 msg_ocs_param_t2='El cliente omite la restauración del EBR (Extended Boot Record)'
+# Tag on 2016/07/03
+# msg_parent_directory='Parent directory'
+# msg_dir_browser_for_img='Directory Browser for Clonezilla image repository'
+# msg_which_dir_as_clonezilla_img_home='Which directory is for the Clonezilla image repository? (If there is a space in the directory name, it will _NOT_ be shown)'
+# msg_path_on_the_resource='Path on the resource'
+# msg_current_selected_dir_name='Current selected dir name'
+# msg_when_current_selected_dir_name_is_ok='When the "Current selected dir name" is what you want, use "Tab" key to choose "Done"'
+# msg_not_chosing_CZ_IMG_dir='//NOTE// You should not choose the directory tagged with CZ_IMG. They are just for you to know the images list in the current dir.'
+# msg_no_any_image_found='There is no any image found in this directory'
+# msg_this_directory_is_not_mountpoint='This directory is not a mount point'
+# msg_there_is_no_way_to_mount_subdirectory='There is no way to mount the sub-directory.'
+# msg_the_dir_you_choose_is_clonezilla_img_dir='This directory you choose is a Clonezilla image dir'
 msg_remount_subdir="Remontar subdirectorio en medio del repositorio actual"
 msg_run_clonezilla_live_again_but_remounted_subdir="Comenzar de nuevo (Remontar subdirectorio en medio del repositorio actual)"
 msg_exit_browsing="Salir de la exploración de directorios"
@@ -1107,3 +1119,15 @@ msg_ocs_onthefly_param_xz='Use xz algorithm'
 msg_ocs_onthefly_param_lzop='Use lzo algorithm'
 msg_ocs_onthefly_param_zstd='Use zstd algorithm'
 msg_ocs_onthefly_param_cat='Do not compress'
+# Tag for missing vars on 2016/07/03
+msg_parent_directory='Parent directory'
+msg_dir_browser_for_img='Directory Browser for Clonezilla image repository'
+msg_which_dir_as_clonezilla_img_home='Which directory is for the Clonezilla image repository? (If there is a space in the directory name, it will _NOT_ be shown)'
+msg_path_on_the_resource='Path on the resource'
+msg_current_selected_dir_name='Current selected dir name'
+msg_when_current_selected_dir_name_is_ok='When the "Current selected dir name" is what you want, use "Tab" key to choose "Done"'
+msg_not_chosing_CZ_IMG_dir='//NOTE// You should not choose the directory tagged with CZ_IMG. They are just for you to know the images list in the current dir.'
+msg_no_any_image_found='There is no any image found in this directory'
+msg_this_directory_is_not_mountpoint='This directory is not a mount point'
+msg_there_is_no_way_to_mount_subdirectory='There is no way to mount the sub-directory.'
+msg_the_dir_you_choose_is_clonezilla_img_dir='This directory you choose is a Clonezilla image dir'
