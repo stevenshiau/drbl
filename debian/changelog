@@ -1,3 +1,9 @@
+drbl (2.28.18-drbl1) unstable; urgency=medium
+
+  * Add missing variables for language file es_ES.
+
+ -- Steven Shiau <steven@clonezilla.org>  Sun, 03 Mar 2019 19:50:22 +0800
+
 drbl (2.28.17-drbl1) unstable; urgency=medium
 
   * Bug fixed: drbl-client-service failed for systemd service.

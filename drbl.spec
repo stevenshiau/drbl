@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.28.17
+Version:	2.28.18
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Sun Mar 03 2019 Steven Shiau <steven _at_ clonezilla org> 2.28.18-drbl1
+  * Add missing variables for language file es_ES.
+
 * Wed Feb 20 2019 Steven Shiau <steven _at_ clonezilla org> 2.28.17-drbl1
   * Bug fixed: drbl-client-service failed for systemd service.
     Thanks to Dr. Yu from NCTU for reporting this issue.
