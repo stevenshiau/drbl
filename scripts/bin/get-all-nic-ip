@@ -97,7 +97,8 @@ done
 # Therefore we have to put [[:space:]]+ after ^[[:alnum:]]+[[:digit:]]+\:.
 
 NDVS="$(LC_ALL=C ifconfig -a | grep -iE '(HWaddr|encap:Point-to-Point Protocol)'| awk -F' ' '{print $1}')"
-NDVS="$NDVS $(LC_ALL=C ifconfig -a | grep -iE '(^[[:alnum:]]+[[:digit:]]+(:[[:digit:]]+|)\:[[:space:]]+)'| awk -F': ' '{print $1}')"
+#NDVS="$NDVS $(LC_ALL=C ifconfig -a | grep -iE '(^[[:alnum:]]+[[:digit:]]+(:[[:digit:]]+|)\:[[:space:]]+)'| awk -F': ' '{print $1}')"
+NDVS="$NDVS $(LC_ALL=C get-nic-devs | xargs echo)"
 # Exclude some device if it's assigned in drbl.conf.
 if [ -n "$exclude_eth_nics" ]; then
   for exn in $exclude_eth_nics; do
