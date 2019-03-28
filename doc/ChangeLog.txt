@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.28.19-drbl1) unstable; urgency=medium
+
+  * Include package mbmon in Clonezilla live.
+
+ -- Steven Shiau <steven@clonezilla.org>  Thu, 28 Mar 2019 22:14:32 +0800
+
 drbl (2.28.18-drbl1) unstable; urgency=medium
 
   * Add missing variables for language file es_ES.
