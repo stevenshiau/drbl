@@ -5,6 +5,19 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.28.21-drbl1) unstable; urgency=medium
+
+  * Include package rdfind in Clonezilla live.
+
+ -- Steven Shiau <steven@clonezilla.org>  Mon, 29 Apr 2019 06:11:11 +0800
+
+drbl (2.28.20-drbl1) unstable; urgency=medium
+
+  * Add package vbetool for Clonezilla live.
+    Ref: https://sourceforge.net/p/clonezilla/bugs/321/
+
+ -- Steven Shiau <steven@clonezilla.org>  Mon, 08 Apr 2019 12:38:43 +0800
+
 drbl (2.28.19-drbl1) unstable; urgency=medium
 
   * Include package mbmon in Clonezilla live.
