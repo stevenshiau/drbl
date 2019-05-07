@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.29.1-drbl1) unstable; urgency=medium
+
+  * Support Ubuntu 19.04.
+
+ -- Steven Shiau <steven@clonezilla.org>  Tue, 07 May 2019 21:03:08 +0800
+
 drbl (2.28.21-drbl1) unstable; urgency=medium
 
   * Include package rdfind in Clonezilla live.
