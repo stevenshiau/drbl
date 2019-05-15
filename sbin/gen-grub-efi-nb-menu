@@ -195,6 +195,9 @@ case "$bg_mode" in
   graphic*|GRAPHIC*) g_bg_f="yes" ;;
 esac
 
+# Prepare required files
+cp $drbl_syscfg/boot-local-efi.cfg $GRUB_EFI_D/
+
 grub_ver="$(LC_ALL=C cat $pxecfg_pd/GRUB_VERSION)"
 echo "Adding GRUB EFI boot menu for DRBL, Clonezilla..."
 cat <<-GRUB_END > $GRUB_EFI_D/grub.cfg
@@ -262,7 +265,13 @@ menuentry "$FULL_OS_Version $powerful_client_menu_label" --id drbl-client {
 #  initrd initrd-pxe.img
 #}
 
-$LOCAL_EFI_BOOT_GRUB_CFG
+menuentry "Local operating system (if available)" --id local-disk {
+  echo "Booting first local disk..."
+  configfile grub-efi.cfg/boot-local-efi.cfg
+  # If not chainloader, definitely no uEFI boot loader was found.
+  echo "No uEFI boot loader was found!"
+  sleep 15
+}
 
 menuentry "Reboot" --id reboot {
   echo "System rebooting..."
