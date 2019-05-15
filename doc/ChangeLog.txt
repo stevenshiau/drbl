@@ -9,8 +9,9 @@ drbl (2.29.2-drbl1) unstable; urgency=medium
 
   * Add new file boot-local-efi.cfg for booting uEFI local OS.
   * Remove variable LOCAL_EFI_BOOT_GRUB_CFG from drbl-functions.
+  * Use boot-local-efi.cfg in gen-grub-efi-nb-menu.
 
- -- Steven Shiau <steven@clonezilla.org>  Wed, 15 May 2019 14:40:38 +0800
+ -- Steven Shiau <steven@clonezilla.org>  Wed, 15 May 2019 14:52:38 +0800
 
 drbl (2.29.1-drbl1) unstable; urgency=medium
 

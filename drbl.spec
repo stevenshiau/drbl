@@ -48,6 +48,7 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 * Wed May 08 2019 Steven Shiau <steven _at_ clonezilla org> 2.29.2-drbl1
   * Add new file boot-local-efi.cfg for booting uEFI local OS.
   * Remove variable LOCAL_EFI_BOOT_GRUB_CFG from drbl-functions.
+  * Use boot-local-efi.cfg in gen-grub-efi-nb-menu.
 
 * Tue May 07 2019 Steven Shiau <steven _at_ clonezilla org> 2.29.1-drbl1
   * Support Ubuntu 19.04.
