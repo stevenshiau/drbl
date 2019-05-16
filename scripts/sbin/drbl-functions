@@ -42,9 +42,7 @@ fi
 
 # Define a local efi boot image in first local disk. This is used in ocs-live-boot-menu and gen-grub-efi-nb-menu.
 LOCAL_EFI_BOOT_GRUB_CFG="\
-menuentry \"Local operating system (if available)\" --id local-disk {
-  echo \"Booting first local disk...\"
-  set root=(hd0,1)
+set root=(hd0,gpt1)
   if [ -e /EFI/redhat/grub.efi ]; then
     chainloader /EFI/redhat/grub.efi +1
   elif [ -e /EFI/fedora/shim.efi ]; then
@@ -87,11 +85,8 @@ menuentry \"Local operating system (if available)\" --id local-disk {
   elif [ -e /EFI/Boot/bootaa64.efi ]; then
     # MS Windows
     chainloader /EFI/Boot/bootaa64.efi +1
-  else
-    echo \"No uEFI image was found!\"
-    sleep 15
   fi
-}"
+"
 
 # some functions
 # get OS type
