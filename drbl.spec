@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.29.3
+Version:	2.29.4
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,13 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Thu May 16 2019 Steven Shiau <steven _at_ clonezilla org> 2.29.4-drbl1
+  * Add backup plan in case boot-local-efi.cfg fails, since there is
+    a bug in Ubuntu's grub commands, including regexp, probe...:
+    https://bugs.launchpad.net/bugs/1829331
+  * Update language files: de_DE, fr_FR, hu_HU, ja_JP, pl_PL, tr_TR.
+    Thanks to Greg, Jean-Francois, Kris, Michael, Volkan, Akira.
+
 * Wed May 08 2019 Steven Shiau <steven _at_ clonezilla org> 2.29.3-drbl1
   * Use boot-local-efi.cfg in gen-grub-efi-nb-menu.
 

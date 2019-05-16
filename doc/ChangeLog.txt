@@ -5,6 +5,16 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.29.4-drbl1) unstable; urgency=medium
+
+  * Add backup plan in case boot-local-efi.cfg fails, since there is
+    a bug in Ubuntu's grub commands, including regexp, probe...:
+    https://bugs.launchpad.net/bugs/1829331
+  * Update language files: de_DE, fr_FR, hu_HU, ja_JP, pl_PL, tr_TR.
+    Thanks to Greg, Jean-Francois, Kris, Michael, Volkan, Akira.
+
+ -- Steven Shiau <steven@clonezilla.org>  Thu, 16 May 2019 21:53:25 +0800
+
 drbl (2.29.3-drbl1) unstable; urgency=medium
 
   * Use boot-local-efi.cfg in gen-grub-efi-nb-menu.
