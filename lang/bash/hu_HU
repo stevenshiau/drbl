@@ -2,7 +2,7 @@
 # Written by Steven Shiau <steven _at_ nchc org tw> to use in DRBL 
 # Hungarian translation by Greg <greg.hefty _at_ freemail hu>
 # License: GPL
-# Last updated: 06 March 2018
+# Last updated: 13 May 2019
 
 #-----------------------------------------
 # some words
@@ -1094,26 +1094,26 @@ msg_select_nics_for_channel_bonding='Válasszon hálózati kártyákat a csatorn
 msg_it_might_stop_required_restoring_service='Ez a visszaállításhoz szükséges szolgáltatások leállását okozhatja.'
 msg_do_all_clients_finish_jobs='Minden kliens végzett a visszaállítási műveletekkel? //MEGJEGYZÉS// NE VÁLASZOLJON "y"-NAL, HA MÉG _NEM_ FEJEZTE BE AZ ÖSSZES.'
 # Tag on 2018/09/25
-msg_clonezilla_massive_deployment='Massive deployment by multicast, broadcast or bittorrent'
-msg_netboot_interactive_client='Network boot clients and enter Clonezilla live interactive mode'
-msg_secure_boot_for_clients_is_enabled='uEFI Secure boot for clients is enabled. The DHCP service will be started in this machine for Clonezilla lite server. Please make sure there is no secondary DHCP service existing in the LAN.'
+msg_clonezilla_massive_deployment='Tömeges telepítés multicast, broadcast, vagy bittorrent használatával'
+msg_netboot_interactive_client='Kliensek indítása hálózatról, majd Clonezilla live interaktív módba léptetése'
+msg_secure_boot_for_clients_is_enabled='Az uEFI Biztonságos indítás klienseknek bekapcsolva. A Clonezilla lite szerver számára DHCP szolgáltatás fog működni ezen a gépen. Győződjön meg róla, hogy nem fut másik DHCP szerver a LAN-on.'
 # Tag on 2019/01/08
-msg_ocs_live_lite_server_des='A Clonezilla live lite szerver voltaképp a Clonezilla szerver mója, mely multicast/broadcast szervert futtat a kliensgépek számára. Meglévő hálózati környezetben azért egyszerűbb az alkalmazása, mert úgy illeszthető a hálózati környezethez, hogy nem szükséges a LAN hálózat beállításainak módosítása. Ha olyan elkülönített hálózati környezetben használja, ahol nincs feltöltést igénylő kommunikáció, ez a lite szerver saját DHCP és PXE szolgáltatást fog futtatni. Az ezen lite szerver által biztosított kép visszaállításához, a kliensgépek indítása azonos verziójú Clonezilla live-val kell történjen, CD/USB flash eszköz, vagy PXE használatával is.'
-msg_img_massive_deploy='Massive deployment from an image'
-msg_dev_massive_deploy='Massive deployment directly from partition(s) or disk(s) (BT only)'
-msg_disk_to_mdisk_by_BT='Disk(s) to disks of multiple machines using BT protocol'
-msg_part_to_mpart_by_BT='Part(s) to partitions of multiple machines using BT protocol'
-msg_save_temp_img_for_BT='Before conducting massive deployment directly from a source device, we still need to save the source device as a temporary image.'
+msg_ocs_live_lite_server_des='A Clonezilla live lite szerver voltaképp a Clonezilla szerver módja, mely multicast/broadcast szervert futtat a kliensgépek számára. Meglévő hálózati környezetben azért egyszerűbb az alkalmazása, mert úgy illeszthető a hálózati környezethez, hogy nem szükséges a LAN hálózat beállításainak módosítása. Ha olyan elkülönített hálózati környezetben használja, ahol nincs feltöltést igénylő kommunikáció, ez a lite szerver saját DHCP és PXE szolgáltatást fog futtatni. Az ezen lite szerver által biztosított kép visszaállításához, a kliensgépek indítása azonos verziójú Clonezilla live-val kell történjen, CD/USB flash eszköz, vagy PXE használatával is.'
+msg_img_massive_deploy='Tömeges telepítés egy képből'
+msg_dev_massive_deploy='Tömeges telepítés közvetlenül partíció(k)ról, vagy lemez(ek)ről (BT esetén)'
+msg_disk_to_mdisk_by_BT='Lemez(ek) több gép lemezeire BT protokollal'
+msg_part_to_mpart_by_BT='Partíció(k) több gép partícióira BT protokollal'
+msg_save_temp_img_for_BT='Forráseszközről való közvetlen, tömeges telepítés kivitelezéséhez, mindenképp ideiglenes képet kell készíteni az eszközről.'
 # Tag on 2019/01/12
-msg_mount_ramdisk='Use memory (OK for BT from raw device)'
-msg_img_repo_is_using_tmpfs='The image repository is using tmpfs (RAM as disk).'
-msg_failed_to_use_ramdisk_as_repo='Failed to use RAM disk (tmpfs) as image repository.'
+msg_mount_ramdisk='Memória használata (jó nyers eszközről, BT-vel)'
+msg_img_repo_is_using_tmpfs='A képtárhely tmpfs-t használ (RAM vagy lemez).'
+msg_failed_to_use_ramdisk_as_repo='RAM lemez (tmpfs) képtárként való alkalmazása sikertelen.'
 # Tag on 2019/01/16
-msg_ocs_onthefly_param_u='Use nuttcp instead of nc when cloning over network'
-msg_choose_param_to_set_before_sending_data='Choose the program to compress the data before sending to client. This is used to save the network bandwidth. If multiple CPUs are available, they will be used to have better performance when compressing data' 
-msg_ocs_onthefly_param_gz='Use gzip algorithm'
-msg_ocs_onthefly_param_bzip2='Use bzip2 algorithm'
-msg_ocs_onthefly_param_xz='Use xz algorithm'
-msg_ocs_onthefly_param_lzop='Use lzo algorithm'
-msg_ocs_onthefly_param_zstd='Use zstd algorithm'
-msg_ocs_onthefly_param_cat='Do not compress'
+msg_ocs_onthefly_param_u='Hálózati klónozáskor nuttcp használata nc helyett'
+msg_choose_param_to_set_before_sending_data='Az adatok kliensre küldése előtt, válasszon tömörítőprogramot. Ezáltal csökken a hálózat terhelése. Ha több CPU áll rendelkezésre, mind munkára lesz fogva a hatékonyabb adattömörítés érdekében' 
+msg_ocs_onthefly_param_gz='gzip algoritmus használata'
+msg_ocs_onthefly_param_bzip2='bzip2 algoritmus használata'
+msg_ocs_onthefly_param_xz='xz algoritmus használata'
+msg_ocs_onthefly_param_lzop='lzo algoritmus használata'
+msg_ocs_onthefly_param_zstd='zstd algoritmus használata'
+msg_ocs_onthefly_param_cat='Ne tömörítsen'
