@@ -40,54 +40,6 @@ if [ -n "$colors_no" ]; then
   fi
 fi
 
-# Define a local efi boot image in first local disk. This is used in ocs-live-boot-menu and gen-grub-efi-nb-menu.
-LOCAL_EFI_BOOT_GRUB_CFG="\
-set root=(hd0,gpt1)
-  if [ -e /EFI/redhat/grub.efi ]; then
-    chainloader /EFI/redhat/grub.efi +1
-  elif [ -e /EFI/fedora/shim.efi ]; then
-    chainloader /EFI/fedora/shim.efi +1
-  elif [ -e /EFI/fedora/grubx64.efi ]; then
-    chainloader /EFI/fedora/grubx64.efi +1
-  elif [ -e /EFI/centos/grubx64.efi ]; then
-    chainloader /EFI/centos/grubx64.efi +1
-  elif [ -e /EFI/debian/grubx64.efi ]; then
-    chainloader /EFI/debian/grubx64.efi +1
-  elif [ -e /EFI/ubuntu/grubx64.efi ]; then
-    chainloader /EFI/ubuntu/grubx64.efi +1
-  elif [ -e /EFI/mageia/grubx64.efi ]; then
-    chainloader /EFI/mageia/grubx64.efi +1
-  elif [ -e /EFI/opensuse/grubx64.efi ]; then
-    chainloader /EFI/opensuse/grubx64.efi +1
-  elif [ -e /EFI/sled12/grubx64.efi ]; then
-    # SuSE Linux Enterprise 12
-    chainloader /EFI/sled12/grubx64.efi +1
-  elif [ -e /EFI/SuSE/elilo.efi ]; then
-    # SuSE Linux Enterprise 11
-    chainloader /EFI/SuSE/elilo.efi +1
-  elif [ -e /EFI/Boot/bootx64.efi ]; then
-    # MS Windows
-    chainloader /EFI/Boot/bootx64.efi +1
-  elif [ -e /EFI/Microsoft/Boot/bootmgfw.efi ]; then
-    chainloader	/EFI/Microsoft/Boot/bootmgfw.efi +1
-  elif [ -e /EFI/centos/grubaa64.efi ]; then
-    chainloader /EFI/centos/grubaa64.efi +1
-  elif [ -e /EFI/debian/grubaa64.efi ]; then
-    chainloader /EFI/debian/grubaa64.efi +1
-  elif [ -e /EFI/ubuntu/grubaa64.efi ]; then
-    chainloader /EFI/ubuntu/grubaa64.efi +1
-  elif [ -e /EFI/fedora/grubaa64.efi ]; then
-    chainloader /EFI/fedora/grubaa64.efi +1
-  elif [ -e /EFI/redhat/grubaa64.efi ]; then
-    chainloader /EFI/redhat/grubaa64.efi +1
-  elif [ -e /EFI/opensuse/grubaa64.efi ]; then
-    chainloader /EFI/opensuse/grubaa64.efi +1
-  elif [ -e /EFI/Boot/bootaa64.efi ]; then
-    # MS Windows
-    chainloader /EFI/Boot/bootaa64.efi +1
-  fi
-"
-
 # some functions
 # get OS type
 get_os_type() {
