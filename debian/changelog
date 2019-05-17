@@ -1,3 +1,11 @@
+drbl (2.29.5-drbl1) unstable; urgency=medium
+
+  * Integrated backup plan in boot-local-efi.cfg. Hence the regexp
+    issue in Ubuntu's grub2 can be workarounded.
+    Ref: https://bugs.launchpad.net/bugs/1829331
+
+ -- Steven Shiau <steven@clonezilla.org>  Fri, 17 May 2019 11:48:38 +0800
+
 drbl (2.29.4-drbl1) unstable; urgency=medium
 
   * Add backup plan in case boot-local-efi.cfg fails, since there is
