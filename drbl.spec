@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.29.5
+Version:	2.29.6
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,10 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Tue May 21 2019 Steven Shiau <steven _at_ clonezilla org> 2.29.6-drbl1
+  * Update language files es_ES and it_IT. Thanks to
+    Juan Ramón Martínez and gf.gentili.
+
 * Fri May 17 2019 Steven Shiau <steven _at_ clonezilla org> 2.29.5-drbl1
   * Integrated backup plan in boot-local-efi.cfg. Hence the regexp
     issue in Ubuntu's grub2 can be workarounded.
