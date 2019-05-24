@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.29.7-drbl1) unstable; urgency=medium
+
+  * File ca_ES was updated. Thanks to René Mérou.
+
+ -- Steven Shiau <steven@clonezilla.org>  Fri, 24 May 2019 14:01:47 +0800
+
 drbl (2.29.6-drbl1) unstable; urgency=medium
 
   * Update language files es_ES and it_IT. Thanks to
