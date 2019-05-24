@@ -1100,26 +1100,26 @@ msg_select_nics_for_channel_bonding="Seleccini les targetes de xarxa per a la un
 msg_it_might_stop_required_restoring_service="Això hauria de terminar els serveis requerits per a la restauració."
 msg_do_all_clients_finish_jobs="Han acabat tot els clients els traballs de restauració? //NOTA// NO RESPONGUI 'y' SI NO HAN ACABAT TOTS ELS CLIENTS ELS SEUS TREBALLS."
 # Tag on 2018/09/25
-msg_clonezilla_massive_deployment='Massive deployment by multicast, broadcast or bittorrent'
-msg_netboot_interactive_client='Network boot clients and enter Clonezilla live interactive mode'
-msg_secure_boot_for_clients_is_enabled='uEFI Secure boot for clients is enabled. The DHCP service will be started in this machine for Clonezilla lite server. Please make sure there is no secondary DHCP service existing in the LAN.'
+msg_clonezilla_massive_deployment="Deslplegament massiu per multicast, broadcast o bittorrent"
+msg_netboot_interactive_client="Clients de xarxa y entrar en mode interactiu de Clonezilla Live"
+msg_secure_boot_for_clients_is_enabled="uEFI Secure boot per a clients està habilitat. El servicio DHCP se engegarà en esta màquina per al servidor Clonezilla lite. Per favor, aseguris de que no existeixi altre servei DHCP en la LAN."
 # Tag on 2019/01/08
-msg_ocs_live_lite_server_des="Clonezilla live lite server és un mode de servei de Clonezilla, que s'executa en servei multicast/broadcast per a màquines client. Per tant, és més fàcil usar-ho en un entorn de xarxes existent perquè pot simplement encaixar en el entorn de xarxa sense canviar qualsevol configuració de xarxa LAN preexistent. Si ho utilitza en un entorn aïllat de xarxa sense cap comunicació amb el servidor de pujada, aquest petit servidor executarà el seus propis serveis de DHCP i PXE. Vostè pot arrencar les màquines client amb la mateixa versió de Clonezilla live, ja sigui utilitzant CD/ dispositiu USB flash o PXE per a restaurar la imatge proveïda per aquest petit servidor."
-msg_img_massive_deploy='Massive deployment from an image'
-msg_dev_massive_deploy='Massive deployment directly from partition(s) or disk(s) (BT only)'
-msg_disk_to_mdisk_by_BT='Disk(s) to disks of multiple machines using BT protocol'
-msg_part_to_mpart_by_BT='Part(s) to partitions of multiple machines using BT protocol'
-msg_save_temp_img_for_BT='Before conducting massive deployment directly from a source device, we still need to save the source device as a temporary image.'
+msg_ocs_live_lite_server_des="El servidor Clonezilla live lite és un mode de servei Clonezilla, que executa multicast/broadcast per a màquines client. Per tant, és més fàcil d'usar a l'entorn de xarxa existent, ja que ell només pot ajustar-se a l'entorn de xarxa sense canviar cap configuració de xarxa existent en la LAN. Si utilitza això en un entorn de xarxa aïllat sense cap comunicació amb el servidor de pujada, aquest servidor lite executarà el seu propi servei DHCP i PXE. Vostè pot arrencar les màquines client amb la mateixa versió de Clonezilla live, ja sigui utilitzant CD/unitat flaix USB o PXE per a restaurar la imatge proporcionada per aquest servidor lite."
+msg_img_massive_deploy="Desplegament massiu des d'una imatge."
+msg_dev_massive_deploy="Desplegament massiu directament des de partició(ns) o disc(s) (només BT)"
+msg_disk_to_mdisk_by_BT="Disc(s) a discos de múltiples màquines usant el protocol BT"
+msg_part_to_mpart_by_BT="Partició(ns) a partiticiones de múltiples màquines usant el protocol BT"
+msg_save_temp_img_for_BT="Abans de realitzar una implementació massiva directament des d'un dispositiu d'origen, encara hem de guardar el dispositiu d'origen com una imatge temporal."
 # Tag on 2019/01/12
-msg_mount_ramdisk='Use memory (OK for BT from raw device)'
-msg_img_repo_is_using_tmpfs='The image repository is using tmpfs (RAM as disk).'
-msg_failed_to_use_ramdisk_as_repo='Failed to use RAM disk (tmpfs) as image repository.'
+msg_mount_ramdisk="Usar memòria (OK per a BT des de dispositiu raw)"
+msg_img_repo_is_using_tmpfs="La imatge del repositori està usant tmpfs (RAM com a disc)."
+msg_failed_to_use_ramdisk_as_repo="Fallada en usar la RAM (tmpfs) com mimagen del repositori."
 # Tag on 2019/01/16
-msg_ocs_onthefly_param_u='Use nuttcp instead of nc when cloning over network'
-msg_choose_param_to_set_before_sending_data='Choose the program to compress the data before sending to client. This is used to save the network bandwidth. If multiple CPUs are available, they will be used to have better performance when compressing data' 
-msg_ocs_onthefly_param_gz='Use gzip algorithm'
-msg_ocs_onthefly_param_bzip2='Use bzip2 algorithm'
-msg_ocs_onthefly_param_xz='Use xz algorithm'
-msg_ocs_onthefly_param_lzop='Use lzo algorithm'
-msg_ocs_onthefly_param_zstd='Use zstd algorithm'
-msg_ocs_onthefly_param_cat='Do not compress'
+msg_ocs_onthefly_param_u="Usar nuttcp en comptes de nc quan es cloni a través de la xarxa"
+msg_choose_param_to_set_before_sending_data="Triï el programa per a comprimir les dades abans d'enviar-les al client. Això s'utilitza per a no saturar l'amplada de banda de la xarxa. Si hi ha diverses CPU disponibles, s'utilitzaran per a tenir un millor rendiment en comprimir les dades"
+msg_ocs_onthefly_param_gz='Usar algorisme gzip'
+msg_ocs_onthefly_param_bzip2='Usar algorisme bzip2'
+msg_ocs_onthefly_param_xz='Usar algorisme xz'
+msg_ocs_onthefly_param_lzop='Usar algorisme lzo'
+msg_ocs_onthefly_param_zstd='Usar algorisme zstd'
+msg_ocs_onthefly_param_cat='No comprimir'
