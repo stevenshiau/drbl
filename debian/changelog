@@ -1,3 +1,10 @@
+drbl (2.29.9-drbl1) unstable; urgency=medium
+
+  * Install the required grub module efifwsetup
+    before running fwsetup.
+
+ -- Steven Shiau <steven@clonezilla.org>  Wed, 29 May 2019 18:06:29 +0800
+
 drbl (2.29.8-drbl1) unstable; urgency=medium
 
   * Add uEFI firmware setup menu when running gen-grub-efi-nb-menu
