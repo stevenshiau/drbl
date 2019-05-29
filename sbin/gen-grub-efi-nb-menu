@@ -276,6 +276,7 @@ menuentry "Local operating system (if available)" --id local-disk {
 
 menuentry 'uEFI firmware setup' 'uefi-firmware' {
   echo "Entering uEFI firmware setup..."
+  insmod efifwsetup
   fwsetup
 }
 
