@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.29.8-drbl1) unstable; urgency=medium
+
+  * Add uEFI firmware setup menu when running gen-grub-efi-nb-menu
+
+ -- Steven Shiau <steven@clonezilla.org>  Wed, 29 May 2019 11:09:20 +0800
+
 drbl (2.29.7-drbl1) unstable; urgency=medium
 
   * File ca_ES was updated. Thanks to René Mérou.
