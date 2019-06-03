@@ -274,12 +274,6 @@ menuentry "Local operating system (if available)" --id local-disk {
   sleep 15
 }
 
-menuentry 'uEFI firmware setup' 'uefi-firmware' {
-  echo "Entering uEFI firmware setup..."
-  insmod efifwsetup
-  fwsetup
-}
-
 menuentry "Reboot" --id reboot {
   echo "System rebooting..."
   reboot
@@ -288,6 +282,12 @@ menuentry "Reboot" --id reboot {
 menuentry "Shutdown" --id shutdown {
   echo "System shutting down..."
   halt
+}
+
+menuentry 'uEFI firmware setup' 'uefi-firmware' {
+  echo "Entering uEFI firmware setup..."
+  insmod efifwsetup
+  fwsetup
 }
 
 GRUB_END
