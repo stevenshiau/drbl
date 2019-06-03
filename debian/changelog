@@ -1,3 +1,9 @@
+drbl (2.29.10-drbl1) unstable; urgency=medium
+
+  * Shift the uEFI boot order.
+
+ -- Steven Shiau <steven@clonezilla.org>  Mon, 03 Jun 2019 21:50:35 +0800
+
 drbl (2.29.9-drbl1) unstable; urgency=medium
 
   * Install the required grub module efifwsetup

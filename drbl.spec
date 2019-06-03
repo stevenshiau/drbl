@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.29.9
+Version:	2.29.10
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Mon Jun 03 2019 Steven Shiau <steven _at_ clonezilla org> 2.29.10-drbl1
+  * Shift the uEFI boot order.
+
 * Wed May 29 2019 Steven Shiau <steven _at_ clonezilla org> 2.29.9-drbl1
   * Install the required grub module efifwsetup
     before running fwsetup.
