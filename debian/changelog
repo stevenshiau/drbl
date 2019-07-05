@@ -1,3 +1,11 @@
+drbl (2.29.11-drbl1) unstable; urgency=medium
+
+  * Ecryptfs-utils & partimage are not required for DRBL. It's better to
+    have that, but not required. This is due to they are removed from Debian
+    Buster.
+
+ -- Steven Shiau <steven@clonezilla.org>  Fri, 05 Jul 2019 15:35:08 +0800
+
 drbl (2.29.10-drbl1) unstable; urgency=medium
 
   * Shift the uEFI boot order.
