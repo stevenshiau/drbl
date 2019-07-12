@@ -1,3 +1,11 @@
+drbl (2.30.4-drbl1) unstable; urgency=medium
+
+  * Bug fixed: Stop mkswapfile service before starting ocsd-run in clients
+    for CentOS 7.x.
+  * Remove CO5*, add CO7.6.1810 in /usr/share/drbl/setup/files/RH/.
+
+ -- Steven Shiau <steven@clonezilla.org>  Fri, 12 Jul 2019 22:30:52 +0800
+
 drbl (2.30.3-drbl1) unstable; urgency=medium
 
   * Bug fixed: uEFI boot menu for drbl client was overwritten by wrong
