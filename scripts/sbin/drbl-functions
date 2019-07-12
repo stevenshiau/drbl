@@ -2844,6 +2844,30 @@ output_netinstall_syslinux_pxelinux_menu() {
 
   TDIR="$1" 
   NB_CFG_DIR_FNAME="$2"
+
+  if [ "$nb_mode_" = "efi" ]; then
+     cat <<-PXE_END > $NB_CFG_DIR_FNAME
+set pref=/boot/grub
+set default="0"
+insmod efi_gop
+insmod efi_uga
+if loadfont \$pref/unicode.pf2; then
+  set gfxmode=auto
+  insmod gfxterm
+  terminal_output gfxterm
+fi
+set timeout=30
+set hidden_timeout_quiet=false
+insmod png
+if background_image \$pref/drblwp.png; then
+  set color_normal=black/white
+  set color_highlight=green/white
+else
+  set color_normal=white/black
+  set color_highlight=black/white
+fi
+PXE_END
+  fi
   
   # Type 1: Linux
   for inet in $TDIR/vmlinuz-netinstall-*; do
@@ -3016,18 +3040,19 @@ label $img_menu
 
 PXE_END
    else
-    # Only output x86-64/amd64 one
-    if [ -n "$(echo $kernel | grep -iE "(x86-64|x86_64|amd64)")" ]; then
+    # Only output x86-64/amd64 one for uEFI mode
+    if [ -n "$(echo $kernel | grep -iE -- "(x86-64|x86_64|amd64|i386)")" ]; then
      echo "Adding $img_menu menu..."
      [ -n "$verbose" ] && echo "extra option in append: $extra_append"    
      cat <<-PXE_END >> $NB_CFG_DIR_FNAME
-#menuentry "$des" --id $img_menu {
-#  echo "Enter netinstall for $img_menu..."
-#  echo "Loading Linux kernel..."
-#  linux $boot_file_dir$kernel $ramdisk_size_opt $extra_append
-#  echo "Loading initial ramdisk..."
-#  initrd $boot_file_dir$img
-#}
+menuentry "$des" --id $img_menu {
+  set check_signatures=no
+  echo "Enter netinstall for $img_menu..."
+  echo "Loading Linux kernel..."
+  linux $boot_file_dir$kernel $ramdisk_size_opt $extra_append
+  echo "Loading initial ramdisk..."
+  initrd $boot_file_dir$img
+}
 
 PXE_END
     fi

@@ -10,9 +10,6 @@ DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/usr/share/drbl}"
 [ -e /etc/drbl/drbl-ocs.conf ] && . /etc/drbl/drbl-ocs.conf
 [ -e $DRBL_SCRIPT_PATH/sbin/ocs-functions ] && . $DRBL_SCRIPT_PATH/sbin/ocs-functions
 
-# Force to use boot loader "syslinux" although it's defined in /etc/drbl/drbl.conf. We swtiched to use syslinux 6.x EFI boot
-live_efi_boot_loader="syslinux"
-
 #
 supported_dists="$(LC_ALL=C set | grep -i "_netinstall_ver" | awk -F"_" '{print $1}' | sort | uniq)"
 supported_dists="$(echo $supported_dists)" # To make it one line
@@ -79,6 +76,10 @@ while [ $# -gt 0 ]; do
 done
 #
 target_d="$1"
+
+#
+check_if_root
+
 # if working dir is not assigned, create one
 if [ -z "$target_d" ]; then
   target_d="$(mktemp -d /tmp/netinstall.XXXXXX)"
@@ -107,9 +108,9 @@ fi
 echo "The output file name is: $output_filename."
 
 WD="$(pwd)"
-mkdir -p $target_d/syslinux/ $target_d/live/ $target_d/EFI/boot/
+mkdir -p $target_d/syslinux/ $target_d/live/ $target_d/EFI/boot/ $target_d/boot/grub
 cp -af $pxelinux_bg_img $target_d/syslinux/
-cp -af $pxelinux_bg_img $target_d/EFI/boot/
+cp -af $pxelinux_bg_img /usr/share/grub/unicode.pf2 $target_d/boot/grub/
 
 echo "The following action will download a lot of network install packages, including these distributions: $GL_INST. This might take a long time..."
 echo 'If you want to assign the url, check "netinstall image settings" in drbl.conf.'
@@ -161,8 +162,54 @@ output_netinstall_syslinux_pxelinux_menu -p /live/ $target_d/live/ $target_d/sys
 perl -pi -e "s/^(#|[[:space:]])*MENU HIDE.*/  # MENU HIDE/i" $target_d/syslinux/syslinux.cfg
 
 # 2. The boot menu for EFI machine
-cp -a $target_d/syslinux/syslinux.cfg $target_d/EFI/boot/
-perl -pi -e "s/Boot menu for BIOS machine/Boot menu for EFI machinie/g" $target_d/EFI/boot/syslinux.cfg
+# Check if required files exists on this machine
+# grub-efi-amd64-signed: /usr/lib/grub/x86_64-efi-signed/gcdx64.efi.signed
+# shim-signed: /usr/lib/shim/shimx64.efi.signed
+uefi_boot_support="yes"
+if [ -e /usr/lib/shim/shimx64.efi.signed ]; then
+  cp -a /usr/lib/shim/shimx64.efi.signed $target_d/EFI/boot/bootx64.efi
+else
+  echo "File /usr/lib/shim/shimx64.efi.signed not found."
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+  echo "uEFI booting not supported!"
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+  echo "On Debian or Ubuntu Linux, you can install it by:"
+  echo "apt-get install shim-signed"
+  uefi_boot_support="no"
+fi
+if [ -e /usr/lib/grub/x86_64-efi-signed/gcdx64.efi.signed ]; then
+  cp -a /usr/lib/grub/x86_64-efi-signed/gcdx64.efi.signed $target_d/EFI/boot/grubx64.efi
+else
+  echo "File /usr/lib/grub/x86_64-efi-signed/gcdx64.efi.signed not found."
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+  echo "uEFI booting not supported!"
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+  echo "On Debian or Ubuntu Linux, you can install it by:"
+  echo "apt-get install grub-efi-amd64-signed"
+  uefi_boot_support="no"
+fi
+if [ ! -d "/usr/lib/grub/i386-efi" ]; then
+  echo "File dir /usr/lib/grub/i386-efi not found."
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+  echo "uEFI booting for i386 not supported!"
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+  echo "On Debian or Ubuntu Linux, you can install it by:"
+  echo "apt-get install grub-efi-ia32-bin"
+fi
+
+#
+if [ "$uefi_boot_support" = "yes" ]; then
+  # Create bootia32.efi. This is for i386 uEFI booting.
+  mkdir -p $target_d/tmp-efi
+  ocs-gen-grub2-efi-bldr $target_d/tmp-efi/
+  rsync -avP $target_d/tmp-efi/bootia32.efi $target_d/EFI/boot/
+  rm -rf $target_d/tmp-efi/
+  echo -n "Copying /usr/lib/grub/x86_64-efi and /usr/lib/grub/i386-efi to $target_d/boot/grub/..."
+  rsync -a /usr/lib/grub/x86_64-efi $target_d/boot/grub/
+  rsync -a /usr/lib/grub/i386-efi $target_d/boot/grub/
+  echo " done!"
+  output_netinstall_syslinux_pxelinux_menu --efi -p /live/ $target_d/live/ $target_d/boot/grub/grub.cfg
+fi
 
 echo "Preparing syslinux.exe, syslinux, makeboot.bat and makeboot.sh... "
 put_syslinux_makeboot_for_usb_flash $target_d/ "$syslinux_ver_no"
