@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.30.2-drbl1) unstable; urgency=medium
+
+  * Update prompt about secure netboot for uEFI in drbl-gen-grub-efi-nb.
+
+ -- Steven Shiau <steven@clonezilla.org>  Fri, 12 Jul 2019 10:15:53 +0800
+
 drbl (2.30.1-drbl1) unstable; urgency=medium
 
   * Support Debian Buster (10.0).
