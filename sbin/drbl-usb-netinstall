@@ -1,0 +1,235 @@
+#!/bin/bash
+# Author: Steven Shiau <steven _at_ nchc org tw>
+# License: GPL
+# Description: Download the netinstall kernel & initrd and package them as a zip file for USB flash drive to boot and install GNU/Linux.
+# This program only works for syslinux >= 6.0 because the EFI boot is supported from syslinux >= 6.0.
+
+DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/usr/share/drbl}"
+
+. $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
+[ -e /etc/drbl/drbl-ocs.conf ] && . /etc/drbl/drbl-ocs.conf
+[ -e $DRBL_SCRIPT_PATH/sbin/ocs-functions ] && . $DRBL_SCRIPT_PATH/sbin/ocs-functions
+
+#
+supported_dists="$(LC_ALL=C set | grep -i "_netinstall_ver" | awk -F"_" '{print $1}' | sort | uniq)"
+supported_dists="$(echo $supported_dists)" # To make it one line
+supported_dists_with_comma="$(echo $supported_dists | sed -e "s/ /, /g")"
+
+USAGE() {
+  echo "Download GNU/Linux netinstall kernel and initrd and package them as a zip file for USB flash drive to boot and install GNU/Linux."
+  echo "Usage: $0 [OPTION] [DIR]"
+  echo "OPTION:"
+  echo "-a, --file-name-prefix NAME    Assign the output file name as NAME.zip. $0 will auto append '.zip' in the end of filename."
+  echo "-d, --dist DIST:       Create GNU/Linux DIST netinstall zip. DIST is one of these: $supported_dists_with_comma. If this option is not assigned, all the supported GNU/Linux netinstall files will be included."
+  echo "-i, --assign-version-no NO  Assign the version number as NO instead of date."
+  echo "-s, --syslinux-ver NO  Assign the syslinux version number to be used as NO ."
+}
+
+#############
+###  MAIN ###
+#############
+#
+# Parse command-line options
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -a|--file-name-prefix)
+            shift
+            if [ -z "$(echo $1 |grep ^-.)" ]; then
+              # skip the -xx option, in case 
+              target_zip_prefix="$1"
+              shift
+            fi
+	    [ -z "$target_zip_prefix" ] && USAGE && exit 1
+            ;;
+    -d|--dist)
+        shift; mode="install"
+        if [ -z "$(echo $1 |grep ^-.)" ]; then
+          # skip the -xx option, in case 
+          GL_INST="$1"
+          [ -z "$GL_INST" ] && USAGE && exit 1
+	  shift
+        fi
+	;;
+    -i|--assign-version-no)
+            shift
+            if [ -z "$(echo $1 |grep ^-.)" ]; then
+              # skip the -xx option, in case 
+              version_no="$1"
+              shift
+            fi
+	    [ -z "$version_no" ] && USAGE && exit 1
+            ;;
+    -s|--syslinux-ver)
+            shift
+            if [ -z "$(echo $1 |grep ^-.)" ]; then
+              # skip the -xx option, in case 
+              syslinux_ver_no="$1"
+              shift
+            fi
+	    [ -z "$syslinux_ver_no" ] && USAGE && exit 1
+            ;;
+    -*)     echo "${0}: ${1}: invalid option" >&2
+            USAGE >& 2
+            exit 2 ;;
+    *)      break ;;
+  esac
+done
+#
+target_d="$1"
+
+#
+check_if_root
+
+# if working dir is not assigned, create one
+if [ -z "$target_d" ]; then
+  target_d="$(mktemp -d /tmp/netinstall.XXXXXX)"
+  echo "Working dir: $target_d"
+fi
+if [ -z "$GL_INST" ]; then
+  GL_INST="all"
+else
+  # Check if it is in the supported distributions.
+  for i in $GL_INST; do
+    if [ -z "$(echo $supported_dists | grep -Ew $i)" ]; then
+     echo "\"$GL_INST\" is not a supported distribution."
+     echo "Supported ones are (case sensitive): $supported_dists."
+     exit 1
+    fi
+  done
+fi
+
+[ -z "$version_no" ] && version_no="$(date +%Y%m%d)"
+zip_label_tag="${version_no}"
+if [ -n "$target_zip_prefix" ]; then
+  output_filename="${target_zip_prefix}.zip"
+else
+  output_filename="linux-netinstall-${zip_label_tag}.zip"
+fi
+echo "The output file name is: $output_filename."
+
+WD="$(pwd)"
+mkdir -p $target_d/syslinux/ $target_d/live/ $target_d/EFI/boot/ $target_d/boot/grub
+cp -af $pxelinux_bg_img $target_d/syslinux/
+cp -af $pxelinux_bg_img /usr/share/grub/unicode.pf2 $target_d/boot/grub/
+
+echo "The following action will download a lot of network install packages, including these distributions: $GL_INST. This might take a long time..."
+echo 'If you want to assign the url, check "netinstall image settings" in drbl.conf.'
+drbl-netinstall -w --skip-rerun-gen -i "$GL_INST" -d $target_d/live/
+
+echo "Generating default pxelinux config $target_d/syslinux/syslinux.cfg..."
+echo "Adding menus..."
+cat <<-PXE_END > $target_d/syslinux/syslinux.cfg
+# Created by generate-pxe-menu! Do NOT edit unless you know what you are doing! 
+# Keep those comment "MENU DEFAULT" and "MENU HIDE"! Do NOT remove them.
+# Note!!! If "serial" directive exists, it must be the first directive
+default vesamenu.c32
+timeout 70
+prompt 0
+noescape 1
+MENU MARGIN 5
+MENU BACKGROUND drblwp.png
+# Set the color for unselected menu item and timout message
+MENU COLOR UNSEL 7;32;41 #c0000090 #00000000
+MENU COLOR TIMEOUT_MSG 7;32;41 #c0000090 #00000000
+MENU COLOR TIMEOUT 7;32;41 #c0000090 #00000000
+MENU COLOR HELP 7;32;41 #c0000090 #00000000
+
+# MENU MASTER PASSWD
+
+say **********************************************
+say Welcome to DRBL.
+say NCHC Free Software Labs, Taiwan.
+say http://drbl.org; http://drbl.nchc.org.tw
+say **********************************************
+
+# Allow client to edit the parameters
+ALLOWOPTIONS 1
+
+# simple menu title
+MENU TITLE DRBL (http://drbl.org)
+
+PXE_END
+
+# Creating the boot menu, 2 types: for BIOS and EFI
+# 1. The boot menu for BIOS machine
+# //NOTE// the / in the end of /live/ for -p option is important. Do not remove it. 
+# Because we use that in syslinux.cfg like:
+# kernel $boot_file_dir$kernel
+# append initrd=$boot_file_dir$img $ramdisk_size_opt $extra_append
+output_netinstall_syslinux_pxelinux_menu -p /live/ $target_d/live/ $target_d/syslinux/syslinux.cfg
+
+# Turn on all menus before copying to EFI dir
+perl -pi -e "s/^(#|[[:space:]])*MENU HIDE.*/  # MENU HIDE/i" $target_d/syslinux/syslinux.cfg
+
+# 2. The boot menu for EFI machine
+# Check if required files exists on this machine
+# grub-efi-amd64-signed: /usr/lib/grub/x86_64-efi-signed/gcdx64.efi.signed
+# shim-signed: /usr/lib/shim/shimx64.efi.signed
+uefi_boot_support="yes"
+if [ -e /usr/lib/shim/shimx64.efi.signed ]; then
+  cp -a /usr/lib/shim/shimx64.efi.signed $target_d/EFI/boot/bootx64.efi
+else
+  echo "File /usr/lib/shim/shimx64.efi.signed not found."
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+  echo "uEFI booting not supported!"
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+  echo "On Debian or Ubuntu Linux, you can install it by:"
+  echo "apt-get install shim-signed"
+  uefi_boot_support="no"
+fi
+if [ -e /usr/lib/grub/x86_64-efi-signed/gcdx64.efi.signed ]; then
+  cp -a /usr/lib/grub/x86_64-efi-signed/gcdx64.efi.signed $target_d/EFI/boot/grubx64.efi
+else
+  echo "File /usr/lib/grub/x86_64-efi-signed/gcdx64.efi.signed not found."
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+  echo "uEFI booting not supported!"
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+  echo "On Debian or Ubuntu Linux, you can install it by:"
+  echo "apt-get install grub-efi-amd64-signed"
+  uefi_boot_support="no"
+fi
+if [ ! -d "/usr/lib/grub/i386-efi" ]; then
+  echo "File dir /usr/lib/grub/i386-efi not found."
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+  echo "uEFI booting for i386 not supported!"
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+  echo "On Debian or Ubuntu Linux, you can install it by:"
+  echo "apt-get install grub-efi-ia32-bin"
+fi
+
+#
+if [ "$uefi_boot_support" = "yes" ]; then
+  # Create bootia32.efi. This is for i386 uEFI booting.
+  mkdir -p $target_d/tmp-efi
+  ocs-gen-grub2-efi-bldr $target_d/tmp-efi/
+  rsync -avP $target_d/tmp-efi/bootia32.efi $target_d/EFI/boot/
+  rm -rf $target_d/tmp-efi/
+  echo -n "Copying /usr/lib/grub/x86_64-efi and /usr/lib/grub/i386-efi to $target_d/boot/grub/..."
+  rsync -a /usr/lib/grub/x86_64-efi $target_d/boot/grub/
+  rsync -a /usr/lib/grub/i386-efi $target_d/boot/grub/
+  echo " done!"
+  output_netinstall_syslinux_pxelinux_menu --efi -p /live/ $target_d/live/ $target_d/boot/grub/grub.cfg
+fi
+
+echo "Preparing syslinux.exe, syslinux, makeboot.bat and makeboot.sh... "
+put_syslinux_makeboot_for_usb_flash $target_d/ "$syslinux_ver_no"
+
+cp -af $DRBL_SCRIPT_PATH/doc/GPL $target_d/
+
+(cd $target_d; zip -r $WD/$output_filename *)
+echo "The netinstall file $output_filename was created."
+
+echo "*******************************************************************"
+if [ -n "$target_d" -a -d "$target_d" ]; then
+  echo "Do you want to remove the downloaded files in dir $target_d?"
+  echo -n "[y/N] "
+  read rm_files
+  case "$rm_files" in
+     y|Y|[yY][eE][sS])
+       # Some checkings to avoid to remove the /
+       if [ -n "$target_d" -a -d "$target_d/syslinux/" -a -f "$target_d/COPYING" ]; then
+	  rm -rf $target_d
+       fi
+       ;;
+  esac
+fi
