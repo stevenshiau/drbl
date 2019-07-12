@@ -240,7 +240,7 @@ for i in $dest_bootloader; do
     echo "Copied from /usr/lib/shim/shim${SB_EFI_NAME}.efi.signed" > ${out_f}.info
   else
     [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
-    echo "UEFI Secure Boot support disabled for ${EFI_ARCH} clients becasue there is no /usr/lib/shim/shim${SB_EFI_NAME}.efi.signed and /usr/lib/grub/${EFI_ARCH}-efi-signed/grubnet${SB_EFI_NAME}.efi.signed installed."
+    echo "UEFI Secure Boot support disabled for ${EFI_ARCH} clients becasue there is no /usr/lib/shim/shim${SB_EFI_NAME}.efi.signed and /usr/lib/grub/${EFI_ARCH}-efi-signed/grubnet${SB_EFI_NAME}.efi.signed installed, or it is disabled in /etc/drbl/drbl.conf (\"secure_boot_client\")."
     [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
     # Non-secure boot
     # Checking the required modules
