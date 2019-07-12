@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.29.11
+Version:	2.30.1
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,13 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Fri Jul 12 2019 Steven Shiau <steven _at_ clonezilla org> 2.30.1-drbl1
+  * Support Debian Buster (10.0).
+  * Make drbl-syslinux-netinstall use grub for uEFI booting. 
+    Rename drbl-syslinux-netinstall as drbl-usb-netinstall,
+    while there is still a link for drbl-usb-netinstall to
+    drbl-syslinux-netinstall.
+
 * Fri Jul 05 2019 Steven Shiau <steven _at_ clonezilla org> 2.29.11-drbl1
   * Ecryptfs-utils & partimage are not required for DRBL. It's better to
     have that, but not required. This is due to they are removed from Debian

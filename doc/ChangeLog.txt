@@ -5,6 +5,16 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.30.1-drbl1) unstable; urgency=medium
+
+  * Support Debian Buster (10.0).
+  * Make drbl-syslinux-netinstall use grub for uEFI booting. 
+    Rename drbl-syslinux-netinstall as drbl-usb-netinstall,
+    while there is still a link for drbl-usb-netinstall to
+    drbl-syslinux-netinstall.
+
+ -- Steven Shiau <steven@clonezilla.org>  Fri, 12 Jul 2019 09:31:06 +0800
+
 drbl (2.29.11-drbl1) unstable; urgency=medium
 
   * Ecryptfs-utils & partimage are not required for DRBL. It's better to
