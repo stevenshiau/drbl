@@ -1,3 +1,11 @@
+drbl (2.30.3-drbl1) unstable; urgency=medium
+
+  * Bug fixed: uEFI boot menu for drbl client was overwritten by wrong
+    command in function output_netinstall_syslinux_pxelinux_menu of
+    drbl-functions.
+
+ -- Steven Shiau <steven@clonezilla.org>  Fri, 12 Jul 2019 14:45:21 +0800
+
 drbl (2.30.2-drbl1) unstable; urgency=medium
 
   * Update prompt about secure netboot for uEFI in drbl-gen-grub-efi-nb.
