@@ -2801,6 +2801,7 @@ output_netinstall_syslinux_pxelinux_menu() {
   local NB_CFG_DIR_FNAME  # Where pxeliux cfg file exists (e.g. /tftpboot/nbi_img/pxelinux.cfg/)
   local menu_hint ni_ver ni_arch boot_file_dir
   local nb_mode_="pxe" # Default mode if not assigned
+  local usb_boot_media_="no"  # Default not to prepend the setting for USB boot media
   # output the netinstall menu
   # Here 2 types: Linux and BSD
   # The netinstall kernel files (linux) or pxeboot file (bsd) in /tftpboot/nbi_img are, e.g.:
@@ -2836,6 +2837,7 @@ output_netinstall_syslinux_pxelinux_menu() {
              exit 1
            fi
            ;;
+     -u|--usb-boot-media) usb_boot_media_="yes"; shift;;
      -*)   echo "${0}: ${1}: invalid option" >&2
            exit 2 ;;
      *)    break ;;
@@ -2845,7 +2847,9 @@ output_netinstall_syslinux_pxelinux_menu() {
   TDIR="$1" 
   NB_CFG_DIR_FNAME="$2"
 
-  if [ "$nb_mode_" = "efi" ]; then
+  if [ "$nb_mode_" = "efi" -a "$usb_boot_media_" = "yes" ]; then
+     # This is for drbl-usb-netinstall use. For the netboot of DRBL clients,
+     # the gen-grub-efi-nb-menu will prepend those configs for diskless clients.
      cat <<-PXE_END > $NB_CFG_DIR_FNAME
 set pref=/boot/grub
 set default="0"
