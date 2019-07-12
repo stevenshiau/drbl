@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.30.4
+Version:	2.30.5
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Fri Jul 12 2019 Steven Shiau <steven _at_ clonezilla org> 2.30.5-drbl1
+  * Use soft link for CO7.x and RH7.x in /usr/share/drbl/setup/files/RH.
+
 * Fri Jul 12 2019 Steven Shiau <steven _at_ clonezilla org> 2.30.4-drbl1
   * Bug fixed: Stop mkswapfile service before starting ocsd-run in clients
     for CentOS 7.x.

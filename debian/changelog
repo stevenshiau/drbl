@@ -1,3 +1,9 @@
+drbl (2.30.5-drbl1) unstable; urgency=medium
+
+  * Use soft link for CO7.x and RH7.x in /usr/share/drbl/setup/files/RH.
+
+ -- Steven Shiau <steven@clonezilla.org>  Fri, 12 Jul 2019 22:53:17 +0800
+
 drbl (2.30.4-drbl1) unstable; urgency=medium
 
   * Bug fixed: Stop mkswapfile service before starting ocsd-run in clients
