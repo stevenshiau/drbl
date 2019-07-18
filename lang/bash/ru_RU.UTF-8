@@ -1121,3 +1121,6 @@ msg_ocs_onthefly_param_xz='Use xz algorithm'
 msg_ocs_onthefly_param_lzop='Use lzo algorithm'
 msg_ocs_onthefly_param_zstd='Use zstd algorithm'
 msg_ocs_onthefly_param_cat='Do not compress'
+# Tag on 2019/07/18
+msg_ocs_param_iui='Do not update initramfs file(s) on the restored GNU/Linux.'
+msg_ocs_onthefly_param_iui='Do not update initramfs file(s) on the restored GNU/Linux.'

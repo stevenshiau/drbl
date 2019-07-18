@@ -1131,3 +1131,6 @@ msg_no_any_image_found='No se ha encontrado ninguna imagen en este directorio'
 msg_this_directory_is_not_mountpoint='Este directorio no es un punto de montaje'
 msg_there_is_no_way_to_mount_subdirectory='No hay forma de montar el subdirectorio.'
 msg_the_dir_you_choose_is_clonezilla_img_dir='Este directorio que elijas es un directorio de imágenes de Clonezilla'
+# Tag on 2019/07/18
+msg_ocs_param_iui='Do not update initramfs file(s) on the restored GNU/Linux.'
+msg_ocs_onthefly_param_iui='Do not update initramfs file(s) on the restored GNU/Linux.'

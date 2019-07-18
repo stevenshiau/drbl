@@ -1116,3 +1116,6 @@ msg_ocs_onthefly_param_xz='使用xz演算法'
 msg_ocs_onthefly_param_lzop='使用lzo演算法'
 msg_ocs_onthefly_param_zstd='使用zstd演算法'
 msg_ocs_onthefly_param_cat='不壓縮'
+# Tag on 2019/07/18
+msg_ocs_param_iui='不要更新佈署後的GNU/Linux中的initramfs檔'
+msg_ocs_onthefly_param_iui='不要更新佈署後的GNU/Linux中的initramfs檔'
