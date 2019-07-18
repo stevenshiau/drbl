@@ -1617,6 +1617,7 @@ set_drbl_ocs_extra_param() {
       "-irhr"    "$msg_ocs_param_irhr" off \
       "-irvd"    "$msg_ocs_param_irvd" off \
       "-ius"     "$msg_ocs_param_ius" off \
+      "-iui"     "$msg_ocs_param_iui" off \
       "-icds"    "$msg_ocs_param_icds" off \
       "-iefi"    "$msg_ocs_param_iefi" off \
       "-j1"      "$msg_ocs_param_j1" off \
@@ -1935,6 +1936,7 @@ if [ "$mode" = "restore" ]; then
     "-irhr"    "$msg_ocs_param_irhr" off \
     "-irvd"    "$msg_ocs_param_irvd" off \
     "-ius"     "$msg_ocs_param_ius" off \
+    "-iui"     "$msg_ocs_param_iui" off \
     "-icds"    "$msg_ocs_param_icds" off \
     "-iefi"    "$msg_ocs_param_iefi" off \
     "-j1"      "$msg_ocs_param_j1" off \
