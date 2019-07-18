@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.30.6-drbl1) unstable; urgency=medium
+
+  * Add the option -iui to the drbl-ocs dialog menu.
+    Update language files for the option "-iui".
+
+ -- Steven Shiau <steven@clonezilla.org>  Thu, 18 Jul 2019 23:53:55 +0800
+
 drbl (2.30.5-drbl1) unstable; urgency=medium
 
   * Use soft link for CO7.x and RH7.x in /usr/share/drbl/setup/files/RH.
