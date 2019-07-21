@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.30.6
+Version:	2.30.7
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,11 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Sun Jul 21 2019 Steven Shiau <steven _at_ clonezilla org> 2.30.7-drbl1
+  * Separate 32-bit and 64-bit syslinux when running makeboot.sh
+    Thanks to Martin Mokrejs for reporting this issue.
+    Ref: https://sourceforge.net/p/clonezilla/bugs/326/
+
 * Thu Jul 18 2019 Steven Shiau <steven _at_ clonezilla org> 2.30.6-drbl1
   * Add the option -iui to the drbl-ocs dialog menu.
     Update language files for the option "-iui".

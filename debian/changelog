@@ -1,3 +1,11 @@
+drbl (2.30.7-drbl1) unstable; urgency=medium
+
+  * Separate 32-bit and 64-bit syslinux when running makeboot.sh
+    Thanks to Martin Mokrejs for reporting this issue.
+    Ref: https://sourceforge.net/p/clonezilla/bugs/326/
+
+ -- Steven Shiau <steven@clonezilla.org>  Sun, 21 Jul 2019 16:25:24 +0800
+
 drbl (2.30.6-drbl1) unstable; urgency=medium
 
   * Add the option -iui to the drbl-ocs dialog menu.
