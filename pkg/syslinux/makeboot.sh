@@ -165,13 +165,11 @@ check_if_syslinux_runs() {
   $sys_exec -h 2>/dev/null >/dev/null
   lrc=$?
   if [ "$lrc" -ne 0 ]; then
-   if [ "$(LC_ALL=C uname -m)" = "x86_64" ]; then
-     [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
-     echo "On x86-64 system, you should install libc6-i386 (for Debian/Ubuntu) or glibc.i686 (for Fedora/CentOS/OpenSuSE) package so that the required libraries to run 32-bit program $sys_exec exist."
-     [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
-     echo "Program terminated!"
-     exit 1
-   fi
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+    echo "File to run $sys_exec."
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+    echo "Program terminated!"
+    exit 1
   fi
   return $lrc
 } # end of check_if_syslinux_runs
@@ -259,6 +257,12 @@ if [ -z "$(echo $target_part | grep -iE "/dev/[hsu][bd][a-z]+[[:digit:]]+")" ]; 
   exit 1
 fi
 
+# Get the running OS arch
+os_arch="$(LC_ALL=C uname -m)"
+case "$os_arch" in
+	x86_64)    arch_d="x64" ;;
+	i[3456]86) arch_d="x86" ;;
+esac
 #
 pt_dev="$(basename $target_part)"  # e.g. sdc1
 hd_dev="$(get_diskname $target_part)"   # e.g. sdc
@@ -427,7 +431,7 @@ linux_tmpd="$(mktemp -d /tmp/linux_tmp.XXXXXX)"
 [ $? -eq 0 ] || exit 1
 
 echo "A filesystem supporting Unix file mode for $mode is required. Copying $mode to $linux_tmpd"
-cp -fv "$path_of_prog/utils/linux/$mode" "$linux_tmpd"
+cp -fv "$path_of_prog/utils/linux/$arch_d/$mode" "$linux_tmpd"
 chmod u+x "$linux_tmpd/$mode"
 
 check_if_syslinux_runs "$linux_tmpd/$mode"
