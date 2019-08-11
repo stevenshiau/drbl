@@ -3217,6 +3217,7 @@ put_syslinux_makeboot_for_usb_flash() {
   # syslinux_ver is not required. If it's not assigned, the latest one on the web will be used.
   local syslinux_ver="$2"  
   local sysl_dir sysl_extra_c32_chklist
+  local latest_syslinux_v sl_epoch apt_tmpdir
   sysl_extra_c32_chklist="ldlinux.c32 libcom32.c32 libutil.c32"
   [ -z "$t_dir" -o ! -d "$t_dir" ] && echo "No t_dir!" && exit 1
   # Function to put syslinux.exe and syslinux (linux ELF 32-bit LSB executable) in dir t_dir 
@@ -3255,7 +3256,26 @@ put_syslinux_makeboot_for_usb_flash() {
     [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
   fi
   if [ -n "$(LC_ALL=C file /usr/bin/syslinux | grep -iEwo "ELF 64-bit")" ]; then
-    cp -af /usr/bin/{syslinux,extlinux} $t_dir/utils/linux/x64
+    # If it's Debian, use better way to get the right version of syslinux and extlinux
+    check_distribution_name 
+    if [ "$OS_type" = "DBN" ]; then
+      # latest_syslinux_v is like: 3:6.03+dfsg-14.1+deb9u1
+      apt-get update
+      latest_syslinux_v="$(LC_ALL=C apt-cache show syslinux | grep -iE "^Version:" | grep -Ew "${SYSLINUX_VER}" | sort -V -r | head -n 1 | awk -F" " '{print $2}')"
+      sl_epoch="($echo $latest_syslinux_v | awk -F":" '{print $1}')"
+      
+      apt_tmpdir="$(mktemp -d /tmp/apt_deb.XXXXXX)"
+      (
+      cd $apt_tmpdir
+      apt-get download syslinux:amd64=${latest_syslinux_v} extlinux:amd64=${latest_syslinux_v=}
+      dpkg -x $apt_tmpdir/syslinux*.deb $apt_tmpdir/
+      dpkg -x $apt_tmpdir/extlinux*.deb $apt_tmpdir/
+      )
+      cp -af $apt_tmpdir/usr/bin/{syslinux,extlinux} $t_dir/utils/linux/x64
+    else
+      # Using the one from running AMD64 GNU/Linux. However, this might be different version from the downloaded syslinux zip file.
+      cp -af /usr/bin/{syslinux,extlinux} $t_dir/utils/linux/x64
+    fi
   else
     [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
     echo "64-bit syslinux and extlinux not found in the dir /usr/bin/!"
