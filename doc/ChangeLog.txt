@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.30.8-drbl1) unstable; urgency=medium
+
+  * Update language files for msg_disk_is_full_or_permission_issue.
+  * Improvem the mechanism for putting syslinux and extlinux in x64/{syslinux,extlinux} of live system.
+
+ -- Steven Shiau <steven@clonezilla.org>  Mon, 12 Aug 2019 12:41:01 +0800
+
 drbl (2.30.7-drbl1) unstable; urgency=medium
 
   * Separate 32-bit and 64-bit syslinux when running makeboot.sh
