@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.30.8
+Version:	2.30.9
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,10 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Mon Aug 12 2019 Steven Shiau <steven _at_ clonezilla org> 2.30.9-drbl1
+  * Bug fixed: make sure the syslinux-related files are from same version of
+    syslinux packages.
+
 * Mon Aug 12 2019 Steven Shiau <steven _at_ clonezilla org> 2.30.8-drbl1
   * Update language files for msg_disk_is_full_or_permission_issue.
   * Improvem the mechanism for putting syslinux and extlinux in x64/{syslinux,extlinux} of live system.
