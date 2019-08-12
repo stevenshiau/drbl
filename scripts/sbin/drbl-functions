@@ -3248,6 +3248,15 @@ put_syslinux_makeboot_for_usb_flash() {
   # cp -af $sysl_dir/bios/{menu.c32,vesamenu.c32,chain.c32} $t_dir/isolinux/
   cp -af $sysl_dir/bios/syslinux.exe $t_dir/utils/win32/
   cp -af $sysl_dir/bios/syslinux64.exe $t_dir/utils/win64/
+  cp -af $sysl_dir/bios/mbr.bin $t_dir/utils/mbr/
+  for i in $sysl_extra_c32_chklist; do
+    if [ -e $sysl_dir/bios/$i ]; then
+      cp -af $sysl_dir/bios/$i $t_dir/syslinux/
+      # To make the version consistent, put them to isolinux dir, too.
+      # Jan/19/2014 We have unified isolinux and syslinux dir as one dir syslinux only.
+      # cp -af $sysl_dir/bios/$i $t_dir/isolinux/
+    fi
+  done
   if [ -n "$(LC_ALL=C file $sysl_dir/bios/syslinux | grep -iEwo "ELF 32-bit")" ]; then
     cp -af $sysl_dir/bios/{syslinux,extlinux} $t_dir/utils/linux/x86
   else
@@ -3256,7 +3265,7 @@ put_syslinux_makeboot_for_usb_flash() {
     [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
   fi
   if [ -n "$(LC_ALL=C file /usr/bin/syslinux | grep -iEwo "ELF 64-bit")" ]; then
-    # If it's Debian, use better way to get the right version of syslinux and extlinux
+    # If it's Debian, use better way to get the right version of syslinux and extlinux, and overwrite the ones from syslinux zip file
     check_distribution_name 
     if [ "$OS_type" = "DBN" ]; then
       # latest_syslinux_v is like: 3:6.03+dfsg-14.1+deb9u1
@@ -3267,11 +3276,31 @@ put_syslinux_makeboot_for_usb_flash() {
       apt_tmpdir="$(mktemp -d /tmp/apt_deb.XXXXXX)"
       (
       cd $apt_tmpdir
-      apt-get download syslinux:amd64=${latest_syslinux_v} extlinux:amd64=${latest_syslinux_v=}
-      dpkg -x $apt_tmpdir/syslinux*.deb $apt_tmpdir/
-      dpkg -x $apt_tmpdir/extlinux*.deb $apt_tmpdir/
+      apt-get download syslinux:amd64=${latest_syslinux_v} syslinux-common:amd64=${latest_syslinux_v} extlinux:amd64=${latest_syslinux_v=} isolinux:amd64=${latest_syslinux_v=}
+      for ideb in $apt_tmpdir/*.deb; do
+        dpkg -x $ideb $apt_tmpdir/
+      done
       )
-      cp -af $apt_tmpdir/usr/bin/{syslinux,extlinux} $t_dir/utils/linux/x64
+      cp -avf $apt_tmpdir/usr/bin/{syslinux,extlinux} $t_dir/utils/linux/x64/
+      cp -avf $apt_tmpdir/usr/lib/syslinux/memdisk $t_dir/syslinux/
+      cp -avf $apt_tmpdir/usr/lib/ISOLINUX/isolinux.bin $t_dir/syslinux/
+      cp -avf $apt_tmpdir/usr/lib/syslinux/mbr/mbr.bin $t_dir/utils/mbr/
+      c32_mod="chain.c32 ldlinux.c32 libcom32.c32 libutil.c32 menu.c32 vesamenu.c32"
+      for i in $c32_mod; do
+        cp -avf $apt_tmpdir/usr/lib/syslinux/modules/bios/$i $t_dir/syslinux/
+      done
+      if [ -n "$(echo $apt_tmpdir | grep -Ew "apt_deb")" ]; then
+        rm -rf $apt_tmpdir
+      fi
+      (
+      mkdir $apt_tmpdir; cd $apt_tmpdir
+      apt-get download syslinux:i386=${latest_syslinux_v} extlinux:i386=${latest_syslinux_v=} 
+      for ideb in $apt_tmpdir/*.deb; do
+        dpkg -x $ideb $apt_tmpdir/
+      done
+      )
+      # Only /usr/bin/{syslinux,extlinux}, for those *.c32 and other files, use those from amd64 deb.
+      cp -avf $apt_tmpdir/usr/bin/{syslinux,extlinux} $t_dir/utils/linux/x86/
     else
       # Using the one from running AMD64 GNU/Linux. However, this might be different version from the downloaded syslinux zip file.
       cp -af /usr/bin/{syslinux,extlinux} $t_dir/utils/linux/x64
@@ -3281,15 +3310,6 @@ put_syslinux_makeboot_for_usb_flash() {
     echo "64-bit syslinux and extlinux not found in the dir /usr/bin/!"
     [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
   fi
-  cp -af $sysl_dir/bios/mbr.bin $t_dir/utils/mbr/
-  for i in $sysl_extra_c32_chklist; do
-    if [ -e $sysl_dir/bios/$i ]; then
-      cp -af $sysl_dir/bios/$i $t_dir/syslinux/
-      # To make the version consistent, put them to isolinux dir, too.
-      # Jan/19/2014 We have unified isolinux and syslinux dir as one dir syslinux only.
-      # cp -af $sysl_dir/bios/$i $t_dir/isolinux/
-    fi
-  done
   # For EFI machine
   if [ "$live_efi_boot_loader" = "syslinux" ]; then
     if [ -d "$sysl_dir/efi" ]; then
