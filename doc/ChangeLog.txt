@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.30.10-drbl1) unstable; urgency=medium
+
+  * Update language files for input checking related.
+
+ -- Steven Shiau <steven@clonezilla.org>  Tue, 13 Aug 2019 20:09:55 +0800
+
 drbl (2.30.9-drbl1) unstable; urgency=medium
 
   * Bug fixed: make sure the syslinux-related files are from same version of
