@@ -1121,3 +1121,6 @@ msg_ocs_param_iui='不要更新佈署後的GNU/Linux中的initramfs檔'
 msg_ocs_onthefly_param_iui='不要更新佈署後的GNU/Linux中的initramfs檔'
 # Tag on 2019/07/25
 msg_disk_is_full_or_permission_issue='因為空間不足，或者有權限的問題，故無法在這個目錄寫資料進去:'
+# Tag on 2019/08/13
+msg_no_device_selected='沒有選擇任何裝置.'
+msg_input_img_dir_not_exist='所輸入的印象檔在這沒有對應的目錄:'

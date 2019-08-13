@@ -1122,3 +1122,6 @@ msg_ocs_param_iui='Do not update initramfs file(s) on the restored GNU/Linux.'
 msg_ocs_onthefly_param_iui='Do not update initramfs file(s) on the restored GNU/Linux.'
 # Tag on 2019/07/25
 msg_disk_is_full_or_permission_issue='No space left on the device or there is a permission issue. Hence the data can not be written to this dir:'
+# Tag on 2019/08/13
+msg_no_device_selected='No device selected.'
+msg_input_img_dir_not_exist='The directory for this inputed image name does NOT exist:'
