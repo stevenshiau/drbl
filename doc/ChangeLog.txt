@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.30.11-drbl1) unstable; urgency=medium
+
+  * Update the mechanism to get bs and comments in drbl-aoe-img-dump
+
+ -- Steven Shiau <steven@clonezilla.org>  Fri, 16 Aug 2019 20:37:26 +0800
+
 drbl (2.30.10-drbl1) unstable; urgency=medium
 
   * Update language files for input checking related.
