@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.30.12
+Version:	2.30.13
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Sun Sep 01 2019 Steven Shiau <steven _at_ clonezilla org> 2.30.13-drbl1
+  * Add packages zfsutils-linux and zfs-initramfs in clonezilla live.
+
 * Mon Aug 26 2019 Steven Shiau <steven _at_ clonezilla org> 2.30.12-drbl1
   * Add thin-provisioning-tools in drbl/clonezilla live packages list, and
     device-mapper-persistent-data in the PKG_TO_QUERY of drbl.conf.

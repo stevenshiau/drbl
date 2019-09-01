@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.30.13-drbl1) unstable; urgency=medium
+
+  * Add packages zfsutils-linux and zfs-initramfs in clonezilla live.
+
+ -- Steven Shiau <steven@clonezilla.org>  Sun, 01 Sep 2019 17:58:27 +0800
+
 drbl (2.30.12-drbl1) unstable; urgency=medium
 
   * Add thin-provisioning-tools in drbl/clonezilla live packages list, and
