@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.30.14-drbl1) unstable; urgency=medium
+
+  * Remove zfs-fuse from package list in drbl.conf.
+
+ -- Steven Shiau <steven@clonezilla.org>  Sun, 01 Sep 2019 21:42:24 +0800
+
 drbl (2.30.13-drbl1) unstable; urgency=medium
 
   * Add packages zfsutils-linux and zfs-initramfs in clonezilla live.
