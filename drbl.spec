@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.30.15
+Version:	2.30.16
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,13 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Tue Sep 03 2019 Steven Shiau <steven _at_ clonezilla org> 2.30.16-drbl1
+  * Separate pkg variables about x86 and x86-64 in drbl.conf:
+    PKG_FROM_DBN_WHICH_OCS_LIVE_NEED_X86_ONLY
+    PKG_FROM_DBN_WHICH_OCS_LIVE_NEED_X86_64_ONLY
+  * Remove zfs-initramfs and zfsutils-linux from pkg list. They will be
+    added by Ubuntu-based Clonezilla live when creating.
+
 * Mon Sep 02 2019 Steven Shiau <steven _at_ clonezilla org> 2.30.15-drbl1
   * Update language files about removing MBR partition table prompts.
   * Move packages zfsutils-linux and zfs-initramfs to amd64 only since it's

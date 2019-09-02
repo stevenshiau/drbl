@@ -5,6 +5,16 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.30.16-drbl1) unstable; urgency=medium
+
+  * Separate pkg variables about x86 and x86-64 in drbl.conf:
+    PKG_FROM_DBN_WHICH_OCS_LIVE_NEED_X86_ONLY
+    PKG_FROM_DBN_WHICH_OCS_LIVE_NEED_X86_64_ONLY
+  * Remove zfs-initramfs and zfsutils-linux from pkg list. They will be
+    added by Ubuntu-based Clonezilla live when creating.
+
+ -- Steven Shiau <steven@clonezilla.org>  Tue, 03 Sep 2019 06:40:04 +0800
+
 drbl (2.30.15-drbl1) unstable; urgency=medium
 
   * Update language files about removing MBR partition table prompts.
