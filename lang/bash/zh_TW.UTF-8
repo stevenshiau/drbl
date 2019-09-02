@@ -1124,3 +1124,5 @@ msg_disk_is_full_or_permission_issue='因為空間不足，或者有權限的問
 # Tag on 2019/08/13
 msg_no_device_selected='沒有選擇任何裝置.'
 msg_input_img_dir_not_exist='所輸入的印象檔在這沒有對應的目錄:'
+# Tag on 2019/09/02
+msg_clean_MBR_partition_keep_GPT_one='相反地，若你確認只有GPT的分割表是你要的，，你可以使用這個指令來將MBR的分割表消除，而保留GPT分割表'

@@ -1124,3 +1124,5 @@ msg_disk_is_full_or_permission_issue='No space left on the device or there is a 
 # Tag on 2019/08/13
 msg_no_device_selected='No device selected.'
 msg_input_img_dir_not_exist='The directory for this inputed image name does NOT exist:'
+# Tag on 2019/09/02
+msg_clean_MBR_partition_keep_GPT_one='On the other hand, if you are sure only GPT partition table is the one you want, you can run this command to destroy the MBR partition table while keeping the GPT partition table'
