@@ -5,6 +5,15 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.30.17-drbl1) unstable; urgency=medium
+
+  * Separate PKG_FROM_DBN_WHICH_OCS_LIVE_NEED in drbl.conf as
+    PKG_FROM_DBN_WHICH_OCS_LIVE_MUST_HAVE and
+    PKG_FROM_DBN_WHICH_OCS_LIVE_NICE_TO_HAVE
+    so that it's easier to be used in other scenario, like for singularity.
+
+ -- Steven Shiau <steven@clonezilla.org>  Sat, 07 Sep 2019 12:53:35 +0800
+
 drbl (2.30.16-drbl1) unstable; urgency=medium
 
   * Separate pkg variables about x86 and x86-64 in drbl.conf:

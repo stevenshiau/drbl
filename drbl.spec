@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.30.16
+Version:	2.30.17
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,12 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Sat Sep 07 2019 Steven Shiau <steven _at_ clonezilla org> 2.30.17-drbl1
+  * Separate PKG_FROM_DBN_WHICH_OCS_LIVE_NEED in drbl.conf as
+    PKG_FROM_DBN_WHICH_OCS_LIVE_MUST_HAVE and
+    PKG_FROM_DBN_WHICH_OCS_LIVE_NICE_TO_HAVE
+    so that it's easier to be used in other scenario, like for singularity.
+
 * Tue Sep 03 2019 Steven Shiau <steven _at_ clonezilla org> 2.30.16-drbl1
   * Separate pkg variables about x86 and x86-64 in drbl.conf:
     PKG_FROM_DBN_WHICH_OCS_LIVE_NEED_X86_ONLY
