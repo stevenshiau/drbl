@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.30.18-drbl1) unstable; urgency=medium
+
+  * Add packages mutt and telnet in DRBL/Clonezilla live.
+
+ -- Steven Shiau <steven@clonezilla.org>  Sat, 21 Sep 2019 18:38:54 +0800
+
 drbl (2.30.17-drbl1) unstable; urgency=medium
 
   * Separate PKG_FROM_DBN_WHICH_OCS_LIVE_NEED in drbl.conf as
