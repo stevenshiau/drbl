@@ -1,3 +1,10 @@
+drbl (2.30.19-drbl1) unstable; urgency=medium
+
+  * Update language files about playing sound.
+  * Add music123 & sound-icons in the DRBL/Clonezilla packages list.
+
+ -- Steven Shiau <steven@clonezilla.org>  Tue, 15 Oct 2019 22:57:42 +0800
+
 drbl (2.30.18-drbl1) unstable; urgency=medium
 
   * Add packages mutt and telnet in DRBL/Clonezilla live.
