@@ -1631,6 +1631,7 @@ set_drbl_ocs_extra_param() {
       "-o0"      "$msg_ocs_param_o0" off \
       "-o1"      "$msg_ocs_param_o1" off \
       "-srel"    "$msg_ocs_param_srel" off \
+      "-ps"      "$msg_ocs_param_ps" off \
     2> $OCS_PARAM_TMP
     else
       # Beginner mode. Use default settings
@@ -1758,9 +1759,10 @@ set_drbl_ocs_extra_param() {
       "-gm "       "$msg_ocs_param_gm" off \
       "-gs "       "$msg_ocs_param_gs" off \
       "-gmf "      "$msg_ocs_param_gmf" off \
-      "-noabo"     "$msg_ocs_param_noabo" off \
+      "-noabo "    "$msg_ocs_param_noabo" off \
       "-o0 "       "$msg_ocs_param_o0" off \
       "-o1 "       "$msg_ocs_param_o1" off \
+      "-ps "       "$msg_ocs_param_ps" off \
       2>> $OCS_PARAM_TMP
     else
       echo "-j2 " >> $OCS_PARAM_TMP
@@ -1948,6 +1950,7 @@ if [ "$mode" = "restore" ]; then
     "-o0"      "$msg_ocs_param_o0" off \
     "-o1"      "$msg_ocs_param_o1" off \
     "-srel"    "$msg_ocs_param_srel" off \
+    "-ps"      "$msg_ocs_param_ps" off \
     2> $OCS_PARAM_TMP
   else
     if [ "$ocs_batch_mode" != "on" ]; then
@@ -2067,7 +2070,8 @@ else
     "-gm "      "$msg_ocs_param_gm" off \
     "-gs "      "$msg_ocs_param_gs" off \
     "-gmf "     "$msg_ocs_param_gmf" off \
-    "-noabo"     "$msg_ocs_param_noabo" off \
+    "-noabo "   "$msg_ocs_param_noabo" off \
+    "-ps "      "$msg_ocs_param_ps" off \
     2>> $OCS_PARAM_TMP
   else
     echo "-c " "-j2 " >> $OCS_PARAM_TMP
@@ -3142,6 +3146,7 @@ get_syslinux_binary_for_dos_linux() {
   # -rwxrwxr-x mfleming/syslinux  26012 2013-07-04 21:27 syslinux-6.01/efi32/com32/menu/menu.c32
   # -rwxrwxr-x mfleming/syslinux  31416 2013-07-04 21:28 syslinux-6.01/efi64/com32/menu/menu.c32
   # Therefore we have to parse them...
+  # //NOTE// The syslinux tarball (<= ver 6.03) from syslinux.org only contains x86 (32-bit) programs for GNU/Linux, no x86-64 ones.
   if [ -n "$(tar -tvJf $sysl_dir/syslinux-${syslinux_ver}.tar.xz | \
 	     grep -w "bios/com32/menu/menu.c32")" ]; then
     dirprefix="bios/"
