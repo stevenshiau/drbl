@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.30.19
+Version:	2.30.20
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,16 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Wed Oct 23 2019 Steven Shiau <steven _at_ clonezilla org> 2.30.20-drbl1
+  * Update function parse_cmdline_option so that it can parse the
+    boot parameter like ocs_repository from grub.
+    Thanks to jeff.sadowski for reporting this issue.
+    Ref:
+    https://sourceforge.net/p/clonezilla/discussion/Help/thread/ebf65f9bdd/
+  * Update Brazilian Portuguese translation. Thank to Rafael Fontenelle for
+    updating that.
+    Ref: https://gitlab.com/stevenshiau/drbl/merge_requests/13
+
 * Tue Oct 15 2019 Steven Shiau <steven _at_ clonezilla org> 2.30.19-drbl1
   * Update language files about playing sound.
   * Add music123 & sound-icons in the DRBL/Clonezilla packages list.
