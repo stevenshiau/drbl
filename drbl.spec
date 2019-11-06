@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.30.20
+Version:	2.30.21
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,10 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Wed Nov 06 2019 Steven Shiau <steven _at_ clonezilla org> 2.30.21-drbl1
+  * Add tmux in the drbl/clonezilla live pkgs list.
+  * Netinstall for Ubuntu is set as bionic and eoan.
+
 * Wed Oct 23 2019 Steven Shiau <steven _at_ clonezilla org> 2.30.20-drbl1
   * Update function parse_cmdline_option so that it can parse the
     boot parameter like ocs_repository from grub.
