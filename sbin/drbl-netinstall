@@ -185,11 +185,18 @@ get_centos_netinstall() {
           url=$centos_url_site/$path_to_centos/$ver/os/$arch/images/pxeboot
           get_and_put_linux_img $url CentOS $ver $arch $centos_netinstall_kernel $centos_netinstall_initrd
           ;;
-        *)
+        7)
           # For 7 or later... only x86-64 exists.
 	  # Who knows about the future...
 	  [ "$arch" = "i386" ] && continue
           url=$centos_url_site/$path_to_centos/$ver/os/$arch/images/pxeboot
+          get_and_put_linux_img $url CentOS $ver $arch $centos_netinstall_kernel $centos_netinstall_initrd
+          ;;
+        *)
+          # For 8 or later... only x86-64 exists.
+	  # Who knows about the future...
+	  [ "$arch" = "i386" ] && continue
+          url=$centos_url_site/$path_to_centos/$ver/BaseOS/$arch/os/images/pxeboot
           get_and_put_linux_img $url CentOS $ver $arch $centos_netinstall_kernel $centos_netinstall_initrd
           ;;
       esac

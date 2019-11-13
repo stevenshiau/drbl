@@ -2961,11 +2961,17 @@ PXE_END
       if [ -n "$(echo $inet | grep -iE "\-centos-[5-6]-" 2>/dev/null)" ]; then
         # For CentOS 5 to 6.
         extra_append=""
-      else
+      elif [ -n "$(echo $inet | grep -iE "\-centos-7-" 2>/dev/null)" ]; then
+        # CentOS 7
         # Ref: https://bugzilla.redhat.com/show_bug.cgi?id=810005
         echo "Using CentOS installation repository \"$centos_url_site\" from drbl.conf"
 	# http://free.nchc.org.tw/centos/7/os/x86_64/
         extra_append="inst.repo=$centos_url_site/centos/$ni_ver/os/$ni_arch"
+      else
+        # CentOS 8 or later
+        echo "Using CentOS installation repository \"$centos_url_site\" from drbl.conf"
+	# http://free.nchc.org.tw/centos/8/BaseOS/x86_64/
+        extra_append="inst.repo=$centos_url_site/centos/$ni_ver/BaseOS/$ni_arch/os/"
       fi
       # For CentOS, enable reiserfs when installing
       menu_hint=""
