@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.30.23
+Version:	2.30.24
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,11 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Tue Nov 19 2019 Steven Shiau <steven _at_ clonezilla org> 2.30.24-drbl1
+  * Remove archivemount from packages list of clonezilla live since:
+    (1) It requires fuse v2 but now only fuse v3 is available in Debian Sid.
+    (2) It's not used basically in Clonezilla live.
+
 * Tue Nov 19 2019 Steven Shiau <steven _at_ clonezilla org> 2.30.23-drbl1
   * Changes in the packages:
     Remove cloudfuse: it's not maintained for more than 4 years, 

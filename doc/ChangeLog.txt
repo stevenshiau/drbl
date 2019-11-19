@@ -5,6 +5,14 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.30.24-drbl1) unstable; urgency=medium
+
+  * Remove archivemount from packages list of clonezilla live since:
+    (1) It requires fuse v2 but now only fuse v3 is available in Debian Sid.
+    (2) It's not used basically in Clonezilla live.
+
+ -- Steven Shiau <steven@clonezilla.org>  Tue, 19 Nov 2019 22:08:00 +0800
+
 drbl (2.30.23-drbl1) unstable; urgency=medium
 
   * Changes in the packages:
