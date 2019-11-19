@@ -5,6 +5,16 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.30.23-drbl1) unstable; urgency=medium
+
+  * Changes in the packages:
+    Remove cloudfuse: it's not maintained for more than 4 years, 
+    and fuse < 3 is not available in Debian Sid.
+    Add s3ql in the packages list so that user can manually mount
+    swift/S3 cloud storage.
+
+ -- Steven Shiau <steven@clonezilla.org>  Tue, 19 Nov 2019 17:09:08 +0800
+
 drbl (2.30.22-drbl1) unstable; urgency=medium
 
   * Update netinstall for fedora 31 and centos 8.

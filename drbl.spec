@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.30.22
+Version:	2.30.23
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,13 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Tue Nov 19 2019 Steven Shiau <steven _at_ clonezilla org> 2.30.23-drbl1
+  * Changes in the packages:
+    Remove cloudfuse: it's not maintained for more than 4 years, 
+    and fuse < 3 is not available in Debian Sid.
+    Add s3ql in the packages list so that user can manually mount
+    swift/S3 cloud storage.
+
 * Wed Nov 13 2019 Steven Shiau <steven _at_ clonezilla org> 2.30.22-drbl1
   * Update netinstall for fedora 31 and centos 8.
 
