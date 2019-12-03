@@ -1090,8 +1090,6 @@ msg_lite_server_and_client_are_provided="a més, el mode de client i de servidor
 # Tag on 2017/12/02
 msg_ocs_param_z8="compressió lz4 (ràpida peró imatge de més grandària)"
 # Tag on 2017/12/27
-msg_ocs_param_z9="compressió zstd"
-msg_ocs_param_z9p="compressió pzstd"
 msg_ocs_param_z8p="compressió lz4mt (ràpida peró imatge de més grandària)"
 # Tag on 2018/01/09
 msg_use_channel_bonding="Usar la unió de intrefícies de xarxa [channel bonding]"
@@ -1136,3 +1134,6 @@ msg_clean_MBR_partition_keep_GPT_one='On the other hand, if you are sure only GP
 # Tag on 2019/10/04
 msg_ocs_param_ps="Play sound when the job is done"
 msg_ocs_onthefly_param_ps="Play sound when the job is done"
+# Tag on 2019/12/03
+msg_ocs_param_z9="compressió zstd"
+msg_ocs_param_z9p="compressió pzstd"

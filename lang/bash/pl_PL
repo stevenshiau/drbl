@@ -1084,8 +1084,6 @@ msg_lite_server_and_client_are_provided='Ponadto dostępne są także tryby Clon
 # Tag on 2017/12/02
 msg_ocs_param_z8='kompresja lz4 (Szybka, ale daje większy obraz)'
 # Tag on 2017/12/27
-msg_ocs_param_z9='kompresja zstd'
-msg_ocs_param_z9p='kompresja pzstd'
 msg_ocs_param_z8p='kompresja lz4mt (Szybka, ale daje większy obraz)'
 # Tag on 2018/01/09
 msg_use_channel_bonding='Użyj łączenia kanałów'
@@ -1130,3 +1128,6 @@ msg_clean_MBR_partition_keep_GPT_one='On the other hand, if you are sure only GP
 # Tag on 2019/10/04
 msg_ocs_param_ps="Play sound when the job is done"
 msg_ocs_onthefly_param_ps="Play sound when the job is done"
+# Tag on 2019/12/03
+msg_ocs_param_z9='kompresja zstd'
+msg_ocs_param_z9p='kompresja pzstd'

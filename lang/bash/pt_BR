@@ -1084,8 +1084,6 @@ msg_lite_server_and_client_are_provided='Além disso, Modos servidor e cliente d
 # Tag on 2017/12/02
 msg_ocs_param_z8='compressão lz4 (Rápida, mas também imagem maior)'
 # Tag on 2017/12/27
-msg_ocs_param_z9='compressão zstd'
-msg_ocs_param_z9p='compressão pzstd'
 msg_ocs_param_z8p='compressão lz4mt (Rápida, mas também imagem maior)'
 # Tag on 2018/01/09
 msg_use_channel_bonding='Usar ligação de canal'
@@ -1130,3 +1128,6 @@ msg_clean_MBR_partition_keep_GPT_one='Por outro lado, se tiver certeza de que ap
 # Tag on 2019/10/04
 msg_ocs_param_ps="Reproduzir som quando a tarefa estiver concluída"
 msg_ocs_onthefly_param_ps="Reproduzir som quando a tarefa estiver concluída"
+# Tag on 2019/12/03
+msg_ocs_param_z9='compressão zstd'
+msg_ocs_param_z9p='compressão pzstd'

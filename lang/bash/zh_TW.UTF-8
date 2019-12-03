@@ -1083,8 +1083,6 @@ msg_lite_server_and_client_are_provided='此外，亦有再生龍輕量伺服器
 # Tag on 2017/12/02
 msg_ocs_param_z8='使用lz4壓縮(快速但相對大的印象檔)'
 # Tag on 2017/12/27
-msg_ocs_param_z9='使用zstd壓縮'
-msg_ocs_param_z9p='使用pzstd壓縮'
 msg_ocs_param_z8p='使用lz4mt壓縮(快速但相對大的印象檔)'
 # Tag on 2018/01/09
 msg_use_channel_bonding='使用通道捆合技術'
@@ -1129,3 +1127,6 @@ msg_clean_MBR_partition_keep_GPT_one='相反地，若你確認只有GPT的分割
 # Tag on 2019/10/04
 msg_ocs_param_ps="動作完成時播放聲音來提示"
 msg_ocs_onthefly_param_ps="動作完成時播放聲音來提示"
+# Tag on 2019/12/03
+msg_ocs_param_z9='使用zstd壓縮(非常快速，印象檔大小類同gzip)'
+msg_ocs_param_z9p='使用pzstd壓縮(非常快速，印象檔大小類同gzip，適用多核心/CPU機器)'

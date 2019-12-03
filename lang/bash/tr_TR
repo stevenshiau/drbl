@@ -1085,8 +1085,6 @@ msg_lite_server_and_client_are_provided='Bunun yanında, Clonezilla lite sunucus
 # Tag on 2017/12/02
 msg_ocs_param_z8='lz4 sıkıştırması (Hızlı, fakat büyük kalıp boyutu)'
 # Tag on 2017/12/27
-msg_ocs_param_z9='zstd sıkıştırması'
-msg_ocs_param_z9p='pzstd sıkıştırması'
 msg_ocs_param_z8p='lz4mt sıkıştırması (Hızlı, fakat büyük kalıp boyutu)'
 # Tag on 2018/01/09
 msg_use_channel_bonding='Kanal bağlama kulan'
@@ -1131,3 +1129,6 @@ msg_clean_MBR_partition_keep_GPT_one='On the other hand, if you are sure only GP
 # Tag on 2019/10/04
 msg_ocs_param_ps="Play sound when the job is done"
 msg_ocs_onthefly_param_ps="Play sound when the job is done"
+# Tag on 2019/12/03
+msg_ocs_param_z9='zstd sıkıştırması'
+msg_ocs_param_z9p='pzstd sıkıştırması'
