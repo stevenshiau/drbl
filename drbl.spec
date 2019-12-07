@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.30.25
+Version:	2.30.26
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,11 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Sat Dec 07 2019 Steven Shiau <steven _at_ clonezilla org> 2.30.26-drbl1
+  * Fix the issue for setting up Ubuntu 19.10. Thanks to Spinage and
+    bliard. Ref:
+    https://sourceforge.net/p/drbl/discussion/DRBL_for_Debian/thread/33a8153d3d
+
 * Tue Dec 03 2019 Steven Shiau <steven _at_ clonezilla org> 2.30.25-drbl1
   * Update language files about zstd description.
 

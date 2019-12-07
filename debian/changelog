@@ -1,3 +1,11 @@
+drbl (2.30.26-drbl1) unstable; urgency=medium
+
+  * Fix the issue for setting up Ubuntu 19.10. Thanks to Spinage and
+    bliard. Ref:
+    https://sourceforge.net/p/drbl/discussion/DRBL_for_Debian/thread/33a8153d3d
+
+ -- Steven Shiau <steven@clonezilla.org>  Sat, 07 Dec 2019 18:58:56 +0800
+
 drbl (2.30.25-drbl1) unstable; urgency=medium
 
   * Update language files about zstd description.
