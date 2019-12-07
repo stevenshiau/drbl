@@ -3244,6 +3244,7 @@ mkdir -p $drbl_common_root/etc/diskless-image
 # copy dev tarball to $drbl_common_root/etc/diskless-image
 # For older version of udev, we test udevd, for newer one, we test udevadm
 if [ -x "$drbl_common_root/sbin/udevadm" -o \
+     -x "$drbl_common_root/bin/udevadm" -o \
      -x "$drbl_common_root/sbin/udevd" ]; then
   echo -n "Using udev for clients... "
 elif [ -f "$drbl_pkgdir/dev.tgz" ]; then

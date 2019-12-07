@@ -47,7 +47,7 @@ create_dev(){
      # the time now, so that we can avoid the wrong clock or timezone.
      echo -n "Using old-style dev instead of udev... " 
      tar -xzmf /etc/diskless-image/dev.tgz -C /dev
-   elif [ -n "$(ls /sbin/udev* 2>/dev/null)" ]; then
+   elif [ -n "$(ls /sbin/udev* /bin/udev* 2>/dev/null)" ]; then
      echo -n "Mounting sysfs... "
      mount -n -t sysfs none /sys
      ln -snf /proc/self/fd /dev/fd
