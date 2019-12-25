@@ -209,6 +209,10 @@ done
 
 #
 check_if_root
+if [ "$?" -ne 1 ]; then
+  USAGE
+  exit 1
+fi
 target_part="$1"
 
 if ! type parted &>/dev/null; then
@@ -221,6 +225,13 @@ fi
 if ! type blkid &>/dev/null; then
   [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
   echo 'Program "blkid" was not found on this GNU/Linux system. Please install it.'
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+  echo "Program terminated!"
+  exit 1
+fi
+if ! type mcopy &>/dev/null; then
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+  echo 'Program "mcopy" was not found on this GNU/Linux system. Please install it. On Debian or Ubuntu Linux, you can install it by: sudo apt-get install mtools'
   [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
   echo "Program terminated!"
   exit 1
