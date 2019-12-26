@@ -5,6 +5,15 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.30.27-drbl1) unstable; urgency=medium
+
+  * Add bluetooth related packages in DRBL/Clonezilla live packages list:
+    bluetooth bluez bluez-tools
+  * Check if mcopy exists in makeboot.sh. Thanks to Laurence Mitchell for
+    reporting this.
+
+ -- Steven Shiau <steven@clonezilla.org>  Thu, 26 Dec 2019 08:42:35 +0800
+
 drbl (2.30.26-drbl1) unstable; urgency=medium
 
   * Fix the issue for setting up Ubuntu 19.10. Thanks to Spinage and

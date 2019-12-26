@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.30.26
+Version:	2.30.27
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,12 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Thu Dec 26 2019 Steven Shiau <steven _at_ clonezilla org> 2.30.27-drbl1
+  * Add bluetooth related packages in DRBL/Clonezilla live packages list:
+    bluetooth bluez bluez-tools
+  * Check if mcopy exists in makeboot.sh. Thanks to Laurence Mitchell for
+    reporting this.
+
 * Sat Dec 07 2019 Steven Shiau <steven _at_ clonezilla org> 2.30.26-drbl1
   * Fix the issue for setting up Ubuntu 19.10. Thanks to Spinage and
     bliard. Ref:
