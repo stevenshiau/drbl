@@ -1,3 +1,10 @@
+drbl (2.30.28-drbl1) unstable; urgency=medium
+
+  * Add mtr dcfldd iotop to packages list of drbl/clonezilla live.
+  * Bug fixed: "$#" not ""$?" in argument test of makeboot.sh.
+
+ -- Steven Shiau <steven@clonezilla.org>  Tue, 14 Jan 2020 08:05:49 +0800
+
 drbl (2.30.27-drbl1) unstable; urgency=medium
 
   * Add bluetooth related packages in DRBL/Clonezilla live packages list:

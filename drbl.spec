@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.30.27
+Version:	2.30.28
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,10 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Tue Jan 24 2020 Steven Shiau <steven _at_ clonezilla org> 2.30.28-drbl1
+  * Add mtr dcfldd iotop to packages list of drbl/clonezilla live.
+  * Bug fixed: "$#" not ""$?" in argument test of makeboot.sh.
+
 * Thu Dec 26 2019 Steven Shiau <steven _at_ clonezilla org> 2.30.27-drbl1
   * Add bluetooth related packages in DRBL/Clonezilla live packages list:
     bluetooth bluez bluez-tools
