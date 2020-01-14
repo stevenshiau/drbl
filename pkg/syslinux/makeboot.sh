@@ -209,7 +209,7 @@ done
 
 #
 check_if_root
-if [ "$?" -ne 1 ]; then
+if [ "$#" -ne 1 ]; then
   USAGE
   exit 1
 fi
