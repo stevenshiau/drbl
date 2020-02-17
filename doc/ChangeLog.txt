@@ -5,6 +5,18 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.30.30-drbl1) unstable; urgency=medium
+
+  * Update languge files es_ES. Thanks to Juan Ramón Martínez.
+
+ -- Steven Shiau <steven@clonezilla.org>  Mon, 17 Feb 2020 11:14:41 +0800
+
+drbl (2.30.29-drbl1) unstable; urgency=medium
+
+  * To save space, include mtr-tiny instead of mtr in DRBL/Clonezilla live.
+
+ -- Steven Shiau <steven@clonezilla.org>  Tue, 14 Jan 2020 21:19:41 +0800
+
 drbl (2.30.28-drbl1) unstable; urgency=medium
 
   * Add mtr dcfldd iotop to packages list of drbl/clonezilla live.

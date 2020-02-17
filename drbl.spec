@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.30.28
+Version:	2.30.30
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,12 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Mon Feb 17 2020 Steven Shiau <steven _at_ clonezilla org> 2.30.30-drbl1
+  * Update languge files es_ES. Thanks to Juan Ramón Martínez.
+
+* Tue Jan 24 2020 Steven Shiau <steven _at_ clonezilla org> 2.30.29-drbl1
+  * To save space, include mtr-tiny instead of mtr in DRBL/Clonezilla live.
+
 * Tue Jan 24 2020 Steven Shiau <steven _at_ clonezilla org> 2.30.28-drbl1
   * Add mtr dcfldd iotop to packages list of drbl/clonezilla live.
   * Bug fixed: "$#" not ""$?" in argument test of makeboot.sh.
