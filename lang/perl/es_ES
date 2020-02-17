@@ -52,7 +52,7 @@ $lang_charset = 'iso-8859-1';
    please_enter => "por favor introduzca",
    to_deploy_them => "para desplegar su",
    root_passwd => "password de root",
-   initial_digit => "digito inicial",
+   initial_digit => "dígito inicial",
    unable_to_find_the => "No es posible encontrar el",
    program_stop => "Programa detenido",
    );
@@ -124,11 +124,11 @@ $lang_charset = 'iso-8859-1';
                 "¿Cuál es el máximo tamaño (Megabytes) para el espacio swap ?\n".
                 "Se intentará asignar el espacio swap por usted, si no es suficiente, el 60% del espacio libre será utilizado.",
    mode_for_client_init =>
-              "¿Qué modo quiere que usen los clientes despues de iniciarse ?\n".
+              "¿Qué modo quiere que usen los clientes después de iniciarse ?\n".
               "\"1\": Modo gráfico (X window system) (por defecto),\n".
               "\"2\": Modo texto.",
    client_text_mode => "Los clientes usarán el modo texto cuando inicien.",
-   client_graphic_mode => "Los clientes entrarán en modo gráfico despues de iniciarse.",
+   client_graphic_mode => "Los clientes entrarán en modo gráfico después de iniciarse.",
    login_mode_for_client =>
                   "¿Qué modo desea cuando el cliente inicie en modo gráfico ?\n".
                   "0: login normal, 1: login automático, 2: login por tiempo",
@@ -201,7 +201,7 @@ $lang_charset = 'iso-8859-1';
    open_thin_client_option =>
         "¿Desea que los clientes DRBL tengan una opción de ejecutarse en modo terminal? por ej. quiere dejar ejecutar a este cliente la visualización remota (que utilizará recursos del servidor), introduzca \"Y\" aqui.\n".
         "¡Nota!\n".
-	"0. Si reponde si a esta opción, el cliente tendrá un entorno limitado, por ej. NO tendrá acceso a un USB local, CD, audio, impresora, etc. en el cliente.\n".
+	"0. Si responde si a esta opción, el cliente tendrá un entorno limitado, por ej. NO tendrá acceso a un USB local, CD, audio, impresora, etc. en el cliente.\n".
 	"1. Si su servidor no es potente, introduzca \"no\" aqui.\n".
 	"2. Introduciendo \"yes\" (si) aqui, se activará xdmcp,\n".
 	"No es algo seguro activarlo. Configurando /etc/hosts.allow y /etc/hosts.deny para sólo permitir acceso local es otra alternativa pero no la mas segura.\n".

@@ -519,7 +519,7 @@ msg_switch_pxe_bg_mode='Cambiar el modo del menú de inicio PXE'
 msg_pxemenu_text='El cliente usa el modo texto del menú de incio PXE'
 msg_pxemenu_graphic='El cliente usa el modo gráfico del menú de incio PXE'
 msg_only_one_kernel_meets_requirement='Sólo un kernel se ajusta a sus requisitos'
-msg_drbl_server_is_NOT_NAT_server='Este servidor DRBL NO proporcionar servicio NAT, por tanto su cliente DRBL NO podrá acceder al Internet.'
+msg_drbl_server_is_NOT_NAT_server='Este servidor DRBL NO proporciona servicio NAT, por tanto su cliente DRBL NO podrá acceder a Internet.'
 msg_ask_user_is_reserved_for_save_mode='"ask_user" es un nombre de imagen reservado, ¡por favor use otro nombre!'
 msg_all_data_in_dev_will_be_overwritten='¡LOS DATOS EXISTENTES EN ESTE/ESTOS DISCODURO(S)/PARTICION(ES) SERÁN SOBRESCRITOS! TODOS LOS DATOS SE PERDERÁN'
 msg_authentication_pxe_linux_info="Si desea utilizar un mecanismo de autentificación en el inicio del cliente PXE Linux, use drbl-pxelinux-passwd en el servidor. Para modo información, ejecute \"drbl-pxelinux-passwd -h\"."
@@ -530,9 +530,9 @@ msg_gen_template_files="Regenerar el archivo plantilla de SSI/Clonezilla box"
 msg_ocs_iso_too_big_for_CD="El archivo ISO destino es demasiado grande para copiarlo en un CD."
 msg_ocs_iso_too_big_for_DVD="El archivo ISO destino es demasiado grande para copiarlo en un DVD."
 msg_unable_to_create_clonezilla_img_iso="No es posible crear esta imagen de Clonezilla live CD"
-msg_burn_clonezilla_img_iso="Puede copiar este archivo iso en un CD/DVD, despues puede usarlo para iniciar otra máquina para usar Clonezilla"
-msg_burn_drbl_live_img_iso="Puede copiar este archivo iso en un CD/DVD, despues puede usarlo para iniciar otra máquina para usar DRBL"
-msg_burn_drbl_live_img_zip="Puede descomprimir este archivo zip en una unidad USB flash, despues puede hacerlo bootable con el programa 'makeboot.bat' (bajo MS windows) o 'syslinux -s DEVNAME' (bajo GNU/Linux, DEVNAME es como /dev/sdb1), y usarlo para iniciar otra máquina para usar DRBL"
+msg_burn_clonezilla_img_iso="Puede copiar este archivo iso en un CD/DVD, después puede usarlo para iniciar otra máquina para usar Clonezilla"
+msg_burn_drbl_live_img_iso="Puede copiar este archivo iso en un CD/DVD, después puede usarlo para iniciar otra máquina para usar DRBL"
+msg_burn_drbl_live_img_zip="Puede descomprimir este archivo zip en una unidad USB flash, después puede hacerlo bootable con el programa 'makeboot.bat' (bajo MS windows) o 'syslinux -s DEVNAME' (bajo GNU/Linux, DEVNAME es como /dev/sdb1), y usarlo para iniciar otra máquina para usar DRBL"
 msg_is_mounted_u_must_unmount_it="¡Este dispositivo está montado! Debe desmontarlo primero"
 msg_create_live_device_warning='Este programa escribirá los programas Debian Live y DRBL/Clonezilla en el dispositivo. ¡El MBR de este dispositivo se sobrescribirá! (la tabla de particiones se mantendrá) ¡Tenga cuidado cuando lo use! El dispositivo es:'
 msg_unable_to_mount_this_dev='¡No es posible montar el dispositivo! ¿Ya ha formateado la partición? Este dispositivo es'
@@ -1124,24 +1124,24 @@ msg_which_dir_as_clonezilla_img_home='¿Qué directorio es para el repositorio d
 msg_path_on_the_resource='Ruta en el recurso'
 msg_current_selected_dir_name='Nombre de directorio seleccionado actual'
 msg_when_current_selected_dir_name_is_ok='Cuando el "Nombre del directorio seleccionado actual" sea el que desee, use la tecla "Tabulador" para elegir "Listo"'
-msg_not_chosing_CZ_IMG_dir='//NOTA// No debe elegir el directorio etiquetado con CZ_IMG. Son solo para que usted conozca la lista de imágenes en el directorio actual.'
+msg_not_chosing_CZ_IMG_dir='//NOTA// No debe elegir el directorio etiquetado con CZ_IMG. Son sólo para que usted conozca la lista de imágenes en el directorio actual.'
 msg_no_any_image_found='No se ha encontrado ninguna imagen en este directorio'
 msg_this_directory_is_not_mountpoint='Este directorio no es un punto de montaje'
 msg_there_is_no_way_to_mount_subdirectory='No hay forma de montar el subdirectorio.'
-msg_the_dir_you_choose_is_clonezilla_img_dir='Este directorio que elijas es un directorio de imágenes de Clonezilla'
+msg_the_dir_you_choose_is_clonezilla_img_dir='Este directorio que elija es un directorio de imágenes de Clonezilla'
 # Tag on 2019/07/18
-msg_ocs_param_iui='Do not update initramfs file(s) on the restored GNU/Linux.'
-msg_ocs_onthefly_param_iui='Do not update initramfs file(s) on the restored GNU/Linux.'
+msg_ocs_param_iui='No actualice el/los archivo/s initramfs en el GNU/Linux restaurado.'
+msg_ocs_onthefly_param_iui='No actualice el/los archivo/s initramfs en el GNU/Linux restaurado.'
 # Tag on 2019/07/25
-msg_disk_is_full_or_permission_issue='No space left on the device or there is a permission issue. Hence the data can not be written to this dir:'
+msg_disk_is_full_or_permission_issue='No queda espacio en el dispositivo o hay un problema de permisos. Por lo tanto, los datos no se pueden escribir en este directorio:'
 # Tag on 2019/08/13
-msg_no_device_selected='No device selected.'
-msg_input_img_dir_not_exist='The directory for this inputed image name does NOT exist:'
+msg_no_device_selected='Ningún dispositivo seleccionado.'
+msg_input_img_dir_not_exist='El directorio para este nombre de imagen incorporado NO existe:'
 # Tag on 2019/09/02
-msg_clean_MBR_partition_keep_GPT_one='On the other hand, if you are sure only GPT partition table is the one you want, you can run this command to destroy the MBR partition table while keeping the GPT partition table'
+msg_clean_MBR_partition_keep_GPT_one='Por otro lado, si está seguro de que sólo la tabla de particiones GPT es la que desea, puede ejecutar este comando para destruir la tabla de particiones MBR mientras mantiene la tabla de particiones GPT'
 # Tag on 2019/10/04
-msg_ocs_param_ps="Play sound when the job is done"
-msg_ocs_onthefly_param_ps="Play sound when the job is done"
+msg_ocs_param_ps="Reproducir sonido cuando el trabajo esté terminado"
+msg_ocs_onthefly_param_ps="Reproducir sonido cuando el trabajo esté terminado"
 # Tag on 2019/12/03
 msg_ocs_param_z9='compresión zstd'
 msg_ocs_param_z9p='compresión pzstd'
