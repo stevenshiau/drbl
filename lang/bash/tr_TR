@@ -1117,18 +1117,18 @@ msg_ocs_onthefly_param_lzop='lzo algoritması kullan'
 msg_ocs_onthefly_param_zstd='zstd algoritması kullan'
 msg_ocs_onthefly_param_cat='Sıkıştırma'
 # Tag on 2019/07/18
-msg_ocs_param_iui='Do not update initramfs file(s) on the restored GNU/Linux.'
-msg_ocs_onthefly_param_iui='Do not update initramfs file(s) on the restored GNU/Linux.'
+msg_ocs_param_iui='Kurtarılan GNU/Linux üzerinde initramfs dosyasını/dosyalarını güncelleme.'
+msg_ocs_onthefly_param_iui='Kurtarılan GNU/Linux üzerinde initramfs dosyasını/dosyalarını güncelleme.'
 # Tag on 2019/07/25
-msg_disk_is_full_or_permission_issue='No space left on the device or there is a permission issue. Hence the data can not be written to this dir:'
+msg_disk_is_full_or_permission_issue='Cihazda yer kalmadı veya bir izin sorunu var. Dolayısıyla veriler bu dizine yazılamaz:'
 # Tag on 2019/08/13
-msg_no_device_selected='No device selected.'
-msg_input_img_dir_not_exist='The directory for this inputed image name does NOT exist:'
+msg_no_device_selected='Cihaz seçilmedi.'
+msg_input_img_dir_not_exist='Girilen kalıp adında bir dizin mevcut DEĞİL:'
 # Tag on 2019/09/02
-msg_clean_MBR_partition_keep_GPT_one='On the other hand, if you are sure only GPT partition table is the one you want, you can run this command to destroy the MBR partition table while keeping the GPT partition table'
+msg_clean_MBR_partition_keep_GPT_one='Öte yandan, yalnızca GPT bölüm tablosunun istediğiniz tablo olduğundan eminseniz, GPT bölüm tablosunu korurken MBR bölüm tablosunu yok etmek için bu komutu çalıştırabilirsiniz'
 # Tag on 2019/10/04
-msg_ocs_param_ps="Play sound when the job is done"
-msg_ocs_onthefly_param_ps="Play sound when the job is done"
+msg_ocs_param_ps="İşlem bitince ses çal"
+msg_ocs_onthefly_param_ps="İşlem bitince ses çal"
 # Tag on 2019/12/03
 msg_ocs_param_z9='zstd sıkıştırması'
 msg_ocs_param_z9p='pzstd sıkıştırması'

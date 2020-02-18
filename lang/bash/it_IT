@@ -1115,18 +1115,18 @@ msg_ocs_onthefly_param_lzop='Usa l'\''algoritmo lzo'
 msg_ocs_onthefly_param_zstd='Usa l'\''algoritmo zstd'
 msg_ocs_onthefly_param_cat='Non comprime'
 # Tag on 2019/07/18
-msg_ocs_param_iui='Do not update initramfs file(s) on the restored GNU/Linux.'
-msg_ocs_onthefly_param_iui='Do not update initramfs file(s) on the restored GNU/Linux.'
+msg_ocs_param_iui='Non aggiornare file initramfs sul GNU/Linux ripristinato.'
+msg_ocs_onthefly_param_iui='Non aggiornare file initramfs sul GNU/Linux ripristinato.'
 # Tag on 2019/07/25
-msg_disk_is_full_or_permission_issue='No space left on the device or there is a permission issue. Hence the data can not be written to this dir:'
+msg_disk_is_full_or_permission_issue='Spazio insufficiente sull'\''unità o mancano i permessi. Quindi i dati non possono essere scritti in questa dir:'
 # Tag on 2019/08/13
-msg_no_device_selected='No device selected.'
-msg_input_img_dir_not_exist='The directory for this inputed image name does NOT exist:'
+msg_no_device_selected='Nessuna unità selezionata.'
+msg_input_img_dir_not_exist='La directory per il nome di immagine immesso NON esiste:'
 # Tag on 2019/09/02
-msg_clean_MBR_partition_keep_GPT_one='On the other hand, if you are sure only GPT partition table is the one you want, you can run this command to destroy the MBR partition table while keeping the GPT partition table'
+msg_clean_MBR_partition_keep_GPT_one='D'\''altra parte, se siete sicuri che solo la tabella delle partizioni GPT sia quella desiderata, potete eseguire questo comando per distruggere la tabella delle partizioni MBR mantenendo la tabella delle partizioni GPT'
 # Tag on 2019/10/04
-msg_ocs_param_ps="Play sound when the job is done"
-msg_ocs_onthefly_param_ps="Play sound when the job is done"
+msg_ocs_param_ps="Audio da riprodurre al termine del lavoro"
+msg_ocs_onthefly_param_ps="Audio da riprodurre al termine del lavoro"
 # Tag on 2019/12/03
 msg_ocs_param_z9='compressione zstd'
 msg_ocs_param_z9p='compressione pzstd'

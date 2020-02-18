@@ -2,7 +2,7 @@
 # Written by Steven Shiau <steven _at_ nchc org tw> to use in DRBL 
 # Hungarian translation by Greg <greg.hefty _at_ freemail hu>
 # License: GPL
-# Last updated: 13 May 2019
+# Last updated: 18 Feb 2020
 
 #-----------------------------------------
 # some words
@@ -1116,18 +1116,18 @@ msg_ocs_onthefly_param_lzop='lzo algoritmus használata'
 msg_ocs_onthefly_param_zstd='zstd algoritmus használata'
 msg_ocs_onthefly_param_cat='Ne tömörítsen'
 # Tag on 2019/07/18
-msg_ocs_param_iui='Do not update initramfs file(s) on the restored GNU/Linux.'
-msg_ocs_onthefly_param_iui='Do not update initramfs file(s) on the restored GNU/Linux.'
+msg_ocs_param_iui='Ne frissítse az initramfs fájl(oka)t a visszaállított GNU/Linux-on.'
+msg_ocs_onthefly_param_iui='Ne frissítse az initramfs fájl(oka)t a visszaállított GNU/Linux-on.'
 # Tag on 2019/07/25
-msg_disk_is_full_or_permission_issue='No space left on the device or there is a permission issue. Hence the data can not be written to this dir:'
+msg_disk_is_full_or_permission_issue='Nincs több hely az eszközön, vagy jogosultsági gond adódott. Így az adatok nem írhatók ebbe a könyvtárba:'
 # Tag on 2019/08/13
-msg_no_device_selected='No device selected.'
-msg_input_img_dir_not_exist='The directory for this inputed image name does NOT exist:'
+msg_no_device_selected='Nincs kijelölt eszköz.'
+msg_input_img_dir_not_exist='NINCS ilyen, a megadott képnévnek megfelelő könyvtár:'
 # Tag on 2019/09/02
-msg_clean_MBR_partition_keep_GPT_one='On the other hand, if you are sure only GPT partition table is the one you want, you can run this command to destroy the MBR partition table while keeping the GPT partition table'
+msg_clean_MBR_partition_keep_GPT_one='Másfelől, ha biztosan kizárólag a GPT partíciós táblára van szüksége, ezen parancs futtatásával azt megtarthatja, míg az MBR partíciós táblát eltávolítja'
 # Tag on 2019/10/04
-msg_ocs_param_ps="Play sound when the job is done"
-msg_ocs_onthefly_param_ps="Play sound when the job is done"
+msg_ocs_param_ps="Hangjelzés a feladat végeztével"
+msg_ocs_onthefly_param_ps="Hangjelzés a feladat végeztével"
 # Tag on 2019/12/03
 msg_ocs_param_z9='zstd tömörítés'
 msg_ocs_param_z9p='pzstd tömörítés'
