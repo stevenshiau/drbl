@@ -1115,18 +1115,18 @@ msg_ocs_onthefly_param_lzop='lzo-Algorithmus verwenden'
 msg_ocs_onthefly_param_zstd='zstd-Algorithmus verwenden'
 msg_ocs_onthefly_param_cat='Keine Kompression'
 # Tag on 2019/07/18
-msg_ocs_param_iui='Do not update initramfs file(s) on the restored GNU/Linux.'
-msg_ocs_onthefly_param_iui='Do not update initramfs file(s) on the restored GNU/Linux.'
+msg_ocs_param_iui='Initramfs-Dateien im wiederhergestellten GNU/Linux nicht aktualisieren.'
+msg_ocs_onthefly_param_iui='Initramfs-Dateien im wiederhergestellten GNU/Linux nicht aktualisieren.'
 # Tag on 2019/07/25
-msg_disk_is_full_or_permission_issue='No space left on the device or there is a permission issue. Hence the data can not be written to this dir:'
+msg_disk_is_full_or_permission_issue='Kein freier Speicher mehr auf dem Gerät oder fehlende Zugriffsrechte. Die Daten können daher nicht in dieses Verzeichnis geschrieben werden:'
 # Tag on 2019/08/13
-msg_no_device_selected='No device selected.'
-msg_input_img_dir_not_exist='The directory for this inputed image name does NOT exist:'
+msg_no_device_selected='Es wurde kein Gerät ausgewählt.'
+msg_input_img_dir_not_exist='Das Verzeichnis für den angegebenen Image-Namen existiert NICHT:'
 # Tag on 2019/09/02
-msg_clean_MBR_partition_keep_GPT_one='On the other hand, if you are sure only GPT partition table is the one you want, you can run this command to destroy the MBR partition table while keeping the GPT partition table'
+msg_clean_MBR_partition_keep_GPT_one='Wenn Sie aber sicher sind, dass Sie nur die GPT Partitiontabelle benötigen, können Sie diesen Befehl ausführen, um die MBR Partitiontabelle zu löschen und nur die GPT Partitiontabelle zu behalten'
 # Tag on 2019/10/04
-msg_ocs_param_ps="Play sound when the job is done"
-msg_ocs_onthefly_param_ps="Play sound when the job is done"
+msg_ocs_param_ps="Sound abspielen, wenn der Job erledigt ist"
+msg_ocs_onthefly_param_ps="Sound abspielen, wenn der Job erledigt ist"
 # Tag on 2019/12/03
 msg_ocs_param_z9='zstd Komprimierung'
 msg_ocs_param_z9p='pzstd Komprimierung'
