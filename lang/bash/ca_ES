@@ -1122,18 +1122,18 @@ msg_ocs_onthefly_param_lzop='Usar algorisme lzo'
 msg_ocs_onthefly_param_zstd='Usar algorisme zstd'
 msg_ocs_onthefly_param_cat='No comprimir'
 # Tag on 2019/07/18
-msg_ocs_param_iui='Do not update initramfs file(s) on the restored GNU/Linux.'
-msg_ocs_onthefly_param_iui='Do not update initramfs file(s) on the restored GNU/Linux.'
+msg_ocs_param_iui='No actualizar el/s fitxer/s initramfs en el GNU/Linux restaurat.'
+msg_ocs_onthefly_param_iui='No actualitzar el/s fitxer/s initramfs en el GNU/Linux restaurat.'
 # Tag on 2019/07/25
-msg_disk_is_full_or_permission_issue='No space left on the device or there is a permission issue. Hence the data can not be written to this dir:'
+msg_disk_is_full_or_permission_issue='No hi ha espai al dispositiu o hi ha problemes de permisos. Per aixó, les dades no poden ser escrites en aquest disc:'
 # Tag on 2019/08/13
-msg_no_device_selected='No device selected.'
-msg_input_img_dir_not_exist='The directory for this inputed image name does NOT exist:'
+msg_no_device_selected='No hi ha un dispositiu seleccionat.'
+msg_input_img_dir_not_exist="El directori d'image introduit no existeix:"
 # Tag on 2019/09/02
-msg_clean_MBR_partition_keep_GPT_one='On the other hand, if you are sure only GPT partition table is the one you want, you can run this command to destroy the MBR partition table while keeping the GPT partition table'
+msg_clean_MBR_partition_keep_GPT_one='Per altra banda, si està segur que vol tan sols una taula de partició GPT, pot emprar aquesta línea de comandament per destruir el MBR de la taula de particions i al mateix temps guardar la taula de particions GPT'
 # Tag on 2019/10/04
-msg_ocs_param_ps="Play sound when the job is done"
-msg_ocs_onthefly_param_ps="Play sound when the job is done"
+msg_ocs_param_ps="Fes un senyal sonor quan el treball estigui acabat."
+msg_ocs_onthefly_param_ps="Fes un senyal sonor quan el treball estigui acabat."
 # Tag on 2019/12/03
 msg_ocs_param_z9="compressió zstd"
 msg_ocs_param_z9p="compressió pzstd"
