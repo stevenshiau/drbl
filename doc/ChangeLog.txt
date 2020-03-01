@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.30.32-drbl1) unstable; urgency=medium
+
+  * Update language file ca_ES. Thanks to René Mérou.
+  * Update the language file ja_JP. Thanks to Akira Yoshiyama.
+
+ -- Steven Shiau <steven@clonezilla.org>  Sun, 01 Mar 2020 14:43:21 +0800
+
 drbl (2.30.31-drbl1) unstable; urgency=medium
 
   * Update the language files tr_TR, hu_HU, it_IT, pl_PL.
