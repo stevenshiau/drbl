@@ -1,3 +1,11 @@
+drbl (2.30.33-drbl1) unstable; urgency=medium
+
+  * Add "-p cmd" option for these 2 functions in drbl-functions:
+    ocs_sr_param_postaction_after_clone
+    ocs_onthefly_param_postaction_after_clone
+
+ -- Steven Shiau <steven@clonezilla.org>  Mon, 02 Mar 2020 16:03:14 +0800
+
 drbl (2.30.32-drbl1) unstable; urgency=medium
 
   * Update language file ca_ES. Thanks to René Mérou.
