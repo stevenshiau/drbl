@@ -1129,4 +1129,4 @@ msg_ocs_param_ps="Audio da riprodurre al termine del lavoro"
 msg_ocs_onthefly_param_ps="Audio da riprodurre al termine del lavoro"
 # Tag on 2019/12/03
 msg_ocs_param_z9='compressione zstd'
-msg_ocs_param_z9p='compressione pzstd'
+msg_ocs_param_z9p='compressione zstdmt'

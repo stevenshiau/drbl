@@ -1150,4 +1150,4 @@ msg_ocs_param_ps="ジョブ終了時に音を鳴らす"
 msg_ocs_onthefly_param_ps="ジョブ終了時に音を鳴らす"
 # Tag on 2019/12/03
 msg_ocs_param_z9='zstd 圧縮'
-msg_ocs_param_z9p='pzstd 圧縮'
+msg_ocs_param_z9p='zstdmt 圧縮'

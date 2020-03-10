@@ -1136,4 +1136,4 @@ msg_ocs_param_ps="Fes un senyal sonor quan el treball estigui acabat."
 msg_ocs_onthefly_param_ps="Fes un senyal sonor quan el treball estigui acabat."
 # Tag on 2019/12/03
 msg_ocs_param_z9="compressió zstd"
-msg_ocs_param_z9p="compressió pzstd"
+msg_ocs_param_z9p="compressió zstdmt"

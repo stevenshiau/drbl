@@ -1132,4 +1132,4 @@ msg_ocs_param_ps="Play sound when the job is done"
 msg_ocs_onthefly_param_ps="Play sound when the job is done"
 # Tag on 2019/12/03
 msg_ocs_param_z9='zstd compression (Very fast and small image like gzip)'
-msg_ocs_param_z9p='pzstd compression (Very fast and small image like gzip, for multicore/CPU)'
+msg_ocs_param_z9p='zstdmt compression (Very fast and small image like gzip, for multicore/CPU)'

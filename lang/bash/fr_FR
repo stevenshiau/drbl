@@ -1131,4 +1131,4 @@ msg_ocs_param_ps="Jouer un son lorsque la tâche est terminée"
 msg_ocs_onthefly_param_ps="Jouer un son lorsque la tâche est terminée"
 # Tag on 2019/12/03
 msg_ocs_param_z9='compression zstd'
-msg_ocs_param_z9p='compression pzstd'
+msg_ocs_param_z9p='compression zstdmt'

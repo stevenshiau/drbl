@@ -1144,4 +1144,4 @@ msg_ocs_param_ps="Reproducir sonido cuando el trabajo esté terminado"
 msg_ocs_onthefly_param_ps="Reproducir sonido cuando el trabajo esté terminado"
 # Tag on 2019/12/03
 msg_ocs_param_z9='compresión zstd'
-msg_ocs_param_z9p='compresión pzstd'
+msg_ocs_param_z9p='compresión zstdmt'

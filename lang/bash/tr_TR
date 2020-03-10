@@ -1131,4 +1131,4 @@ msg_ocs_param_ps="İşlem bitince ses çal"
 msg_ocs_onthefly_param_ps="İşlem bitince ses çal"
 # Tag on 2019/12/03
 msg_ocs_param_z9='zstd sıkıştırması'
-msg_ocs_param_z9p='pzstd sıkıştırması'
+msg_ocs_param_z9p='zstdmt sıkıştırması'
