@@ -1,3 +1,11 @@
+drbl (2.31.1-drbl1) unstable; urgency=medium
+
+  * Replace pzstd by zstdmt, and add -z1p/-z9p in beginner mode. Thanks to
+    Lord65 (lord5319 _at_ gmail com) for this idea.
+    Ref: https://github.com/facebook/zstd/pull/1192#issuecomment-397599977
+
+ -- Steven Shiau <steven@clonezilla.org>  Tue, 10 Mar 2020 20:51:10 +0800
+
 drbl (2.31.0-drbl1) unstable; urgency=medium
 
   * Removed pxz, move packages mbmon and vbetool to X86 and X86-64 sectors
