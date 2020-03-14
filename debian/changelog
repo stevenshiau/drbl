@@ -1,3 +1,11 @@
+drbl (2.31.2-drbl1) unstable; urgency=medium
+
+  * No more including ufsutils in drbl/clonezilla live.
+  * Add required variable PKG_FROM_DBN_WHICH_OCS_LIVE_NEED_ARMHF_ONLY
+    in drbl.conf.
+
+ -- Steven Shiau <steven@clonezilla.org>  Sat, 14 Mar 2020 17:09:11 +0800
+
 drbl (2.31.1-drbl1) unstable; urgency=medium
 
   * Replace pzstd by zstdmt, and add -z1p/-z9p in beginner mode. Thanks to
