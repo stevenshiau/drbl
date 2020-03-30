@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.31.2
+Version:	2.31.3
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,10 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Mon Mar 30 2020 Steven Shiau <steven _at_ clonezilla org> 2.31.3-drbl1
+  * Fix duplicated -z1p/-z9p dialog in expert mode. Thanks to
+    ottokang _at gmail com for reporting this issue.
+
 * Sat Mar 14 2020 Steven Shiau <steven _at_ clonezilla org> 2.31.2-drbl1
   * No more including ufsutils in drbl/clonezilla live.
   * Add required variable PKG_FROM_DBN_WHICH_OCS_LIVE_NEED_ARMHF_ONLY

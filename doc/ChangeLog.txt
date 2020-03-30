@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.31.3-drbl1) unstable; urgency=medium
+
+  * Fix duplicated -z1p/-z9p dialog in expert mode. Thanks to
+    ottokang _at gmail com for reporting this issue.
+
+ -- Steven Shiau <steven@clonezilla.org>  Mon, 30 Mar 2020 21:32:11 +0800
+
 drbl (2.31.2-drbl1) unstable; urgency=medium
 
   * No more including ufsutils in drbl/clonezilla live.
