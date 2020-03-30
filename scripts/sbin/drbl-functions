@@ -2132,22 +2132,34 @@ if [ "$mode" = "save" ]; then
       "-z2p"           "$msg_ocs_param_z2p" \
       "-z2"            "$msg_ocs_param_z2" \
       "-z3"            "$msg_ocs_param_z3" \
-      $ocs_z4_option_1      $ocs_z4_option_2 \
-      $ocs_z5p_option_1     $ocs_z5p_option_2 \
-      $ocs_z5_option_1      $ocs_z5_option_2 \
-      $ocs_z6p_option_1     $ocs_z6p_option_2 \
-      $ocs_z6_option_1      $ocs_z6_option_2 \
-      $ocs_z7_option_1      $ocs_z7_option_2 \
-      $ocs_z8_option_1      $ocs_z8_option_2 \
-      $ocs_z8p_option_1     $ocs_z8p_option_2 \
-      $ocs_z9_option_1      $ocs_z9_option_2 \
-      $ocs_z9p_option_1     $ocs_z9p_option_2 \
+      $ocs_z4_option_1  $ocs_z4_option_2 \
+      $ocs_z5p_option_1 $ocs_z5p_option_2 \
+      $ocs_z5_option_1  $ocs_z5_option_2 \
+      $ocs_z6p_option_1 $ocs_z6p_option_2 \
+      $ocs_z6_option_1  $ocs_z6_option_2 \
+      $ocs_z7_option_1  $ocs_z7_option_2 \
+      $ocs_z8_option_1  $ocs_z8_option_2 \
+      $ocs_z8p_option_1 $ocs_z8p_option_2 \
+      $ocs_z9_option_1  $ocs_z9_option_2 \
+      $ocs_z9p_option_1 $ocs_z9p_option_2 \
       "-z0"            "$msg_ocs_param_z0" \
       2>> $OCS_PARAM_TMP
       # We need to append a space after this parameter so it won't be connected to next parameter.
       echo -n " " >> $OCS_PARAM_TMP
     else
-      echo "-z1p " >> $OCS_PARAM_TMP
+      # Question about -z1p and -z9p.
+      if [ -z "$fsck_src_part_intr" -a -z "$fsck_src_part_auto" ]; then
+        $DIA --backtitle "$msg_nchc_free_software_labs" --title  \
+        "$msg_clonezilla_advanced_extra_param | $msg_mode: $ocs_mode_prompt" --menu "$msg_choose_one_compression_param_to_save" \
+        0 0 0 $DIA_ESC \
+        "-z1p"              "$msg_ocs_param_z1p" \
+        $ocs_z9p_option_1   $ocs_z9p_option_2 \
+        2>> $OCS_PARAM_TMP
+        # We need to append a space after this parameter so it won't be connected to next parameter.
+        echo -n " " >> $OCS_PARAM_TMP
+      else
+        echo "-z1p " >> $OCS_PARAM_TMP
+      fi
     fi
   else
     # Hide -z1p, z2p...
@@ -2158,18 +2170,30 @@ if [ "$mode" = "save" ]; then
       "-z1"            "$msg_ocs_param_z1" \
       "-z2"            "$msg_ocs_param_z2" \
       "-z3"            "$msg_ocs_param_z3" \
-      $ocs_z4_option_1      $ocs_z4_option_2 \
-      $ocs_z5_option_1      $ocs_z5_option_2 \
-      $ocs_z6_option_1      $ocs_z6_option_2 \
-      $ocs_z7_option_1      $ocs_z7_option_2 \
-      $ocs_z8_option_1      $ocs_z8_option_2 \
-      $ocs_z9_option_1      $ocs_z9_option_2 \
+      $ocs_z4_option_1  $ocs_z4_option_2 \
+      $ocs_z5_option_1  $ocs_z5_option_2 \
+      $ocs_z6_option_1  $ocs_z6_option_2 \
+      $ocs_z7_option_1  $ocs_z7_option_2 \
+      $ocs_z8_option_1  $ocs_z8_option_2 \
+      $ocs_z9_option_1  $ocs_z9_option_2 \
       "-z0"            "$msg_ocs_param_z0" \
       2>> $OCS_PARAM_TMP
       # We need to append a space after this parameter so it won't be connected to next parameter.
       echo -n " " >> $OCS_PARAM_TMP
     else
-      echo "-z1 " >> $OCS_PARAM_TMP
+      # Question about -z1p and -z9p.
+      if [ -z "$fsck_src_part_intr" -a -z "$fsck_src_part_auto" ]; then
+        $DIA --backtitle "$msg_nchc_free_software_labs" --title  \
+        "$msg_clonezilla_advanced_extra_param | $msg_mode: $ocs_mode_prompt" --menu "$msg_choose_one_compression_param_to_save" \
+        0 0 0 $DIA_ESC \
+        "-z1"              "$msg_ocs_param_z1" \
+        $ocs_z9_option_1   $ocs_z9_option_2 \
+        2>> $OCS_PARAM_TMP
+        # We need to append a space after this parameter so it won't be connected to next parameter.
+        echo -n " " >> $OCS_PARAM_TMP
+      else
+        echo "-z1p " >> $OCS_PARAM_TMP
+      fi
     fi
   fi
 
@@ -2211,21 +2235,6 @@ if [ "$mode" = "save" ]; then
       yes) echo "-fsck-y " >> $OCS_PARAM_TMP;;
         *) echo " " >> $OCS_PARAM_TMP;;
     esac
-  fi
-  
-  # Question about -z1p and -z9p.
-  show_z4_or_above_menu_or_not
-  if [ -z "$fsck_src_part_intr" -a -z "$fsck_src_part_auto" ]; then
-    $DIA --backtitle "$msg_nchc_free_software_labs" --title  \
-    "$msg_clonezilla_advanced_extra_param | $msg_mode: $ocs_mode_prompt" --menu "$msg_choose_one_compression_param_to_save" \
-    0 0 0 $DIA_ESC \
-    "-z1p"              "$msg_ocs_param_z1p" \
-    $ocs_z9p_option_1   $ocs_z9p_option_2 \
-    2>> $OCS_PARAM_TMP
-    # We need to append a space after this parameter so it won't be connected to next parameter.
-    echo -n " " >> $OCS_PARAM_TMP
-  else
-    echo "-z1p " >> $OCS_PARAM_TMP
   fi
   
   # Question about checking the image is restorable or not. By default, no matter it's beginner or advanced mode, 
