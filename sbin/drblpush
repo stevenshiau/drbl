@@ -1826,16 +1826,29 @@ server-name 				drbl;
 allow booting;
 allow bootp;
 
-option arch code 93 = unsigned integer 16;
-option space pxelinux;
-option pxelinux.magic      code 208 = string;
-option pxelinux.configfile code 209 = text;
-option pxelinux.pathprefix code 210 = text;
-option pxelinux.reboottime code 211 = unsigned integer 32;
+# For Raspberry Pi
+# Ref: https://www.raspberrypi.org/forums/viewtopic.php?t=209247
+#      https://tools.ietf.org/html/rfc2132
+option vendor-specific-info    code 43 = string;            # Server - RFC 2132, 8.4
+option param-request-list      code 55 = string;            # Client - RFC 2132, 9.8
+option vendor-class-identifier code 60 = string;            # Client - RFC 2132, 9.13
+option rpi-tftp-server         code 66 = text;              # Server - RFC 2132, 9.4
+
+# Ref: Dynamic Host Configuration Protocol (DHCP) Options for the
+#      Intel Preboot eXecution Environment (PXE)
+#      https://tools.ietf.org/html/rfc4578
+#      https://tools.ietf.org/html/rfc5071
+option arch code 93 = unsigned integer 16;                  # Client - RFC 4578, 2.1
+option space pxelinux;                                     
+#option pxelinux.magic      code 208 = string;              # Server - RFC 5071, 3.2
+#option pxelinux.configfile code 209 = text;                # Server - RFC 5071, 4.2
+#option pxelinux.pathprefix code 210 = text;                # Server - RFC 5071, 5.2
+#option pxelinux.reboottime code 211 = unsigned integer 32; # Server - RFC 5071, 6.2
 
 site-option-space "pxelinux";
+
 if exists dhcp-parameter-request-list {
-    # Always send the PXELINUX options (specified in hexadecimal)
+    # Always send the PXELINUX options (specified in hexadecimal, i.e.: 208=0xd0, 209=0xd1, etc.)
     option dhcp-parameter-request-list = concat(option dhcp-parameter-request-list,d0,d1,d2,d3);
 }
 # Ref:
@@ -1845,16 +1858,64 @@ if exists dhcp-parameter-request-list {
 # (1) syslinux (scripts/sbin/prepare-files-for-PXE-client)
 # or
 # (2) grub (drbl-gen-grub-efi-nb)
-if option arch = 00:06 {
+# Ref: http://ipxe.org/cfg/platform. Thanks to Danny Russ for providing this.
+if option arch = 00:00 {
+    # Intel x86PC or
+    # Raspberry Pi, which should not declare itself as an Intel x86PC.
+    # Ref: https://kiljan.org/2019/11/16/arch-linux-arm-network-boot-on-raspberry-pi-4/
+    # We will overwrite it later in the class "raspberrypi".
+    filename "lpxelinux.0";
+} else if option arch = 00:06 {
+    # EFI IA32
     filename "bootia32.efi";
-} else if option arch = 00:07 {
+} else if option arch = 00:07 or
+          option arch = 00:09 {
+    # EFI BC or EFI x86-64 
     filename "bootx64.efi";
-} else if option arch = 00:09 {
-    # For iPXE uEFI client. Ref: http://ipxe.org/cfg/platform
-    # Thanks to Danny Russ for providing this.
-    filename "bootx64.efi";
+} else if option arch = 00:0a {
+    # armv7 (arm 32 bit)
+    filename "bootarm.efi";
+} else if option arch = 00:0b or
+          option arch = 00:16 {
+    # aarch64 (arm 64 bit)
+    # Rockpro64 (https://www.pine64.org/rockpro64) uses 00:16
+    filename "bootaa64.efi";
 } else {
-    filename "$pxe_file";
+    # Default to Intel x86PC
+    filename "lpxelinux.0";
+}
+
+class "raspberrypi" {
+  # Raspberry Pi, which should not declare itself as an Intel x86PC.
+  # However, we still can identify it by some methods.
+  # Ref: https://kiljan.org/2019/11/16/arch-linux-arm-network-boot-on-raspberry-pi-4/
+  match if (
+    (
+          # Parameter list from Pi 3B ROM and old bootcode.bin
+          binary-to-ascii(10,8,",",option param-request-list) =
+            "43,60,67,128,129,130,131,132,133,134,135,66"
+          # Parameter list from Pi 3B+ ROM and newer bootcode.bin
+       or binary-to-ascii(10,8,",",option param-request-list) =
+            "43,60,67,128,129,130,131,132,133,134,135,66,1,3"
+          # Parameter list from Pi 4B EEPROM boot code (2019-10-16)
+       or binary-to-ascii(10,8,",",option param-request-list) =
+            "1,3,43,60,66,67,128,129,130,131,132,133,134,135"
+    ) 
+    and option vendor-class-identifier = "PXEClient:Arch:00000:UNDI:002001"
+    and option arch = 00:00    # Architecture: Intel x86PC
+    and (
+         substring(hardware,1,3) = b8:27:eb # Pi Foundation OUI listing
+      or substring(hardware,1,3) = dc:a6:32 # Raspberry Pi Trading Ltd OUI listing
+    )
+  );
+  # There are extra 3 spaces in the end for vendor-specific-info, due to a bug in bootrom for Raspberry Pi <= 3
+  # No need for Raspberry Pi 4, but it is OK to have that.
+  # Ref: https://www.raspberrypi.org/documentation/hardware/raspberrypi/bootmodes/net.md
+  option vendor-specific-info "Raspberry Pi Boot   ";
+  # bootcode.bin is not used on the Raspberry Pi 4, because it has been replaced by boot code in the onboard EEPROM.
+  # Older model needs that.
+  # Ref: https://www.raspberrypi.org/documentation/configuration/boot_folder.md
+  filename "bootcode.bin";
 }
 
 ## Uncomment the following "if block" when you have some buggy PXE NIC card (such as annoying sis900 NIC). Remember to modify the MAC vendor prefix and restart dhcpd service!!!
@@ -1881,11 +1942,14 @@ if option arch = 00:06 {
 # End of log command
 
 # Uncomment the following to get the debug/verbose messages in system log. The messages like the following will be shown:
-# Client 0:c:29:3b:34:fb requests 1:2:3:5:6:b:c:d:f:10:11:12:2b:36:3c:43:80:81:82:83:84:85:86:87 - PXEClient:Arch:00000:UNDI:002001 - no dhcp-client-id
-# Client 0:c:29:3b:34:fb requests 1:3:6:c:f:1c:28:29:2a - DRBLClient - no dhcp-client-id
+# Client 0:c:29:1d:9a:d1 with arch 0:7 requests 1:2:3:4:5:6:c:d:f:11:12:16:17:1c:28:29:2a:2b:32:33:36:3a:3b:3c:42:43:61:80:81:82:83:84:85:86:87 - PXEClient:Arch:00007:UNDI:003016 - no dhcp-client-id
+# Client 0:c:29:e5:a4:2 with arch 0:0 requests 1:2:3:5:6:b:c:d:f:10:11:12:2b:36:3c:43:80:81:82:83:84:85:86:87 - PXEClient:Arch:00000:UNDI:002001 - no dhcp-client-id
+# Client 0:c:29:3b:34:fb with arch 0:0 requests 1:3:6:c:f:1c:28:29:2a - DRBLClient - no dhcp-client-id
 # Begin of log command
 #log(info, concat("Client ",
 #        binary-to-ascii(16, 8, ":", substring(hardware, 1, 6)),
+#        " with arch ",
+#        binary-to-ascii(16, 8, ":", option arch),
 #        " requests ",
 #        binary-to-ascii(16, 8, ":", option dhcp-parameter-request-list),
 #        " - ",
@@ -4281,6 +4345,7 @@ EOF
 subnet $network netmask $netmask_sys {
     option subnet-mask	$netmask_sys;
     option routers $gateway;
+    option rpi-tftp-server "$bootserver";
     next-server $bootserver;
 
 EOF
