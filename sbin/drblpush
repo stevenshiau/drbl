@@ -4472,8 +4472,8 @@ dhcp_eths="$(awk -F"=" '/^interface=.*/ {print $2}' $config_file)"
 # i.e. if eth0:1, we print eth0
 dhcp_eths="$(echo $dhcp_eths | sed -e "s/:[0-9]*//g")"
 if [ -e "/etc/debian_version" ]; then
-   # Debian, use the parameter "INTERFACES"
-   echo "INTERFACES=\"$dhcp_eths\"" > $SYSCONF_PATH/$DHCP_SRV_NAME
+   # Debian, use the parameter "INTERFACESv4"
+   echo "INTERFACESv4=\"$dhcp_eths\"" > $SYSCONF_PATH/$DHCP_SRV_NAME
 elif [ -e "/etc/SuSE-release" ]; then
    perl -pi -e "s/^[#]*[[:space:]]*[#]*DHCPD_INTERFACE=.*/DHCPD_INTERFACE=\"$dhcp_eths\"/g" $SYSCONF_PATH/$DHCP_SRV_NAME
 else
