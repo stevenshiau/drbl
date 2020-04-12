@@ -173,6 +173,40 @@ check_if_syslinux_runs() {
   fi
   return $lrc
 } # end of check_if_syslinux_runs
+#
+is_partition() {
+  # //NOTE// If new RE* is added, remember to check the function check_if_disk_busy_before_create_partition and get_not_busy_disks_or_parts have to be modified, too.
+  # IDE and SCSI disk partition: /dev/hda1, /dev/hdb1, /dev/sda1, /dev/sdb1...
+  # KVM virtual disk partition: /dev/vda1, /dev/vdb1...
+  # Xen virtual disk partition: /dev/xvda1, /dev/xvdb1, /dev/xdvc1...
+  # CCISS RAID disk partition: /dev/cciss/c0d0p1, /dev/cciss/c0d1p1...
+  # SD card: /dev/mmcblk0p1, /dev/mmcblk0p2, /dev/mmcblk0p3...
+  # NBD device: /dev/nbd0p1, /dev/nbd0p2...
+  # NVME device: /dev/nvme0n1p1, /dev/nvme0n1p2, /dev/nvme1n1p1, /dev/nvme1n1p2
+  # FakeRAID: with nodmraid boot parameter, /dev/md126p1, /dev/md126p2...
+  # Mylex ExtremeRAID-2000 SCSI RAID controller: /dev/rd/c0d0p1, /dev/rd/c0d1p1...
+  # Compaq Smart Array controller: /dev/ida/c0d0p1, /dev/ida/c0d1p2...
+  local dev_=${1#/dev/*}
+  local RE1='x?[hsv]d[a-z]+[0-9]+'
+  local RE2='i2o/hd[a-z]+[0-9]+'
+  local RE3='cciss/c[0-9]d[0-9]p[0-9]+'
+  local RE4='mmcblk[0-9]+p+[0-9]+'
+  local RE5='md[0-9]+p+[0-9]+'
+  local RE6='rd/c[0-9]d[0-9]p[0-9]+'
+  local RE7='ida/c[0-9]d[0-9]p[0-9]+'
+  local RE8='nvme[0-9]+n[0-9]+p+[0-9]+'
+  local RE9='nbd[0-9]+p+[0-9]+'
+  local rc=1
+  local fs_
+
+  if [ -z "$dev_" ]; then
+    return 1
+  fi
+  echo $dev_ | grep -Eq "^($RE1|$RE2|$RE3|$RE4|$RE5|$RE6|$RE7|$RE8|$RE9)$"
+  rc=$?
+
+  return $rc
+} # end of is_partition
 
 #
 export LANG=C
@@ -260,7 +294,7 @@ if [ -z "$target_part" ]; then
   exit 1
 fi
 # Make sure target_part is partition device name, not disk device name
-if [ -z "$(echo $target_part | grep -iE "/dev/[hsu][bd][a-z]+[[:digit:]]+")" ]; then
+if ! is_partition $target_part ; then
   [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
   echo "\"$target_part\" is NOT a valid partition name!"
   [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
