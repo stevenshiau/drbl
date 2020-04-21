@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.31.5
+Version:	2.31.6
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,10 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Tue Apr 21 2020 Steven Shiau <steven _at_ clonezilla org> 2.31.6-drbl1
+  * Add scdaemon in the drbl/clonezilla packages list.
+    Thanks to nurupo for suggesting this.
+
 * Sun Apr 12 2020 Steven Shiau <steven _at_ clonezilla org> 2.31.5-drbl1
     Support detecting more partition name in makeboot.sh. Thanks to
     mauromol for reporting this issue.
