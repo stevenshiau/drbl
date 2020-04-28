@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.31.6
+Version:	2.31.7
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Tue Apr 28 2020 Steven Shiau <steven _at_ clonezilla org> 2.31.7-drbl1
+  * Add netinstall for Ubuntu 20.04. Drop 19.10.
+
 * Tue Apr 21 2020 Steven Shiau <steven _at_ clonezilla org> 2.31.6-drbl1
   * Add scdaemon in the drbl/clonezilla packages list.
     Thanks to nurupo for suggesting this.
