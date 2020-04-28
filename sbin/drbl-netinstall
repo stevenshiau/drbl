@@ -118,11 +118,11 @@ get_ubuntu_netinstall() {
   for ver in $ubuntu_netinstall_ver; do
     for arch in $ubuntu_netinstall_arch; do
       case $ver in
-      [j]*)
-        # For the version = jaunty, gtk mode is available. However, it's not available in karmic...
+      [f]*)
+        # For the version = focal
 	# URL e.g. 
-	# http://free.nchc.org.tw/ubuntu/dists/jaunty/main/installer-i386/current/images/netboot/gtk/ubuntu-installer/i386/
-        url=$ubuntu_url_site/$path_to_ubuntu/$ver/main/installer-$arch/current/images/netboot/gtk/ubuntu-installer/$arch ;;
+	# http://free.nchc.org.tw/ubuntu/dists/focal/main/installer-amd64/current/legacy-images/netboot/
+        url=$ubuntu_url_site/$path_to_ubuntu/$ver/main/installer-$arch/current/legacy-images/netboot/ubuntu-installer/$arch ;;
       *)
         # URL e.g:
         # http://free.nchc.org.tw/ubuntu//dists/edgy/main/installer-i386/current/images/netboot/ubuntu-installer/i386/
