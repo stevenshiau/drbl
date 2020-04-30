@@ -1,3 +1,10 @@
+drbl (2.31.9-drbl1) unstable; urgency=medium
+
+  * Remove extra drbl-ocs command in unicast of dcs.
+  * This release should be ready for Ubuntu 20.04 (Focal).
+
+ -- Steven Shiau <steven@clonezilla.org>  Thu, 30 Apr 2020 22:48:34 +0800
+
 drbl (2.31.8-drbl1) unstable; urgency=medium
 
   * Update INTERFACESv4 in get_dhcpd_interface. Avoid multicast service
