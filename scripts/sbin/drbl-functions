@@ -653,7 +653,7 @@ conv_devfspart_to_tradpart() {
 
 # get dhcpd interface
 get_dhcpd_interface() {
-  local INTERFACES= INTERFACES_TMP=
+  local INTERFACES INTERFACESv4 INTERFACES_TMP
   if [ -e /etc/debian_version ]; then
     # Debian
     . $SYSCONF_PATH/$DHCP_SRV_NAME
@@ -682,7 +682,8 @@ get_dhcpd_interface() {
        INTERFACES="$INTERFACES $INTERFACES_TMP"
     done
   fi
-  echo $INTERFACES
+  # The variable might be INTERFACES or INTERFACESv4 (newer isc-dhcp-server)
+  echo $INTERFACES $INTERFACESv4
 } # end of get_dhcpd_interface
 
 # HD dma status
