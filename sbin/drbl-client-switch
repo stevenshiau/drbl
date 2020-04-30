@@ -461,7 +461,6 @@ do_clonezilla_restore_dev() {
     # Squeeze multiple spaces to one only
     drbl_ocs_cmd="$(echo drbl-ocs $OCS_OPTS $dcs_restore_extra_opt $host_opt -l $lang start${dev} restore $target_image $target_dev | sed -r -e "s|[[:space:]]+| |g")"
     eval $drbl_ocs_cmd
-    drbl-ocs $OCS_OPTS $dcs_restore_extra_opt -h "$IP_LIST" -l $lang start${dev} restore $target_image $target_dev
     [ "$BOOTUP" = "color" ] && $SETCOLOR_SUCCESS
     echo PS. $msg_run_drbl_ocs_again_cmd
     echo "$drbl_ocs_cmd" | tee $run_again_fname
