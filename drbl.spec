@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.31.9
+Version:	2.31.10
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,11 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Tue May 12 2020 Steven Shiau <steven _at_ clonezilla org> 2.31.10-drbl1
+  * The option -z5p was missing in the menu due to pxz was not replaced by
+    pixz. Thanks to Darkyere for reporting this.
+    Ref: https://sourceforge.net/p/clonezilla/bugs/344/
+
 * Thu Apr 30 2020 Steven Shiau <steven _at_ clonezilla org> 2.31.9-drbl1
   * Remove extra drbl-ocs command in unicast of dcs.
   * This release should be ready for Ubuntu 20.04 (Focal).

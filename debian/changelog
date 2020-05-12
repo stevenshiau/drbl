@@ -1,3 +1,11 @@
+drbl (2.31.10-drbl1) unstable; urgency=medium
+
+  * The option -z5p was missing in the menu due to pxz was not replaced by
+    pixz. Thanks to Darkyere for reporting this.
+    Ref: https://sourceforge.net/p/clonezilla/bugs/344/
+
+ -- Steven Shiau <steven@clonezilla.org>  Tue, 12 May 2020 21:47:41 +0800
+
 drbl (2.31.9-drbl1) unstable; urgency=medium
 
   * Remove extra drbl-ocs command in unicast of dcs.
