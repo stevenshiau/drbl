@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.31.10
+Version:	2.31.11
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Fri May 22 2020 Steven Shiau <steven _at_ clonezilla org> 2.31.11-drbl1
+  * drbl.conf: add xen-tools in live packages list.
+
 * Tue May 12 2020 Steven Shiau <steven _at_ clonezilla org> 2.31.10-drbl1
   * The option -z5p was missing in the menu due to pxz was not replaced by
     pixz. Thanks to Darkyere for reporting this.

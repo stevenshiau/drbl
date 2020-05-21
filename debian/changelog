@@ -1,3 +1,9 @@
+drbl (2.31.11-drbl1) unstable; urgency=medium
+
+  * drbl.conf: add xen-tools in live packages list.
+
+ -- Steven Shiau <steven@clonezilla.org>  Fri, 22 May 2020 05:53:00 +0800
+
 drbl (2.31.10-drbl1) unstable; urgency=medium
 
   * The option -z5p was missing in the menu due to pxz was not replaced by
