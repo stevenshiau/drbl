@@ -845,6 +845,7 @@ case "$MODE" in
          echo "Settinig client as remote-linux graphic mode..."
          stop_ocs_if_necessary
          set-default-pxe-img -i drbl -c $PXE_CONF -l "$FULL_OS_Version $powerful_client_menu_label"
+         set-default-grub-efi-img -i drbl-client -c $GRUB_CONF
          if [ "$LIST_HOST" = "on" ]; then
            # now use --no-gen-ssi, but we will run drbl-gen-ssi-files when finished
 	   drbl-powerful-thin-client --no-gen-ssi -p -h "$IP_LIST" -ln $lang
@@ -918,6 +919,7 @@ case "$MODE" in
          echo "Setting client as remote-linux text mode..."
          stop_ocs_if_necessary
          set-default-pxe-img -i drbl -c $PXE_CONF -l "$FULL_OS_Version $powerful_client_menu_label"
+         set-default-grub-efi-img -i drbl-client -c $GRUB_CONF
          if [ "$LIST_HOST" = "on" ]; then
            # now use --no-gen-ssi, but we will run drbl-gen-ssi-files when finished
 	   drbl-powerful-thin-client --no-gen-ssi -p -h "$IP_LIST" -ln $lang
@@ -1060,8 +1062,9 @@ case "$MODE" in
      echo "This network installation is for: $OS_netinstall"
      echo "Setting client to the mode for installing this distribution via network..."
      stop_ocs_if_necessary
-     echo -n "Set the PXE environment..."
+     echo -n "Set the PXE/uEFI netboot environment..."
      set-default-pxe-img -i $OS_netinstall -c $PXE_CONF
+     set-default-grub-efi-img -i $OS_netinstall -c $GRUB_CONF
      echo "done!"
      deploy_pxecfg_grubefi_files
      ;;
