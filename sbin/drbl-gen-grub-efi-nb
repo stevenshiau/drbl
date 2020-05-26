@@ -130,7 +130,11 @@ fi
 cp -fv $grub_bg_img $pxecfg_pd/
 
 # Generate the template grub.cfg
-gen-grub-efi-nb-menu
+if [ -n "$tftp_server_ip" ]; then
+  gen-grub-efi-nb-menu -t $tftp_server_ip
+else
+  gen-grub-efi-nb-menu
+fi
 
 # For x86-64 arch, we create bootx64.efi and bootia32.efi.
 # For i386 arch, we only create bootia32.efi.
