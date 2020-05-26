@@ -21,6 +21,7 @@ USAGE() {
   echo "-s, --serial OPT:  set the grub menu to work with serial console output. OPT is like: serial --speed=115200 --unit=0 --word=8 --parity=no --stop=1"
   echo "-g, --graphic [y|n]:  Option to set client to use graphical mode or not when booting GNU/Linux (now only for Fedora Core)"
   echo "-p, --grub-efi-dir DIR:  Assign grub config dir as DIR instead of deafult dir $GRUB_EFINB_DIR"
+  echo "-t, --tftp-server IPADD:  Assign the IP address IPADD for the TFTP server. If not assigned, automatically obtain from network boot server. Howerver, grub <= 2.0.2 does not support receiving that. Not sure if newer version will support it or not. Hence this is a workaround."
   echo "-v, --verbose:  verbose mode."
   echo "Ex:"
   echo "To create the console output in DRBL client:"
@@ -91,6 +92,15 @@ while [ $# -gt 0 ]; do
               shift
             fi
 	    [ -z "$GRUB_EFI_D" ] && USAGE && exit 1
+	    ;;
+    -t|--tftp-server)
+            shift
+            if [ -z "$(echo $1 |grep ^-.)" ]; then
+              # skip the -xx option, in case 
+              tftp_server_ip="$1"
+              shift
+            fi
+	    [ -z "$tftp_server_ip" ] && USAGE && exit 1
 	    ;;
     -v|--verbose)
             shift; verbose="on"
@@ -215,12 +225,50 @@ terminal_output --append serial
 GRUB_END
 fi
 
+# Decide if it's something like (tftp,192.168.22.254) or (tftp) in grub config.
+if [ -n "$tftp_server_ip" ]; then
+  tftp_srv_opt="tftp,$tftp_server_ip"
+else
+  tftp_srv_opt="tftp"
+fi
+
 cat <<-GRUB_END >> $GRUB_EFI_D/grub.cfg
 set default=drbl-client
 set timeout_style=menu
 set timeout=7
 set hidden_timeout_quiet=false
 set graphic_bg=${g_bg_f}
+# tftpd_opt can be tftpd_opt=tftp or tftpd_opt="tftp,\$tftp_server_ip", e.g., tftpd_opt=tftp,192.168.66.254
+set tftpd_opt=${tftp_srv_opt}
+# "run_load_netboot" is the flag to avoid load_netboot to be run more than once.
+#
+function load_netboot {
+  set prefix=(\$tftpd_opt)/grub
+  echo "Grub CPU and platform: \$grub_cpu, \$grub_platform"
+  echo 'Network status: '
+  net_ls_cards
+  net_ls_addr
+  net_ls_routes
+  # sleep 5
+  
+  if [ -s "\$prefix/grub.cfg-drbl-\$net_default_mac" ]; then
+    echo "Loading config file \$prefix/grub.cfg-drbl-\$net_default_mac..."
+    # Before using configfile to run another config file, set run_load_netboot
+    # and export so that it will be honored in configfile.
+    set run_load_netboot=no
+    export run_load_netboot
+    configfile \$prefix/grub.cfg-drbl-\$net_default_mac
+  fi
+  
+  if [ -s "\$prefix/grub.cfg-drbl-\$net_default_ip" ]; then
+    echo "Loading config file \$prefix/grub.cfg-drbl-\$net_default_ip..."
+    # Before using configfile to run another config file, set run_load_netboot
+    # and export so that it will be honored in configfile.
+    set run_load_netboot=no
+    export run_load_netboot
+    configfile \$prefix/grub.cfg-drbl-\$net_default_ip
+  fi
+}
 #
 function load_gfxterm {
   set gfxmode=auto
@@ -229,6 +277,13 @@ function load_gfxterm {
   insmod gfxterm
   terminal_output gfxterm
 }
+
+# load_netboot should be run once, otherwise it will loop.
+# i.e., for default grub.cfg, run load_netboot. 
+# Otherwise (e.g., grub.cfg-drbl-192.168.37.3, grub.cfg-drbl-01:00:0c:29:1d:9a:d1) skip it.
+if [ "\$run_load_netboot" != "no" ]; then
+  load_netboot
+fi
 
 # Somehow the grub2 from CentOS 7 will look for unicode.pf2.pf2 if using "loadfont unicode.pf2". While in Debian/Ubuntu it's OK to use "loadfont unicode.pf2".
 if [ x"\${graphic_bg}" = xyes ]; then
@@ -252,17 +307,17 @@ cat <<-GRUB_END >> $GRUB_EFI_D/grub.cfg
 menuentry "$FULL_OS_Version $powerful_client_menu_label" --id drbl-client {
   echo "Enter DRBL..."
   echo "Loading Linux kernel vmlinuz-pxe..."
-  linux vmlinuz-pxe devfs=nomount drblthincli=off selinux=0 drbl_bootp=\$net_default_next_server $quiet_opt $edd_opt $CONSOLE_OUTPUT $drbl_mode_opt $drbl_dist_append
+  linuxefi vmlinuz-pxe devfs=nomount drblthincli=off selinux=0 drbl_bootp=\$net_default_next_server $quiet_opt $edd_opt $CONSOLE_OUTPUT $drbl_mode_opt $drbl_dist_append
   echo "Loading initial ramdisk initrd-pxe.img..."
-  initrd initrd-pxe.img 
+  initrdefi initrd-pxe.img 
 }
 
 #menuentry "Clonezilla" --id clonezilla-se-client {
 #  echo "Enter Clonezilla..."
 #  echo 'Loading Linux kernel vmlinuz-pxe...'
-#  linux vmlinuz-pxe devfs=nomount drblthincli=off selinux=0 $quiet_opt text 1 drbl_bootp=\$net_default_next_server $edd_opt $CONSOLE_OUTPUT $clonezilla_mode_opt $drbl_dist_append
+#  linuxefi vmlinuz-pxe devfs=nomount drblthincli=off selinux=0 $quiet_opt text 1 drbl_bootp=\$net_default_next_server $edd_opt $CONSOLE_OUTPUT $clonezilla_mode_opt $drbl_dist_append
 #  echo 'Loading initial ramdisk initrd-pxe.img...'
-#  initrd initrd-pxe.img
+#  initrdefi initrd-pxe.img
 #}
 
 menuentry "Local operating system (if available)" --id local-disk {
