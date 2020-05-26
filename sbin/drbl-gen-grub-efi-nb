@@ -91,49 +91,6 @@ else
   exit 1
 fi
 #
-grub_efi_tmpd="$(mktemp -d /tmp/grub-efi.XXXXXX)"
-# Prepare a grub.cfg so that the eltorito image could find it.
-# Because if/elif/else/fi is only supported in normal module, and in this embedded, preconfig only the command in rescue mode is supported, here we use this unique, subtle way. i.e.
-# Quoted from Andrei Borzenkov:
-# "if" is not external command - it must be recognized and processed by
-# script parser and at this point rescue script parser is still active.
-# OTOH "configfile" is more or less standard external command. So first
-# "if" results in error, then "configfile" succeeds. configfile
-# implicitly loads and calls normal.mod so it appears to work. Although
-# not exactly as envisioned :)
-# //NOTE// So when configfile command succeeds, it won't return to this
-# preconfig file. Therefore there is no need to have if/elif/else/fi
-# commands.
-# For more details, check:
-# http://lists.gnu.org/archive/html/help-grub/2015-09/msg00035.html
-
-# Also check grub 2.02 manual (not 2.00, since the variables are very different):
-# http://dev.gentoo.org/~floppym/grub.html
-
-cat <<-GRUB_END > $grub_efi_tmpd/grub-header.cfg
-set prefix=($tftp_srv_opt)/grub-efi.cfg
-echo "Grub CPU and platform: \$grub_cpu, \$grub_platform"
-echo 'Network status: '
-net_ls_cards
-net_ls_addr
-net_ls_routes
-
-tr --set pretty_mac x: x- \$net_default_mac
-
-echo "Loading config file \$prefix/grub.cfg-01-\$pretty_mac..."
-configfile \$prefix/grub.cfg-01-\$pretty_mac
-
-echo "Loading config file \$prefix/grub.cfg-\$net_default_ip..."
-configfile \$prefix/grub.cfg-\$net_default_ip
-
-echo "Loading config file: \$prefix/grub.cfg"
-configfile \$prefix/grub.cfg
-
-echo "Could not find config file \$prefix/grub.cfg-\$pretty_mac, \$prefix/grub.cfg-\$net_default_ip or \$prefix/grub.cfg!"
-sleep 15
-
-GRUB_END
-
 if [ -z "$GRUB_EFINB_DIR" ]; then
   [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
   echo "\"\$GRUB_EFINB_DIR\" _NOT_ defined!"
@@ -253,7 +210,7 @@ for i in $dest_bootloader; do
       fi
     done
     echo "Creating the uEFI network booting bootable image $out_f..."
-    $GRUB_MKIMG $grub_mkimg_compress_opt -O ${EFI_ARCH}-efi -o $out_f --prefix="($tftp_srv_opt)/grub-efi.cfg/" -c $grub_efi_tmpd/grub-header.cfg $efi_required_mod
+    $GRUB_MKIMG $grub_mkimg_compress_opt -O ${EFI_ARCH}-efi -o $out_f --prefix="($tftp_srv_opt)/grub-efi.cfg/" $efi_required_mod
     rc=$?
     if [ "$rc" -ne 0 ]; then
       # When grub-mkimage fails, an empty output file will still be created. We'd better to clean it.
@@ -266,11 +223,7 @@ for i in $dest_bootloader; do
     else
       # Create a tag file
       echo "Created by program \"$prog\" with command:" > ${out_f}.info
-      echo "$GRUB_MKIMG $grub_mkimg_compress_opt -O ${EFI_ARCH}-efi -o $out_f --prefix='(tftp)/grub-efi.cfg/' -c $grub_efi_tmpd/grub-header.cfg $efi_required_mod" >> ${out_f}.info
-      echo "The contents of $grub_efi_tmpd/grub-header.cfg:" >> ${out_f}.info
-      echo "$msg_delimiter_star_line" >> ${out_f}.info
-      cat $grub_efi_tmpd/grub-header.cfg >> ${out_f}.info
-      echo "$msg_delimiter_star_line" >> ${out_f}.info
+      echo "$GRUB_MKIMG $grub_mkimg_compress_opt -O ${EFI_ARCH}-efi -o $out_f --prefix='(tftp)/grub-efi.cfg/' $efi_required_mod" >> ${out_f}.info
     fi
   fi
 done
@@ -279,8 +232,3 @@ done
 echo "Preparing the grub modules in $GRUB_EFINB_DIR..."
 $GRUB_MKNETD --net-directory=$GRUB_EFINB_DIR --subdir=/ >/dev/null
 echo "The uEFI network booting is ready."
-
-# Clean the temp dir
-if [ -e "$grub_efi_tmpd" -a -n "$(echo $grub_efi_tmpd | grep -E "grub-efi")" ]; then
-  rm -rf $grub_efi_tmpd
-fi
