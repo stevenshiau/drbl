@@ -1,3 +1,11 @@
+drbl (2.32.2-drbl1) unstable; urgency=medium
+
+  * Bug fixed: the created grub menu by drbl-sl and the function
+    output_netinstall_syslinux_pxelinux_menu of drbl-functions
+    should use linuxefi/initrdefi, not linux/initrd.
+
+ -- Steven Shiau <steven@clonezilla.org>  Wed, 27 May 2020 21:34:50 +0800
+
 drbl (2.32.1-drbl1) unstable; urgency=medium
   * drbl-gen-grub-efi-nb: grub-header.cfg is moved & can assign tftp server
     Move grub-header.cfg to grub.cfg so that it's more flexible.
