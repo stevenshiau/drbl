@@ -1,3 +1,31 @@
+drbl (2.32.1-drbl1) unstable; urgency=medium
+  * drbl-gen-grub-efi-nb: grub-header.cfg is moved & can assign tftp server
+    Move grub-header.cfg to grub.cfg so that it's more flexible.
+    If tftp server is assigned for drbl-gen-grub-efi-nb, the IP address
+    should be assigned to the menu created by gen-grub-efi-nb-menu.
+  * gen-grub-efi-nb-menu: improve tftp & header file.
+    1. Add -t|--tftp-server option for assigning the TFTP server.
+    2. Move the grub-header.cfg from drbl-gen-grub-efi-nb so that it's more
+    flexible.
+    3. To avoid conflict with the patch of grub in CentOS/Fedora,
+       for GRUB EFI NB MAC/IP config style, the netboot file is now like
+       grub.cfg-drbl-00:50:56:01:01:01
+       and
+       grub.cfg-drbl-192.168.177.2
+       not grub.cfg-01-* anymore.
+    4. Use linuxefi/initrdefi instead of linux/initrd command in the grub
+    config file.
+  * dcs: bug - did not switch some client's mode.
+  * Follow the change in gen-grub-efi-nb-menu, the grub command in the
+    grub config file is now linuxefi/initrdefi instead of
+    linux/initrd. Hence the corresponding functions have to be
+    changed:
+    add_opt_in_grub_efi_cfg_block
+    remove_opt_in_grub_efi_cfg_block
+  * ocswp-grub2.png: Make characters smaller.
+
+ -- Steven Shiau <steven@clonezilla.org>  Wed, 27 May 2020 09:34:52 +0800
+
 drbl (2.31.11-drbl1) unstable; urgency=medium
 
   * drbl.conf: add xen-tools in live packages list.
