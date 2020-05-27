@@ -841,9 +841,9 @@ menuentry "$SL_NAME" --id clonezilla-live-client {
   # Do _NOT_ edit unless you know what you are doing!
   echo "Enter $SL_FULL_NAME $SL_VER (Ramdisk)..."
   echo 'Loading $nbi_kernel...'
-  linux $nbi_kernel $append_param_in_pxe_cfg
+  linuxefi $nbi_kernel $append_param_in_pxe_cfg
   echo 'Loading initial ramdisk $nbi_initrd...'
-  initrd $nbi_initrd
+  initrdefi $nbi_initrd
 }
 
 SL_PXE

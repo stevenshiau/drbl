@@ -3095,9 +3095,9 @@ menuentry "$des" --id $img_menu {
   set check_signatures=no
   echo "Enter netinstall for $img_menu..."
   echo "Loading Linux kernel..."
-  linux $boot_file_dir$kernel $ramdisk_size_opt $extra_append
+  linuxefi $boot_file_dir$kernel $ramdisk_size_opt $extra_append
   echo "Loading initial ramdisk..."
-  initrd $boot_file_dir$img
+  initrdefi $boot_file_dir$img
 }
 
 PXE_END
@@ -3138,7 +3138,7 @@ PXE_END
 menuentry "$des" --id $img_menu {
   echo "Enter netinstall for $img_menu..."
   echo "Loading Linux kernel..."
-  linux $boot_file_dir$img
+  linuxefi $boot_file_dir$img
 }
 
 PXE_END
