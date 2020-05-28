@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.32.2
+Version:	2.32.3
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,10 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Thu May 28 2020 Steven Shiau <steven _at_ clonezilla org> 2.32.3-drbl1
+  * Bug fixed: missing linuxefi module in drbl-gen-grub-efi-nb since
+    we have used linuxefi/initrdefi in the grub config file.
+
 * Wed May 27 2020 Steven Shiau <steven _at_ clonezilla org> 2.32.2-drbl1
   * Bug fixed: the created grub menu by drbl-sl and the function
     output_netinstall_syslinux_pxelinux_menu of drbl-functions

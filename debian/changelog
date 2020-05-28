@@ -1,3 +1,10 @@
+drbl (2.32.3-drbl1) unstable; urgency=medium
+
+  * Bug fixed: missing linuxefi module in drbl-gen-grub-efi-nb since
+    we have used linuxefi/initrdefi in the grub config file.
+
+ -- Steven Shiau <steven@clonezilla.org>  Thu, 28 May 2020 15:34:44 +0800
+
 drbl (2.32.2-drbl1) unstable; urgency=medium
 
   * Bug fixed: the created grub menu by drbl-sl and the function
