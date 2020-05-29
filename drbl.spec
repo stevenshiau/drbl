@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.32.4
+Version:	2.32.5
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Fri May 29 2020 Steven Shiau <steven _at_ clonezilla org> 2.32.5-drbl1
+  * Make my email address consistent at clonezilla org for all the files.
+
 * Fri May 29 2020 Steven Shiau <steven _at_ clonezilla org> 2.32.4-drbl1
   * grub netboot cfg dir is now at /tftpboot/nbi_img/grub/,
     while for backward compatibility, we still link it to

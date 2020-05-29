@@ -1,3 +1,9 @@
+drbl (2.32.5-drbl1) unstable; urgency=medium
+
+  * Make my email address consistent at clonezilla org for all the files.
+
+ -- Steven Shiau <steven@clonezilla.org>  Fri, 29 May 2020 23:47:35 +0800
+
 drbl (2.32.4-drbl1) unstable; urgency=medium
 
   * grub netboot cfg dir is now at /tftpboot/nbi_img/grub/,
