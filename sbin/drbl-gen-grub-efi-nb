@@ -1,6 +1,6 @@
 #!/bin/bash
 # License: GPL 
-# Author: Steven Shiau <steven _at_ nchc org tw>, Ceasar Sun <ceasar _at_ nchc ogr tw>
+# Author: Steven Shiau <steven _at_ clonezilla org>, Ceasar Sun <ceasar _at_ nchc ogr tw>
 # Description: Program to prepare grub uEFI network booting image
 
 #

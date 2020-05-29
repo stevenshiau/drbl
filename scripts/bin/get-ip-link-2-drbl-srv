@@ -1,5 +1,5 @@
 #!/bin/bash
-# Author: Steven Shiau <steven _at_ nchc org tw>
+# Author: Steven Shiau <steven _at_ clonezilla org>
 # License: GPL
 # This script is used in DRBL client to show the IP Address of client which is connected to DRBL server. It can be used for more than one NIC or alias IP addresses.
 

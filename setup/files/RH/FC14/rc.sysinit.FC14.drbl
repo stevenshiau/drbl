@@ -4,7 +4,7 @@
 #
 # Taken in part from Miquel van Smoorenburg's bcheckrc.
 #
-# This file is modified by Steven Shiau <steven _at_ nchc org tw>  to be used for DRBL on Fedora 14 on Nov/21/2010
+# This file is modified by Steven Shiau <steven _at_ clonezilla org>  to be used for DRBL on Fedora 14 on Nov/21/2010
 
 HOSTNAME=$(/bin/hostname)
 

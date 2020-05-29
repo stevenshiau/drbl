@@ -22,7 +22,7 @@
 # Description: Start the swapfile
 ### END INIT INFO
 
-# Modified by Steven Shiau <steven _at_ nchc org tw>, Ceasar Sun <ceasar _at_ nchc org tw> to use it in DRBL
+# Modified by Steven Shiau <steven _at_ clonezilla org>, Ceasar Sun <ceasar _at_ nchc org tw> to use it in DRBL
 # This file is borrowed from Knoppix (http://www.knoppix.org).
 
 # Setting

@@ -4,7 +4,7 @@
 # chkconfig: 2345 98 2
 # description: drblthincli is a script to let DRBL client run server's gdm/kdm/xdm, i.e. remote display
 #
-# Author: Steven Shiau <steven _at_ nchc org tw>
+# Author: Steven Shiau <steven _at_ clonezilla org>
 # License: GPL
 #
 # For SuSE insserv

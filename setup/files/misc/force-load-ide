@@ -1,5 +1,5 @@
 #!/bin/bash
-# Author: Steven Shiau <steven _at_ nchc org tw>
+# Author: Steven Shiau <steven _at_ clonezilla org>
 # License: GPL
 # Force to load the ide devices modules, since in some chip (like piix), the hotplug is unable to load them.
 # Some codes are from /etc/hotplug/ide.rc of hotplug

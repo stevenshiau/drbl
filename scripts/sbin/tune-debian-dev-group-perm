@@ -1,5 +1,5 @@
 #!/bin/bash
-# Author: Steven Shiau <steven _at_ nchc org tw>
+# Author: Steven Shiau <steven _at_ clonezilla org>
 # License: GPL 
 # Description: DRBL utitilty to add users to group plugdev, audio... devices
 # Ref: http://drbl.org/faq/index.php#path=./2_System&entry=05_usb_sound.faq

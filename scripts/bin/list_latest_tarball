@@ -4,7 +4,7 @@
 # http://staff.washington.edu/corey/tools.html
 # Author: Corey Satten, corey @ cac.washington.edu, 06/26/03, release 1.8
 #============================================================================
-# Modified by Steven Shiau <steven _at_ nchc org tw> Sep/03/07
+# Modified by Steven Shiau <steven _at_ clonezilla org> Sep/03/07
 # We use this one to find the last version tar.bz2 in the repository.
 # Because we might have a lot of tar.bz2...
 # clonezilla-2.1.8-1.tar.bz2

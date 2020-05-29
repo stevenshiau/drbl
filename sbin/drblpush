@@ -18,7 +18,7 @@
 # Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 #
 # Version 0.1, by K. L. Huang, klhaung _at_ gmail com, especially for Debian
-# Modified by Steven Shiau, steven _at_ nchc org tw DRBL for Redhat
+# Modified by Steven Shiau, steven _at_ clonezilla org DRBL for Redhat
 
 # setting
 # timed login to GDM default time (seconds)
@@ -2060,7 +2060,7 @@ system("mkdir -p $drbl_syscfg; cp -f drbl_deploy.conf $drbl_syscfg/");
 # better not to modify this file manually.
 # "drblpush" is written by K. L. Huang, klhaung _at_ gmail com,
 # especially for Debian, then modified to use with Redhat by
-# Steven Shiau, steven _at_ nchc org tw.
+# Steven Shiau, steven _at_ clonezilla org.
 # Ceasar Sun, ceasar _at_ nchc org tw
 # **********************************************************************
 

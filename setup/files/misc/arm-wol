@@ -1,12 +1,12 @@
 #!/bin/bash
-# Author: Steven Shiau <steven _at_ nchc org tw>
+# Author: Steven Shiau <steven _at_ clonezilla org>
 # License: GPL
 #
 # To arm wake on LAN for NIC in DRBL client.
 #
 # chkconfig: 2345 99 99
 # description: To arm wake on LAN for NIC in DRBL client before it poweroffs.
-# Author: Steven Shiau <steven _at_ nchc org tw>
+# Author: Steven Shiau <steven _at_ clonezilla org>
 # License: GPL
 #
 # For SuSE insserv

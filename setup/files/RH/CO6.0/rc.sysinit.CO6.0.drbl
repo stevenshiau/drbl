@@ -4,7 +4,7 @@
 #
 # Taken in part from Miquel van Smoorenburg's bcheckrc.
 #
-# Modified by Steven Shiau <steven _at_ nchc org tw> to use in 
+# Modified by Steven Shiau <steven _at_ clonezilla org> to use in 
 # DRBL for CentOS 6.0 on 2011/Aug/22
 
 HOSTNAME=$(/bin/hostname)

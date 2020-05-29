@@ -9,7 +9,7 @@
 # Author:       Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
 #               Modified for RHS Linux by Damien Neil
 #
-# This file was modified by Steven Shiau <steven _at_ nchc org tw>  to be used for DRBL (Clonezilla SE) on Nov/23/2009.
+# This file was modified by Steven Shiau <steven _at_ clonezilla org>  to be used for DRBL (Clonezilla SE) on Nov/23/2009.
 
 
 . /etc/init.d/functions

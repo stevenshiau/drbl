@@ -19,9 +19,9 @@
 # Description: Reset autologin account's home directory
 ### END INIT INFO
 #
-# Author: Steven Shiau <steven _at_ nchc org tw>
+# Author: Steven Shiau <steven _at_ clonezilla org>
 # License: GPL
-# Modified by Steven Shiau <steven _at_ nchc org tw> to be used in DRBL for RedHat
+# Modified by Steven Shiau <steven _at_ clonezilla org> to be used in DRBL for RedHat
 
 # Load DRBL setting and functions
 DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/usr/share/drbl}"

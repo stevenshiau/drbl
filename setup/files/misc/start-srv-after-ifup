@@ -1,5 +1,5 @@
 #!/bin/bash
-# Steven Shiau <steven _at_ nchc org tw>
+# Steven Shiau <steven _at_ clonezilla org>
 # License: GPL
 # This program is used in service /etc/init.d/waitnfs.sh to start some services in /etc/network/if-up.d/ in Ubuntu dapper or later, since in DRBL client, we won't run serivce networking to start network. This will result in no service located in /etc/network/if-up.d/ will be start, especially the must - mountnfs in DRBL.
 

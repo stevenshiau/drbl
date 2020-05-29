@@ -1,5 +1,5 @@
 #!/bin/bash
-# Authors: Steven Shiau <steven _at_ nchc org tw> and Blake, Kuo-Lien Huang <klhaung _at_ gmail.com>, and Ceasar Sun <ceasar _at_ nchc org tw>
+# Authors: Steven Shiau <steven _at_ clonezilla org> and Blake, Kuo-Lien Huang <klhaung _at_ gmail.com>, and Ceasar Sun <ceasar _at_ nchc org tw>
 # License: GPL
 # Description: DRBL utitilty to switch the mode for clients.
 

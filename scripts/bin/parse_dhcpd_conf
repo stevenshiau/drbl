@@ -1,5 +1,5 @@
 #!/usr/bin/perl -w
-# Steven Shiau <steven _at_ nchc org tw>
+# Steven Shiau <steven _at_ clonezilla org>
 # License: GPL
 # Description: To parse the dhcpd.conf as a HOSTNAME IP MAC table.
 # The reference is like: 

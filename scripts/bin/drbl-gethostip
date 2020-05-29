@@ -2,7 +2,7 @@
 #
 ## Originally by Ben H. Originally by neeko.
 ## Ref: http://www.thenetworkadministrator.com/hack/IPAddresses.htm
-## Modified by Steven Shiau <steven _at_ nchc org tw>.
+## Modified by Steven Shiau <steven _at_ clonezilla org>.
 ## Usage: drbl-gethostip host/ip
 ##
 use Socket;                       # for gethostbyname()

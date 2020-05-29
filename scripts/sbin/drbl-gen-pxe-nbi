@@ -1,5 +1,5 @@
 #!/bin/bash
-# Author: Steven Shiau <steven _at_ nchc org tw>
+# Author: Steven Shiau <steven _at_ clonezilla org>
 # License: GPL 
 # Description: DRBL utitilty to create the Network Boot Image (NBI) files for PXELINUX clients. 
 # NOTE! THIS COMMAND IS USUALLY CALLED BY DRBLSRV SINCE IT RUNS mknic-nbi WITH --no-modules.

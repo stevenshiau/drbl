@@ -1,6 +1,6 @@
 #!/bin/bash
 # This file is borrowed from Debian's diskless.
-# Modified by Steven Shiau <steven _at_ nchc org tw>, Ceasar Sun <ceasar _at_ nchc org tw>
+# Modified by Steven Shiau <steven _at_ clonezilla org>, Ceasar Sun <ceasar _at_ nchc org tw>
 # License: GPL
 # 2006/02/28
 # Thanks to James MacLean for providing clientdir method in kernel cmdline.

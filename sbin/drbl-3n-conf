@@ -1,5 +1,5 @@
 #!/bin/bash
-# Author: Steven Shiau <steven _at_ nchc org tw>
+# Author: Steven Shiau <steven _at_ clonezilla org>
 # License: GPL
 #
 # set the NFS, NIS, NAT config for DRBL clients to access

@@ -1,5 +1,5 @@
 #!/bin/bash
-# Steven Shiau <steven _at_ nchc org tw>
+# Steven Shiau <steven _at_ clonezilla org>
 # License: GPL
 # Description: To parse the /etc/apt/sourcesl.list and get the installed pacakge
 # Usage: $0 PKGNAME

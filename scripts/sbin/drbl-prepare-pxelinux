@@ -1,5 +1,5 @@
 #!/bin/bash
-# Steven Shiau <steven _at_ nchc org tw>, Ceasar Sun <ceasar _at_ nchc org tw>
+# Steven Shiau <steven _at_ clonezilla org>, Ceasar Sun <ceasar _at_ nchc org tw>
 # License: GPL
 # Description: prepare the pxelinux by using the files on the system or download and extract the required programs for DRBL.
 DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/usr/share/drbl}"

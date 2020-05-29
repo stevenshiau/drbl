@@ -1,5 +1,5 @@
 #!/bin/bash
-# Author: Steven Shiau <steven _at_ nchc org tw>
+# Author: Steven Shiau <steven _at_ clonezilla org>
 # License: GPL
 # This program is used to replace the command "dpkg-reconfigure console-data" because console-data is in the process of being obsoleted by console-setup. For more info, check:
 # http://bugs.debian.org/570223

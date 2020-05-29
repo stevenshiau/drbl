@@ -1,5 +1,5 @@
 #!/bin/bash
-# Author: Steven Shiau <steven _at_ nchc org tw>, Ceasar Sun <ceasar _at_ nchc org tw>
+# Author: Steven Shiau <steven _at_ clonezilla org>, Ceasar Sun <ceasar _at_ nchc org tw>
 # License: GPL
 #
 # To generate or clean NIS/YP securenets setting for DRBL clients to access

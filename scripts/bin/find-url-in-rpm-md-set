@@ -1,5 +1,5 @@
 #!/bin/bash
-# Author: Steven Shiau <steven _at_ nchc org tw>
+# Author: Steven Shiau <steven _at_ clonezilla org>
 # License: GPL
 # Description: Find the url in rpm-md repository setting (quite similar to yum repository setting). This script is specially for OpenSuSE 11.1 using zypper repository output from command "zypper lr -e myrepo.repo".
 # This script is modified from find-url-in-yum-set which is for Fedora.

@@ -4,7 +4,7 @@
 # http://staff.washington.edu/corey/tools.html
 # Author: Corey Satten, corey @ cac.washington.edu, 06/26/03, release 1.8
 #============================================================================
-# Modified by Steven Shiau <steven _at_ nchc org tw> 12/12/04
+# Modified by Steven Shiau <steven _at_ clonezilla org> 12/12/04
 # We use this one to find the last version rpms in our apt repository.
 # Because we might have a lot of drbl-setup rpms...
 # drbl-script-1.0-45drbl.i386.rpm

@@ -1,5 +1,5 @@
 #!/bin/bash
-# Author: Steven Shiau <steven _at_ nchc org tw>
+# Author: Steven Shiau <steven _at_ clonezilla org>
 # License: GPL
 # Description: Download the netinstall kernel & initrd and package them as a zip file for USB flash drive to boot and install GNU/Linux.
 # This program only works for syslinux >= 6.0 because the EFI boot is supported from syslinux >= 6.0.

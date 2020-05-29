@@ -1,5 +1,5 @@
 #!/bin/bash
-# Author: Steven Shiau <steven _at_ nchc org tw>
+# Author: Steven Shiau <steven _at_ clonezilla org>
 # License: GPL
 # Description: This program will startup the iptables NAT for DRBL clients when DRBL server boots.
 # Note: This program is different with drbl-nat-rules

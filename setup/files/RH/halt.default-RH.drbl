@@ -7,7 +7,7 @@
 # Author:       Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
 #               Modified for RHS Linux by Damien Neil
 #
-# This file is modified by Steven Shiau <steven _at_ nchc org tw>  to be used for DRBL on Fedora 14 on Nov/21/2010
+# This file is modified by Steven Shiau <steven _at_ clonezilla org>  to be used for DRBL on Fedora 14 on Nov/21/2010
 
 NOLOCALE=1
 . /etc/init.d/functions

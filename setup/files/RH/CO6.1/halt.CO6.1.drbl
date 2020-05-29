@@ -7,7 +7,7 @@
 # Author:       Miquel van Smoorenburg, <miquels@drinkel.nl.mugnet.org>
 #               Modified for RHS Linux by Damien Neil
 #
-# Modified by Steven Shiau <steven _at_ nchc org tw> to use in 
+# Modified by Steven Shiau <steven _at_ clonezilla org> to use in 
 # DRBL for CentOS 6.1 on 2011/12/13
 
 NOLOCALE=1

@@ -1,5 +1,5 @@
 #!/bin/bash
-# Author: Steven Shiau <steven _at_ nchc org tw> 
+# Author: Steven Shiau <steven _at_ clonezilla org> 
 # license: GPL
 # Description: update the kernel of DRBL clients from server's kernel
 # RC: 0: succeed 1: fail 2:fail (can not find the common_root/lib/modules

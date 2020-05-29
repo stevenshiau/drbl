@@ -18,7 +18,7 @@
 #		     program and remove /etc/reconfigSys when done.
 #                    Also will run if 'reconfig' is on the kernel cmdline.
 #
-# Modified by Steven Shiau <steven _at_ nchc org tw> to use in 
+# Modified by Steven Shiau <steven _at_ clonezilla org> to use in 
 # DRBL for SuSE 2005/7/31
 # 
 

@@ -4,7 +4,7 @@
 # http://staff.washington.edu/corey/tools.html
 # Author: Corey Satten, corey @ cac.washington.edu, 06/26/03, release 1.8
 #============================================================================
-# Modified by Steven Shiau <steven _at_ nchc org tw> 12/12/04
+# Modified by Steven Shiau <steven _at_ clonezilla org> 12/12/04
 # 2005/8/22 Steven Shiau modified to add sed -n '/\.rpm$/s/^[-l].* //p' since there are some ftp mirror site can NOT handle symbolic link well (.i.e. dir -L will fail). One of the site is
 # ftp://mirrors.mathematik.uni-bielefeld.de/pub/linux/suse/apt/SuSE/9.3-i386/RPMS.base/
 # 2006/6/24 Steven Shiau modified it to use lftp for http instead of lynx, since

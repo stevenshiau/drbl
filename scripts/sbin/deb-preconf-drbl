@@ -1,5 +1,5 @@
 #!/bin/bash
-# Author: Steven Shiau <steven _at_ nchc org tw>
+# Author: Steven Shiau <steven _at_ clonezilla org>
 # License: GPL
 # Description: Generate some deb configs before install it so the user won't be
 #              asked to input. We will configure them in drblpush. So some 
