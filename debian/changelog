@@ -1,3 +1,11 @@
+drbl (2.32.4-drbl1) unstable; urgency=medium
+
+  * grub netboot cfg dir is now at /tftpboot/nbi_img/grub/,
+    while for backward compatibility, we still link it to
+    /tftpboot/nbi_img/grub-efi.cfg.
+
+ -- Steven Shiau <steven@clonezilla.org>  Fri, 29 May 2020 20:59:23 +0800
+
 drbl (2.32.3-drbl1) unstable; urgency=medium
 
   * Bug fixed: missing linuxefi module in drbl-gen-grub-efi-nb since
