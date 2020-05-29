@@ -4137,7 +4137,7 @@ get_grub_efi_image_block() {
   local GRUB_CONF_TMP="$2"
   [ -z "$IMG_NAME" ] && exit 1
   # By using
-  # grep -Ei -n '^[[:space:]]*menuentry[[:space:]]+.*([[:space:]]|$)+' /tftpboot/nbi_img/grub-efi.cfg/grub.cfg | grep -A1 -E "menuentry[[:space:]]+.*--id drbl-client([[:space:]]|$)+"
+  # grep -Ei -n '^[[:space:]]*menuentry[[:space:]]+.*([[:space:]]|$)+' /tftpboot/nbi_img/grub/grub.cfg | grep -A1 -E "menuentry[[:space:]]+.*--id drbl-client([[:space:]]|$)+"
   # 29:menuentry "CentOS 7.1.1503 Linux (DRBL mode, mostly local resources)" {
   # 34:menuentry 'Clonezilla' {
   # so we know we can replace the one between line no. 29 and 34
