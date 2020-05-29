@@ -323,7 +323,7 @@ menuentry "$FULL_OS_Version $powerful_client_menu_label" --id drbl-client {
 menuentry "Local operating system (if available)" --id local-disk {
   echo "Booting first local disk..."
   # Generate boot menu automatically
-  configfile grub-efi.cfg/boot-local-efi.cfg
+  configfile grub/boot-local-efi.cfg
   # If not chainloaded, definitely no uEFI boot loader was found.
   echo "No uEFI boot loader was found!"
   sleep 15
