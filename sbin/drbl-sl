@@ -454,6 +454,7 @@ fi
 install_SL(){
   # 2 cases, (1) live iso/zip (2) path where iso is mounted or zip is uncompressed.
   # Case (1)
+  local grub_cfg_f lines begin_line end_line search_cmd
   if [ "$source_mode" = "iso-zip" ]; then
     if [ -z "$SL_ISO" ]; then
       USAGE
@@ -765,13 +766,11 @@ install_SL(){
       # We have to remove ip=frommedia because the /etc/resolv.conf got in live-boot (actually this program scripts/live-bottom/23networking) won't be copied to /etc/resolv.conf if ip=frommedia exists in boot parameters.
       # 2012/Nov/1 The patched live-boot 2.0.15-1.drbl15 has fixed this issue, and live-boot 3.x has no such issue. Therefore no more removing ip=frommedia.
       # 2014/Jan/19 The syslinux and isolinux dirs have been unified in one dir "syslinux"
-      if [ -e $isomnt/syslinux/isolinux.cfg ]; then
-        iso_cfg_file="$isomnt/syslinux/isolinux.cfg"
-      elif [ -e $isomnt/isolinux/isolinux.cfg ]; then
-        iso_cfg_file="$isomnt/isolinux/isolinux.cfg"
+      if [ -e $isomnt/boot/grub/grub.cfg ]; then
+        grub_cfg_f="$isomnt/boot/grub/grub.cfg"
       else
         [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
-        echo "File isolinux.cfg was _NOT_ found in live system!"
+        echo "File grub.cfg was _NOT_ found in live system!"
         [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
         echo "$msg_program_stop"
         exit 1
@@ -781,9 +780,14 @@ install_SL(){
       # (2) "drbl_live_noconfx" which we will add later
       # (3) "username", we will add it later
       # (4) more... Check function filter_cl_gp_boot_param.
-      # By grep both "append" and "initrd_filename" we can find the correct append line.
-      cl_gp_boot_param="$(LC_ALL=C grep -Eiw "append" $iso_cfg_file | \
-                          grep -Eiw "$initrd_filename" | head -n 1 | filter_cl_gp_boot_param)"
+      # get the description from grub config. It's more precise than isolinux.cfg we used before.
+      # because we can locate default menu by "--id live-default".
+      lines="$(get_grub_efi_image_block live-default $grub_cfg_f)"
+      begin_line="$(echo $lines | awk -F" " '{print $1}')"
+      end_line="$(echo $lines | awk -F" " '{print $2}')"
+      search_cmd="if ($begin_line..$end_line) {print}"
+      cl_gp_boot_param="$(LC_ALL=C perl -n -e "$search_cmd" $grub_cfg_f | \
+	                  grep -Eiw "linuxefi" | filter_cl_gp_boot_param)"
       ;;
   esac
   
