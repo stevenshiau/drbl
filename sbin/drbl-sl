@@ -787,7 +787,7 @@ install_SL(){
       end_line="$(echo $lines | awk -F" " '{print $2}')"
       search_cmd="if ($begin_line..$end_line) {print}"
       cl_gp_boot_param="$(LC_ALL=C perl -n -e "$search_cmd" $grub_cfg_f | \
-	                  grep -Eiw "linuxefi" | filter_cl_gp_boot_param)"
+	                  grep -Eiw "$linux_cmd" | filter_cl_gp_boot_param)"
       ;;
   esac
   
@@ -845,9 +845,9 @@ menuentry "$SL_NAME" --id clonezilla-live-client {
   # Do _NOT_ edit unless you know what you are doing!
   echo "Enter $SL_FULL_NAME $SL_VER (Ramdisk)..."
   echo 'Loading $nbi_kernel...'
-  linuxefi $nbi_kernel $append_param_in_pxe_cfg
+  \$linux_cmd $nbi_kernel $append_param_in_pxe_cfg
   echo 'Loading initial ramdisk $nbi_initrd...'
-  initrdefi $nbi_initrd
+  \$initrd_cmd $nbi_initrd
 }
 
 SL_PXE

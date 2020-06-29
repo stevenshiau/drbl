@@ -301,23 +301,38 @@ else
   set color_highlight=white/blue
 fi
 
+# Uncomment the following for serial console
+# The command serial initializes the serial unit 0 with the speed 38400bps. 
+# The serial unit 0 is usually called ‘COM1’. If COM2, use ‘--unit=1’ instead.
+#serial --unit=0 --speed=38400
+#terminal_input serial
+#terminal_output serial
+
+# Decide if the commands: linux/initrd (default) or linuxefi/initrdefi
+set linux_cmd=linux
+set initrd_cmd=initrd
+if [ "\${grub_cpu}" = "x86_64" -o "\${grub_cpu}" = "i386" ];then
+  set linux_cmd=linuxefi
+  set initrd_cmd=initrdefi
+fi
+
 GRUB_END
 
 cat <<-GRUB_END >> $GRUB_EFI_D/grub.cfg
 menuentry "$FULL_OS_Version $powerful_client_menu_label" --id drbl-client {
   echo "Enter DRBL..."
   echo "Loading Linux kernel vmlinuz-pxe..."
-  linuxefi vmlinuz-pxe devfs=nomount drblthincli=off selinux=0 drbl_bootp=\$net_default_next_server $quiet_opt $edd_opt $CONSOLE_OUTPUT $drbl_mode_opt $drbl_dist_append
+  \$linux_cmd vmlinuz-pxe devfs=nomount drblthincli=off selinux=0 drbl_bootp=\$net_default_next_server $quiet_opt $edd_opt $CONSOLE_OUTPUT $drbl_mode_opt $drbl_dist_append
   echo "Loading initial ramdisk initrd-pxe.img..."
-  initrdefi initrd-pxe.img 
+  \$initrd_cmd initrd-pxe.img 
 }
 
 #menuentry "Clonezilla" --id clonezilla-se-client {
 #  echo "Enter Clonezilla..."
 #  echo 'Loading Linux kernel vmlinuz-pxe...'
-#  linuxefi vmlinuz-pxe devfs=nomount drblthincli=off selinux=0 $quiet_opt text 1 drbl_bootp=\$net_default_next_server $edd_opt $CONSOLE_OUTPUT $clonezilla_mode_opt $drbl_dist_append
+#  \$linux_cmd vmlinuz-pxe devfs=nomount drblthincli=off selinux=0 $quiet_opt text 1 drbl_bootp=\$net_default_next_server $edd_opt $CONSOLE_OUTPUT $clonezilla_mode_opt $drbl_dist_append
 #  echo 'Loading initial ramdisk initrd-pxe.img...'
-#  initrdefi initrd-pxe.img
+#  \$initrd_cmd initrd-pxe.img
 #}
 
 menuentry "Local operating system (if available)" --id local-disk {
