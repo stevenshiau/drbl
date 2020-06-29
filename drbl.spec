@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.32.6
+Version:	2.32.7
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,11 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Mon Jun 29 2020 Steven Shiau <steven _at_ clonezilla org> 2.32.7-drbl1
+  * A better mechanism to deal with linuxefi/initrdefi or linux/initrd in
+    the grub config. This can avoid using that in the client of arm arch
+    (for the future).
+
 * Sun May 31 2020 Steven Shiau <steven _at_ clonezilla org> 2.32.6-drbl1
   * drbl-sl: get the default boot parameters from grub.cfg instead of
     isolinux.cfg since we can locate it in more precise way.

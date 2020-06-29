@@ -5,6 +5,14 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.32.7-drbl1) unstable; urgency=medium
+
+  * A better mechanism to deal with linuxefi/initrdefi or linux/initrd in
+    the grub config. This can avoid using that in the client of arm arch
+    (for the future).
+
+ -- Steven Shiau <steven@clonezilla.org>  Mon, 29 Jun 2020 17:16:43 +0800
+
 drbl (2.32.6-drbl1) unstable; urgency=medium
 
   * drbl-sl: get the default boot parameters from grub.cfg instead of
