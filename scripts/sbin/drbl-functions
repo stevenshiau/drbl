@@ -4441,7 +4441,7 @@ add_opt_in_grub_efi_cfg_block() {
   tag_found="$(LC_ALL=C head -n $end_line $GRUB_CONF | tail -n $(($end_line-$begin_line)) | grep -Eiw "^[[:space:]]*$linux_cmd[[:space:]]*.*[[:space:]]+$opt_name=.*([[:space:]]+|$)")"
   if [ -z "$tag_found" ]; then
     # append ocs_opt=... in the end of linux kernel parameter.
-    sub_menu_entry_cmd="if ($begin_line..$end_line) {s|(^[[:space:]]*\$linux_cmd[[:space:]]+.*)|\$1 $opt_name=${prot_dq}${opt_content}${prot_dq}|i}"
+    sub_menu_entry_cmd="if ($begin_line..$end_line) {s|(^[[:space:]]*\\\$linux_cmd[[:space:]]+.*)|\$1 $opt_name=${prot_dq}${opt_content}${prot_dq}|i}"
     LC_ALL=C perl -pi -e "$sub_menu_entry_cmd" $GRUB_CONF
   else
     # overwrite existing ocs_opt=...
@@ -4450,14 +4450,14 @@ add_opt_in_grub_efi_cfg_block() {
     # (3) nothing (except space) after =, e.g. 'ocs_daemonon='
     if [ -n "$(echo $tag_found | grep -iE "$opt_name=\\\\\"[^\"]*\\\\\"")" ]; then
       # case 1, e.g. ocs_daemonon="ssh"
-      sub_menu_entry_cmd="if ($begin_line..$end_line) {s|(^[[:space:]]*\$linux_cmd[[:space:]]*.*)[[:space:]]+$opt_name=\"[^\"]*\"([[:space:]]+.*$)|\$1 $opt_name=${prot_dq}${opt_content}${prot_dq}\$2|i}"
+      sub_menu_entry_cmd="if ($begin_line..$end_line) {s|(^[[:space:]]*\\\$linux_cmd[[:space:]]*.*)[[:space:]]+$opt_name=\"[^\"]*\"([[:space:]]+.*$)|\$1 $opt_name=${prot_dq}${opt_content}${prot_dq}\$2|i}"
     else
       if [ -n "$(echo $tag_found | grep -iE "$opt_name=[^[:space:]]+")" ]; then
         # case 2, e.g. ocs_daemonon=ssh
-        sub_menu_entry_cmd="if ($begin_line..$end_line) {s|(^[[:space:]]*\$linux_cmd[[:space:]]*.*)[[:space:]]+$opt_name=[^[:space:]]+([[:space:]]+.*$)|\$1 $opt_name=${prot_dq}${opt_content}${prot_dq}\$2|i}"
+        sub_menu_entry_cmd="if ($begin_line..$end_line) {s|(^[[:space:]]*\\\$linux_cmd[[:space:]]*.*)[[:space:]]+$opt_name=[^[:space:]]+([[:space:]]+.*$)|\$1 $opt_name=${prot_dq}${opt_content}${prot_dq}\$2|i}"
       else
         # case 3, e.g. 'ocs_daemonon=', normally this is for 'locales=' or 'keyboard-layouts='
-        sub_menu_entry_cmd="if ($begin_line..$end_line) {s|(^[[:space:]]*\$linux_cmd[[:space:]]*.*)[[:space:]]+$opt_name=[[:space:]]+(.*$)|\$1 $opt_name=${prot_dq}${opt_content}${prot_dq} \$2|i}"
+        sub_menu_entry_cmd="if ($begin_line..$end_line) {s|(^[[:space:]]*\\\$linux_cmd[[:space:]]*.*)[[:space:]]+$opt_name=[[:space:]]+(.*$)|\$1 $opt_name=${prot_dq}${opt_content}${prot_dq} \$2|i}"
       fi
     fi
     LC_ALL=C perl -pi -e "$sub_menu_entry_cmd" $GRUB_CONF
@@ -4502,17 +4502,17 @@ remove_opt_in_grub_efi_cfg_block() {
     # (3) without " and nothing after '=', e.g. 'ocs_live_run='
 
     # (1) with ", e.g. ocs_live_run="ocs-live-general"
-    sub_menu_entry_cmd="if ($begin_line..$end_line) {s|(^[[:space:]]*\$linux_cmd[[:space:]]+.*)[[:space:]]+$opt_name=\\\\\"[^\"]*\\\\\"([[:space:]]+.*)|\$1\$2|i}"
+    sub_menu_entry_cmd="if ($begin_line..$end_line) {s|(^[[:space:]]*\\\$linux_cmd[[:space:]]+.*)[[:space:]]+$opt_name=\\\\\"[^\"]*\\\\\"([[:space:]]+.*)|\$1\$2|i}"
     LC_ALL=C perl -pi -e "$sub_menu_entry_cmd" $GRUB_CONF
     # (2) without ", e.g. ocs_live_run=ocs-live-general
-    sub_menu_entry_cmd="if ($begin_line..$end_line) {s|(^[[:space:]]*\$linux_cmd[[:space:]]+.*)[[:space:]]+$opt_name=[^[:space:]]+([[:space:]]+.*)|\$1\$2|i}"
+    sub_menu_entry_cmd="if ($begin_line..$end_line) {s|(^[[:space:]]*\\\$linux_cmd[[:space:]]+.*)[[:space:]]+$opt_name=[^[:space:]]+([[:space:]]+.*)|\$1\$2|i}"
     LC_ALL=C perl -pi -e "$sub_menu_entry_cmd" $GRUB_CONF
     # (3) without " and nothing after '=', e.g. 'ocs_live_run='
-    sub_menu_entry_cmd="if ($begin_line..$end_line) {s|(^[[:space:]]*\$linux_cmd[[:space:]]+.*)[[:space:]]+$opt_name=[[:space:]]+(.*)|\$1 \$2|i}"
+    sub_menu_entry_cmd="if ($begin_line..$end_line) {s|(^[[:space:]]*\\\$linux_cmd[[:space:]]+.*)[[:space:]]+$opt_name=[[:space:]]+(.*)|\$1 \$2|i}"
     LC_ALL=C perl -pi -e "$sub_menu_entry_cmd" $GRUB_CONF
   else
     # 2nd type, i.e. without "=", or nothing. Even if nothing, perl won't fail. Therefore just run it.
-    sub_menu_entry_cmd="if ($begin_line..$end_line) {s|(^[[:space:]]*\$linux_cmd[[:space:]]+.*)[[:space:]]+$opt_name([[:space:]]+.*)|\$1\$2|i}"
+    sub_menu_entry_cmd="if ($begin_line..$end_line) {s|(^[[:space:]]*\\\$linux_cmd[[:space:]]+.*)[[:space:]]+$opt_name([[:space:]]+.*)|\$1\$2|i}"
     LC_ALL=C perl -pi -e "$sub_menu_entry_cmd" $GRUB_CONF
   fi
   # Restore the status

@@ -787,7 +787,7 @@ install_SL(){
       end_line="$(echo $lines | awk -F" " '{print $2}')"
       search_cmd="if ($begin_line..$end_line) {print}"
       cl_gp_boot_param="$(LC_ALL=C perl -n -e "$search_cmd" $grub_cfg_f | \
-	                  grep -Eiw "$linux_cmd" | filter_cl_gp_boot_param)"
+	                  grep -Eiw "\$linux_cmd" | filter_cl_gp_boot_param)"
       ;;
   esac
   
