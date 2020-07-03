@@ -311,6 +311,7 @@ fi
 # Decide if the commands: linux/initrd (default) or linuxefi/initrdefi
 set linux_cmd=linux
 set initrd_cmd=initrd
+export linux_cmd initrd_cmd
 if [ "\${grub_cpu}" = "x86_64" -o "\${grub_cpu}" = "i386" ];then
   set linux_cmd=linuxefi
   set initrd_cmd=initrdefi

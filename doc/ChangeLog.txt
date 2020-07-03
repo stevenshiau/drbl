@@ -5,6 +5,15 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.32.8-drbl1) unstable; urgency=medium
+
+  * Bug fixed: wrong commands for parsing $linux_cmd
+  * Remove exfat-fuse from packages list. It will be added in run-time since
+    Linux kernel 5.7 has a module to support exfat. No need to use fuse
+    program for distribution using Linux kernel >= 5.7.
+
+ -- Steven Shiau <steven@clonezilla.org>  Tue, 30 Jun 2020 16:14:36 +0800
+
 drbl (2.32.7-drbl1) unstable; urgency=medium
 
   * A better mechanism to deal with linuxefi/initrdefi or linux/initrd in

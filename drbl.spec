@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.32.7
+Version:	2.32.8
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,12 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Tue Jun 30 2020 Steven Shiau <steven _at_ clonezilla org> 2.32.8-drbl1
+  * Bug fixed: wrong commands for parsing $linux_cmd
+  * Remove exfat-fuse from packages list. It will be added in run-time since
+    Linux kernel 5.7 has a module to support exfat. No need to use fuse
+    program for distribution using Linux kernel >= 5.7.
+
 * Mon Jun 29 2020 Steven Shiau <steven _at_ clonezilla org> 2.32.7-drbl1
   * A better mechanism to deal with linuxefi/initrdefi or linux/initrd in
     the grub config. This can avoid using that in the client of arm arch
