@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.32.8
+Version:	2.32.9
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,13 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Fri Jul 03 2020 Steven Shiau <steven _at_ clonezilla org> 2.32.9-drbl1
+  * Export linux_cmd and initrd_cmd in grub.cfg, i.e., make them as global
+    variables so that the submenu can use that, too.
+    Thanks to Chuck for identifying this issue.
+    Ref:
+    https://sourceforge.net/p/clonezilla/discussion/Clonezilla_live/thread/a7b696d13e/
+
 * Tue Jun 30 2020 Steven Shiau <steven _at_ clonezilla org> 2.32.8-drbl1
   * Bug fixed: wrong commands for parsing $linux_cmd
   * Remove exfat-fuse from packages list. It will be added in run-time since
