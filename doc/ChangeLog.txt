@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.32.10-drbl1) unstable; urgency=medium
+
+  * Link pxelinux.0 as lpxelinux.0 in tftp root so that CentOS 7 can work in
+    the new drbl config file.
+
+ -- Steven Shiau <steven@clonezilla.org>  Fri, 17 Jul 2020 21:23:33 +0800
+
 drbl (2.32.9-drbl1) unstable; urgency=medium
 
   * Export linux_cmd and initrd_cmd in grub.cfg, i.e., make them as global
