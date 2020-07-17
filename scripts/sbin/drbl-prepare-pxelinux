@@ -164,6 +164,11 @@ put_distribution_pxelinux() {
       done
       put_pxelinux_bin_2_drbl_repo $tmp_wd $pxelinux_binsrc_dir/bios/
       rm -f $v_opt $tmp_wd/*
+      # Centos 7 only provides syslinux 4 which lacks lpxelinux.0. 
+      # For compability with DRBL which requires syslinux >= v5, just link it to pxelinux.0
+      if [ ! -e "$pxelinux_binsrc_dir/bios/lpxelinux.0" ]; then
+	(cd $pxelinux_binsrc_dir/bios/; ln -fs pxelinux.0 lpxelinux.0)
+      fi
 
       # This part works for syslinux >=6
       # Those *.c32, isolinux.bin, memdisk, and mbr.bin are copied in this part for syslinux >=6
