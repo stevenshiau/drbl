@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.33.1-drbl1) unstable; urgency=medium
+
+  * Add Korean support. Thanks to Hyeonmin Oh and 박규민.
+
+ -- Steven Shiau <steven@clonezilla.org>  Sun, 09 Aug 2020 06:59:16 +0800
+
 drbl (2.32.10-drbl1) unstable; urgency=medium
 
   * Link pxelinux.0 as lpxelinux.0 in tftp root so that CentOS 7 can work in
