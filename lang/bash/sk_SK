@@ -1131,3 +1131,5 @@ msg_ocs_onthefly_param_ps="Po dokončení úlohy prehrať zvuk"
 # Tag on 2019/12/03
 msg_ocs_param_z9='zstd kompresia'
 msg_ocs_param_z9p='zstdmt kompresia'
+# Tag on 2020/08/09
+msg_locale_ko_KR='Korean'
