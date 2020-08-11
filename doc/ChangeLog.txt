@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.33.2-drbl1) unstable; urgency=medium
+
+  * Add the updated Korean language file. Thanks to Hyeonmin Oh.
+
+ -- Steven Shiau <steven@clonezilla.org>  Tue, 11 Aug 2020 12:41:57 +0800
+
 drbl (2.33.1-drbl1) unstable; urgency=medium
 
   * Add Korean support. Thanks to Hyeonmin Oh and 박규민.
