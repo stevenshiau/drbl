@@ -435,6 +435,6 @@ label AoE-client
 
 PXE_END
 
-output_netinstall_syslinux_pxelinux_menu $TDIR $PXECFG_DIR/default
+output_netinstall_boot_menu $TDIR $PXECFG_DIR/default
 
 echo "done!"

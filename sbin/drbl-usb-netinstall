@@ -156,7 +156,7 @@ PXE_END
 # Because we use that in syslinux.cfg like:
 # kernel $boot_file_dir$kernel
 # append initrd=$boot_file_dir$img $ramdisk_size_opt $extra_append
-output_netinstall_syslinux_pxelinux_menu -p /live/ $target_d/live/ $target_d/syslinux/syslinux.cfg
+output_netinstall_boot_menu -p /live/ $target_d/live/ $target_d/syslinux/syslinux.cfg
 
 # Turn on all menus before copying to EFI dir
 perl -pi -e "s/^(#|[[:space:]])*MENU HIDE.*/  # MENU HIDE/i" $target_d/syslinux/syslinux.cfg
@@ -208,7 +208,7 @@ if [ "$uefi_boot_support" = "yes" ]; then
   rsync -a /usr/lib/grub/x86_64-efi $target_d/boot/grub/
   rsync -a /usr/lib/grub/i386-efi $target_d/boot/grub/
   echo " done!"
-  output_netinstall_syslinux_pxelinux_menu --efi -u -p /live/ $target_d/live/ $target_d/boot/grub/grub.cfg
+  output_netinstall_boot_menu --efi -u -p /live/ $target_d/live/ $target_d/boot/grub/grub.cfg
 fi
 
 echo "Preparing syslinux.exe, syslinux, makeboot.bat and makeboot.sh... "

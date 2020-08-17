@@ -2832,7 +2832,7 @@ parse_cmdline_option() {
   [ -f "$parse_tmp" ] && rm -f $parse_tmp
 } # parse_cmdline_option
 #
-output_netinstall_syslinux_pxelinux_menu() {
+output_netinstall_boot_menu() {
   local TDIR  # Where netinstall kernel/initrd exists (e.g. /tftpboot/nbi_img)
   local NB_CFG_DIR_FNAME  # Where pxeliux cfg file exists (e.g. /tftpboot/nbi_img/pxelinux.cfg/)
   local menu_hint ni_ver ni_arch boot_file_dir
@@ -2887,6 +2887,7 @@ output_netinstall_syslinux_pxelinux_menu() {
      # This is for drbl-usb-netinstall use. For the netboot of DRBL clients,
      # the gen-grub-efi-nb-menu will prepend those configs for diskless clients.
      cat <<-PXE_END > $NB_CFG_DIR_FNAME
+# Netboot menu for grub
 set pref=/boot/grub
 set default="0"
 insmod efi_gop
@@ -2906,6 +2907,16 @@ else
   set color_normal=white/black
   set color_highlight=black/white
 fi
+
+# Decide if the commands: linux/initrd (default) or linuxefi/initrdefi
+set linux_cmd=linux
+set initrd_cmd=initrd
+export linux_cmd initrd_cmd
+if [ "\${grub_cpu}" = "x86_64" -o "\${grub_cpu}" = "i386" ];then
+  set linux_cmd=linuxefi
+  set initrd_cmd=initrdefi
+fi
+
 PXE_END
   fi
   
@@ -3144,7 +3155,7 @@ menuentry "$des" --id $img_menu {
 PXE_END
    fi
   done
-} # end of output_netinstall_syslinux_pxelinux_menu
+} # end of output_netinstall_boot_menu
 #
 get_syslinux_binary_for_dos_linux() {
   local sysl_dir="$1"

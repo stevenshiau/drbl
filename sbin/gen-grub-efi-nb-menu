@@ -364,6 +364,6 @@ menuentry 'uEFI firmware setup' 'uefi-firmware' {
 GRUB_END
 
 # Append the config for those netinstall files
-output_netinstall_syslinux_pxelinux_menu --efi $TDIR $GRUB_EFI_D/grub.cfg
+output_netinstall_boot_menu --efi $TDIR $GRUB_EFI_D/grub.cfg
 
 echo "done!"
