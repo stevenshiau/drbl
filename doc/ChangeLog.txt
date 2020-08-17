@@ -5,6 +5,15 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (2.33.3-drbl1) unstable; urgency=medium
+
+  * Bug fix: missing assignment for $linux_cmd and $initrd_cmd in the
+    grub boot menu created by drbl-usb-netinstall.
+  * Rename function output_netinstall_syslinux_pxelinux_menu as
+    output_netinstall_boot_menu so its name can cover uefi netboot.
+
+ -- Steven Shiau <steven@clonezilla.org>  Mon, 17 Aug 2020 15:08:06 +0800
+
 drbl (2.33.2-drbl1) unstable; urgency=medium
 
   * Add the updated Korean language file. Thanks to Hyeonmin Oh.
