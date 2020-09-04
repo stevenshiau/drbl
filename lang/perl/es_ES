@@ -121,16 +121,16 @@ $lang_charset = 'iso-8859-1';
    try_to_create_swap =>
                 "¡OK! ¡Se va a probar de crear el espacio swap para el cliente si este posee disco duro!",
    max_swap_size =>
-                "¿Cuál es el máximo tamaño (Megabytes) para el espacio swap ?\n".
+                "¿Cuál es el máximo tamaño (Megabytes) para el espacio swap?\n".
                 "Se intentará asignar el espacio swap por usted, si no es suficiente, el 60% del espacio libre será utilizado.",
    mode_for_client_init =>
-              "¿Qué modo quiere que usen los clientes después de iniciarse ?\n".
+              "¿Qué modo quiere que usen los clientes después de iniciarse?\n".
               "\"1\": Modo gráfico (X window system) (por defecto),\n".
               "\"2\": Modo texto.",
    client_text_mode => "Los clientes usarán el modo texto cuando inicien.",
    client_graphic_mode => "Los clientes entrarán en modo gráfico después de iniciarse.",
    login_mode_for_client =>
-                  "¿Qué modo desea cuando el cliente inicie en modo gráfico ?\n".
+                  "¿Qué modo desea cuando el cliente inicie en modo gráfico?\n".
                   "0: login normal, 1: login automático, 2: login por tiempo",
    auto_login => "Los clientes se auto logarán cuando inicien.",
    created_account_for_auto_login =>
@@ -186,7 +186,7 @@ $lang_charset = 'iso-8859-1';
    say_no_to_quit_other_to_continue => "¡Introduzca \"no\" o \"n\" para quitar, u otra letra para continuar!",
    syncing_flush => "Sincronizando - sistema de archivo de vaciado de buffers...",
    install_and_upgrade => "instalo y actualizo",
-   IP_start_prompt => "Cuál es el número inicial que desea usar en el último grupo de dígitos de la dirección IP (por ej. el valor inicial de d en la dirección IP a.b.c.d) de los clientes DRBL conectados a este puerto ethernet",
+   IP_start_prompt => "Qué número inicial desea usar en el último grupo de dígitos de la dirección IP (por ej. el valor inicial de d en la dirección IP a.b.c.d) de los clientes DRBL conectados a este puerto ethernet",
    client_no_in_MAC_file => "El número de clientes en este archivo es",
    not_initial_value => "¡El valor que introdujo NO es válido como valor inicial! ¡¡¡Por favor reintrodúzcalo de nuevo!!!",
    can_not_be_the_last_IP => "¡¡¡NO puede ser el último grupo de números de la IP!!!",
@@ -233,18 +233,18 @@ $lang_charset = 'iso-8859-1';
    no_clonezilla_in_system => "¡Su sistema no es Clonezilla!",
    class_c_IP_for_multicast_clonezilla => "¡Si desea usar clonezilla multicast, debe usar una clase C privada (192.168.*.*)! ¡En caso contrario las prestaciones de clonación multicast serán terriblemente peores!",
    drbl_ssi_mode_for_client => "¿Desea usar el modo DRBL SSI (Single system image)? Si es así, la carga y el espacio de disco del servidor será mas ligero. ¡NOTA! En este modo, (1) La memoria de la máquina cliente debe ser de al menos 256 MB. (2) ¡La configuración y los archivos de configuración del cliente no se salvarán en el servidor DRBL! ¡Serán usados una vez y descartados una vez la máquina se apague! Además, si modifica algún archivo en la plantilla cliente (ubicada en $drblroot), debe ejecutar drbl-gen-ssi-files para crear la plantilla tarball en $drbl_common_root/drbl_ssi/. (3) Si desea proporcionar algún archivo para sobrescribir la configuración en la plantilla tarball cuando el cliente inicie, consulte $drbl_common_root/drbl_ssi/clients/00_README para mas detalles.",
-   which_drbl_mode_for_client => "En el sistema, hay 3 modos para los servicios linux diskless:\n[0] Modo DRBL completo, cada cliente tiene su propio NFS basado en /etc y /var.\n[1] Modo DRBL SSI (Single system image), cada cliente usa tmpfs basado en /etc y /var. En este modo, la carga y el espacio de disco necesario del servidor será mas ligero. ¡NOTA! (a) Se recomienda al menos 256 MB de memoria en la máquina cliente. (b) ¡La configuración y los archivos de configuración del cliente no se salvarán en el servidor DRBL! ¡Serán usados una vez y descartados una vez la máquina se apague! Además, si modifica algún archivo de la plantilla cliente (ubicada en $drblroot), debe ejecutar drbl-gen-ssi-files para crear la plantilla tarball en $drbl_common_root/drbl_ssi/. (c) Si desea proporcionar algún archivo para sobrescribir la configuración en la plantilla tarball cuando el cliente inicie, consulte $drbl_common_root/drbl_ssi/clients/00_README para mas detalles.\n[2] No deseo proporcionar servicio Linux diskless al cliente.\n¿Qué modo prefiere ?",
+   which_drbl_mode_for_client => "En el sistema, hay 3 modos para los servicios linux diskless:\n[0] Modo DRBL completo, cada cliente tiene su propio NFS basado en /etc y /var.\n[1] Modo DRBL SSI (Single system image), cada cliente usa tmpfs basado en /etc y /var. En este modo, la carga y el espacio de disco necesario del servidor será mas ligero. ¡NOTA! (a) Se recomienda al menos 256 MB de memoria en la máquina cliente. (b) ¡La configuración y los archivos de configuración del cliente no se salvarán en el servidor DRBL! ¡Serán usados una vez y descartados una vez la máquina se apague! Además, si modifica algún archivo de la plantilla cliente (ubicada en $drblroot), debe ejecutar drbl-gen-ssi-files para crear la plantilla tarball en $drbl_common_root/drbl_ssi/. (c) Si desea proporcionar algún archivo para sobrescribir la configuración en la plantilla tarball cuando el cliente inicie, consulte $drbl_common_root/drbl_ssi/clients/00_README para mas detalles.\n[2] No deseo proporcionar servicio Linux diskless al cliente.\n¿Qué modo prefiere?",
    drbl_ssi_mode_is_set => "El modo DRBL SSI está configurado, ¡un modo elegante de DRBL está en camino!",
    full_drbl_mode_is_set => "¡Elegido modo DRBL completo!",
    no_drbl_mode_in_system => "Su sistema no es Linux diskless para cliente.",
-   where_is_ocs_img_repo_dir => "Cuando se use clonezilla, ¿en qué directorio de este servidor desea guardar la imagen salvada (Por favor use un path absoluto, y NO lo asigne bajo /mnt/, /media/ o /tmp/) ?",
+   where_is_ocs_img_repo_dir => "Cuando se use clonezilla, ¿en qué directorio de este servidor desea guardar la imagen salvada? (Por favor use un path absoluto, y NO lo asigne bajo /mnt/, /media/ o /tmp/)",
    not_allowed_ocs_img_repo_dir => "no es un directorio permitido para salvar imágenes de clonezilla, por favor introdúzcalo de nuevo.",
-   drbl_server_as_NAT_server => "¿Desea dejar el servidor DRBL como un servidor NAT ? Si no, su cliente DRBL NO será capaz de acceder a Internet.",
+   drbl_server_as_NAT_server => "¿Desea dejar el servidor DRBL como un servidor NAT? Si no, su cliente DRBL NO será capaz de acceder a Internet.",
    drbl_server_is_NOT_NAT_server => "Este servidor DRBL No proporciona servicio NAT, por lo que su cliente DRBL NO será capaz de acceder a Internet.",
    both_drbl_clonezilla_are_none => "Tanto los modos drbl como clonezilla no se encuentran disponibles, ¡sólo funciones muy limitadas (como netinstall, si instala los archivos necsarios, y drbl-sl) están disponibles en este sistema!",
    are_you_sure_you_want_to_continue => "¿Seguro que desea continuar?" ,
    # Tag on 2010/12/13
-   #which_clonezilla_mode_for_client => "En el sistema, hay 3 modos disponibles para clonezilla:\n[0] Modo Clonezilla completo, cada cliente tiene su propio NFS basado en /etc y /var.\n[1] Modo Clonezilla box, cada cliente usa tmpfs basado en /etc y /var. En este modo, la carga y el espacio de disco necesario del servidor es inferior que en el Modo Clonezilla completo. ¡Nota! ¡En el modo Clonezilla box, la configuración y los archivos de configuración del cliente no se salvarán en el servidor DRBL! ¡Serán usados una vez y descartados una vez la máquina se apague!\n[2] No quiero clonezilla.\n¿Qué modo prefiere ?",
+   #which_clonezilla_mode_for_client => "En el sistema, hay 3 modos disponibles para clonezilla:\n[0] Modo Clonezilla completo, cada cliente tiene su propio NFS basado en /etc y /var.\n[1] Modo Clonezilla box, cada cliente usa tmpfs basado en /etc y /var. En este modo, la carga y el espacio de disco necesario del servidor es inferior que en el Modo Clonezilla completo. ¡Nota! ¡En el modo Clonezilla box, la configuración y los archivos de configuración del cliente no se salvarán en el servidor DRBL! ¡Serán usados una vez y descartados una vez la máquina se apague!\n[2] No quiero clonezilla.\n¿Qué modo prefiere?",
    which_clonezilla_mode_for_client => "En el sistema, hay 4 modos disponibles para clonezilla:\n[0] Modo Clonezilla completo, cada cliente tiene su propio NFS basado en /etc y /var.\n[1] Modo Clonezilla box, cada cliente usa tmpfs basado en /etc y /var. En este modo, la carga y el espacio de disco necesario del servidor es inferior que en el Modo Clonezilla completo. ¡Nota! En el modo Clonezilla box, ¡la configuración y los archivos de configuración del cliente no se salvarán en el servidor DRBL! ¡Serán usados una vez y descartados una vez la máquina se apague!\n[2] No quiero clonezilla.\n[3] Usar Clonezilla live como el S.O. (Sistema Operativo) de clientes.\n¿Qué modo prefiere?",
    clonezilla_live_mode_is_set => "Usar Clonezilla live como el S.O. (Sistema Operativo) de clientes cuando se ejecuta una tarea Clonezilla.",
    which_clonezilla_live_branch => "¿Qué versión/rama de Clonezilla live quiere que usen los clientes?\n[0]: stable (Debian-based)\n[1]: testing (Debian-based)\n[2]: alternative stable (Ubuntu-based)\n[3]: alternative testing (Ubuntu-based)\nSi no está seguro escoja [2]: alternative stable.",
