@@ -1,3 +1,9 @@
+drbl (2.33.4-drbl1) unstable; urgency=medium
+
+  * Spain Language files were updated. Thanks to Juan Ramón Martínez.
+
+ -- Steven Shiau <steven@clonezilla.org>  Fri, 04 Sep 2020 08:51:47 +0800
+
 drbl (2.33.3-drbl1) unstable; urgency=medium
 
   * Bug fix: missing assignment for $linux_cmd and $initrd_cmd in the
