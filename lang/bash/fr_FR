@@ -1134,3 +1134,5 @@ msg_ocs_param_z9='compression zstd'
 msg_ocs_param_z9p='compression zstdmt'
 # Tag on 2020/08/09
 msg_locale_ko_KR='Korean'
+# Tag on 2020/09/10
+msg_ocs_onthefly_param_rvd='Remove NTFS volume dirty flag in source NTFS file system before cloning it'

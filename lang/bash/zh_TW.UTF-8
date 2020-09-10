@@ -1132,3 +1132,5 @@ msg_ocs_param_z9='使用zstd壓縮(非常快速，印象檔大小類同gzip)'
 msg_ocs_param_z9p='使用zstdmt壓縮(非常快速，印象檔大小類同gzip，適用多核心/CPU機器)'
 # Tag on 2020/08/09
 msg_locale_ko_KR='韓文'
+# Tag on 2020/09/10
+msg_ocs_onthefly_param_rvd='複製檔案系統前，移除來源NTFS檔案系統的卷髒標記'
