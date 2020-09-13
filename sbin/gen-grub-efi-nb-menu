@@ -280,7 +280,7 @@ function load_gfxterm {
 
 # load_netboot should be run once, otherwise it will loop.
 # i.e., for default grub.cfg, run load_netboot. 
-# Otherwise (e.g., grub.cfg-drbl-192.168.37.3, grub.cfg-drbl-01:00:0c:29:1d:9a:d1) skip it.
+# Otherwise (e.g., grub.cfg-drbl-192.168.37.3, grub.cfg-drbl-00:0c:29:1d:9a:d1) skip it.
 if [ "\$run_load_netboot" != "no" ]; then
   load_netboot
 fi

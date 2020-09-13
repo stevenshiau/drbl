@@ -4180,23 +4180,23 @@ set_specific_host_grub_efi_conf() {
     case "$ih" in
       *.*.*.*)
         # list by IP
-	# the grub_eficfg will like "grub.cfg-192.168.177.2"
-	grub_eficfg="grub.cfg-${ih}"
-        # These files look like: 01-MAC address (with ":" -> "-"),
-	# We'd better to clean the 01-MAC file if it exists since maybe it's created by ocsmgrd when received the results from client in the previous save/restoration. Since 01-MAC has higher priority than "C0A80001" style file in pxelinux, this is a must if we can find it, we have to remove it.
+	# the grub_eficfg will like "grub.cfg-drbl-192.168.177.2"
+	grub_eficfg="grub.cfg-drbl-${ih}"
+        # These files look like: grub.cfg-drbl:$MAC, e.g., grub.cfg-drbl-88:aa:bb:cc:dd:ee
+	# We'd better to clean the grub.cfg-drbl:$MAC if it exists since maybe it's created by ocsmgrd when received the results from client in the previous save/restoration. Since grub.cfg-drbl:$MAC has higher priority than "C0A80001" style file in pxelinux, this is a must if we can find it, we have to remove it.
 	# TODO: What if no MAC address setting in dhcpd.conf ? Then $OCS_TMP will be empty, then... ?
-        grub_eficfg_MAC="grub.cfg-01-$(grep ${ih} $OCS_TMP | awk -F" " '{print $3}' | tr ":" "-")"
+        grub_eficfg_MAC="grub.cfg-drbl-$(grep ${ih} $OCS_TMP | awk -F" " '{print $3}')"
         [ -f "$GRUB_EFINB_DIR/$grub_eficfg_MAC" ] && rm -f $GRUB_EFINB_DIR/$grub_eficfg_MAC
         ;;
       *:*:*:*:*:*)
         # list by MAC
-	# for an Ethernet (ARP type 1) with address 88:99:AA:BB:CC:DD it would search for the filename grub.cfg-01-88-99-aa-bb-cc-dd (lowercase)
-	grub_eficfg="$(echo $ih | tr "[A-Z]" "[a-z]" | tr ":" "-")"
-	# append "grub.cfg-01-" in the beginning
-	grub_eficfg="grub.cfg-01-$grub_eficfg"
-	# We'd better to clean the IP-based setting file if it exists since maybe it's created by ocsmgrd when received the results from client in the previous save/restoration. Although grub.cfg-01-MAC has higher priority than "grub.cfg-C0A80001" style file in grub_efi, this NOT a must if we can find it, but we remove it to avoid confusion.
+	# for an Ethernet (ARP type 1) with address 88:99:AA:BB:CC:DD it would search for the filename grub.cfg-drbl-88:99:aa:bb:cc:dd (lowercase)
+	grub_eficfg="$(echo $ih | tr "[A-Z]" "[a-z]")"
+	# append "grub.cfg-drbl-" in the beginning
+	grub_eficfg="grub.cfg-drbl-$grub_eficfg"
+	# We'd better to clean the IP-based setting file if it exists since maybe it's created by ocsmgrd when received the results from client in the previous save/restoration. Although grub.cfg-drbl-$MAC has higher priority than "grub.cfg-drbl-C0A80001" style file in grub_efi, this NOT a must if we can find it, but we remove it to avoid confusion.
         IP="$(grep -E ${ih} $OCS_TMP | awk -F" " '{print $2}')"
-	grub_eficfg_MIP="grub.cfg-${IP}"
+	grub_eficfg_MIP="grub.cfg-drbl-${IP}"
         [ -f "$GRUB_EFINB_DIR/$grub_eficfg_MIP" ] && rm -f $GRUB_EFINB_DIR/$grub_eficfg_MIP
         ;;
     esac
