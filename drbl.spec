@@ -46,7 +46,7 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 
 %changelog
 * Sun Sep 13 2020 Steven Shiau <steven _at_ clonezilla org> 2.33.6-drbl1
-  * Bug fixe: grub netboot host specific boot issue fixed. Thanks to Mark
+  * Bug fixed: grub netboot host specific boot issue fixed. Thanks to Mark
     Wiese.
     Ref:
     https://sourceforge.net/p/drbl/discussion/DRBL_for_Debian/thread/6ad0214cc0
