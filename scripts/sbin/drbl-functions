@@ -1143,6 +1143,7 @@ language_help_prompt_by_idx_no() {
   echo "       [0|en_US.UTF-8]: English,"
   echo "       [2|zh_TW.UTF-8]: Traditional Chinese (UTF-8, Unicode) - Taiwan"
   echo "       [a|ask]: Prompt to ask the language index"
+  echo " This option is for backward compatibility. It's recommended to use locales to assign that."
 }
 #
 language_help_prompt_by_idx_name() {
