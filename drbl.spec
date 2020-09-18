@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	2.33.6
+Version:	4.0.0
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,11 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Fri Sep 18 2020 Steven Shiau <steven _at_ clonezilla org> 4.0.0-drbl1
+  * Add more prompt about the function language_help_prompt_by_idx_no
+    of drbl-functions.
+  * Sync the version number to that of Clonezilla.
+
 * Sun Sep 13 2020 Steven Shiau <steven _at_ clonezilla org> 2.33.6-drbl1
   * Bug fixed: grub netboot host specific boot issue fixed. Thanks to Mark
     Wiese.

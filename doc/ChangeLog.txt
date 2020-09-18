@@ -5,6 +5,14 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (4.0.0-drbl1) unstable; urgency=medium
+
+  * Add more prompt about the function language_help_prompt_by_idx_no
+    of drbl-functions.
+  * Sync the version number to that of Clonezilla.
+
+ -- Steven Shiau <steven@clonezilla.org>  Fri, 18 Sep 2020 22:30:50 +0800
+
 drbl (2.33.6-drbl1) unstable; urgency=medium
 
   * Bug fixed: grub netboot host specific boot issue fixed. Thanks to Mark
