@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	4.0.1
+Version:	4.0.2
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,13 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Tue Sep 29 2020 Steven Shiau <steven _at_ clonezilla org> 4.0.2-drbl1
+  * Update drbl.conf:
+    Use package name netcat-traditional instead of the fuzzy name: netcat.
+    Include uuid-runtime in the Clonezilla live.
+    Add nuttcp to PKG_TO_QUERY.
+    Update fedora_netinstall_ver as "32".
+
 * Mon Sep 21 2020 Steven Shiau <steven _at_ clonezilla org> 4.0.1-drbl1
   * Add package uuid-runtime in Clonezilla/DRBL packages list.
 
