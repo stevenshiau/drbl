@@ -1106,7 +1106,7 @@ msg_mount_ramdisk='使用記憶體 (可用於BT機制來源直接從硬碟或分
 msg_img_repo_is_using_tmpfs='印象檔儲藏庫已經是使用記憶體(tmpfs)。'
 msg_failed_to_use_ramdisk_as_repo='未能使用記憶體來做印象檔儲藏。'
 # Tag on 2019/01/16
-msg_ocs_onthefly_param_u='透過網路複製時，不用nc，改用nuttcp'
+msg_ocs_onthefly_param_u='透過網路複製時，不用nuttcp，改用netcat'
 msg_choose_param_to_set_before_sending_data='選擇壓縮演算法來在透過網路送出資料前先壓縮，這目的是用來節省頻寬用的。若有多個CPU核心的時候，壓縮時會自動採用多核心版本的程式來獲取更加的效能'
 msg_ocs_onthefly_param_gz='使用gzip演算法'
 msg_ocs_onthefly_param_bzip2='使用bzip2演算法'
@@ -1134,3 +1134,7 @@ msg_ocs_param_z9p='使用zstdmt壓縮(非常快速，印象檔大小類同gzip�
 msg_locale_ko_KR='韓文'
 # Tag on 2020/09/10
 msg_ocs_onthefly_param_rvd='複製檔案系統前，移除來源NTFS檔案系統的卷髒標記'
+# Tag on 2020/10/02
+msg_ocs_onthefly_param_t='用戶端電腦略去復原MBR (Master Boot Record)'
+msg_ocs_onthefly_param_t1='用戶端電腦使用syslinux提供的bootloader(僅適用於Windows)'
+msg_ocs_onthefly_param_t2='用戶端電腦略去復原EBR (Extended Boot Record)'

@@ -1104,7 +1104,7 @@ msg_mount_ramdisk='메모리 사용 (로우 디바이스에서 BT 확인)'
 msg_img_repo_is_using_tmpfs='이미지 저장소가 tmpfs를 사용하고 있습니다. (디스크로서의 램)'
 msg_failed_to_use_ramdisk_as_repo='RAM 디스크 (tmpfs)를 이미지 저장소로 사용하지 못했습니다.'
 # Tag on 2019/01/16
-msg_ocs_onthefly_param_u='네트워크를 통해 복제할 때 nc 대신 nuttcp를 사용'
+msg_ocs_onthefly_param_u='네트워크를 통해 복제할 때 nuttcp 대신 netcat를 사용'
 msg_choose_param_to_set_before_sending_data='클라이언트에게 보내기 전에 데이터를 압축할 프로그램을 선택하십시오. 네트워크 대역폭을 절약하는 데 사용됩니다. 멀티 코어 CPU일 경우, 데이터 압축 시 성능이 향상되는데 사용됩니다' 
 msg_ocs_onthefly_param_gz='gzip 알고리즘 사용'
 msg_ocs_onthefly_param_bzip2='bzip2 알고리즘 사용'
@@ -1133,3 +1133,7 @@ msg_ocs_param_z9='zstd 압축 (gzip과 같은 매우 빠르고 작은 용량 이
 msg_ocs_param_z9p='zstdmt 압축 (멀티 코어 CPU의 경우, gzip과 같은 매우 빠르고 작은 용량 이미지)'
 # Tag on 2020/09/10
 msg_ocs_onthefly_param_rvd='Remove NTFS volume dirty flag in source NTFS file system before cloning it'
+# Tag on 2020/10/02
+msg_ocs_onthefly_param_t='Skip cloning the MBR (Master Boot Record)'
+msg_ocs_onthefly_param_t1='Clone the prebuilt bootloader from syslinux (For Windows only)'
+msg_ocs_onthefly_param_t2='Skip cloning the EBR (Extended Boot Record)'

@@ -1107,7 +1107,7 @@ msg_mount_ramdisk='Usar memória (OK para BT de dispositivo não tratado)'
 msg_img_repo_is_using_tmpfs='O repositório de imagem está usando tmpfs (RAM como disco).'
 msg_failed_to_use_ramdisk_as_repo='Falha ao usar disco de RAM (tmpfs) como repositório de imagem.'
 # Tag on 2019/01/16
-msg_ocs_onthefly_param_u='Usar nuttcp em vez de nc ao clonar pela rede'
+msg_ocs_onthefly_param_u='Usar netcat em vez de nuttcp ao clonar pela rede'
 msg_choose_param_to_set_before_sending_data='Escolha o programa para comprimir os dados antes de enviar para o cliente. Isso é usado para economizar a largura de banda da rede. Se várias CPUs estiverem disponíveis, elas serão usadas para obter melhor desempenho ao comprimir dados'
 msg_ocs_onthefly_param_gz='Usar algoritmo gzip'
 msg_ocs_onthefly_param_bzip2='Usar algoritmo bzip2'
@@ -1135,3 +1135,7 @@ msg_ocs_param_z9p='compressão zstdmt'
 msg_locale_ko_KR='Korean'
 # Tag on 2020/09/10
 msg_ocs_onthefly_param_rvd='Remove NTFS volume dirty flag in source NTFS file system before cloning it'
+# Tag on 2020/10/02
+msg_ocs_onthefly_param_t='Skip cloning the MBR (Master Boot Record)'
+msg_ocs_onthefly_param_t1='Clone the prebuilt bootloader from syslinux (For Windows only)'
+msg_ocs_onthefly_param_t2='Skip cloning the EBR (Extended Boot Record)'
