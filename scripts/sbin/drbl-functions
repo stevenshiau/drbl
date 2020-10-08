@@ -1481,7 +1481,7 @@ ocs_sr_param_postaction_after_clone() {
   "$msg_mode: $ocs_mode_prompt" --menu "$msg_choose_post_mode_after_clone_1:" \
   0 0 0 $DIA_ESC \
   "-p choose "    "$msg_ocs_param_p_choose_1" \
-  "-p cmd"        "$msg_enter_cml" \
+  "-p true"       "$msg_enter_cml" \
   "-p reboot "    "$msg_ocs_param_p_reboot_1" \
   "-p poweroff "  "$msg_ocs_param_p_poweroff_1" \
   2>> $ocs_parm
@@ -1492,10 +1492,10 @@ ocs_onthefly_param_postaction_after_clone() {
   $DIA --backtitle "$msg_nchc_free_software_labs" --title  \
   "$msg_mode: $ocs_mode_prompt" --menu "$msg_choose_post_mode_after_clone_1:" \
   0 0 0 $DIA_ESC \
-  "-pa choose "    "$msg_ocs_param_p_choose_1" \
-  "-pa cmd"        "$msg_enter_cml" \
-  "-pa reboot "    "$msg_ocs_param_p_reboot_1" \
-  "-pa poweroff "  "$msg_ocs_param_p_poweroff_1" \
+  "-p choose "    "$msg_ocs_param_p_choose_1" \
+  "-p true"       "$msg_enter_cml" \
+  "-p reboot "    "$msg_ocs_param_p_reboot_1" \
+  "-p poweroff "  "$msg_ocs_param_p_poweroff_1" \
   2>> $ocs_parm
 } # end of ocs_onthefly_param_postaction_after_clone
 #
