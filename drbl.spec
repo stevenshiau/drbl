@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	4.0.2
+Version:	4.1.0
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,14 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Fri Oct 09 2020 Steven Shiau <steven _at_ clonezilla org> 4.1.0-drbl1
+  * Sync the option "-p" of ocs-onthefly with ocs-sr, it was "-pa" for
+    ocs-onthefly.
+    In addition, "-pa cmd" is now "-p true" when shown in dialog.
+  * Update language files for updated ocs-onthefly:
+    1. Default to use nuttcp.
+    2. Use ocs-sr to save and restore pseudo image.
+
 * Tue Sep 29 2020 Steven Shiau <steven _at_ clonezilla org> 4.0.2-drbl1
   * Update drbl.conf:
     Use package name netcat-traditional instead of the fuzzy name: netcat.
