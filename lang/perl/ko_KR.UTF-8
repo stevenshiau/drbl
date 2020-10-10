@@ -1,0 +1,260 @@
+#!/usr/bin/perl -T
+# Written by Steven Shiau <steven _at_ clonezilla org> to use in DRBL
+# Translated by Hyeonmin Oh <hyunmin860 _at_ gmail com>, Last updated : 06/Aug/2020
+# License: GPL
+
+$lang_charset = 'UTF-8';
+
+%delimiter =
+   (
+   dash_line => '------------------------------------------------------',
+   star_line => '******************************************************',
+   exclamation_line => "!!!!!!!!!!!!!!!!!!!!!!!!!",
+   warning_line => "!!!!!!!!!!!!!!!!!!!!!! 경고 !!!!!!!!!!!!!!!!!!!!!!!",
+   );
+
+%lang_text =
+   (  
+   Say        => 'Say',
+   or         => '또는',
+   seconds    => '초',
+   WARNING    => '경고',
+   Accept     => '동의',
+   as         => 'as',
+   login      => '로그인',
+   clear      => '클리어',
+   of         => 'of',
+   logout     => '로그아웃',
+   page       => '페이지',
+   move       => '이동',
+   date       => '날짜',
+   size       => '크기',
+   type       => '유형',
+   filename   => '파일이름',
+   encoding   => '인코딩',
+   download   => '다운로드',
+   cancel     => '취소',
+   continue   => '계속',
+   for        => 'for',
+   save       => '저장',
+   add        => '추가',
+   delete     => '삭제',
+   uninstall  => '언인스톨',
+   done       => '완료',
+   finish     => '종료',
+   space      => '공간',
+   );
+
+%lang_word =
+   (
+   please_enter => "입력하십시오",
+   to_deploy_them => "배포용",
+   root_passwd => "루트 암호",
+   initial_digit => "초기 숫자",
+   unable_to_find_the => "찾을 수 없습니다",
+   program_stop => "프로그램 정지",
+   );
+
+%lang_deploy =
+   (
+   interactive_mode_prompt => '대화형 모드를 사용하면 DRBL 환경의 정보를 제공할 수 있습니다.',
+   domain_unset_prompt => '도메인이 설정되지 않았습니다. 지금 도메인을 입력하십시오 :',
+   domain_prompt => 'DNS 도메인 (Ex : drbl.sf.net)을 입력하십시오 :',
+   nisdomain_unset_prompt => 'NIS 도메인이 설정되지 않았습니다. 지금 NIS 도메인을 입력하십시오 :',
+   nisdomain_prompt => 'NIS/YP 도메인 이름을 입력하세요 :',
+   not_allowed_domainname => '도메인 이름으로 적절하지 않습니다. 다시 입력하십시오.',
+   not_allowed_nisdomainname => 'NIS 도메인 이름으로 사용할 수 없습니다. 다시 입력하십시오.',
+   set_domain_as => '도메인 설정 :',
+   enter_client_hostname_prefix => "클라이언트 호스트명 문자열을 입력하세요 : \n 이 문자열은 클라이언트의 호스트명을 자동으로 만드는데 사용됩니다. 자동으로 생성된 일부 또는 모든 호스트명을 덮어쓰려면 Ctrl-C를 눌러, 이 프로그램을 지금 종료하고 /etc/drbl/client-ip-hostname을 편집한 다음, 이 프로그램을 다시 실행하십시오.",
+   not_allowed_hostname => '클라이언트 호스트명 문자열로 적절하지 않습니다. 다시 입력하십시오.',
+   set_client_hostname_prefix => '클라이언트 호스트명 문자열을 다음과 같이 설정합니다 :',
+   no_NIC_setup => '클라이언트용 네트워크 카드(Ex : eth1, eth2의 IP 주소)에 대한, 인터넷 네트워크를 설정하지 않았거나 잘못된 것이 있습니다.',
+   configured_nic => '시스템에서 발견된 이더넷 카드 :',
+   we_can_NOT_continue => '계속 진행할 수 없습니다...',
+   but_not_private_IP_or_configured => '사설 IP가 아니거나, 설정이 잘못되었거나, 지금 작동되지 않습니다.',
+   enter_public_IP_for_the_client => "클라이언트의 공개 IP를 입력하십시오.",
+   its_IP_in_DRBL_is => "DRBL의 IP는 다음과 같습니다.",
+   wrong_entered_IP => "입력한 IP 주소가 잘못되었습니다. 다시 입력하십시오.",
+   enter_gateway_for_client => "클라이언트용 게이트웨이 입력",
+   enter_netmask_for_client => "클라이언트용 넷마스크 입력",
+   wrong_entered_netmask => "입력한 넷마스크가 잘못되었습니다. 다시 입력하십시오.",
+   set_client_public_IP_as => "클라이언트의 공용 IP 주소 네트워크 매개 변수를 다음과 같이 설정합니다 :",
+   we_will_skip => '건너뜁니다.',
+   for_internet_access_prompt => '이 서버의 어떤 이더넷 포트가, DRBL 연결이 아닌 공용 인터넷 사용을 위한 것입니까?',
+   drbl_website_prompt => '자세한 사항은 http://drbl.nchc.org.tw/redhat or http://drbl.sf.net/redhat 을 참고하십시오.',
+   ethernet_port_for_internet => '인터넷 액세스를 위한 이더넷 포트는 다음과 같습니다 :',
+   ethernet_port_for_DRBL => 'DRBL 환경을위한 이더넷 포트 :',
+   only_1_IP_for_eth0 => 'eth0의 IP 주소는 1개뿐이며, DRBL 환경에는 eth0을 사용하지 않습니다.',
+   no_DRBL_port => 'DRBL 환경에 사용할 수 있는 이더넷 포트가 없습니다.',
+   saved_mac_address_files_in_etc => "이 파일은 $drbl_syscfg 디렉토리에 저장됩니다.",
+   collect_MAC_prompt => 
+          "이제 클라이언트의 MAC 주소를 수집할 수 있습니다. \n".
+          "클라이언트를 부팅할 때마다, DRBL 서버의 DHCP 서비스가 클라이언트에 동일한 IP 주소를 제공하게 하려면, 이 절차를 지금 수행해야 합니다. \n".
+          "클라이언트의 MAC 주소가 이미 있을 경우, 다른 그룹 파일에 저장할 수 있습니다. (이 파일 번호는 DRBL 서비스의 네트워크 카드 수와 동일함) 이 경우, 이 단계를 건너뛸 수 있습니다. \n".
+          "이 단계는 클라이언트의 MAC 주소를 기록한 다음, 다른 그룹으로 나누는 데 도움이 됩니다. 시간을 절약하고 오타를 줄일 수 있습니다. \n".
+	  "클라이언트의 부팅에 따라 MAC 주소가 차례로 기록되며, \n".
+	  "서버의 네트워크 카드에 따라 다른 파일에 저장됩니다. 파일 이름은 macadr-eth1.txt, macadr-eth2.txt와 같습니다. ($drbl_syscfg 디렉토리에서 찾을 수 있습니다.) \n".
+	  "순서대로 클라이언트를 부팅하고 etherboot 또는 PXE에서 부팅되는지 꼭 확인하십시오. \n". 
+          "수집 하시겠습니까?",
+   ok_let_do_it => 'OK! 수집합니다.',
+   you_are_not_root => '루트 계정이 아닙니다.',
+   ok_let_continue => 'OK! 계속합니다...',
+   fix_eth_IP_prompt => "DRBL 서버의 DHCP 서비스가 클라이언트를 부팅 할 때마다, 동일한 IP 주소를 클라이언트에 제공하도록 하시겠습니까? (이 기능을 원한다면 클라이언트의 MAC 주소를 수집하여 파일에 저장해야 합니다 (Ex : 이전 절차에서)). 이것은 DRBL 서버의 이더넷 네트워크 인터페이스에 연결된 클라이언트를 위한 것입니다.",
+   MAC_file_prompt => "OK! 클라이언트의 MAC 주소를 포함하는 파일 이름을 한 줄씩 알려주십시오.",
+   range_prompt => "OK! 계속하겠습니다. 고정된 주소 대신 \"첫 번째 부팅이 최초의 IP를 취득\"하는 방식으로 클라이언트의 IP 주소를 설정합니다.",
+   client_number_connected_to_eth => "DRBL 서버의 이더넷 네트워크 인터페이스에 연결된, DRBL 클라이언트(학생용 PC)는 몇 대입니까?",
+   enter_the_no => "숫자를 입력하십시오.",
+   the_value_you_set => "클라이언트 IP 주소의 마지막 숫자 셋, 그 끝 숫자는? :",
+   set_the_IP_connected_to_eth => "DRBL 서버의 이더넷 네트워크 인터페이스에 연결된 클라이언트의 IP 주소를 설정합니다.",
+   do_you_want_to_continue => "계속하시겠습니까?",
+   reenter_or_accept => "다시 입력하거나, 이 값을 수락하고 계속 진행할 다른 문자를 입력하십시오.",
+   filename_you_set => "설정한 파일 이름은 다음과 같습니다.",
+   by_MAC_file => "설정한 MAC 주소 파일로, DRBL 서버의 이더넷 네트워크 인터페이스에 연결된 클라이언트의 IP 주소",
+   let_restart_it_again => "OK, 다시 시작합시다.",
+   layout_for_DRBL => "DRBL 환경의 레이아웃은 다음과 같습니다 :",
+   swap_prompt =>
+              "클라이언트 컴퓨터에 스왑 파티션이 있거나 쓰기 가능한 파일 시스템이 있는 로컬 하드 드라이브가 있는 경우, \n".
+              "클라이언트가 더 많은 메모리를 사용할 수 있도록, 해당 스왑 파티션을 사용하거나 쓰기 가능한 파일 시스템에 스왑 파일을 만들겠습니까? (이 단계에서는 해당 하드 디스크의 데이터를 삭제하지 않습니다.)",
+   try_to_create_swap =>
+                "OK! 로컬 하드 드라이브가 있다면, 클라이언트를 위한 스왑 공간 만들기를 시도하겠습니다.",
+   max_swap_size =>
+                "스왑 공간의 최대 크기 (MB)는 얼마입니까? \n".
+                "스왑 공간 할당을 시도합니다. 공간이 충분하지 않을 경우, 여유 공간의 60%가 사용됩니다.",
+   mode_for_client_init =>
+              "클라이언트가 부팅 된 후, 어떤 모드를 사용하시겠습니까? \n".
+              "\"1\": 그래픽 모드 (X-Window 시스템) (기본값), \n".
+              "\"2\": 텍스트 모드",
+   client_text_mode => "클라이언트는 부팅 할 때 텍스트 모드를 사용합니다.",
+   client_graphic_mode => "클라이언트는 부팅 후 그래픽 모드로 들어갑니다.",
+   login_mode_for_client =>
+                  "클라이언트가 그래픽 모드로 부팅 할 때, 어떤 모드를 원하십니까? \n".
+                  "0: 일반 로그인, 1: 자동 로그인, 2: 타임아웃 후 로그인",
+   auto_login => "클라이언트는 부팅 할 때 자동 로그인합니다.",
+   created_account_for_auto_login =>
+                      "클라이언트 컴퓨터가 자동 로그인할 수 있도록 계정이 생성됩니다. \n".
+		      "자동 로그인 ID는 클라이언트의 호스트 이름과 동일합니다.\n".
+                      "계정 및 비밀번호 정보가 파일에 나열됩니다.",
+   time_for_countdown => "카운트 다운은 몇 초로 설정하시겠습니까?",
+   timed_login_prompt => "이후 시간이 초과되면 클라이언트가 자동 로그인합니다.",
+   normal_login_prompt => "클라이언트는 부팅할 때 사용자가 로그인할 때까지 기다립니다.",
+   keep_client_setting_question => "기존 DRBL 클라이언트가 있을 경우, 기존 설정을 유지하시겠습니까?",
+   remove_client_setting => "DRBL 클라이언트가 이미 있을 경우, 모든 설정을 제거합니다.",
+   keep_client_setting => "DRBL 클라이언트가 이미 있을 경우, 설정을 유지하도록 합니다.",
+   set_client_root_passwd => "서버로부터 복사한 동일한 root 패스워드 대신, 클라이언트의 root 패스워드를 새롭게 설정하시겠습니까? (보안 강화를 위하여)",
+   whats_client_root_passwd => "클라이언트의 새 루트 비밀번호(화면에 표시되지 않음)?",
+   set_client_pxelinux_passwd => "클라이언트의 pxelinux 패스워드를 설정하고 클라이언트 부팅시, 시작용 패스워드를 입력하도록 하시겠습니까? (보안 강화를 위하여)",
+   whats_client_pxelinux_passwd => "클라이언트 용 새 pxelinux 비밀번호 (화면에 표시되지 않음)?",
+   retype_root_passwd => "새 비밀번호를 다시 입력하십시오. (화면에 표시되지 않습니다)",
+   sorry_passwd_not_match => "죄송합니다. 비밀번호가 일치하지 않습니다",
+   sorry_passwd_can_not_empty => "죄송합니다. 비밀번호에 공백을 넣을 수 없습니다.",
+   set_client_alias_IP =>
+      "alias interface의 사용으로 각 클라이언트는 2개의 IP 주소를 가질 수 있습니다.\n".
+      "그중 하나는 DRBL 서버에 연결된 클라이언트의 개인 IP이고, 다른 하나는 스위치에서 WAN에 직접 연결된 클라이언트의 공용 IP입니다. \n".
+      "클라이언트의 공인 IP를 설정하시겠습니까?",
+   searching_installed_drbl_packages => "DRBL 서버용으로 설치된 패키지 검색 중... 몇 분이 소요될 수 있습니다...",
+   no_drbl_server_package_found =>
+	      "DRBL 서버 패키지가 설치되어 있지 않습니다. \n". 
+	      "DRBL 서버를 먼저 설정하려면 다른 스크립트 (drblsrv -i)를 실행해야 합니다. 그렇지 않을 경우 시스템이 작동하지 않습니다. \n".
+	      "계속 진행하시겠습니까? 계속하려면 \"yes\" 또는 \"y\" 입력하거나, 종료하려면 다른 문자를 입력하십시오.",
+   but_you_will_see_errors => "하지만 많은 오류 메시지를 보게 될 것입니다...!!!",
+   smart_decision => "OK, 지금 종료합니다!",
+   finished_searching_installed_drbl_packages => "DRBL 서버에 대해 설치된 패키지 검색을 완료했습니다.",
+   note_for_keep_client_setting => "[참고] DRBL 클라이언트가 있을 경우, 이 스크립트를 완료하면 DRBL 클라이언트가 잘못될 수 있습니다. DRBL 클라이언트를 재부팅하면 클라이언트가 작동하게 됩니다.",
+   press_enter_to_continue => "계속하려면 Enter를 누르십시오...",
+   no_deploy_prompt =>
+	      "이 작업 디렉토리에 모든 구성 파일이 작성되었으나, \n".
+	      "아직 시스템에 배치되지는 않습니다. \n".
+	      "만약 시스템에 배치하려면, \"-n\" 또는 \"--no_deploy\" 옵션을 사용하지 마십시오.",
+   ready_to_deploy =>
+	      "이제 파일을 시스템에 배포할 준비가 되었습니다. \n".
+	      "계속하시겠습니까?",
+   overwrite_firewall_rule => "[경고] 계속하면 설정 중에 방화벽 규칙을 덮어쓰게 됩니다.",
+   backup_firewall_rule => "원래 규칙은 시스템 구성 디렉토리 (/etc/sysconfig 또는 /etc/default)에 iptables.drblsave로 백업됩니다.",
+   oh_quit_now => "여기서 종료합니다.",
+   accept_or_enter => "\"Y\" 라고 말하거나, 다른 문자를 하나씩 입력합니다...",
+   failed_to_open_file => "파일을 열지 못했습니다.",
+   #
+   analyzing_rpm_info => "rpm 패키지 정보 분석 중... 몇 분 정도 걸릴 수 있습니다...",
+   no_drbl_server_package => "DRBL 서버 패키지가 설치되어 있지 않습니다.",
+   apt_pkg_not_installed =>  "\"apt\" 패키지가 설치되지 않았습니다.", 
+   we_are_now_ready_to => "다음 준비가 되었습니다.",
+   the_files_for_DRBL_server => "DRBL 서버용 파일",
+   say_yes_to_continue_other_to_quit => "계속하려면 \"yes\" 또는 \"y\" 를 입력하거나, 종료하려면 다른 문자를 입력하십시오.",
+   say_no_to_quit_other_to_continue => "종료하려면 \"no\" 또는 \"n\" 를 입력하거나, 계속하려면 다른 문자를 입력하십시오.",
+   syncing_flush => "sync 중 - 파일 시스템 버퍼 반영 중...", 
+   install_and_upgrade => "인스톨과 업그레이드",
+   IP_start_prompt => "이 이더넷 포트에 연결된 DRBL 클라이언트의 IP의 마지막 자릿수 (즉, IP 주소 a.b.c.d에서 d의 초기 값)에 사용하려는 초기 번호는 무엇입니까?",
+   client_no_in_MAC_file => "이 파일의 클라이언트 번호는",
+   not_initial_value => "입력한 것은 초기 값에 유효하지 않습니다. 다시 입력하십시오.",
+   can_not_be_the_last_IP => "은 IP 주소의 끝자리로 할 수 없습니다.",
+   can_not_be_the_first_IP => "은 IP 주소의 앞자리로 할 수 없습니다.",
+   set_client_system_select => "클라이언트용 부팅 프롬프트를 설정하시겠습니까?",
+   use_graphic_pxelinux_menu => "클라이언트 부팅시, PXE 메뉴에 그래픽 배경을 사용하시겠습니까?",
+   note_for_use_graphic_pxelinux_menu => "[참고] 그래픽 PXELinux 메뉴를 사용하지만 클라이언트가 부팅되지 않을 경우, \"switch-pxe-bg-mode -m text\"를 실행하여 텍스트 모드로 전환할 수 있습니다.",
+   whats_client_system_boot_timeout => "클라이언트의 부팅 프롬프트 시간제한은 1/10 초입니까?",
+   sorry_timeout_must_be_number => "타임아웃은 숫자여야 합니다. (Ex : 70)",
+   unable_to_get_ethx_IP => "IP 주소를 얻을 수 없습니다. \ 정적 클래스 C 개인 IP 주소 (Ex : 192.168.1.1)를 설정 해야하며, DHCP 클라이언트와 같은 유동 IP 주소가 될 수 없습니다. 이 오류는 네트워크 카드에 있습니다.",
+   program_stop => "프로그램 중지.",
+   open_thin_client_option => 
+        "DRBL 클라이언트가 터미널 모드를 실행하는 옵션을 갖도록 하시겠습니까? 즉, 클라이언트가 원격 디스플레이 (대부분 서버의 리소스를 사용함)를 실행되게 하려면 \"Y\"라고 입력하십시오. \ n".
+        "[참고] \n".
+	"0. 이 옵션에 대해 yes라고 대답할 경우, 클라이언트에게 매우 제한된 환경이 될 것입니다. (즉, 클라이언트에서 USB, CD, 오디오, 프린터 등을 로컬로 액세스할 수 없게 됩니다.) \n".
+	"1. 서버의 성능이 좋지 않을 경우, \"no\"를 입력하십시오. \n".
+	"2. 여기서 \"yes\" 를 입력하게 될 경우, xdmcp를 킵니다. \n".
+	"이것을 켜는 것은 결코 안전한 일이 아닙니다.  로컬 액세스만 허용하도록 /etc/hosts.allow 및 /etc/hosts.deny를 설정하는 것이 또 다른 대안이나, 가장 안전한 방법은 아닙니다. \n".
+	"만약 xdmcp를 켜려면 방화벽 포트 177이 가장 안전합니다.\n".
+	"xdmcp 보안에 대한 자세한 내용은 메뉴얼을 참조하시기 바랍니다. \n".
+	"직접 설정하십시오. \n".
+	"3. 여기에 \"yes\" 를 입력할 경우, 데스크탑 환경 관리지(gdm/kdm)를 다시 시작해야 할수도 있습니다. 응용 프로그램을 닫기 전에 데이터를 저장하십시오. \n".
+	"클라이언트가 터미널 모드를 실행할 수 있는 옵션을 제공하시겠습니까?",
+   server_kernel_nfsd_support => "서버에서 실행 중인 커널은 다음을 지원합니다 :",
+   change_kernel_notes => "[참고] 서버에서 실행 중인 커널을 변경하고 커널이 udp 또는 tcp를 통한 NFS를 지원하는지 확실하지 않을 경우, 클라이언트 부팅이 실패하지 않도록 \"drblpush -i\"를 재실행하는 것이 좋습니다.",
+   hint_for_answer => "[힌트] yes/no 옵션을 사용할 수 있는 경우, 기본값은 대문자입니다. Ex. (y/N), 기본값은 \"N\"이며, \"Enter\"를 누를 경우, \"N\"으로 간주됩니다. 어떤 것을 선택해야 할지 모르겠다면 \"Enter\" 키를 누르십시오.",
+   hint_for_detect_MAC => "DRBL 클라이언트에 고정 IP 주소를 사용하려면, 대화형 모드 (-i 옵션 사용)에서 \"drblpush\"를 실행하고 클라이언트의 MAC 주소를 수집해야합니다.",
+   illegal_char_in_MAC => "MAC 주소 파일에 잘못된 문자가 있습니다.",
+   fix_wrong_MAC_file => "입력한 MAC 주소 파일을 확인하고 수정하십시오.",
+   unable_to_find_public_IP => "이 서버의 공인 IP 주소를 찾을 수 없습니다.",
+   available_eth_ports => "이 서버에서 사용 가능한 이더넷 포트 :",
+   is_not_in_the_lists => "는 이 목록에 없습니다",
+   enter_it_again => "다시 입력하십시오.",
+   the_eth_port_you_choose_for_wan => "WAN 연결을 위해 선택한 이더넷 포트",
+   set_DBN_client_audio_plugdev_etc_open_to_all => "DRBL 클라이언트의 모든 사용자에게 오디오, CD-ROM, 플로피, 비디오 및 plugdev (Ex : USB 디바이스)를 열도록 하시겠습니까? 만약 그렇다면, 모든 사용자를 서버 및 클라이언트의 해당 디바이스 그룹에 추가합니다.",
+   use_random_password => "자동 로그인 계정에 *랜덤* 비밀번호를 사용하시겠습니까?",
+   enter_password_for_autologin_accounts => "자동 로그인 계정의 비밀번호를 입력하십시오.",
+   whats_client_autologin_passwd => "클라이언트 자동 로그인 계정의 비밀번호는 무엇입니까 (화면에 표시되지 않음)?",
+   retype_autologin_passwd => "암호를 다시 입력하십시오. (화면에 표시되지 않음)",
+   clonezilla_box_mode_for_client => "Clonezilla 박스 모드를 사용하시겠습니까? 만약 그렇다면, DRBL에 대한 일부 기능이 억제되고 clonezilla를 수행하는 elegant mode가 제공됩니다. [참고] 이 모드에서는 클라이언트의 설정 및 구성 파일이 DRBL 서버에 저장되지 않습니다. 단지 한번 사용만 사용되며, PC가 종료된 후 사라집니다.",
+   clonezilla_box_mode_is_set => "Clonezilla 박스 모드가 설정되었고, Clonezilla를 위한 elegant mode가 시작되었습니다.",
+   full_clonezilla_mode_is_set => "전체 Clonezilla 모드가 설정되었습니다.",
+   clonezilla_box_mode_not_set => "Clonezilla 박스 모드가 설정되어 있지 않다면, DRBL 박스의 모든 기능을 사용할 수 있습니다.",
+   no_clonezilla_in_system => "이 시스템에 Clonezilla가 없습니다.",
+   class_c_IP_for_multicast_clonezilla => "멀티캐스트 clonezilla를 사용하려면 전용 클래스 C (192.168. *. *)를 사용해야 합니다. 그렇지 않으면, 멀티캐스트 클론의 성능이 엄청나게 나빠질 것입니다.",
+   drbl_ssi_mode_for_client => "DRBL SSI(단일 시스템 이미지) 모드를 사용하시겠습니까? yes인 경우, 서버의 로드 및 필요한 디스크 공간이 더 가벼워집니다. [참고] 이 모드에서는 (1) 클라이언트 시스템 메모리가 256MB 이상입니다. (2) 클라이언트의 설정 및 설정 파일은 DRBL 서버에 저장되지 않습니다. 단 한 번만 사용되며, PC가 종료 후 사라집니다. 또한 템플릿 클라이언트 ($drblroot에 있음)에서 파일을 수정할 경우, drbl-gen-ssi-files를 실행하여 $drbl_common_root/drbl_ssi/에 템플릿 tarball을 만들어야 합니다. (3) 클라이언트 부팅 시 템플릿 tarball의 설정을 덮어쓸 수 있는 파일을 제공하려면 $drbl_common_root/drbl_ssi/clients/00_README를 확인하여 자세한 내용을 확인합니다.",
+   which_drbl_mode_for_client => "이 시스템에는 diskless linux 서비스를 위한 세 가지 모드가 있습니다 : \n [0] 전체 DRBL 모드이며, 모든 클라이언트에는 고유한 NFS 기반 /etc 및 /var가 있습니다. \n [1] DRBL SSI(단일 시스템 이미지) 모드에서는 모든 클라이언트가 tmpfs 기반 /etc 및 /var를 사용합니다. 이 모드에서는 서버의 로드 및 필요한 디스크 공간이 더 가벼워집니다. [참고] (a) 클라이언트 시스템 메모리는 256MB 이상 권장됩니다. (b) 클라이언트의 설정 및 구성 파일은 DRBL 서버에 저장되지 않습니다. 그것들은 한 번만 사용되며 기계가 종료된 후에 사라질 것입니다. 또한 $drblroot에 위치한 템플릿 클라이언트에서 파일을 수정하는 경우 drbl_common_root/drbl_ssi/에서 drbl-gen-ssi 파일을 실행하여 $drbl_common_drbl_si/에 템플릿 tarball을 생성해야 합니다. (c) 클라이언트 부팅 시 tarball 템플릿의 설정을 덮어 쓸 파일을 제공하려면 자세한 내용은 $drbl_common_root/drbl_ssi/clients/00_README를 확인하십시오. \n [2] diskless Linux 서비스를 클라이언트에 제공하고 싶지 않습니다. \n 어떤 모드를 선호하십니까?",
+   drbl_ssi_mode_is_set => "DRBL SSI 모드가 설정되었으며, DRBL을 위한 elegant mode가 진행 중입니다.",
+   full_drbl_mode_is_set => "전체 DRBL 모드가 선택되었습니다.",
+   no_drbl_mode_in_system => "이 시스템에 클라이언트 용 diskless Linux가 없습니다.",
+   where_is_ocs_img_repo_dir => "Clonezilla를 사용할 때, 저장된 이미지를 저장할 서버의 디렉토리를 선택합니다(절대 경로를 사용하십시오. /mnt/, /media/ 또는 /tmp/에서 할당하지 마십시오.",
+   not_allowed_ocs_img_repo_dir => "clonezilla 이미지를 저장할 수 있는 디렉토리가 아닙니다. 다시 입력하십시오.",
+   drbl_server_as_NAT_server => "DRBL 서버를 NAT 서버로 사용하시겠습니까? 그렇지 않을 경우, DRBL 클라이언트가 인터넷에 액세스할 수 없습니다.",
+   drbl_server_is_NOT_NAT_server => "이 DRBL 서버는 NAT 서비스를 제공하지 않으므로, DRBL 클라이언트가 인터넷에 액세스할 수 없습니다.",
+   both_drbl_clonezilla_are_none => "drbl 및 clonezilla 모드 모두 사용할 수 없는 것으로 할당되며, netinstall, 필요한 파일을 설치한 경우 및 drbl-sl과 같은 매우 제한된 기능만 이 시스템에서 사용할 수 있습니다.",
+   are_you_sure_you_want_to_continue => "정말로 계속하시겠습니까?",
+   # Tag on 2010/12/13
+   which_clonezilla_mode_for_client => "시스템에는 clonezilla에 사용할 수 있는 4가지 모드가 있습니다 : \n [0] Full Clonezilla 모드, 모든 클라이언트에는 자체 NFS 기반 /etc 및 /var가 있습니다. \n [1] Clonezilla 박스 모드, 모든 클라이언트는 tmpfs 기반 /etc 및 /var를 사용합니다. 이 모드에서 서버의 로드 및 필요한 디스크 공간은 Full Clonezilla 모드의 디스크 공간보다 작습니다. [참고] Clonezilla 박스 모드에서는 클라이언트의 설정 및 구성 파일이 DRBL 서버에 저장되지 않습니다. 한 번만 사용하면 기계가 종료될 때 사라집니다. \n [2] Clonezilla를 사용하지 않음. \n [3] Clonezilla live를 클라이언트의 OS (Operating System)로 사용. \n 어떤 모드를 선호하십니까?",
+   clonezilla_live_mode_is_set => "Clonezilla 작업을 실행할 때 Clonezilla 라이브를 클라이언트의 OS (운영 체제)로 사용합니다.",
+   which_clonezilla_live_branch => "클라이언트를 위한 Clonezilla live 릴리스 지점 (release branch)은 무엇입니까? \n [0]: 안정 (데비안 기반) \n [1]: 테스팅 (데비안 기반) \n [2]: 대체 안정 (우분투 기반)\n[3]: 대체 테스트 (우분투 기반)\n 잘 모를 경우, [2]: 대체 안정 (우분투 기반) 선택.",
+   which_live_client_cpu_mode => "Clonezilla live로 Clonezilla 작업을 실행할 때 클라이언트의 CPU 아키텍처는 무엇입니까? \n [0]: i586 \n [1]: i686 \n [2]: amd64 \n 잘 모를 경우, i586 선택.",
+   which_live_client_cpu_mode_for_ubuntu => "Clonezilla 라이브로 Clonezilla 작업을 실행할 때 클라이언트의 CPU 아키텍처는 무엇입니까? \n [0]: i386 \n [1]: amd64 \n 잘 모를 경우, i386 선택.",
+   live_client_branch_set=> "The Clonezilla live branch가 다음으로 선택되었습니다 :",
+   live_client_cpu_arch_is_set => "Clonezilla 작업을 실행할 때 클라이언트의 CPU 아키텍처 :",
+   # Tag on 2017/01/26
+   only_one_network_card_in_system => "[주의] 이 시스템에서 오직 1개의 네트워크 카드가 발견되었습니다.",
+   found_dhcp_service_on_nic => "네트워크 인터페이스에서 DHCP 서비스를 찾았습니다.",
+   do_you_want_to_lease_ip_addr_from_existing_dhcp_srv => "기존 DHCP 서비스에서 IP 주소를 임대하시겠습니까? DHCP 서버 IP 주소는 :",
+   will_use_available_ip_addr_from_dhcp_srv => "만약 그렇다면, DHCP 서버에서 임대된 사용 가능한 IP 주소를 사용합니다. 그렇지 않은 경우, 이 시스템에서 DHCP 서비스를 실행하며 서비스가 기존 서비스와 충돌할 수 있습니다. 따라서 yes를 선택하는 것이 좋습니다.",
+   note_you_have_to_make_sure_enough_no_of_ip_addr => "[참고] 'yes'를 선택하면 DHCP 서버가 모든 클라이언트에 대해 충분한 수의 IP 주소를 제공해야 합니다. 또한 모든 PXE 또는 uEFI 네트워크 부팅 클라이언트가 DRBL 또는 Clonzilla 모드로 전환되기 때문에 이 메커니즘은 위험합니다. 재확인 바랍니다.",
+   failed_to_detect_dhcp_service => "이 네트워크 카드에서 DHCP 서비스를 찾지 못했습니다",
+   do_you_want_to_try_it_again => "재시도 하시겠습니까?",
+   mark_the_end_of_lang =>"."
+   );
