@@ -1,3 +1,9 @@
+drbl (4.1.1-drbl1) unstable; urgency=medium
+
+  * ocs-onthefly: Update locales about net pipe program netcat and nuttcp.
+
+ -- Steven Shiau <steven@clonezilla.org>  Sat, 10 Oct 2020 22:39:55 +0800
+
 drbl (4.1.0-drbl1) unstable; urgency=medium
 
   * Sync the option "-p" of ocs-onthefly with ocs-sr, it was "-pa" for
