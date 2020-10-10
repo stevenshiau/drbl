@@ -1113,7 +1113,6 @@ msg_mount_ramdisk="Usar memòria (OK per a BT des de dispositiu raw)"
 msg_img_repo_is_using_tmpfs="La imatge del repositori està usant tmpfs (RAM com a disc)."
 msg_failed_to_use_ramdisk_as_repo="Fallada en usar la RAM (tmpfs) com mimagen del repositori."
 # Tag on 2019/01/16
-msg_ocs_onthefly_param_u="Usar netcat en comptes de nuttcp quan es cloni a través de la xarxa"
 msg_choose_param_to_set_before_sending_data="Triï el programa per a comprimir les dades abans d'enviar-les al client. Això s'utilitza per a no saturar l'amplada de banda de la xarxa. Si hi ha diverses CPU disponibles, s'utilitzaran per a tenir un millor rendiment en comprimir les dades"
 msg_ocs_onthefly_param_gz='Usar algorisme gzip'
 msg_ocs_onthefly_param_bzip2='Usar algorisme bzip2'
@@ -1145,3 +1144,6 @@ msg_ocs_onthefly_param_rvd='Remove NTFS volume dirty flag in source NTFS file sy
 msg_ocs_onthefly_param_t='Skip cloning the MBR (Master Boot Record)'
 msg_ocs_onthefly_param_t1='Clone the prebuilt bootloader from syslinux (For Windows only)'
 msg_ocs_onthefly_param_t2='Skip cloning the EBR (Extended Boot Record)'
+msg_choose_net_pipe_program='Choose the network pipe program when cloning over network'
+msg_ocs_onthefly_param_netcat='Use netcat when cloning over network'
+msg_ocs_onthefly_param_nuttcp='Use nuttcp when cloning over network'
