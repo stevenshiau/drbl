@@ -1,3 +1,11 @@
+drbl (4.1.2-drbl1) unstable; urgency=medium
+
+  * Update ocsd-rescue.service for Ubuntu 20.10 since it requires
+    ExecStart. The original inclusion from rescue.service is not working
+    anymore.
+
+ -- Steven Shiau <steven@clonezilla.org>  Sat, 24 Oct 2020 16:21:18 +0800
+
 drbl (4.1.1-drbl1) unstable; urgency=medium
 
   * ocs-onthefly: Update locales about net pipe program netcat and nuttcp.

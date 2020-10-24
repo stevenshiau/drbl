@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	4.1.1
+Version:	4.1.2
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,11 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Sat Oct 24 2020 Steven Shiau <steven _at_ clonezilla org> 4.1.2-drbl1
+  * Update ocsd-rescue.service for Ubuntu 20.10 since it requires
+    ExecStart. The original inclusion from rescue.service is not working
+    anymore.
+
 * Sat Oct 10 2020 Steven Shiau <steven _at_ clonezilla org> 4.1.1-drbl1
   * ocs-onthefly: Update locales about net pipe program netcat and nuttcp.
 
