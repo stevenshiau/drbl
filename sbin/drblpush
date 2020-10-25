@@ -3034,9 +3034,13 @@ done
 #	2. make a link of rescue.service to ocsd-rescue.service
 #	3. remove /etc/rc*.d/S*ocs-run to avoid ocs-run service competition
 if is_systemd_init; then
+  [ -e /etc/lsb-release ] && . /etc/lsb-release
   [ ! -d "$drbl_common_root/etc/systemd/system/rescue.target.wants" ] && mkdir "$drbl_common_root/etc/systemd/system/rescue.target.wants"
   cp -P $drbl_common_root/etc/systemd/system/multi-user.target.wants/* $drbl_common_root/etc/systemd/system/rescue.target.wants/
-  if [ -d $drbl_setup_path/files/${OS_type}/${OS_Version}/systemd/system ]; then
+  if [ -d $drbl_setup_path/files/${DISTRIB_ID}/${DISTRIB_RELEASE}/systemd/system ]; then
+    # For Ubuntu, first find its own one.
+    cp $drbl_setup_path/files/${DISTRIB_ID}/${DISTRIB_RELEASE}/systemd/system/ocsd-*.service $drbl_common_root/etc/systemd/system/
+  elif [ -d $drbl_setup_path/files/${OS_type}/${OS_Version}/systemd/system ]; then
     cp $drbl_setup_path/files/${OS_type}/${OS_Version}/systemd/system/ocsd-*.service $drbl_common_root/etc/systemd/system/
   else
     # Can not find fine-tune file, show warning, and use the most related one.
