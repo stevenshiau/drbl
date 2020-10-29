@@ -1,3 +1,9 @@
+drbl (4.1.4-drbl1) unstable; urgency=medium
+
+  * Update opensuse netinstall as 15.2 in drbl.conf.
+
+ -- Steven Shiau <steven@clonezilla.org>  Thu, 29 Oct 2020 20:53:26 +0800
+
 drbl (4.1.3-drbl1) unstable; urgency=medium
 
   * Bug fixed: ocsd-*.service was not corrected copied by drblpush.

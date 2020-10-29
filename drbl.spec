@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	4.1.3
+Version:	4.1.4
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Thu Oct 29 2020 Steven Shiau <steven _at_ clonezilla org> 4.1.4-drbl1
+  * Update opensuse netinstall as 15.2 in drbl.conf.
+
 * Sun Oct 25 2020 Steven Shiau <steven _at_ clonezilla org> 4.1.3-drbl1
   * Bug fixed: ocsd-*.service was not corrected copied by drblpush.
 
