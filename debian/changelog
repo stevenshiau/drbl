@@ -1,3 +1,10 @@
+drbl (4.1.5-drbl1) unstable; urgency=medium
+
+  * Add scsitools blktool safecopy gpart to the packages list
+    of clonezilla live.
+
+ -- Steven Shiau <steven@clonezilla.org>  Mon, 02 Nov 2020 20:13:51 +0800
+
 drbl (4.1.4-drbl1) unstable; urgency=medium
 
   * Update opensuse netinstall as 15.2 in drbl.conf.
