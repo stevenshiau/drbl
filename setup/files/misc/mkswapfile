@@ -63,7 +63,7 @@ newswapfile() {
   # Create swap files in exist partitions
   avail_part="$(LC_ALL=C fdisk -l 2>/dev/null | grep "^\/dev\/" | awk '{ if($2=="*" && $6!="f" && $6!="0" && $6!="5") print $1; if($2!="*" && $5!="f" && $5!="0" && $5!="5") print $1; }')"
   for p in $avail_part; do
-    part_fs="$(LC_ALL=C ocs-get-part-info $p type filesystem)"
+    part_fs="$(LC_ALL=C ocs-get-dev-info $p type filesystem)"
     rc=$?
     [ "$rc" -gt 0 ] && continue 
     case "$part_fs" in *[Ss][Ww][Aa][Pp]*|*extended*) continue ;; esac
