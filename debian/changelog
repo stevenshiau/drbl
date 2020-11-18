@@ -1,3 +1,10 @@
+drbl (4.2.0-drbl1) unstable; urgency=medium
+
+  * mkswapfile: Use new name ocs-get-dev-info
+  * Sync the version number with Clonezilla.
+
+ -- Steven Shiau <steven@clonezilla.org>  Wed, 18 Nov 2020 09:55:41 +0800
+
 drbl (4.1.5-drbl1) unstable; urgency=medium
 
   * Add scsitools blktool safecopy gpart to the packages list
