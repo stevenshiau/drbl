@@ -1,3 +1,10 @@
+drbl (4.2.1-drbl1) unstable; urgency=medium
+
+  * Remove hfsprogs from the default packages list in 
+    DRBL/Clonezilla/GParted live since it's now in Debian non-free section.
+
+ -- Steven Shiau <steven@clonezilla.org>  Sun, 22 Nov 2020 13:32:40 +0800
+
 drbl (4.2.0-drbl1) unstable; urgency=medium
 
   * mkswapfile: Use new name ocs-get-dev-info

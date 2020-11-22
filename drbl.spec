@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	4.2.0
+Version:	4.2.1
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,10 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Sun Nov 22 2020 Steven Shiau <steven _at_ clonezilla org> 4.2.1-drbl1
+  * Remove hfsprogs from the default packages list in 
+    DRBL/Clonezilla/GParted live since it's now in Debian non-free section.
+
 * Wed Nov 18 2020 Steven Shiau <steven _at_ clonezilla org> 4.2.0-drbl1
   * mkswapfile: Use new name ocs-get-dev-info
   * Sync the version number with Clonezilla.
