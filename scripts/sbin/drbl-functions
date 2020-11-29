@@ -3715,7 +3715,7 @@ get_latest_pkg_in_drbl_repository() {
     # Hence we add all of them as:
     # 0:4.0.2-1.drbl15
     # 1:20170623.drbl1
-    pver="$(xzgrep -Ew -A 30 "^Package: $pkg([[:space:]]+|$)" $ktmp/Packages.xz | grep -E "^Version:" | sed -e "s/^Version: //g" | sed -r -e "s/^([^:]+)$/0:\1/g" | sort -V -r | uniq | head -n 1)"
+    pver="$(xzgrep -Ew -A 5 "^Package: $pkg([[:space:]]+|$)" $ktmp/Packages.xz | grep -E "^Version:" | sed -e "s/^Version: //g" | sed -r -e "s/^([^:]+)$/0:\1/g" | sort -V -r | uniq | head -n 1)"
     if [ -z "$pver" ]; then
       # Clean Packages.xz to avoid wget using another name like Packages.xz.1 then search the next again
       rm -f $ktmp/Packages.xz
