@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (4.2.2-drbl1) unstable; urgency=medium
+
+  * Add package f3 in Clonezilla/DRBL live.
+
+ -- Steven Shiau <steven@clonezilla.org>  Sun, 29 Nov 2020 16:11:57 +0800
+
 drbl (4.2.1-drbl1) unstable; urgency=medium
 
   * Remove hfsprogs from the default packages list in 
