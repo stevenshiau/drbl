@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (4.2.5-drbl1) unstable; urgency=medium
+
+  * Add more packages in DRBL/Clonezilla live packages list:
+    vnstat iperf3
+
+ -- Steven Shiau <steven@clonezilla.org>  Tue, 08 Dec 2020 08:45:54 +0800
+
 drbl (4.2.4-drbl1) unstable; urgency=medium
 
   * Add more packages in DRBL/Clonezilla live packages list:
