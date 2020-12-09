@@ -1147,11 +1147,11 @@ msg_ocs_param_z9p='compresión zstdmt'
 # Tag on 2020/08/09
 msg_locale_ko_KR='Coreano'
 # Tag on 2020/09/10
-msg_ocs_onthefly_param_rvd='Remove NTFS volume dirty flag in source NTFS file system before cloning it'
+msg_ocs_onthefly_param_rvd='Elimine el indicador sucio de volumen NTFS en el sistema de archivos NTFS de origen antes de clonarlo'
 # Tag on 2020/10/02
-msg_ocs_onthefly_param_t='Skip cloning the MBR (Master Boot Record)'
-msg_ocs_onthefly_param_t1='Clone the prebuilt bootloader from syslinux (For Windows only)'
-msg_ocs_onthefly_param_t2='Skip cloning the EBR (Extended Boot Record)'
-msg_choose_net_pipe_program='Choose the network pipe program when cloning over network'
-msg_ocs_onthefly_param_netcat='Use netcat when cloning over network'
-msg_ocs_onthefly_param_nuttcp='Use nuttcp when cloning over network'
+msg_ocs_onthefly_param_t='Omitir clonado del MBR (Master Boot Record)'
+msg_ocs_onthefly_param_t1='Clonar el bootloader prediseñado de syslinux (Únicamente para Windows)'
+msg_ocs_onthefly_param_t2='Omitir clonado del EBR (Extended Boot Record)'
+msg_choose_net_pipe_program='Elegir programa de canalización de red cuando se clone sobre red'
+msg_ocs_onthefly_param_netcat='Usar netcat cuando se clone sobre red'
+msg_ocs_onthefly_param_nuttcp='Usar nuttcp cuando se clone sobre red'
