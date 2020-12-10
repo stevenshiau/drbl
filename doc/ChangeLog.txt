@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (4.2.6-drbl1) unstable; urgency=medium
+
+  * Language file es_ES was updated. Thanks to Juan Ramón Martínez.
+
+ -- Steven Shiau <steven@clonezilla.org>  Thu, 10 Dec 2020 18:12:29 +0800
+
 drbl (4.2.5-drbl1) unstable; urgency=medium
 
   * Add more packages in DRBL/Clonezilla live packages list:
