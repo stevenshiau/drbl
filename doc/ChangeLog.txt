@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (4.2.7-drbl1) unstable; urgency=medium
+
+  * Add glances in the packages list of drbl/clonezilla live.
+
+ -- Steven Shiau <steven@clonezilla.org>  Fri, 25 Dec 2020 11:42:29 +0800
+
 drbl (4.2.6-drbl1) unstable; urgency=medium
 
   * Language file es_ES was updated. Thanks to Juan Ramón Martínez.
