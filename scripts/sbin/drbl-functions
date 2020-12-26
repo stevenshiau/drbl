@@ -2817,7 +2817,7 @@ parse_cmdline_option() {
       # 2020/12/26 When two "=" in the variable, e.g.,:
       # "ocs_live_run=ocs-sr -q2 -j2 -z1p -p poweroff savedisk autoname-wpfx=fox serialno=xyz"
       # it fails at:
-      # ocs_live_run=ocs-sr -q2 -j2 -z1p -p poweroff savedisk autoname-wpfx="chrisux310uak serialno=xyz"
+      # ocs_live_run=ocs-sr -q2 -j2 -z1p -p poweroff savedisk autoname-wpfx="fox serialno=xyz"
       # since sed is greedy regex.
       # Therefore we have to use non-greedy regex language, perl, for this purpose: 
       # perl -pi -e 's/(^")(.*?=)(.*=.*)*/$2"$3/g' $parse_tmp
