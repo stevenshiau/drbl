@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	4.2.8
+Version:	4.2.9
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,10 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Mon Dec 28 2020 Steven Shiau <steven _at_ clonezilla org> 4.2.9-drbl1
+  * Disable zz-dhclient in the initramfs on DRBL server.
+    Ref:
+    https://sourceforge.net/p/drbl/discussion/DRBL_for_Debian/thread/791b123348/
 * Sat Dec 26 2020 Steven Shiau <steven _at_ clonezilla org> 4.2.8-drbl1
   * Improve parse_cmdline_option to allow multiple "=" in a line, e.g.,
     ocs_live_run="ocs-sr -q2 -j2 -z1p -p poweroff savedisk autoname-wpfx=fox serialno=xyz

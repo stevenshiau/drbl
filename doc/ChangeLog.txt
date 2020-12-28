@@ -5,6 +5,14 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (4.2.9-drbl1) unstable; urgency=medium
+
+  * Disable zz-dhclient in the initramfs on DRBL server.
+    Ref:
+    https://sourceforge.net/p/drbl/discussion/DRBL_for_Debian/thread/791b123348/
+
+ -- Steven Shiau <steven@clonezilla.org>  Mon, 28 Dec 2020 09:57:25 +0800
+
 drbl (4.2.8-drbl1) unstable; urgency=medium
 
   * Improve parse_cmdline_option to allow multiple "=" in a line, e.g.,
