@@ -2177,6 +2177,12 @@ if [ "$DISTRIB_ID" = "Ubuntu" ]; then
     ;;
   esac
 fi
+# Ubuntu >= 20.10 has a hook file zz-dhclient causing server booting to lease IP address. We do not need that.
+if grep -Ewq "^cp -a /usr/lib/initramfs-tools/etc/dhcp/.*" /usr/share/initramfs-tools/hooks/zz-dhclient 2>/dev/null; then
+  echo "Found /usr/share/initramfs-tools/hooks/zz-dhclient. Comment it to avoid running dhclient in initramfs."
+  perl -pi -e "s|^(cp -a /usr/lib/initramfs-tools/etc/dhcp/.*)|# \$1 # commented by DRBL|" /usr/share/initramfs-tools/hooks/zz-dhclient
+  update-initramfs -u
+fi
 
 # If purge_client = no, which means we will NOT overwrite the old files.
 # we had better to add "-u" for rsync, and we assign keep_old_files_flag=yes
