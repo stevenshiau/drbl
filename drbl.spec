@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	4.2.7
+Version:	4.2.8
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,12 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Sat Dec 26 2020 Steven Shiau <steven _at_ clonezilla org> 4.2.8-drbl1
+  * Improve parse_cmdline_option to allow multiple "=" in a line, e.g.,
+    ocs_live_run="ocs-sr -q2 -j2 -z1p -p poweroff savedisk autoname-wpfx=fox serialno=xyz
+    Thanks to Christopher S for reporting this.
+    Ref: https://sourceforge.net/p/clonezilla/support-requests/144/
+
 * Fri Dec 25 2020 Steven Shiau <steven _at_ clonezilla org> 4.2.7-drbl1
   * Add glances in the packages list of drbl/clonezilla live.
 

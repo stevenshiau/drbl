@@ -1,3 +1,12 @@
+drbl (4.2.8-drbl1) unstable; urgency=medium
+
+  * Improve parse_cmdline_option to allow multiple "=" in a line, e.g.,
+    ocs_live_run="ocs-sr -q2 -j2 -z1p -p poweroff savedisk autoname-wpfx=fox serialno=xyz
+    Thanks to Christopher S for reporting this.
+    Ref: https://sourceforge.net/p/clonezilla/support-requests/144/
+
+ -- Steven Shiau <steven@clonezilla.org>  Sat, 26 Dec 2020 10:56:12 +0800
+
 drbl (4.2.7-drbl1) unstable; urgency=medium
 
   * Add glances in the packages list of drbl/clonezilla live.
