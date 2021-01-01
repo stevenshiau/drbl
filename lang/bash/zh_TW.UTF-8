@@ -1072,7 +1072,7 @@ msg_auto_detect_dhcpd='自動偵測是否有DHCP服務存在'
 msg_use_existing_dhcpd='使用區域網路中現有的DHCP服務'
 msg_start_new_dhcpd='在區域網路新增DHCP服務'
 # Tag on 2017/06/13
-msg_ocs_live_mount_smb_protocol_ver='你要使用那一種版本的SMB協定?若不清楚，可以嘗試預設的版本(1.0)'
+msg_ocs_live_mount_smb_protocol_ver='你要使用那一種版本的SMB協定?若不清楚，可以嘗試預設的版本(auto)'
 msg_ocs_use_smbv1_0='SMB協定1.0'
 msg_ocs_use_smbv2_0='SMB協定2.0'
 msg_ocs_use_smbv2_1='SMB協定2.1'
@@ -1140,3 +1140,6 @@ msg_ocs_onthefly_param_t2='用戶端電腦略去復原EBR (Extended Boot Record)
 msg_choose_net_pipe_program='選擇在透過網路對拷的時候，要選用的網路對傳程式'
 msg_ocs_onthefly_param_netcat='網路對傳時，使用netcat'
 msg_ocs_onthefly_param_nuttcp='網路對傳時，使用nuttcp'
+# Tag on 2020/12/31
+msg_ocs_use_smbv3_11='SMB協定3.1.1'
+msg_ocs_use_smb_auto='自動與伺服器協商SMB協定'
