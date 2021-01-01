@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	4.2.9
+Version:	4.2.10
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Fri Jan 01 2021 Steven Shiau <steven _at_ clonezilla org> 4.2.10-drbl1
+  * Update language files about samba protocol.
+
 * Mon Dec 28 2020 Steven Shiau <steven _at_ clonezilla org> 4.2.9-drbl1
   * Disable zz-dhclient in the initramfs on DRBL server.
     Ref:

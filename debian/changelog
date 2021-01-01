@@ -1,3 +1,9 @@
+drbl (4.2.10-drbl1) unstable; urgency=medium
+
+  * Update language files about samba protocol.
+
+ -- Steven Shiau <steven@clonezilla.org>  Fri, 01 Jan 2021 20:55:40 +0800
+
 drbl (4.2.9-drbl1) unstable; urgency=medium
 
   * Disable zz-dhclient in the initramfs on DRBL server.
