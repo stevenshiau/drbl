@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	4.2.10
+Version:	4.2.11
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Fri Jan 08 2021 Steven Shiau <steven _at_ clonezilla org> 4.2.11-drbl1
+  * Add virt-what in live packages list.
+
 * Fri Jan 01 2021 Steven Shiau <steven _at_ clonezilla org> 4.2.10-drbl1
   * Update language files about samba protocol.
 
