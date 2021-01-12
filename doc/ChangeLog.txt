@@ -5,6 +5,15 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (4.2.12-drbl1) unstable; urgency=medium
+
+  * Bug fixed: drbl-sl failed to support GParted live due to the default
+    boot parameters are using aufs, not overlay. In addition, the
+    function filter_cl_gp_boot_param in drbl-function should 
+    support the format of $linux_cmd line in grub.cfg.
+
+ -- Steven Shiau <steven@clonezilla.org>  Tue, 12 Jan 2021 22:13:32 +0800
+
 drbl (4.2.11-drbl1) unstable; urgency=medium
 
   * Add virt-what in live packages list.
