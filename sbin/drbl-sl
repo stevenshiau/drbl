@@ -150,14 +150,14 @@ drbl_prerun2=\"grep -qsE ^sudo -i ocs-live-run-menu /home/$assgned_username/.bas
          server_IP="$(LC_ALL=C get-all-nic-ip -i | awk -F" " '{print $1}')"
        fi
        get_rootfs_location_opt
-       assgned_username="user"  # The live system uses the default username as "user"
-       gparted_se_live_opts="username=$assgned_username"
        if [ -z "$cl_gp_boot_param" ]; then
-         append_param_in_grub_cfg="boot=live union=aufs noswap noeject nolocales vga=788 $rootfs_location_opt "
+         assgned_username="user"  # The live system uses the default username as "user"
+         gparted_se_live_opts="username=$assgned_username"
+         append_param_in_grub_cfg="boot=live union=overlay noswap noeject nolocales vga=788 $rootfs_location_opt "
          append_param_in_pxe_cfg="initrd=$nbi_initrd $append_param_in_grub_cfg"
        else
-         append_param_in_grub_cfg="$cl_gp_boot_param noeject $rootfs_location_opt $gparted_se_live_opts"
-         append_param_in_pxe_cfg="initrd=$nbi_initrd $append_param_in_grub_cfg $gparted_se_live_opts"
+         append_param_in_grub_cfg="$cl_gp_boot_param noeject $rootfs_location_opt"
+         append_param_in_pxe_cfg="initrd=$nbi_initrd $append_param_in_grub_cfg"
        fi
        ;;
   esac
@@ -787,7 +787,7 @@ install_SL(){
       end_line="$(echo $lines | awk -F" " '{print $2}')"
       search_cmd="if ($begin_line..$end_line) {print}"
       cl_gp_boot_param="$(LC_ALL=C perl -n -e "$search_cmd" $grub_cfg_f | \
-	                  grep -Eiw "\$linux_cmd" | filter_cl_gp_boot_param)"
+	                  grep -iw "\$linux_cmd" | filter_cl_gp_boot_param)"
       ;;
   esac
   
