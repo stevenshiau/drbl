@@ -1144,7 +1144,7 @@ msg_ocs_onthefly_param_nuttcp='網路對傳時，使用nuttcp'
 msg_ocs_use_smbv3_11='SMB協定3.1.1'
 msg_ocs_use_smb_auto='自動與伺服器協商SMB協定'
 # Tag on 2021/01/18
-msg_choose_if_fsck_the_source_part='掛載儲藏庫之前，選擇是否要檢查並修正儲藏庫的檔案系統。這選項只適用那些GNU/Linux系統上fsck程式支援比較好的檔案系統，例如ext2/3/4, reiserfs, xfs, jfs或者vfat。對於NTFS或者HFS+並不支援。'
+msg_choose_if_fsck_the_repo_part='掛載儲藏庫之前，選擇是否要檢查並修正儲藏庫的檔案系統。這選項只適用那些GNU/Linux系統上fsck程式支援比較好的檔案系統，例如ext2/3/4, reiserfs, xfs, jfs或者vfat。對於NTFS或者HFS+並不支援。'
 msg_skip_check_repo_fs='略去檢查與修正儲藏庫分割區的檔案系統'
 msg_ocs_param_fsck_repo_part='掛載儲藏庫之前嘗試交談式檢查與修復檔案系統'
 msg_ocs_param_fsck_repo_part_yes='掛載儲藏庫之前嘗試自動(小心!)檢查與修復檔案系統'
