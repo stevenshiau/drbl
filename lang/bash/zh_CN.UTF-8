@@ -1146,3 +1146,8 @@ msg_ocs_onthefly_param_nuttcp='Use nuttcp when cloning over network'
 # Tag on 2020/12/31
 msg_ocs_use_smbv3_11='SMB protocol 3.11 or 3.1.1'
 msg_ocs_use_smb_auto='Auto negotiate SMB protocol'
+# Tag on 2021/01/18
+msg_choose_if_fsck_the_repo_part='Choose if you want to check and repair the file system before mounting the image repository. This option is only for certain file systems which are well supported by fsck on GNU/Linux, like ext2/3/4, reiserfs, xfs, jfs, vfat. Not for NTFS, HFS+...'
+msg_skip_check_repo_fs='Skip checking/repairing the file system before mounting'
+msg_ocs_param_fsck_repo_part='Interactively check and repair the file system before mounting'
+msg_ocs_param_fsck_repo_part_yes='Auto (Caution!) check and repair file system before mounting'
