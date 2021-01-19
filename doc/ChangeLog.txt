@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (4.2.15-drbl1) unstable; urgency=medium
+
+  * drbl.conf: use exfatprogs instead of exfat-utils in the packages
+    list of Clonezilla/DRBL live. Add it to GParted live, too.
+
+ -- Steven Shiau <steven@clonezilla.org>  Tue, 19 Jan 2021 17:58:00 +0800
+
 drbl (4.2.14-drbl1) unstable; urgency=medium
 
   * Fix a typo in the language file zh_TW.UTF-8.
