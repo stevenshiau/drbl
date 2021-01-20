@@ -1163,3 +1163,4 @@ msg_choose_if_fsck_the_repo_part='Choose if you want to check and repair the fil
 msg_skip_check_repo_fs='Skip checking/repairing the file system before mounting'
 msg_ocs_param_fsck_repo_part='Interactively check and repair the file system before mounting'
 msg_ocs_param_fsck_repo_part_yes='Auto (Caution!) check and repair file system before mounting'
+msg_not_this_is_for_mount_repository='//NOTE// This is for mounting local storage device as an image repository!'
