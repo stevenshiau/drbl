@@ -285,9 +285,9 @@ label drbl
   # MENU HIDE
   MENU LABEL $FULL_OS_Version $powerful_client_menu_label
   # MENU PASSWD
-  # Append DHCP/BOOTP to the kernel command line, i.e., ip=<client-ip>:<boot-server-ip>:<gw-ip>:<netmask>
-  # We need this when using proxy DHCP
-  IPAPPEND 1
+  # If necessary, uncomment "IPAPPEND 1" to get DHCP/BOOTP in kernel command line,
+  # i.e., ip=<client-ip>:<boot-server-ip>:<gw-ip>:<netmask>
+  # IPAPPEND 1
   kernel vmlinuz-pxe
   append initrd=initrd-pxe.img devfs=nomount drblthincli=off selinux=0 $quiet_opt $edd_opt $CONSOLE_OUTPUT $drbl_mode_opt $drbl_dist_append
   TEXT HELP
@@ -300,9 +300,9 @@ label clonezilla
   MENU HIDE
   MENU LABEL Clonezilla
   # MENU PASSWD
-  # Append DHCP/BOOTP to the kernel command line, i.e., ip=<client-ip>:<boot-server-ip>:<gw-ip>:<netmask>
-  # We need this when using proxy DHCP
-  IPAPPEND 1
+  # If necessary, uncomment "IPAPPEND 1" to get DHCP/BOOTP in kernel command line,
+  # i.e., ip=<client-ip>:<boot-server-ip>:<gw-ip>:<netmask>
+  # IPAPPEND 1
   kernel vmlinuz-pxe
   append initrd=initrd-pxe.img devfs=nomount drblthincli=off selinux=0 $quiet_opt text 1 $edd_opt $CONSOLE_OUTPUT $clonezilla_mode_opt $drbl_dist_append
   TEXT HELP
@@ -373,9 +373,9 @@ label drbl-terminal
   MENU HIDE
   MENU LABEL $FULL_OS_Version $thin_client_menu_label
   # MENU PASSWD
-  # Append DHCP/BOOTP to the kernel command line, i.e., ip=<client-ip>:<boot-server-ip>:<gw-ip>:<netmask>
-  # We need this when using proxy DHCP
-  IPAPPEND 1
+  # If necessary, uncomment "IPAPPEND 1" to get DHCP/BOOTP in kernel command line,
+  # i.e., ip=<client-ip>:<boot-server-ip>:<gw-ip>:<netmask>
+  # IPAPPEND 1
   kernel vmlinuz-pxe
   append initrd=initrd-pxe.img devfs=nomount drblthincli=on $quiet_opt
   TEXT HELP
