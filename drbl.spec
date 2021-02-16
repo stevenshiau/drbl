@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	4.2.15
+Version:	4.2.17
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,13 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Tue Feb 16 2021 Steven Shiau <steven _at_ clonezilla org> 4.2.17-drbl1
+  * Comment "IPAPPEND 1" in generate-pxe-menu. It fails the live-boot
+    when pxebooting a clonezilla/drbl live client.
+
+* Wed Jan 20 2021 Steven Shiau <steven _at_ clonezilla org> 4.2.16-drbl1
+  * Update language files about fsck repository file system.
+
 * Tue Jan 19 2021 Steven Shiau <steven _at_ clonezilla org> 4.2.15-drbl1
   * drbl.conf: use exfatprogs instead of exfat-utils in the packages
     list of Clonezilla/DRBL live. Add it to GParted live, too.
