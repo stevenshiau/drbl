@@ -1075,63 +1075,63 @@ msg_auto_detect_dhcpd='自动检测DHCP服务'
 msg_use_existing_dhcpd='使用局域网中现有的DHCP服务'
 msg_start_new_dhcpd='在局域网新增DHCP服务'
 # Tag on 2017/06/13
-msg_ocs_live_mount_smb_protocol_ver='你要使用哪一种版本的SMB协议？如果不确定，尝试默认版本(auto)。'
+msg_ocs_live_mount_smb_protocol_ver='你要使用哪一种版本的SMB协议？如果不确定，尝试默认版本(v1.0)。'
 msg_ocs_use_smbv1_0='SMB协议1.0'
 msg_ocs_use_smbv2_0='SMB协议2.0'
 msg_ocs_use_smbv2_1='SMB协议2.1'
 msg_ocs_use_smbv3_0='SMB协议3.0'
 msg_you_must_select_a_ver='你必须选择一个版本！'
 # Tag on 2017/09/24
-msg_lite_server_and_client_are_provided='Besides, Clonezilla lite server and client modes are also available. You can use them for massive deployment'
+msg_lite_server_and_client_are_provided='此外，再生龙轻量服务器也可以使用，你可以使用它做大量部署。'
 # Tag on 2017/12/02
-msg_ocs_param_z8='lz4 compression (Fast but also larger image)'
+msg_ocs_param_z8='使用lz4压缩(快速但是较大的镜像文件)'
 # Tag on 2017/12/27
-msg_ocs_param_z8p='lz4mt compression (Fast but also larger image)'
+msg_ocs_param_z8p='使用lz4mt压缩(快速但是较大的镜像文件)'
 # Tag on 2018/01/09
-msg_use_channel_bonding='Use channel bonding'
-msg_select_nics_for_channel_bonding='Select the network cards for channel bonding. You should choose two or more cards.'
+msg_use_channel_bonding='使用通道绑定技术'
+msg_select_nics_for_channel_bonding='为通道绑定选择网卡。你需要选择两张或两张以上的网卡。'
 # Tag on 2018/03/06
-msg_it_might_stop_required_restoring_service='It might terminate the required services for restoring.'
-msg_do_all_clients_finish_jobs='Do all clients finish restoring jobs? //NOTE// DO NOT ANSWER "y" IF ALL CLIENTS HAVE _NOT_ FINISHED JOBS.'
+msg_it_might_stop_required_restoring_service='这有可能中断所有还原所需要的服务。'
+msg_do_all_clients_finish_jobs='所有客户端完成还原工作了吗？//注意//在客户端没有完成所有还原工作时，绝对不要回答"y"。'
 # Tag on 2018/09/25
-msg_clonezilla_massive_deployment='Massive deployment by multicast, broadcast or bittorrent'
-msg_netboot_interactive_client='Network boot clients and enter Clonezilla live interactive mode'
-msg_secure_boot_for_clients_is_enabled='uEFI Secure boot for clients is enabled. The DHCP service will be started in this machine for Clonezilla lite server. Please make sure there is no secondary DHCP service existing in the LAN.'
+msg_clonezilla_massive_deployment='使用群播、广播或者比特流来做大量部署'
+msg_netboot_interactive_client='客户端网络开机进入再生龙互动模式'
+msg_secure_boot_for_clients_is_enabled='uEFI客户端的安全开机模式已经开启。将在这台机器启动DHCP服务，供再生龙服务器使用。请务必确认在局域网内没有其他DHCP服务'
 # Tag on 2019/01/08
 msg_ocs_live_lite_server_des='再生龙轻量服务器是再生龙服务的一个简单模式，提供映像文件群播/广播服务给客户端。因此可以较为简单地使用在现有的网络环境中，最主要就是不需改变现有局域网环境设置，直接使用现有的网络设置。若您的网络是一个封闭的环境，不对外连接，这个再生龙轻量服务器将会提供DHCP和PXE服务。您可以用光盘/U盘，或者PXE通过客户端开机时接收这个轻量服务器提供的映像来还原一个同样版本的再生龙单机版。'
-msg_img_massive_deploy='Massive deployment from an image'
-msg_dev_massive_deploy='Massive deployment directly from partition(s) or disk(s) (BT only)'
-msg_disk_to_mdisk_by_BT='Disk(s) to disks of multiple machines using BT protocol'
-msg_part_to_mpart_by_BT='Part(s) to partitions of multiple machines using BT protocol'
-msg_save_temp_img_for_BT='Before conducting massive deployment directly from a source device, we still need to save the source device as a temporary image.'
+msg_img_massive_deploy='使用镜像文件做大量部署'
+msg_dev_massive_deploy='直接从分区或者硬盘来做大量部署(仅适用BT机制)'
+msg_disk_to_mdisk_by_BT='使用BT机制直接从整块硬盘部署到多台机器的整块硬盘'
+msg_part_to_mpart_by_BT='使用BT机制直接从硬盘分区部署到多台机器的硬盘分区'
+msg_save_temp_img_for_BT='在直接从硬盘或者分区读取资料做大量部署之前，我们还是要先保存一个临时镜像。'
 # Tag on 2019/01/12
-msg_mount_ramdisk='Use memory (OK for BT from raw device)'
-msg_img_repo_is_using_tmpfs='The image repository is using tmpfs (RAM as disk).'
-msg_failed_to_use_ramdisk_as_repo='Failed to use RAM disk (tmpfs) as image repository.'
+msg_mount_ramdisk='使用内存(适用于使用BT机制来源直接从硬盘或分区的模式)'
+msg_img_repo_is_using_tmpfs='镜像仓库已经使用tmpfs(内存文件系统)。'
+msg_failed_to_use_ramdisk_as_repo='未能使用内存文件系统(tmpfs)作为镜像仓库。'
 # Tag on 2019/01/16
-msg_choose_param_to_set_before_sending_data='Choose the program to compress the data before sending to client. This is used to save the network bandwidth. If multiple CPUs are available, they will be used to have better performance when compressing data' 
-msg_ocs_onthefly_param_gz='Use gzip algorithm'
-msg_ocs_onthefly_param_bzip2='Use bzip2 algorithm'
-msg_ocs_onthefly_param_xz='Use xz algorithm'
-msg_ocs_onthefly_param_lzop='Use lzo algorithm'
-msg_ocs_onthefly_param_zstd='Use zstd algorithm'
-msg_ocs_onthefly_param_cat='Do not compress'
+msg_choose_param_to_set_before_sending_data='通过网络发送到客户端之前选择压缩算法，以便节省带宽。在多核CPU的情况下，压缩时会自动采取多核算法来提高性能。' 
+msg_ocs_onthefly_param_gz='使用gzip算法'
+msg_ocs_onthefly_param_bzip2='使用bzip2算法'
+msg_ocs_onthefly_param_xz='使用xz算法'
+msg_ocs_onthefly_param_lzop='使用lzo算法'
+msg_ocs_onthefly_param_zstd='使用zstd算法'
+msg_ocs_onthefly_param_cat='不压缩'
 # Tag on 2019/07/18
-msg_ocs_param_iui='Do not update initramfs file(s) on the restored GNU/Linux.'
-msg_ocs_onthefly_param_iui='Do not update initramfs file(s) on the restored GNU/Linux.'
+msg_ocs_param_iui='不要更新部署后的GNU/Linux中的initramfs文件。'
+msg_ocs_onthefly_param_iui='不要更新部署后的GNU/Linux中的initramfs文件。'
 # Tag on 2019/07/25
-msg_disk_is_full_or_permission_issue='No space left on the device or there is a permission issue. Hence the data can not be written to this dir:'
+msg_disk_is_full_or_permission_issue='空间不足或权限问题，当前目录无法写入:'
 # Tag on 2019/08/13
-msg_no_device_selected='No device selected.'
-msg_input_img_dir_not_exist='The directory for this inputed image name does NOT exist:'
+msg_no_device_selected='没有选择任何设备。'
+msg_input_img_dir_not_exist='输入的镜像名称没有对应的目录:'
 # Tag on 2019/09/02
-msg_clean_MBR_partition_keep_GPT_one='On the other hand, if you are sure only GPT partition table is the one you want, you can run this command to destroy the MBR partition table while keeping the GPT partition table'
+msg_clean_MBR_partition_keep_GPT_one='相反的，若你确认只有GPT分区表是你要的，你可以使用这个指令将MBR分区表清除，而保留GPT分区表'
 # Tag on 2019/10/04
-msg_ocs_param_ps="Play sound when the job is done"
-msg_ocs_onthefly_param_ps="Play sound when the job is done"
+msg_ocs_param_ps="任务完成时播放声音来提示"
+msg_ocs_onthefly_param_ps="任务完成时播放声音来提示"
 # Tag on 2019/12/03
-msg_ocs_param_z9='zstd compression'
-msg_ocs_param_z9p='zstdmt compression'
+msg_ocs_param_z9='使用zstd压缩(速度很快，压缩文件大小跟gzip差不多)'
+msg_ocs_param_z9p='使用pzstd压缩(速度很快，压缩文件大小跟gzip差不多，适用于多核/CPU机器)'
 # Tag on 2020/08/09
 msg_locale_ko_KR='Korean'
 # Tag on 2020/09/10
