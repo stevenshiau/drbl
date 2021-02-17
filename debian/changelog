@@ -1,3 +1,9 @@
+drbl (4.2.18-drbl1) unstable; urgency=medium
+
+  * zh_CN.UTF-8: Thanks Zhiqiang Zhang for updating.
+
+ -- Steven Shiau <steven@clonezilla.org>  Wed, 17 Feb 2021 21:29:33 +0800
+
 drbl (4.2.17-drbl1) unstable; urgency=medium
 
   * Comment "IPAPPEND 1" in generate-pxe-menu. It fails the live-boot
