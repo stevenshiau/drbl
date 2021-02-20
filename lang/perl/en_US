@@ -244,7 +244,7 @@ $lang_charset = 'iso-8859-1';
    which_clonezilla_mode_for_client => "In the system, there are 4 modes available for clonezilla:\n[0] Full Clonezilla mode, every client has its own NFS based /etc and /var.\n[1] Clonezilla box mode, every client uses tmpfs based /etc and /var. In this mode, the loading and necessary disk space of server will be lighter than that in Full Clonezilla mode. Note! In Clonezilla box mode, the setting and config files of client will not be saved to the DRBL server! They just use once and will vanish after the machine shutdowns!\n[2] I do NOT want clonezilla.\n[3] Use Clonezilla live as the OS (Operating System) of clients.\nWhich mode do you prefer?",
    clonezilla_live_mode_is_set => "Use Clonezilla live as the OS (Operating System) of clients when running Clonezilla job.",
    which_clonezilla_live_branch => "What's the Clonezilla live release branch for the clients?\n[0]: stable (Debian-based)\n[1]: testing (Debian-based)\n[2]: alternative stable (Ubuntu-based)\n[3]: alternative testing (Ubuntu-based)\nIf unsure, choose [2]: alternative stable.",
-   which_live_client_cpu_mode => "What's the CPU arch for the clients when running Clonezilla job with Clonezilla live?\n[0]: i586\n[1]: i686\n[2]: amd64\nIf unsure, choose i586.",
+   which_live_client_cpu_mode => "What's the CPU arch for the clients when running Clonezilla job with Clonezilla live?\n[0]: i686\n[1]: i686-pae\n[2]: amd64\nIf unsure, choose amd64.",
    which_live_client_cpu_mode_for_ubuntu => "What's the CPU arch for the clients when running Clonezilla job with Clonezilla live?\n[0]: i386\n[1]: amd64\nIf unsure, choose i386.",
    live_client_branch_set=> "The Clonezilla live branch is chosen as",
    live_client_cpu_arch_is_set => "The CPU arch for clients when running Clonezilla job",
@@ -256,5 +256,7 @@ $lang_charset = 'iso-8859-1';
    note_you_have_to_make_sure_enough_no_of_ip_addr => "//NOTE// If you choose 'yes', you have to make sure your DHCP server provides enough number of IP address for all the clients. Besides, this mechanism is risky because all the PXE or uEFI network booting clients will enter DRBL or Clonezilla mode. Please make sure this is what you want.",
    failed_to_detect_dhcp_service => "Failed to find any DHCP service on this network card",
    do_you_want_to_try_it_again => "Do you want to try it again?",
+   # Tag on 2021/02/14
+   from_ubuntu_1910_only_amd64_is_available => "From Ubuntu 19.10, only amd64 (x86-64) release of Clonezilla live is available.",
    mark_the_end_of_lang =>"."
    );

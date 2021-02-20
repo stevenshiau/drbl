@@ -262,7 +262,7 @@ $lang_charset = 'UTF-8';
    which_clonezilla_mode_for_client => "このシステムでは、Clonezilla 用の４つのモードを選択できます：\n[0] 完全 Clonezilla モード：全クライアントには NFS ベースの個別 /etc, /var があります。\n[1] Clonezilla ボックスモード：全クライアントは tmpfs ベースの /etc, /var があります。このモードでは、サーバの負荷と必要なディスク領域が完全 Clonezilla モードと比べて少なくなります。【注意】Clonezilla ボックスモードでは、クライアント設定と設定ファイルは DRBL サーバに保存されません！設定は一度だけ使われて、マシン停止後に消失します！\n[2] Clonezilla は不要です。\n[3] クライアントの OS（オペレーティングシステム）として Clonezilla Live を使用。\nどのモードを使用しますか？",
    clonezilla_live_mode_is_set => "Clonezilla ジョブ実行時のクライアント OS として Clonezilla Live を使用する",
    which_clonezilla_live_branch => "クライアント用の Clonezilla Live のリリースブランチはどれですか？\n[0]: 安定版 (Debian ベース)\n[1]: テスト版 (Debian ベース)\n[2]: 別の安定版 (Ubuntu ベース)\n[3]: 別のテスト版 (Ubuntu ベース)\nよく分からなければ、[2]: 別の安定版 を選択して下さい。",
-   which_live_client_cpu_mode => "Clonezilla ジョブ実行時のクライアント用の CPU アーキテクチャはどれですか？\n[0]: i586\n[1]: i686\n[2]: amd64\nよく分からなければ、i586 を選択して下さい。",
+   which_live_client_cpu_mode => "Clonezilla ジョブ実行時のクライアント用の CPU アーキテクチャはどれですか？\n[0]: i686\n[1]: i686-pae\n[2]: amd64\nよく分からなければ、amd64 を選択して下さい。",
    which_live_client_cpu_mode_for_ubuntu => "Clonezilla ジョブ実行時のクライアント用の CPU アーキテクチャはどれですか？\n[0]: i386\n[1]: amd64\nよく分からなければ、i386 を選択して下さい。",
    live_client_branch_set=> "選択されたClonezilla Live ブランチ：",
    live_client_cpu_arch_is_set => "Clonezilla ジョブ実行時のクライアント用 CPU アーキテクチャ：",
@@ -274,5 +274,7 @@ $lang_charset = 'UTF-8';
    note_you_have_to_make_sure_enough_no_of_ip_addr => "【注意】yes を選択した場合、DHCP サーバが全クライアントに対して充分な数の IP アドレスを提供できるか確認する必要があります。更に、この仕組みは PXE／UEFI のネットワークブートクライアントが全て DRBL 又は Clonezilla モードになる危険性があります。これが希望通りか確認して下さい。",
    failed_to_detect_dhcp_service => "この NIC で DHCP サービスを検出できませんでした。",
    do_you_want_to_try_it_again => "再度試行しますか？",
+   # Tag on 2021/02/14
+   from_ubuntu_1910_only_amd64_is_available => "From Ubuntu 19.10, only amd64 (x86-64) release of Clonezilla live is available.",
    mark_the_end_of_lang =>"。"
    );

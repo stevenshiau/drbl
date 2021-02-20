@@ -245,7 +245,7 @@ $lang_charset = 'iso-8859-1';
    which_clonezilla_mode_for_client => "A rendszeren, négy Clonezilla mód elérhető:\n[0] Teljes Clonezilla mód, mikor minden kliensnél saját, NFS alapú az /etc és /var.\n[1] Clonezilla box mód, ahol minden kliensnél tmpfs alapú az /etc és /var. Ebben a módban, a betöltő és a szerver számára szükséges lemezterület kevesebb, mint a Teljes Clonezilla módban. Megjegyzés! Clonezilla box módban, a kliens beállítási- és konfig fájljai nem lesznek mentve a DRBL szerverre! Csupán egyszer használatosak, majd eltűnnek a gép kikapcsolásakor!\n[2] NEM használok Clonezilla-t.\n[3] Clonezilla live használata a kliensek operációs rendszereként.\nMelyik módot szeretné?",
    clonezilla_live_mode_is_set => "Clonezilla live használata a kliensek operációs rendszereként Clonezilla feladat futásához.",
    which_clonezilla_live_branch => "Mi legyen a Clonezilla live kiadásának fajtája kliensekhez?\n[0]: stabil (Debian alapú)\n[1]: tesztváltozat (Debian alapú)\n[2]: alternatív stabil (Ubuntu alapú)\n[3]: alternatív tesztváltozat (Ubuntu alapú)\nHa bizonytalan, válassza ezt [2]: alternatív stabil.",
-   which_live_client_cpu_mode => "Mi legyen a CPU architektúra kliensekhez, Clonezilla feladat, Clonezilla live-val futtatásakor?\n[0]: i586\n[1]: i686\n[2]: amd64\nHa bizonytalan, válassza az i586-ot.",
+   which_live_client_cpu_mode => "Mi legyen a CPU architektúra kliensekhez, Clonezilla feladat, Clonezilla live-val futtatásakor?\n[0]: i686\n[1]: i686-pae\n[2]: amd64\nHa bizonytalan, válassza az amd64-ot.",
    which_live_client_cpu_mode_for_ubuntu => "Mi legyen a CPU architektúra kliensekhez, Clonezilla feladat, Clonezilla live-val futtatásakor?\n[0]: i386\n[1]: amd64\nHa bizonytalan, válassza az i386-ot.",
    live_client_branch_set=> "A Clonezilla live fajtáját illető választás:",
    live_client_cpu_arch_is_set => "A CPU architektúra klienseknek, Clonezilla feladat futtatásához",
@@ -257,5 +257,7 @@ $lang_charset = 'iso-8859-1';
    note_you_have_to_make_sure_enough_no_of_ip_addr => "//MEGJEGYZÉS// Ha a döntése 'igen', bizonyosodjon meg róla, a DHCP szerver elegendő számú IP címmel tud szolgálni minden kliens számára. Azonban, ez a megoldás kockázatos is egyben, mivel az összes PXE, vagy uEFI hálózati bootolású kliens DRBL, vagy Clonezilla módba lép. Ezt is vegye számításba.",
    failed_to_detect_dhcp_service => "Ezen a hálózati kártyán nem található DHCP szerver",
    do_you_want_to_try_it_again => "Kíván újabb kísérletet tenni?",
+   # Tag on 2021/02/14
+   from_ubuntu_1910_only_amd64_is_available => "From Ubuntu 19.10, only amd64 (x86-64) release of Clonezilla live is available.",
    mark_the_end_of_lang =>"."
    );

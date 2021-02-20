@@ -252,7 +252,7 @@
    which_clonezilla_mode_for_client => "本系統中，Clonezilla再生龍有4個模式可以選用:\n[0] 完全模式(Full clonezilla mode)，每個用戶端都有自己的/etc與/var (基於NFS).\n[1] 再生龍盒模式(Clonezilla box mode), 每個用戶端都使用tmpfs(以記憶體來當虛擬磁碟)的/etc與/var。此模式中，Clonezilla伺服器的負載與所需要的硬碟空間會少一些。但是請注意！這個模式中，用戶端電腦的系統設定檔並不會回存到伺服器中。所有開機後的系統設定只會使用一次然後關機後就消失!\n[2] 我不要使用再生龍.\n[3] 使用Clonezilla live當作用戶端做clonezilla工作時候的作業系統.\n你要選用哪一個模式?",
    clonezilla_live_mode_is_set => "使用Clonezilla live當作用戶端執行Clonezilla工作的作業系統。",
    which_clonezilla_live_branch => "使用來那哪個分類的Clonezilla live?\n[0]: 穩定版 (Debian-based)\n[1]: 測試版 (Debian-based)\n[2]: 穩定替代版 (Ubuntu-based)\n[3]: 測試的替代版 (Ubuntu-based)\n若不確認, 選 [2]: 穩定替代版",
-   which_live_client_cpu_mode => "當使用Clonezilla live來執行Clonezilla的工作時，用戶端的CPU架構要選用那一種?\n[0]: i586\n[1]: i686\n[2]: amd64\n如果不確認，請選用i586.",
+   which_live_client_cpu_mode => "當使用Clonezilla live來執行Clonezilla的工作時，用戶端的CPU架構要選用那一種?\n[0]: i686\n[1]: i686-pae\n[2]: amd64\n如果不確認，請選用amd64.",
    which_live_client_cpu_mode_for_ubuntu => "當使用Clonezilla live來執行Clonezilla的工作時，用戶端的CPU架構要選用那一種?\n[0]: i386\n[1]: amd64\n如果不確認，請選用i386.",
    live_client_branch_set=> "Clonezilla live分類選定為",
    live_client_cpu_arch_is_set => "用戶端執行Clonezilla的工作時，選用的CPU架構是",
@@ -264,5 +264,7 @@
    note_you_have_to_make_sure_enough_no_of_ip_addr => "//注意// 若選擇是，你必須確認現有的DHCP服務提供足夠多的IP位址給用戶端機器使用。此外，這個機制有其風險，因為在此區域網域的PXE或者uEFI網路開機用戶端都會進入DRBL或者Clonezilla模式。請確認這是你要的模式。",
    failed_to_detect_dhcp_service => "無法在此張網卡找到任何DHCP服務",
    do_you_want_to_try_it_again => "你是否要再試一次?",
+   # Tag on 2021/02/14
+   from_ubuntu_1910_only_amd64_is_available => "自Ubuntu 19.10 (含)之後的版本, Clonezilla live只支援amd64 (x86-64)的CPU架構.",
    mark_the_end_of_lang =>"."
    );

@@ -245,7 +245,7 @@ $lang_charset = 'utf-8';
    which_clonezilla_mode_for_client => "Sistemde, clonezilla için uygun 4 mod var:\n[0] Tam Clonezilla modu, her istemci kendi NFS tabanlı /etc ve /var dizinlerine sahiptir.\n[1] Clonezilla box modu, her istemci tmpfs temelli /etc ve /var dizinlerini kullanır. Bu modda, yükleme ve sunucu için gerekli disk alanı Tam Clonezilla modundan daha hafif olacaktır. Uyarı! Clonezilla box modda, istemcinin yapılandırma ve ayar dosyaları DRBL sunucu üzerinde kaydedilmeyecek! Bir kere kullanılacak ve makine baştan başlatıldığında silinecekler!\n[2] Clonezilla İSTEMİYORUM.\n[3] Clonezilla live, istemcinin bir işletim sistemi gibi kullanılsın.\nHangi modu tercih edersiniz?",
    clonezilla_live_mode_is_set => " Clonezilla görevi çalışırken, Clonezilla live istemcinin işletim sistemi gibi çalışsın.",
    which_clonezilla_live_branch => "İstemci için hangi Clonezilla live dalını seçersiniz?\n[0]: kararlı (Debian-tabanlı)\n[1]: test (Debian-tabanlı)\n[2]: alternatif kararlı (Ubuntu-tabanlı)\n[3]: alternatif test (Ubuntu-tabanlı)\nEmin değilseniz, [2]: alternatif kararlı seçeneğini seçin.",
-   which_live_client_cpu_mode => "Clonezilla live ile birlikte Clonezilla görevi çalıştığında istemciler için kullanılacak işlemci mimarisi nedir?\n[0]: i586\n[1]: i686\n[2]: amd64\nEmin değilseniz, i586 seçin.",
+   which_live_client_cpu_mode => "Clonezilla live ile birlikte Clonezilla görevi çalıştığında istemciler için kullanılacak işlemci mimarisi nedir?\n[0]: i686\n[1]: i686-pae\n[2]: amd64\nEmin değilseniz, amd64 seçin.",
    which_live_client_cpu_mode_for_ubuntu => "Clonezilla live ile birlikte Clonezilla görevi çalıştığında istemciler için kullanılacak işlemci mimarisi nedir?\n[0]: i386\n[1]: amd64\nEmin değilseniz, i386 seçin.",
    live_client_branch_set=> "Clonezilla live dalı seçildi",
    live_client_cpu_arch_is_set => "İstemci için seçilen işlemci mimarisi",
@@ -257,5 +257,7 @@ $lang_charset = 'utf-8';
    note_you_have_to_make_sure_enough_no_of_ip_addr => "//NOT// 'evet' seçeneğini seçerseniz, DHCP sunucunuzun tüm istemciler için yeterli sayıda IP adresi sağladığından emin olmanız gerekir. Ayrıca, bu mekanizma risklidir çünkü tüm PXE veya uEFI ağ önyükleme istemcileri DRBL veya Clonezilla moduna girer. Lütfen bunu istediğinizden emin olun.",
    failed_to_detect_dhcp_service => "Bu ağ kartında hiç DHCP servisi bulunamadı",
    do_you_want_to_try_it_again => "Yeniden denemek ister misiniz?",
+   # Tag on 2021/02/14
+   from_ubuntu_1910_only_amd64_is_available => "From Ubuntu 19.10, only amd64 (x86-64) release of Clonezilla live is available.",
    mark_the_end_of_lang =>"."
    );

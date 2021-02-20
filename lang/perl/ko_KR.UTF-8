@@ -244,7 +244,7 @@ $lang_charset = 'UTF-8';
    which_clonezilla_mode_for_client => "시스템에는 clonezilla에 사용할 수 있는 4가지 모드가 있습니다 : \n [0] Full Clonezilla 모드, 모든 클라이언트에는 자체 NFS 기반 /etc 및 /var가 있습니다. \n [1] Clonezilla 박스 모드, 모든 클라이언트는 tmpfs 기반 /etc 및 /var를 사용합니다. 이 모드에서 서버의 로드 및 필요한 디스크 공간은 Full Clonezilla 모드의 디스크 공간보다 작습니다. [참고] Clonezilla 박스 모드에서는 클라이언트의 설정 및 구성 파일이 DRBL 서버에 저장되지 않습니다. 한 번만 사용하면 기계가 종료될 때 사라집니다. \n [2] Clonezilla를 사용하지 않음. \n [3] Clonezilla live를 클라이언트의 OS (Operating System)로 사용. \n 어떤 모드를 선호하십니까?",
    clonezilla_live_mode_is_set => "Clonezilla 작업을 실행할 때 Clonezilla 라이브를 클라이언트의 OS (운영 체제)로 사용합니다.",
    which_clonezilla_live_branch => "클라이언트를 위한 Clonezilla live 릴리스 지점 (release branch)은 무엇입니까? \n [0]: 안정 (데비안 기반) \n [1]: 테스팅 (데비안 기반) \n [2]: 대체 안정 (우분투 기반)\n[3]: 대체 테스트 (우분투 기반)\n 잘 모를 경우, [2]: 대체 안정 (우분투 기반) 선택.",
-   which_live_client_cpu_mode => "Clonezilla live로 Clonezilla 작업을 실행할 때 클라이언트의 CPU 아키텍처는 무엇입니까? \n [0]: i586 \n [1]: i686 \n [2]: amd64 \n 잘 모를 경우, i586 선택.",
+   which_live_client_cpu_mode => "Clonezilla live로 Clonezilla 작업을 실행할 때 클라이언트의 CPU 아키텍처는 무엇입니까? \n [0]: i686 \n [1]: i686-pae \n [2]: amd64 \n 잘 모를 경우, amd64 선택.",
    which_live_client_cpu_mode_for_ubuntu => "Clonezilla 라이브로 Clonezilla 작업을 실행할 때 클라이언트의 CPU 아키텍처는 무엇입니까? \n [0]: i386 \n [1]: amd64 \n 잘 모를 경우, i386 선택.",
    live_client_branch_set=> "The Clonezilla live branch가 다음으로 선택되었습니다 :",
    live_client_cpu_arch_is_set => "Clonezilla 작업을 실행할 때 클라이언트의 CPU 아키텍처 :",
@@ -256,5 +256,7 @@ $lang_charset = 'UTF-8';
    note_you_have_to_make_sure_enough_no_of_ip_addr => "[참고] 'yes'를 선택하면 DHCP 서버가 모든 클라이언트에 대해 충분한 수의 IP 주소를 제공해야 합니다. 또한 모든 PXE 또는 uEFI 네트워크 부팅 클라이언트가 DRBL 또는 Clonzilla 모드로 전환되기 때문에 이 메커니즘은 위험합니다. 재확인 바랍니다.",
    failed_to_detect_dhcp_service => "이 네트워크 카드에서 DHCP 서비스를 찾지 못했습니다",
    do_you_want_to_try_it_again => "재시도 하시겠습니까?",
+   # Tag on 2021/02/14
+   from_ubuntu_1910_only_amd64_is_available => "From Ubuntu 19.10, only amd64 (x86-64) release of Clonezilla live is available.",
    mark_the_end_of_lang =>"."
    );

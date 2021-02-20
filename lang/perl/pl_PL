@@ -244,7 +244,7 @@ $lang_charset = 'iso-8859-1';
    which_clonezilla_mode_for_client => "W systemie dostępne są 4 tryby dla Clonezilli: \n Tryb pełny [0] Full Clonezilla, każdy klient ma własny tryb oparty na NFS /etc i /var.\n [1] Clonezilla box, każdy klient używa tmpfs /etc i /var. W tym trybie ładowanie i wymagana przestrzeń dyskowa serwera będą lżejsze niż w trybie Full Clonezilla. Uwaga! W trybie box Clonezilla pliki ustawień i konfiguracji klienta nie zostaną zapisane na serwerze DRBL! Użyte są tylko raz i znikną po zamknięciu maszyny! \ N [2] NIE chcę Clonezilli. \ N [3] Używaj Clonezilli live jako OS (System Operacyjny) klientów.\nKtóry tryb preferujesz?",
    clonezilla_live_mode_is_set => "Używaj Clonezilla live jako OS (System Operacyjny) klientów podczas pracy Clonezilli.",
    which_clonezilla_live_branch => "Jaka jest gałąź dystrybucji Clonezilla live dla klientów?\n[0]: stabilna (oparta na Debianie)\n[1]: testowa (oparta na Debianie)\n[2]: alternatywna stabilna (oparta na Ubuntu)\n[3]: testowa alternatywna (oparta na systemie Ubuntu)\nW razie wątpliwości wybierz [2]: alternatywna stabilna.",
-   which_live_client_cpu_mode => "Jaka jest architektura procesorów dla klientów podczas pracy clonezilli z Clonezillą live?\n[0]: i586\n[1]: i686\n[2]: amd64\nJeśli nie jesteś pewien, wybierz i586.",
+   which_live_client_cpu_mode => "Jaka jest architektura procesorów dla klientów podczas pracy clonezilli z Clonezillą live?\n[0]: i686\n[1]: i686-pae\n[2]: amd64\nJeśli nie jesteś pewien, wybierz amd64.",
    which_live_client_cpu_mode_for_ubuntu => "Jaka jest architektura procesorów dla klientów podczas pracy Clonezilli z Clonezillą live?\n[0]: i386\n[1]: amd64\nJeśli nie jesteś pewien, wybierz i386.",
    live_client_branch_set=> "Gałąź/Odmiana Clonezilli live jest wybrana jako",
    live_client_cpu_arch_is_set => "Architektura procesora dla klientów podczas pracy Clonezilli",
@@ -256,5 +256,7 @@ $lang_charset = 'iso-8859-1';
    note_you_have_to_make_sure_enough_no_of_ip_addr => "//UWAGA// Jeśli wybierzesz 'tak (yes)', musisz upewnić się, że twój serwer DHCP zapewnia wystarczającą liczbę adresów IP dla wszystkich klientów. Poza tym ten mechanizm jest ryzykowny, ponieważ wszyscy klienci uruchamiający sieć PXE lub uEFI wejdą w tryb DRBL lub Clonezilla. Upewnij się, że to jest to, czego chcesz.",
    failed_to_detect_dhcp_service => "Nie można znaleźć żadnej usługi DHCP na tej karcie sieciowej",
    do_you_want_to_try_it_again => "Czy chcesz spróbować jeszcze raz?",
+   # Tag on 2021/02/14
+   from_ubuntu_1910_only_amd64_is_available => "From Ubuntu 19.10, only amd64 (x86-64) release of Clonezilla live is available.",
    mark_the_end_of_lang =>"."
    );

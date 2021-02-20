@@ -246,7 +246,7 @@ $lang_charset = 'UTF-8';
    which_clonezilla_mode_for_client => "No sistema, há 4 modos disponíveis para clonezilla:\n[0] Modo Clonezilla completo, cada cliente tem seu próprio NFS baseado em /etc e /var.\n[1] Modo Clonezilla box, cada cliente usa tmpfs baseado em /etc e /var. Neste modo, a carga e o espaço de disco do servidor necessários é inferior ao Modo Clonezilla completo. Nota! No modo Clonezilla box, a configuração e os arquivos de configuração do cliente não serão salvos no servidor DRBL! Serão usados apenas uma vez e descartados depois que a máquina desligar!\n[2] Não quero clonezilla.\n[3] Usar Clonezilla live como o S.O. (Sistema Operacional) dos clientes.\nQual modo prefere?",
    clonezilla_live_mode_is_set => "Usar Clonezilla live como o S.O. (Sistema Operacional) de clientes quando se executa uma tarefa Clonezilla.",
    which_clonezilla_live_branch => "Qual versão de Clonezilla live quer que usem os clientes?\n[0]: stable (Debian-based)\n[1]: testing (Debian-based)\n[2]: alternative stable (Ubuntu-based)\n[3]: alternative testing (Ubuntu-based)\nSe não tem certeza escolha [2]: alternative stable.",
-   which_live_client_cpu_mode => "Qual é a arquitectura de CPU dos clientes quando se executa una tarefa Clonezilla com Clonezilla live?\n[0]: i586\n[1]: i686\n[2]: amd64\nSe não tem certeza, escolha i586.",
+   which_live_client_cpu_mode => "Qual é a arquitectura de CPU dos clientes quando se executa una tarefa Clonezilla com Clonezilla live?\n[0]: i686\n[1]: i686-pae\n[2]: amd64\nSe não tem certeza, escolha amd64.",
    which_live_client_cpu_mode_for_ubuntu => "Qual é a arquitectura de CPU dos clientes quando se executa una tarefa Clonezilla com Clonezilla live?\n[0]: i386\n[1]: amd64\nSe não tem certeza, escolha i386.",
    live_client_branch_set=> "A versão estabelecida para Clonezilla live é",
    live_client_cpu_arch_is_set => "A arquitetura de CPU para clientes quando se executa uma tarefa Clonezilla",
@@ -258,5 +258,7 @@ $lang_charset = 'UTF-8';
    note_you_have_to_make_sure_enough_no_of_ip_addr => "//NOTA// Se você escolher 'sim', precisará garantir que o servidor DHCP forneça um número IP suficiente de todos os clientes. Além disso, esse mecanismo é arriscado porque todos os clientes de inicialização de rede PXE ou uEFI entram no modo DRBL ou Clonezilla. Por favor, verifique se é isso que você deseja.",
    failed_to_detect_dhcp_service => "Falha ao encontrar um serviço DHCP nesta placa de rede",
    do_you_want_to_try_it_again => "Deseja tentar novamente?",
+   # Tag on 2021/02/14
+   from_ubuntu_1910_only_amd64_is_available => "From Ubuntu 19.10, only amd64 (x86-64) release of Clonezilla live is available.",
    mark_the_end_of_lang =>"."
    );
