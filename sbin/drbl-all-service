@@ -272,36 +272,8 @@ case "$switch" in
           systemctl enable $_real_service_name.service
         elif [ -e /etc/debian_version ]; then
           # Debian-like
-          get_debian_ubuntu_init_serv_control_prog
 	  echo "Force to add $serv service by SysV command (insserv)..."
-          if [ "$dbn_ubn_serv_control_prog" = "use-insserv" ]; then
-            insserv $serv &>/dev/null
-	  else
-            case "$serv" in
-             portmap)
-               update-rc.d $serv start 18 2 3 4 5 . start 32 0 6 . stop 32 1 . &> /dev/null
-               ;;
-             nis)
-               update-rc.d $serv start 19 2 3 4 5 . stop 19 0 1 6 . &> /dev/null
-               ;;
-             nfs-common)
-               update-rc.d $serv start 21 2 3 4 5 . stop 79 0 1 6 . &> /dev/null
-               ;;
-             nfs-kernel-server)
-               update-rc.d $serv start 20 2 3 4 5 . stop 80 0 1 6 . &> /dev/null
-               ;;
-             unfs3)
-               update-rc.d $serv start 25 2 3 4 5 . stop 25 0 1 6 . &> /dev/null
-               ;;
-             drbl-clients-nat)
-               update-rc.d drbl-clients-nat start 40 2 3 4 5 . stop 89 0 6 . &>/dev/null
-               ;;
-             *)
-               # such as dhcp3-server, tftpd-hpa
-               update-rc.d $serv defaults &> /dev/null
-               ;;
-            esac
-          fi
+          insserv $serv &>/dev/null
         elif [ -e /etc/SuSE-release ]; then
            # SuSE
 	   echo "Force to add $serv service by SysV command (insserv)..."
@@ -322,13 +294,8 @@ case "$switch" in
       for serv in $drbl_service; do 
         if [ -e /etc/debian_version ]; then
           # Debian-like
-          get_debian_ubuntu_init_serv_control_prog
 	  echo "Force to delete $serv service by SysV command (insserv)..."
-          if [ "$dbn_ubn_serv_control_prog" = "use-insserv" ]; then
-            insserv -r $serv &>/dev/null
-          else
-            update-rc.d -f $serv remove &>/dev/null
-          fi
+          insserv -r $serv &>/dev/null
         elif [ -e /etc/SuSE-release ]; then
           # SuSE
 	  echo "Force to delete $serv service by SysV command (insserv)..."
