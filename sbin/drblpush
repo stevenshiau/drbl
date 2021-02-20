@@ -1054,15 +1054,13 @@ sub interactive_mode {
                if ( "$live_client_branch" eq "0" || "$live_client_branch" eq "1" ) {
   	       print "$delimiter{\"star_line\"}\n".
   	             "$lang_deploy{\"which_live_client_cpu_mode\"}\n".
-  	             "[1] ";
+  	             "[2] ";
   	       chomp($live_client_cpu_mode=<STDIN>);
                }else{
-                   # For Ubuntu-based Clonezilla live, different arch
-  	       print "$delimiter{\"star_line\"}\n".
-  	             "$lang_deploy{\"which_live_client_cpu_mode_for_ubuntu\"}\n".
-  	             "[0] ";
-  	       chomp($live_client_cpu_mode=<STDIN>);
-  	     }
+                # For Ubuntu-based Clonezilla live, different arch is not available.
+		# Only amd64 is available in Ubuntu >= 19.10
+  	        print "$lang_deploy{\"from_ubuntu_1910_only_amd64_is_available\"}\n";
+  	       }
              }
   	}
   	# Format the input number as text
@@ -1090,10 +1088,10 @@ sub interactive_mode {
   	}
   	# Format the input number as text
          if ( "$live_client_branch" eq "stable" || "$live_client_branch" eq "testing" ) {
-          # Normal Clonezilla live, i586, i686-pae and amd64 exist
+          # Normal Clonezilla live, i686, i686-pae and amd64 exist
           SWITCH: for ($live_client_cpu_mode) {
             /^[[:space:]]*0[[:space:]]*$/ && do {
-              $live_client_cpu_mode="i586";
+              $live_client_cpu_mode="i686";
               last SWITCH;
           };
             /^[[:space:]]*1[[:space:]]*$/ && do {
@@ -1105,31 +1103,18 @@ sub interactive_mode {
               last SWITCH;
           };
             /.*/ && do {
-              $live_client_cpu_mode="i686-pae";
+              $live_client_cpu_mode="amd64";
               last SWITCH;
             };
           }
          }else{
-          # Alternative Clonezilla live, only i386 and amd64 exist
-          SWITCH: for ($live_client_cpu_mode) {
-            /^[[:space:]]*0[[:space:]]*$/ && do {
-              $live_client_cpu_mode="i386";
-              last SWITCH;
-          };
-            /^[[:space:]]*1[[:space:]]*$/ && do {
-              $live_client_cpu_mode="amd64";
-              last SWITCH;
-          };
-            /.*/ && do {
-              $live_client_cpu_mode="i386";
-              last SWITCH;
-            };
-          }
+          # Alternative Clonezilla live, only amd64 exists from Ubuntu >= 19.10
+          $live_client_cpu_mode="amd64";
          }
-          if ( $live_client_cpu_mode ) {
-            print "$delimiter{\"star_line\"}\n";
-            print "$lang_deploy{\"live_client_cpu_arch_is_set\"}: $live_client_cpu_mode\n";
-          }
+         if ( $live_client_cpu_mode ) {
+           print "$delimiter{\"star_line\"}\n";
+           print "$lang_deploy{\"live_client_cpu_arch_is_set\"}: $live_client_cpu_mode\n";
+         }
         }
 
 	if ( "$drbl_mode" eq "none" && "$clonezilla_mode" eq "none" ) {
