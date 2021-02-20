@@ -4781,7 +4781,6 @@ filter_cl_gp_boot_param(){
   sed -r -e "s|initrd=[^[:space:]]+[[:space:]]?||g" | \
   sed -r -e "s|vga=[^[:space:]]+[[:space:]]?||g" | \
   sed -r -e "s|ip=[^[:space:]]*[[:space:]]?||g" | \
-  sed -r -e "s|username=[^[:space:]]+[[:space:]]?||g" | \
   sed -r -e "s|keyboard-layouts=[^[:space:]]+[[:space:]]?||g" | \
   sed -r -e "s|locales=[^[:space:]]+[[:space:]]?||g" | \
   sed -r -e "s|[^[:space:]]+.blacklist=[^[:space:]]+[[:space:]]?||g" | \
