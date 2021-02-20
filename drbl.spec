@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	4.2.18
+Version:	4.3.1
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,15 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Sat Feb 20 2021 Steven Shiau <steven _at_ clonezilla org> 4.3.1-drbl1
+  * Update the Clonezilla live arch in drblpush:
+    Debian-based: i686, i686-pae, amd64
+    Ubuntu-based: amd64
+  * Update language files about CPU arch of clonezilla live in drblpush.
+  * drbl-all-service: remove update-rc.d, use insserv only for Debian
+    system.
+  * Do not remove username=* in filter_cl_gp_boot_param of drbl-functions.
+
 * Wed Feb 17 2021 Steven Shiau <steven _at_ clonezilla org> 4.2.18-drbl1
   * zh_CN.UTF-8: Thanks Zhiqiang Zhang for updating.
 

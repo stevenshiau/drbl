@@ -1,3 +1,15 @@
+drbl (4.3.1-drbl1) unstable; urgency=medium
+
+  * Update the Clonezilla live arch in drblpush:
+    Debian-based: i686, i686-pae, amd64
+    Ubuntu-based: amd64
+  * Update language files about CPU arch of clonezilla live in drblpush.
+  * drbl-all-service: remove update-rc.d, use insserv only for Debian
+    system.
+  * Do not remove username=* in filter_cl_gp_boot_param of drbl-functions.
+
+ -- Steven Shiau <steven@clonezilla.org>  Sat, 20 Feb 2021 15:10:24 +0800
+
 drbl (4.2.18-drbl1) unstable; urgency=medium
 
   * zh_CN.UTF-8: Thanks Zhiqiang Zhang for updating.
