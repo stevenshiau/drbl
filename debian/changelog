@@ -1,3 +1,12 @@
+drbl (4.3.3-drbl1) unstable; urgency=medium
+
+  * Add -ssnf (--skip-set-netboot-first) in the dcs menu so that 
+    the variable efi_netboot_1st_in_nvram in drbl-ocs.conf can be
+    changed in the menu when running dcs.
+  * Add -sspt (--skip-save-part-table) in the menu for ocs-sr and drbl-ocs.
+
+ -- Steven Shiau <steven@clonezilla.org>  Sun, 07 Mar 2021 16:10:05 +0800
+
 drbl (4.3.2-drbl1) unstable; urgency=medium
 
   * Include jq in Clonezilla/DRBL live:
