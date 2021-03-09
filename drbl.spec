@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	4.3.3
+Version:	4.3.5
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,14 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Tue Mar 09 2021 Steven Shiau <steven _at_ clonezilla org> 4.3.5-drbl1
+  * Add b2sum support for image chcksum and files in the file system.
+
+* Sun Mar 07 2021 Steven Shiau <steven _at_ clonezilla org> 4.3.4-drbl1
+  * A typo was fixed:
+    msg_continue_with_weired_partition_table ->
+    msg_continue_with_weird_partition_table.
+
 * Sun Mar 07 2021 Steven Shiau <steven _at_ clonezilla org> 4.3.3-drbl1
   * Add -ssnf (--skip-set-netboot-first) in the dcs menu so that 
     the variable efi_netboot_1st_in_nvram in drbl-ocs.conf can be

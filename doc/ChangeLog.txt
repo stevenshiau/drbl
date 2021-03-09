@@ -5,6 +5,20 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (4.3.5-drbl1) unstable; urgency=medium
+
+  * Add b2sum support for image chcksum and files in the file system.
+
+ -- Steven Shiau <steven@clonezilla.org>  Tue, 09 Mar 2021 16:54:45 +0800
+
+drbl (4.3.4-drbl1) unstable; urgency=medium
+
+  * A typo was fixed:
+    msg_continue_with_weired_partition_table ->
+    msg_continue_with_weird_partition_table.
+
+ -- Steven Shiau <steven@clonezilla.org>  Sun, 07 Mar 2021 22:00:41 +0800
+
 drbl (4.3.3-drbl1) unstable; urgency=medium
 
   * Add -ssnf (--skip-set-netboot-first) in the dcs menu so that 
