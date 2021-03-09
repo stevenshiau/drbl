@@ -1152,3 +1152,7 @@ msg_not_this_is_for_mount_repository='//注意// 這是針對要掛載本機的�
 # Tag on 2021/03/06
 msg_ocs_param_ssnf='略去在網路開機用戶端的NVRAM設定開機第一優先裝置為網路卡'
 msg_ocs_param_sspt='不儲存來源硬碟的分割表'
+# Tag on 2021/03/09
+msg_B2SUMS_check_failed='BLAKE2雜湊值檢查發現有問題!'
+msg_ocs_param_gb='產生印象檔的BLAKE2雜湊值'
+msg_ocs_param_cb='經由BLAKE2雜湊值檢查印象檔'
