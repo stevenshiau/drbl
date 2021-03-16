@@ -5,6 +5,14 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (4.3.6-drbl1) unstable; urgency=medium
+
+  * The option -sspt of ocs-sr was changed to -scpt so change it in TUI menu
+    in drbl-functions and language files.
+  * Update language files about types of block device.
+
+ -- Steven Shiau <steven@clonezilla.org>  Tue, 16 Mar 2021 21:35:33 +0800
+
 drbl (4.3.5-drbl1) unstable; urgency=medium
 
   * Add b2sum support for image chcksum and files in the file system.

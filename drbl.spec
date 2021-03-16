@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	4.3.5
+Version:	4.3.6
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,11 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Tue Mar 16 2021 Steven Shiau <steven _at_ clonezilla org> 4.3.6-drbl1
+  * The option -sspt of ocs-sr was changed to -scpt so change it in TUI menu
+    in drbl-functions and language files.
+  * Update language files about types of block device.
+
 * Tue Mar 09 2021 Steven Shiau <steven _at_ clonezilla org> 4.3.5-drbl1
   * Add b2sum support for image chcksum and files in the file system.
 
