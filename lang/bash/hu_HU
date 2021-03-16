@@ -1152,7 +1152,7 @@ msg_ocs_param_fsck_repo_part_yes='Auto (Caution!) check and repair file system b
 msg_not_this_is_for_mount_repository='//NOTE// This is for mounting local storage device as an image repository!'
 # Tag on 2021/03/06
 msg_ocs_param_ssnf='Skip setting 1st boot device as network in uEFI netboot client NVRAM'
-msg_ocs_param_sspt='Skip saving the partition table of the source disk'
+msg_ocs_param_scpt='Skip checking the partition table of the source disk is MBR or GPT format'
 # Tag on 2021/03/09
 msg_B2SUMS_check_failed='BLAKE2 checksums did NOT match!'
 msg_ocs_param_gb='Generate image BLAKE2 checksums'
