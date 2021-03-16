@@ -1157,3 +1157,7 @@ msg_ocs_param_scpt='Skip checking the partition table of the source disk is MBR 
 msg_B2SUMS_check_failed='BLAKE2 checksums did NOT match!'
 msg_ocs_param_gb='Generate image BLAKE2 checksums'
 msg_ocs_param_cb='Check image by BLAKE2 checksums'
+# Tag on 2021/03/15
+msg_list_local_device_mode='Which mode do you want to list the block devices on this machine? If you have no idea, choose "disk_or_part". Do _NOT_ choose "both_type_dev" unless you know what you are doing. Basically "both_type_dev" is for you to force choosing the block device which is not listed as it is. For example, you want to save the block device /dev/sda but it is not shown in "saveparts" mode since it is a disk device name, not a partition device name.'
+msg_list_disk_or_part_mode='Separate disk(s) and partition(s)'
+msg_list_both_type_device_mode='List both types of block devices together, i.e., show disk(s) and partition(s) simultaneously'
