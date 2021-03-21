@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	4.3.6
+Version:	4.3.7
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Sun Mar 21 2021 Steven Shiau <steven _at_ clonezilla org> 4.3.7-drbl1
+  * Add dir links for CentOS 7.7-7.9: CO7.7.1908, CO7.8.2003, CO7.9.2009.
+
 * Tue Mar 16 2021 Steven Shiau <steven _at_ clonezilla org> 4.3.6-drbl1
   * The option -sspt of ocs-sr was changed to -scpt so change it in TUI menu
     in drbl-functions and language files.
