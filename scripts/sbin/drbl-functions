@@ -3760,7 +3760,7 @@ gen_CDG_checksums() {
   local sum_file="CHECKSUMS.TXT"
   local sum_file_html="CHECKSUMS.php"
   local filetype="iso zip tar tar.gz"
-  local sum_types="md5sum sha1sum sha256sum sha512sum"
+  local sum_types="md5sum sha1sum sha256sum sha512sum b2sum"
   local sum_of
   echo -n "Creating checksums..."
   rm -f $sum_file $sum_file_html
