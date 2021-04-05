@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (4.3.8-drbl1) unstable; urgency=medium
+
+  * Add b2sum in gen_CDG_checksums of drbl-functions.
+
+ -- Steven Shiau <steven@clonezilla.org>  Mon, 05 Apr 2021 11:29:31 +0800
+
 drbl (4.3.7-drbl1) unstable; urgency=medium
 
   * Add dir links for CentOS 7.7-7.9: CO7.7.1908, CO7.8.2003, CO7.9.2009.
