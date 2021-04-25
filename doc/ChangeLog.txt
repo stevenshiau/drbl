@@ -5,6 +5,15 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (4.3.9-drbl1) unstable; urgency=medium
+
+  * drbl-get-dnsserver: improved for multiple NIC configured with DNS, 
+    nameserver_sys can be like: '8.8.8.8 DNS Domain: ~.  8.8.8.8 DNS Domain: ~.'
+    Hence we only put correct IPv4 address.
+    Ref: https://groups.google.com/g/drbl/c/ebgoMdLIo9c
+
+ -- Steven Shiau <steven@clonezilla.org>  Sun, 25 Apr 2021 19:56:53 +0800
+
 drbl (4.3.8-drbl1) unstable; urgency=medium
 
   * Add b2sum in gen_CDG_checksums of drbl-functions.
