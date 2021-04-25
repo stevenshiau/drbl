@@ -59,7 +59,17 @@ if [ -z "$nameserver_sys" -o -n "$(echo "$nameserver_sys" | grep -E "^127\..*")"
     nameserver_sys="$(LC_ALL=C grep -Ew "^nameserver" /var/run/dnsmasq/resolv.conf 2>/dev/null | awk -F" " '{print $2}')"
   fi
 fi
-if [ -n "$nameserver_sys" ]; then
-  # Make them as one line, and put "," as the delimiter
-  echo "$nameserver_sys" | xargs echo | sed -r -e "s/[[:space:]]+/, /g"
-fi
+
+sys_dns=""
+# For multiple NIC configured with DNS, 
+# nameserver_sys can be like: '8.8.8.8 DNS Domain: ~.  8.8.8.8 DNS Domain: ~.     '
+# Hence we only put correct IPv4 address.
+# Ref: https://groups.google.com/g/drbl/c/ebgoMdLIo9c
+# Thanks to Alber Yang (alber.yang _at_ gmail com) for reporting this issue.
+for i in $nameserver_sys; do
+  if `is_valid_IPv4_add $i`; then
+    sys_dns="$sys_dns, $i"
+  fi
+done
+# Strip the leading ", "
+echo "$(echo $sys_dns | sed -r -e "s/^, //")"
