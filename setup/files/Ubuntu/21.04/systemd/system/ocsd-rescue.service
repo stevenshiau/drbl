@@ -1,0 +1,16 @@
+[Unit]
+Requires=ocsd-run.service
+After=ocsd-run.service
+
+[Service]
+Environment=HOME=/root
+WorkingDirectory=-/root
+ExecStartPre=-/bin/plymouth --wait quit
+ExecStart=-/lib/systemd/systemd-sulogin-shell rescue
+Type=idle
+StandardInput=tty-force
+StandardOutput=inherit
+StandardError=inherit
+KillMode=process
+IgnoreSIGPIPE=no
+SendSIGHUP=yes
