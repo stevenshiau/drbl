@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	4.3.9
+Version:	4.3.10
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -45,6 +45,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Sun May 16 2021 Steven Shiau <steven _at_ clonezilla org> 4.3.10-drbl1
+  * Add support for Ubuntu 21.04. 
+
 * Sun Apr 25 2021 Steven Shiau <steven _at_ clonezilla org> 4.3.9-drbl1
   * drbl-get-dnsserver: improved for multiple NIC configured with DNS, 
     nameserver_sys can be like: '8.8.8.8 DNS Domain: ~.  8.8.8.8 DNS Domain: ~.'

@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (4.3.10-drbl1) unstable; urgency=medium
+
+  * Add support for Ubuntu 21.04. 
+
+ -- Steven Shiau <steven@clonezilla.org>  Sun, 16 May 2021 16:27:52 +0800
+
 drbl (4.3.9-drbl1) unstable; urgency=medium
 
   * drbl-get-dnsserver: improved for multiple NIC configured with DNS, 
