@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	4.3.10
+Version:	4.3.11
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -15,9 +15,7 @@ Obsoletes:	drbl-gdm, drbl-script, drbl-setup, rh-netinstall, mdk-netinstall, woo
 DRBL (Diskless Remote Boot in Linux).
 Description:
 DRBL provides a diskless or systemless environment for client machines. It works on Debian, Ubuntu, Mandriva, Red Hat, Fedora, CentOS and OpenSuSE. DRBL uses distributed hardware resources and makes it possible for clients to fully access local hardware. It also includes Clonezilla, a partition and disk cloning utility similar to Symantec Ghost(TM) or True Image(TM).
-For more details, check 
-1. http://drbl.org or http://drbl.sourceforge.net (English)
-2. http://drbl.nchc.org.tw (Traditional Chinese - Taiwan) 
+For more details, check http://drbl.org.
 
 %prep
 %setup -q -n drbl-%{version}
@@ -45,6 +43,13 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Mon Jun 21 2021 Steven Shiau <steven _at_ clonezilla org> 4.3.11-drbl1
+  * Add function clean_raid_metadata_in_disk in ocs-functions.
+    Function clean_filesystem_header_in_partition is renamed as
+    clean_filesystem_header_in_dev.
+  * ocs-clean-part-fs is renamed as ocs-clean-disk-part-fs
+  * debian/control: Depends on dmraid, wipefs
+
 * Sun May 16 2021 Steven Shiau <steven _at_ clonezilla org> 4.3.10-drbl1
   * Add support for Ubuntu 21.04. 
 

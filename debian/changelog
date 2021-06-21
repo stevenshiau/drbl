@@ -1,3 +1,12 @@
+drbl (4.3.11-drbl1) unstable; urgency=medium
+
+  * Add function clean_raid_metadata_in_disk in ocs-functions.
+    Function clean_filesystem_header_in_partition is renamed as
+    clean_filesystem_header_in_dev.
+  * ocs-clean-part-fs is renamed as ocs-clean-disk-part-fs
+
+ -- Steven Shiau <steven@clonezilla.org>  Mon, 21 Jun 2021 19:53:32 +0800
+
 drbl (4.3.10-drbl1) unstable; urgency=medium
 
   * Add support for Ubuntu 21.04. 
