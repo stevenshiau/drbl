@@ -1561,7 +1561,7 @@ set_drbl_ocs_extra_param() {
   local ASK_VOL_SIZE=1
   local inst_grub_opt
   local set_y_opt="yes"  # Option to set option y* (y0/y1/y2)
-  local default_postaction postaction_opt
+  local default_postaction postaction_opt j2_switch_msg_1 j2_switch_msg_2 j2_switch_msg_3
   
   while [ $# -gt 0 ]; do
     case "$1" in
@@ -1598,6 +1598,20 @@ set_drbl_ocs_extra_param() {
   
   if [ "$mode" = "restore" ]; then
     if [ "$ocs_user_mode" = "expert" ]; then
+      # The option "-j2" (clone_hidden_data) should be only enabled by default when it's restoredisk
+      # Ref: https://sourceforge.net/p/clonezilla/bugs/361/
+      case "$dev_" in 
+        parts) # For restoreparts
+	       j2_switch_msg_1=""
+	       j2_switch_msg_2=""
+	       j2_switch_msg_3=""
+	       ;;
+        disk)  # For restoredisk
+	       j2_switch_msg_1="-j2"
+	       j2_switch_msg_2="$(rep_whspc_w_udrsc "$msg_ocs_param_j2")"
+	       j2_switch_msg_3="on"
+	       ;;
+      esac
       $DIA --separate-output --backtitle "$msg_nchc_free_software_labs" --title  \
       "$msg_clonezilla_advanced_extra_param | $msg_mode: $ocs_mode_prompt" --checklist "$msg_choose_param_to_set_multiple_choices ($msg_press_space_to_mark_selection)" \
       0 0 0 $DIA_ESC \
@@ -1625,7 +1639,7 @@ set_drbl_ocs_extra_param() {
       "-icds"    "$msg_ocs_param_icds" off \
       "-iefi"    "$msg_ocs_param_iefi" off \
       "-j1"      "$msg_ocs_param_j1" off \
-      "-j2"      "$msg_ocs_param_j2" on \
+      $j2_switch_msg_1 $j2_switch_msg_2 $j2_switch_msg_3 \
       "-cm"      "$msg_ocs_param_cm" off \
       "-cs"      "$msg_ocs_param_cs" off \
       "-cb"      "$msg_ocs_param_cb" off \
@@ -1649,7 +1663,9 @@ set_drbl_ocs_extra_param() {
       else
         # restoreparts mode.
         # "$inst_grub_opt" = "off" (no "-g auto") means skip_clean_mbr_opt="on" (-t)
-        echo "-e1 auto" "-e2" "-t" "-r" "-x" "-j2" > $OCS_PARAM_TMP
+        # Do not enable -j2 by default since for restoreparts, it should not be done by default.
+        # Ref: https://sourceforge.net/p/clonezilla/bugs/361/
+        echo "-e1 auto" "-e2" "-t" "-r" "-x" > $OCS_PARAM_TMP
       fi
     fi
   
@@ -1905,7 +1921,7 @@ local mode2_="$3"
 local cpu_no
 local vol_size_tmp
 local ASK_VOL_SIZE=1
-local inst_grub_opt opt_confirm_
+local inst_grub_opt opt_confirm_ j2_switch_msg_1 j2_switch_msg_2 j2_switch_msg_3
 vol_size_tmp="$(mktemp /tmp/vol_size_tmp.XXXXXX)"
 
 # If the mode is only for parts, we won't turn on "-g auto" option by default
@@ -1926,6 +1942,20 @@ if [ "$mode" = "restore" ]; then
   # remove them on purpose. Since the necessay parameters will be assigned by
   # drbl-ocs (Ex: we use "-y1 -p choose" in drbl-ocs)
   if [ "$ocs_user_mode" = "expert" ]; then
+    # The option "-j2" (clone_hidden_data) should be only enabled when it's in restoredisk mode
+    # Ref: https://sourceforge.net/p/clonezilla/bugs/361/
+    case "$mode2_" in 
+      restoreparts) 
+	      j2_switch_msg_1=""
+	      j2_switch_msg_2=""
+	      j2_switch_msg_3=""
+	      ;;
+      restoredisk)
+	      j2_switch_msg_1="-j2"
+	      j2_switch_msg_2="$(rep_whspc_w_udrsc "$msg_ocs_param_j2")"
+	      j2_switch_msg_3="on"
+	      ;;
+    esac
     $DIA --separate-output --backtitle "$msg_nchc_free_software_labs" --title  \
     "$msg_clonezilla_advanced_extra_param | $msg_mode: $ocs_mode_prompt" --checklist "$msg_choose_param_to_set_multiple_choices ($msg_press_space_to_mark_selection)" \
     0 0 0 $DIA_ESC \
@@ -1952,7 +1982,7 @@ if [ "$mode" = "restore" ]; then
     "-icds"    "$msg_ocs_param_icds" off \
     "-iefi"    "$msg_ocs_param_iefi" off \
     "-j1"      "$msg_ocs_param_j1" off \
-    "-j2"      "$msg_ocs_param_j2" on \
+    $j2_switch_msg_1 $j2_switch_msg_2 $j2_switch_msg_3 \
     "-cm"      "$msg_ocs_param_cm" off \
     "-cs"      "$msg_ocs_param_cs" off \
     "-cb"      "$msg_ocs_param_cb" off \
@@ -1979,7 +2009,9 @@ if [ "$mode" = "restore" ]; then
     else
       # restoreparts mode.
       # "$inst_grub_opt" = "off" (no "-g auto") means skip_clean_mbr_opt="on" (-t)
-      echo "-e1 auto" "-e2" "-t" "-r" "-j2" "$opt_confirm_" > $OCS_PARAM_TMP
+      # Do not enable -j2 by default since for restoreparts, it should not be done by default.
+      # Ref: https://sourceforge.net/p/clonezilla/bugs/361/
+      echo "-e1 auto" "-e2" "-t" "-r" "$opt_confirm_" > $OCS_PARAM_TMP
     fi
   fi
 
