@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	4.3.11
+Version:	4.3.12
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -43,6 +43,11 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Mon Jul 05 2021 Steven Shiau <steven _at_ clonezilla org> 4.3.12-drbl1
+  * The option "-j2" (clone_hidden_data) should be only enabled
+    by default only when it's restoredisk, not restoreparts.
+    Ref: https://sourceforge.net/p/clonezilla/bugs/361/
+
 * Mon Jun 21 2021 Steven Shiau <steven _at_ clonezilla org> 4.3.11-drbl1
   * Add function clean_raid_metadata_in_disk in ocs-functions.
     Function clean_filesystem_header_in_partition is renamed as
