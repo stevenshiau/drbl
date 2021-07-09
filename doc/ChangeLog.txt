@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (4.3.13-drbl1) unstable; urgency=medium
+
+  * drbl.conf: add packages ncdu & ncdt in the packages list
+    of clonezilla/drbl live.
+
+ -- Steven Shiau <steven@clonezilla.org>  Fri, 09 Jul 2021 14:05:06 +0800
+
 drbl (4.3.12-drbl1) unstable; urgency=medium
 
   * The option "-j2" (clone_hidden_data) should be only enabled

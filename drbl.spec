@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	4.3.12
+Version:	4.3.13
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -43,6 +43,10 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Fri Jul 09 2021 Steven Shiau <steven _at_ clonezilla org> 4.3.13-drbl1
+  * drbl.conf: add packages ncdu & ncdt in the packages list
+    of clonezilla/drbl live.
+
 * Mon Jul 05 2021 Steven Shiau <steven _at_ clonezilla org> 4.3.12-drbl1
   * The option "-j2" (clone_hidden_data) should be only enabled
     by default only when it's restoredisk, not restoreparts.
