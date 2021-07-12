@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (4.3.14-drbl1) unstable; urgency=medium
+
+  * Add vifm, ytree, and lfm in the packages list of Clonezilla/DRBL live.
+
+ -- Steven Shiau <steven@clonezilla.org>  Mon, 12 Jul 2021 16:06:37 +0800
+
 drbl (4.3.13-drbl1) unstable; urgency=medium
 
   * drbl.conf: add packages ncdu & ncdt in the packages list
