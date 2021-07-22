@@ -766,7 +766,6 @@ msg_ocs_onthefly_param_j2='MBR と最初のパーティションの間に隠れ�
 # Tag on 2009/03/16
 msg_ocs_param_e2='sfdisk が EDD からの HDD CHS 値を使用(非 GRUB ブートローダ用)'
 msg_ocs_onthefly_param_e2='sfdisk が EDD からの HDD CHS 値を使用(非 GRUB ブートローダ用)'
-msg_press_space_to_mark_selection='スペースキーを押して選択対象に印を付けて下さい。星印(*)は選択された事を示します'
 msg_see_above_notice='【注意】上記の注意事項を読んでください!'
 # Tag on 2009/04/10
 msg_select_beginner_or_expert_mode="拡張パラメータに関するウィザードを実行するモードを選択"
@@ -1181,3 +1180,5 @@ msg_ocs_param_cb='Check image by BLAKE2 checksums'
 msg_list_local_device_mode='Which mode do you want to list the block devices on this machine? If you have no idea, choose "disk_or_part". Do _NOT_ choose "both_type_dev" unless you know what you are doing. Basically "both_type_dev" is for you to force choosing the block device which is not listed as it is. For example, you want to save the block device /dev/sda but it is not shown in "saveparts" mode since it is a disk device name, not a partition device name.'
 msg_list_disk_or_part_mode='Separate disk(s) and partition(s)'
 msg_list_both_type_device_mode='List both types of block devices together, i.e., show disk(s) and partition(s) simultaneously'
+# Tag on 2021/07/22
+msg_press_space_to_mark_selection='スペースキーを押して選択対象に印を付けて下さい。星印(*)は選択された事を示します'

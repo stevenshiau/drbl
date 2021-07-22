@@ -750,7 +750,6 @@ msg_ocs_onthefly_param_j2='复制介于MBR与第一个分割表中的隐藏资�
 # Tag on 2009/03/16
 msg_ocs_param_e2='用户端执行sfdisk时强迫使用EDD的硬盘CHS值(用于非grub开机管理程序)'
 msg_ocs_onthefly_param_e2='用户端执行sfdisk时强迫使用EDD的硬盘CHS值(用于非grub开机管理程序)'
-msg_press_space_to_mark_selection='使用空格键来标示你的选择，被标示选到的部分会出现星号(*)'
 msg_see_above_notice='警告!请读上述注意事项!'
 # Tag on 2009/04/10
 msg_select_beginner_or_expert_mode="选择后续高级参数向导所要的模式"
@@ -1163,3 +1162,5 @@ msg_ocs_param_cb='Check image by BLAKE2 checksums'
 msg_list_local_device_mode='Which mode do you want to list the block devices on this machine? If you have no idea, choose "disk_or_part". Do _NOT_ choose "both_type_dev" unless you know what you are doing. Basically "both_type_dev" is for you to force choosing the block device which is not listed as it is. For example, you want to save the block device /dev/sda but it is not shown in "saveparts" mode since it is a disk device name, not a partition device name.'
 msg_list_disk_or_part_mode='Separate disk(s) and partition(s)'
 msg_list_both_type_device_mode='List both types of block devices together, i.e., show disk(s) and partition(s) simultaneously'
+# Tag on 2021/07/22
+msg_press_space_to_mark_selection='如果有复选的选项让您选择，请使用空格键来标示你的选择，被标示选到的部分会出现星号(*)'

@@ -748,7 +748,6 @@ msg_ocs_onthefly_param_j2='Clone the hidden data between MBR and 1st partition'
 # Tag on 2009/03/16
 msg_ocs_param_e2='sfdisk uses CHS of hard drive from EDD(for non-grub boot loader)'
 msg_ocs_onthefly_param_e2='sfdisk uses CHS of hard drive from EDD(for non-grub boot loader)'
-msg_press_space_to_mark_selection='Press space key to mark your selection. An asterisk (*) will be shown when the selection is done'
 msg_see_above_notice='Warning! See above notice!'
 # Tag on 2009/04/10
 msg_select_beginner_or_expert_mode="Choose the mode to run the following wizard about advanced parameters"
@@ -1163,3 +1162,5 @@ msg_ocs_param_cb='Check image by BLAKE2 checksums'
 msg_list_local_device_mode='Which mode do you want to list the block devices on this machine? If you have no idea, choose "disk_or_part". Do _NOT_ choose "both_type_dev" unless you know what you are doing. Basically "both_type_dev" is for you to force choosing the block device which is not listed as it is. For example, you want to save the block device /dev/sda but it is not shown in "saveparts" mode since it is a disk device name, not a partition device name.'
 msg_list_disk_or_part_mode='Separate disk(s) and partition(s)'
 msg_list_both_type_device_mode='List both types of block devices together, i.e., show disk(s) and partition(s) simultaneously'
+# Tag on 2021/07/22
+msg_press_space_to_mark_selection='If multiple choices are available, press space key to mark your selection. An asterisk (*) will be shown when the selection is done'

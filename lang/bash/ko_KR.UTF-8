@@ -746,7 +746,6 @@ msg_ocs_onthefly_param_j2='MBR과 첫 번째 파티션 간에 숨겨진 데이�
 # Tag on 2009/03/16
 msg_ocs_param_e2='sfdisk는 EDD의 하드 드라이브 CHS를 사용합니다. (non-grub boot loader 용)'
 msg_ocs_onthefly_param_e2='sfdisk는 EDD의 하드 드라이브 CHS를 사용합니다. (non-grub boot loader 용)'
-msg_press_space_to_mark_selection='스페이스 키를 눌러 선택 사항을 표시합니다. 선택이 완료되면 별표(*)가 표시됩니다.'
 msg_see_above_notice='[경고] 위 공지를 참조하십시오.'
 # Tag on 2009/04/10
 msg_select_beginner_or_expert_mode="고급 매개 변수에 대한 마법사를 실행하려면, 아래의 모드를 선택하십시오."
@@ -1159,3 +1158,5 @@ msg_ocs_param_cb='Check image by BLAKE2 checksums'
 msg_list_local_device_mode='Which mode do you want to list the block devices on this machine? If you have no idea, choose "disk_or_part". Do _NOT_ choose "both_type_dev" unless you know what you are doing. Basically "both_type_dev" is for you to force choosing the block device which is not listed as it is. For example, you want to save the block device /dev/sda but it is not shown in "saveparts" mode since it is a disk device name, not a partition device name.'
 msg_list_disk_or_part_mode='Separate disk(s) and partition(s)'
 msg_list_both_type_device_mode='List both types of block devices together, i.e., show disk(s) and partition(s) simultaneously'
+# Tag on 2021/07/22
+msg_press_space_to_mark_selection='스페이스 키를 눌러 선택 사항을 표시합니다. 선택이 완료되면 별표(*)가 표시됩니다.'
