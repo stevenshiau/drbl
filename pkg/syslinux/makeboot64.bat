@@ -24,6 +24,7 @@ cls
 if %~d0 == %systemdrive% (color 4f && echo Do not run %~nx0 from your local system hard drive. && echo It should only be run from your USB flash drive or USB hard drive. && goto end)
 rem echo %~d0 | "%windir%\system32\findstr.exe" /B /I "%systemdrive%" && color 4f && echo You can _NOT_ RUN %~nx0 from your local system hard drive! It should only be run from your USB flash drive or USB hard drive. && goto end
 echo.
+wmic logicaldisk where caption="%~d0" get filesystem|find "FAT32">nul && echo The USB pendrive has FAT32 formatting. || echo Please format your USB pendrive as FAT32
 echo Press any key to make drive %~d0 bootable
 echo or close this window to abort...
 pause > nul
