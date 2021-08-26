@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	4.3.15
+Version:	4.3.16
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -43,6 +43,13 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Thu Aug 26 2021 Steven Shiau <steven _at_ clonezilla org> 4.3.16-drbl1
+  * Add support OCS for Debian 11 (Bullseye).
+  * Improve makeboot64.bat: checking FAT file system
+    Thanks to Geert-Jan Uijtdewilligen.
+    Ref:
+    https://sourceforge.net/p/clonezilla/support-requests/158/
+
 * Thu Jul 22 2021 Steven Shiau <steven _at_ clonezilla org> 4.3.15-drbl1
   * Update msg_press_space_to_mark_selection in the language files.
 
