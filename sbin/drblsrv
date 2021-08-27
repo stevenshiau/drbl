@@ -3364,8 +3364,21 @@ fi
 # $PKG_FROM_DRBL will be loaded from conf/drbl.conf
 
 # We need to preconfig some packages, such as dhcp3-server, tftpd-hpa, nis so
-# it will not ask user to config. We will configure later in drblpush.
-deb-preconf-drbl
+# it will not ask user to configure. We will configure later in drblpush.
+deb_preconf_opt=""
+# Older Debian's package nis does not include file /etc/default/nis, we need to ask deb-preconf-drbl to generate that file. While Debian >=11, it's included.
+# For Ubuntu, Focal (20.04) and Groovy (20.10) use NIS version 3, no /etc/default/nis. While Ubuntu >=21, it's included.
+[ -e /etc/lsb-release ] && . /etc/lsb-release
+if [ "$DISTRIB_ID" = "Ubuntu" ]; then
+  case "$DISTRIB_RELEASE" in
+    20.*) deb_preconf_opt="-s";;
+  esac
+else
+  case "$OS_Version" in
+    DBN10.*|DBN9.*) deb_preconf_opt="-s";;
+  esac
+fi
+deb-preconf-drbl $deb_preconf_opt
 
 # Install them
 $inst_prog $inst_opt $inst_action $PKG_FROM_DBN $PKG_FROM_DRBL
