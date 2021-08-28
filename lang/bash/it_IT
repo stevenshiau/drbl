@@ -1161,3 +1161,5 @@ msg_list_disk_or_part_mode='Separate disk(s) and partition(s)'
 msg_list_both_type_device_mode='List both types of block devices together, i.e., show disk(s) and partition(s) simultaneously'
 # Tag on 2021/07/22
 msg_press_space_to_mark_selection='Per selezionare premi la barra spaziatrice. Un asterisco (*) indicherà la selezione effettuata'
+# Tag on 2021/08/28
+msg_reserved_img_names="Some reserved image names have special meanings, including \"ask_user\", \"autoname\", \"autoname-*\" \"autohostname\", and \"autoproductname\". Please check Clonezilla website for more details."
