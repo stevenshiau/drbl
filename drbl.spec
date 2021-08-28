@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	4.4.1
+Version:	4.4.2
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -43,6 +43,11 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Sat Aug 28 2021 Steven Shiau <steven _at_ clonezilla org> 4.4.2-drbl1
+  * Update language files about reserved image names.
+  * ocsd-rescue.service: do not use .include for Debian 10 since
+    systemd .include directives are deprecated. Same as that for Debian 11.
+
 * Fri Aug 27 2021 Steven Shiau <steven _at_ clonezilla org> 4.4.1-drbl1
   * drblsrv: /etc/default/nis is not created for newer nis package
     (version >= 4, from Debian 11 or Ubuntu 21.04) by using the option "-s"
