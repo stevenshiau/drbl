@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	4.5.0
+Version:	4.5.1
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -43,8 +43,11 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Mon Sep 13 2021 Steven Shiau <steven _at_ clonezilla org> 4.5.1-drbl1
+  * Suppress the error message about "setterm -blank 0".
+
 * Sun Aug 29 2021 Steven Shiau <steven _at_ clonezilla org> 4.5.0-drbl1
-  * Since the version number with that of Clonezilla. 
+  * Sync the version number with that of Clonezilla. 
 
 * Sat Aug 28 2021 Steven Shiau <steven _at_ clonezilla org> 4.4.2-drbl1
   * Update language files about reserved image names.

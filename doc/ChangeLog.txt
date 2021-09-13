@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (4.5.1-drbl1) unstable; urgency=medium
+
+  * Suppress the error message about "setterm -blank 0".
+
+ -- Steven Shiau <steven@clonezilla.org>  Mon, 13 Sep 2021 09:27:02 +0800
+
 drbl (4.5.0-drbl1) unstable; urgency=medium
 
   * Since the version number with that of Clonezilla. 
