@@ -3215,6 +3215,7 @@ get_syslinux_binary_for_dos_linux() {
   # syslinux_ver is not required. If it's not assigned, the latest one on the web will be used.
   local syslinux_ver="$2"
   local syslinux_tarball syslinux_ver_subdir syslinux_extra_c32 dirprefix syslinux_efi_coms
+  local found_url valid_ulr
   [ -z "$sysl_dir" -o ! -d "$sysl_dir" ] && echo "No sysl_dir!" && exit 1
   # syslinux_binsrc_url is like:
   # http://www.kernel.org/pub/linux/utils/boot/syslinux/
@@ -3236,8 +3237,22 @@ get_syslinux_binary_for_dos_linux() {
     syslinux_ver_subdir="$(LC_ALL=C echo "$syslinux_ver" | sed -r -e "s/-pre[[:digit:]]+$//g")"
     syslinux_ver_subdir="Testing/$syslinux_ver_subdir"
   fi
-  echo "Downloading $syslinux_binsrc_url/$syslinux_ver_subdir/$syslinux_tarball..."
-  wget $wget_opt -P $sysl_dir $syslinux_binsrc_url/$syslinux_ver_subdir/$syslinux_tarball
+  found_url="false"
+  while [ "$found_url" = "false" ]; do
+    if `check_url $syslinux_binsrc_url/$syslinux_ver_subdir/$syslinux_tarball`; then
+      valid_ulr="$syslinux_binsrc_url/$syslinux_ver_subdir/$syslinux_tarball"
+      found_url="true"
+    else
+      # E.g., 6.04 -> 6.03
+      # Because Debian has syslinux like: 3:6.04~git20190206.bf6db5b4+dfsg1-1, but
+      # actually 6.04 is not officially released on syslinux.org (Sep/25/2021).
+      syslinux_ver="$(LC_ALL=C echo "scale=2; $syslinux_ver - 0.01" | bc -l)"
+      echo "Try earlier syslinux version $syslinux_ver..."
+      syslinux_tarball="syslinux-${syslinux_ver}.tar.xz"
+    fi
+  done
+  echo "Downloading $valid_ulr..."
+  wget $wget_opt -P $sysl_dir $valid_ulr
   # For syslinux 6.x, due to EFI feature was added, *.c32 might be in different dirs, e.g. for menu.c32:
   # $ tar tvJf syslinux-5.10.tar.xz | grep -w menu.c32
   # -rwxrwxr-x mfleming/syslinux  25808 2013-06-05 03:33 syslinux-5.10/com32/menu/menu.c32
@@ -4991,3 +5006,16 @@ query_pkg_ver() {
   fi
   return $rc
 } # end of query_pkg_ver
+#
+function check_url(){
+  # Function to check if URL exists or not.
+  # Ref: https://gist.github.com/hrwgc/7455343
+  local url_t="$1"
+  local rc
+  if [ -n "$(LC_ALL=C wget --spider -S $url_t 2>&1 | grep -E 'HTTP/1.1 200 OK')" ]; then
+    rc=0
+  else
+    rc=1
+  fi
+  return $rc
+} # end of check_url
