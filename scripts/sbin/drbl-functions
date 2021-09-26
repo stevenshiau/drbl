@@ -3396,7 +3396,8 @@ put_syslinux_makeboot_for_usb_flash() {
       apt_tmpdir="$(mktemp -d /tmp/apt_deb.XXXXXX)"
       (
       cd $apt_tmpdir
-      apt-get download syslinux:amd64=${latest_syslinux_v} syslinux-common:amd64=${latest_syslinux_v} extlinux:amd64=${latest_syslinux_v=} isolinux:amd64=${latest_syslinux_v=}
+      # apt-get download syslinux:amd64=${latest_syslinux_v} syslinux-common:amd64=${latest_syslinux_v} extlinux:amd64=${latest_syslinux_v=} isolinux:amd64=${latest_syslinux_v=}
+      apt-get download syslinux:amd64 syslinux-common:amd64 extlinux:amd64 isolinux:amd64
       for ideb in $apt_tmpdir/*.deb; do
         dpkg -x $ideb $apt_tmpdir/
       done
@@ -3414,7 +3415,8 @@ put_syslinux_makeboot_for_usb_flash() {
       fi
       (
       mkdir $apt_tmpdir; cd $apt_tmpdir
-      apt-get download syslinux:i386=${latest_syslinux_v} extlinux:i386=${latest_syslinux_v=} 
+      # apt-get download syslinux:i386=${latest_syslinux_v} extlinux:i386=${latest_syslinux_v=} 
+      apt-get download syslinux:i386 extlinux:i386 
       for ideb in $apt_tmpdir/*.deb; do
         dpkg -x $ideb $apt_tmpdir/
       done
