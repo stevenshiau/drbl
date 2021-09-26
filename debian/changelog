@@ -1,3 +1,12 @@
+drbl (4.5.2-drbl1) unstable; urgency=medium
+
+  * drbl-functions: add function check_url, and a better way to download
+    earlier version of syslinux when the specified version does not
+    exist at syslinux repository. Do not assign the versions of 
+    syslinux-related pkgs in function put_syslinux_makeboot_for_usb_flash.
+
+ -- Steven Shiau <steven@clonezilla.org>  Sun, 26 Sep 2021 10:23:38 +0800
+
 drbl (4.5.1-drbl1) unstable; urgency=medium
 
   * Suppress the error message about "setterm -blank 0".
