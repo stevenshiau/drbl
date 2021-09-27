@@ -1,0 +1,95 @@
+#!/bin/bash
+# Author: Steven Shiau <steven _at_ clonezilla org>
+# License: GPL
+# Description: Generate some deb configs before install it so the user won't be
+#              asked to input. We will configure them in drblpush. So some 
+#              preconfig data are just temp.
+
+# dhcp3-server isc-dhcp-server tftpd-hpa nfs-kernel-server nis
+
+# Load DRBL setting and functions
+DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/usr/share/drbl}"
+
+. $DRBL_SCRIPT_PATH/sbin/drbl-conf-functions
+
+# Settings
+DEBCONF=/var/cache/debconf/config.dat
+DEFAULT_NIS=/etc/default/nis
+set_etc_nis="no"
+[ ! -f "$DEBCONF" ] && mkdir -p "$(dirname $DEBCONF)"
+
+ocs_file="$0"
+ocs=`basename $ocs_file`
+#
+while [ $# -gt 0 ]; do
+ case "$1" in
+   -s|--set-nis-etc) set_etc_nis="yes"; shift;;
+   -*)     echo "${0}: ${1}: invalid option" >&2
+           USAGE >& 2
+           exit 2 ;;
+   *)      break ;;
+ esac
+done
+
+# isc-dhcp-server
+debconf-set-selections <<EOF
+isc-dhcp-server	isc-dhcp-server/config_warn	note	
+isc-dhcp-server	isc-dhcp-server/interfaces	string	eth1
+EOF
+
+# tftpd-hpa
+debconf-set-selections <<EOF
+tftpd-hpa	tftpd-hpa/username	string	tftp
+tftpd-hpa	tftpd-hpa/address	string	0.0.0.0:69
+tftpd-hpa	tftpd-hpa/options	string	--secure
+tftpd-hpa	tftpd-hpa/directory	string	$pxecfg_pd
+EOF
+
+# nis
+debconf-set-selections <<EOF
+nis     nis/domain      string  localdomain
+EOF
+
+# About NIS etc settings
+[ -f /etc/default/nis ] && mv -f /etc/default/nis /etc/default/nis.drblsave
+if [ "$set_etc_nis" = "yes" ]; then
+  cat << EOF >> $DEFAULT_NIS
+#
+# /etc/defaults/nis	Configuration settings for the NIS daemons.
+#
+
+# Are we a NIS server and if so what kind (values: false, slave, master)
+NISSERVER=false
+
+# Are we a NIS client (i.e. start ypbind?)
+NISCLIENT=false
+
+# Location of the master NIS password file (for yppasswdd).
+# If you change this make sure it matches with /var/yp/Makefile.
+YPPWDDIR=/etc
+
+# Do we allow the user to use ypchsh and/or ypchfn ? The YPCHANGEOK
+# fields are passed with -e to yppasswdd, see it's manpage.
+# Possible values: "chsh", "chfn", "chsh,chfn"
+YPCHANGEOK=chsh
+
+# NIS master server.  If this is configured on a slave server then ypinit
+# will be run each time NIS is started.
+NISMASTER=
+
+# Additional options to be given to ypserv when it is started.
+YPSERVARGS=
+
+# Additional options to be given to ypbind when it is started.  
+YPBINDARGS=
+
+# Additional options to be given to yppasswdd when it is started.  Note
+# that if -p is set then the YPPWDDIR above should be empty.
+YPPASSWDDARGS=
+
+# Additional options to be given to ypxfrd when it is started. 
+YPXFRDARGS=
+EOF
+fi
+
+echo "localdomain" > /etc/defaultdomain
