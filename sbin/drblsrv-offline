@@ -366,12 +366,13 @@ if [ "$prompt_different_arch_pkgs" = "yes" ]; then
   check_installed_pkgs_arch
 fi
 
-# 2. Prepare some config to avoid some delay when installing packages. If user already install them, we will overwrite those setting when running drblpush.
-if [ "$OS_type" = "DBN" ]; then
-  # We need to preconfig some packages, such as dhcp3-server, tftpd-hpa, nis so
-  # it will not ask user to config. We will configure later in drblpush.
-  deb-preconf-drbl
-fi
+# 2021/9/27. Comment this since all the packages are installed by users. If not, then drblsrv should have taken care of that. Hence there is no need to run drbl-deb-preconf actually.
+# # 2. Prepare some config to avoid some delay when installing packages. If user already install them, we will overwrite those setting when running drblpush.
+# if [ "$OS_type" = "DBN" ]; then
+#   # We need to preconfig some packages, such as dhcp3-server, tftpd-hpa, nis so
+#   # it will not ask user to config. We will configure later in drblpush.
+#   drbl-deb-preconf
+# fi
 
 # 3.
 [ ! -d $pxecfg_pd ] && mkdir -p $pxecfg_pd
