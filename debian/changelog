@@ -1,3 +1,12 @@
+drbl (4.5.3-drbl1) unstable; urgency=medium
+
+  * deb-preconf-drbl was renamed as drbl-deb-preconf.
+  * Bug fixed:
+    drbl-deb-preconf should not be run again in drblsrv-offline. It only
+    runs once at drblsrv.
+
+ -- Steven Shiau <steven@clonezilla.org>  Mon, 27 Sep 2021 18:57:34 +0800
+
 drbl (4.5.2-drbl1) unstable; urgency=medium
 
   * drbl-functions: add function check_url, and a better way to download
