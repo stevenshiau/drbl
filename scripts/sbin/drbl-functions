@@ -1858,6 +1858,7 @@ set_drbl_ocs_extra_param() {
   if [ "$mode" = "save" ]; then
     # save
     show_z4_or_above_menu_or_not
+    # We can not detect # of the CPU cores in the clients from server, hence let user choose.
     if [ "$ocs_user_mode" = "expert" ]; then
       $DIA --backtitle "$msg_nchc_free_software_labs" --title  \
       "$msg_clonezilla_advanced_extra_param | $msg_mode: $ocs_mode_prompt" --menu "$msg_choose_one_compression_param_to_save" \
@@ -1882,7 +1883,21 @@ set_drbl_ocs_extra_param() {
       # We need to append a space after this parameter so it won't be connected to next parameter.
       echo -n " " >> $OCS_PARAM_TMP
     else
-      echo "-z1p " >> $OCS_PARAM_TMP
+      # Question about -z1p and -z9p.
+      # We can not detect # of the CPU cores in the clients from server, hence let user choose.
+      # Here to make it simple, just use z*p since it works for both single and multiple cores.
+      if [ -n "$ocs_z9p_option_1" -a -n "$ocs_z9p_option_2" ]; then
+        $DIA --backtitle "$msg_nchc_free_software_labs" --title  \
+        "$msg_clonezilla_advanced_extra_param | $msg_mode: $ocs_mode_prompt" --menu "$msg_choose_one_compression_param_to_save" \
+        0 0 0 $DIA_ESC \
+        "-z1p"              "$msg_ocs_param_z1p" \
+        $ocs_z9p_option_1   $ocs_z9p_option_2 \
+        2>> $OCS_PARAM_TMP
+        # We need to append a space after this parameter so it won't be connected to next parameter.
+        echo -n " " >> $OCS_PARAM_TMP
+      else
+        echo "-z1p " >> $OCS_PARAM_TMP
+      fi
     fi
     # About image volume size
     if [ -z "$dcs_img_vol_limit" ]; then
@@ -2191,7 +2206,7 @@ if [ "$mode" = "save" ]; then
       echo -n " " >> $OCS_PARAM_TMP
     else
       # Question about -z1p and -z9p.
-      if [ -z "$fsck_src_part_intr" -a -z "$fsck_src_part_auto" ]; then
+      if [ -n "$ocs_z9p_option_1" -a -z "$ocs_z9p_option_2" ]; then
         $DIA --backtitle "$msg_nchc_free_software_labs" --title  \
         "$msg_clonezilla_advanced_extra_param | $msg_mode: $ocs_mode_prompt" --menu "$msg_choose_one_compression_param_to_save" \
         0 0 0 $DIA_ESC \
@@ -2205,7 +2220,7 @@ if [ "$mode" = "save" ]; then
       fi
     fi
   else
-    # Hide -z1p, z2p...
+    # Single processor, so we hide -z1p, z2p...
     if [ "$ocs_user_mode" = "expert" ]; then
       $DIA --backtitle "$msg_nchc_free_software_labs" --title  \
       "$msg_clonezilla_advanced_extra_param | $msg_mode: $ocs_mode_prompt" --menu "$msg_choose_one_compression_param_to_save" \
@@ -2224,8 +2239,8 @@ if [ "$mode" = "save" ]; then
       # We need to append a space after this parameter so it won't be connected to next parameter.
       echo -n " " >> $OCS_PARAM_TMP
     else
-      # Question about -z1p and -z9p.
-      if [ -z "$fsck_src_part_intr" -a -z "$fsck_src_part_auto" ]; then
+      # Question about -z1 and -z9.
+      if [ -n "$ocs_z9_option_1" -a -z "$ocs_z9_option_2" ]; then
         $DIA --backtitle "$msg_nchc_free_software_labs" --title  \
         "$msg_clonezilla_advanced_extra_param | $msg_mode: $ocs_mode_prompt" --menu "$msg_choose_one_compression_param_to_save" \
         0 0 0 $DIA_ESC \
@@ -2235,7 +2250,7 @@ if [ "$mode" = "save" ]; then
         # We need to append a space after this parameter so it won't be connected to next parameter.
         echo -n " " >> $OCS_PARAM_TMP
       else
-        echo "-z1p " >> $OCS_PARAM_TMP
+        echo "-z1 " >> $OCS_PARAM_TMP
       fi
     fi
   fi
