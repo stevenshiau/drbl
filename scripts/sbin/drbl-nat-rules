@@ -59,7 +59,7 @@ save_rules() {
       # SuSE
       # we already set that in /etc/sysconfig/SuSEfirewall2, so it not necessary
       continue
-    elif [ -n "$(which systemctl 2>/dev/null)" -a -e "/lib/systemd/system/iptables.service" ]; then
+    elif [ -n "$(command -v systemctl 2>/dev/null)" -a -e "/lib/systemd/system/iptables.service" ]; then
       # for FC 17, add by Ceasar
       echo "Save iptables service ,run :iptables-save"
       iptables-save > $NAT_RULES_FOR_RH
@@ -93,7 +93,7 @@ do_stop_iptables() {
       # TODO, can it (the cleaned one) save back to system in SuSE ? 
       # Now this seems to do nothing.
       /etc/init.d/SuSEfirewall2_setup stop
-   elif [ -n "$(which systemctl 2>/dev/null)" -a -e "/lib/systemd/system/iptables.service" ]; then
+   elif [ -n "$(command -v systemctl 2>/dev/null)" -a -e "/lib/systemd/system/iptables.service" ]; then
      # for FC 18/21, add by Ceasar
      if [ "$(LC_ALL=C firewall-cmd --state 2>/dev/null)" = "running" ]; then
        echo "Stop firewalld service ,run :systemctl stop firewalld.service"

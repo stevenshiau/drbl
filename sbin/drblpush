@@ -2400,7 +2400,7 @@ done
 # /lib/ld-linux.so.2 (0xb76ec000)
 #
 export DESTDIR="$drbl_common_root"
-[ -e "$(LC_ALL=C which gawk)" ] && copy_exec_drbl "$(LC_ALL=C which gawk)" /bin/
+[ -e "$(LC_ALL=C command -v gawk)" ] && copy_exec_drbl "$(LC_ALL=C command -v gawk)" /bin/
 
 echo -n "."
 # Creat a file $drbl_common_root/sbin/fsck.nfs to let rc.sysinit use

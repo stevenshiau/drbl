@@ -300,7 +300,7 @@ case "$switch" in
           # SuSE
 	  echo "Force to delete $serv service by SysV command (insserv)..."
           insserv -f -r $serv &>/dev/null
-        elif [ -n "$(which systemctl 2>/dev/null)" -a -e "/lib/systemd/system/$serv.service" ]; then
+        elif [ -n "$(command -v systemctl 2>/dev/null)" -a -e "/lib/systemd/system/$serv.service" ]; then
            # For systemd, systemctl can't en/disable if service name be a alias name, ex: nfslock, due to 'nfslock' -> 'nfs-lock'
            _real_service_name=$(basename $(readlink -f  /usr/lib/systemd/system/$serv.service) ".service")
            echo "Force to del $_real_service_name service by systemd command..."

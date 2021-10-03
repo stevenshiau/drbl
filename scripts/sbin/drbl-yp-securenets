@@ -113,14 +113,21 @@ EOF
       if [ "$restart_yp" = "yes" ]; then
          echo "Stopping NIS service..."
 	 echo "$msg_delimiter_star_line"
-         [ -n "$(which systemctl 2>/dev/null)" -a -e "/lib/systemd/system/$YP_SRV_NAME.service" ] && systemctl stop $YP_SRV_NAME.service  # For systemd
-         [ -x "/etc/init.d/$YP_SRV_NAME" ] && /etc/init.d/$YP_SRV_NAME stop  # For  SysV service
+         if [ -n "$(command -v systemctl 2>/dev/null)" -a \
+	      -e "/lib/systemd/system/$YP_SRV_NAME.service" ]; then
+	   # For systemd
+	   systemctl stop $YP_SRV_NAME.service
+	 fi
+         if [ -x "/etc/init.d/$YP_SRV_NAME" ]; then
+	   # For  SysV service
+	   /etc/init.d/$YP_SRV_NAME stop
+	 fi
 	 echo "$msg_delimiter_star_line"
       fi
       echo "done!"
       if [ -f $securenets_file ]; then 
         echo "Remove the $securenets_file..."
-        [ -f "$securenets_file" ] && mv -f $securenets_file ${securenets_file}.drblsave
+        mv -f $securenets_file ${securenets_file}.drblsave
       fi
       ;;
      *)
