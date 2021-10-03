@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	4.5.3
+Version:	4.5.4
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -43,6 +43,10 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Sun Oct 03 2021 Steven Shiau <steven _at_ clonezilla org> 4.5.4-drbl1
+  * Replace "which" with "command -v" in the script because "which"
+    command is deprecated.
+
 * Mon Sep 27 2021 Steven Shiau <steven _at_ clonezilla org> 4.5.3-drbl1
   * deb-preconf-drbl was renamed as drbl-deb-preconf.
   * Bug fixed:

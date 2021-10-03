@@ -1,3 +1,10 @@
+drbl (4.5.4-drbl1) unstable; urgency=medium
+
+  * Replace "which" with "command -v" in the script because "which"
+    command is deprecated.
+
+ -- Steven Shiau <steven@clonezilla.org>  Sun, 03 Oct 2021 13:57:56 +0800
+
 drbl (4.5.3-drbl1) unstable; urgency=medium
 
   * deb-preconf-drbl was renamed as drbl-deb-preconf.
