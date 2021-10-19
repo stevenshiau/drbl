@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (4.5.6-drbl1) unstable; urgency=medium
+
+  * Bug fixed: "-z9p" was not shown in the save menu for beginner mode.
+
+ -- Steven Shiau <steven@clonezilla.org>  Tue, 19 Oct 2021 18:43:01 +0800
+
 drbl (4.5.5-drbl1) unstable; urgency=medium
 
   * Enable the option -z9p for Clonezilla SE beginner mode.
