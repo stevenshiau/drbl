@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	4.5.6
+Version:	4.5.7
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -43,6 +43,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Tue Oct 19 2021 Steven Shiau <steven _at_ clonezilla org> 4.5.7-drbl1
+  * Clean unsupported DBN9.0 files. Update ocsd-rescue.service for DBN-TU.
+
 * Tue Oct 19 2021 Steven Shiau <steven _at_ clonezilla org> 4.5.6-drbl1
   * Bug fixed: "-z9p" was not shown in the save menu for beginner mode.
 
