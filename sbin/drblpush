@@ -3020,7 +3020,7 @@ for i in $client_services; do
     chroot $drbl_common_root/ /sbin/chkconfig $i on
   fi
 done
-# deal with ocs-run service in systemd environemnt on Fedora 17 and later
+# Deal with ocs-run service in systemd environment
 #	1. create rescue.target and services files
 #	2. make a link of rescue.service to ocsd-rescue.service
 #	3. remove /etc/rc*.d/S*ocs-run to avoid ocs-run service competition
@@ -3035,8 +3035,8 @@ if is_systemd_init; then
     cp $drbl_setup_path/files/${OS_type}/${OS_Version}/systemd/system/ocsd-*.service $drbl_common_root/etc/systemd/system/
   else
     # Can not find fine-tune file, show warning, and use the most related one.
-    OS_Version_Major="${OS_Version:0:3}"  # E.g. CO7.1.1503 -> CO7
-    most_related_ver_d="$(LC_ALL=C find $drbl_setup_path/files/$OS_type/${OS_Version_Major}* -type d -maxdepth 1 -exec dirname {} \; 2>/dev/null | sort | uniq | tail -n 1)"
+    OS_Version_Major="${OS_Version:0:3}"  # E.g. CO7.1.1503 -> CO7; DBN9.2 -> DBN9
+    most_related_ver_d="$(LC_ALL=C find $drbl_setup_path/files/$OS_type/${OS_Version_Major}* -maxdepth 1 -type d -exec dirname {} \; 2>/dev/null | sort -V | uniq | tail -n 1)"
     [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
     echo "Warning! The fine-tune files in dir ${drbl_setup_path}/files/${OS_type}/${OS_Version}/systemd/system/ were not found. Using ocs-related systemd files in ${most_related_ver_d}/ for client's systemd service."
     echo "This may cause some problems to DRBL clients!"
