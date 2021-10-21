@@ -5,6 +5,14 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (4.5.8-drbl1) unstable; urgency=medium
+
+  * Clean unsupported ones in drbl/setup/files/
+  * drblpush: modify the way to get most_related_ver_d, and update some
+    comments.
+
+ -- Steven Shiau <steven@clonezilla.org>  Thu, 21 Oct 2021 22:26:24 +0800
+
 drbl (4.5.7-drbl1) unstable; urgency=medium
 
   * Clean unsupported DBN9.0 files. Update ocsd-rescue.service for DBN-TU.
