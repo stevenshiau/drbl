@@ -1163,3 +1163,7 @@ msg_list_both_type_device_mode='將硬碟或者分割區一起列出，也就是
 msg_press_space_to_mark_selection='如果有複選的選項讓你選擇, 請使用空白鍵來標示你的選擇，被標示選到的部份會出現星號(*)'
 # Tag on 2021/08/28
 msg_reserved_img_names="以下的印象檔專用保留字眼有特殊意義，包含\"ask_user\", \"autoname\", \"autoname-*\" \"autohostname\",以及\"autoproductname\"。欲知詳情，請瀏覽再生龍網頁。"
+# Tag on 2021/10/25
+msg_choose_if_use_wifi="找到無線網卡，你要使用它嗎?"
+msg_do_not_use_wifi="不使用它。"
+msg_use_wifi="要使用它。"
