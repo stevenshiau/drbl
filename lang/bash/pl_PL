@@ -1165,6 +1165,7 @@ msg_press_space_to_mark_selection='Naciśnij spację, aby zaznaczyć swój wybó
 # Tag on 2021/08/28
 msg_reserved_img_names="Some reserved image names have special meanings, including \"ask_user\", \"autoname\", \"autoname-*\" \"autohostname\", and \"autoproductname\". Please check Clonezilla website for more details."
 # Tag on 2021/10/25
-msg_choose_if_use_wifi="Wi-Fi device was found. Do you want to use it?"
-msg_do_not_use_wifi="No, do not use it."
-msg_use_wifi="Yes, use it."
+msg_choose_wired_or_wireless="Both wired and wireless network devices were detected. Which type do you want to use?"
+msg_use_wired="Use wired network device"
+msg_use_wireless="Use wireless network device"
+msg_nic_status_on_sytem="Network device and status detected on this system:"

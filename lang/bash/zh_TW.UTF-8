@@ -1164,6 +1164,7 @@ msg_press_space_to_mark_selection='如果有複選的選項讓你選擇, 請使�
 # Tag on 2021/08/28
 msg_reserved_img_names="以下的印象檔專用保留字眼有特殊意義，包含\"ask_user\", \"autoname\", \"autoname-*\" \"autohostname\",以及\"autoproductname\"。欲知詳情，請瀏覽再生龍網頁。"
 # Tag on 2021/10/25
-msg_choose_if_use_wifi="找到無線網卡，你要使用它嗎?"
-msg_do_not_use_wifi="不使用它。"
-msg_use_wifi="要使用它。"
+msg_choose_wired_or_wireless="偵測到有線與無線網卡，請問要使用哪種的網卡?"
+msg_use_wired="使用有線網卡"
+msg_use_wireless="使用無線網卡"
+msg_nic_status_on_sytem="此系統上偵測到的網卡與狀態:"
