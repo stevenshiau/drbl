@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	4.5.10
+Version:	4.5.11
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -43,6 +43,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Wed Oct 27 2021 Steven Shiau <steven _at_ clonezilla org> 4.5.11-drbl1
+  * Language files es_ES were updated. Thanks to Juan Ramón Martínez.
+
 * Tue Oct 26 2021 Steven Shiau <steven _at_ clonezilla org> 4.5.10-drbl1
   * Update language files about wired/wireless NIC.
   * Add packages openfortivpn & openconnect in the packages list of
