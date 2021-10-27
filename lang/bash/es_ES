@@ -1126,7 +1126,7 @@ msg_not_chosing_CZ_IMG_dir='//NOTA// No debe elegir el directorio etiquetado con
 msg_no_any_image_found='No se ha encontrado ninguna imagen en este directorio'
 msg_this_directory_is_not_mountpoint='Este directorio no es un punto de montaje'
 msg_there_is_no_way_to_mount_subdirectory='No hay forma de montar el subdirectorio.'
-msg_the_dir_you_choose_is_clonezilla_img_dir='Este directorio que elija es un directorio de imágenes de Clonezilla'
+msg_the_dir_you_choose_is_clonezilla_img_dir='Este directorio que eliges es un directorio de imágenes de Clonezilla'
 # Tag on 2019/07/18
 msg_ocs_param_iui='No actualice el/los archivo/s initramfs en el GNU/Linux restaurado.'
 msg_ocs_onthefly_param_iui='No actualice el/los archivo/s initramfs en el GNU/Linux restaurado.'
@@ -1155,29 +1155,29 @@ msg_choose_net_pipe_program='Elegir programa de canalización de red cuando se c
 msg_ocs_onthefly_param_netcat='Usar netcat cuando se clone sobre red'
 msg_ocs_onthefly_param_nuttcp='Usar nuttcp cuando se clone sobre red'
 # Tag on 2020/12/31
-msg_ocs_use_smbv3_11='SMB protocol 3.11 or 3.1.1'
-msg_ocs_use_smb_auto='Auto negotiate SMB protocol'
+msg_ocs_use_smbv3_11='Protocolo SMB 3.11 o 3.1.1'
+msg_ocs_use_smb_auto='Auto negociar protocolo SMB'
 # Tag on 2021/01/18
-msg_choose_if_fsck_the_repo_part='Choose if you want to check and repair the file system before mounting the image repository. This option is only for certain file systems which are well supported by fsck on GNU/Linux, like ext2/3/4, reiserfs, xfs, jfs, vfat. Not for NTFS, HFS+...'
-msg_skip_check_repo_fs='Skip checking/repairing the file system before mounting'
-msg_ocs_param_fsck_repo_part='Interactively check and repair the file system before mounting'
-msg_ocs_param_fsck_repo_part_yes='Auto (Caution!) check and repair file system before mounting'
-msg_not_this_is_for_mount_repository='//NOTE// This is for mounting local storage device as an image repository!'
+msg_choose_if_fsck_the_repo_part='Elija si quiere chequear y reparar el sistema de archivos antes de montar la imagen repositorio. Esta opción es sólo para ciertos sistemas de archivos bien soportados por fsck en GNU/Linux, como ext2/3/4, reiserfs, xfs, jfs, vfat. No para NTFS, HFS+...'
+msg_skip_check_repo_fs='Omitir chequeo/reparación del sistema de archivos antes de montar'
+msg_ocs_param_fsck_repo_part='Interactuar en el chequeo y reparación del sistema de archivos antes de montar'
+msg_ocs_param_fsck_repo_part_yes='Auto (Atención!) chequeo y reparación del sistema de archivos antes de montar'
+msg_not_this_is_for_mount_repository='//NOTA// Esto es para montar un dispositivo de almacenamiento local como un repositorio de imágenes.!'
 # Tag on 2021/03/06
-msg_ocs_param_ssnf='Skip setting 1st boot device as network in uEFI netboot client NVRAM'
-msg_ocs_param_scpt='Skip checking the partition table of the source disk is MBR or GPT format'
+msg_ocs_param_ssnf='Omitir la configuración del primer dispositivo de arranque como red en la NVRAM del cliente uEFI netboot'
+msg_ocs_param_scpt='Omitir la comprobación de que la tabla de particiones del disco de origen tiene formato MBR o GPT'
 # Tag on 2021/03/09
-msg_B2SUMS_check_failed='BLAKE2 checksums did NOT match!'
-msg_ocs_param_gb='Generate image BLAKE2 checksums'
-msg_ocs_param_cb='Check image by BLAKE2 checksums'
+msg_B2SUMS_check_failed='Los checksums de BLAKE2 NO coinciden!'
+msg_ocs_param_gb='Generar checksums de imagen BLAKE2'
+msg_ocs_param_cb='Verificar imagen con checksums de BLAKE2'
 # Tag on 2021/03/15
-msg_list_local_device_mode='Which mode do you want to list the block devices on this machine? If you have no idea, choose "disk_or_part". Do _NOT_ choose "both_type_dev" unless you know what you are doing. Basically "both_type_dev" is for you to force choosing the block device which is not listed as it is. For example, you want to save the block device /dev/sda but it is not shown in "saveparts" mode since it is a disk device name, not a partition device name.'
-msg_list_disk_or_part_mode='Separate disk(s) and partition(s)'
-msg_list_both_type_device_mode='List both types of block devices together, i.e., show disk(s) and partition(s) simultaneously'
+msg_list_local_device_mode='¿En qué modo desea enumerar los dispositivos de bloque en esta máquina? Si no tiene idea, elija "disk_or_part". _NO_ elija "both_type_dev" a menos que sepa lo que está haciendo. Básicamente, "both_type_dev" es para que fuerce la elección del dispositivo de bloque que no aparece como tal. Por ejemplo, desea guardar el dispositivo de bloque /dev/sda pero no se muestra en el modo "saveparts" ya que es un nombre de dispositivo de disco y no un nombre de dispositivo de partición.'
+msg_list_disk_or_part_mode='Disco (s) y partición (es) separados'
+msg_list_both_type_device_mode='Listar ambos tipos de dispositivos de bloque juntos, es decir, mostrar el(los) disco(s) y la(s) partición(es) simultáneamente'
 # Tag on 2021/07/22
-msg_press_space_to_mark_selection='Pulsa la barra espaciadora para seleccionar. Un asterisco(*) aparecerá cuando la selección se realice'
+msg_press_space_to_mark_selection='Pulse la barra espaciadora para seleccionar. Un asterisco(*) aparecerá cuando la selección se realice'
 # Tag on 2021/08/28
-msg_reserved_img_names="Some reserved image names have special meanings, including \"ask_user\", \"autoname\", \"autoname-*\" \"autohostname\", and \"autoproductname\". Please check Clonezilla website for more details."
+msg_reserved_img_names="Algunos nombres de imágenes reservados tienen significados especiales, incluyendo \"ask_user\", \"autoname\", \"autoname-*\" \"autohostname\", y \"autoproductname\". Consulte el sitio web de Clonezilla para obtener más detalles."
 # Tag on 2021/10/25
 msg_choose_wired_or_wireless="Both wired and wireless network devices were detected. Which type do you want to use?"
 msg_use_wired="Use wired network device"

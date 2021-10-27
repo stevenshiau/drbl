@@ -241,7 +241,7 @@ $lang_charset = 'iso-8859-1';
    not_allowed_ocs_img_repo_dir => "no es un directorio permitido para salvar imágenes de clonezilla, por favor introdúzcalo de nuevo.",
    drbl_server_as_NAT_server => "¿Desea dejar el servidor DRBL como un servidor NAT? Si no, su cliente DRBL NO será capaz de acceder a Internet.",
    drbl_server_is_NOT_NAT_server => "Este servidor DRBL No proporciona servicio NAT, por lo que su cliente DRBL NO será capaz de acceder a Internet.",
-   both_drbl_clonezilla_are_none => "Tanto los modos drbl como clonezilla no se encuentran disponibles, ¡sólo funciones muy limitadas (como netinstall, si instala los archivos necsarios, y drbl-sl) están disponibles en este sistema!",
+   both_drbl_clonezilla_are_none => "Tanto los modos drbl como clonezilla no se encuentran disponibles, ¡sólo funciones muy limitadas (como netinstall, si instala los archivos necesarios, y drbl-sl) están disponibles en este sistema!",
    are_you_sure_you_want_to_continue => "¿Seguro que desea continuar?" ,
    # Tag on 2010/12/13
    #which_clonezilla_mode_for_client => "En el sistema, hay 3 modos disponibles para clonezilla:\n[0] Modo Clonezilla completo, cada cliente tiene su propio NFS basado en /etc y /var.\n[1] Modo Clonezilla box, cada cliente usa tmpfs basado en /etc y /var. En este modo, la carga y el espacio de disco necesario del servidor es inferior que en el Modo Clonezilla completo. ¡Nota! ¡En el modo Clonezilla box, la configuración y los archivos de configuración del cliente no se salvarán en el servidor DRBL! ¡Serán usados una vez y descartados una vez la máquina se apague!\n[2] No quiero clonezilla.\n¿Qué modo prefiere?",
@@ -261,6 +261,6 @@ $lang_charset = 'iso-8859-1';
    failed_to_detect_dhcp_service => "Falló el encontrar un servicio DHCP en esta tarjeta de red",
    do_you_want_to_try_it_again => "¿Quiere intentarlo de nuevo?",
    # Tag on 2021/02/14
-   from_ubuntu_1910_only_amd64_is_available => "From Ubuntu 19.10, only amd64 (x86-64) release of Clonezilla live is available.",
+   from_ubuntu_1910_only_amd64_is_available => "Desde Ubuntu 19.10, sólo está disponible la versión amd64 (x86-64) de Clonezilla live.",
    mark_the_end_of_lang =>"."
    );
