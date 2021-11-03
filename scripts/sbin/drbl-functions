@@ -1939,6 +1939,17 @@ local ASK_VOL_SIZE=1
 local inst_grub_opt opt_confirm_ j2_switch_msg_1 j2_switch_msg_2 j2_switch_msg_3
 vol_size_tmp="$(mktemp /tmp/vol_size_tmp.XXXXXX)"
 
+if [ "$mode2_" = "recovery-iso-zip" ]; then
+  # E.g., set_ocs_sr_extra_param restore /tmp/ocs_recovery_tmp.8YNkii recovery-iso-zip
+  # When mode2_ is recovery-iso-zip, we have to convert it to restoreparts or restoredisk
+  # by testing the image
+  if [ -e "$ocsroot/$target_dir/disk" ]; then
+    mode2_="restoredisk"
+  else
+    mode2_="restoreparts"
+  fi
+fi
+
 # If the mode is only for parts, we won't turn on "-g auto" option by default
 case "$mode2_" in
   *parts) inst_grub_opt="off"
