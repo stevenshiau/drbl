@@ -1,3 +1,12 @@
+drbl (4.5.12-drbl1) unstable; urgency=medium
+
+  * Bug fixed: option "-j2" was missing in recovery-iso-zip mode.
+    Thanks to Ek Han Heng for reporting this issue.
+    Ref:
+    https://sourceforge.net/p/clonezilla/discussion/Clonezilla_live/thread/9ffa31f838/
+
+ -- Steven Shiau <steven@clonezilla.org>  Wed, 03 Nov 2021 22:24:00 +0800
+
 drbl (4.5.11-drbl1) unstable; urgency=medium
 
   * Language files es_ES were updated. Thanks to Juan Ramón Martínez.

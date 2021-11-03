@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	4.5.11
+Version:	4.5.12
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -43,6 +43,12 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Wed Nov 03 2021 Steven Shiau <steven _at_ clonezilla org> 4.5.12-drbl1
+  * Bug fixed: option "-j2" was missing in recovery-iso-zip mode.
+    Thanks to Ek Han Heng for reporting this issue.
+    Ref:
+    https://sourceforge.net/p/clonezilla/discussion/Clonezilla_live/thread/9ffa31f838/
+
 * Wed Oct 27 2021 Steven Shiau <steven _at_ clonezilla org> 4.5.11-drbl1
   * Language files es_ES were updated. Thanks to Juan Ramón Martínez.
 
