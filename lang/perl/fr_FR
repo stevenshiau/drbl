@@ -259,6 +259,6 @@ $lang_charset = 'iso-8859-1';
    failed_to_detect_dhcp_service => "Aucun service DHCP n'a été trouvé sur cette carte réseau",
    do_you_want_to_try_it_again => "Voulez-vous essayer à nouveau ?",
    # Tag on 2021/02/14
-   from_ubuntu_1910_only_amd64_is_available => "From Ubuntu 19.10, only amd64 (x86-64) release of Clonezilla live is available.",
+   from_ubuntu_1910_only_amd64_is_available => "À partir d'Ubuntu 19.10, Clonezilla n'est plus disponible qu'en version amd64 (x86-64).",
    mark_the_end_of_lang =>"."
    );

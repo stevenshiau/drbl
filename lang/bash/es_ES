@@ -1179,7 +1179,7 @@ msg_press_space_to_mark_selection='Pulse la barra espaciadora para seleccionar. 
 # Tag on 2021/08/28
 msg_reserved_img_names="Algunos nombres de imágenes reservados tienen significados especiales, incluyendo \"ask_user\", \"autoname\", \"autoname-*\" \"autohostname\", y \"autoproductname\". Consulte el sitio web de Clonezilla para obtener más detalles."
 # Tag on 2021/10/25
-msg_choose_wired_or_wireless="Both wired and wireless network devices were detected. Which type do you want to use?"
-msg_use_wired="Use wired network device"
-msg_use_wireless="Use wireless network device"
-msg_nic_status_on_sytem="Network device and status detected on this system:"
+msg_choose_wired_or_wireless="Se detectaron dispositivos de red tanto cableados como inalámbricos. ¿Qué tipo quiere usar?"
+msg_use_wired="Usar dispositivo de red con cable"
+msg_use_wireless="Usar dispositivo de red inalámbrica"
+msg_nic_status_on_sytem="Dispositivo de red y estado detectado en este sistema:"

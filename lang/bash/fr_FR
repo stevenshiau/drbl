@@ -1131,42 +1131,42 @@ msg_ocs_onthefly_param_ps="Jouer un son lorsque la tâche est terminée"
 msg_ocs_param_z9='compression zstd'
 msg_ocs_param_z9p='compression zstdmt'
 # Tag on 2020/08/09
-msg_locale_ko_KR='Korean'
+msg_locale_ko_KR='Coréen'
 # Tag on 2020/09/10
-msg_ocs_onthefly_param_rvd='Remove NTFS volume dirty flag in source NTFS file system before cloning it'
+msg_ocs_onthefly_param_rvd='Supprimer le bit d\''intégrité NTFS du système source avant clonage'
 # Tag on 2020/10/02
-msg_ocs_onthefly_param_t='Skip cloning the MBR (Master Boot Record)'
-msg_ocs_onthefly_param_t1='Clone the prebuilt bootloader from syslinux (For Windows only)'
-msg_ocs_onthefly_param_t2='Skip cloning the EBR (Extended Boot Record)'
-msg_choose_net_pipe_program='Choose the network pipe program when cloning over network'
-msg_ocs_onthefly_param_netcat='Use netcat when cloning over network'
-msg_ocs_onthefly_param_nuttcp='Use nuttcp when cloning over network'
+msg_ocs_onthefly_param_t='Passer le clonage du MBR (Master Boot Record)'
+msg_ocs_onthefly_param_t1='Cloner le bootloader prédéfini dans syslinux (Windows uniquement)'
+msg_ocs_onthefly_param_t2='Passer le clonage de l\''EBR (Extended Boot Record)'
+msg_choose_net_pipe_program='Choisir le programme d\''échange à utiliser pour le clonage par le réseau'
+msg_ocs_onthefly_param_netcat='Utiliser netcat pour le clonage par le réseau'
+msg_ocs_onthefly_param_nuttcp='Utiliser nuttcp pour le clonage par le réseau'
 # Tag on 2020/12/31
-msg_ocs_use_smbv3_11='SMB protocol 3.11 or 3.1.1'
-msg_ocs_use_smb_auto='Auto negotiate SMB protocol'
+msg_ocs_use_smbv3_11='Protocole SMB 3.11 ou 3.1.1'
+msg_ocs_use_smb_auto='Auto-négocier le protocole SMB'
 # Tag on 2021/01/18
-msg_choose_if_fsck_the_repo_part='Choose if you want to check and repair the file system before mounting the image repository. This option is only for certain file systems which are well supported by fsck on GNU/Linux, like ext2/3/4, reiserfs, xfs, jfs, vfat. Not for NTFS, HFS+...'
-msg_skip_check_repo_fs='Skip checking/repairing the file system before mounting'
-msg_ocs_param_fsck_repo_part='Interactively check and repair the file system before mounting'
-msg_ocs_param_fsck_repo_part_yes='Auto (Caution!) check and repair file system before mounting'
-msg_not_this_is_for_mount_repository='//NOTE// This is for mounting local storage device as an image repository!'
+msg_choose_if_fsck_the_repo_part='Décidez si vous voulez vérifier et réparer le système de fichiers avant de monter de dépôt des images. Cette option est uniquement destinée à certains systèmes de fichiers, bien supportés par fsck sous GNU/Linux, comme ext2/3/4, reiserfs, xfs, jfs, vfat. Mais pas NTFS, HFS+...'
+msg_skip_check_repo_fs='Passer la vérification/réparation du système de fichiers avant le montage'
+msg_ocs_param_fsck_repo_part='Vérification et réparation interactives du système de fichiers avant le montage'
+msg_ocs_param_fsck_repo_part_yes='Vérification et réparation automatiques (attention !) du système de fichiers avant le montage'
+msg_not_this_is_for_mount_repository='//NOTE// Il s\''agit de monter le périphérique local de stockage comme dépôt des images !'
 # Tag on 2021/03/06
-msg_ocs_param_ssnf='Skip setting 1st boot device as network in uEFI netboot client NVRAM'
-msg_ocs_param_scpt='Skip checking the partition table of the source disk is MBR or GPT format'
+msg_ocs_param_ssnf='Passer la définition du 1er périphérique d\''amorçage en tant que réseau dans la NVRAM du client d\''amorçage uEFI'
+msg_ocs_param_scpt='Ne pas vérifier que le format de la table de partitions du disque source est MBR ou GPT'
 # Tag on 2021/03/09
-msg_B2SUMS_check_failed='BLAKE2 checksums did NOT match!'
-msg_ocs_param_gb='Generate image BLAKE2 checksums'
-msg_ocs_param_cb='Check image by BLAKE2 checksums'
+msg_B2SUMS_check_failed='Les sommes de contrôle BLAKE2 ne correspondent pas !'
+msg_ocs_param_gb='Générer la somme de contrôle BLAKE2 de l\''image'
+msg_ocs_param_cb='Vérifier la somme de contrôle BLAKE2 de l\''image'
 # Tag on 2021/03/15
-msg_list_local_device_mode='Which mode do you want to list the block devices on this machine? If you have no idea, choose "disk_or_part". Do _NOT_ choose "both_type_dev" unless you know what you are doing. Basically "both_type_dev" is for you to force choosing the block device which is not listed as it is. For example, you want to save the block device /dev/sda but it is not shown in "saveparts" mode since it is a disk device name, not a partition device name.'
-msg_list_disk_or_part_mode='Separate disk(s) and partition(s)'
-msg_list_both_type_device_mode='List both types of block devices together, i.e., show disk(s) and partition(s) simultaneously'
+msg_list_local_device_mode='Quel mode pour le listage des périphériques bloc sur cette machine ? Si vous ne savez pas, choisissez "disque_ou_partition". Ne choisissez _PAS_ "both_type_dev" sauf si vous savez ce que vous faites. Le mode "both_type_dev" vous permet de forcer le choix d\''un périphérique bloc qui n\''est pas listé correctement. Par exemple, si vous voulez sauvegarder le périphérique bloc /dev/sda alors qu\''il n\''appraît pas sous le mode "saveparts" puisque c\''est le nom d\''un disque et pas un nom de périphérique partition.'
+msg_list_disk_or_part_mode='Separer disque(s) et partition(s)'
+msg_list_both_type_device_mode='Lister simultanément les deux types de périphériques bloc. Ex : montrer disques et partitions ensemble'
 # Tag on 2021/07/22
 msg_press_space_to_mark_selection='Appuyez Espace pour marquer la sélection. Un astérisque (*) montre la sélection'
 # Tag on 2021/08/28
-msg_reserved_img_names="Some reserved image names have special meanings, including \"ask_user\", \"autoname\", \"autoname-*\" \"autohostname\", and \"autoproductname\". Please check Clonezilla website for more details."
+msg_reserved_img_names="Certains noms réservés d\''images ont des significations particulières, y compris \"ask_user\", \"autoname\", \"autoname-*\" \"autohostname\", et \"autoproductname\". Veuillez consulter le site web de Clonezilla pour plus de détails."
 # Tag on 2021/10/25
-msg_choose_wired_or_wireless="Both wired and wireless network devices were detected. Which type do you want to use?"
-msg_use_wired="Use wired network device"
-msg_use_wireless="Use wireless network device"
-msg_nic_status_on_sytem="Network device and status detected on this system:"
+msg_choose_wired_or_wireless="Des périphériques réseau câblé et sans fil ont été détectés. Lequel de ces types voulez-vous utiliser ?"
+msg_use_wired="Utiliser le périphérique câblé"
+msg_use_wireless="Utiliser le périphérique sans fil"
+msg_nic_status_on_sytem="Périphérique réseau et statut détectés :"
