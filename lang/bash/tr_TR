@@ -1131,42 +1131,42 @@ msg_ocs_onthefly_param_ps="İşlem bitince ses çal"
 msg_ocs_param_z9='zstd sıkıştırması'
 msg_ocs_param_z9p='zstdmt sıkıştırması'
 # Tag on 2020/08/09
-msg_locale_ko_KR='Korean'
+msg_locale_ko_KR='Korece'
 # Tag on 2020/09/10
-msg_ocs_onthefly_param_rvd='Remove NTFS volume dirty flag in source NTFS file system before cloning it'
+msg_ocs_onthefly_param_rvd='Klonlamadan önce kaynak NTFS dosya sisteminde NTFS birimi dirty bayrağını kaldır'
 # Tag on 2020/10/02
-msg_ocs_onthefly_param_t='Skip cloning the MBR (Master Boot Record)'
-msg_ocs_onthefly_param_t1='Clone the prebuilt bootloader from syslinux (For Windows only)'
-msg_ocs_onthefly_param_t2='Skip cloning the EBR (Extended Boot Record)'
-msg_choose_net_pipe_program='Choose the network pipe program when cloning over network'
-msg_ocs_onthefly_param_netcat='Use netcat when cloning over network'
-msg_ocs_onthefly_param_nuttcp='Use nuttcp when cloning over network'
+msg_ocs_onthefly_param_t='MBR (Master Boot Record, Ana Önyükleme Kaydı) klonlamayı atla'
+msg_ocs_onthefly_param_t1='Önceden oluşturulmuş önyükleyiciyi syslinuxtan klonla (Yalnızca Windows için)'
+msg_ocs_onthefly_param_t2='EBR (Extended Boot Record, Genişletilmiş Önyükleme Kaydı) klonlamayı atla'
+msg_choose_net_pipe_program='Ağ üzerinden klonlarken ağ pipe programını seç'
+msg_ocs_onthefly_param_netcat='Ağ üzerinden klonlarken netcat kullan'
+msg_ocs_onthefly_param_nuttcp='Ağ üzerinden klonlarken nuttcp kullanın'
 # Tag on 2020/12/31
-msg_ocs_use_smbv3_11='SMB protocol 3.11 or 3.1.1'
-msg_ocs_use_smb_auto='Auto negotiate SMB protocol'
+msg_ocs_use_smbv3_11='SMB protokolü 3.11 veya 3.1.1'
+msg_ocs_use_smb_auto='SMB protokolünde otomatik anlaş'
 # Tag on 2021/01/18
-msg_choose_if_fsck_the_repo_part='Choose if you want to check and repair the file system before mounting the image repository. This option is only for certain file systems which are well supported by fsck on GNU/Linux, like ext2/3/4, reiserfs, xfs, jfs, vfat. Not for NTFS, HFS+...'
-msg_skip_check_repo_fs='Skip checking/repairing the file system before mounting'
-msg_ocs_param_fsck_repo_part='Interactively check and repair the file system before mounting'
-msg_ocs_param_fsck_repo_part_yes='Auto (Caution!) check and repair file system before mounting'
-msg_not_this_is_for_mount_repository='//NOTE// This is for mounting local storage device as an image repository!'
+msg_choose_if_fsck_the_repo_part='Görüntü deposunu bağlamadan önce dosya sistemini kontrol edip onarmak isteyip istemediğinizi seçin. Bu seçenek yalnızca ext2/3/4, reiserfs, xfs, jfs, vfat gibi GNU/Linux içinde fsck tarafından iyi desteklenen belirli dosya sistemleri içindir. NTFS, HFS+ için değil...'
+msg_skip_check_repo_fs='Bağlamadan önce dosya sistemini kontrol etmeyi/onarmayı atla'
+msg_ocs_param_fsck_repo_part='Bağlamadan önce dosya sistemini etkileşimli olarak kontrol et ve onar'
+msg_ocs_param_fsck_repo_part_yes='Otomatik (Dikkat!) Montajdan önce dosya sistemini kontrol et ve onar'
+msg_not_this_is_for_mount_repository='//NOT// Bu, yerel depolama aygıtını bir görüntü deposu olarak bağlamak içindir!'
 # Tag on 2021/03/06
-msg_ocs_param_ssnf='Skip setting 1st boot device as network in uEFI netboot client NVRAM'
-msg_ocs_param_scpt='Skip checking the partition table of the source disk is MBR or GPT format'
+msg_ocs_param_ssnf='UEFI netboot istemcisi NVRAMde 1. önyükleme aygıtını ağ olarak ayarlamayı atla'
+msg_ocs_param_scpt='Kaynak diskin bölüm tablosunun MBR veya GPT formatı olup olmadığını kontrol etmeyi atla'
 # Tag on 2021/03/09
-msg_B2SUMS_check_failed='BLAKE2 checksums did NOT match!'
-msg_ocs_param_gb='Generate image BLAKE2 checksums'
-msg_ocs_param_cb='Check image by BLAKE2 checksums'
+msg_B2SUMS_check_failed='BLAKE2 sağlama toplamları eşleşmedi!'
+msg_ocs_param_gb='Kalıp için BLAKE2 sağlama toplamları oluştur'
+msg_ocs_param_cb='BLAKE2 sağlama toplamlarıyla kalıbı kontrol et'
 # Tag on 2021/03/15
-msg_list_local_device_mode='Which mode do you want to list the block devices on this machine? If you have no idea, choose "disk_or_part". Do _NOT_ choose "both_type_dev" unless you know what you are doing. Basically "both_type_dev" is for you to force choosing the block device which is not listed as it is. For example, you want to save the block device /dev/sda but it is not shown in "saveparts" mode since it is a disk device name, not a partition device name.'
-msg_list_disk_or_part_mode='Separate disk(s) and partition(s)'
-msg_list_both_type_device_mode='List both types of block devices together, i.e., show disk(s) and partition(s) simultaneously'
+msg_list_local_device_mode='Bu makinedeki blok cihazlarını hangi modda listelemek istiyorsunuz? Hiçbir fikriniz yoksa, "disk_or_part" öğesini seçin. Ne yaptığınızı bilmiyorsanız, "both_type_dev"i SEÇMEYİN. Temel olarak "both_type_dev", listelenmemiş olan blok cihazını olduğu gibi seçmeye zorlamanız içindir. Örneğin, /dev/sda blok cihazını kaydetmek istiyorsunuz, ancak bu bir disk cihazı olup, bir bölüm cihazı adı olmadığından "saveparts" modunda gösterilmiyor.'
+msg_list_disk_or_part_mode='Disk(ler)i ve bölümü/bölümleri ayır'
+msg_list_both_type_device_mode='Her iki blok aygıtı türünü birlikte listele, yani disk(ler)i ve bölümü/bölümleri aynı anda göster'
 # Tag on 2021/07/22
-msg_press_space_to_mark_selection='Seçimini işaretlemek için boşluk tuşunu kullanın. Seçim yapıldığında bir yıldız (*) işareti gösterilir'
+msg_press_space_to_mark_selection='Seçimi işaretlemek için boşluk tuşunu kullanın. Seçim yapıldığında bir yıldız (*) işareti gösterilir'
 # Tag on 2021/08/28
-msg_reserved_img_names="Some reserved image names have special meanings, including \"ask_user\", \"autoname\", \"autoname-*\" \"autohostname\", and \"autoproductname\". Please check Clonezilla website for more details."
+msg_reserved_img_names="\"ask_user\", \"autoname\", \"autoname-*\" \"autohostname\" ve \"autoproductname\" dahil bazı ayrılmış görüntü adlarının özel anlamları vardır. Daha fazla ayrıntı için lütfen Clonezilla web sitesini kontrol edin."
 # Tag on 2021/10/25
-msg_choose_wired_or_wireless="Both wired and wireless network devices were detected. Which type do you want to use?"
-msg_use_wired="Use wired network device"
-msg_use_wireless="Use wireless network device"
-msg_nic_status_on_sytem="Network device and status detected on this system:"
+msg_choose_wired_or_wireless="Hem kablolu hem de kablosuz ağ cihazları algılandı. Hangi türü kullanmak istiyorsunuz?"
+msg_use_wired="Kablolu ağ cihazı kullanın"
+msg_use_wireless="Kablosuz ağ cihazı kullanın"
+msg_nic_status_on_sytem="Bu sistemde algılanan ağ cihazı ve durumu:"

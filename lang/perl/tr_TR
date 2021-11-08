@@ -258,6 +258,6 @@ $lang_charset = 'utf-8';
    failed_to_detect_dhcp_service => "Bu ağ kartında hiç DHCP servisi bulunamadı",
    do_you_want_to_try_it_again => "Yeniden denemek ister misiniz?",
    # Tag on 2021/02/14
-   from_ubuntu_1910_only_amd64_is_available => "From Ubuntu 19.10, only amd64 (x86-64) release of Clonezilla live is available.",
+   from_ubuntu_1910_only_amd64_is_available => "Ubuntu 19.10'dan itibaren Clonezilla live'ın yalnızca amd64 (x86-64) sürümü mevcuttur.",
    mark_the_end_of_lang =>"."
    );
