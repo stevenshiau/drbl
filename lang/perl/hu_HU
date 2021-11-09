@@ -2,7 +2,7 @@
 # Written by Steven Shiau <steven _at_ clonezilla org> for DRBL
 # Hungarian translation by Greg <greg.hefty _at_ freemail hu>
 # License: GPL
-# Last updated: 08 June. 2017
+# Last updated: 09 Nov 2021
 
 $lang_charset = 'iso-8859-1';
 
@@ -258,6 +258,6 @@ $lang_charset = 'iso-8859-1';
    failed_to_detect_dhcp_service => "Ezen a hálózati kártyán nem található DHCP szerver",
    do_you_want_to_try_it_again => "Kíván újabb kísérletet tenni?",
    # Tag on 2021/02/14
-   from_ubuntu_1910_only_amd64_is_available => "From Ubuntu 19.10, only amd64 (x86-64) release of Clonezilla live is available.",
+   from_ubuntu_1910_only_amd64_is_available => "Ubuntu 19.10-től kezdve, csak amd64 (x86-64) Clonezilla live kiadás elérhető.",
    mark_the_end_of_lang =>"."
    );
