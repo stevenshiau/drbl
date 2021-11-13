@@ -13,7 +13,7 @@ msg_NOT_found='見つかりません'
 msg_Done='完了'
 msg_please='お願い:'
 msg_browse='詳細は'
-msg_or='又は'
+msg_or='または'
 msg_for_more_details='を参照して下さい'
 msg_Failed_to_get='取得失敗'
 msg_Failed_to_install='インストール失敗'
@@ -40,7 +40,7 @@ msg_install_DBN='Debian GNU/Linux に DRBL インストール中…'
 msg_install_SUSE='SuSE Linux に DRBL インストール中…'
 msg_OS_version='あなたの OS 用のバージョン番号'
 msg_is_not_supported='このバージョンはサポートされていません'
-msg_press_ctrl_c_stop='Ctrl-C を押してプログラムを停止してください!!'
+msg_press_ctrl_c_stop='Ctrl-C を押してプログラムを停止して下さい!!'
 msg_set_proxy='プロキシサーバを設定しますか?'
 msg_http_proxy_server='HTTP プロトコル用プロキシサーバ名(FQDN)または IP アドレス:'
 msg_http_proxy_port='HTTP プロトコル用プロキシサーバのポート番号:'
@@ -48,8 +48,8 @@ msg_ftp_proxy_server='FTP プロトコル用プロキシサーバ名(FQDN)また
 msg_ftp_proxy_port='FTP プロトコル用プロキシサーバのポート番号:'
 msg_http_proxy_you_set='設定された HTTP プロキシサーバ'
 msg_ftp_proxy_you_set='設定された FTP プロキシサーバ'
-msg_drbl_test_option='よりパワフルですが、バグがあるかも知れない DRBL「テスト(testing)」パッケージを使用しますか?(あなたが十分勇敢なら!!!) (DRBL RPM パッケージを testing ディレクトリからダウンロードした場合、「yes」を回答してください)'
-msg_drbl_unstable_option='よりパワフルですが、バグがあるかも知れない DRBL「不安定(unstable)」パッケージを使用しますか?(あなたが超勇敢なら!!!) (DRBL RPM パッケージを unstable ディレクトリからダウンロードした場合、「yes」を回答してください)'
+msg_drbl_test_option='よりパワフルですが、バグがあるかも知れない DRBL「テスト(testing)」パッケージを使用しますか?(あなたが十分勇敢なら!!!) (DRBL RPM パッケージを testing ディレクトリからダウンロードした場合、「yes」を回答して下さい)'
+msg_drbl_unstable_option='よりパワフルですが、バグがあるかも知れない DRBL「不安定(unstable)」パッケージを使用しますか?(あなたが超勇敢なら!!!) (DRBL RPM パッケージを unstable ディレクトリからダウンロードした場合、「yes」を回答して下さい)'
 msg_drbl_extra_option='DRBL プロジェクトから提供されている幾つかの外部パッケージを使用しますか?(これは単なるオプションで、必要ありません)'
 msg_drbl_netinstall_option='ネットワーク経由で幾つかの GNU/Linux ディストリビューション(Debian, Ubuntu, RedHat Linux, Fedora Core, Mandriva, CentOS, OpenSuSE...)をクライアントにインストール可能なネットワークインストール起動イメージをインストールしますか?  【注意】このアクションは大量のファイル(合計 100MB 以上)をインターネットからダウンロードし、おそらく数分かかります。あなたのクライアントマシンにハードディスクがあり、そのマシンに GNU/Linux をインストールしても構わないのであれば、Y を回答して下さい。「no」を回答した場合、これらを後でインストールする drbl-netinstall を実行できます。'
 msg_firefly_option='(Firefly から提供された)漢字(中国語、日本語、韓国語)用パッチをされたパッケージを使用しますか? (十分に勇気がありますか)'
@@ -86,7 +86,7 @@ msg_create_files_for_PXELINUX='PXE クライアント用の設定ファイルを
 msg_prepare_files_for_PXE_client='PXE クライアント用の設定とイメージファイルを準備しています…'
 msg_PXE_NOT_work='PXE ブートが動作できません!!'
 msg_press_enter_to_continue='「Enter」を押して続けて下さい…'
-msg_press_enter_to_exit='「Enter」を押して終了してください…'
+msg_press_enter_to_exit='「Enter」を押して終了して下さい…'
 msg_FreeDOS_NOT_work='FreeDOS リモートブートは動作しません!!'
 msg_no_apt_already_uninstall='apt パッケージがありません…DRBL パッケージを既にアンインストールしましたか?'
 msg_program_stop='プログラム中断!!'
@@ -102,7 +102,7 @@ msg_uninstalling_DRBL_DBN='Debian Linux 用 DRBL をアンインストール中�
 msg_uninstalling_DRBL_SUSE='SuSE Linux 用 DRBL をアンインストール中…'
 msg_analyzing_rpm_info='RPM パッケージ情報を調査中…数分かかります…'
 msg_failed_to_install_pkgs='必要なパッケージのインストールに失敗。先に進めません!!'
-msg_check_network_and_url='ネットワーク接続をチェックしてください(あなたのマシンと次の間の)：'
+msg_check_network_and_url='ネットワーク接続をチェックして下さい(あなたのマシンと次の間の)：'
 msg_not_determine_OS='使用中の OS バージョンを検知できません!!'
 msg_enter_OS_ver='バージョンを入力して下さい(RH8.0, RH9, FC1, MDK9.2, MDK10.0 ...)'
 msg_clean_apt_cache_RH='RPM::Architecture を有効にする為に apt のキャッシュを削除中…'
@@ -614,8 +614,8 @@ msg_readonly_dev_fuse='リードオンリーな FUSE デバイス(例：SSHFS, S
 msg_writable_dev_ramdisk='メモリ！【お薦めしません】'
 msg_warning_mount_ntfs_writable='警告!!ntfs-3g による NTFS パーティションのマウントは実験レベルです!!NTFS パーティションにおけるファイルシステム破壊を招く恐れがあります(しかし可能性は非常に低いです)!!'
 msg_df_report='ファイルシステムディスク使用量'
-msg_hint_assign_IP_group="ヒント１：$drbl_syscfg/IP-grp-* ファイル(各行に IP アドレスの一覧)\nの追加により IP アドレスグループを作成できます。\nファイル名の * を表示可能な文字または単語(1 や DX)で置き換えてください。"
-msg_hint_assign_MAC_group="ヒント２：$drbl_syscfg/MAC-grp-* ファイル(各行に MAC アドレスの一覧)\nを追加する事により、MAC アドレスグループを作成できます。\nファイル名の * を表示可能な文字または単語(1 や DX)で置き換えてください。"
+msg_hint_assign_IP_group="ヒント１：$drbl_syscfg/IP-grp-* ファイル(各行に IP アドレスの一覧)\nの追加により IP アドレスグループを作成できます。\nファイル名の * を表示可能な文字または単語(1 や DX)で置き換えて下さい。"
+msg_hint_assign_MAC_group="ヒント２：$drbl_syscfg/MAC-grp-* ファイル(各行に MAC アドレスの一覧)\nを追加する事により、MAC アドレスグループを作成できます。\nファイル名の * を表示可能な文字または単語(1 や DX)で置き換えて下さい。"
 msg_device_image_device_clone='2つのモードを選べます。\n(1)「ディスク／パーティション→イメージ」または「イメージ→ディスク／パーティション」複製\n(2)「ディスク→ディスク」または「パーティション→パーティション」複製'
 msg_device_image_clone='ディスク／パーティション⇔イメージ'
 msg_device_device_clone='ディスク／パーティション⇔ディスク／パーティション'
@@ -691,7 +691,7 @@ msg_drbl_env_is_ready='DRBL 環境が準備できましたので、ここで Clo
 msg_ntfs_in_this_part_is_corrupt='このパーティションの NTFS は障害があります'
 msg_two_options_for_you_now='ここで２つのオプションがあります'
 msg_boot_win_run_chkdsk="MS Windows で一時マシンを起動してみて、(MS XP リカバリコンソールあるいは他のもの用に)'chkdsk /f' または 'chkdsk /p /r' を実行し、２回再起動します!!重要：/f と /p /r パラメータを忘れないで下さい!!これらのオプションはお薦めです!!"
-msg_run_ntfsfix_then_force_save='ntfsfix でファイルシステムを修正し、パーティションを保存するよう CLonezilla に試行させてください。【注意】ntfsfix はいくつかの基本的な NTFS の非一貫性の修復と、NTFS ジャーナルファイルのリセット、Windows の初回起動時の NTFS 一貫性チェックのスケジュール設定しか出来ません。一言で言えば、ntfsfix は chkdsk の Linux 版ではありません。このオプションはお薦めしません!!'
+msg_run_ntfsfix_then_force_save='ntfsfix でファイルシステムを修正し、パーティションを保存するよう CLonezilla に試行させて下さい。【注意】ntfsfix はいくつかの基本的な NTFS の非一貫性の修復と、NTFS ジャーナルファイルのリセット、Windows の初回起動時の NTFS 一貫性チェックのスケジュール設定しか出来ません。一言で言えば、ntfsfix は chkdsk の Linux 版ではありません。このオプションはお薦めしません!!'
 msg_stay_in_this_console_1='このコンソール(console 1)のままで、コマンドラインプロンプトに入ります'
 msg_run_cmd_exit='exit または logout コマンドを実行して下さい'
 msg_this_is_for_drbl_server_not_for_clonezilla_server_edition='これは DRBL サーバ用で、Clonezilla サーバ版を使用したい場合、デスクトップの「Clonezilla Server Edition」アイコンをクリックした方が良いでしょう。でないと、Clonezilla イメージリポジトリ(/home/partimag)を自分でマウントする必要があります。今、イメージリポジトリはこのマシンのメモリを使用しています。'
@@ -766,7 +766,7 @@ msg_ocs_onthefly_param_j2='MBR と最初のパーティションの間に隠れ�
 # Tag on 2009/03/16
 msg_ocs_param_e2='sfdisk が EDD からの HDD CHS 値を使用(非 GRUB ブートローダ用)'
 msg_ocs_onthefly_param_e2='sfdisk が EDD からの HDD CHS 値を使用(非 GRUB ブートローダ用)'
-msg_see_above_notice='【注意】上記の注意事項を読んでください!'
+msg_see_above_notice='【注意】上記の注意事項を読んで下さい!'
 # Tag on 2009/04/10
 msg_select_beginner_or_expert_mode="拡張パラメータに関するウィザードを実行するモードを選択"
 msg_beginner_mode="初心者モード：デフォルトオプションを了解"
@@ -821,7 +821,7 @@ msg_ocs_onthefly_param_q1='セクター毎コピーの使用を強制（全フ�
 # Tag on 2011/02/15
 msg_the_image_to_be_cheked='チェックするイメージ'
 msg_the_part_image_to_be_cheked='チェックするパーティション'
-msg_choose_the_parts_to_check='チェックするパーティションを選択してください'
+msg_choose_the_parts_to_check='チェックするパーティションを選択して下さい'
 msg_the_requested_partition_to_be_checked='イメージ中でチェックするよう要求されたパーティション'
 msg_a_disk_image_saved_from_hd='これは HDD からセーブされたディスク全体のイメージです。'
 msg_a_part_image_saved_from_partitions='これはディスク全体のイメージではなく、パーティションからセーブされたパーティションイメージです。'
@@ -838,7 +838,7 @@ msg_choose_if_checking_image_restorable='イメージ保存後、イメージが
 msg_ocs_param_check_img_restorable='はい、保存イメージをチェックします'
 msg_ocs_param_skip_checking_img_restorable='いいえ、保存イメージのチェックを省略します'
 msg_check_if_image_restorable='イメージが復元可能かどうかをチェック'
-msg_choose_the_image_to_be_checked='復元可能かどうかをチェックするイメージを選択してください'
+msg_choose_the_image_to_be_checked='復元可能かどうかをチェックするイメージを選択して下さい'
 msg_broken_image_dir='本イメージディレクトリ中に disk または parts という名前のファイルが見つからないので、本イメージは壊れています'
 msg_no_umounted_disks_found='HDD が存在しないか、アンマウントされた HDD が見つかりません! Clonezilla をディスクの保存・複製に使用するために、元 HDD があり、アンマウントされていなければなりません! このマシンに間違いなく HDD がある場合、カーネルが古すぎるのかも知れません。'
 msg_no_umounted_parts_found='パーティションが存在しないか、アンマウントされたパーティションが見つかりません! Clonezilla をパーティションの保存・複製に使用するために、元パーティションがあり、アンマウントされていなければなりません! このマシンに間違いなくパーティションがある場合、カーネルが古すぎるのかも知れません。'
@@ -940,7 +940,7 @@ msg_do_not_panic_for_booting_msg_of_kvm='【注意】起動メッセージが出
 msg_only_output_for_kvm_no_input='これは仮想マシンの出力だけで、入力はありません。よって、キーボードとマウスで仮想マシンを制御できません。'
 msg_press_ctrl_c_to_quit_tail='Ctrl-C で表示プログラム(tail)を終了できます。'
 msg_choose_if_create_vmdk_format='デフォルトでは、qcow2 仮想ディスク形式のみ作成されます。vmdk 形式(6互換)を作成したい場合は -c を選択して下さい'
-msg_not_create_vmdk_format='vmdk 形式を作成しないか、又は'
+msg_not_create_vmdk_format='vmdk 形式を作成しないか、または'
 msg_create_vmdk_format='vmdk 形式も作成する'
 msg_failed_to_start_kvm_to_convert='イメージ変換用 kvm の起動に失敗しました！'
 # Tag on 2014/06/21
@@ -1048,7 +1048,7 @@ msg_ocs_param_p_choose_1='すべての処理の完了時に実行する、再起
 msg_remove_source_or_destination_disk_after_cloning='【注意】このマシンを起動する前に、コピー元ディスクやコピー先ディスクを忘れずに取り外して下さい。'
 msg_2_identical_systems_will_confuse_restored_os='さもないと、２つの個別のシステムが同じマシン上に存在する場合、リストアされたOSは混乱し、起動が失敗する可能性があります。'
 # Tag on 2016/11/01
-msg_warning_selinux_is_enabled='【警告】このシステムの SELinux が有効になっています。DRBL サーバで SELinux をどう設定して良いか分からない場合、作業を続ける前に(1)/etc/selinux/config で "SELINUX=disabled" を設定して無効化 (2) システムを再起動 (3) drblsrv プログラムを再実行 してください。'
+msg_warning_selinux_is_enabled='【警告】このシステムの SELinux が有効になっています。DRBL サーバで SELinux をどう設定して良いか分からない場合、作業を続ける前に(1)/etc/selinux/config で "SELINUX=disabled" を設定して無効化 (2) システムを再起動 (3) drblsrv プログラムを再実行 して下さい。'
 # Tag on 2016/12/06
 msg_bittorent_restore="BitTorrent リストア"
 # Tag on 2017/01/03
@@ -1057,7 +1057,7 @@ msg_ocs_param_noabo='イメージは所有者以外もアクセス可能'
 msg_found_dhcp_service_on_nic='このネットワーク I/F で DHCP サーバを検出'
 msg_do_you_want_to_lease_ip_addr_from_existing_dhcp_srv='既存の DHCP サービスから IP アドレスを割り当てたいですか？ DHCP サーバの IP アドレス：'
 msg_will_use_available_ip_addr_from_dhcp_srv='もしそうなら、DHCP サーバから割り当てられた利用可能な IP アドレスを使用します。もし違う場合、このマシンで DHCP サービスを実行しますが、既存の DHCP サーバと衝突する可能性があります。よって、「はい」を選択する事をお勧めします。'
-msg_note_you_have_to_make_sure_enough_no_of_ip_addr='【注意】「はい」を選択した場合、DHCP サーバがクライアント用に十分な数の IP アドレスを提供できる事を確認して下さい。でないと、PXE/uEFI ネットワークブートのクライアントが DRBL 又は Clonezilla モードに入る危険性があります。これが期待した状態か確認して下さい。'
+msg_note_you_have_to_make_sure_enough_no_of_ip_addr='【注意】「はい」を選択した場合、DHCP サーバがクライアント用に十分な数の IP アドレスを提供できる事を確認して下さい。でないと、PXE/uEFI ネットワークブートのクライアントが DRBL または Clonezilla モードに入る危険性があります。これが期待した状態か確認して下さい。'
 msg_failed_to_find_any_dhcp_srv='このネットワークカードでの DHCP サービス検出に失敗しました。'
 # Tag on 2017/03/02
 msg_say_no_to_manually_config_it='「いいえ」の場合、後で手動で再設定するチャンスがあります。'
@@ -1077,15 +1077,15 @@ msg_clonezilla_live_lite_client='Clonezilla Live Lite クライアントにな�
 msg_start_clonezilla_live_lite_server='Clonezilla Live Lite サーバを起動'
 msg_stop_clonezilla_live_lite_server='Clonezilla Live Lite サーバを停止'
 msg_convert_encrypted_img_not_supported='BitTorrent のスライスファイルから暗号化イメージへの変換は未対応です。'
-msg_if_boot_from_locaL_media='CD 又は URB メモリを用いてクライアントマシンを起動したい場合'
+msg_if_boot_from_locaL_media='CD または URB メモリを用いてクライアントマシンを起動したい場合'
 msg_remote_clone_source='リモートデバイス複製のコピー元モードを入力して下さい'
 msg_remote_clone_destination='リモートデバイス複製のコピー先モードを入力して下さい'
 msg_now_wait_for_client_to_connect='クライアントの接続待機中…'
 msg_now_run_this_cmd_in_target_machine='リモート複製を開始する為、Clonezilla Live によってコピー先マシンを起動し、Clonezilla モードに入り、「remote-dest」を選択してウィザードに従うか、コピー先マシン上で以下のコマンドを実行する事ができます。'
 msg_insert_storage_dev_now='ストレージ装置を使用する場合、ストレージ装置をこのマシンに挿入する事ができます。その後デバイスが認識されるのを待って下さい。'
 msg_which_mode_for_client_boot='どのようにクライアントマシンを起動しますか？'
-msg_boot_client_with_network='ネットワークブートで起動(PXE 又は uEFI)'
-msg_boot_with_local_media='USB メモリ又は CD 等のローカルメディアから起動'
+msg_boot_client_with_network='ネットワークブートで起動(PXE または uEFI)'
+msg_boot_with_local_media='USB メモリまたは CD 等のローカルメディアから起動'
 msg_boot_client_with_network_and_local_media='ネットワーク／ローカルメディア両方で起動'
 msg_how_to_run_dhcpd='どのように DHCP サービスを実行しますか？「auto-dhcpd」モードでは、Clonezilla は LAN 上に既存の DHCP サービスがあるかどうかを検出します。「use-existing-dhcpd」モードでは、LAN 上の既存の DHCP サービスを使用します。このため、既存の DHCP サービスが適切に設定されているかどうかと、クライアント用の IP アドレスが十分に提供できるかを確認する必要があります。「start-new-dhcpd」モードでは、LAN 上でネットワークブート機構用の新しい DHCP サービスを実行します。「start-new-dhcpd」モードを選択する場合、LAN 上に別の DHCP サーバがいない事を確認しなければなりません。さもないと DHCP サービスが互いに衝突するでしょう。'
 msg_auto_detect_dhcpd='DHCP サービスを自動検出'
@@ -1115,9 +1115,9 @@ msg_clonezilla_massive_deployment='マルチキャスト、ブロードキャス
 msg_netboot_interactive_client='ネットワークブートクライアントと Clonezilla Live 対話モードへの移行'
 msg_secure_boot_for_clients_is_enabled='クライアントの uEFI セキュアブートが有効になっています。Clonezilla Lite サーバ用 DHCP サービスをこのマシンで起動します。LAN 上に別の DHCP サービスが存在しない事を確認して下さい。'
 # Tag on 2019/01/08
-msg_ocs_live_lite_server_des='Clonezilla Live Lite サーバは Clonezilla サーバモードの一種で、クライアントマシン用のマルチキャスト/ブロードキャストサービスを実行します。この為、LAN 上の既存のネットワーク設定の変更なしにネットワーク環境にフィットできるので、既存のネットワーク環境で簡単に使用できます。これを、上位 LAN との通信のない独立したネットワーク環境で使用する場合、Lite サーバは独自の DHCP と PXE サービスを実行します。この Lite サーバが提供するイメージのリストアでは、CD/USB メモリ又は PXE のいずれかで同じバージョンの Clonezilla Live でクライアントマシンを起動できます。'
+msg_ocs_live_lite_server_des='Clonezilla Live Lite サーバは Clonezilla サーバモードの一種で、クライアントマシン用のマルチキャスト/ブロードキャストサービスを実行します。この為、LAN 上の既存のネットワーク設定の変更なしにネットワーク環境にフィットできるので、既存のネットワーク環境で簡単に使用できます。これを、上位 LAN との通信のない独立したネットワーク環境で使用する場合、Lite サーバは独自の DHCP と PXE サービスを実行します。この Lite サーバが提供するイメージのリストアでは、CD/USB メモリまたは PXE のいずれかで同じバージョンの Clonezilla Live でクライアントマシンを起動できます。'
 msg_img_massive_deploy='1イメージからの大規模構築'
-msg_dev_massive_deploy='パーティション又はディスクからの直接大規模構築 (BitTorrent のみ)'
+msg_dev_massive_deploy='パーティションまたはディスクからの直接大規模構築 (BitTorrent のみ)'
 msg_disk_to_mdisk_by_BT='複数マシンのディスクからローカルディスクへ (BT プロトコル使用)'
 msg_part_to_mpart_by_BT='複数マシンのパーティションからローカルパーティションへ (BT プロトコル使用)'
 msg_save_temp_img_for_BT='転送元デバイスから直接大規模構築を実行する前に、転送元デバイスを一時イメージとして保存する必要があります。'
@@ -1150,42 +1150,42 @@ msg_ocs_onthefly_param_ps="ジョブ終了時に音を鳴らす"
 msg_ocs_param_z9='zstd 圧縮'
 msg_ocs_param_z9p='zstdmt 圧縮'
 # Tag on 2020/08/09
-msg_locale_ko_KR='Korean'
+msg_locale_ko_KR='韓国語'
 # Tag on 2020/09/10
-msg_ocs_onthefly_param_rvd='Remove NTFS volume dirty flag in source NTFS file system before cloning it'
+msg_ocs_onthefly_param_rvd='複製前に、コピー元 NTFS ファイルシステム中の NTFS ボリューム dirty フラグを削除'
 # Tag on 2020/10/02
-msg_ocs_onthefly_param_t='Skip cloning the MBR (Master Boot Record)'
-msg_ocs_onthefly_param_t1='Clone the prebuilt bootloader from syslinux (For Windows only)'
-msg_ocs_onthefly_param_t2='Skip cloning the EBR (Extended Boot Record)'
-msg_choose_net_pipe_program='Choose the network pipe program when cloning over network'
-msg_ocs_onthefly_param_netcat='Use netcat when cloning over network'
-msg_ocs_onthefly_param_nuttcp='Use nuttcp when cloning over network'
+msg_ocs_onthefly_param_t='MBR (Master Boot Record) の複製を省略'
+msg_ocs_onthefly_param_t1='SYSLINUX からビルド済みのブートローダーを複製 (Windows のみ)'
+msg_ocs_onthefly_param_t2='EBR (Extended Boot Record) の複製を省略'
+msg_choose_net_pipe_program='ネットワーク経由の複製時のネットワークパイププログラムを選択'
+msg_ocs_onthefly_param_netcat='ネットワーク経由の複製時に netcat を使用'
+msg_ocs_onthefly_param_nuttcp='ネットワーク経由の複製時に nuttcp を使用'
 # Tag on 2020/12/31
-msg_ocs_use_smbv3_11='SMB protocol 3.11 or 3.1.1'
-msg_ocs_use_smb_auto='Auto negotiate SMB protocol'
+msg_ocs_use_smbv3_11='SMB プロトコル 3.11 または 3.1.1'
+msg_ocs_use_smb_auto='オートネゴシエーション SMB プロトコル'
 # Tag on 2021/01/18
-msg_choose_if_fsck_the_repo_part='Choose if you want to check and repair the file system before mounting the image repository. This option is only for certain file systems which are well supported by fsck on GNU/Linux, like ext2/3/4, reiserfs, xfs, jfs, vfat. Not for NTFS, HFS+...'
-msg_skip_check_repo_fs='Skip checking/repairing the file system before mounting'
-msg_ocs_param_fsck_repo_part='Interactively check and repair the file system before mounting'
-msg_ocs_param_fsck_repo_part_yes='Auto (Caution!) check and repair file system before mounting'
-msg_not_this_is_for_mount_repository='//NOTE// This is for mounting local storage device as an image repository!'
+msg_choose_if_fsck_the_repo_part='イメージリポジトリマウント前にファイルシステムのチェックと修復を行うかどうかを選択して下さい。本オプションは GNU/Linux 上の fsck が十分に対応しているファイルシステム (ext2/3/4, reiserfs, xfs, jfs, vfat. Not for NTFS, HFS+...) 専用です。'
+msg_skip_check_repo_fs='マウント前のファイルシステムチェック/修正を省略'
+msg_ocs_param_fsck_repo_part='マウント前に対話モードでファイルシステムをチェック/修正'
+msg_ocs_param_fsck_repo_part_yes='マウント前に自動モードで(注意!)ファイルシステムをチェック/修正'
+msg_not_this_is_for_mount_repository='【注意】 ローカルストレージデバイスをイメージリポジトリとしてマウントする為のものです!'
 # Tag on 2021/03/06
-msg_ocs_param_ssnf='Skip setting 1st boot device as network in uEFI netboot client NVRAM'
-msg_ocs_param_scpt='Skip checking the partition table of the source disk is MBR or GPT format'
+msg_ocs_param_ssnf='uEFI ネットワーク起動クライアント NVRAM で、ネットワークを1番目の起動デバイスに設定するのを省略'
+msg_ocs_param_scpt='コピー元ディスクのパーティションテーブルフォーマットが MBR あるいは GPT のチェックを省略'
 # Tag on 2021/03/09
-msg_B2SUMS_check_failed='BLAKE2 checksums did NOT match!'
-msg_ocs_param_gb='Generate image BLAKE2 checksums'
-msg_ocs_param_cb='Check image by BLAKE2 checksums'
+msg_B2SUMS_check_failed='BLAKE2 チェックサムが一致しませんでした!'
+msg_ocs_param_gb='イメージの BLAKE2 チェックサムを生成'
+msg_ocs_param_cb='BLAKE2 チェックサムでイメージをチェック'
 # Tag on 2021/03/15
-msg_list_local_device_mode='Which mode do you want to list the block devices on this machine? If you have no idea, choose "disk_or_part". Do _NOT_ choose "both_type_dev" unless you know what you are doing. Basically "both_type_dev" is for you to force choosing the block device which is not listed as it is. For example, you want to save the block device /dev/sda but it is not shown in "saveparts" mode since it is a disk device name, not a partition device name.'
-msg_list_disk_or_part_mode='Separate disk(s) and partition(s)'
-msg_list_both_type_device_mode='List both types of block devices together, i.e., show disk(s) and partition(s) simultaneously'
+msg_list_local_device_mode='どのモードでこのマシンのブロックデバイスを一覧表示しますか？よく分からない場合は「disk_or_part」を選択して下さい。内容を理解していない限り「both_type_dev」は選択しないで下さい。基本的に「both_type_dev」はそのままの形で一覧されないブロックデバイスをあえて選択する為のものです。例えば、ブロックデバイス /dev/sda を選択したいが「saveparts」モードの為に表示されない (/dev/sda はディスクデバイス名であり、パーティション名ではないので) 場合などです。'
+msg_list_disk_or_part_mode='ディスクとパーティションを分離して表示'
+msg_list_both_type_device_mode='両タイプのブロックデバイスを一緒に表示 (＝ディスクとパーティションを同時に表示)'
 # Tag on 2021/07/22
 msg_press_space_to_mark_selection='スペースキーを押して選択対象に印を付けて下さい。星印(*)は選択された事を示します'
 # Tag on 2021/08/28
-msg_reserved_img_names="Some reserved image names have special meanings, including \"ask_user\", \"autoname\", \"autoname-*\" \"autohostname\", and \"autoproductname\". Please check Clonezilla website for more details."
+msg_reserved_img_names="\"ask_user\", \"autoname\", \"autoname-*\" \"autohostname\", and \"autoproductname\" など、いくつかの予約されたイメージ名は特別な意味を持ちます。詳細は Clonezilla Web サイトを確認して下さい。"
 # Tag on 2021/10/25
-msg_choose_wired_or_wireless="Both wired and wireless network devices were detected. Which type do you want to use?"
-msg_use_wired="Use wired network device"
-msg_use_wireless="Use wireless network device"
-msg_nic_status_on_sytem="Network device and status detected on this system:"
+msg_choose_wired_or_wireless="有線／無線両方のネットワークデバイスが検出されました。どちらのタイプを使用しますか？"
+msg_use_wired="有線ネットワークデバイスを使用"
+msg_use_wireless="無線ネットワークデバイスを使用"
+msg_nic_status_on_sytem="このシステム上で検出されたネットワークデバイスと状態:"
