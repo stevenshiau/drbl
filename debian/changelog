@@ -1,3 +1,10 @@
+drbl (4.5.14-drbl1) unstable; urgency=medium
+
+  * Japanese language files were updated.
+    Thanks to Akira Yoshiyama.
+
+ -- Steven Shiau <steven@clonezilla.org>  Sun, 14 Nov 2021 16:48:59 +0800
+
 drbl (4.5.13-drbl1) unstable; urgency=medium
 
   * Language files de_DE, hu_HU, es_ES, fr_FR, pl_PL, tr_TR, were updated.
