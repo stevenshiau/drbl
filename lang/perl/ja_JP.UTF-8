@@ -275,6 +275,6 @@ $lang_charset = 'UTF-8';
    failed_to_detect_dhcp_service => "この NIC で DHCP サービスを検出できませんでした。",
    do_you_want_to_try_it_again => "再度試行しますか？",
    # Tag on 2021/02/14
-   from_ubuntu_1910_only_amd64_is_available => "From Ubuntu 19.10, only amd64 (x86-64) release of Clonezilla live is available.",
+   from_ubuntu_1910_only_amd64_is_available => "Ubuntu 19.10 以降、Clonezilla は amd64 (x86-64) リリースのみ利用可能です。",
    mark_the_end_of_lang =>"。"
    );
