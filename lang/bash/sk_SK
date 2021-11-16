@@ -2,7 +2,7 @@
 # Written by Steven Shiau <steven _at_ clonezilla org> to use in DRBL 
 # License: GPL
 # Merged some of those revised by Dylan Pack <sarpulhu _at_ gmail com> on 26/Feb/2009.
-# Translated by Ondrej Dzivy Balucha <ondrej _at_ odb sk> on 2017/06/18.
+# Translated by Ondrej Dzivy Balucha <ondrej _at_ odb sk> on 2021/11/08.
 
 #-----------------------------------------
 # some words
@@ -235,7 +235,7 @@ msg_remote_fdos='Vzdialené nabootovanie klienta a spustenie FreeDOS'
 msg_clonezilla_start='Spustiť clonezilla mód'
 msg_clonezilla_stop='Zastaviť clonezilla mód'
 msg_netinstall='Klient nainštaluje Linux cez sieť'
-msg_boot_client_local='Klient spusti jeho vlastný lokálny OS'
+msg_boot_client_local='Klient spustí jeho vlastný lokálny OS'
 msg_reboot_the_client='Reštartovať klienta teraz'
 msg_shutdown_the_client='Vypnúť klienta teraz'
 msg_Wake_on_LAN='Zapnúť klienta použitím Wake-on-LAN teraz'
@@ -383,13 +383,13 @@ msg_turn_on_client_to_make_template='Now set up the client machines to boot from
 msg_turn_on_client_to_clone='Now set the client machines to boot from PXE or Etherboot (refer to http://drbl.org for more details). Then boot those clients, so that the template image can be cloned to them!'
 msg_turn_on_client_to_select_clone_type='Now set the client machines to boot from PXE or Etherboot (refer to http://drbl.org for more details). Then boot those clients and you can choose to save or restore an image!'
 msg_client_sfdisk_log_are_in='The sfdisk log when running clonezilla is in client'
-msg_set_the_clients_root_passwd='Set the clients root password.'
+msg_set_the_clients_root_passwd='Nastaviť klientské root heslo.'
 msg_new_passwd_prompt='Nové heslo: (Bude sa zobrazovať zastupným znakom *)'
 msg_do_you_want_set_yum_repo='Chcete vybrať yum repozitár?'
-msg_set_yum_conf_yes_prompt='If yes, we will list some for you to choose from, this may be good if you know what mirror site is faster.'
-msg_set_yum_conf_no_prompt='If not, we will use the existing config files in this machine (so you have to make sure the yum repository setting works on this machine) and generate some config files of DRBL related packages.'
-msg_need_lynx_to_parse_config='We need lynx to parse config file to get url, trying to install it...'
-msg_need_curl_etc_to_parse_config='We need curl, lftp and wget to parse config file to get url, trying to install them if not installed...'
+msg_set_yum_conf_yes_prompt='Ak áno, zobrazíme vám nejaké aby ste si mohli vybrať. Toto môže byť vhodné ak viete, ktorý mirror je rýchlejší.'
+msg_set_yum_conf_no_prompt='Ak nie, použijeme existujúce konfiguračné súbory z tohto počítača (mali by ste sa uistiť, že nastavenia yum repozitára funguje na tomto počítači) a vygenerujeme niektoré konfiguračné súbory balíkov súvisiacich s DRBL.'
+msg_need_lynx_to_parse_config='Potrebujeme lynx na vyparsovanie url z konfiguračného súboru, pokúsime sa ho nainštalovať...'
+msg_need_curl_etc_to_parse_config='Potrebujeme curl, lftp a wget na vyparsovanie url z konfiguračného súboru, pokúsime sa ich nainštalovať, ak nie sú nainštalované...'
 msg_try_to_update_some_pkgs='Pokúšam sa aktualizovať niektoré potrebné balíčky, ak sú dostupné...'
 msg_force_to_upgrade_some_pkgs='Vynútiť aktualizáciu niektorých balíčkov, akje to potrebné...'
 msg_install_net_install_images='Inštalujem sieťové inštalačné obrazy niektorých Linuxových distribúcií...'
@@ -425,7 +425,7 @@ msg_ocs_param_exclude_multicast='You assigned -u (select image in the client) fo
 msg_run_drbl_ocs_again_cmd='Nabudúce môžte spustiť tento príkaz priamo:'
 msg_is_unknown_HD='je neznámy disk! Známe a podporované disky sú napríklad hda, hdb, hdc, hdd'
 msg_creating_partition_in_target='Vytvorí partíciu na cieľovom PC...'
-msg_partition_table_for_target_dev='The partition table to write on the target device'
+msg_partition_table_for_target_dev='Tabuľka partícií, ktorá sa zapíše na cieľové zariadenie'
 msg_if_go_on_the_data_will_be_erased_then_confirm='Ak budete pokračovať, dáta na cieľovom disku budú zničené!!! Buďte opatrný!!! Ste si istý?'
 msg_should_not_run_ocs_onthefly_in_server='Nemali by ste spúštať tento program na DRBL serveri!!! Mali by ste ho spustiť na DRBL klientovi!!!'
 msg_ok_we_will_keep_old_partition_table='OK, ponechá sa stará tabuľka partícií.'
@@ -1132,40 +1132,40 @@ msg_ocs_param_z9p='zstdmt kompresia'
 # Tag on 2020/08/09
 msg_locale_ko_KR='Korean'
 # Tag on 2020/09/10
-msg_ocs_onthefly_param_rvd='Remove NTFS volume dirty flag in source NTFS file system before cloning it'
+msg_ocs_onthefly_param_rvd='Odstrániť NTFS volume dirty flag v zdrojovom NTFS file systéme pred jeho klonovaním'
 # Tag on 2020/10/02
-msg_ocs_onthefly_param_t='Skip cloning the MBR (Master Boot Record)'
-msg_ocs_onthefly_param_t1='Clone the prebuilt bootloader from syslinux (For Windows only)'
-msg_ocs_onthefly_param_t2='Skip cloning the EBR (Extended Boot Record)'
-msg_choose_net_pipe_program='Choose the network pipe program when cloning over network'
-msg_ocs_onthefly_param_netcat='Use netcat when cloning over network'
-msg_ocs_onthefly_param_nuttcp='Use nuttcp when cloning over network'
+msg_ocs_onthefly_param_t='Preskočiť klonovanie MBR (Master Boot Record)'
+msg_ocs_onthefly_param_t1='Klonovať predpripravený bootloader zo syslinuxu (Iba pre Windows)'
+msg_ocs_onthefly_param_t2='Preskočiť klonovanie EBR (Extended Boot Record)'
+msg_choose_net_pipe_program='Vyberte sieťový program pri klonovaní cez sieť'
+msg_ocs_onthefly_param_netcat='Použiť netcat pri klonovaní cez sieť'
+msg_ocs_onthefly_param_nuttcp='Použiť nuttcp pri klonovaní cez sieť'
 # Tag on 2020/12/31
-msg_ocs_use_smbv3_11='SMB protocol 3.11 or 3.1.1'
-msg_ocs_use_smb_auto='Auto negotiate SMB protocol'
+msg_ocs_use_smbv3_11='SMB protokol 3.11 alebo 3.1.1'
+msg_ocs_use_smb_auto='Automaticky vyjednať SMB protokol'
 # Tag on 2021/01/18
-msg_choose_if_fsck_the_repo_part='Choose if you want to check and repair the file system before mounting the image repository. This option is only for certain file systems which are well supported by fsck on GNU/Linux, like ext2/3/4, reiserfs, xfs, jfs, vfat. Not for NTFS, HFS+...'
-msg_skip_check_repo_fs='Skip checking/repairing the file system before mounting'
-msg_ocs_param_fsck_repo_part='Interactively check and repair the file system before mounting'
-msg_ocs_param_fsck_repo_part_yes='Auto (Caution!) check and repair file system before mounting'
-msg_not_this_is_for_mount_repository='//NOTE// This is for mounting local storage device as an image repository!'
+msg_choose_if_fsck_the_repo_part='Vyberte či chcete skontrolovať a opraviť súborový systém pred namontovaním repozitára obrazov. Táto možnosť je len pre určité súborové systémy, ktoré sú dobre podporované programom fsck na GNU/Linuxe, napríklad ext2/3/4, reiserfs, xfs, jfs, vfat. Nieje určená pre NTFS, HFS+...'
+msg_skip_check_repo_fs='Preskočiť kontrolu/opravu súborového systému pred namontovaním'
+msg_ocs_param_fsck_repo_part='Interaktívne skontrolovať a opraviť súborový systém pred namontovaním'
+msg_ocs_param_fsck_repo_part_yes='Automaticky (Pozor!) skontrolovať a opraviť súborový systém pred namontovaním'
+msg_not_this_is_for_mount_repository='//POZNÁMNKA// Slúži na namontovanie lokálneho úložného zariadenia ako repozitára obrazov!'
 # Tag on 2021/03/06
-msg_ocs_param_ssnf='Skip setting 1st boot device as network in uEFI netboot client NVRAM'
-msg_ocs_param_scpt='Skip checking the partition table of the source disk is MBR or GPT format'
+msg_ocs_param_ssnf='preskočiť nastavenie siete ako prvého bootovateľného zariadenia v uEFI netboot client NVRAM'
+msg_ocs_param_scpt='Preskočiť kontrolu tabuľky partícií vo formáte MBR alebo GPT'
 # Tag on 2021/03/09
-msg_B2SUMS_check_failed='BLAKE2 checksums did NOT match!'
-msg_ocs_param_gb='Generate image BLAKE2 checksums'
-msg_ocs_param_cb='Check image by BLAKE2 checksums'
+msg_B2SUMS_check_failed='Kontrolné sumy BLAKE2 sa NEZHODUJÚ!'
+msg_ocs_param_gb='Generovať BLAKE2 kontrolné sumy obrazu'
+msg_ocs_param_cb='Skontrolovať obraz pomocou BLAKE2 kontrolných súm'
 # Tag on 2021/03/15
-msg_list_local_device_mode='Which mode do you want to list the block devices on this machine? If you have no idea, choose "disk_or_part". Do _NOT_ choose "both_type_dev" unless you know what you are doing. Basically "both_type_dev" is for you to force choosing the block device which is not listed as it is. For example, you want to save the block device /dev/sda but it is not shown in "saveparts" mode since it is a disk device name, not a partition device name.'
-msg_list_disk_or_part_mode='Separate disk(s) and partition(s)'
-msg_list_both_type_device_mode='List both types of block devices together, i.e., show disk(s) and partition(s) simultaneously'
+msg_list_local_device_mode='V akom móde chcete vylistovať blokové zariadenie na tomto zariadení? Ak netušíte, zvoľte "disk_or_part". NEVYBERAJTE "both_type_dev" pokiaľ neviete čo robíte. "Both_type_dev" je v podstate na to, aby ste si vynútili výber blokového zariadenia, ktoré nie je uvedené tak, ako je. Napríklad chcete uložiť blokové zariadenie /dev/sda, ale nezobrazuje sa v režime "saveparts", pretože ide o názov diskového zariadenia, nie názov zariadenia oddielu. '
+msg_list_disk_or_part_mode='Oddeliť disk(y) a partíciu(e)'
+msg_list_both_type_device_mode='Vylistovať oba typy blokových zariadení spolu, t.j. zobraziť disk(y) a partíciu(e) súčasne'
 # Tag on 2021/07/22
 msg_press_space_to_mark_selection='Stlačte medzerovník pre označenie výberu. Pri danom výbere sa zobrazí hviezdička (*)'
 # Tag on 2021/08/28
-msg_reserved_img_names="Some reserved image names have special meanings, including \"ask_user\", \"autoname\", \"autoname-*\" \"autohostname\", and \"autoproductname\". Please check Clonezilla website for more details."
+msg_reserved_img_names="Niektoré vyhradené názvy obrazov majú špeciálny význam, vrátane \"ask_user\", \"autoname\", \"autoname-*\" \"autohostname\", a \"autoproductname\". Viac podrobností nájdete na webovej stránke Clonezilla."
 # Tag on 2021/10/25
-msg_choose_wired_or_wireless="Both wired and wireless network devices were detected. Which type do you want to use?"
-msg_use_wired="Use wired network device"
-msg_use_wireless="Use wireless network device"
-msg_nic_status_on_sytem="Network device and status detected on this system:"
+msg_choose_wired_or_wireless="Boli rozpoznané káblové aj bezdrôtové sieťové karty. Ktorý typ chcete použiť?"
+msg_use_wired="Použiť káblovú sieťovú kartu"
+msg_use_wireless="Použiť bezdrôtovú sieťovú kartu"
+msg_nic_status_on_sytem="V tomto systéme bolo zistené sieťové zariadenie a stav:"
