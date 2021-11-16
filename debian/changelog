@@ -1,3 +1,9 @@
+drbl (4.5.15-drbl1) unstable; urgency=medium
+
+  * Language files of sk_SK were updated. Thanks to Ondrej Dzivy Balucha.
+
+ -- Steven Shiau <steven@clonezilla.org>  Tue, 16 Nov 2021 21:58:03 +0800
+
 drbl (4.5.14-drbl1) unstable; urgency=medium
 
   * Japanese language files were updated.
