@@ -1,3 +1,11 @@
+drbl (4.5.16-drbl1) unstable; urgency=medium
+
+  * boot-local-efi.cfg: Improved to detect hd1, hd2...
+    Thanks to Sung Cho for reporting this issue.
+    Ref: https://sourceforge.net/p/clonezilla/bugs/371/
+
+ -- Steven Shiau <steven@clonezilla.org>  Sun, 21 Nov 2021 11:15:37 +0800
+
 drbl (4.5.15-drbl1) unstable; urgency=medium
 
   * Language files of sk_SK were updated. Thanks to Ondrej Dzivy Balucha.

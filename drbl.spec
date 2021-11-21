@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	4.5.15
+Version:	4.5.16
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -43,6 +43,11 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Sun Nov 21 2021 Steven Shiau <steven _at_ clonezilla org> 4.5.16-drbl1
+  * boot-local-efi.cfg: Improved to detect hd1, hd2...
+    Thanks to Sung Cho for reporting this issue.
+    Ref: https://sourceforge.net/p/clonezilla/bugs/371/
+
 * Tue Nov 16 2021 Steven Shiau <steven _at_ clonezilla org> 4.5.15-drbl1
   * Language files of sk_SK were updated. Thanks to Ondrej Dzivy Balucha.
 
