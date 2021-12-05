@@ -949,7 +949,6 @@ msg_succeed_to_decrypt_img='Descifrado de imagen satisfatorio'
 msg_failed_to_encrypt_img='Fallo al cifrar la imagen.'
 msg_failed_to_decrypt_img='Fallo al descifrar la imagen'
 msg_encrypt_img_dir_is_now_as='El directorio de la imagen cifrada temporal es ahora como'
-msg_set_image_volume_size='El tamaño en MB para partir el archivo imagen partición en varios volúmenes de archivos. Por favor introduzca un número mayor de 10. Si no desea partir el archivo imagen, introduzca un número muy grande ej. "1000000". Por favor no use nunca mas "0" porque si su distribución de GNU/Linux usa el nuevo /sbin/init en el inicio, se confundirá con ese "0". //NOTA// Para el repositorio de imagen FAT32, el número no debe ser mas largo de 4096.'
 # Tag on 2015/01/03
 msg_is_encrypted_image_already='Esta imagen raiz ya está cifrada, no es necesario cifrarla de nuevo'
 msg_is_unencrypted_image_already='Esta imagen raiz ya está descifrada, no es necesario descifrarla de nuevo'
@@ -1183,3 +1182,5 @@ msg_choose_wired_or_wireless="Se detectaron dispositivos de red tanto cableados 
 msg_use_wired="Usar dispositivo de red con cable"
 msg_use_wireless="Usar dispositivo de red inalámbrica"
 msg_nic_status_on_sytem="Dispositivo de red y estado detectado en este sistema:"
+# Tag on 2021/12/04
+msg_set_image_volume_size='El tamaño en MB para partir el archivo imagen partición en varios volúmenes de archivos. Por favor introduzca un número mayor de 10. Si no desea partir el archivo imagen, introduzca un número muy grande ej. "1000000". Por favor no use nunca mas "0" porque si su distribución de GNU/Linux usa el nuevo /sbin/init en el inicio, se confundirá con ese "0". //NOTA// Para el repositorio de imagen FAT32, el número no debe ser mas largo de 4096.'

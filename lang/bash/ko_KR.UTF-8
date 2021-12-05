@@ -944,7 +944,6 @@ msg_succeed_to_decrypt_img='이미지 복호화에 성공했습니다'
 msg_failed_to_encrypt_img='이미지 암호화에 실패했습니다.'
 msg_failed_to_decrypt_img='이미지 복호화에 실패했습니다.'
 msg_encrypt_img_dir_is_now_as='이제 임시로 암호화된 이미지 디렉토리가 다음과 같습니다 :'
-msg_set_image_volume_size='파티션 이미지 파일을 여러 볼륨 파일로 분할하기 위한 크기 (MB)입니다. 10보다 큰 숫자를 입력하십시오. 이미지 파일을 분할하고 싶지 않다면, "1000000"과 같은 큰 수를 입력하십시오. GNU/Linux 배포판이 upstart에서 새로운 /sbin/init를 사용하면, "0"과 혼동되므로 더 이상 "0"을 입력하지 마십시오. [참고] FAT32 이미지 저장소의 경우, 숫자는 4096보다 크지 않아야 합니다.'
 # Tag on 2015/01/03
 msg_is_encrypted_image_already='이 소스 이미지는 이미 암호화되어 있으므로, 다시 암호화할 필요가 없습니다.'
 msg_is_unencrypted_image_already='이 소스 이미지는 이미 암호화되어 있지 않으므로, 다시 복호화 할 필요가 없습니다.'
@@ -1167,3 +1166,5 @@ msg_choose_wired_or_wireless="Both wired and wireless network devices were detec
 msg_use_wired="Use wired network device"
 msg_use_wireless="Use wireless network device"
 msg_nic_status_on_sytem="Network device and status detected on this system:"
+# Tag on 2021/12/04
+msg_set_image_volume_size='파티션 이미지 파일을 여러 볼륨 파일로 분할하기 위한 크기 (MB)입니다. 10보다 큰 숫자를 입력하십시오. 이미지 파일을 분할하고 싶지 않다면, "1000000"과 같은 큰 수를 입력하십시오. GNU/Linux 배포판이 upstart에서 새로운 /sbin/init를 사용하면, "0"과 혼동되므로 더 이상 "0"을 입력하지 마십시오. [참고] FAT32 이미지 저장소의 경우, 숫자는 4096보다 크지 않아야 합니다.'

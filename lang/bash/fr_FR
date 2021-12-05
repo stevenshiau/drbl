@@ -948,7 +948,6 @@ msg_succeed_to_decrypt_img='Le déchiffrement de l'\''image a réussi'
 msg_failed_to_encrypt_img='Le chiffrement de l'\''image a échoué.'
 msg_failed_to_decrypt_img='Le déchiffrement de l'\''image a échoué'
 msg_encrypt_img_dir_is_now_as='Le répertoire temporaire de l'\''image chiffrée est maintenant'
-msg_set_image_volume_size='Taille en Mo pour le découpage du fichier image de la partition en fichiers volumes multiples. Entrez un nombre au-dessus de 10. Si vous ne voulez pas de découpage, entrez une valeur très grande (ex : "1000000"). N'\''utilisez plus "0", car si votre distribution utilise le nouveau /sbin/init au démarrage, la valeur "0" induira des ambiguïtés. //NOTE// Pour le dépôt d'\''image en FAT32, la valeur ne doit pas dépasser 4096.'
 # Tag on 2015/01/03
 msg_is_encrypted_image_already='Cette image source est déjà chiffrée, il est donc inutile de la chiffrer à nouveau'
 msg_is_unencrypted_image_already='Cette image source est déjà déchiffrée, il est donc inutile de la déchiffrer à nouveau'
@@ -1170,3 +1169,5 @@ msg_choose_wired_or_wireless="Des périphériques réseau câblé et sans fil on
 msg_use_wired="Utiliser le périphérique câblé"
 msg_use_wireless="Utiliser le périphérique sans fil"
 msg_nic_status_on_sytem="Périphérique réseau et statut détectés :"
+# Tag on 2021/12/04
+msg_set_image_volume_size='Taille en Mo pour le découpage du fichier image de la partition en fichiers volumes multiples. Entrez un nombre au-dessus de 10. Si vous ne voulez pas de découpage, entrez une valeur très grande (ex : "1000000"). N'\''utilisez plus "0", car si votre distribution utilise le nouveau /sbin/init au démarrage, la valeur "0" induira des ambiguïtés. //NOTE// Pour le dépôt d'\''image en FAT32, la valeur ne doit pas dépasser 4096.'

@@ -947,7 +947,6 @@ msg_succeed_to_decrypt_img='Sikeres visszafejtés'
 msg_failed_to_encrypt_img='A titkosítás sikertelen.'
 msg_failed_to_decrypt_img='A visszafejtés sikertelen'
 msg_encrypt_img_dir_is_now_as='A titkosított lemezkép ideiglenes könyvtára'
-msg_set_image_volume_size='A partíciós lemezkép maximális mérete MB-ban, ami felett darabolandó. Az érték 10-nél több kell legyen. Ha nem szeretné darabolni a lemezképet, adjon meg egy nagy számot, pl. "1000000". Soha ne írjon "0"-t, mert ha a GNU/Linux disztribúciója új /sbin/init-et használ az upstart-ból, akkor az ütközhet a "0"-val. //MEGJEGYZÉS// FAT32 lemezkép tárolónál, az érték nem lehet nagyobb, mint 4096.'
 # Tag on 2015/01/03
 msg_is_encrypted_image_already='Ez a forráskép már eleve titkosított, így nem szükséges újfent titkosítani'
 msg_is_unencrypted_image_already='Ez a forráskép már vissza lett fejtve, így nem kell újból visszafejteni'
@@ -1169,3 +1168,5 @@ msg_choose_wired_or_wireless="Vezetékes és vezetéknélküli hálózati eszkö
 msg_use_wired="Vezetékes hálózati eszköz használata"
 msg_use_wireless="Vezetéknélküli hálózati eszköz használata"
 msg_nic_status_on_sytem="Hálózati eszköz és állapota észlelve a rendszeren:"
+# Tag on 2021/12/04
+msg_set_image_volume_size='A partíciós lemezkép maximális mérete MB-ban, ami felett darabolandó. Az érték 10-nél több kell legyen. Ha nem szeretné darabolni a lemezképet, adjon meg egy nagy számot, pl. "1000000". Soha ne írjon "0"-t, mert ha a GNU/Linux disztribúciója új /sbin/init-et használ az upstart-ból, akkor az ütközhet a "0"-val. //MEGJEGYZÉS// FAT32 lemezkép tárolónál, az érték nem lehet nagyobb, mint 4096.'

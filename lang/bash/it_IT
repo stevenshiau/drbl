@@ -946,7 +946,6 @@ msg_succeed_to_decrypt_img='Immagine decriptata con successo'
 msg_failed_to_encrypt_img='Non riesco a criptare l'\''immagine.'
 msg_failed_to_decrypt_img='Non riesco a decriptare l'\''immagine.'
 msg_encrypt_img_dir_is_now_as='L'\''immagine temporanea criptata è ora come'
-msg_set_image_volume_size='Dimensione in MB dei file multivolume in cui dividere il file immagine della partizione. Per favore immettete un numero superiore a 10. Se non volete dividere il file immagine, immettete un numero alto, ad es. "1000000". Per favore non usate "0", poiché se la vostra distribuzione GNU/Linux usa un nuovo /sbin/init, verrà confuso con "0". //NOTA// Per i repository di immagini FAT32, il numero non deve essere maggiore di 4096.'
 # Tag on 2015/01/03
 msg_is_encrypted_image_already='Questa immagine sorgente è già stata criptata, perciò non è necessario criptarla di nuovo'
 msg_is_unencrypted_image_already='Questa immagine sorgente è già stata decriptata, perciò non è necessario decriptarla di nuovo'
@@ -1168,3 +1167,5 @@ msg_choose_wired_or_wireless="Both wired and wireless network devices were detec
 msg_use_wired="Use wired network device"
 msg_use_wireless="Use wireless network device"
 msg_nic_status_on_sytem="Network device and status detected on this system:"
+# Tag on 2021/12/04
+msg_set_image_volume_size='Dimensione in MB dei file multivolume in cui dividere il file immagine della partizione. Per favore immettete un numero superiore a 10. Se non volete dividere il file immagine, immettete un numero alto, ad es. "1000000". Per favore non usate "0", poiché se la vostra distribuzione GNU/Linux usa un nuovo /sbin/init, verrà confuso con "0". //NOTA// Per i repository di immagini FAT32, il numero non deve essere maggiore di 4096.'

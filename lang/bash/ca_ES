@@ -953,7 +953,6 @@ msg_succeed_to_decrypt_img="Desxifrat de la imatge reeixit."
 msg_failed_to_encrypt_img="Xifrat de la imatge fracassat."
 msg_failed_to_decrypt_img="Desxifrat de la imatge fracassat"
 msg_encrypt_img_dir_is_now_as="El directori de la imatge xifrada temporal es"
-msg_set_image_volume_size="Grandària en MB per dividir la partició de l'arxiu imatge en diversos volums d'arxius. Per favor introdueixi un nombre major de 10. Si no desitja fragmentar l'arxiu imatge, introdueixi un nombre molt gran ex. \"1000000\". Per favor no usi mai més \"0\" perquè si la seva distribució de GNU/Linux usa el nou /sbin/init en l'inici, es confondrà amb aquest \"0\". //NOTA// Per al repositori imatge del FAT32, El nombre no ha de ser major que 4096."
 # Tag on 2015/01/03
 msg_is_encrypted_image_already="Aquesta imatge font ja està xifrada, per tant no és necessari xifrar-la de nou"
 msg_is_unencrypted_image_already="Aquesta imatge font ja està desxifrada, per tant no és necessari desxifrar-la de nou"
@@ -1175,3 +1174,5 @@ msg_choose_wired_or_wireless="Both wired and wireless network devices were detec
 msg_use_wired="Use wired network device"
 msg_use_wireless="Use wireless network device"
 msg_nic_status_on_sytem="Network device and status detected on this system:"
+# Tag on 2021/12/04
+msg_set_image_volume_size="Grandària en MB per dividir la partició de l'arxiu imatge en diversos volums d'arxius. Per favor introdueixi un nombre major de 10. Si no desitja fragmentar l'arxiu imatge, introdueixi un nombre molt gran ex. \"1000000\". Per favor no usi mai més \"0\" perquè si la seva distribució de GNU/Linux usa el nou /sbin/init en l'inici, es confondrà amb aquest \"0\". //NOTA// Per al repositori imatge del FAT32, El nombre no ha de ser major que 4096."

@@ -946,7 +946,6 @@ msg_succeed_to_decrypt_img='Image erfolgreich entschlüsselt'
 msg_failed_to_encrypt_img='Fehler beim Verschlüsseln des Image.'
 msg_failed_to_decrypt_img='Fehler beim Entschlüsseln des Image.'
 msg_encrypt_img_dir_is_now_as='Das temporäre Verschlüsselungsverzeichnis ist jetzt'
-msg_set_image_volume_size='Größe der Stücke in MB, in die das Image aufgeteilt wird. Der Wert muss größer als 10 sein. Wenn Sie keine Aufteilung wollen, geben Sie einen großen Wert, z.B. "1000000" ein. Bitte verwenden Sie nicht mehr "0" dafür, wenn Ihre GNU/Linux Distribution das neue /sbin/init von upstart benutzt, fängt dieses mit dem Wert "0" nichts an. //HINWEIS// Für ein FAT32-Imageverzeichnis darf der Wert nicht größer als 4096 sein.'
 # Tag on 2015/01/03
 msg_is_encrypted_image_already='Dieses Quellverzeichnis ist bereits verschlüsselt, daher muss es nicht nochmal verschlüsselt werden'
 msg_is_unencrypted_image_already='Dieses Quellverzeichnis ist bereits entschlüsselt, daher muss es nicht nochmal entschlüsselt werden'
@@ -1168,3 +1167,5 @@ msg_choose_wired_or_wireless="Es wurden sowohl LAN (drahtgebundene) als auch WLA
 msg_use_wired="Verwende LAN Netzwerk"
 msg_use_wireless="Verwende WLAN Netzwerk"
 msg_nic_status_on_sytem="Auf diesem System gefundene Netzwerk-Geräte:"
+# Tag on 2021/12/04
+msg_set_image_volume_size='Größe der Stücke in MB, in die das Image aufgeteilt wird. Der Wert muss größer als 10 sein. Wenn Sie keine Aufteilung wollen, geben Sie einen großen Wert, z.B. "1000000" ein. Bitte verwenden Sie nicht mehr "0" dafür, wenn Ihre GNU/Linux Distribution das neue /sbin/init von upstart benutzt, fängt dieses mit dem Wert "0" nichts an. //HINWEIS// Für ein FAT32-Imageverzeichnis darf der Wert nicht größer als 4096 sein.'

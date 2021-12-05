@@ -947,7 +947,6 @@ msg_enter_passphrase_for_decrypt_img='Zadajte heslo/frázu na dešifrovanie obra
 msg_succeed_to_decrypt_img='Dešifrovanie bolo úspešné'
 msg_failed_to_encrypt_img='Dešifrovanie obrazu zlyhalo'
 msg_encrypt_img_dir_is_now_as='Dočasný adresár obrazu je teraz'
-msg_set_image_volume_size='Veľkosť v MB pre rozdelenie obrazu partície do viacerých súborov. Prosím zadajte číslo väčšie ako 10. Ak nechcete rozdeliť obraz, zadajte veľké číslo, napríklad "1000000". Prosím nezadávajte "0", pretože ak vaša distribúcia GNU/Linuxu používa nový /sbin/init z upstartu, tak bude z"0" zmätená. //Poznámka// Pre FAT32 adresár na uloženie obrazov, by číslo nemalo byť väčšie ako 4096.'
 # Tag on 2015/01/03
 msg_is_encrypted_image_already='Tento obraz už je zašifrovaný, tak ho už nieje potrebné znovu zašifrovať'
 msg_is_unencrypted_image_already='Tento obraz už je dešifrovaný, tak ho už nieje potrebné znovu dešifrovať'
@@ -1169,3 +1168,5 @@ msg_choose_wired_or_wireless="Boli rozpoznané káblové aj bezdrôtové sieťov
 msg_use_wired="Použiť káblovú sieťovú kartu"
 msg_use_wireless="Použiť bezdrôtovú sieťovú kartu"
 msg_nic_status_on_sytem="V tomto systéme bolo zistené sieťové zariadenie a stav:"
+# Tag on 2021/12/04
+msg_set_image_volume_size='Veľkosť v MB pre rozdelenie obrazu partície do viacerých súborov. Prosím zadajte číslo väčšie ako 10. Ak nechcete rozdeliť obraz, zadajte veľké číslo, napríklad "1000000". Prosím nezadávajte "0", pretože ak vaša distribúcia GNU/Linuxu používa nový /sbin/init z upstartu, tak bude z"0" zmätená. //Poznámka// Pre FAT32 adresár na uloženie obrazov, by číslo nemalo byť väčšie ako 4096.'

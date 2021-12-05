@@ -949,7 +949,6 @@ msg_succeed_to_decrypt_img='成功解密镜像'
 msg_failed_to_encrypt_img='无法加密镜像.'
 msg_failed_to_decrypt_img='无法解密镜像'
 msg_encrypt_img_dir_is_now_as='加密的临时镜像目录现在变成'
-msg_set_image_volume_size='将一个分区的映像分割成多卷存档，每个分割档的大小 (MB)。输入的数字请大于10。如果你不要分割的话，请输入一个大的数字，例如"1000000"，请不要再使用"0"。因为如果你的/sbin/init是来自于新版的upstart，这个"0"会让/sbin/init搞混。//注意// 如果你的镜像仓库是在FAT32文件系统上，这个数字不可以超过4096。'
 # Tag on 2015/01/03
 msg_is_encrypted_image_already='来源镜像已经是加密状态, 因此不需要再加密'
 msg_is_unencrypted_image_already='来源镜像已经是解密状态, 因此不需要再解密'
@@ -1171,3 +1170,5 @@ msg_choose_wired_or_wireless="Both wired and wireless network devices were detec
 msg_use_wired="Use wired network device"
 msg_use_wireless="Use wireless network device"
 msg_nic_status_on_sytem="Network device and status detected on this system:"
+# Tag on 2021/12/04
+msg_set_image_volume_size='将一个分区的映像分割成多卷存档，每个分割档的大小 (MB)。输入的数字请大于10。如果你不要分割的话，请输入一个大的数字，例如"1000000"，请不要再使用"0"。因为如果你的/sbin/init是来自于新版的upstart，这个"0"会让/sbin/init搞混。//注意// 如果你的镜像仓库是在FAT32文件系统上，这个数字不可以超过4096。'

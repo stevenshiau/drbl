@@ -965,7 +965,6 @@ msg_succeed_to_decrypt_img='イメージの復号化に成功しました'
 msg_failed_to_encrypt_img='イメージ暗号化に失敗しました。'
 msg_failed_to_decrypt_img='イメージ復号化に失敗しました。'
 msg_encrypt_img_dir_is_now_as='イメージ暗号化作業用ディレクトリ: '
-msg_set_image_volume_size='パーティションイメージファイルを複数のボリュームファイルに分割する為のサイズ(MB)。10以上の数を入力して下さい。イメージファイルを分割しない場合、大きな数（例：1000000）を入力して下さい。GNU/Linuxディストリビューションがupstartからの新しい/sbin/initを使用しており、0だとその/sbin/initが混乱するので、0は使用しないで下さい。 【注意】イメージリポジトリが FAT32 の場合、サイズを 4096 より大きくしないで下さい。'
 
 # Tag on 2015/01/03
 msg_is_encrypted_image_already='この元イメージは既に暗号化されており、再度暗号化する必要はありません'
@@ -1189,3 +1188,5 @@ msg_choose_wired_or_wireless="有線／無線両方のネットワークデバ�
 msg_use_wired="有線ネットワークデバイスを使用"
 msg_use_wireless="無線ネットワークデバイスを使用"
 msg_nic_status_on_sytem="このシステム上で検出されたネットワークデバイスと状態:"
+# Tag on 2021/12/04
+msg_set_image_volume_size='パーティションイメージファイルを複数のボリュームファイルに分割する為のサイズ(MB)。10以上の数を入力して下さい。イメージファイルを分割しない場合、大きな数（例：1000000）を入力して下さい。GNU/Linuxディストリビューションがupstartからの新しい/sbin/initを使用しており、0だとその/sbin/initが混乱するので、0は使用しないで下さい。 【注意】イメージリポジトリが FAT32 の場合、サイズを 4096 より大きくしないで下さい。'

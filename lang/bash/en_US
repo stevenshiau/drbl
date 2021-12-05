@@ -946,7 +946,6 @@ msg_succeed_to_decrypt_img='Succeeded to decrypt the image'
 msg_failed_to_encrypt_img='Failed to encrypt the image.'
 msg_failed_to_decrypt_img='Failed to decrypt the image'
 msg_encrypt_img_dir_is_now_as='The temporary encrypted image dir is now as'
-msg_set_image_volume_size='The size in MB to split the partition image file into multiple volumes files. Please input the number larger than 10. If you do not want to split the image file, enter a big number, e.g. "1000000". Please do not use "0" anymore, because if your GNU/Linux distribution use new /sbin/init from upstart, it will be confused with the "0". //NOTE// For the FAT32 image repository, the number should not be larger than 4096.'
 # Tag on 2015/01/03
 msg_is_encrypted_image_already='This source image is already encrypted, so it is not necessary to be encrypted again'
 msg_is_unencrypted_image_already='This source image is already unencrypted, so it is not necessary to be decrypted again'
@@ -1171,3 +1170,5 @@ msg_choose_wired_or_wireless="Both wired and wireless network devices were detec
 msg_use_wired="Use wired network device"
 msg_use_wireless="Use wireless network device"
 msg_nic_status_on_sytem="Network device and status detected on this system:"
+# Tag on 2021/12/04
+msg_set_image_volume_size='The size in MB to split the partition image file into multiple volumes files. Use "0" if you do not want to split the image file. //NOTE// For the FAT32 image repository, the number should be between 1 and 4096. Do not use "0" because a file size limit is 4096 MB for FAT32.'

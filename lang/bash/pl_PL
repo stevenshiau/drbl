@@ -947,7 +947,6 @@ msg_succeed_to_decrypt_img='Wprowadź hasło, aby odszyfrować obraz'
 msg_failed_to_encrypt_img='Nie udało się zaszyfrować obrazu.'
 msg_failed_to_decrypt_img='Nie udało się odszyfrować obrazu'
 msg_encrypt_img_dir_is_now_as='Tymczasowy katalog z zaszyfrowanym obrazem jest teraz jako'
-msg_set_image_volume_size='Rozmiar w MB, aby podzielić plik obrazu partycji na pliki o wielu woluminach. Wprowadź liczbę większą niż 10. Jeśli nie chcesz dzielić pliku obrazu, wprowadź dużą liczbę, np. "1000000". Nie używaj więcej "0", ponieważ jeśli twoja dystrybucja GNU/Linux używa nowego upstart z /sbin/init, będzie to mylone z "0". //UWAGA// W przypadku Repozytorium Obrazów FAT32 liczba nie powinna być większa niż 4096.'
 # Tag on 2015/01/03
 msg_is_encrypted_image_already='Ten obraz źródłowy jest już zaszyfrowany, więc nie trzeba go ponownie szyfrować'
 msg_is_unencrypted_image_already='Ten obraz źródłowy jest już rozszyfrowany, więc ponowne odszyfrowywanie nie jest konieczne'
@@ -1169,3 +1168,5 @@ msg_choose_wired_or_wireless="Wykryto zarówno przewodowe, jak i bezprzewodowe u
 msg_use_wired="Użyj przewodowego urządzenia sieciowego"
 msg_use_wireless="Użyj urządzenia sieci bezprzewodowej"
 msg_nic_status_on_sytem="Urządzenie sieciowe i jego stan wykryty w tym systemie:"
+# Tag on 2021/12/04
+msg_set_image_volume_size='Rozmiar w MB, aby podzielić plik obrazu partycji na pliki o wielu woluminach. Wprowadź liczbę większą niż 10. Jeśli nie chcesz dzielić pliku obrazu, wprowadź dużą liczbę, np. "1000000". Nie używaj więcej "0", ponieważ jeśli twoja dystrybucja GNU/Linux używa nowego upstart z /sbin/init, będzie to mylone z "0". //UWAGA// W przypadku Repozytorium Obrazów FAT32 liczba nie powinna być większa niż 4096.'

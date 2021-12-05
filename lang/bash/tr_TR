@@ -948,7 +948,6 @@ msg_succeed_to_decrypt_img='Kalıp şifresi çözme başarılı'
 msg_failed_to_encrypt_img='Kalıp şifreleme başarısız.'
 msg_failed_to_decrypt_img='Kalıp şifresi çözme başarısız'
 msg_encrypt_img_dir_is_now_as='Geçiçi şifrelenmiş kalıp dizini artık'
-msg_set_image_volume_size='Bölüm kalıp dosyasını birden çok birime bölmek için MB cinsinden boyut. Lütfen 10dan büyük sayı girin. Kalıp dosyasını bölmek istemiyorsanız, büyük bir sayı girin, ör. "1000000". Lütfen artık "0" kullanmayın, çünkü GNU / Linux dağıtımınız upstart ile yeni /sbin/init kullanıyorsa, "0" ile karıştırılacaktır. //NOT// FAT32 kalıp deposu için sayı 4096dan büyük olmamalıdır.'
 # Tag on 2015/01/03
 msg_is_encrypted_image_already='Bu kaynak kalıbı zaten şifrelenmiş, bu nedenle tekrar şifrelemek gerekli değil'
 msg_is_unencrypted_image_already='Bu kaynak görüntü zaten şifrelenmemiş, bu yüzden tekrar şifreleme çözülmesi gerekli değil'
@@ -1170,3 +1169,5 @@ msg_choose_wired_or_wireless="Hem kablolu hem de kablosuz ağ cihazları algıla
 msg_use_wired="Kablolu ağ cihazı kullanın"
 msg_use_wireless="Kablosuz ağ cihazı kullanın"
 msg_nic_status_on_sytem="Bu sistemde algılanan ağ cihazı ve durumu:"
+# Tag on 2021/12/04
+msg_set_image_volume_size='Bölüm kalıp dosyasını birden çok birime bölmek için MB cinsinden boyut. Lütfen 10dan büyük sayı girin. Kalıp dosyasını bölmek istemiyorsanız, büyük bir sayı girin, ör. "1000000". Lütfen artık "0" kullanmayın, çünkü GNU / Linux dağıtımınız upstart ile yeni /sbin/init kullanıyorsa, "0" ile karıştırılacaktır. //NOT// FAT32 kalıp deposu için sayı 4096dan büyük olmamalıdır.'
