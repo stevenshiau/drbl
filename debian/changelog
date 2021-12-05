@@ -1,3 +1,10 @@
+drbl (4.6.1-drbl1) unstable; urgency=medium
+
+  * Update language files about image volume size (msg_set_image_volume_size).
+  * drbl.conf: Update netinstall dor Debian and Ubuntu.
+
+ -- Steven Shiau <steven@clonezilla.org>  Sun, 05 Dec 2021 19:20:27 +0800
+
 drbl (4.5.16-drbl1) unstable; urgency=medium
 
   * boot-local-efi.cfg: Improved to detect hd1, hd2...
