@@ -1171,4 +1171,4 @@ msg_use_wired="Use wired network device"
 msg_use_wireless="Use wireless network device"
 msg_nic_status_on_sytem="Network device and status detected on this system:"
 # Tag on 2021/12/04
-msg_set_image_volume_size='The size in MB to split the partition image file into multiple volumes files. Use "0" if you do not want to split the image file. //NOTE// For the FAT32 image repository, the number should be between 1 and 4096. Do not use "0" because a file size limit is 4096 MB for FAT32.'
+msg_set_image_volume_size='The size in MB to split the partition image file into multiple volumes files. Use "0" if you do not want to split the image file. //NOTE// For the FAT32 image repository, the number should be between 1 and 4096. Do not use "0" because the file size limit is 4096 MB for FAT32.'
