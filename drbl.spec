@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	4.6.2
+Version:	4.6.3
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -43,6 +43,10 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Sun Dec 12 2021 Steven Shiau <steven _at_ clonezilla org> 4.6.3-drbl1
+  * put_syslinux_makeboot_for_usb_flash of drbl-functions: 
+    revert to use assigned version of syslinux.
+
 * Mon Dec 06 2021 Steven Shiau <steven _at_ clonezilla org> 4.6.2-drbl1
   * Update language files.
 

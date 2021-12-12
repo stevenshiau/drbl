@@ -1,3 +1,10 @@
+drbl (4.6.3-drbl1) unstable; urgency=medium
+
+  * put_syslinux_makeboot_for_usb_flash of drbl-functions: 
+    revert to use assigned version of syslinux.
+
+ -- Steven Shiau <steven@clonezilla.org>  Sun, 12 Dec 2021 17:48:21 +0800
+
 drbl (4.6.2-drbl1) unstable; urgency=medium
 
   * Update language files.
