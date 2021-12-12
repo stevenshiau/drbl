@@ -3363,7 +3363,7 @@ put_syslinux_makeboot_for_usb_flash() {
   # syslinux_ver is not required. If it's not assigned, the latest one on the web will be used.
   local syslinux_ver="$2"  
   local sysl_dir sysl_extra_c32_chklist
-  local latest_syslinux_v sl_epoch apt_tmpdir
+  local latest_syslinux_v apt_tmpdir
   sysl_extra_c32_chklist="ldlinux.c32 libcom32.c32 libutil.c32"
   [ -z "$t_dir" -o ! -d "$t_dir" ] && echo "No t_dir!" && exit 1
   # Function to put syslinux.exe and syslinux (linux ELF 32-bit LSB executable) in dir t_dir 
@@ -3417,13 +3417,12 @@ put_syslinux_makeboot_for_usb_flash() {
       # latest_syslinux_v is like: 3:6.03+dfsg-14.1+deb9u1
       apt-get update
       latest_syslinux_v="$(LC_ALL=C apt-cache show syslinux | grep -iE "^Version:" | grep -Ew "${SYSLINUX_VER}" | sort -V -r | head -n 1 | awk -F" " '{print $2}')"
-      sl_epoch="($echo $latest_syslinux_v | awk -F":" '{print $1}')"
       
       apt_tmpdir="$(mktemp -d /tmp/apt_deb.XXXXXX)"
       (
       cd $apt_tmpdir
-      # apt-get download syslinux:amd64=${latest_syslinux_v} syslinux-common:amd64=${latest_syslinux_v} extlinux:amd64=${latest_syslinux_v=} isolinux:amd64=${latest_syslinux_v=}
-      apt-get download syslinux:amd64 syslinux-common:amd64 extlinux:amd64 isolinux:amd64
+      apt-get download syslinux:amd64=${latest_syslinux_v} syslinux-common:amd64=${latest_syslinux_v} extlinux:amd64=${latest_syslinux_v=} isolinux:amd64=${latest_syslinux_v=}
+      # apt-get download syslinux:amd64 syslinux-common:amd64 extlinux:amd64 isolinux:amd64
       for ideb in $apt_tmpdir/*.deb; do
         dpkg -x $ideb $apt_tmpdir/
       done
