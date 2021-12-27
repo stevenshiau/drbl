@@ -1168,4 +1168,4 @@ msg_use_wired="Verwende LAN Netzwerk"
 msg_use_wireless="Verwende WLAN Netzwerk"
 msg_nic_status_on_sytem="Auf diesem System gefundene Netzwerk-Geräte:"
 # Tag on 2021/12/04
-msg_set_image_volume_size='Größe der Stücke in MB, in die das Image aufgeteilt wird. Der Wert muss größer als 10 sein. Wenn Sie keine Aufteilung wollen, geben Sie einen großen Wert, z.B. "1000000" ein. Bitte verwenden Sie nicht mehr "0" dafür, wenn Ihre GNU/Linux Distribution das neue /sbin/init von upstart benutzt, fängt dieses mit dem Wert "0" nichts an. //HINWEIS// Für ein FAT32-Imageverzeichnis darf der Wert nicht größer als 4096 sein.'
+msg_set_image_volume_size='Größe in MB, wenn das Partitionimage in mehrere Teile aufgeteilt wird. Verwenden Sie "0", um das Image nicht aufzuteilen. //HINWEIS// Wenn das Image-Repository auf einem FAT32-Volume liegt, sollte der Wert zwischen 1 und 4096 liegen. Verwenden Sie dann nicht "0", da eine Datei auf FAT32 nur 4096 MB groß sein darf.'

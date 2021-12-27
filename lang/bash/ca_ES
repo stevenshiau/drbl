@@ -1135,44 +1135,44 @@ msg_ocs_onthefly_param_ps="Fes un senyal sonor quan el treball estigui acabat."
 msg_ocs_param_z9="compressió zstd"
 msg_ocs_param_z9p="compressió zstdmt"
 # Tag on 2020/08/09
-msg_locale_ko_KR='Korean'
+msg_locale_ko_KR='Coreà'
 # Tag on 2020/09/10
-msg_ocs_onthefly_param_rvd='Remove NTFS volume dirty flag in source NTFS file system before cloning it'
+msg_ocs_onthefly_param_rvd='Elimini el indicador de volumen NTFS sucio del sistema de archivos NTFS origen antes de clonar-ho.'
 # Tag on 2020/10/02
-msg_ocs_onthefly_param_t='Skip cloning the MBR (Master Boot Record)'
-msg_ocs_onthefly_param_t1='Clone the prebuilt bootloader from syslinux (For Windows only)'
-msg_ocs_onthefly_param_t2='Skip cloning the EBR (Extended Boot Record)'
-msg_choose_net_pipe_program='Choose the network pipe program when cloning over network'
-msg_ocs_onthefly_param_netcat='Use netcat when cloning over network'
-msg_ocs_onthefly_param_nuttcp='Use nuttcp when cloning over network'
+msg_ocs_onthefly_param_t='Ometre clonat del MBR (Master Boot Record)'
+msg_ocs_onthefly_param_t1='Clonar el bootloader predisenyat de syslinux (Únicament per a Windows)'
+msg_ocs_onthefly_param_t2='Ometre clonat del EBR (Extended Boot Record)'
+msg_choose_net_pipe_program='Triar programa de canalització de xarxa quan es cloni sobre xarxa'
+msg_ocs_onthefly_param_netcat='Usar netcat quan es cloni sobre xarxa'
+msg_ocs_onthefly_param_nuttcp='Usar nuttcp quan es cloni sobre xarxa'
 # Tag on 2020/12/31
-msg_ocs_use_smbv3_11='SMB protocol 3.11 or 3.1.1'
-msg_ocs_use_smb_auto='Auto negotiate SMB protocol'
+msg_ocs_use_smbv3_11='SMB protocol 3.11 o 3.1.1'
+msg_ocs_use_smb_auto='Auto negociar protocol SMB'
 # Tag on 2021/01/18
-msg_choose_if_fsck_the_repo_part='Choose if you want to check and repair the file system before mounting the image repository. This option is only for certain file systems which are well supported by fsck on GNU/Linux, like ext2/3/4, reiserfs, xfs, jfs, vfat. Not for NTFS, HFS+...'
-msg_skip_check_repo_fs='Skip checking/repairing the file system before mounting'
-msg_ocs_param_fsck_repo_part='Interactively check and repair the file system before mounting'
-msg_ocs_param_fsck_repo_part_yes='Auto (Caution!) check and repair file system before mounting'
-msg_not_this_is_for_mount_repository='//NOTE// This is for mounting local storage device as an image repository!'
+msg_choose_if_fsck_the_repo_part="Trïi si vol chequear i reparar el sistema d'arxius abans de muntar la imatge repositori. Aquesta opció és només per a uns certs sistemes d'arxius ben suportats per fsck en GNU/Linux, com ext2/3/4, reiserfs, xfs, jfs, vfat. No per a NTFS, HFS+..."
+msg_skip_check_repo_fs="Ometre revisió/reparació del sistema d'arxius abans de muntar"
+msg_ocs_param_fsck_repo_part="Interactuar en la revisió i reparació del sistema d'arxius abans de muntar"
+msg_ocs_param_fsck_repo_part_yes="Auto-revisió (Caution!) i reparació del sistema d'arxius abans de muntar and repair file system before mounting"
+msg_not_this_is_for_mount_repository="//NOTA// Això és per a muntar un dispositiu d'emmagatzematge local com un repositori d'imatges!"
 # Tag on 2021/03/06
-msg_ocs_param_ssnf='Skip setting 1st boot device as network in uEFI netboot client NVRAM'
-msg_ocs_param_scpt='Skip checking the partition table of the source disk is MBR or GPT format'
+msg_ocs_param_ssnf="Ometre la configuració del primer dispositiu d'arrencada com a xarxa del NVRAM del client de uEFI netboot"
+msg_ocs_param_scpt="Ometre la comprovació que la taula de particions del disc d'origen té format MBR o GPT"
 # Tag on 2021/03/09
-msg_B2SUMS_check_failed='BLAKE2 checksums did NOT match!'
-msg_ocs_param_gb='Generate image BLAKE2 checksums'
-msg_ocs_param_cb='Check image by BLAKE2 checksums'
+msg_B2SUMS_check_failed="Els checksums de BLAKE2 NO coincideixen!"
+msg_ocs_param_gb="Generar checksums d'imatge BLAKE2"
+msg_ocs_param_cb="Verificar imatge amb checksums de BLAKE2"
 # Tag on 2021/03/15
-msg_list_local_device_mode='Which mode do you want to list the block devices on this machine? If you have no idea, choose "disk_or_part". Do _NOT_ choose "both_type_dev" unless you know what you are doing. Basically "both_type_dev" is for you to force choosing the block device which is not listed as it is. For example, you want to save the block device /dev/sda but it is not shown in "saveparts" mode since it is a disk device name, not a partition device name.'
-msg_list_disk_or_part_mode='Separate disk(s) and partition(s)'
-msg_list_both_type_device_mode='List both types of block devices together, i.e., show disk(s) and partition(s) simultaneously'
+msg_list_local_device_mode="En quina manera desitja enumerar els dispositius de bloc en aquesta màquina? Si no té idea, triï 'disk_or_part'. _NO_ triï 'both_type_dev' tret que sàpiga el que està fent. Bàsicament, 'both_type_dev' és perquè forci l'elecció del dispositiu de bloc que no apareix com a tal. Per exemple, desitja guardar el dispositiu de bloc /dev/sda però no es mostra en la manera 'saveparts' ja que és un nom de dispositiu de disc i no un nom de dispositiu de partició."
+msg_list_disk_or_part_mode="Disc(s) i partició(ns) separats"
+msg_list_both_type_device_mode="Llistar tots dos tipus de dispositius de bloc junts, és a dir, mostrar el(els) disc(s) i la(les) partició(ons) simultàniament"
 # Tag on 2021/07/22
 msg_press_space_to_mark_selection="Prem la barra espaiadora per seleccionar. Un asterisc(*) apareixerà quan la selecció es realitzi"
 # Tag on 2021/08/28
-msg_reserved_img_names="Some reserved image names have special meanings, including \"ask_user\", \"autoname\", \"autoname-*\" \"autohostname\", and \"autoproductname\". Please check Clonezilla website for more details."
+msg_reserved_img_names="Alguns noms d'imatges reservats tenen significats especials, incloent \"ask_user\", \"autoname\", \"autoname-\" \"autohostname\", i \"autoproductname\". Consulti el lloc web de Clonezilla per a obtenir més detalls."
 # Tag on 2021/10/25
-msg_choose_wired_or_wireless="Both wired and wireless network devices were detected. Which type do you want to use?"
-msg_use_wired="Use wired network device"
-msg_use_wireless="Use wireless network device"
-msg_nic_status_on_sytem="Network device and status detected on this system:"
+msg_choose_wired_or_wireless="Es detectaren dispositius de xarxa tant cablejats com sense fils. Quin tipus vol usar?"
+msg_use_wired="Usar dispositiu de xarxa amb cable"
+msg_use_wireless="Usar dispositiu de xarxa sense fil"
+msg_nic_status_on_sytem="Dispositiu de xarxa i estat detectat en aquest sistema:"
 # Tag on 2021/12/04
 msg_set_image_volume_size="Grandària en MB per dividir la partició de l'arxiu imatge en diversos volums d'arxius. Per favor introdueixi un nombre major de 10. Si no desitja fragmentar l'arxiu imatge, introdueixi un nombre molt gran ex. \"1000000\". Per favor no usi mai més \"0\" perquè si la seva distribució de GNU/Linux usa el nou /sbin/init en l'inici, es confondrà amb aquest \"0\". //NOTA// Per al repositori imatge del FAT32, El nombre no ha de ser major que 4096."

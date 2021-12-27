@@ -1169,4 +1169,4 @@ msg_use_wired="Użyj przewodowego urządzenia sieciowego"
 msg_use_wireless="Użyj urządzenia sieci bezprzewodowej"
 msg_nic_status_on_sytem="Urządzenie sieciowe i jego stan wykryty w tym systemie:"
 # Tag on 2021/12/04
-msg_set_image_volume_size='Rozmiar w MB, aby podzielić plik obrazu partycji na pliki o wielu woluminach. Wprowadź liczbę większą niż 10. Jeśli nie chcesz dzielić pliku obrazu, wprowadź dużą liczbę, np. "1000000". Nie używaj więcej "0", ponieważ jeśli twoja dystrybucja GNU/Linux używa nowego upstart z /sbin/init, będzie to mylone z "0". //UWAGA// W przypadku Repozytorium Obrazów FAT32 liczba nie powinna być większa niż 4096.'
+msg_set_image_volume_size='Rozmiar w MB, aby podzielić plik obrazu partycji na wiele plików, woluminów. Użyj "0", jeśli nie chcesz dzielić pliku obrazu. //UWAGA// W przypadku repozytorium obrazów FAT32 liczba powinna wynosić od 1 do 4096. Nie należy używać „0”, ponieważ limit rozmiaru pliku dla systemu FAT32 wynosi 4096 MB.'

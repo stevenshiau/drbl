@@ -1183,4 +1183,4 @@ msg_use_wired="Usar dispositivo de red con cable"
 msg_use_wireless="Usar dispositivo de red inalámbrica"
 msg_nic_status_on_sytem="Dispositivo de red y estado detectado en este sistema:"
 # Tag on 2021/12/04
-msg_set_image_volume_size='El tamaño en MB para partir el archivo imagen partición en varios volúmenes de archivos. Por favor introduzca un número mayor de 10. Si no desea partir el archivo imagen, introduzca un número muy grande ej. "1000000". Por favor no use nunca mas "0" porque si su distribución de GNU/Linux usa el nuevo /sbin/init en el inicio, se confundirá con ese "0". //NOTA// Para el repositorio de imagen FAT32, el número no debe ser mas largo de 4096.'
+msg_set_image_volume_size='El tamaño en MB para partir el archivo imagen partición en varios volúmenes de archivos. Use "0" si no desea partir el archivo de imagen. //NOTA// Para el repositorio de imagen FAT32, el número debe ser entre 1 y 4096. No use "0" porque el límite de tamaño de archivo es 4096 MB para FAT32.'

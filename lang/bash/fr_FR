@@ -1170,4 +1170,4 @@ msg_use_wired="Utiliser le périphérique câblé"
 msg_use_wireless="Utiliser le périphérique sans fil"
 msg_nic_status_on_sytem="Périphérique réseau et statut détectés :"
 # Tag on 2021/12/04
-msg_set_image_volume_size='Taille en Mo pour le découpage du fichier image de la partition en fichiers volumes multiples. Entrez un nombre au-dessus de 10. Si vous ne voulez pas de découpage, entrez une valeur très grande (ex : "1000000"). N'\''utilisez plus "0", car si votre distribution utilise le nouveau /sbin/init au démarrage, la valeur "0" induira des ambiguïtés. //NOTE// Pour le dépôt d'\''image en FAT32, la valeur ne doit pas dépasser 4096.'
+msg_set_image_volume_size='Taille en Mo pour la découpe du fichier image de la partition en fichiers volumes multiples. Entrez "0" pour ne pas découper le fichier image. //NOTE// Pour déposer une image sous FAT32, la taille doit être comprise entre 1 et 4096. N\''utilisez pas "0" car la taille d\''un fichier sous FAT32 est limitée à 4096 Mo'
