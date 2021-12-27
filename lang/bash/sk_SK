@@ -1169,4 +1169,4 @@ msg_use_wired="Použiť káblovú sieťovú kartu"
 msg_use_wireless="Použiť bezdrôtovú sieťovú kartu"
 msg_nic_status_on_sytem="V tomto systéme bolo zistené sieťové zariadenie a stav:"
 # Tag on 2021/12/04
-msg_set_image_volume_size='Veľkosť v MB pre rozdelenie obrazu partície do viacerých súborov. Prosím zadajte číslo väčšie ako 10. Ak nechcete rozdeliť obraz, zadajte veľké číslo, napríklad "1000000". Prosím nezadávajte "0", pretože ak vaša distribúcia GNU/Linuxu používa nový /sbin/init z upstartu, tak bude z"0" zmätená. //Poznámka// Pre FAT32 adresár na uloženie obrazov, by číslo nemalo byť väčšie ako 4096.'
+msg_set_image_volume_size="Veľkosť v MB pre rozdelenie obrazu partície do viacerých súborov. Použite "0" ak nechcete rozdelit obraz. //Poznámka// Pre FAT32 adresár na uloženie obrazov, by číslo malo byť medzi 1 a 4096. Nezadávajte "0", lebo limit veľlkosti súboru pre FAT32 je 4096 MB."
