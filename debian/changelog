@@ -1,3 +1,12 @@
+drbl (4.6.4-drbl1) unstable; urgency=medium
+
+  * Language files ca_ES, de_DE, es_ES, fr_FR, ja_JP, pl_PL and
+    sk_SK were updated. Thanks to René Mérou, Michael Vinzenz,
+    Juan Ramón Martínez, Akira Yoshiyama, Jean-Francois Nifenecker,
+    Kris, and Ondrej Dzivý Balucha.
+
+ -- Steven Shiau <steven@clonezilla.org>  Mon, 27 Dec 2021 21:22:03 +0800
+
 drbl (4.6.3-drbl1) unstable; urgency=medium
 
   * put_syslinux_makeboot_for_usb_flash of drbl-functions: 
