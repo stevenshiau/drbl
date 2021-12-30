@@ -2,7 +2,7 @@
 # Written by Steven Shiau <steven _at_ clonezilla org> to use in DRBL 
 # Hungarian translation by Greg <greg.hefty _at_ freemail hu>
 # License: GPL
-# Last updated: 09 Nov 2021
+# Last updated: 28 Dec 2021
 
 #-----------------------------------------
 # some words
@@ -1169,4 +1169,4 @@ msg_use_wired="Vezetékes hálózati eszköz használata"
 msg_use_wireless="Vezetéknélküli hálózati eszköz használata"
 msg_nic_status_on_sytem="Hálózati eszköz és állapota észlelve a rendszeren:"
 # Tag on 2021/12/04
-msg_set_image_volume_size='A partíciós lemezkép maximális mérete MB-ban, ami felett darabolandó. Az érték 10-nél több kell legyen. Ha nem szeretné darabolni a lemezképet, adjon meg egy nagy számot, pl. "1000000". Soha ne írjon "0"-t, mert ha a GNU/Linux disztribúciója új /sbin/init-et használ az upstart-ból, akkor az ütközhet a "0"-val. //MEGJEGYZÉS// FAT32 lemezkép tárolónál, az érték nem lehet nagyobb, mint 4096.'
+msg_set_image_volume_size='A partíciós lemezkép maximális mérete MB-ban, ami felett darabolandó. Írjon "0"-t, ha egyáltalán nem szükséges darabolni. //MEGJEGYZÉS// FAT32 lemezkép tárolónál, az érték 1 és 4096 között kell legyen. Ilyenkor ne adjon meg "0"-t, mert FAT32 esetén a fájlméret korlát 4096 MB.'
