@@ -32,6 +32,7 @@ while [ "$ASK_LANG" -ne 0 ]; do
   0 0 0 \
   ca_ES.UTF-8 "Catalan | Català" \
   de_DE.UTF-8 "German | Deutsch" \
+  el_GR.UTF-8 "Greek | Ελληνικά" \
   en_US.UTF-8 "English" \
   hu_HU.UTF-8 "Hungarian | Magyar" \
   es_ES.UTF-8 "Spanish | Español" \
