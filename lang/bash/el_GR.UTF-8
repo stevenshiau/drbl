@@ -830,6 +830,7 @@ msg_only_kernel_same_with_srv_available='Μόνο ο ίδιος τύπος πυ�
 msg_ocs_param_irhr='Μην καταργήσετε την εγγραφή υλικού Linux udev μετά την επαναφορά.'
 msg_remove_yum_repo_question='Θέλετε να καταργήσετε τις ρυθμίσεις του αποθετηρίου DRBL yum;'
 msg_locale_de_DE='Γερμανικά'
+msg_locale_el_GR='Ελληνικά'
 msg_locale_en_US='Αγγλικά'
 msg_locale_es_ES='Ισπανικά'
 msg_locale_fr_FR='Γαλλικά'
