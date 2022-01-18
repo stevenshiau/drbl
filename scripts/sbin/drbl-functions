@@ -1510,8 +1510,7 @@ show_z4_or_above_menu_or_not() {
     # "-z5"      "$msg_ocs_param_z5" \
     ocs_z5_option_1="-z5"
     ocs_z5_option_2="$(rep_whspc_w_udrsc "$msg_ocs_param_z5")"
-  fi
-  if type pixz &>/dev/null; then
+
     # "-z5p"      "$msg_ocs_param_z5p" \
     ocs_z5p_option_1="-z5p"
     ocs_z5p_option_2="$(rep_whspc_w_udrsc "$msg_ocs_param_z5p")"
