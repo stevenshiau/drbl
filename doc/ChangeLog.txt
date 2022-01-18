@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (4.6.7-drbl1) unstable; urgency=medium
+
+  * Program pixz was replaced by xz since using "-T 0" works the same.
+    Hence the description was updated.
+
+ -- Steven Shiau <steven@clonezilla.org>  Tue, 18 Jan 2022 11:43:00 +0800
+
 drbl (4.6.6-drbl1) unstable; urgency=medium
 
   * Add wavemon in the packages list.

@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	4.6.6
+Version:	4.6.7
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -43,6 +43,10 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Tue Jan 18 2022 Steven Shiau <steven _at_ clonezilla org> 4.6.7-drbl1
+  * Program pixz was replaced by xz since using "-T 0" works the same.
+    Hence the description was updated.
+
 * Sun Jan 09 2022 Steven Shiau <steven _at_ clonezilla org> 4.6.6-drbl1
   * Add wavemon in the packages list.
   * Add language files el_GR.UTF-8. Thanks to Stamatis Mavrogiorgis.
