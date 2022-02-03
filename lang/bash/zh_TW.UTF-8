@@ -1169,3 +1169,14 @@ msg_use_wireless="使用無線網卡"
 msg_nic_status_on_sytem="此系統上偵測到的網卡與狀態:"
 # Tag on 2021/12/04
 msg_set_image_volume_size='將一個分割區的印象檔切割成數個小的分片檔案，每個分片檔的大小(MB)。可以使用"0"表示不要分割。//注意// 如果你的印象檔儲藏庫是在FAT32檔案系統上，這個數字要介於1到4096之間。不要使用"0"因為在FAT上單一檔案最大只能4096 MB。'
+# Tag on 2022/02/03
+msg_found_luks_dev='找到LUKS加密裝置'
+msg_prompt_for_open_luks_dev='我們現在需要開啟LUKS加密裝置，您會被逐一提示輸入密語來開啟'
+msg_luks_mapped_name_not_found_in_this_file='LUKS加密裝置的對應名稱在這個檔案沒有找到'
+msg_name_it_arbitrarily_restered_os_boot_might_fail='我們將隨意取名，不過，若還原的作業系統需要特定的對應名稱，可能會無法開機'
+msg_now_open_luks_dev='現在開啟LUKS加密裝置'
+msg_luks_header_file_found='找到LUKS加密標頭檔'
+msg_luks_header_file_not_found='未找到LUKS加密標頭檔'
+msg_luks_crypttab_file_found='找到LUKS crypttab檔'
+msg_luks_crypttab_file_not_found='未找到LUKS crypttab檔'
+msg_this_partition_table_file_found='找到這個硬碟的分割表'

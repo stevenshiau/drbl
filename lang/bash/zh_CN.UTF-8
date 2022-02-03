@@ -1172,3 +1172,14 @@ msg_use_wireless="Use wireless network device"
 msg_nic_status_on_sytem="Network device and status detected on this system:"
 # Tag on 2021/12/04
 msg_set_image_volume_size='将一个分区的映像分割成多卷存档，每个分割档的大小 (MB)。输入的数字请大于10。如果你不要分割的话，请输入一个大的数字，例如"1000000"，请不要再使用"0"。因为如果你的/sbin/init是来自于新版的upstart，这个"0"会让/sbin/init搞混。//注意// 如果你的镜像仓库是在FAT32文件系统上，这个数字不可以超过4096。'
+# Tag on 2022/02/03
+msg_found_luks_dev='Found LUKS device'
+msg_prompt_for_open_luks_dev='We have to open LUKS device now. You will be prompted to enter passphrase for each one of them.'
+msg_luks_mapped_name_not_found_in_this_file='The LUKS mapped device name was not found in this file'
+msg_name_it_arbitrarily_restered_os_boot_might_fail='Will name it arbitrarily. However, if the restored OS depends on that specified name, it might fail to boot.'
+msg_now_open_luks_dev='Now open the LUKS device'
+msg_luks_header_file_found='LUKS header file found'
+msg_luks_header_file_not_found='LUKS header file not found'
+msg_luks_crypttab_file_found='LUKS crypttab file found'
+msg_luks_crypttab_file_not_found='LUKS crypttab file not found'
+msg_this_partition_table_file_found='The partition table file for this disk was found'

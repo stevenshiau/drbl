@@ -1169,3 +1169,14 @@ msg_use_wireless="Verwende WLAN Netzwerk"
 msg_nic_status_on_sytem="Auf diesem System gefundene Netzwerk-Geräte:"
 # Tag on 2021/12/04
 msg_set_image_volume_size='Größe in MB, wenn das Partitionimage in mehrere Teile aufgeteilt wird. Verwenden Sie "0", um das Image nicht aufzuteilen. //HINWEIS// Wenn das Image-Repository auf einem FAT32-Volume liegt, sollte der Wert zwischen 1 und 4096 liegen. Verwenden Sie dann nicht "0", da eine Datei auf FAT32 nur 4096 MB groß sein darf.'
+# Tag on 2022/02/03
+msg_found_luks_dev='Found LUKS device'
+msg_prompt_for_open_luks_dev='We have to open LUKS device now. You will be prompted to enter passphrase for each one of them.'
+msg_luks_mapped_name_not_found_in_this_file='The LUKS mapped device name was not found in this file'
+msg_name_it_arbitrarily_restered_os_boot_might_fail='Will name it arbitrarily. However, if the restored OS depends on that specified name, it might fail to boot.'
+msg_now_open_luks_dev='Now open the LUKS device'
+msg_luks_header_file_found='LUKS header file found'
+msg_luks_header_file_not_found='LUKS header file not found'
+msg_luks_crypttab_file_found='LUKS crypttab file found'
+msg_luks_crypttab_file_not_found='LUKS crypttab file not found'
+msg_this_partition_table_file_found='The partition table file for this disk was found'

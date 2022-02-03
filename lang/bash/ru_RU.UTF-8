@@ -1174,3 +1174,14 @@ msg_use_wireless="Use wireless network device"
 msg_nic_status_on_sytem="Network device and status detected on this system:"
 # Tag on 2021/12/04
 msg_set_image_volume_size='Укажите размер тома в МБ, если хотите разбить файл образа раздела на несколько томов. Пожалуйста, введите число, большее 10. Если вы не хотите разбивать файл образа, ввести большое число, например, "1000000". Пожалуйста, не используйте "0", потому что, если ваш дистрибутив GNU/Linux использует новый /sbin/init для инициализации, он будет сбит с толку "0". //ПРИМЕЧАНИЕ// Для репозитория образов на FAT32 цифра не может быть больше, чем 4096.'
+# Tag on 2022/02/03
+msg_found_luks_dev='Found LUKS device'
+msg_prompt_for_open_luks_dev='We have to open LUKS device now. You will be prompted to enter passphrase for each one of them.'
+msg_luks_mapped_name_not_found_in_this_file='The LUKS mapped device name was not found in this file'
+msg_name_it_arbitrarily_restered_os_boot_might_fail='Will name it arbitrarily. However, if the restored OS depends on that specified name, it might fail to boot.'
+msg_now_open_luks_dev='Now open the LUKS device'
+msg_luks_header_file_found='LUKS header file found'
+msg_luks_header_file_not_found='LUKS header file not found'
+msg_luks_crypttab_file_found='LUKS crypttab file found'
+msg_luks_crypttab_file_not_found='LUKS crypttab file not found'
+msg_this_partition_table_file_found='The partition table file for this disk was found'

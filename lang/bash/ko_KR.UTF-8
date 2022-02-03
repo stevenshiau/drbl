@@ -1168,3 +1168,14 @@ msg_use_wireless="Use wireless network device"
 msg_nic_status_on_sytem="Network device and status detected on this system:"
 # Tag on 2021/12/04
 msg_set_image_volume_size='파티션 이미지 파일을 여러 볼륨 파일로 분할하기 위한 크기 (MB)입니다. 10보다 큰 숫자를 입력하십시오. 이미지 파일을 분할하고 싶지 않다면, "1000000"과 같은 큰 수를 입력하십시오. GNU/Linux 배포판이 upstart에서 새로운 /sbin/init를 사용하면, "0"과 혼동되므로 더 이상 "0"을 입력하지 마십시오. [참고] FAT32 이미지 저장소의 경우, 숫자는 4096보다 크지 않아야 합니다.'
+# Tag on 2022/02/03
+msg_found_luks_dev='Found LUKS device'
+msg_prompt_for_open_luks_dev='We have to open LUKS device now. You will be prompted to enter passphrase for each one of them.'
+msg_luks_mapped_name_not_found_in_this_file='The LUKS mapped device name was not found in this file'
+msg_name_it_arbitrarily_restered_os_boot_might_fail='Will name it arbitrarily. However, if the restored OS depends on that specified name, it might fail to boot.'
+msg_now_open_luks_dev='Now open the LUKS device'
+msg_luks_header_file_found='LUKS header file found'
+msg_luks_header_file_not_found='LUKS header file not found'
+msg_luks_crypttab_file_found='LUKS crypttab file found'
+msg_luks_crypttab_file_not_found='LUKS crypttab file not found'
+msg_this_partition_table_file_found='The partition table file for this disk was found'
