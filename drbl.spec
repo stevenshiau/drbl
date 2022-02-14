@@ -44,7 +44,7 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 
 %changelog
 * Mon Feb 14 2022 Steven Shiau <steven _at_ clonezilla org> 5.0.1-drbl1
-  * Add memtester in the packages list for Clonezilla live.
+  * Add memtester and edac-utils in the packages list for Clonezilla live.
 
 * Thu Feb 03 2022 Steven Shiau <steven _at_ clonezilla org> 5.0.0-drbl1
   * Update language files for the support of LUKS.
