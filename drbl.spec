@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	5.0.1
+Version:	5.0.2
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -43,6 +43,10 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Sat Mar 12 2022 Steven Shiau <steven _at_ clonezilla org> 5.0.2-drbl1
+  * Removed extra unnecessary Alias line in the following files:
+    arm-wol.service, drbl-clients-nat.service, drblthincli.service, mkswapfile.service
+
 * Mon Feb 14 2022 Steven Shiau <steven _at_ clonezilla org> 5.0.1-drbl1
   * Add memtester and edac-utils in the packages list for Clonezilla live.
 
