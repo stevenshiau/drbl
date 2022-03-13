@@ -1,3 +1,9 @@
+drbl (5.0.3-drbl1) unstable; urgency=medium
+
+  * Remove s3ql from the packages list of Clonezilla live.
+
+ -- Steven Shiau <steven@clonezilla.org>  Sun, 13 Mar 2022 19:03:23 +0800
+
 drbl (5.0.2-drbl1) unstable; urgency=medium
 
   * Removed extra unnecessary Alias line in the following files:
