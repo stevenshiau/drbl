@@ -1680,7 +1680,7 @@ set_drbl_ocs_extra_param() {
         "-k1 "     "$msg_ocs_param_k1"  \
         "-k2 "     "$msg_ocs_param_k2"  \
         "-j0 "     "$msg_ocs_param_j0" \
-        " "        "$msg_use_the_part_table_from_image"  \
+        "-k0 "     "$msg_use_the_part_table_from_image"  \
         "exit "    "$msg_exit" \
         2>> $OCS_PARAM_TMP
       else
@@ -1693,7 +1693,7 @@ set_drbl_ocs_extra_param() {
         $DIA --backtitle "$msg_nchc_free_software_labs" --title  \
         "$msg_clonezilla_advanced_extra_param | $msg_mode: $ocs_mode_prompt" --menu "$msg_choose_param_to_set_single_choice $msg_hint_for_fdisk:" \
         0 0 0 $DIA_ESC \
-        " "        "$msg_use_the_part_table_from_image"  \
+        "-k0 "     "$msg_use_the_part_table_from_image"  \
         "-k "      "$msg_ocs_param_k"  \
         "-k1 "     "$msg_ocs_param_k1"  \
         "-k2 "     "$msg_ocs_param_k2"  \
@@ -2052,7 +2052,7 @@ if [ "$mode" = "restore" ]; then
         "-k1 "     "$msg_ocs_param_k1"  \
         "-k2 "     "$msg_ocs_param_k2"  \
         "-j0 "     "$msg_ocs_param_j0" \
-        " "        "$msg_use_the_part_table_from_image"  \
+        "-k0 "     "$msg_use_the_part_table_from_image"  \
         "exit "    "$msg_exit" \
         2>> $OCS_PARAM_TMP
       else
@@ -2065,7 +2065,7 @@ if [ "$mode" = "restore" ]; then
         $DIA --backtitle "$msg_nchc_free_software_labs" --title  \
         "$msg_clonezilla_advanced_extra_param | $msg_mode: $ocs_mode_prompt" --menu "$msg_choose_param_to_set_single_choice $msg_hint_for_fdisk:" \
         0 0 0 $DIA_ESC \
-        " "        "$msg_use_the_part_table_from_image"  \
+        "-k0 "     "$msg_use_the_part_table_from_image"  \
         "-k "      "$msg_ocs_param_k"  \
         "-k1 "     "$msg_ocs_param_k1"  \
         "-k2 "     "$msg_ocs_param_k2"  \
