@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	5.0.3
+Version:	5.0.4
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -43,6 +43,11 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Sun Mar 27 2022 Steven Shiau <steven _at_ clonezilla org> 5.0.4-drbl1
+  * Add the dummy option "-k0" for the dialog of creating partition
+    in ocs-sr and ocs-onthefly. It's the same as default action.
+    Just easier for us to explain.
+
 * Sun Mar 13 2022 Steven Shiau <steven _at_ clonezilla org> 5.0.3-drbl1
   * Remove s3ql from the packages list of Clonezilla live.
 
