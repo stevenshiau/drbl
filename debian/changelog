@@ -1,3 +1,10 @@
+drbl (5.0.6-drbl1) unstable; urgency=medium
+
+  * To make it consistent. Put "-k0" even it's in beginner mode for
+    restoredisk in the dialog menu.
+
+ -- Steven Shiau <steven@clonezilla.org>  Tue, 29 Mar 2022 14:38:09 +0800
+
 drbl (5.0.5-drbl1) unstable; urgency=medium
 
   * Check option "exit" earlier in k-related options menu of dialog.
