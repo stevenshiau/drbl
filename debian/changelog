@@ -1,3 +1,9 @@
+drbl (5.0.7-drbl1) unstable; urgency=medium
+
+  * Updated language file ca_ES. Thanks to René Mérou.
+
+ -- Steven Shiau <steven@clonezilla.org>  Mon, 18 Apr 2022 16:25:02 +0800
+
 drbl (5.0.6-drbl1) unstable; urgency=medium
 
   * To make it consistent. Put "-k0" even it's in beginner mode for
