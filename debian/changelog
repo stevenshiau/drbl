@@ -1,3 +1,10 @@
+drbl (5.0.8-drbl1) unstable; urgency=medium
+
+  * drbl-get-dnsserver: support using resolvctl to get DNS setting.
+    This makes it work for Ubuntu 22.04.
+
+ -- Steven Shiau <steven@clonezilla.org>  Fri, 22 Apr 2022 07:31:33 +0800
+
 drbl (5.0.7-drbl1) unstable; urgency=medium
 
   * Updated language file ca_ES. Thanks to René Mérou.
