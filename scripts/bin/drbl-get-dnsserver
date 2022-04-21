@@ -31,6 +31,7 @@ done
 nameserver_sys="$(LC_ALL=C grep -Ew "^nameserver" $DNS_sys | awk -F" " '{print $2}')"
 if [ -z "$nameserver_sys" -o -n "$(echo "$nameserver_sys" | grep -E "^127\..*")" ]; then
   # On Ubuntu, dnsmasq with network-manager, the result might 127.0.0.1. We use nm-tool to get the real one
+  # Ubuntu >= 22.04, use "resolvectl status"
   # Ubuntu >= 17.10 or Debian >= 9, use "systemd-resolve --status"
   # Ubuntu <= 14.04, use "nmcli dev list", while > 14.04, "nmcli dev show".
   # Results of systemd-resolve --status, example:
@@ -41,9 +42,12 @@ if [ -z "$nameserver_sys" -o -n "$(echo "$nameserver_sys" | grep -E "^127\..*")"
   # 		 8.8.4.4
   #              168.95.1.1
   #              DNSSEC NTA: 10.in-addr.arpa
-  nameserver_sys="$(LC_ALL=C systemd-resolve --status 2>/dev/null | sed -r -n '/DNS Servers:/,/(^$|^[[:print:]]*:[[:space:]]+.*)/p' | sed -r -e "s/DNS Servers://g")"
-  # Decide the last line if it's the IP address.
-  last_line="$(LC_ALL=C echo "$nameserver_sys" | tail -n 1 | grep -E "^[[:print:]]*:[[:space:]]+.*$")"
+  nameserver_sys="$(LC_ALL=C resolvectl status 2>/dev/null | grep -E "^[[:space:]]*DNS Servers" | awk -F":" '{print $2}')"
+  if [ -z "$nameserver_sys" ]; then
+    nameserver_sys="$(LC_ALL=C systemd-resolve --status 2>/dev/null | sed -r -n '/DNS Servers:/,/(^$|^[[:print:]]*:[[:space:]]+.*)/p' | sed -r -e "s/DNS Servers://g")"
+    # Decide the last line if it's the IP address.
+    last_line="$(LC_ALL=C echo "$nameserver_sys" | tail -n 1 | grep -E "^[[:print:]]*:[[:space:]]+.*$")"
+  fi
   if [ -n "$last_line" ]; then
     # Do not show the last line, remove it.
     nameserver_sys="$(echo "$nameserver_sys" | head -n -1)"
