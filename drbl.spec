@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	5.0.8
+Version:	5.0.9
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -43,6 +43,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Mon May 02 2022 Steven Shiau <steven _at_ clonezilla org> 5.0.9-drbl1
+  * Updated language files about opening LUKS or not.
+
 * Fri Apr 22 2022 Steven Shiau <steven _at_ clonezilla org> 5.0.8-drbl1
   * drbl-get-dnsserver: support using resolvctl to get DNS setting.
     This makes it work for Ubuntu 22.04.

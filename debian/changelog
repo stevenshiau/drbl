@@ -1,3 +1,9 @@
+drbl (5.0.9-drbl1) unstable; urgency=medium
+
+  * Updated language files about opening LUKS or not.
+
+ -- Steven Shiau <steven@clonezilla.org>  Mon, 02 May 2022 10:42:50 +0800
+
 drbl (5.0.8-drbl1) unstable; urgency=medium
 
   * drbl-get-dnsserver: support using resolvctl to get DNS setting.
