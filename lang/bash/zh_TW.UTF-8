@@ -1180,3 +1180,7 @@ msg_luks_header_file_not_found='未找到LUKS加密標頭檔'
 msg_luks_crypttab_file_found='找到LUKS crypttab檔'
 msg_luks_crypttab_file_not_found='未找到LUKS crypttab檔'
 msg_this_partition_table_file_found='找到這個硬碟的分割表'
+# Tag on 2022/05/02
+msg_found_luks_do_you_want_open_it='找到LUKS加密裝置。你要解開它嗎?'
+msg_if_yes_open_luks='若回答yes或y，您會被提示輸入密語來開啟。'
+msg_if_no_dd_mode_will_be_used='若回答no或n，LUKS加密裝置不會被解開，再生龍會使用每個磁區複製(sector by sector, dd)的模式。'
