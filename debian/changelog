@@ -1,3 +1,11 @@
+drbl (5.1.0-drbl1) unstable; urgency=medium
+
+  * drbl-functions: add a function about using a dialog to ask if
+    opening LUKS device.
+  * Update language files about LUKS in TUI.
+
+ -- Steven Shiau <steven@clonezilla.org>  Tue, 10 May 2022 07:41:58 +0800
+
 drbl (5.0.9-drbl1) unstable; urgency=medium
 
   * Updated language files about opening LUKS or not.
