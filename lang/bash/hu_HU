@@ -1183,5 +1183,8 @@ msg_luks_crypttab_file_not_found='LUKS crypttab file not found'
 msg_this_partition_table_file_found='The partition table file for this disk was found'
 # Tag on 2022/05/02
 msg_found_luks_do_you_want_open_it='Found LUKS device. Do you want to open it?'
-msg_if_yes_open_luks='If yes (y), you will be prompted to enter passphrase to open the LUKS device.'
-msg_if_no_dd_mode_will_be_used='If no (n), the LUKS device will not be opened, and sector-by-sector (dd) mode of Clonezilla will be used.'
+msg_if_yes_open_luks='If yes, you will be prompted to enter passphrase to open the LUKS device later.'
+msg_if_no_dd_mode_will_be_used='If no, the LUKS device will not be opened, and sector-by-sector (dd) mode of Clonezilla will be used.'
+# Tag on 2022/05/09
+msg_open_luks_dev='Open the LUKS device'
+msg_do_not_open_luks_dev='Do not open the LUKS device'
