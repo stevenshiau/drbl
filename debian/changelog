@@ -1,3 +1,10 @@
+drbl (5.1.1-drbl1) unstable; urgency=medium
+
+  * set_drbl_ocs_extra_param: OCS_PARAM_TMP is a global variable.
+    No need to pass to function.
+
+ -- Steven Shiau <steven@clonezilla.org>  Tue, 10 May 2022 09:01:26 +0800
+
 drbl (5.1.0-drbl1) unstable; urgency=medium
 
   * drbl-functions: add a function about using a dialog to ask if
