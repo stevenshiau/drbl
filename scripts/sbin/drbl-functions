@@ -1554,7 +1554,7 @@ show_z4_or_above_menu_or_not() {
 #
 set_drbl_ocs_extra_param() {
   local mode
-  # OCS_PARAM_TMP is global variable
+  # OCS_PARAM_TMP is a global variable
   local dev_
   local vol_size_tmp
   local ASK_VOL_SIZE=1
@@ -1930,8 +1930,8 @@ set_drbl_ocs_extra_param() {
 set_ocs_sr_extra_param() {
 # This function is used to be called inside ocs-sr, not from other program.
 local mode="$1"
-OCS_PARAM_TMP="$2"
-local mode2_="$3"
+# OCS_PARAM_TMP is a global variable
+local mode2_="$2"
 local cpu_no
 local vol_size_tmp
 local ASK_VOL_SIZE=1
