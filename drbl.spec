@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	5.1.1
+Version:	5.1.2
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -43,6 +43,10 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Thu May 12 2022 Steven Shiau <steven _at_ clonezilla org> 5.1.2-drbl1
+  * Update language files es_ES, hu_HU & fr_FR.
+    Thanks to Juan Ramón Martínez, Greg and Jean-Francois Nifenecker.
+
 * Tue May 10 2022 Steven Shiau <steven _at_ clonezilla org> 5.1.1-drbl1
   * set_drbl_ocs_extra_param: OCS_PARAM_TMP is a global variable.
     No need to pass to function.
