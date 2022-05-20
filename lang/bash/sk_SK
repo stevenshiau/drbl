@@ -1149,7 +1149,7 @@ msg_ocs_param_fsck_repo_part='Interaktívne skontrolovať a opraviť súborový 
 msg_ocs_param_fsck_repo_part_yes='Automaticky (Pozor!) skontrolovať a opraviť súborový systém pred namontovaním'
 msg_not_this_is_for_mount_repository='//POZNÁMNKA// Slúži na namontovanie lokálneho úložného zariadenia ako repozitára obrazov!'
 # Tag on 2021/03/06
-msg_ocs_param_ssnf='preskočiť nastavenie siete ako prvého bootovateľného zariadenia v uEFI netboot client NVRAM'
+msg_ocs_param_ssnf='preskočiť nastavenie siete ako prvého bootovateľného zariadenia v UEFI netboot client NVRAM'
 msg_ocs_param_scpt='Preskočiť kontrolu tabuľky partícií vo formáte MBR alebo GPT'
 # Tag on 2021/03/09
 msg_B2SUMS_check_failed='Kontrolné sumy BLAKE2 sa NEZHODUJÚ!'
@@ -1171,20 +1171,20 @@ msg_nic_status_on_sytem="V tomto systéme bolo zistené sieťové zariadenie a s
 # Tag on 2021/12/04
 msg_set_image_volume_size="Veľkosť v MB pre rozdelenie obrazu partície do viacerých súborov. Použite "0" ak nechcete rozdelit obraz. //Poznámka// Pre FAT32 adresár na uloženie obrazov, by číslo malo byť medzi 1 a 4096. Nezadávajte "0", lebo limit veľlkosti súboru pre FAT32 je 4096 MB."
 # Tag on 2022/02/03
-msg_found_luks_dev='Found LUKS device'
-msg_prompt_for_open_luks_dev='We have to open LUKS device now. You will be prompted to enter passphrase for each one of them.'
-msg_luks_mapped_name_not_found_in_this_file='The LUKS mapped device name was not found in this file'
-msg_name_it_arbitrarily_restered_os_boot_might_fail='Will name it arbitrarily. However, if the restored OS depends on that specified name, it might fail to boot.'
-msg_now_open_luks_dev='Now open the LUKS device'
-msg_luks_header_file_found='LUKS header file found'
-msg_luks_header_file_not_found='LUKS header file not found'
-msg_luks_crypttab_file_found='LUKS crypttab file found'
-msg_luks_crypttab_file_not_found='LUKS crypttab file not found'
-msg_this_partition_table_file_found='The partition table file for this disk was found'
+msg_found_luks_dev='Nájdené LUKS zariadenie'
+msg_prompt_for_open_luks_dev='Teraz musíme otvoriť LUKS zariadenie. Budete vyzvaný na zadanie hesla pre každé z nich.'
+msg_luks_mapped_name_not_found_in_this_file='V tomto súbore sa nenašiel názov mapovaného zariadenia LUKS'
+msg_name_it_arbitrarily_restered_os_boot_might_fail='Pomenuje sa náhodne. Ak však obnovený operačný systém závisí od zadaného názvu, môže sa stať, že sa nepodarí spustiť.'
+msg_now_open_luks_dev='Teraz otvorte LUKS zariadenie'
+msg_luks_header_file_found='Nájdený LUKS hlavičkový súbor'
+msg_luks_header_file_not_found='LUKS hlavičkový súbor nenájdený'
+msg_luks_crypttab_file_found='Nájdený LUKS crypttab súbor'
+msg_luks_crypttab_file_not_found='LUKS crypttab súbor nenájdený'
+msg_this_partition_table_file_found='Bola nájdená tabuľka partícií pre tento disk'
 # Tag on 2022/05/02
-msg_found_luks_do_you_want_open_it='Found LUKS device. Do you want to open it?'
-msg_if_yes_open_luks='If yes, you will be prompted to enter passphrase to open the LUKS device later.'
-msg_if_no_dd_mode_will_be_used='If no, the LUKS device will not be opened, and sector-by-sector (dd) mode of Clonezilla will be used.'
+msg_found_luks_do_you_want_open_it='Nájdené LUKS zariadenie. Chcete ho otvoriť?'
+msg_if_yes_open_luks='Ak áno, budete neskôr vyzvaný na zadanie hesla potrebného k jeho otvoreniu.'
+msg_if_no_dd_mode_will_be_used='Ak nie, LUKS zariadenie nebude otvorené a sector-by-sector (dd) mód Clonezilly bude použitý.'
 # Tag on 2022/05/09
-msg_open_luks_dev='Open the LUKS device'
-msg_do_not_open_luks_dev='Do not open the LUKS device'
+msg_open_luks_dev='Otvoriť LUKS zariadenie'
+msg_do_not_open_luks_dev='Neotvárať LUKS zariadenie'
