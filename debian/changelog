@@ -1,3 +1,17 @@
+drbl (5.1.5-drbl1) unstable; urgency=medium
+
+  * Update netinstall version for Fedora and OpenSUSE.
+
+ -- Steven Shiau <steven@clonezilla.org>  Sun, 22 May 2022 08:25:20 +0800
+
+drbl (5.1.4-drbl1) unstable; urgency=medium
+
+  * Language files pl_PL and sk_SK were updated. Thanks to kris and
+    Ondrej Dzivý Balucha.
+  * Add ngrep in the packages list.
+
+ -- Steven Shiau <steven@clonezilla.org>  Sat, 21 May 2022 07:53:29 +0800
+
 drbl (5.1.3-drbl1) unstable; urgency=medium
 
   * Language file de_DE were updated. Thanks to Michael Vinzenz.
