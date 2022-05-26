@@ -315,7 +315,7 @@ do_clonezilla_save_dev() {
   # ask if want to set ocs extra param
   OCS_PARAM_TMP=`mktemp /tmp/ocs_param_tmp.XXXXXX`
   trap "[ -f "$OCS_PARAM_TMP" ] && rm -f $OCS_PARAM_TMP" HUP INT QUIT TERM EXIT
-  set_drbl_ocs_extra_param save $OCS_PARAM_TMP $dev
+  set_drbl_ocs_extra_param save $dev
   OCS_OPTS="$(cat $OCS_PARAM_TMP)"
   OCS_OPTS="$(echo $OCS_OPTS)"  # Make it in one line
   [ -f "$OCS_PARAM_TMP" ] && rm -f $OCS_PARAM_TMP
@@ -368,7 +368,7 @@ do_clonezilla_restore_dev() {
   # ask if want to set ocs extra param
   OCS_PARAM_TMP=`mktemp /tmp/ocs_param_tmp.XXXXXX`
   trap "[ -f "$OCS_PARAM_TMP" ] && rm -f $OCS_PARAM_TMP" HUP INT QUIT TERM EXIT
-  set_drbl_ocs_extra_param restore $OCS_PARAM_TMP $dev
+  set_drbl_ocs_extra_param restore $dev
   OCS_OPTS="$(cat $OCS_PARAM_TMP)"
   OCS_OPTS="$(echo $OCS_OPTS)"  # Make it in one line
   [ -f "$OCS_PARAM_TMP" ] && rm -f $OCS_PARAM_TMP

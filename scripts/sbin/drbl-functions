@@ -1579,9 +1579,14 @@ set_drbl_ocs_extra_param() {
   done
   
   mode="$1"
-  OCS_PARAM_TMP="$2"
-  dev_="$3"
+  dev_="$2"
   vol_size_tmp="$(mktemp /tmp/vol_size_tmp.XXXXXX)"
+
+  if [ -z "$OCS_PARAM_TMP" ]; then
+    echo "\"$OCS_PARAM_TMP\" was not assigned in function set_drbl_ocs_extra_param."
+    echo "$msg_program_stop!"
+    exit 1
+  fi
   
   # If the mode is only for parts, we won't turn on "-g auto" option by default
   case "$dev_" in
@@ -1937,6 +1942,12 @@ local vol_size_tmp
 local ASK_VOL_SIZE=1
 local inst_grub_opt opt_confirm_ j2_switch_msg_1 j2_switch_msg_2 j2_switch_msg_3
 vol_size_tmp="$(mktemp /tmp/vol_size_tmp.XXXXXX)"
+
+if [ -z "$OCS_PARAM_TMP" ]; then
+  echo "\"$OCS_PARAM_TMP\" was not assigned in function set_ocs_sr_extra_param"
+  echo "$msg_program_stop!"
+  exit 1
+fi
 
 if [ "$mode2_" = "recovery-iso-zip" ]; then
   # E.g., set_ocs_sr_extra_param restore /tmp/ocs_recovery_tmp.8YNkii recovery-iso-zip
