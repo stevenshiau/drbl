@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (5.1.8-drbl1) unstable; urgency=medium
+
+  * Update set_drbl_ocs_extra_param of drbl-functions, more reasonable.
+    The corresponding changes to drbl-client-switch was done, too.
+
+ -- Steven Shiau <steven@clonezilla.org>  Thu, 26 May 2022 08:31:58 +0800
+
 drbl (5.1.7-drbl1) unstable; urgency=medium
 
   * Add the missing ngrep back in the packages list.
