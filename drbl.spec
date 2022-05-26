@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	5.1.6
+Version:	5.1.7
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -43,6 +43,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Thu May 26 2022 Steven Shiau <steven _at_ clonezilla org> 5.1.7-drbl1
+  * Add the missing ngrep back in the packages list.
+
 * Sun May 22 2022 Steven Shiau <steven _at_ clonezilla org> 5.1.6-drbl1
   * Merge pull request #23 from yosshy/japanese
     Update Japanese translation. Thanks to Akira Yoshiyama.
