@@ -5,6 +5,15 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (5.1.10-drbl1) unstable; urgency=medium
+
+  * Include package ufw in live system.
+  * Add option "-sfs" in the dialog menu. The corresponding language files
+    were updated, too.
+    Ref: https://github.com/stevenshiau/clonezilla/issues/71
+
+ -- Steven Shiau <steven@clonezilla.org>  Mon, 04 Jul 2022 20:39:33 +0800
+
 drbl (5.1.9-drbl1) unstable; urgency=medium
 
   * Add duf, duff and dfc in the live packages list.
