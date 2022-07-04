@@ -1188,3 +1188,5 @@ msg_if_no_dd_mode_will_be_used='Ha nem, a LUKS eszközt nem nyitjuk meg, helyett
 # Tag on 2022/05/09
 msg_open_luks_dev='Nyissa meg a LUKS eszközt'
 msg_do_not_open_luks_dev='Ne nyissa meg a LUKS eszközt'
+# Tag on 2022/07/04
+msg_ocs_param_sfs='Skip partition file system saving'

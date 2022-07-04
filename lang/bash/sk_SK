@@ -1188,3 +1188,5 @@ msg_if_no_dd_mode_will_be_used='Ak nie, LUKS zariadenie nebude otvorené a secto
 # Tag on 2022/05/09
 msg_open_luks_dev='Otvoriť LUKS zariadenie'
 msg_do_not_open_luks_dev='Neotvárať LUKS zariadenie'
+# Tag on 2022/07/04
+msg_ocs_param_sfs='Skip partition file system saving'

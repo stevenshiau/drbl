@@ -1187,3 +1187,5 @@ msg_if_no_dd_mode_will_be_used='若回答no，LUKS加密裝置不會被解開，
 # Tag on 2022/05/09
 msg_open_luks_dev='解開LUKS加密裝置'
 msg_do_not_open_luks_dev='不要解開LUKS加密裝置'
+# Tag on 2022/07/04
+msg_ocs_param_sfs='略去存分割區的檔案系統'

@@ -1208,3 +1208,5 @@ msg_if_no_dd_mode_will_be_used='いいえの場合、LUKS デバイスはオー�
 # Tag on 2022/05/09
 msg_open_luks_dev='LUKS デバイスをオープンする'
 msg_do_not_open_luks_dev='LUKS デバイスをオープンしない'
+# Tag on 2022/07/04
+msg_ocs_param_sfs='Skip partition file system saving'

@@ -1792,6 +1792,7 @@ set_drbl_ocs_extra_param() {
       "-o1 "       "$msg_ocs_param_o1" off \
       "-ps "       "$msg_ocs_param_ps" off \
       "-scpt "     "$msg_ocs_param_scpt" off \
+      "-sfs "      "$msg_ocs_param_sfs" off \
       2>> $OCS_PARAM_TMP
     else
       echo "-j2 " >> $OCS_PARAM_TMP
@@ -2153,6 +2154,7 @@ else
     "-noabo "   "$msg_ocs_param_noabo" off \
     "-ps "      "$msg_ocs_param_ps" off \
     "-scpt "    "$msg_ocs_param_scpt" off \
+    "-sfs "     "$msg_ocs_param_sfs" off \
     2>> $OCS_PARAM_TMP
   else
     echo "-c " "-j2 " >> $OCS_PARAM_TMP
