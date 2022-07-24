@@ -65,14 +65,17 @@ common_root_space=$(du -smc $common_root_dir 2>/dev/null | cut -f1 | tail -n1)
 
 # for /var/lib, we need to exclude the /var/lib/dpkg or /var/lib/rpm
 per_node_space=$(du -smc /etc /var/lib 2>/dev/null | cut -f1 | tail -n1)
-if [ -d /var/lib/dpkg ]; then
-  varlib_pkg_space=$(du -smc /var/lib/dpkg 2>/dev/null | cut -f1 | tail -n1)
-  [ -z "$varlib_pkg_space" ] && varlib_pkg_space=0
-elif [ -d /var/lib/rpm ]; then
-  varlib_pkg_space=$(du -smc /var/lib/rpm 2>/dev/null | cut -f1 | tail -n1)
-  [ -z "$varlib_pkg_space" ] && varlib_pkg_space=0
-fi
-per_node_space=$(($per_node_space - $varlib_pkg_space))
+# Exclude the dir assigned in varlib_NOT_2_be_copied_2_each_client
+varlib_pkg_space_all=0
+for iv in $varlib_NOT_2_be_copied_2_each_client; do
+  if [ -d /var/lib/$iv ]; then
+    varlib_pkg_space=$(du -smc /var/lib/$iv 2>/dev/null | cut -f1 | tail -n1)
+    if [ -n "$varlib_pkg_space" ]; then
+      varlib_pkg_space_all=$(( $varlib_pkg_space_all + $varlib_pkg_space))
+    fi
+  fi
+done
+per_node_space=$(($per_node_space - $varlib_pkg_space_all))
 drbl_need=$(expr $client_no "*" $per_node_space + $common_root_space)
 drbl_need=$(echo "scale=0; $drbl_need * $buffer_ratio_for_client_space" | bc -l)
 # truncate the $drbl_need to be integer
