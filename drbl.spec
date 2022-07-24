@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	5.1.10
+Version:	5.1.11
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -43,6 +43,10 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Sun Jul 24 2022 Steven Shiau <steven _at_ clonezilla org> 5.1.11-drbl1
+  * check_drbl_setup_space: more precise calculation based on the variable
+    varlib_NOT_2_be_copied_2_each_client from drbl.conf.
+
 * Mon Jul 04 2022 Steven Shiau <steven _at_ clonezilla org> 5.1.10-drbl1
   * Include package ufw in live system.
   * Add option "-sfs" in the dialog menu. The corresponding language files

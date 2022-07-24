@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (5.1.11-drbl1) unstable; urgency=medium
+
+  * check_drbl_setup_space: more precise calculation based on the variable
+    varlib_NOT_2_be_copied_2_each_client from drbl.conf.
+
+ -- Steven Shiau <steven@clonezilla.org>  Sun, 24 Jul 2022 20:55:06 +0800
+
 drbl (5.1.10-drbl1) unstable; urgency=medium
 
   * Include package ufw in live system.
