@@ -11,7 +11,7 @@ export LC_ALL=C
 #. $uid_tmp
 #[ -f $uid_tmp ] && rm -f $uid_tmp
 
-MINUID="$(LC_ALL=C egrep '^UID_MIN\s+[0-9]+' /etc/login.defs | sed -e 's/^UID_MIN//')"
+MINUID="$(LC_ALL=C grep -E '^UID_MIN\s+[0-9]+' /etc/login.defs | sed -e 's/^UID_MIN//')"
 
 # If we can not find minum UID of YP from /var/yp/Makefile, we use specific rules.
 if [ -z "$MINUID" ]; then

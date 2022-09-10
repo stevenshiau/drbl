@@ -114,7 +114,7 @@ remove_extra_nfs_opt_to_fstab() {
 } # end of remove_extra_nfs_opt_to_fstab() {
 maybe_break(){
 	# Refer from Debian live-boot
-	if echo "${break:-}" | egrep -q "(,|^)$1(,|$)"; then
+	if echo "${break:-}" | grep -E -q "(,|^)$1(,|$)"; then
 		if command -v chvt >/dev/null 2>&1; then
 			chvt 1
 		fi
