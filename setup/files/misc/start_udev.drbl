@@ -175,12 +175,12 @@ STRING=$"Starting $prog: "
 echo -n "$STRING "
 
 # mount the tmpfs on ${udev_root%/}, if not already done
-LANG=C fgrep -q "none ${udev_root%/} " /proc/mounts || { 
-	if LANG=C fgrep -q "none ${udev_root%/}/pts " /proc/mounts; then
+LANG=C grep -F -q "none ${udev_root%/} " /proc/mounts || { 
+	if LANG=C grep -F -q "none ${udev_root%/}/pts " /proc/mounts; then
 		PTSDIR=$(mktemp -d)
 		mount --move /dev/pts "$PTSDIR"
 	fi
-	if LANG=C fgrep -q "none ${udev_root%/}/shm " /proc/mounts; then
+	if LANG=C grep -F -q "none ${udev_root%/}/shm " /proc/mounts; then
 		SHMDIR=$(mktemp -d)
 		mount --move /dev/shm "$SHMDIR"
 	fi
