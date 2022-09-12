@@ -2702,7 +2702,7 @@ DHCP_END
           i=$((i+1))
         fi
       done
-      if ! egrep -e "^auto[[:space:]]+${nic_dev_only}:1" /etc/network/interfaces; then
+      if ! grep -E -e "^auto[[:space:]]+${nic_dev_only}:1" /etc/network/interfaces; then
         cat <<-NET_END >> /etc/network/interfaces
 auto ${nic_dev_only}:1
 iface ${nic_dev_only}:1 inet static
