@@ -1189,3 +1189,6 @@ msg_open_luks_dev='解開LUKS加密裝置'
 msg_do_not_open_luks_dev='不要解開LUKS加密裝置'
 # Tag on 2022/07/04
 msg_ocs_param_sfs='略去存分割區的檔案系統'
+# Tag on 2022/09/10
+msg_choose_default_param_if_no_idea='如果你不確認，建議就保留預設值，不修改任何選項，直接按Enter。'
+msg_hint_for_fdisk_beginner='現在選用你要的方式來目的碟上產生硬碟分割表。***注意***(1)在目的碟產生一個新的分割表，原本在目的碟中的資料將會全部消失!!!(2)再生龍無法將大的硬碟(分割區)產生的印象檔還原到小的硬碟(分割區)中。但是可以將小的的硬碟(分割區)產生的印象檔還原到大的硬碟(分割區)中。'
