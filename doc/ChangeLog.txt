@@ -5,6 +5,14 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (5.1.12-drbl1) unstable; urgency=medium
+
+  * Show option "-k0" and "-k1" in the restoring, beginner mode.
+  * The command egrep was replaced by "grep -E" to avoid grep >= 3.8
+    showing warnings.
+
+ -- Steven Shiau <steven@clonezilla.org>  Mon, 12 Sep 2022 20:09:32 +0800
+
 drbl (5.1.11-drbl1) unstable; urgency=medium
 
   * check_drbl_setup_space: more precise calculation based on the variable

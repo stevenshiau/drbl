@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	5.1.11
+Version:	5.1.12
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -43,6 +43,11 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Mon Sep 12 2022 Steven Shiau <steven _at_ clonezilla org> 5.1.12-drbl1
+  * Show option "-k0" and "-k1" in the restoring, beginner mode.
+  * The command egrep was replaced by "grep -E" to avoid grep >= 3.8
+    showing warnings.
+
 * Sun Jul 24 2022 Steven Shiau <steven _at_ clonezilla org> 5.1.11-drbl1
   * check_drbl_setup_space: more precise calculation based on the variable
     varlib_NOT_2_be_copied_2_each_client from drbl.conf.
