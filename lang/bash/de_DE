@@ -1188,9 +1188,9 @@ msg_if_no_dd_mode_will_be_used='Falls nein, wird das LUKS-Device nicht geöffnet
 msg_open_luks_dev='LUKS-Device öffnen'
 msg_do_not_open_luks_dev='LUKS-Device nicht öffnen'
 # Tag on 2022/07/04
-msg_ocs_param_sfs='Skip partition file system saving'
+msg_ocs_param_sfs='Überspringe die Sicherung des Partition-Filesystems'
 # Tag on 2022/09/10
-msg_choose_default_param_if_no_idea='If you have no idea, keep the default values and do NOT change anything. Just press Enter.'
-msg_hint_for_fdisk_beginner='Choose the mode to create the partition table on the target disk: ***ATTENTION***(1) TO CREATE A NEW PARTITION TABLE ON THE TARGET DISK. ALL THE DATA ON THE TARGET DEVICE WILL BE ERASED!!! (2) Clonezilla will not restore an image from a large disk (partition) to a smaller disk (partition). However, it can restore an image from a small disk (partition) to a larger disk (partition).'
+msg_choose_default_param_if_no_idea='Wenn Sie es nicht wissen, ändern Sie NICHTS und behalten die Default-Werte. Drücken Sie einfach Enter.'
+msg_hint_for_fdisk_beginner='Wählen Sie die Art, wie die Partitiontable auf der Zielplatte erstellt wird: ***ACHTUNG***(1) ERSTELLEN EINER NEUEN PARTITION TABLE AUF DER ZIELPLATTE. ALLE DATEN AUF DEM ZIELDEVICE WERDEN GELÖSCHT!!! (2) Clonezilla spielt kein Image von einer größeren Platte (Partition) auf eine kleinere Platte (Partition) zurück. Allerdings kann es ein Image von einer kleineren Platte (Partition) auf eine größere Platte (Partition) zurückspielen.'
 # Tag on 2022/09/27
-msg_hint_for_onthefly_fdisk_beginner='Choose the mode to create the partition table on the target disk: ***ATTENTION***(1) TO CREATE A NEW PARTITION TABLE ON THE TARGET DISK. ALL THE DATA ON THE TARGET DEVICE WILL BE ERASED!!! (2) Clonezilla will not clone a large disk (partition) to a smaller disk (partition). However, it can clone a small disk (partition) to a larger disk (partition).'
+msg_hint_for_onthefly_fdisk_beginner='Wählen Sie die Art, wie die Partitiontable auf der Zielplatte erstellt wird: ***ACHTUNG***(1) ERSTELLEN EINER NEUEN PARTITION TABLE AUF DER ZIELPLATTE. ALLE DATEN AUF DEM ZIELDEVICE WERDEN GELÖSCHT!!! (2) Clonezilla spielt kein Image von einer größeren Platte (Partition) auf eine kleinere Platte (Partition) zurück. Allerdings kann es ein Image von einer kleineren Platte (Partition) auf eine größere Platte (Partition) zurückspielen.'

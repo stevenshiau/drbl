@@ -1190,9 +1190,9 @@ msg_if_no_dd_mode_will_be_used='Εάν όχι, η συσκευή LUKS δεν θ�
 msg_open_luks_dev='Άνοιγμα της συσκευής LUKS'
 msg_do_not_open_luks_dev='Μην ανοίξετε τη συσκευή LUKS'
 # Tag on 2022/07/04
-msg_ocs_param_sfs='Skip partition file system saving'
+msg_ocs_param_sfs='Παράλειψη αποθήκευσης αντιγράφου ασφαλείας των κατάτμησεων'
 # Tag on 2022/09/10
-msg_choose_default_param_if_no_idea='If you have no idea, keep the default values and do NOT change anything. Just press Enter.'
-msg_hint_for_fdisk_beginner='Choose the mode to create the partition table on the target disk: ***ATTENTION***(1) TO CREATE A NEW PARTITION TABLE ON THE TARGET DISK. ALL THE DATA ON THE TARGET DEVICE WILL BE ERASED!!! (2) Clonezilla will not restore an image from a large disk (partition) to a smaller disk (partition). However, it can restore an image from a small disk (partition) to a larger disk (partition).'
+msg_choose_default_param_if_no_idea='Αν δεν έχετε ιδέα, διατηρήστε τις προεπιλεγμένες τιμές και ΜΗΝ αλλάξετε τίποτα. Απλώς πατήστε Enter.'
+msg_hint_for_fdisk_beginner='Επιλέξτε τον τρόπο δημιουργίας του πίνακα κατατμήσεων στο δίσκο προορισμού: ***ΠΡΟΣΟΧΗ***(1) Η ΔΗΜΙΟΥΡΓΙΑ ΝΕΟΥ ΠΙΝΑΚΑ ΚΑΤΑΤΜΗΣΕΩΝ ΣΤΟΝ ΕΠΙΛΕΓΜΕΝΟ ΔΙΣΚΟ ΘΑ ΣΒΗΣΕΙ ΟΛΑ ΤΑ ΔΕΔΟΜΕΝΑ ΣΤΟΝ ΔΙΣΚΟ ΑΥΤΟ!!! (2) Το Clonezilla δεν μπορεί να αποκαταστήσει είδωλο από μεγάλο δίσκο (κατάτμηση) σε μικρότερο δίσκο (κατάτμηση), ωστόσο, μπορεί να αποκαταστήσει είδωλο από μικρό δίσκο (κατάτμηση) σε μεγαλύτερο δίσκο (κατάτμηση).'
 # Tag on 2022/09/27
-msg_hint_for_onthefly_fdisk_beginner='Choose the mode to create the partition table on the target disk: ***ATTENTION***(1) TO CREATE A NEW PARTITION TABLE ON THE TARGET DISK. ALL THE DATA ON THE TARGET DEVICE WILL BE ERASED!!! (2) Clonezilla will not clone a large disk (partition) to a smaller disk (partition). However, it can clone a small disk (partition) to a larger disk (partition).'
+msg_hint_for_onthefly_fdisk_beginner='Επιλέξτε τον τρόπο δημιουργίας του πίνακα κατατμήσεων στο δίσκο προορισμού: ***ΠΡΟΣΟΧΗ***(1) Η ΔΗΜΙΟΥΡΓΙΑ ΝΕΟΥ ΠΙΝΑΚΑ ΚΑΤΑΤΜΗΣΕΩΝ ΣΤΟΝ ΕΠΙΛΕΓΜΕΝΟ ΔΙΣΚΟ ΘΑ ΣΒΗΣΕΙ ΟΛΑ ΤΑ ΔΕΔΟΜΕΝΑ ΣΤΟΝ ΔΙΣΚΟ ΑΥΤΟ!!! (2) Το Clonezilla δεν μπορεί να αποκαταστήσει είδωλο από μεγάλο δίσκο (κατάτμηση) σε μικρότερο δίσκο (κατάτμηση), ωστόσο, μπορεί να αποκαταστήσει είδωλο από μικρό δίσκο (κατάτμηση) σε μεγαλύτερο δίσκο (κατάτμηση).'

@@ -1190,9 +1190,9 @@ msg_if_no_dd_mode_will_be_used='Si non, le périphérique LUKS ne sera pas ouver
 msg_open_luks_dev='Ouvrir le périphérique LUKS'
 msg_do_not_open_luks_dev='Ne pas ouvrir le périphérique LUKS'
 # Tag on 2022/07/04
-msg_ocs_param_sfs='Skip partition file system saving'
+msg_ocs_param_sfs='Passer la sauvegarde du système de fichiers de la partition'
 # Tag on 2022/09/10
-msg_choose_default_param_if_no_idea='If you have no idea, keep the default values and do NOT change anything. Just press Enter.'
-msg_hint_for_fdisk_beginner='Choose the mode to create the partition table on the target disk: ***ATTENTION***(1) TO CREATE A NEW PARTITION TABLE ON THE TARGET DISK. ALL THE DATA ON THE TARGET DEVICE WILL BE ERASED!!! (2) Clonezilla will not restore an image from a large disk (partition) to a smaller disk (partition). However, it can restore an image from a small disk (partition) to a larger disk (partition).'
+msg_choose_default_param_if_no_idea='En cas de doute, conservez les valeurs par défaut sans RIEN changer. Appuyez directement sur Entrée.'
+msg_hint_for_fdisk_beginner='Choisissez le mode de création de la table de partition sur la cible : ***ATTENTION***(1) LORS DE LA CRÉATION DE LA NOUVELLE TABLE DE PARTITION SUR LE DISQUE CIBLE, TOUTES LES DONNÉES DU PÉRIPHÉRIQUE CIBLE SERONT EFFACÉES !!! (2) Clonezilla ne peut pas restaurer l\''image d\''un grand disque (partition) vers un disque plus petit (partition). En revanche, il peut restaurer l\''image d\''un petit disque (partition) vers un grand (partition).'
 # Tag on 2022/09/27
-msg_hint_for_onthefly_fdisk_beginner='Choose the mode to create the partition table on the target disk: ***ATTENTION***(1) TO CREATE A NEW PARTITION TABLE ON THE TARGET DISK. ALL THE DATA ON THE TARGET DEVICE WILL BE ERASED!!! (2) Clonezilla will not clone a large disk (partition) to a smaller disk (partition). However, it can clone a small disk (partition) to a larger disk (partition).'
+msg_hint_for_onthefly_fdisk_beginner='Choisissez le mode de création de la table de partition sur la cible : ***ATTENTION***(1) LORS DE LA CRÉATION DE LA NOUVELLE TABLE DE PARTITION SUR LE DISQUE CIBLE, TOUTES LES DONNÉES DU PÉRIPHÉRIQUE CIBLE SERONT EFFACÉES !!! (2) Clonezilla ne peut pas cloner l\''image d\''un grand disque (partition) vers un disque plus petit (partition). En revanche, il peut cloner l\''image d\''un petit disque (partition) vers un grand (partition).'

@@ -1189,9 +1189,9 @@ msg_if_no_dd_mode_will_be_used='Jeśli nie, urządzenie LUKS nie zostanie otwart
 msg_open_luks_dev='Otwórz urządzenie LUKS'
 msg_do_not_open_luks_dev='Nie otwieraj urządzenia LUKS'
 # Tag on 2022/07/04
-msg_ocs_param_sfs='Skip partition file system saving'
+msg_ocs_param_sfs='Pomiń zapisywanie systemu plików partycji'
 # Tag on 2022/09/10
-msg_choose_default_param_if_no_idea='If you have no idea, keep the default values and do NOT change anything. Just press Enter.'
-msg_hint_for_fdisk_beginner='Choose the mode to create the partition table on the target disk: ***ATTENTION***(1) TO CREATE A NEW PARTITION TABLE ON THE TARGET DISK. ALL THE DATA ON THE TARGET DEVICE WILL BE ERASED!!! (2) Clonezilla will not restore an image from a large disk (partition) to a smaller disk (partition). However, it can restore an image from a small disk (partition) to a larger disk (partition).'
+msg_choose_default_param_if_no_idea='Jeśli nie masz pojęcia, zachowaj wartości domyślne i niczego nie zmieniaj. Po prostu naciśnij Enter.'
+msg_hint_for_fdisk_beginner='Wybierz tryb tworzenia tabeli partycji na dysku docelowym: ***UWAGA***(1) ABY UTWORZYĆ NOWĄ TABELĘ PARTYCJI NA DYSK DOCELOWY. WSZYSTKIE DANE Z URZĄDZENIA DOCELOWEGO ZOSTANĄ USUNIĘTE!!! (2) Clonezilla nie przywróci obrazu z dużego dysku (partycji) na mniejszy dysk (partycję). Może jednak przywrócić obraz z małego dysku (partycji) na większy dysk (partycję).'
 # Tag on 2022/09/27
-msg_hint_for_onthefly_fdisk_beginner='Choose the mode to create the partition table on the target disk: ***ATTENTION***(1) TO CREATE A NEW PARTITION TABLE ON THE TARGET DISK. ALL THE DATA ON THE TARGET DEVICE WILL BE ERASED!!! (2) Clonezilla will not clone a large disk (partition) to a smaller disk (partition). However, it can clone a small disk (partition) to a larger disk (partition).'
+msg_hint_for_onthefly_fdisk_beginner='Wybierz tryb tworzenia tabeli partycji na dysku docelowym: ***UWAGA***(1) ABY UTWORZYĆ NOWĄ TABELĘ PARTYCJI NA DYSK DOCELOWY. WSZYSTKIE DANE Z URZĄDZENIA DOCELOWEGO ZOSTANĄ USUNIĘTE!!! (2) Clonezilla nie sklonuje dużego dysku (partycji) na mniejszy dysk (partycję). Może jednak sklonować mały dysk (partycję) na większy dysk (partycję).'
