@@ -1,3 +1,9 @@
+drbl (5.1.15-drbl1) unstable; urgency=medium
+
+  * Language file tr_TR was updated. Thanks to Volkan Gezer.
+
+ -- Steven Shiau <steven@clonezilla.org>  Thu, 20 Oct 2022 14:42:07 +0800
+
 drbl (5.1.14-drbl1) unstable; urgency=medium
 
   * Language files de_DE, el_GR.UTF-8, es_ES, fr_FR and pl_PL were updated.
