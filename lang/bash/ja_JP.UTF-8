@@ -22,7 +22,7 @@ msg_note='注意'
 msg_and='と'
 msg_clonezilla='Clonezilla'
 msg_error='エラー'
-msg_restore='復元'
+msg_restore='リストア'
 msg_txt_check='チェック'
 msg_ex='例'
 msg_exit='終了'
@@ -575,7 +575,7 @@ msg_image_source_for_ocs_live="Clonezilla イメージがこの起動メディ�
 msg_modify_grub_config_if_necessary="これら２つのファイルの修正が必要です：$output_dev デバイス中に存在する /boot/grub/menu.lst、/boot/grub/grub.conf。例：Clonezilla ライブの起動でこれを使用する際、環境を合わせる為の次の２行中のデバイス名"
 msg_this_script_will_create_SL_diskless='このスクリプトは、この小さなライブ GNU/Linux 用 DRBL 環境のディスクレスサーバを作成します。'
 msg_RAM_size_for_SL_drbl_client='実行の為、クライアントには少なくても RAM のサイズが必要である事を勧告します。'
-msg_cons_for_dd_clone='dd はブロックが使用されているかどうかに関係なく、ハードディスクの全ブロックを保存／復元します。'
+msg_cons_for_dd_clone='dd はブロックが使用されているかどうかに関係なく、ハードディスクの全ブロックを保存／リストアします。'
 msg_will_be_inefficent_and_slow='【これは非常に役に立たず、非常に長い時間がかかるかも知れません】'
 msg_status_report_is_very_primitive='このモードの状態レポートは非常に原始的です!!'
 msg_home_partimag_not_home_partimage='/home/partimage が見つかりました!!しかしながら、Clonezilla イメージディレクトリは /home/partimag (最後の文字「e」なし)です。/home/partimage を /home/partimag に変更しなければなりません。'
@@ -678,13 +678,13 @@ msg_continue_with_weird_partition_table='続ける場合、何か変な事が起
 msg_does_this_part_table_file_fit_disk='このパーティションテーブルはこのディスクに合っていますか'
 msg_is_this_disk_too_small='ディスクが小さすぎますか'
 msg_the_following_step_is_to_save_the_disk_part_as_img='次のステップは、このマシンのハードディスク／パーティションをイメージとして保存する事です'
-msg_the_following_step_is_to_restore_img_to_disk_part='次のステップは、イメージをこのマシンのハードディスク／パーティションに復元する事です'
+msg_the_following_step_is_to_restore_img_to_disk_part='次のステップは、イメージをこのマシンのハードディスク／パーティションにリストアする事です'
 msg_this_image_dir_is_not_complete='この Clonezilla イメージディレクトリは完全ではありません'
 msg_now_input_in_server='これからイメージ名とデバイス名を入力して下さい'
 msg_later_input_in_client='後でクライアントのイメージ名とデバイス名を入力して下さい'
 msg_drbl_related_services_not_added_started="【注意】DRBL サーバで DRBL 関連のサービスを追加・開始する事を選択していません。DRBL 関連のサービスを開始する場合、'drbl-all-service start' の実行を忘れないで下さい。"
 
-msg_one_NIC_one_IP_limitation_prompt="【注意】このサーバには単一のネットワークカードと１つの IP アドレスがあります。エイリアス IP アドレスの使用により、DRBL サービスを単一のネットワークカードで提供できます。しかしながら、eth0 (このマシンの最初のネットワークカード)で接続したこれらのクライアントに対して注意する必要がある状況があります。このマシンで DHCP サービスが動作する為、どのクライアントに対する IP アドレスもリ?スしない方が良いです。任意のクライアント(他の MS Windows か GNU/Linux クライアントかも知れません)ではなく、eth0 に接続した PXE/Etherboot クライアントのみ IP アドレスをリースする方が良いでしょう。しかしながら、この制限が設定され、DRBL Clonezilla サーバを使用している場合、Clonezilla で復元された OS はこの DRBL サーバから IP アドレスをリース出来なくなります。"
+msg_one_NIC_one_IP_limitation_prompt="【注意】このサーバには単一のネットワークカードと１つの IP アドレスがあります。エイリアス IP アドレスの使用により、DRBL サービスを単一のネットワークカードで提供できます。しかしながら、eth0 (このマシンの最初のネットワークカード)で接続したこれらのクライアントに対して注意する必要がある状況があります。このマシンで DHCP サービスが動作する為、どのクライアントに対する IP アドレスもリ?スしない方が良いです。任意のクライアント(他の MS Windows か GNU/Linux クライアントかも知れません)ではなく、eth0 に接続した PXE/Etherboot クライアントのみ IP アドレスをリースする方が良いでしょう。しかしながら、この制限が設定され、DRBL Clonezilla サーバを使用している場合、Clonezilla でリストアされた OS はこの DRBL サーバから IP アドレスをリース出来なくなります。"
 msg_if_lease_IP_add_to_pxe_etherboot_only="PXE/Etherboot クライアントのみ IP アドレスをリースしますか?【注意】no を回答した場合、eth0 に接続されたどのマシンもこの DRBL サーバから IP アドレスがリースされるでしょう。DRBL 環境に接続したくない他のマシンがある場合、これは非常に迷惑です!!これらはこの DRBL サーバから IP アドレスをリースされてしまいます。従って、eth0 で接続されたマシンが全て DRBL/Clonezilla クライアントとして使用される事が確認されている場合のみ、ここで「no」を回答して下さい。"
 msg_drbl_env_is_not_ready_now_config='DRBL 環境は準備されていません。これから、このような環境をセットアップする為、(1)ネットワーク設定 (2)Clonezilla イメージのホームディレクトリ を含むいくつかの情報を入力しなければなりません。'
 msg_drbl_env_is_ready='DRBL 環境が準備できましたので、ここで Clonezilla サーバを開始できます。'
@@ -805,7 +805,7 @@ msg_ocs_param_z5='XZ 圧縮を使用(最も低速だが小サイズファイル�
 msg_ocs_param_z5p='並列 XZ 圧縮を使用(マルチコアCPU用)'
 msg_ocs_param_z6='lzip 圧縮を使用(最も低速だが小サイズファイル、bzip2 より展開は高速)'
 msg_ocs_param_z6p='並列 lzip圧縮を使用(マルチコアCPU用)'
-msg_image_saved_from_dd='このイメージは dd で保存されています。イメージの復元には高機能ツール（例：partimage、ntfsclone、partclone）の代わりに dd を使用して下さい。'
+msg_image_saved_from_dd='このイメージは dd で保存されています。イメージのリストアには高機能ツール（例：partimage、ntfsclone、partclone）の代わりに dd を使用して下さい。'
 msg_fs_not_supported_by_partimage_ntfsclone='このファイルシステムは高機能ツール（例：partimage、ntfsclone、partclone）でサポートされていないか、ファイルシステムの保存に dd 使用が指定されました'
 msg_use_this_method_to_save_img='イメージ保存方法に partclone、partimage、ntfsclone の代わりにこの方法を使用'
 # Tag on 2010/06/08
@@ -830,15 +830,15 @@ msg_mbr_img_of_this_hd_not_found='この HDD の MBR イメージは保存され
 msg_img_check_not_supported='このパーティションイメージは partclone によって保存されたものではありません。本プログラムは partclone によって保存されたパーティションのみ機能します。チェックを省略します。'
 msg_this_partition_table_file_not_found='パーティションテーブルファイルが保存されませんでした'
 msg_broken_partition_img_found='本イメージ中で壊れたパーティションイメージが検出されたか、それらの一部がチェックできない状態です'
-msg_all_the_part_lv_are_ok='本イメージ中の全てのパーティション／論理ボリュームデバイスイメージがチェック済みで、復元可能です'
+msg_all_the_part_lv_are_ok='本イメージ中の全てのパーティション／論理ボリュームデバイスイメージがチェック済みで、リストア可能です'
 msg_this_image_saved_successfully='このイメージが無事保存されました'
 msg_this_image_not_saved_correctly='このイメージは正常に保存されませんでした'
-msg_do_u_want_to_check_img_is_restorable='保存イメージが復元可能かどうかチェックしますか？【注意】本アクションはイメージが復元可能かどうかのみ確認し、HDD には一切データを書き込みません。'
-msg_choose_if_checking_image_restorable='イメージ保存後、イメージが復元可能かどうかのみチェックしますか？【注意】本アクションはイメージが復元可能かどうかのみ確認し、HDD には一切データを書き込みません。'
+msg_do_u_want_to_check_img_is_restorable='保存イメージがリストア可能かどうかチェックしますか？【注意】本アクションはイメージがリストア可能かどうかのみ確認し、HDD には一切データを書き込みません。'
+msg_choose_if_checking_image_restorable='イメージ保存後、イメージがリストア可能かどうかのみチェックしますか？【注意】本アクションはイメージが可能かどうかのみ確認し、HDD には一切データを書き込みません。'
 msg_ocs_param_check_img_restorable='はい、保存イメージをチェックします'
 msg_ocs_param_skip_checking_img_restorable='いいえ、保存イメージのチェックを省略します'
-msg_check_if_image_restorable='イメージが復元可能かどうかをチェック'
-msg_choose_the_image_to_be_checked='復元可能かどうかをチェックするイメージを選択して下さい'
+msg_check_if_image_restorable='イメージがリストア可能かどうかをチェック'
+msg_choose_the_image_to_be_checked='リストア可能かどうかをチェックするイメージを選択して下さい'
 msg_broken_image_dir='本イメージディレクトリ中に disk または parts という名前のファイルが見つからないので、本イメージは壊れています'
 msg_no_umounted_disks_found='HDD が存在しないか、アンマウントされた HDD が見つかりません! Clonezilla をディスクの保存・複製に使用するために、元 HDD があり、アンマウントされていなければなりません! このマシンに間違いなく HDD がある場合、カーネルが古すぎるのかも知れません。'
 msg_no_umounted_parts_found='パーティションが存在しないか、アンマウントされたパーティションが見つかりません! Clonezilla をパーティションの保存・複製に使用するために、元パーティションがあり、アンマウントされていなければなりません! このマシンに間違いなくパーティションがある場合、カーネルが古すぎるのかも知れません。'
@@ -896,13 +896,13 @@ msg_run_clonezilla_live_again="やり直し(マウント済みの場合、イメ
 msg_run_clonezilla_live_again_but_keep_mounted_repository="やり直し(マウント済みのイメージリポジトリ $ocsroot を保持)"
 # Tag on 2012/04/09
 msg_autohostname_is_reserved_for_save_mode='「autohostname」は予約されたイメージ名です。別の名前を使用して下さい!'
-msg_no_partition_table_need_to_create='このマシンにはパーティションがありません。パーティションイメージをリストアする為には、復元先ディスクにパーティションが必要です。'
+msg_no_partition_table_need_to_create='このマシンにはパーティションがありません。パーティションイメージをリストアする為には、リストア先ディスクにパーティションが必要です。'
 # Tag on 2012/08/20
 msg_client_job_are_logged_in='クライアントジョブはこのファイルに記録されます'
 msg_autoproductname_is_a_reserved='「autoproductname」は予約されたイメージ名です。別の名前を使用して下さい!'
 # Tag on 2012/11/30
 msg_locale_ca_ES='カタルーニャ語'
-keymap_file_prompt_and_example='Clonezilla Live の復元で使用するキー配列を入力して下さい。「NONE」と入力した場合、キー配列は英語キーボードになります。キー配列は /usr/share/X11/xkb/rules/base.lst 中で探せます（例：fr=フランス語キー配列）。詳細は、Debian Live Web サイト上のマニュアルを確認して下さい。'
+keymap_file_prompt_and_example='Clonezilla Live のリストアで使用するキー配列を入力して下さい。「NONE」と入力した場合、キー配列は英語キーボードになります。キー配列は /usr/share/X11/xkb/rules/base.lst 中で探せます（例：fr=フランス語キー配列）。詳細は、Debian Live Web サイト上のマニュアルを確認して下さい。'
 # Tag on 2013/02/17
 msg_ocs_param_srel='イメージディレクトリにリストア中のエラーログを保存'
 # Tag on 2013/07/23
@@ -925,7 +925,7 @@ msg_the_part_image_to_be_convert='変換するパーティションイメージ'
 msg_choose_the_image_to_be_converted_compression='圧縮形式を変換するイメージの選択'
 msg_failed_to_convert_the_img_compression='イメージの圧縮形式の変換に失敗しました'
 msg_succeeded_convert_the_img_compression='このイメージの圧縮形式の変換に成功しました'
-msg_choose_if_converted_image_restorable='変換されたイメージが復元可能かどうか確認'
+msg_choose_if_converted_image_restorable='変換されたイメージがリストア可能かどうか確認'
 msg_check_converted_img_restorable='はい、変換されたイメージをチェックします'
 msg_skip_check_converted_img_restorable='いいえ、変換されたイメージのチェックを省略します'
 msg_convert_img_compression='イメージ圧縮形式を別イメージとして変換'
@@ -945,10 +945,10 @@ msg_create_vmdk_format='vmdk 形式も作成する'
 msg_failed_to_start_kvm_to_convert='イメージ変換用 kvm の起動に失敗しました！'
 # Tag on 2014/06/21
 msg_this_part_in_the_img_is_broken='このパーティションのイメージは壊れています'
-msg_this_part_in_the_img_is_ok='このパーティションのイメージは復元可能です'
+msg_this_part_in_the_img_is_ok='このパーティションのイメージはリストア可能です'
 # Tag on 2014/09/28
-msg_2_or_more_parts_only_same_parts_on_dest='イメージディレクトリから２つ以上のパーティションが選択されました。復元先ディスクのパーティション数と同じ数のパーティションのみ復元可能です。'
-msg_choose_the_parts_from_img_to_restore='復元先ディスクに復元するパーティションを選択して下さい。(復元先パーティションの全データは上書きされ、元のデータは失われます)'
+msg_2_or_more_parts_only_same_parts_on_dest='イメージディレクトリから２つ以上のパーティションが選択されました。リストア先ディスクのパーティション数と同じ数のパーティションのみリストア可能です。'
+msg_choose_the_parts_from_img_to_restore='リストア先ディスクにリストアするパーティションを選択して下さい。(リストア先パーティションの全データは上書きされ、元のデータは失われます)'
 # Tag on 2014/12/23
 msg_encrypt_image='イメージを暗号化しますか？'
 msg_yes_to_encrypt_img='イメージを暗号化する'
@@ -1209,9 +1209,9 @@ msg_if_no_dd_mode_will_be_used='いいえの場合、LUKS デバイスはオー�
 msg_open_luks_dev='LUKS デバイスをオープンする'
 msg_do_not_open_luks_dev='LUKS デバイスをオープンしない'
 # Tag on 2022/07/04
-msg_ocs_param_sfs='Skip partition file system saving'
+msg_ocs_param_sfs='パーティションファイルシステム保存をスキップ'
 # Tag on 2022/09/10
-msg_choose_default_param_if_no_idea='If you have no idea, keep the default values and do NOT change anything. Just press Enter.'
-msg_hint_for_fdisk_beginner='Choose the mode to create the partition table on the target disk: ***ATTENTION***(1) TO CREATE A NEW PARTITION TABLE ON THE TARGET DISK. ALL THE DATA ON THE TARGET DEVICE WILL BE ERASED!!! (2) Clonezilla will not restore an image from a large disk (partition) to a smaller disk (partition). However, it can restore an image from a small disk (partition) to a larger disk (partition).'
+msg_choose_default_param_if_no_idea='分からない場合、デフォルト値のまま何も変更しないで Enter を押してください。'
+msg_hint_for_fdisk_beginner='コピー先ディスク上にパーティションテーブルを作成するモードを選択してください:***注意***(1)コピー先ディスクに新しいパーティションテーブルを作成する為、コピー先ディスク上の全データは削除されます!!!(2) Clonezilla は大きなディスク(パーティション)から小さなディスク(パーティション)へはイメージをリストアしません。ただし、小さなディスク(パーティション)から大きな(パーティション)へのイメージリストアは可能です。'
 # Tag on 2022/09/27
-msg_hint_for_onthefly_fdisk_beginner='Choose the mode to create the partition table on the target disk: ***ATTENTION***(1) TO CREATE A NEW PARTITION TABLE ON THE TARGET DISK. ALL THE DATA ON THE TARGET DEVICE WILL BE ERASED!!! (2) Clonezilla will not clone a large disk (partition) to a smaller disk (partition). However, it can clone a small disk (partition) to a larger disk (partition).'
+msg_hint_for_onthefly_fdisk_beginner='コピー先ディスク上にパーティションテーブルを作成するモードを選択してください:***注意***(1)コピー先ディスクに新しいパーティションテーブルを作成する為、コピー先ディスク上の全データは削除されます!!!(2) Clonezilla は大きなディスク(パーティション)から小さなディスク(パーティション)へはイメージを複製しません。ただし、小さなディスク(パーティション)から大きな(パーティション)へのイメージ複製は可能です。'
