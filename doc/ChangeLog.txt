@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (5.1.16-drbl1) unstable; urgency=medium
+
+  * Language file sk_SK and ja_JP were updated. Thanks to Ondrej Dzivý Balucha
+    and Akira Yoshiyama.
+
+ -- Steven Shiau <steven@clonezilla.org>  Sun, 23 Oct 2022 19:23:21 +0800
+
 drbl (5.1.15-drbl1) unstable; urgency=medium
 
   * Language file tr_TR was updated. Thanks to Volkan Gezer.
