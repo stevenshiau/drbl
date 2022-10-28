@@ -51,5 +51,5 @@ USER_HOME_DIR=$(bash -c "echo ~$auto_login_id")
 auto_login_group="$(id -n -g $auto_login_id)"
 if [ -n "$USER_HOME_DIR" -a -d "$USER_HOME_DIR" ]; then
   rsync -a --delete --progress /etc/skel/ $USER_HOME_DIR/
-  chown -R $auto_login_id.$auto_login_group $USER_HOME_DIR/
+  chown -R ${auto_login_id}:${auto_login_group} $USER_HOME_DIR/
 fi

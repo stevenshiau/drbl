@@ -189,7 +189,7 @@ eval "$run_cmd | tee -a $useradd_gen_tmp"
 # filter those we do not want... just output the password and username
 grep "The password of" $useradd_gen_tmp > $useradd_gen
 chmod 600 $useradd_gen
-chown root.root $useradd_gen
+chown root:root $useradd_gen
 
 #
 if [ -e /etc/debian_version ]; then

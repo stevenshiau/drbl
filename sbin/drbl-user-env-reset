@@ -154,7 +154,7 @@ for id in $account_list; do
   echo -n "Reseting account $id's home directory $USER_HOME_DIR... "
   [ -n "$verbose" ] && rsync_opt_verbose="--progress"
   rsync -a --delete $rsync_opt_verbose /etc/skel/ $USER_HOME_DIR/
-  chown -R $id.$login_group /etc/skel/ $USER_HOME_DIR/
+  chown -R ${id}:${login_group} /etc/skel/ $USER_HOME_DIR/
   echo "done!"
 done
 

@@ -257,7 +257,7 @@ for imember in $grp_member; do
       # Remember to use "" for the file name, since it might contain white space
       if [ -n "$sub_dir" ]; then mkdir -p "$USER_HOME_DIR/$sub_dir"; fi
       cp -rv "$source_file" "$USER_HOME_DIR/$sub_dir/$target_file"
-      chown -R $uid.$gid "$USER_HOME_DIR/$sub_dir/$target_file"
+      chown -R ${uid}:${gid} "$USER_HOME_DIR/$sub_dir/$target_file"
       ;;
     *)
       usage

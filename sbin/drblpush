@@ -2537,7 +2537,7 @@ cp -f $drbl_setup_path/files/ocs/ocs-run $drbl_common_root/etc/init.d/
 # For Debian, there is no gdm-safe-restart script, we just copy it from drbl
 # package. We need gdm-safe-restart for terminal mode setup.
 [ ! -x /usr/sbin/gdm-safe-restart ] && cp -f $drbl_setup_path/files/misc/gdm-safe-restart /usr/sbin/gdm-safe-restart
-chown root.root $drbl_common_root/etc/init.d/{mkswapfile,drblthincli,arm-wol}
+chown root:root $drbl_common_root/etc/init.d/{mkswapfile,drblthincli,arm-wol}
 # Put systemd services for {mkswapfile,drblthincli,arm-wol}
 if is_systemd_init; then
   cp -f $drbl_setup_path/files/misc/systemd/{mkswapfile.service,drblthincli.service,arm-wol.service} $drbl_common_root/lib/systemd/system/
@@ -3293,8 +3293,8 @@ run_fs="$(LC_ALL=C df -T /run 2>/dev/null |grep -Ew "/run" | awk -F" " '{print $
 if [ "$run_fs" != "tmpfs" ]; then
   perl -pi -e "s/^TMPFS_RUN=.*/TMPFS_RUN=\"false\" # Enabled by drblpush./g" $drbl_common_root/sbin/init
 fi
-chown root.root $drbl_common_root/sbin/init
-chown 755 $drbl_common_root/sbin/init
+chown root:root $drbl_common_root/sbin/init
+chmod 755 $drbl_common_root/sbin/init
 
 # mkdir special directory etc/diskless-image for each diskless host to mount its fstab
 #
@@ -3582,7 +3582,7 @@ done
 RC_LOCAL
 
   #change its mode
-  chown root.root $drbl_common_root/etc/rc.d/rc.local
+  chown root:root $drbl_common_root/etc/rc.d/rc.local
   chmod 775 $drbl_common_root/etc/rc.d/rc.local
 fi
 
