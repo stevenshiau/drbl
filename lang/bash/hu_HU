@@ -2,7 +2,7 @@
 # Written by Steven Shiau <steven _at_ clonezilla org> to use in DRBL 
 # Hungarian translation by Greg <greg.hefty _at_ freemail hu>
 # License: GPL
-# Last updated: 11 May 2022
+# Last updated: 04 Nov 2022
 
 #-----------------------------------------
 # some words
@@ -1189,9 +1189,9 @@ msg_if_no_dd_mode_will_be_used='Ha nem, a LUKS eszközt nem nyitjuk meg, helyett
 msg_open_luks_dev='Nyissa meg a LUKS eszközt'
 msg_do_not_open_luks_dev='Ne nyissa meg a LUKS eszközt'
 # Tag on 2022/07/04
-msg_ocs_param_sfs='Skip partition file system saving'
+msg_ocs_param_sfs='Partíciós fájlrendszer mentésének kihagyása'
 # Tag on 2022/09/10
-msg_choose_default_param_if_no_idea='If you have no idea, keep the default values and do NOT change anything. Just press Enter.'
-msg_hint_for_fdisk_beginner='Choose the mode to create the partition table on the target disk: ***ATTENTION***(1) TO CREATE A NEW PARTITION TABLE ON THE TARGET DISK. ALL THE DATA ON THE TARGET DEVICE WILL BE ERASED!!! (2) Clonezilla will not restore an image from a large disk (partition) to a smaller disk (partition). However, it can restore an image from a small disk (partition) to a larger disk (partition).'
+msg_choose_default_param_if_no_idea='Ha bizonytalan, NE módosítsa az alapértelmezett értékeket, csak nyomjon Enter-t.'
+msg_hint_for_fdisk_beginner='Válassza ki a céllemez partíciós táblájának létrehozási módját: ***FIGYELEM***(1) ÚJ PARTÍCIÓ LÉTREHOZÁSAKOR, A CÉLESZKÖZÖN TALÁLHATÓ ÖSSZES ADAT ELVÉSZ!!! (2) A Clonezilla nem képes nagyobb lemezről (partícióról) származó képet, kisebbre visszaállítani. Ámbár, kisebb lemezről (partícióról) mentett képet, visszaállít nagyobbra.'
 # Tag on 2022/09/27
-msg_hint_for_onthefly_fdisk_beginner='Choose the mode to create the partition table on the target disk: ***ATTENTION***(1) TO CREATE A NEW PARTITION TABLE ON THE TARGET DISK. ALL THE DATA ON THE TARGET DEVICE WILL BE ERASED!!! (2) Clonezilla will not clone a large disk (partition) to a smaller disk (partition). However, it can clone a small disk (partition) to a larger disk (partition).'
+msg_hint_for_onthefly_fdisk_beginner='Válassza ki a céllemez partíciós táblájának létrehozási módját: ***FIGYELEM***(1) ÚJ PARTÍCIÓ LÉTREHOZÁSAKOR, A CÉLESZKÖZÖN TALÁLHATÓ ÖSSZES ADAT ELVÉSZ!!! (2) A Clonezilla nem képes nagyobb lemez (partíció) tartalmát, kisebbre klónozni. Kisebb lemezét (partícióét) viszont átmásolja nagyobbra.'
