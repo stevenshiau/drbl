@@ -1191,7 +1191,7 @@ msg_do_not_open_luks_dev='Nie otwieraj urządzenia LUKS'
 # Tag on 2022/07/04
 msg_ocs_param_sfs='Pomiń zapisywanie systemu plików partycji'
 # Tag on 2022/09/10
-msg_choose_default_param_if_no_idea='Jeśli nie masz pojęcia, zachowaj wartości domyślne i niczego nie zmieniaj. Po prostu naciśnij Enter.'
+msg_choose_default_param_if_no_idea='Jeśli nie masz pojęcia, zachowaj wartości domyślne i NICZEGO NIE zmieniaj. Po prostu naciśnij Enter.'
 msg_hint_for_fdisk_beginner='Wybierz tryb tworzenia tabeli partycji na dysku docelowym: ***UWAGA***(1) ABY UTWORZYĆ NOWĄ TABELĘ PARTYCJI NA DYSK DOCELOWY. WSZYSTKIE DANE Z URZĄDZENIA DOCELOWEGO ZOSTANĄ USUNIĘTE!!! (2) Clonezilla nie przywróci obrazu z dużego dysku (partycji) na mniejszy dysk (partycję). Może jednak przywrócić obraz z małego dysku (partycji) na większy dysk (partycję).'
 # Tag on 2022/09/27
 msg_hint_for_onthefly_fdisk_beginner='Wybierz tryb tworzenia tabeli partycji na dysku docelowym: ***UWAGA***(1) ABY UTWORZYĆ NOWĄ TABELĘ PARTYCJI NA DYSK DOCELOWY. WSZYSTKIE DANE Z URZĄDZENIA DOCELOWEGO ZOSTANĄ USUNIĘTE!!! (2) Clonezilla nie sklonuje dużego dysku (partycji) na mniejszy dysk (partycję). Może jednak sklonować mały dysk (partycję) na większy dysk (partycję).'
