@@ -1177,27 +1177,27 @@ msg_nic_status_on_sytem="Dispositiu de xarxa i estat detectat en aquest sistema:
 # Tag on 2021/12/04
 msg_set_image_volume_size="Grandària en MB per dividir la partició de l'arxiu imatge en diversos volums d'arxius. Per favor introdueixi un nombre major de 10. Si no desitja fragmentar l'arxiu imatge, introdueixi un nombre molt gran ex. \"1000000\". Per favor no usi mai més \"0\" perquè si la seva distribució de GNU/Linux usa el nou /sbin/init en l'inici, es confondrà amb aquest \"0\". //NOTA// Per al repositori imatge del FAT32, El nombre no ha de ser major que 4096."
 # Tag on 2022/02/03
-msg_found_luks_dev='Found LUKS device'
-msg_prompt_for_open_luks_dev='We have to open LUKS device now. You will be prompted to enter passphrase for each one of them.'
-msg_luks_mapped_name_not_found_in_this_file='The LUKS mapped device name was not found in this file'
-msg_name_it_arbitrarily_restered_os_boot_might_fail='Will name it arbitrarily. However, if the restored OS depends on that specified name, it might fail to boot.'
-msg_now_open_luks_dev='Now open the LUKS device'
-msg_luks_header_file_found='LUKS header file found'
-msg_luks_header_file_not_found='LUKS header file not found'
-msg_luks_crypttab_file_found='LUKS crypttab file found'
-msg_luks_crypttab_file_not_found='LUKS crypttab file not found'
-msg_this_partition_table_file_found='The partition table file for this disk was found'
+msg_found_luks_dev="Trobat dispositiu LUKS"
+msg_prompt_for_open_luks_dev="Hem d'obrir el dispositiu LUKS ara. Se us demanarà la clau per cadascun d'ells."
+msg_luks_mapped_name_not_found_in_this_file="El nom del dispositiu assignat de LUKS no ha estat trobat en aquest fitxer"
+msg_name_it_arbitrarily_restered_os_boot_might_fail="serà reanomenat a l'atzar. De totes maneres, si el S.O. restaurat depèn d'aquest nom especificat, podria fallar a l'iniciar-se."
+msg_now_open_luks_dev="Ara obre el dispositiu LUKS"
+msg_luks_header_file_found="Arxiu d'encapçalament de LUKS trobat"
+msg_luks_header_file_not_found="Arxiu d'encapçalament de LUKS no trobat"
+msg_luks_crypttab_file_found="Trobat arxiu crypttab de LUKS"
+msg_luks_crypttab_file_not_found="No s'ha trobat arxiu crypttab de LUKS"
+msg_this_partition_table_file_found="S'ha trobat el arxiu de la taula de particions per a aquest disc"
 # Tag on 2022/05/02
-msg_found_luks_do_you_want_open_it='Found LUKS device. Do you want to open it?'
-msg_if_yes_open_luks='If yes, you will be prompted to enter passphrase to open the LUKS device later.'
-msg_if_no_dd_mode_will_be_used='If no, the LUKS device will not be opened, and sector-by-sector (dd) mode of Clonezilla will be used.'
+msg_found_luks_do_you_want_open_it="Dispositiu LUKS trobat. Vol obrir-ho?"
+msg_if_yes_open_luks="En cas afirmatiu, se us demanarà ingressar la contrasenya per poder obrir el dispositiu LUKS més tard."
+msg_if_no_dd_mode_will_be_used="En cas contrari, el dispositiu LUKS no serà obert i el mode sector-a-sector (dd) del Clonezilla serà usat."
 # Tag on 2022/05/09
-msg_open_luks_dev='Open the LUKS device'
-msg_do_not_open_luks_dev='Do not open the LUKS device'
+msg_open_luks_dev="Abrir el dispositiu LUKS"
+msg_do_not_open_luks_dev="No obir el dispositiu LUKS"
 # Tag on 2022/07/04
-msg_ocs_param_sfs='Skip partition file system saving'
+msg_ocs_param_sfs="Saltar desar el sistema de fitxers de la partició"
 # Tag on 2022/09/10
-msg_choose_default_param_if_no_idea='If you have no idea, keep the default values and do NOT change anything. Just press Enter.'
-msg_hint_for_fdisk_beginner='Choose the mode to create the partition table on the target disk: ***ATTENTION***(1) TO CREATE A NEW PARTITION TABLE ON THE TARGET DISK. ALL THE DATA ON THE TARGET DEVICE WILL BE ERASED!!! (2) Clonezilla will not restore an image from a large disk (partition) to a smaller disk (partition). However, it can restore an image from a small disk (partition) to a larger disk (partition).'
+msg_choose_default_param_if_no_idea="Si no està segur, deixi el valor per defecte i NO canviï res. Tan sols polsi Enter."
+msg_hint_for_fdisk_beginner="Seleccioni el mode per a crear la taula de particions en el disc objectiu: ***ATENCIÓ***(1) ANEM A CREAR UNA TAULA DE PARTICIONS NOVA EN EL DISC DESTÍ. TOTA LA INFORMACIÓ EN EL DISPOSITIU DESTÍ SERÀ ESBORRADA!!! (2) Clonezilla no restaurarà la imatge d'un disc dur gran (partició) en un disc dur menor (partició). Però, pot restaurar una imatge des d'un disc petit (partició) en un disc major (partició)."
 # Tag on 2022/09/27
-msg_hint_for_onthefly_fdisk_beginner='Choose the mode to create the partition table on the target disk: ***ATTENTION***(1) TO CREATE A NEW PARTITION TABLE ON THE TARGET DISK. ALL THE DATA ON THE TARGET DEVICE WILL BE ERASED!!! (2) Clonezilla will not clone a large disk (partition) to a smaller disk (partition). However, it can clone a small disk (partition) to a larger disk (partition).'
+msg_hint_for_onthefly_fdisk_beginner="Seleccioni el mode per a crear una taula de particions en el disc destí: ***ATENCIÓ***(1) ANEM A CREAR UNA NOVA TAULA DE PARTICIONS EN EL DISC DESTÍ. TOTA LA INFORMACIÓ EN EL DISPOSITIU SERÀ ESBORRADA!!! (2) Clonezilla no restaurarà la imatge d'un disc dur gran (partició) en un disc dur menor (partició). Però, pot restaurar una imatge des d'un disc petit (partició) en un disc major (partició)."
