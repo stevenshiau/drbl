@@ -395,8 +395,8 @@ else
 fi
 
 # 5.
-# Before running this function, we first check if memtest86+ and pxelinux exist in the drbl package repository ($memtest86_file and $pxelinux_file)
-if [ ! -e "$memtest86_file" ]; then
+# Before running this function, we first check if memtest86+ and pxelinux exist in the drbl package repository ($memtest86_dir and $pxelinux_file)
+if [ -z "$(ls -l $memtest86_dir/mt86+x* 2>/dev/null)" ]; then
   drbl-prepare-memtest
 fi
 # Here we check both pxelinux.0, gpxelinux.0 and lpxelinux.0. Since if older version of syslinux is installed (e.g. 3.7 in CentOS 5), no gpxelinux.0. However, if the user upgrade syslinux as 4.x after drblsrv-offline is run, drbl-prepare-pxelinux won't be run if not checking gpxelinux.0.
