@@ -27,21 +27,20 @@ USAGE() {
 put_memtest_bin_2_drbl_repo() {
   local memtest_bin_abs_path="$1"
   [ -z "$memtest_bin_abs_path" ] && return 1
-  rm -f $memtest86_file
-  path_memtest="$(LC_ALL=C dirname $memtest86_file)"
-  echo "Putting memtest86+ in DRBL package repository $path_memtest/... "
-  cp -af $memtest_bin_abs_path $memtest86_file
-  memtest_v="$(LC_ALL=C strings $memtest_bin_abs_path  | grep "Memtest86  v" | sed -r -e "s/^[[:space:]]*//g")"
+  echo "Putting memtest86+ in DRBL package repository $memtest86_dir/... "
+  memtest_f="$(shorten_memtest_filename `basename $memtest_bin_abs_path`)"
+  cp -af $memtest_bin_abs_path $memtest86_dir/$memtest_f
+  memtest_v="$(LC_ALL=C strings $memtest_bin_abs_path  | grep -Ei 'Memtest86\+[[:space:]]+v' | sed -r -e "s/^[[:space:]]*//g")"
   echo "Memtest86+ version: $memtest_v"
-  echo $memtest_v > $path_memtest/VERSION
+  echo $memtest_v > $memtest86_dir/VERSION
   echo "done!"
   if [ "$deploy_to_system_too" = "yes" ]; then
     echo -n "Putting memtest86+ in DRBL system dir $pxecfg_pd/... "
-    cp -af $memtest86_file $pxecfg_pd/
+    cp -af $memtest_f $pxecfg_pd/
     echo $memtest_v > $pxecfg_pd/MEMTEST86+_VERSION
     echo "done!"
   fi
-}
+} # end of put_memtest_bin_2_drbl_repo
 
 #
 put_upstream_memtest(){
@@ -65,6 +64,22 @@ put_upstream_memtest(){
   fi
 } # end of put_upstream_memtest
 #
+shorten_memtest_filename() {
+  local inp_fn="$1"
+  # memtest86+.bin -> mt86+x32.mbr
+  # memtest86+x32.bin -> mt86+x32.mbr
+  # memtest86+x32.efi -> mt86+x32.efi
+  # memtest86+x64.bin -> mt86+x64.mbr
+  # memtest86+x64.efi -> mt86+x64.efi
+  case "$inp_fn" in
+    memtest86+.bin)    echo mt86+x32.mbr;;
+    memtest86+x32.bin) echo mt86+x32.mbr;;
+    memtest86+x32.efi) echo mt86+x32.efi;;
+    memtest86+x64.bin) echo mt86+x64.mbr;;
+    memtest86+x64.efi) echo mt86+x64.efi;;
+  esac
+} # end of shorten_memtest_filename
+#
 put_distribution_memtest() {
   # Function to use the package from distribution.
   # Memtest86+ file name on different distributions:
@@ -75,15 +90,43 @@ put_distribution_memtest() {
   if $query_pkglist_exist_cmd memtest86+ &>/dev/null; then
      # Found on the system
      # For Redhat-like system, there might return more than one file on a system, i.e. one file belongs to 2 rpm packages.
+     # 2022/11/23 On Debian, memtest86+ v6 is available:
+     # /boot/memtest86+x32.bin
+     # /boot/memtest86+x32.efi
+     # /boot/memtest86+x64.bin
+     # /boot/memtest86+x64.efi
+     # While for memtest86+ <= v5, the file is:
+     # /boot/memtest86+.bin
+
+     # For syslinux in FAT file system, 
+     # "memtest86+.bin" is 9 characters, will go wrong when it's FAT (usb flash drive). We use memtest to overwrite the one comes from Debian live.
+     # In addition, do NOT use memtest.bin, use memtest instead of memtest.bin
+     # since "*.bin" has specially purpose for syslinux.
+     # So here they are:
+     # memtest86+.bin -> mt86+x32.mbr
+     # memtest86+x32.bin -> mt86+x32.mbr
+     # memtest86+x32.efi -> mt86+x32.efi
+     # memtest86+x64.bin -> mt86+x64.mbr
+     # memtest86+x64.efi -> mt86+x64.efi
+
+     # For memtest <= v5.0
      memtest_bin="$(LC_ALL=C $query_pkglist_cmd memtest86+ | grep -Ew "(memtest86\+.bin$|memtest\.bin$|^/boot/memtest86+)" | sort | head -n 1)"
-     if [ -n "$memtest_bin" ]; then
-       echo "Found $memtest_bin in this system, copying the memtest file to DRBL local repository..."
-       put_memtest_bin_2_drbl_repo $memtest_bin
-     else
-       [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
-       echo "Package of memtest was installed, but memtest boot file not found!"
-       [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
-     fi
+     # For memtest >= v6.0
+     memtest_x32_bin="$(LC_ALL=C $query_pkglist_cmd memtest86+ | grep -Ew "^/boot/memtest86\+x32\.bin" | sort | head -n 1)"
+     memtest_x32_efi="$(LC_ALL=C $query_pkglist_cmd memtest86+ | grep -Ew "^/boot/memtest86\+x32\.efi" | sort | head -n 1)"
+     memtest_x64_bin="$(LC_ALL=C $query_pkglist_cmd memtest86+ | grep -Ew "^/boot/memtest86\+x64\.bin" | sort | head -n 1)"
+     memtest_x64_efi="$(LC_ALL=C $query_pkglist_cmd memtest86+ | grep -Ew "^/boot/memtest86\+x64\.efi" | sort | head -n 1)"
+     for im in $memtest_bin $memtest_x32_bin $memtest_x32_efi $memtest_x64_bin $memtest_x64_efi; do
+       eval imfile="\$im"
+       if [ -n "$imfile" ]; then
+         echo "Found $imfile in this system, copying the memtest file to DRBL local repository..."
+         put_memtest_bin_2_drbl_repo $imfile
+       else
+         [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+         echo "Package of memtest was installed, but memtest boot file not found!"
+         [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+       fi
+     done
   else
      # Download and extract it. The reason we do not install it is we do not want to bother the server's boot menu
      tmp_wd="$(LC_ALL=C mktemp -d /tmp/memtest_tmp.XXXXXXX)"
