@@ -95,13 +95,12 @@ put_memtest86_img() {
   # memtest86+
   # make a version tag in $pxecfg_pd
   echo "Copying memtest86+ to $pxecfg_pd..."
-  if [ -f "$memtest86_file" ]; then
-     cp -af $memtest86_file $pxecfg_pd
-     memtest86_src_path="$(dirname $memtest86_file)"
-     cp -af $memtest86_src_path/VERSION $pxecfg_pd/MEMTEST86+_VERSION
+  if [ -n "$(ls -l $memtest86_dir/mt86+x* 2>/dev/null)" ]; then
+     cp -af $memtest86_dir/mt86+x* $pxecfg_pd
+     cp -af $memtest86_dir/VERSION $pxecfg_pd/MEMTEST86+_VERSION
   else
      [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
-     echo "$msg_Warning! $memtest86_file $msg_NOT_found!!!"
+     echo "$msg_Warning! $memtest86_dir/mt86+x* $msg_NOT_found!!!"
      echo "$msg_press_enter_to_continue"
      [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
      read
