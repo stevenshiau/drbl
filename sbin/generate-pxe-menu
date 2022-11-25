@@ -176,10 +176,7 @@ if [ -n "$background_pic" ]; then
 else
   drbl_logo="$(basename $pxelinux_bg_img)"
 fi
-# get memtest filename
-if [ -e "$memtest_filename" ]; then
-  memtest_filename="$(basename $memtest86_file)"
-fi
+
 # show some prompts
 echo "Use com32 module: $MENUC32"
 [ -n "$PXE_SERIAL_OUTPUT" ] && echo "PXE serial output param: $PXE_SERIAL_OUTPUT"
@@ -334,18 +331,36 @@ label local
   ENDTEXT
 
 PXE_END
-if [ -n "$memtest_filename" ]; then
+
+# For memtest86+
+# memtest86+.bin -> mt86+x32.mbr
+# memtest86+x32.bin -> mt86+x32.mbr
+# memtest86+x32.efi -> mt86+x32.efi
+if [ -e "$pxecfg_pd/mt86+x32.mbr" ]; then
 cat <<-PXE_END >> $PXECFG_DIR/default
-# Note! *.bin is specially purpose for syslinux,
-# Do NOT use memtest86.bin, use memtest86 instead of memtest86.bin
-label memtest
+label memtest (32 bits)
   # MENU DEFAULT
   # MENU HIDE
-  MENU LABEL Memory test using Memtest86+
+  MENU LABEL Memory test using Memtest86+ (32 bits)
   # MENU PASSWD
-  kernel $memtest_filename
+  kernel mt86+x32.mbr
   TEXT HELP
-  Run memory test using Memtest86+ $memtest_ver
+  Run memory test using 32-bit Memtest86+ $memtest_ver
+  ENDTEXT
+
+PXE_END
+fi
+
+if [ -e "$pxecfg_pd/mt86+x64.mbr" ]; then
+cat <<-PXE_END >> $PXECFG_DIR/default
+label memtest (64 bits)
+  # MENU DEFAULT
+  # MENU HIDE
+  MENU LABEL Memory test using Memtest86+ (64 bits)
+  # MENU PASSWD
+  kernel mt86+x64.mbr
+  TEXT HELP
+  Run memory test using 64-bit Memtest86+ $memtest_ver
   ENDTEXT
 
 PXE_END
