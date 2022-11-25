@@ -345,6 +345,18 @@ menuentry "Local operating system (if available)" --id local-disk {
   sleep 15
 }
 
+GRUB_END
+
+if [ -e "$pxecfg_pd/mt86+x64.efi" ]; then
+  cat <<-GRUB_END >> $output_file
+menuentry "Memtest using Memtest86+" --id memtest86+ {
+  linux mt86+x64.efi keyboard=both
+}
+
+GRUB_END
+fi
+
+cat <<-GRUB_END >> $GRUB_EFI_D/grub.cfg
 menuentry "Reboot" --id reboot {
   echo "System rebooting..."
   reboot
