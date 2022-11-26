@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	5.1.17
+Version:	5.2.0
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -43,6 +43,17 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Sat Nov 26 2022 Steven Shiau <steven _at_ clonezilla org> 5.2.0-drbl1
+  * Support memtest86+ v6 naming & mechanism.
+    Memtest86+ v6.00 now supports legacy BIOS and uEFI booting.
+    Both x86 and x86-64 are supported, too. In DRBl/Clonezilla
+    we use shorter file name so that it works in FAT file system:
+    memtest86+.bin -> mt86+x32.mbr
+    memtest86+x32.bin -> mt86+x32.mbr
+    memtest86+x32.efi -> mt86+x32.efi
+    memtest86+x64.bin -> mt86+x64.mbr
+    memtest86+x64.efi -> mt86+x64.efi
+
 * Fri Oct 28 2022 Steven Shiau <steven _at_ clonezilla org> 5.1.17-drbl1
   * Use OWNER:GROUP, not OWNER.GROUP in chown command.
 
