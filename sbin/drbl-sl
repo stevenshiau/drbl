@@ -675,7 +675,7 @@ install_SL(){
     if [ -n "$(LC_ALL=C file -Lsk $i | grep -iE "(Linux x86 kernel|Linux kernel x86 boot executable|Linux\/x86 Kernel|x86 boot sector)")" ]; then
       # Ugly
       # we skip memtest, etherboot, ipxe, freedos...
-      if [ -z "$(LC_ALL=C echo $i | grep -iE "(memtest|eb.zli|memdisk|gpxe.lkn|ipxe.lkn|ipxe.efi|freedos|fdos)")" ]; then
+      if [ -z "$(LC_ALL=C echo $i | grep -iE "(memtest|mt86|eb.zli|memdisk|gpxe.lkn|ipxe.lkn|ipxe.efi|freedos|fdos)")" ]; then
         kernel="$i"
         break
       fi
