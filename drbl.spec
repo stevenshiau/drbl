@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	5.2.0
+Version:	5.2.1
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -43,6 +43,10 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Sat Dec 10 2022 Steven Shiau <steven _at_ clonezilla org> 5.2.1-drbl1
+  * drbl-sl: make it work with memtest86+ v6 existing on the system. 
+    Avoid the wrong assignment for Linux kernel.
+
 * Sat Nov 26 2022 Steven Shiau <steven _at_ clonezilla org> 5.2.0-drbl1
   * Support memtest86+ v6 naming & mechanism.
     Memtest86+ v6.00 now supports legacy BIOS and uEFI booting.
