@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	5.2.1
+Version:	5.2.2
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -43,6 +43,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Fri Dec 30 2022 Steven Shiau <steven _at_ clonezilla org> 5.2.2-drbl1
+  * dcs: swtich to detect opentracker, not ocs-bttrack anymore.
+
 * Sat Dec 10 2022 Steven Shiau <steven _at_ clonezilla org> 5.2.1-drbl1
   * drbl-sl: make it work with memtest86+ v6 existing on the system. 
     Avoid the wrong assignment for Linux kernel.

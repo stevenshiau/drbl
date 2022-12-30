@@ -1,3 +1,9 @@
+drbl (5.2.2-drbl1) unstable; urgency=medium
+
+  * dcs: swtich to detect opentracker, not ocs-bttrack anymore.
+
+ -- Steven Shiau <steven@clonezilla.org>  Fri, 30 Dec 2022 09:00:37 +0800
+
 drbl (5.2.1-drbl1) unstable; urgency=medium
 
   * drbl-sl: make it work with memtest86+ v6 existing on the system. 
