@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (5.2.3-drbl1) unstable; urgency=medium
+
+  * drbl-functions: add "--powersave off" in setterm of the function
+    screen_not_blank.
+
+ -- Steven Shiau <steven@clonezilla.org>  Sun, 08 Jan 2023 22:44:03 +0800
+
 drbl (5.2.2-drbl1) unstable; urgency=medium
 
   * dcs: swtich to detect opentracker, not ocs-bttrack anymore.
