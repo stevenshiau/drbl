@@ -725,7 +725,7 @@ turn_on_hd_dma() {
 
 # do not let screen be blank
 screen_not_blank() {
-    setterm --blank 0 2>/dev/null
+    setterm --blank 0 --powersave off 2>/dev/null
 }
 
 # set passwd login for single user mode
