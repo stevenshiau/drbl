@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	5.2.3
+Version:	5.2.4
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -43,6 +43,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Tue Jan 24 2023 Steven Shiau <steven _at_ clonezilla org> 5.2.4-drbl1
+  * Update language files about LUKS.
+
 * Sun Jan 08 2023 Steven Shiau <steven _at_ clonezilla org> 5.2.3-drbl1
   * drbl-functions: add "--powersave off" in setterm of the function
     screen_not_blank.
