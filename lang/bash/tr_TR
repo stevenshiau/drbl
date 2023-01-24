@@ -1196,3 +1196,7 @@ msg_choose_default_param_if_no_idea='Hiçbir fikriniz yoksa, varsayılan değerl
 msg_hint_for_fdisk_beginner='Hedef diskte bölüm tablosu oluşturmak için mod seçin: ***DİKKAT***(1) HEDEF DİSK ÜZERİNDE YENİ BİR BÖLÜM TABLOSU OLUŞTURMAK İÇİN. HEDEF CİHAZDAKİ TÜM VERİLER SİLİNECEK!!! (2) Clonezilla, bir görüntüyü büyük bir diskten (bölüm) daha küçük bir diske (bölüm) geri yüklemeyecektir. Ancak, bir görüntüyü küçük bir diskten (bölüm) daha büyük bir diske (bölüm) geri yükleyebilir.'
 # Tag on 2022/09/27
 msg_hint_for_onthefly_fdisk_beginner='Hedef diskte bölüm tablosu oluşturmak için modu seçin: ***DİKKAT***(1) HEDEF DİSK ÜZERİNDE YENİ BİR BÖLÜM TABLOSU OLUŞTURMAK İÇİN. HEDEF CİHAZDAKİ TÜM VERİLER SİLİNECEK!!! (2) Clonezilla, büyük bir diski (bölümü) daha küçük bir diske (bölümü) klonlamaz. Ancak, küçük bir diski (bölüm) daha büyük bir diske (bölüm) kopyalayabilir.'
+# Tag on 2023/01/24
+msg_failed_to_open_this_luks_dev='Failed to open this LUKS device:'
+msg_do_you_want_to_try_to_open_it_again='Do you want to try to open it again?'
+msg_if_yes_open_luks_again='If yes, you will be prompted to enter passphrase to open the LUKS device again.'

@@ -1209,3 +1209,7 @@ msg_choose_default_param_if_no_idea='Si no tiene idea, mantenga los valores pred
 msg_hint_for_fdisk_beginner='Elija el modo para crear la tabla de particiones en el disco destino: ***ATENCIÓN***(1) PARA CREAR UNA NUEVA TABLA DE PARTICIONES EN EL DISCO DE DESTINO, ¡¡¡TODOS LOS DATOS EN EL DISPOSITIVO DESTINO SE BORRARÁN!!! (2) Clonezilla no restaurará una imagen de un disco grande (partición) a un disco más pequeño (partición). Sin embargo, puede restaurar una imagen desde un disco pequeño (partición) a un disco más grande (partición).'
 # Tag on 2022/09/27
 msg_hint_for_onthefly_fdisk_beginner='Elija el modo para crear la tabla de particiones en el disco de destino: ***ATENCIÓN***(1) PARA CREAR UNA NUEVA TABLA DE PARTICIONES EN EL DISCO DESTINO. ¡¡¡TODOS LOS DATOS EN EL DISPOSITIVO DESTINO SE BORRARÁN!!! (2) Clonezilla no clonará un disco grande (partición) en un disco más pequeño (partición). Sin embargo, puede clonar un disco pequeño (partición) a un disco más grande (partición).'
+# Tag on 2023/01/24
+msg_failed_to_open_this_luks_dev='Failed to open this LUKS device:'
+msg_do_you_want_to_try_to_open_it_again='Do you want to try to open it again?'
+msg_if_yes_open_luks_again='If yes, you will be prompted to enter passphrase to open the LUKS device again.'

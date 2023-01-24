@@ -1197,3 +1197,7 @@ msg_choose_default_param_if_no_idea='If you have no idea, keep the default value
 msg_hint_for_fdisk_beginner='Choose the mode to create the partition table on the target disk: ***ATTENTION***(1) TO CREATE A NEW PARTITION TABLE ON THE TARGET DISK. ALL THE DATA ON THE TARGET DEVICE WILL BE ERASED!!! (2) Clonezilla will not restore an image from a large disk (partition) to a smaller disk (partition). However, it can restore an image from a small disk (partition) to a larger disk (partition).'
 # Tag on 2022/09/27
 msg_hint_for_onthefly_fdisk_beginner='Choose the mode to create the partition table on the target disk: ***ATTENTION***(1) TO CREATE A NEW PARTITION TABLE ON THE TARGET DISK. ALL THE DATA ON THE TARGET DEVICE WILL BE ERASED!!! (2) Clonezilla will not clone a large disk (partition) to a smaller disk (partition). However, it can clone a small disk (partition) to a larger disk (partition).'
+# Tag on 2023/01/24
+msg_failed_to_open_this_luks_dev='Failed to open this LUKS device:'
+msg_do_you_want_to_try_to_open_it_again='Do you want to try to open it again?'
+msg_if_yes_open_luks_again='If yes, you will be prompted to enter passphrase to open the LUKS device again.'
