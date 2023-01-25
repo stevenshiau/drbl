@@ -1986,13 +1986,13 @@ if [ "$mode" = "restore" ]; then
   # remove them on purpose. Since the necessay parameters will be assigned by
   # drbl-ocs (Ex: we use "-y1 -p choose" in drbl-ocs)
   if [ "$ocs_user_mode" = "expert" ]; then
-    # The option "-j2" (clone_hidden_data) should be only enabled when it's in restoredisk mode
+    # The option "-j2" (clone_hidden_data) should be only shown when it's in restoredisk mode
     # Ref: https://sourceforge.net/p/clonezilla/bugs/361/
     case "$mode2_" in 
       restoreparts) 
-	      j2_switch_msg_1=""
-	      j2_switch_msg_2=""
-	      j2_switch_msg_3=""
+	      j2_switch_msg_1="-j2"
+	      j2_switch_msg_2="$(rep_whspc_w_udrsc "$msg_ocs_param_j2")"
+	      j2_switch_msg_3="off"
 	      ;;
       restoredisk)
 	      j2_switch_msg_1="-j2"
