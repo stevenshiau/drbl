@@ -1,3 +1,9 @@
+drbl (5.2.6-drbl1) unstable; urgency=medium
+
+  * Show option "-j2" in the restoreparts menu, default off.
+
+ -- Steven Shiau <steven@clonezilla.org>  Wed, 25 Jan 2023 21:03:03 +0800
+
 drbl (5.2.5-drbl1) unstable; urgency=medium
 
   * drbl-sl: show live version in grub menu.
