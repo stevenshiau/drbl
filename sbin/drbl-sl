@@ -840,7 +840,7 @@ SL_PXE
     fi
     echo "Append the $SL_FULL_NAME config in $GRUB_EFINB_DIR/grub.cfg..."
     cat <<-SL_PXE >> $GRUB_EFINB_DIR/grub.cfg
-menuentry "$SL_NAME $SL_VER (Ramdisk)" --id clonezilla-live-client-${SL_VER} {
+menuentry "$SL_NAME $SL_VER (Ramdisk)" --id clonezilla-live-client {
   # This is Clonezilla live especially to be run for Clonezilla SE.
   # Do _NOT_ edit unless you know what you are doing!
   echo "Enter $SL_FULL_NAME $SL_VER (Ramdisk)..."
