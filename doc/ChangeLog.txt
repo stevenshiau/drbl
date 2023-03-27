@@ -5,6 +5,14 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (5.2.7-drbl1) unstable; urgency=medium
+
+  * drbl.conf: add dvtm & dtach in live packages list.
+  * Merge pull request #27 from kgeorgiy/master
+    Bug: Invalid dialog options for '-p' option
+
+ -- Steven Shiau <steven@clonezilla.org>  Mon, 27 Mar 2023 21:45:45 +0800
+
 drbl (5.2.6-drbl1) unstable; urgency=medium
 
   * Show option "-j2" in the restoreparts menu, default off.
