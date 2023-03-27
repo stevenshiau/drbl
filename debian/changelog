@@ -1,10 +1,19 @@
-drbl (5.2.7-drbl1) unstable; urgency=medium
+drbl (5.2.8-drbl1) unstable; urgency=medium
 
   * drbl.conf: add dvtm & dtach in live packages list.
   * Merge pull request #27 from kgeorgiy/master
     Bug: Invalid dialog options for '-p' option
 
- -- Steven Shiau <steven@clonezilla.org>  Mon, 27 Mar 2023 21:45:45 +0800
+ -- Steven Shiau <steven@clonezilla.org>  Mon, 27 Mar 2023 22:02:22 +0800
+
+drbl (5.2.7-drbl1) unstable; urgency=medium
+
+  * Bug fixed: drbl-sl should not modify grub's "--id", do not append
+    ${SL_VER}. Just leave it as clonezilla-live-client. Program
+    hide_reveal_grub_efi_ent needs it precisely.
+    Thanks to Date Huang for reporting this issue.
+
+ -- Steven Shiau <steven@clonezilla.org>  Sat, 11 Feb 2023 11:54:54 +0800
 
 drbl (5.2.6-drbl1) unstable; urgency=medium
 
