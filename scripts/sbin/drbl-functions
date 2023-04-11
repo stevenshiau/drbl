@@ -1462,7 +1462,7 @@ ocs_advanced_param_post_mode_after_clone() {
   if [ -z "$ocs_postmode" ]; then
     # //NOTE// Extra space is required in the --default-item.
     $DIA --backtitle "$msg_nchc_free_software_labs" --title  \
-    "$msg_clonezilla_advanced_extra_param | $msg_mode: $ocs_mode_prompt"
+    "$msg_clonezilla_advanced_extra_param | $msg_mode: $ocs_mode_prompt" \
     --default-item "-p $default_postaction " \
     --menu "$msg_choose_post_mode_after_clone:" \
     0 0 0 $DIA_ESC \
