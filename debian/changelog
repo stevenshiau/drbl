@@ -1,3 +1,10 @@
+drbl (5.2.9-drbl1) unstable; urgency=medium
+
+  * Bug fixed: missed "\" for the next line in drbl-functions introduced in
+    https://github.com/stevenshiau/drbl/pull/27/commits
+
+ -- Steven Shiau <steven@clonezilla.org>  Tue, 11 Apr 2023 21:29:14 +0800
+
 drbl (5.2.8-drbl1) unstable; urgency=medium
 
   * drbl.conf: add dvtm & dtach in live packages list.
