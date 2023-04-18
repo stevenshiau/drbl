@@ -307,7 +307,15 @@ os_arch="$(LC_ALL=C uname -m)"
 case "$os_arch" in
 	x86_64)    arch_d="x64" ;;
 	i[3456]86) arch_d="x86" ;;
+	*)         arch_d="" ;;
 esac
+if [ -z "$arch_d" ]; then
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+  echo "Not supported OS. This running OS is \"$os_arch\", not x86 architecture." 
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+  echo "Program terminated!"
+  exit 1
+fi
 #
 pt_dev="$(basename $target_part)"  # e.g. sdc1
 hd_dev="$(get_diskname $target_part)"   # e.g. sdc
