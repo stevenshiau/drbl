@@ -1,15 +1,16 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
 Version:	5.2.10
-Release:	drbl1
+Release:	drbl2
 License:	GPL
 Group:		Development/DRBL
 Source0:	drbl-%{version}.tar.xz
 URL:		http://drbl.org
 BuildArch:	noarch
 BuildRoot:	%{_tmppath}/%{name}-%{version}-root
-Requires:	perl, bash
+Requires:	perl, bash, dialog
 Obsoletes:	drbl-gdm, drbl-script, drbl-setup, rh-netinstall, mdk-netinstall, woody-netinstall, memtest86, knoppix-terminalserver
+#BuildRequires:  make
 
 %description
 DRBL (Diskless Remote Boot in Linux).
@@ -43,6 +44,10 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Tue Apr 18 2023 Steven Shiau <steven _at_ clonezilla org> 5.2.10-drbl2
+  * Update drbl.spec for better with rpm.
+    Ref: https://sourceforge.net/p/clonezilla/discussion/Open_discussion/thread/c870bcd449
+
 * Tue Apr 18 2023 Steven Shiau <steven _at_ clonezilla org> 5.2.10-drbl1
   * makeboot.sh: make it run only in x86 arch.
 
@@ -126,7 +131,7 @@ make install DESTDIR=$RPM_BUILD_ROOT/
     were updated, too.
     Ref: https://github.com/stevenshiau/clonezilla/issues/71
 
-* Sat Jun 12 2022 Steven Shiau <steven _at_ clonezilla org> 5.1.9-drbl1
+* Sun Jun 12 2022 Steven Shiau <steven _at_ clonezilla org> 5.1.9-drbl1
   * Add duf, duff and dfc in the live packages list.
 
 * Thu May 26 2022 Steven Shiau <steven _at_ clonezilla org> 5.1.8-drbl1
@@ -514,7 +519,7 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 * Thu Sep 10 2020 Steven Shiau <steven _at_ clonezilla org> 2.33.5-drbl1
   * Update language file about ocs-onthefly's -rvd option.
 
-* Mon Sep 04 2020 Steven Shiau <steven _at_ clonezilla org> 2.33.4-drbl1
+* Fri Sep 04 2020 Steven Shiau <steven _at_ clonezilla org> 2.33.4-drbl1
   * Spain Language files were updated. Thanks to Juan Ramón Martínez.
 
 * Mon Aug 17 2020 Steven Shiau <steven _at_ clonezilla org> 2.33.3-drbl1
@@ -673,10 +678,10 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 * Mon Feb 17 2020 Steven Shiau <steven _at_ clonezilla org> 2.30.30-drbl1
   * Update languge files es_ES. Thanks to Juan Ramón Martínez.
 
-* Tue Jan 24 2020 Steven Shiau <steven _at_ clonezilla org> 2.30.29-drbl1
+* Fri Jan 24 2020 Steven Shiau <steven _at_ clonezilla org> 2.30.29-drbl1
   * To save space, include mtr-tiny instead of mtr in DRBL/Clonezilla live.
 
-* Tue Jan 24 2020 Steven Shiau <steven _at_ clonezilla org> 2.30.28-drbl1
+* Fri Jan 24 2020 Steven Shiau <steven _at_ clonezilla org> 2.30.28-drbl1
   * Add mtr dcfldd iotop to packages list of drbl/clonezilla live.
   * Bug fixed: "$#" not ""$?" in argument test of makeboot.sh.
 
@@ -891,7 +896,7 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 * Fri Jan 11 2019 Steven Shiau <steven _at_ clonezilla org> 2.28.11-drbl1
   * Update language files required for BT deployment from source device. 
 
-* Mon Dec 19 2018 Steven Shiau <steven _at_ clonezilla org> 2.28.10-drbl1
+* Wed Dec 19 2018 Steven Shiau <steven _at_ clonezilla org> 2.28.10-drbl1
   * Adding support for Debian 9.5 and 9.6. This release should be ready for
     Ubuntu 18.10, except the DM should be changed to lightdm instead of gdm3.
 
@@ -905,7 +910,7 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 * Tue Oct 02 2018 Steven Shiau <steven _at_ clonezilla org> 2.28.7-drbl1
   * Add ldmtool to packages list of Clonezilla live.
 
-* Sun Sep 29 2018 Steven Shiau <steven _at_ clonezilla org> 2.28.6-drbl1
+* Sat Sep 29 2018 Steven Shiau <steven _at_ clonezilla org> 2.28.6-drbl1
   * Add network-manager to packages list of Clonezilla live so that user
     can use nmtui to configure network if it's necessary, especially
     for wifi.
@@ -1207,7 +1212,7 @@ make install DESTDIR=$RPM_BUILD_ROOT/
   - Add dnsmasq back to PKG_TO_QUERY in drbl.conf since we have fixed the
     issue that DNS query is not working after dnsmasq is installed.
 
-* Mon Apr 26 2017 Steven Shiau <steven _at_ clonezilla org> 2.24.5-drbl1
+* Wed Apr 26 2017 Steven Shiau <steven _at_ clonezilla org> 2.24.5-drbl1
   - Update language files about device to remote device cloning.
 
 * Sun Apr 23 2017 Steven Shiau <steven _at_ clonezilla org> 2.24.4-drbl1
@@ -1393,7 +1398,7 @@ make install DESTDIR=$RPM_BUILD_ROOT/
   * Define LOCAL_EFI_BOOT_GRUB_CFG in drbl-functions and use it both in
     gen-grub-efi-nb-menu and ocs-live-boot-menu.
 
-* Sat Nov 27 2016 Steven Shiau <steven _at_ clonezilla org> 2.23.3-drbl1
+* Sun Nov 27 2016 Steven Shiau <steven _at_ clonezilla org> 2.23.3-drbl1
   - Skip installing package "init" for Debian Wheezy when running
     "drblsrv -i".
     Thanks to Peter Brisson for reporting this issue:
@@ -1417,7 +1422,7 @@ make install DESTDIR=$RPM_BUILD_ROOT/
     Add rpc-statd in client_services_chklist.
   - Add packages sysstat and iftop in the clonezilla/drbl live packages
     list.
-* Mon Nov 01 2016 Steven Shiau <steven _at_ clonezilla org> 2.22.6-drbl1
+* Tue Nov 01 2016 Steven Shiau <steven _at_ clonezilla org> 2.22.6-drbl1
   - Add a mechanism to check if selinux enabled or not in RH-like system.
   - Language files updated for selinux checking description.
   - Language file ca_ES was updated. Thanks to René Mérou.
@@ -1643,7 +1648,7 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 * Tue Mar 29 2016 Steven Shiau <steven _at_ clonezilla org> 2.19.15-drbl1
 - Add GNU/Linux distribution network installation for uEFI network boot clients.
 
-* Tue Mar 21 2016 Steven Shiau <steven _at_ clonezilla org> 2.19.14-drbl1
+* Mon Mar 21 2016 Steven Shiau <steven _at_ clonezilla org> 2.19.14-drbl1
 - Add "exit" option parallel to the beginner/expert selection.
 
 * Mon Mar 14 2016 Steven Shiau <steven _at_ clonezilla org> 2.19.13-drbl1
@@ -2338,7 +2343,7 @@ an issue: https://github.com/s3fs-fuse/s3fs-fuse/issues/166
 * Sat Apr 12 2014 Steven Shiau <steven _at_ clonezilla org> 2.8.9-drbl1
 - Unmounting bind directory under /tftpboot/ if it exists. Otherwise when running "drblsrv -u", it might clean the bind source dir on system.
 
-* Tue Apr 03 2014 Steven Shiau <steven _at_ clonezilla org> 2.8.8-drbl1
+* Thu Apr 03 2014 Steven Shiau <steven _at_ clonezilla org> 2.8.8-drbl1
 - Bug fixed: Mageia's path for vmlinuz and initrd were changed. The corresponding changes were done in drbl-netinstall.
 - The version of netinstall in drbl.conf was updated.
 
@@ -2346,7 +2351,7 @@ an issue: https://github.com/s3fs-fuse/s3fs-fuse/issues/166
 - Bug fixed: drbl-prepare-pxelinux failed to copy correct *.c32 of bios to /tftpboot/nbi_img/. It caused amd64 system failed to boot via pxelinux, isolinux or syslinux.
 - An option "-v" was added to drbl-prepare-pxelinux for verbose output.
 
-* Sun Mar 29 2014 Steven Shiau <steven _at_ clonezilla org> 2.8.6-drbl1
+* Sat Mar 29 2014 Steven Shiau <steven _at_ clonezilla org> 2.8.6-drbl1
 - Bug fixed: drbl-sl failed to detect iso file for file package >=5.17.
 
 * Wed Mar 26 2014 Steven Shiau <steven _at_ clonezilla org> 2.8.5-drbl1
@@ -2435,7 +2440,7 @@ an issue: https://github.com/s3fs-fuse/s3fs-fuse/issues/166
 * Tue Jan 28 2014 Steven Shiau <steven _at_ clonezilla org> 2.7.22-drbl1
 - Program makeboot.sh was improved. The directory "/syslinux" on the destination partition should be checked. If it does not exist, we should create it. Thanks to Ady (ady-sf _at_ hotmail com) for this suggestion.
 
-* Sun Jan 20 2014 Steven Shiau <steven _at_ clonezilla org> 2.7.21-drbl1
+* Mon Jan 20 2014 Steven Shiau <steven _at_ clonezilla org> 2.7.21-drbl1
 - Function put_syslinux_makeboot_for_usb_flash in drbl-functions and drbl-sl have been updated corresponding to the unification of syslinux and isolinux dirs in the Clonezilla/DRBL/GParted live iso and zip.
 - A dir "/utils/win64" was added to be used to run syslinux in Win64 env.
 - An option "-d syslinux" was added when running syslinux in makeboot.sh/makeboot.bat/makeboot64.bat. Thanks to Ady (ady-sf _at_ hotmail com) for this suggestion.
@@ -2489,14 +2494,14 @@ an issue: https://github.com/s3fs-fuse/s3fs-fuse/issues/166
 * Tue Dec 10 2013 Steven Shiau <steven _at_ clonezilla org> 2.7.6-drbl1
 - One more sentence about ocs-cvtimg-comp was added in language files.
 
-* Mon Dec 08 2013 Steven Shiau <steven _at_ clonezilla org> 2.7.5-drbl1
+* Sun Dec 08 2013 Steven Shiau <steven _at_ clonezilla org> 2.7.5-drbl1
 - Language files were updated by adding some sentences related to ocs-cvtimg-comp.
 
-* Mon Dec 08 2013 Steven Shiau <steven _at_ clonezilla org> 2.7.4-drbl1
+* Sun Dec 08 2013 Steven Shiau <steven _at_ clonezilla org> 2.7.4-drbl1
 - Language files were updated by adding some sentences related to ocs-cvtimg-comp.
 - Comments were added in drbl-functions.
 
-* Mon Dec 08 2013 Steven Shiau <steven _at_ clonezilla org> 2.7.3-drbl1
+* Sun Dec 08 2013 Steven Shiau <steven _at_ clonezilla org> 2.7.3-drbl1
 - Language files were updated by adding some sentences related to ocs-cvtimg-comp.
 
 * Sat Dec 07 2013 Steven Shiau <steven _at_ clonezilla org> 2.7.2-drbl1
@@ -2805,7 +2810,7 @@ an issue: https://github.com/s3fs-fuse/s3fs-fuse/issues/166
 * Thu Feb 21 2013 Steven Shiau <steven _at_ clonezilla org> 2.3.8-drbl1
 - Language file zh_CN was updated. Thanks to Zhiqiang Zhang.
 
-* Wed Feb 21 2013 Steven Shiau <steven _at_ clonezilla org> 2.3.7-drbl1
+* Thu Feb 21 2013 Steven Shiau <steven _at_ clonezilla org> 2.3.7-drbl1
 - Language file ca_ES was updated. Thanks to René Mérou.
 - Language file fr_FR was updated. Thanks to Jean-Francois Nifenecker.
 - Language file it_IT was updated. Thanks to Gianfranco Gentili.
@@ -3122,17 +3127,17 @@ an issue: https://github.com/s3fs-fuse/s3fs-fuse/issues/166
 * Sun Jun 17 2012 Steven Shiau <steven _at_ clonezilla org> 1.12.12-1drbl
 - Environmental ADDRFAM=inet was added in start-srv-after-ifup so that mountnfs in if-up.d/ will be run.
 
-* Thu Jun 12 2012 Steven Shiau <steven _at_ clonezilla org> 1.12.11-1drbl
+* Tue Jun 12 2012 Steven Shiau <steven _at_ clonezilla org> 1.12.11-1drbl
 - Package ddrescue was removed from the packages list of Clonezilla live because it's no more in Debian Sid, and we already have gddrescue. Ref: http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=677101
 
-* Thu Jun 12 2012 Steven Shiau <steven _at_ clonezilla org> 1.12.10-1drbl
+* Tue Jun 12 2012 Steven Shiau <steven _at_ clonezilla org> 1.12.10-1drbl
 - Updating Fedora netinstall as 17 in drbl.conf.
 - Updating function output_netinstall_syslinux_pxelinux_menu in drbl-functions so that Fedora 17 netinstall boot parameter inst.repo could be generated.
 
 * Thu May 24 2012 Steven Shiau <steven _at_ clonezilla org> 1.12.9-1drbl
 - Language file zh_CN was updated. Thanks to Zhiqiang Zhang.
 
-* Mon May 18 2012 Steven Shiau <steven _at_ clonezilla org> 1.12.8-1drbl
+* Fri May 18 2012 Steven Shiau <steven _at_ clonezilla org> 1.12.8-1drbl
 - Language file fr_FR was updated. Thanks to Jean-Francois Nifenecker.
 - Language file de_DE was updated. Thanks to Michael Vinzenz.
 
@@ -3196,7 +3201,7 @@ an issue: https://github.com/s3fs-fuse/s3fs-fuse/issues/166
 * Sun Mar 11 2012 Steven Shiau <steven _at_ clonezilla org> 1.11.7-1drbl
 - Bug fixed: regular expression in  list_available_rpm was fixed.
 
-* Fri Mar 10 2012 Steven Shiau <steven _at_ clonezilla org> 1.11.6-1drbl
+* Sat Mar 10 2012 Steven Shiau <steven _at_ clonezilla org> 1.11.6-1drbl
 - Forcing drbl-prepare-pxelinux to be run in drblsrv-offline if gpxelinux.0 is not found. Thanks to Tomas Moler for reporting this issue.
 
 * Thu Mar 01 2012 Steven Shiau <steven _at_ clonezilla org> 1.11.5-1drbl
@@ -3377,7 +3382,7 @@ an issue: https://github.com/s3fs-fuse/s3fs-fuse/issues/166
 - The dir /dev/shm of the DRBL client is created with mode 1777. The makes Google Chrome can run.
 - The tmpfs dirs (/dev/pts, /dev/shm, /sys, /proc) are shown in DRBL client's /etc/fstab.
 
-* Wed Sep 29 2011 Steven Shiau <steven _at_ clonezilla org> 1.10.47-1drbl
+* Thu Sep 29 2011 Steven Shiau <steven _at_ clonezilla org> 1.10.47-1drbl
 - Bug fixed: tmpfs file systems should not be umounted in boot.localfs of OpenSuSE 11.3.
 
 * Mon Sep 26 2011 Steven Shiau <steven _at_ clonezilla org> 1.10.46-1drbl
@@ -3668,7 +3673,7 @@ an issue: https://github.com/s3fs-fuse/s3fs-fuse/issues/166
 * Fri Feb 18 2011 Steven Shiau <steven _at_ clonezilla org> 1.9.9-1
 - An option to check if the image is restorable was added in the wizard.
 
-* Wed Feb 17 2011 Steven Shiau <steven _at_ clonezilla org> 1.9.8-29
+* Thu Feb 17 2011 Steven Shiau <steven _at_ clonezilla org> 1.9.8-29
 - Bug fixed: in dcs, the shutdown command for DRBL clients was reboot.
 
 * Wed Feb 16 2011 Steven Shiau <steven _at_ clonezilla org> 1.9.8-28
@@ -3905,7 +3910,7 @@ an issue: https://github.com/s3fs-fuse/s3fs-fuse/issues/166
 - Language files fr_FR was updated. Thanks to Jean Francois Martinez <jfm512 _at_ free fr>
 - Language file es_ES of perl was updated. Thanks to Juan Ramón Martínez.
 
-* Sat Jun 27 2010 Steven Shiau <steven _at_ clonezilla org> 1.9.6-34
+* Sun Jun 27 2010 Steven Shiau <steven _at_ clonezilla org> 1.9.6-34
 - Put package drbl-ntfsprogs only for DRBL, not for Clonezilla live, since for Clonezilla live, it's better to use ntfsprogs, otherwise the 32-bit drbl-ntfsprogs won't work in pure amd64 Clonezilla live.
 
 * Sun Jun 27 2010 Steven Shiau <steven _at_ clonezilla org> 1.9.6-33
@@ -3926,7 +3931,7 @@ an issue: https://github.com/s3fs-fuse/s3fs-fuse/issues/166
 * Wed Jun 23 2010 Steven Shiau <steven _at_ clonezilla org> 1.9.6-29
 - By default "nomodeset" is used in the boot parameters.
 
-* Tue Jun 21 2010 Steven Shiau <steven _at_ clonezilla org> 1.9.6-28
+* Mon Jun 21 2010 Steven Shiau <steven _at_ clonezilla org> 1.9.6-28
 - Program mkswapfile was modified to be started in runlevel 2 for insserv.
 
 * Fri Jun 18 2010 Steven Shiau <steven _at_ clonezilla org> 1.9.6-27
@@ -4224,7 +4229,7 @@ an issue: https://github.com/s3fs-fuse/s3fs-fuse/issues/166
 * Mon Dec 14 2009 Steven Shiau <steven _at_ clonezilla org> 1.9.5-26
 - Comment was added in drbl.conf.
 
-* Wed Dec 08 2009 Steven Shiau <steven _at_ clonezilla org> 1.9.5-25
+* Tue Dec 08 2009 Steven Shiau <steven _at_ clonezilla org> 1.9.5-25
 - Package pbbuttonsd, which provides program "run-parts", was added to the required packages list in SuSE.
 
 * Mon Dec 07 2009 Steven Shiau <steven _at_ clonezilla org> 1.9.5-24
@@ -4331,7 +4336,7 @@ an issue: https://github.com/s3fs-fuse/s3fs-fuse/issues/166
 - RELEASE-NOTES was updated.
 - New upstream syslinux 3.83.
 
-* Tue Oct 07 2009 Steven Shiau <steven _at_ clonezilla org> 1.9.4-67
+* Wed Oct 07 2009 Steven Shiau <steven _at_ clonezilla org> 1.9.4-67
 - The patched "rc-sysinit.conf" for Ubuntu 9.10 was updated.
 
 * Fri Oct 02 2009 Steven Shiau <steven _at_ clonezilla org> 1.9.4-66
@@ -4912,7 +4917,7 @@ an issue: https://github.com/s3fs-fuse/s3fs-fuse/issues/166
 - An option was added: --dump-mbr-in-the-end. This option allows us to use dd to dump the MBR (total 512 bytes, i.e. 446 bytes (executable code area) + 64 bytes (table of primary partitions) + 2 bytes (MBR signature; # 0xAA55) = 512 bytes) _after_ disk image was restored. This is an insurance for some hard drive has different numbers of cylinder, head and sector between image was saved and restored."
 - Language files updated.
 
-* Sat Oct 05 2008 Steven Shiau <steven _at_ clonezilla org> 1.9.1-32
+* Sun Oct 05 2008 Steven Shiau <steven _at_ clonezilla org> 1.9.1-32
 - davfs2 was removed in the clonezilla live list, since it is not suitable for larger file transfer. The cache mechanism is the key problem (ref: https://sourceforge.net/forum/forum.php?thread_id=2248597&forum_id=82589). Thanks to Louie Chen.
 
 * Wed Oct 01 2008 Steven Shiau <steven _at_ clonezilla org> 1.9.1-31
@@ -4988,10 +4993,10 @@ an issue: https://github.com/s3fs-fuse/s3fs-fuse/issues/166
 - Language files updated.
 - Add option to run boinc command always in drbl-live-boinc.
 
-* Sun Aug 30 2008 Steven Shiau <steven _at_ clonezilla org> 1.9.1-10
+* Sat Aug 30 2008 Steven Shiau <steven _at_ clonezilla org> 1.9.1-10
 - Bug fixed: gateway was assigned wrong one in dhcpd.conf when there are 2 NICs.
 
-* Sun Aug 30 2008 Steven Shiau <steven _at_ clonezilla org> 1.9.1-9
+* Sat Aug 30 2008 Steven Shiau <steven _at_ clonezilla org> 1.9.1-9
 - Bug fixed: force to set the mac address as lowercase in drbl-aoe-img-dump.
 - A function parse_cmdline_option was added in drbl-function.
 
@@ -5496,10 +5501,10 @@ an issue: https://github.com/s3fs-fuse/s3fs-fuse/issues/166
 - Language files updated.
 - Polish drblpush and some for Ubuntu 8.04.
 
-* Sun Jan 05 2008 Steven Shiau <steven _at_ clonezilla org> 1.8.2-19
+* Sat Jan 05 2008 Steven Shiau <steven _at_ clonezilla org> 1.8.2-19
 - A variable PKG_FROM_DRBL_INSTALLED_IN_SYSTEM was added in drbl.conf.
 
-* Sun Jan 05 2008 Steven Shiau <steven _at_ clonezilla org> 1.8.2-18
+* Sat Jan 05 2008 Steven Shiau <steven _at_ clonezilla org> 1.8.2-18
 - An experimental option -q2 for clonezilla was added (Priority: ntfsclone, partclone > partimage > dd), therefore drbl-functions was updated.
 - Language files updated.
 - partclone was added in PKG_FROM_DRBL in drbl.conf.
@@ -6138,7 +6143,7 @@ an issue: https://github.com/s3fs-fuse/s3fs-fuse/issues/166
 * Mon Apr 02 2007 Steven Shiau <steven _at_ clonezilla org> 1.7.10-2
 - update generate-pxe-menu, for FC 4 and later, no more ramdisk_size.
 
-* Thu Mar 24 2007 Steven Shiau <steven _at_ clonezilla org> 1.7.10-1
+* Sat Mar 24 2007 Steven Shiau <steven _at_ clonezilla org> 1.7.10-1
 - update generate-pxe-menu for Ubuntu Feisty, which uses initramfs so ramdisk_size is no more.
 - update language files.
 - bug fixed: drblpush is not able to change mode in pxelinux.cfg/default when system already is in DRBL SSI/Clonezilla box mode.
@@ -6292,7 +6297,7 @@ an issue: https://github.com/s3fs-fuse/s3fs-fuse/issues/166
 - update language file, avoiding some annoying Big5 characters.
 - new upstream syslinux-3.35.
 
-* Tue Jan 26 2007 Steven Shiau <steven _at_ clonezilla org> 1.7.9-37
+* Fri Jan 26 2007 Steven Shiau <steven _at_ clonezilla org> 1.7.9-37
 - add isolinux_file="$pxelinux_binsrc_dir/isolinux.bin" and isolinux_bg_img="$pxelinux_binsrc_dir/ocslogo.png" in drbl.conf
 - language set can use zh_TW.BIG5 or zh_TW.UTF-8.
 - update language files.
@@ -6646,7 +6651,7 @@ an issue: https://github.com/s3fs-fuse/s3fs-fuse/issues/166
 - depmod uses -b /tftpboot/node_root instead of chroot.
 - add comment in drbl-function for create_depmod_env and clean_depmod_env
 
-* Fri Nov 02 2006 Steven Shiau <steven _at_ clonezilla org> 1.7.6-22
+* Thu Nov 02 2006 Steven Shiau <steven _at_ clonezilla org> 1.7.6-22
 - do not copy /etc/selinux/targetd to client, since selinux is disabled in client, this will save about 40 MB space for each client in FC6.
 
 * Thu Nov 02 2006 Steven Shiau <steven _at_ clonezilla org> 1.7.6-21
@@ -7172,7 +7177,7 @@ from drblsrv to drblpush.
 - add function countdown.
 - add "-p true" in dcs.
 
-* Wed May 8 2006 Steven Shiau <steven _at_ clonezilla org> 1.6.3-21
+* Mon May 8 2006 Steven Shiau <steven _at_ clonezilla org> 1.6.3-21
 - bug fixed, $KDE_CFG now can be found correctly in OpenSuSE 10.0.
 
 * Sun May 7 2006 Steven Shiau <steven _at_ clonezilla org> 1.6.3-20
@@ -7624,7 +7629,7 @@ test it before create it.
 - check if kernel 2.6 is running in sarge.
 - add nc or netcat package as a necessary package for ocs-onthefly.
 
-* Wed Nov 11 2005 Steven Shiau <steven _at_ clonezilla org> 1.5.5-12
+* Fri Nov 11 2005 Steven Shiau <steven _at_ clonezilla org> 1.5.5-12
 - fixed some comment typos.
 
 * Wed Nov 09 2005 Steven Shiau <steven _at_ clonezilla org> 1.5.5-11
@@ -7770,7 +7775,7 @@ test it before create it.
 - Suport CentOS 4.1.
 - We should check CentOS-Base.repo not CentOS-Base for yum in CentOS
 
-* Sat Oct 07 2005 Steven Shiau <steven _at_ clonezilla org> 1.5.3-33
+* Fri Oct 07 2005 Steven Shiau <steven _at_ clonezilla org> 1.5.3-33
 - add option for -z0/-z1/-z2 in dcs.
 
 * Fri Oct 07 2005 Steven Shiau <steven _at_ clonezilla org> 1.5.3-32
@@ -8080,7 +8085,7 @@ test it before create it.
 * Sun Jun 19 2005 Steven Shiau <steven _at_ clonezilla org> 1.3.11-7
 - forgot to add add OS_version in remote-linux of dcs, added that.
 
-* Fri Jun 16 2005 Steven Shiau <steven _at_ clonezilla org> 1.3.11-6
+* Thu Jun 16 2005 Steven Shiau <steven _at_ clonezilla org> 1.3.11-6
 - fix the halt bug in FC4.
 - add OS_version so that dcs will show OS_Version in pxelinux's default.
 - check yum repository before using it.
@@ -8102,7 +8107,7 @@ test it before create it.
 * Tue Jun 14 2005 Steven Shiau <steven _at_ clonezilla org> 1.3.11-1
 - initial release for FC4.
 
-* Fri Jun 11 2005 Steven Shiau <steven _at_ clonezilla org> 1.3.10-36
+* Sat Jun 11 2005 Steven Shiau <steven _at_ clonezilla org> 1.3.10-36
 - fix a bug for no menus in MDK 10.2 clients, now add /var/lib/menu /var/lib/menu-xdg for MDK 10.2
 
 * Fri Jun 10 2005 Steven Shiau <steven _at_ clonezilla org> 1.3.10-35
@@ -8275,25 +8280,25 @@ test it before create it.
 * Sun Apr 10 2005 Steven Shiau <steven _at_ clonezilla org> 1.3.9-8
 - move language files to /opt/drbl/conf
 
-* Tue Apr 7 2005 Steven Shiau <steven _at_ clonezilla org> 1.3.9-7
+* Thu Apr 7 2005 Steven Shiau <steven _at_ clonezilla org> 1.3.9-7
 - update the boot hints in drblpush.
 
-* Tue Apr 7 2005 Steven Shiau <steven _at_ clonezilla org> 1.3.9-6
+* Thu Apr 7 2005 Steven Shiau <steven _at_ clonezilla org> 1.3.9-6
 - update the boot hints in drblpush.
 
-* Tue Apr 7 2005 Steven Shiau <steven _at_ clonezilla org> 1.3.9-5
+* Thu Apr 7 2005 Steven Shiau <steven _at_ clonezilla org> 1.3.9-5
 - update some echo.
 
-* Tue Apr 7 2005 Steven Shiau <steven _at_ clonezilla org> 1.3.9-4
+* Thu Apr 7 2005 Steven Shiau <steven _at_ clonezilla org> 1.3.9-4
 - add code to change PXE menu label when mode drbl is switch to clonezilla.
 
-* Mon Apr 6 2005 Steven Shiau <steven _at_ clonezilla org> 1.3.9-3
+* Wed Apr 6 2005 Steven Shiau <steven _at_ clonezilla org> 1.3.9-3
 - remove the code for generate fdos.nbi since etherboot 5.4.0 is released. No more *.nbi.
 
-* Mon Apr 6 2005 Steven Shiau <steven _at_ clonezilla org> 1.3.9-2
+* Wed Apr 6 2005 Steven Shiau <steven _at_ clonezilla org> 1.3.9-2
 - bug fixed for wrong url path.
 
-* Mon Apr 6 2005 Steven Shiau <steven _at_ clonezilla org> 1.3.9-1
+* Wed Apr 6 2005 Steven Shiau <steven _at_ clonezilla org> 1.3.9-1
 - make drblsrv and work without setting up yum/apt/urpmi repository
 - add CentOS4 support.
 - update rc.sysinit.FC3.drbl and rc.sysinit.default-RH.drbl since rc.sysinit in FC3 is updated.
@@ -8465,7 +8470,7 @@ test it before create it.
 * Sun Feb 6 2005 Steven Shiau <steven _at_ clonezilla org> 1.3.6-12
 - initial release for Mandrake Linux 10.1.
 
-* Thu Feb 2 2005 Steven Shiau <steven _at_ clonezilla org> 1.3.6-11
+* Wed Feb 2 2005 Steven Shiau <steven _at_ clonezilla org> 1.3.6-11
 - the hostname of client will use "_" instead of "-"
 - add code to delete the empty line and those comment line of MAC address file.
 - add ddrescue isntallation.
@@ -8635,10 +8640,10 @@ test it before create it.
 * Thu Nov 11 2004 Steven Shiau <steven _at_ clonezilla org> 1.3.2-3
 - add diskless.nchc.org.tw as one of the repository.
 
-* Fri Nov 6 2004 Steven Shiau <steven _at_ clonezilla org> 1.3.2-2drbl
+* Sat Nov 6 2004 Steven Shiau <steven _at_ clonezilla org> 1.3.2-2drbl
 - no more drbl kernel search, use regular kernel from distributions.
 
-* Fri Nov 6 2004 Steven Shiau <steven _at_ clonezilla org> 1.3.2-1drbl
+* Sat Nov 6 2004 Steven Shiau <steven _at_ clonezilla org> 1.3.2-1drbl
 - move stop_ocs_if_necessar() from drbl-ocs to drbl-functions.
 - add active_proc_partitions().
 
@@ -8651,13 +8656,13 @@ test it before create it.
 * Tue Nov 2 2004 Steven Shiau <steven _at_ clonezilla org> 1.3.1-1drbl
 - write and move more functions from drbl-ocs to drbl-functions.
 
-* Fri Oct 30 2004 Steven Shiau <steven _at_ clonezilla org> 1.3-1drbl
+* Sat Oct 30 2004 Steven Shiau <steven _at_ clonezilla org> 1.3-1drbl
 - Rewrite the program, add /opt/drbl/conf/drbl.conf, /opt/drbl/sbin/drbl-functions and /opt/drbl/sbin/drbl-perl-functions
 
 * Sun Oct 17 2004 Steven Shiau <steven _at_ clonezilla org> 1.2-10drbl
 - Use "rsync -a -u" to update files for clients, so now it's not necessary to reboot clients when run "drblpush -i" and select keep the setting. The sshd and other auth mechanism still work without rebooting.
 
-* Sat Oct 11 2004 Steven Shiau <steven _at_ clonezilla org> 1.2-9drbl
+* Mon Oct 11 2004 Steven Shiau <steven _at_ clonezilla org> 1.2-9drbl
 - add LC_ALL=C to ` ` in drblpush, thanks to Abdellah Soubaa from France for providing the envorinment to test.
 
 * Sat Oct 9 2004 Steven Shiau <steven _at_ clonezilla org> 1.2-8drbl
@@ -8761,16 +8766,16 @@ and clients can use same version kernel but different archi.
 * Tue Jun 01 2004 Steven Shiau <steven _at_ clonezilla org> 1.0-26drbl
 - add /var/spool/mail for client to use, now user in clent can access his/her email by using mutt.
 
-* Thu May 28 2004 Steven Shiau <steven _at_ clonezilla org> 1.0-25drbl
+* Fri May 28 2004 Steven Shiau <steven _at_ clonezilla org> 1.0-25drbl
 - touch the drbl client template: /tftpboot/node_root/etc/modules.conf
 
-* Thu May 28 2004 Steven Shiau <steven _at_ clonezilla org> 1.0-24drbl
+* Fri May 28 2004 Steven Shiau <steven _at_ clonezilla org> 1.0-24drbl
 - fix the bug, we need to add yppasswdd ypxfrd to chkconfig --add for server. 
 
-* Thu May 21 2004 Steven Shiau <steven _at_ clonezilla org> 1.0-23drbl
+* Fri May 21 2004 Steven Shiau <steven _at_ clonezilla org> 1.0-23drbl
 - no more the fuzzy description of the last set of digits in the IP address....
 
-* Thu May 21 2004 Steven Shiau <steven _at_ clonezilla org> 1.0-22drbl
+* Fri May 21 2004 Steven Shiau <steven _at_ clonezilla org> 1.0-22drbl
 - user can specify the apt repository by himself in MDK (drblsrv-mdk).
 
 * Tue May 11 2004 Steven Shiau <steven _at_ clonezilla org> 1.0-21drbl
@@ -8786,16 +8791,16 @@ and clients can use same version kernel but different archi.
 * Sun May 02 2004 Steven Shiau <steven _at_ clonezilla org> 1.0-18drbl
 - fix the bug when checking alias public IP address, 0 and 255 can not only be the first and last digit.
 
-* Tue Apr 21 2004 Steven Shiau <steven _at_ clonezilla org> 1.0-17drbl
+* Wed Apr 21 2004 Steven Shiau <steven _at_ clonezilla org> 1.0-17drbl
 - recompiled.
 
-* Tue Apr 18 2004 Steven Shiau <steven _at_ clonezilla org> 1.0-16drbl
+* Sun Apr 18 2004 Steven Shiau <steven _at_ clonezilla org> 1.0-16drbl
 - it's cdialog and reiserfsprogs in MDK, not dialog and resierfs-utils
 
-* Tue Apr 18 2004 Steven Shiau <steven _at_ clonezilla org> 1.0-15drbl
+* Sun Apr 18 2004 Steven Shiau <steven _at_ clonezilla org> 1.0-15drbl
 - add code to detect if apt is compatible with DRBL in drblsrv-mdk
 
-* Tue Apr 17 2004 Steven Shiau <steven _at_ clonezilla org> 1.0-14drbl
+* Sat Apr 17 2004 Steven Shiau <steven _at_ clonezilla org> 1.0-14drbl
 - add -o RPM::Hold::="apt" when use apt-get upgrade in drblsrv-mdk.sh
 
 * Tue Apr 13 2004 Steven Shiau <steven _at_ clonezilla org> 1.0-13drbl
@@ -8832,8 +8837,8 @@ and clients can use same version kernel but different archi.
 * Sun Apr 04 2004 Steven Shiau <steven _at_ clonezilla org> 1.0-3drbl
 - Fix bug for drblsrv-mdk, we need to add $drbl_setup_path for dev path.
 
-* Sun Apr 02 2004 Steven Shiau <steven _at_ clonezilla org> 1.0-2drbl
+* Fri Apr 02 2004 Steven Shiau <steven _at_ clonezilla org> 1.0-2drbl
 - Fix typos in lang/perl/tw.Big5, and add more directories in /var/lib for clients.
 
-* Sat Apr 01 2004 Steven Shiau <steven _at_ clonezilla org> 1.0-1drbl
+* Thu Apr 01 2004 Steven Shiau <steven _at_ clonezilla org> 1.0-1drbl
 - Write drbl setup scripts as rpm package, first release.
