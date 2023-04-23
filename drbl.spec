@@ -1,7 +1,7 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
 Version:	5.2.10
-Release:	drbl2
+Release:	drbl3
 License:	GPL
 Group:		Development/DRBL
 Source0:	drbl-%{version}.tar.xz
@@ -10,7 +10,9 @@ BuildArch:	noarch
 BuildRoot:	%{_tmppath}/%{name}-%{version}-root
 Requires:	perl, bash, dialog
 Obsoletes:	drbl-gdm, drbl-script, drbl-setup, rh-netinstall, mdk-netinstall, woody-netinstall, memtest86, knoppix-terminalserver
-#BuildRequires:  make
+%if 0%{?fedora} >= 37
+BuildRequires:  make
+%endif
 
 %description
 DRBL (Diskless Remote Boot in Linux).
