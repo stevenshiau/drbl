@@ -69,14 +69,18 @@ shorten_memtest_filename() {
   # memtest86+.bin -> mt86+x32.mbr
   # memtest86+x32.bin -> mt86+x32.mbr
   # memtest86+x32.efi -> mt86+x32.efi
+  # memtest86+ia32.bin -> mt86+x32.mbr
+  # memtest86+ia32.efi -> mt86+x32.efi
   # memtest86+x64.bin -> mt86+x64.mbr
   # memtest86+x64.efi -> mt86+x64.efi
   case "$inp_fn" in
-    memtest86+.bin)    echo mt86+x32.mbr;;
-    memtest86+x32.bin) echo mt86+x32.mbr;;
-    memtest86+x32.efi) echo mt86+x32.efi;;
-    memtest86+x64.bin) echo mt86+x64.mbr;;
-    memtest86+x64.efi) echo mt86+x64.efi;;
+    memtest86+.bin)     echo mt86+x32.mbr;;
+    memtest86+x32.bin)  echo mt86+x32.mbr;;
+    memtest86+x32.efi)  echo mt86+x32.efi;;
+    memtest86+ia32.bin) echo mt86+x32.mbr;;
+    memtest86+ia32.efi) echo mt86+x32.efi;;
+    memtest86+x64.bin)  echo mt86+x64.mbr;;
+    memtest86+x64.efi)  echo mt86+x64.efi;;
   esac
 } # end of shorten_memtest_filename
 #
@@ -90,9 +94,11 @@ put_distribution_memtest() {
   if $query_pkglist_exist_cmd memtest86+ &>/dev/null; then
      # Found on the system
      # For Redhat-like system, there might return more than one file on a system, i.e. one file belongs to 2 rpm packages.
-     # 2022/11/23 On Debian, memtest86+ v6 is available:
+     # 2022/11/23, 2023/05/17 On Debian, memtest86+ v6 is available:
      # /boot/memtest86+x32.bin
      # /boot/memtest86+x32.efi
+     # /boot/memtest86+ia32.bin (For newer package)
+     # /boot/memtest86+ia32.efi (For newer package)
      # /boot/memtest86+x64.bin
      # /boot/memtest86+x64.efi
      # While for memtest86+ <= v5, the file is:
@@ -106,6 +112,8 @@ put_distribution_memtest() {
      # memtest86+.bin -> mt86+x32.mbr
      # memtest86+x32.bin -> mt86+x32.mbr
      # memtest86+x32.efi -> mt86+x32.efi
+     # memtest86+ia32.bin -> mt86+x32.mbr
+     # memtest86+ia32.efi -> mt86+x32.efi
      # memtest86+x64.bin -> mt86+x64.mbr
      # memtest86+x64.efi -> mt86+x64.efi
 
@@ -114,6 +122,8 @@ put_distribution_memtest() {
      # For memtest >= v6.0
      memtest_x32_bin="$(LC_ALL=C $query_pkglist_cmd memtest86+ | grep -Ew "^/boot/memtest86\+x32\.bin" | sort | head -n 1)"
      memtest_x32_efi="$(LC_ALL=C $query_pkglist_cmd memtest86+ | grep -Ew "^/boot/memtest86\+x32\.efi" | sort | head -n 1)"
+     memtest_x32_bin="$(LC_ALL=C $query_pkglist_cmd memtest86+ | grep -Ew "^/boot/memtest86\+ia32\.bin" | sort | head -n 1)"
+     memtest_x32_efi="$(LC_ALL=C $query_pkglist_cmd memtest86+ | grep -Ew "^/boot/memtest86\+ia32\.efi" | sort | head -n 1)"
      memtest_x64_bin="$(LC_ALL=C $query_pkglist_cmd memtest86+ | grep -Ew "^/boot/memtest86\+x64\.bin" | sort | head -n 1)"
      memtest_x64_efi="$(LC_ALL=C $query_pkglist_cmd memtest86+ | grep -Ew "^/boot/memtest86\+x64\.efi" | sort | head -n 1)"
      for im in $memtest_bin $memtest_x32_bin $memtest_x32_efi $memtest_x64_bin $memtest_x64_efi; do
