@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	5.2.11
+Version:	5.2.12
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -46,6 +46,10 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Wed May 18 2023 Steven Shiau <steven _at_ clonezilla org> 5.2.12-drbl1
+  * drbl-prepare-memtest: Adopt new file name for memtest86+ia32.*.
+    It was emtest86+x32.*.
+
 * Sun May 07 2023 Steven Shiau <steven _at_ clonezilla org> 5.2.11-drbl1
   * Allow choosing NIC in lite server mode when multiple network cards exist.
     Thanks to Date Huang and Nate Carr for asking this.
