@@ -724,8 +724,11 @@ turn_on_hd_dma() {
 } # end of turn_on_hd_dma
 
 # do not let screen be blank
+#
 screen_not_blank() {
+  if [ "$ocs_screen_blank" != "no" ]; then
     setterm --blank 0 --powersave off 2>/dev/null
+  fi
 }
 
 # set passwd login for single user mode
