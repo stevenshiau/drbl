@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	5.2.13
+Version:	5.2.14
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -46,6 +46,11 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Thu Jun 08 2023 Steven Shiau <steven _at_ clonezilla org> 5.2.14-drbl1
+  * drbl-functions: screen_not_blank honors the variable ocs_screen_blank.
+    When ocs_screen_blank="no" is assigned in the boot parameters,
+    it won't run.
+
 * Thu Jun 08 2023 Steven Shiau <steven _at_ clonezilla org> 5.2.13-drbl1
   * Add packages zfsutils-linux in the packages list of Clonezilla live.
 
