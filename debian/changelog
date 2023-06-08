@@ -1,3 +1,9 @@
+drbl (5.2.13-drbl1) unstable; urgency=medium
+
+  * Add packages zfsutils-linux in the packages list of Clonezilla live.
+
+ -- Steven Shiau <steven@clonezilla.org>  Thu, 08 Jun 2023 20:01:37 +0800
+
 drbl (5.2.12-drbl1) unstable; urgency=medium
 
   * drbl-prepare-memtest: Adopt new file name for memtest86+ia32.*.
