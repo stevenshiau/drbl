@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (5.2.15-drbl1) unstable; urgency=medium
+
+  * Add package ntfs2btrfs in Clonezilla live packages list.
+
+ -- Steven Shiau <steven@clonezilla.org>  Wed, 28 Jun 2023 20:33:46 +0800
+
 drbl (5.2.14-drbl1) unstable; urgency=medium
 
   * drbl-functions: screen_not_blank honors the variable ocs_screen_blank.
