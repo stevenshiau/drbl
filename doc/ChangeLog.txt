@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (5.2.16-drbl1) unstable; urgency=medium
+
+  * Package mlocate was replaced by plocate in the
+    live system packages list.
+
+ -- Steven Shiau <steven@clonezilla.org>  Thu, 06 Jul 2023 12:14:23 +0800
+
 drbl (5.2.15-drbl1) unstable; urgency=medium
 
   * Add package ntfs2btrfs in Clonezilla live packages list.
