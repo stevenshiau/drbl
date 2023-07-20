@@ -1878,6 +1878,7 @@ set_drbl_ocs_extra_param() {
     if [ "$ocs_user_mode" = "expert" ]; then
       $DIA --backtitle "$msg_nchc_free_software_labs" --title  \
       "$msg_clonezilla_advanced_extra_param | $msg_mode: $ocs_mode_prompt" --menu "$msg_choose_one_compression_param_to_save" \
+      --default-item "$ocs_z9p_option_1" \
       0 0 0 $DIA_ESC \
       "-z1p"     "$msg_ocs_param_z1p" \
       "-z1"      "$msg_ocs_param_z1" \
@@ -2225,6 +2226,7 @@ if [ "$mode" = "save" ]; then
     if [ "$ocs_user_mode" = "expert" ]; then
       $DIA --backtitle "$msg_nchc_free_software_labs" --title  \
       "$msg_clonezilla_advanced_extra_param | $msg_mode: $ocs_mode_prompt" --menu "$msg_choose_one_compression_param_to_save" \
+      --default-item "$ocs_z9p_option_1" \
       0 0 0 $DIA_ESC \
       "-z1p"           "$msg_ocs_param_z1p" \
       "-z1"            "$msg_ocs_param_z1" \
