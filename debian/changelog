@@ -1,3 +1,10 @@
+drbl (5.2.18-drbl1) unstable; urgency=medium
+
+  * Add acpitool in live packages list.
+  * Default to use -z9p in the expert mode as saving, too.
+
+ -- Steven Shiau <steven@clonezilla.org>  Fri, 21 Jul 2023 15:59:49 +0800
+
 drbl (5.2.17-drbl1) unstable; urgency=medium
 
   * Include vim instead of vim-tiny in the live system.
