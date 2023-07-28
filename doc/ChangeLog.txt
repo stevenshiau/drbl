@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (5.2.20-drbl1) unstable; urgency=medium
+
+  * Some more cosmetic rewritting. Less verbose outputs.
+
+ -- Steven Shiau <steven@clonezilla.org>  Fri, 28 Jul 2023 13:54:44 +0800
+
 drbl (5.2.19-drbl1) unstable; urgency=medium
 
   * drbl.conf: set netinstall for Debian as bookworm.
