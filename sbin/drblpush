@@ -4126,6 +4126,7 @@ rsync -a $RSYNC_OPT_EXTRA --include="*/" --exclude="*" /var $drbl_common_root/
 for i in $symbolic_files_in_var_chklist; do
   if [ -L /var/$i ]; then
     _tmp_absolute="$(readlink -f /var/$i)"
+    rm -f $drbl_common_root/var/$i
     ln -s $_tmp_absolute $drbl_common_root/var/$i
   fi
 done

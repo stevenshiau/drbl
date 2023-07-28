@@ -262,6 +262,9 @@ case "$switch" in
         if is_systemd_init && [ -e "/lib/systemd/system/${serv}.service" ]; then
           # For systemd, systemctl can't en/disable if service name be a alias name, ex: nfslock, due to 'nfslock' -> 'nfs-lock'
           _real_service_name=$(basename $(readlink -f /lib/systemd/system/${serv}.service) ".service")
+	  if [ "$_real_service_name" = "null" ]; then
+	    continue
+	  fi
           echo "Force to add $_real_service_name service by systemd command..."
           if [ "$_real_service_name" = 'iptables' -a "$(systemctl is-enabled firewalld.service 2>/dev/null)" = 'enable' ]; then
             # On FC18, firewalld could conflict with iptables, so disable firewalld from now on

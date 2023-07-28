@@ -3797,68 +3797,68 @@ rep_whspc_w_udrsc() {
 #   "copy_exec_drbl /usr/bin/time"             -> /usr/bin/time
 #
 copy_exec_drbl() {
-	local source target destination final_destination x nonoptlib
-	local libname dirname
-
-	source="${1}"
-	if [ -n "${2}" ]; then
-		if [ ! -d "${DESTDIR}/${2}" ]; then
-			mkdir -p "${DESTDIR}/${2}"
-		fi
-		target="${2}"
-	else
-		if [ ! -e "${DESTDIR}/$(dirname "${1}")" ]; then
-			mkdir -p "${DESTDIR}/$(dirname "${1}")"
-		fi
-		target="${1}"
-	fi
-
-	if [ -d "${DESTDIR}/${target}" ]; then
-		destination="${target}/$(basename "${source}")"
-	else
-		destination="${target}"
-	fi
-	final_destination="${DESTDIR}/${destination}"
-
-	if [ -L "$final_destination" ]; then
-		if [ $(readlink "${final_destination}") != "${source}" ]; then
-			echo "W:copy_exec_drbl: Not copying ${source} to \$DESTDIR${destination}, which is already a copy of $(readlink ${final_destination})" >&2
-			return
-		fi
-	else
-		cp -pL ${source} ${DESTDIR}/${destination}
-		if [ "${verbose}" = "y" ]; then
-			echo "Adding binary ${source}"
-		fi
-	fi
-
-	# Copy the dependant libraries
-	for x in $(ldd ${source} 2>/dev/null | sed -e '
-	    /\//!d;
-	    /linux-gate/d;
-	    /=>/ {s/.*=>[[:blank:]]*\([^[:blank:]]*\).*/\1/};
-	    s/[[:blank:]]*\([^[:blank:]]*\) (.*)/\1/' 2>/dev/null); do
-
-		# Try to use non-optimised libraries where possible.
-		# We assume that all HWCAP libraries will be in tls,
-		# sse2, vfp or neon
-		nonoptlib=$(echo "${x}" | sed -e 's#/lib/\(tls\|i686\|sse2\|neon\|vfp\).*/\(lib.*\)#/lib/\2#')
-
-		if [ -e "${nonoptlib}" ]; then
-			x="${nonoptlib}"
-		fi
-
-		libname=$(basename "${x}")
-		dirname=$(dirname "${x}")
-
-		mkdir -p "${DESTDIR}/${dirname}"
-		if [ ! -e "${DESTDIR}/${dirname}/${libname}" ]; then
-			cp -pL "${x}" "${DESTDIR}/${dirname}"
-			if [ "${verbose}" = "y" ]; then
-				echo "Adding library ${x}"
-			fi
-		fi
-	done
+  local source target destination final_destination x nonoptlib
+  local libname dirname
+  
+  source="${1}"
+  if [ -n "${2}" ]; then
+  	if [ ! -d "${DESTDIR}/${2}" ]; then
+  		mkdir -p "${DESTDIR}/${2}"
+  	fi
+  	target="${2}"
+  else
+  	if [ ! -e "${DESTDIR}/$(dirname "${1}")" ]; then
+  		mkdir -p "${DESTDIR}/$(dirname "${1}")"
+  	fi
+  	target="${1}"
+  fi
+  
+  if [ -d "${DESTDIR}/${target}" ]; then
+  	destination="${target}/$(basename "${source}")"
+  else
+  	destination="${target}"
+  fi
+  final_destination="${DESTDIR}/${destination}"
+  
+  if [ -L "$final_destination" ]; then
+  	if [ $(readlink "${final_destination}") != "${source}" ]; then
+  	  #	echo "W:copy_exec_drbl: Not copying ${source} to \$DESTDIR${destination}, which is already a copy of $(readlink ${final_destination})" >&2
+  		return
+  	fi
+  else
+  	cp -pL ${source} ${DESTDIR}/${destination}
+  	if [ "${verbose}" = "y" ]; then
+  		echo "Adding binary ${source}"
+  	fi
+  fi
+  
+  # Copy the dependant libraries
+  for x in $(ldd ${source} 2>/dev/null | sed -e '
+      /\//!d;
+      /linux-gate/d;
+      /=>/ {s/.*=>[[:blank:]]*\([^[:blank:]]*\).*/\1/};
+      s/[[:blank:]]*\([^[:blank:]]*\) (.*)/\1/' 2>/dev/null); do
+  
+  	# Try to use non-optimised libraries where possible.
+  	# We assume that all HWCAP libraries will be in tls,
+  	# sse2, vfp or neon
+  	nonoptlib=$(echo "${x}" | sed -e 's#/lib/\(tls\|i686\|sse2\|neon\|vfp\).*/\(lib.*\)#/lib/\2#')
+  
+  	if [ -e "${nonoptlib}" ]; then
+  		x="${nonoptlib}"
+  	fi
+  
+  	libname=$(basename "${x}")
+  	dirname=$(dirname "${x}")
+  
+  	mkdir -p "${DESTDIR}/${dirname}"
+  	if [ ! -e "${DESTDIR}/${dirname}/${libname}" ]; then
+  		cp -pL "${x}" "${DESTDIR}/${dirname}"
+  		if [ "${verbose}" = "y" ]; then
+  			echo "Adding library ${x}"
+  		fi
+  	fi
+  done
 } # end of copy_exec_drbl
 #
 get_block_line_in_upstart_conf() {
