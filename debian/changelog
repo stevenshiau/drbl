@@ -1,3 +1,9 @@
+drbl (5.2.21-drbl1) unstable; urgency=medium
+
+  * gen-grub-efi-nb-menu: failed to write menu for memtest86+.
+
+ -- Steven Shiau <steven@clonezilla.org>  Sat, 29 Jul 2023 17:28:10 +0800
+
 drbl (5.2.20-drbl1) unstable; urgency=medium
 
   * Some more cosmetic rewritting. Less verbose outputs.

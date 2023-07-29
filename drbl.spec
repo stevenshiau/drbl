@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	5.2.20
+Version:	5.2.21
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -46,6 +46,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Sat Jul 29 2023 Steven Shiau <steven _at_ clonezilla org> 5.2.21-drbl1
+  * gen-grub-efi-nb-menu: failed to write menu for memtest86+.
+
 * Fri Jul 28 2023 Steven Shiau <steven _at_ clonezilla org> 5.2.20-drbl1
   * Some more cosmetic rewritting. Less verbose outputs.
 
