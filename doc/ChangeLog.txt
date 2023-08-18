@@ -5,6 +5,14 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (5.2.22-drbl1) unstable; urgency=medium
+
+  * Since grub commands "linux/initrd" works for uEFI boot,
+    no matter it's secure boot or not. Just use them,
+    not using linuxefi/initrdefi.
+
+ -- Steven Shiau <steven@clonezilla.org>  Fri, 18 Aug 2023 10:35:15 +0800
+
 drbl (5.2.21-drbl1) unstable; urgency=medium
 
   * gen-grub-efi-nb-menu: failed to write menu for memtest86+.

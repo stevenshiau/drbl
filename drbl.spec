@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	5.2.21
+Version:	5.2.22
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -46,6 +46,11 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Fri Aug 18 2023 Steven Shiau <steven _at_ clonezilla org> 5.2.22-drbl1
+  * Since grub commands "linux/initrd" works for uEFI boot,
+    no matter it's secure boot or not. Just use them,
+    not using linuxefi/initrdefi.
+
 * Sat Jul 29 2023 Steven Shiau <steven _at_ clonezilla org> 5.2.21-drbl1
   * gen-grub-efi-nb-menu: failed to write menu for memtest86+.
 
