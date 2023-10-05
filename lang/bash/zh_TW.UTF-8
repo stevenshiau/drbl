@@ -1198,3 +1198,6 @@ msg_hint_for_onthefly_fdisk_beginner='現在選用你要的方式來目的碟上
 msg_failed_to_open_this_luks_dev='無法開啟這個LUKS裝置:'
 msg_do_you_want_to_try_to_open_it_again='你要嘗試再開啟看看嗎?'
 msg_if_yes_open_luks_again='若要，將會再提示你輸入密語來開啟LUKS裝置。'
+# Tag on 2023/10/05
+msg_ocs_param_edio='對NVMe SSD裝置開啟Partclone的直接輸入/輸出模式(direct I/O)'
+msg_ocs_onthefly_param_edio='對NVMe SSD裝置開啟Partclone的直接輸入/輸出模式(direct I/O)'

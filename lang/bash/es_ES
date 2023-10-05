@@ -1213,3 +1213,6 @@ msg_hint_for_onthefly_fdisk_beginner='Elija el modo para crear la tabla de parti
 msg_failed_to_open_this_luks_dev='Failed to open this LUKS device:'
 msg_do_you_want_to_try_to_open_it_again='Do you want to try to open it again?'
 msg_if_yes_open_luks_again='If yes, you will be prompted to enter passphrase to open the LUKS device again.'
+# Tag on 2023/10/05
+msg_ocs_param_edio='Enable the direct IO mode of Partclone for NVMe SSD'
+msg_ocs_onthefly_param_edio='Enable the direct IO mode of Partclone for NVMe SSD'
