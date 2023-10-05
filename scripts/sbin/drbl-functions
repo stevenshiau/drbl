@@ -1661,6 +1661,7 @@ set_drbl_ocs_extra_param() {
       "-srel"    "$msg_ocs_param_srel" off \
       "-ssnf"    "$msg_ocs_param_ssnf" off \
       "-ps"      "$msg_ocs_param_ps" off \
+      "-edio"    "$msg_ocs_param_edio" off \
     2>> $OCS_PARAM_TMP
     else
       # Beginner mode. Use default settings
@@ -1804,6 +1805,7 @@ set_drbl_ocs_extra_param() {
       "-ps "       "$msg_ocs_param_ps" off \
       "-scpt "     "$msg_ocs_param_scpt" off \
       "-sfs "      "$msg_ocs_param_sfs" off \
+      "-edio"      "$msg_ocs_param_edio" off \
       2>> $OCS_PARAM_TMP
     else
       echo "-j2 " >> $OCS_PARAM_TMP
@@ -2042,6 +2044,7 @@ if [ "$mode" = "restore" ]; then
     "-o1"      "$msg_ocs_param_o1" off \
     "-srel"    "$msg_ocs_param_srel" off \
     "-ps"      "$msg_ocs_param_ps" off \
+    "-edio"    "$msg_ocs_param_edio" off \
     2>> $OCS_PARAM_TMP
   else
     if [ "$ocs_batch_mode" != "on" ]; then
@@ -2174,6 +2177,7 @@ else
     "-ps "      "$msg_ocs_param_ps" off \
     "-scpt "    "$msg_ocs_param_scpt" off \
     "-sfs "     "$msg_ocs_param_sfs" off \
+    "-edio"     "$msg_ocs_param_edio" off \
     2>> $OCS_PARAM_TMP
   else
     echo "-c " "-j2 " >> $OCS_PARAM_TMP
