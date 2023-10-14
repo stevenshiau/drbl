@@ -1210,9 +1210,9 @@ msg_hint_for_fdisk_beginner='Elija el modo para crear la tabla de particiones en
 # Tag on 2022/09/27
 msg_hint_for_onthefly_fdisk_beginner='Elija el modo para crear la tabla de particiones en el disco de destino: ***ATENCIÓN***(1) PARA CREAR UNA NUEVA TABLA DE PARTICIONES EN EL DISCO DESTINO. ¡¡¡TODOS LOS DATOS EN EL DISPOSITIVO DESTINO SE BORRARÁN!!! (2) Clonezilla no clonará un disco grande (partición) en un disco más pequeño (partición). Sin embargo, puede clonar un disco pequeño (partición) a un disco más grande (partición).'
 # Tag on 2023/01/24
-msg_failed_to_open_this_luks_dev='Failed to open this LUKS device:'
-msg_do_you_want_to_try_to_open_it_again='Do you want to try to open it again?'
-msg_if_yes_open_luks_again='If yes, you will be prompted to enter passphrase to open the LUKS device again.'
+msg_failed_to_open_this_luks_dev='No se pudo abrir este dispositivo LUKS:'
+msg_do_you_want_to_try_to_open_it_again='¿Quiere intentar abrirlo de nuevo?'
+msg_if_yes_open_luks_again='En caso afirmativo, se le pedirá que ingrese una frase de contraseña para abrir el dispositivo LUKS nuevamente.'
 # Tag on 2023/10/05
-msg_ocs_param_edio='Enable the direct IO mode of Partclone for NVMe SSD'
-msg_ocs_onthefly_param_edio='Enable the direct IO mode of Partclone for NVMe SSD'
+msg_ocs_param_edio='Habilite el modo IO directo de Partclone para NVMe SSD'
+msg_ocs_onthefly_param_edio='Habilite el modo IO directo de Partclone para NVMe SSD'
