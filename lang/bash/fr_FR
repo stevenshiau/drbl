@@ -1197,9 +1197,9 @@ msg_hint_for_fdisk_beginner='Choisissez le mode de création de la table de part
 # Tag on 2022/09/27
 msg_hint_for_onthefly_fdisk_beginner='Choisissez le mode de création de la table de partition sur la cible : ***ATTENTION***(1) LORS DE LA CRÉATION DE LA NOUVELLE TABLE DE PARTITION SUR LE DISQUE CIBLE, TOUTES LES DONNÉES DU PÉRIPHÉRIQUE CIBLE SERONT EFFACÉES !!! (2) Clonezilla ne peut pas cloner l\''image d\''un grand disque (partition) vers un disque plus petit (partition). En revanche, il peut cloner l\''image d\''un petit disque (partition) vers un grand (partition).'
 # Tag on 2023/01/24
-msg_failed_to_open_this_luks_dev='Failed to open this LUKS device:'
-msg_do_you_want_to_try_to_open_it_again='Do you want to try to open it again?'
-msg_if_yes_open_luks_again='If yes, you will be prompted to enter passphrase to open the LUKS device again.'
+msg_failed_to_open_this_luks_dev='Ce périphérique LUKS n\''a pas pu être ouvert :'
+msg_do_you_want_to_try_to_open_it_again='Voulez-vous réessayer ?'
+msg_if_yes_open_luks_again='Si oui, la phrase de passe va vous être demandée à nouveau pour accéder au périphérique LUKS.'
 # Tag on 2023/10/05
-msg_ocs_param_edio='Enable the direct IO mode of Partclone for NVMe SSD'
-msg_ocs_onthefly_param_edio='Enable the direct IO mode of Partclone for NVMe SSD'
+msg_ocs_param_edio='Activer le mode E/S direct de Partclone pour le SSD NVMe'
+msg_ocs_onthefly_param_edio='Activer le mode E/S direct de Partclone pour le SSD NVMe'
