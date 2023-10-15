@@ -2,7 +2,7 @@
 # Written by Steven Shiau <steven _at_ clonezilla org> to use in DRBL 
 # License: GPL
 # Merged some of those revised by Dylan Pack <sarpulhu _at_ gmail com> on 26/Feb/2009.
-# Translated by Ondrej Dzivy Balucha <ondrej _at_ odb sk> on 2021/11/08.
+# Translated by Ondrej Dzivy Balucha <ondrej _at_ odb sk> on 2023/10/14.
 
 #-----------------------------------------
 # some words
@@ -1196,9 +1196,9 @@ msg_hint_for_fdisk_beginner='Vyberte mód pre vytvorenie tabuľky partícií na 
 # Tag on 2022/09/27
 msg_hint_for_onthefly_fdisk_beginner='Vyberte mód pre vytvorenie tabuľky partícií na cieľovom disku: ***POZOR***(1) VYTVORIŤ TABUĽKU PARTICIÍ NA CIEĽOVOM DISKU. VŠETKY DÁTA NA CIEĽOVOM DISKU BUDÚ VYMAZANÉ!!! (2) Clonezilla neobnoví obraz z večšieho disku(partície) na menší disk(partíciu). Dokáže však obnoviť obraz z menšieho disku (partície) na väčší disk (partíciu).'
 # Tag on 2023/01/24
-msg_failed_to_open_this_luks_dev='Failed to open this LUKS device:'
-msg_do_you_want_to_try_to_open_it_again='Do you want to try to open it again?'
-msg_if_yes_open_luks_again='If yes, you will be prompted to enter passphrase to open the LUKS device again.'
+msg_failed_to_open_this_luks_dev='Nepodarilo sa otvoriť túto LUKS zariadenie:'
+msg_do_you_want_to_try_to_open_it_again='Chcete ho skúsiť otvoriť znova?'
+msg_if_yes_open_luks_again='Ak áno, budete vyzvaný zadať heslo na opätovné otvorenie LUKS zariadenia.'
 # Tag on 2023/10/05
-msg_ocs_param_edio='Enable the direct IO mode of Partclone for NVMe SSD'
-msg_ocs_onthefly_param_edio='Enable the direct IO mode of Partclone for NVMe SSD'
+msg_ocs_param_edio='Povoliť Partclone direct IO mód pre NVMe SSD'
+msg_ocs_onthefly_param_edio='Povoliť Partclone direct IO mód pre NVMe SSD'

@@ -1195,9 +1195,9 @@ msg_hint_for_fdisk_beginner='Wählen Sie die Art, wie die Partitiontable auf der
 # Tag on 2022/09/27
 msg_hint_for_onthefly_fdisk_beginner='Wählen Sie die Art, wie die Partitiontable auf der Zielplatte erstellt wird: ***ACHTUNG***(1) ERSTELLEN EINER NEUEN PARTITION TABLE AUF DER ZIELPLATTE. ALLE DATEN AUF DEM ZIELDEVICE WERDEN GELÖSCHT!!! (2) Clonezilla spielt kein Image von einer größeren Platte (Partition) auf eine kleinere Platte (Partition) zurück. Allerdings kann es ein Image von einer kleineren Platte (Partition) auf eine größere Platte (Partition) zurückspielen.'
 # Tag on 2023/01/24
-msg_failed_to_open_this_luks_dev='Failed to open this LUKS device:'
-msg_do_you_want_to_try_to_open_it_again='Do you want to try to open it again?'
-msg_if_yes_open_luks_again='If yes, you will be prompted to enter passphrase to open the LUKS device again.'
+msg_failed_to_open_this_luks_dev='Fehler beim Öffnen dieses LUKS-Devices:'
+msg_do_you_want_to_try_to_open_it_again='Wollen Sie nochmal versuchen, es zu öffnen?'
+msg_if_yes_open_luks_again='Falls ja, müssen Sie die Passphrase zum Öffnen des LUKS-Devices erneut eingeben.'
 # Tag on 2023/10/05
-msg_ocs_param_edio='Enable the direct IO mode of Partclone for NVMe SSD'
-msg_ocs_onthefly_param_edio='Enable the direct IO mode of Partclone for NVMe SSD'
+msg_ocs_param_edio='Aktiviere den Direct-IO-Mode für NVMe SSD in Partclone'
+msg_ocs_onthefly_param_edio='Aktiviere den Direct-IO-Mode für NVMe SSD in Partclone'
