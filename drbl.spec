@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	5.2.23
+Version:	5.2.24
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -46,6 +46,15 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Tue Oct 17 2023 Steven Shiau <steven _at_ clonezilla org> 5.2.24-drbl1
+  * Language file es_ES was updated. Thanks to Juan Ramón Martínez.
+  * Language file fr_FR was updated. Thanks to Jean-Francois Nifenecker.
+  * Language files el_GR.UTF-8 & pl_PL were updated. Thanks to
+    Stamatis Mavrogiorgis and Kris.
+  * Language files de_DE & sk_SK were updated. Thanks to Michael Vinzenz &
+    Ondrej Dzivy Balucha.
+  * Language file tr_TR was updated. Thanks to Volkan Gezer.
+
 * Thu Oct 05 2023 Steven Shiau <steven _at_ clonezilla org> 5.2.23-drbl1
   * Add option "-edio" in the TUI wizard.
   * Update language files about direct IO descriptions.

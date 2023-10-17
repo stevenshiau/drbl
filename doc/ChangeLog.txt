@@ -5,6 +5,18 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (5.2.24-drbl1) unstable; urgency=medium
+
+  * Language file es_ES was updated. Thanks to Juan Ramón Martínez.
+  * Language file fr_FR was updated. Thanks to Jean-Francois Nifenecker.
+  * Language files el_GR.UTF-8 & pl_PL were updated. Thanks to
+    Stamatis Mavrogiorgis and Kris.
+  * Language files de_DE & sk_SK were updated. Thanks to Michael Vinzenz &
+    Ondrej Dzivy Balucha.
+  * Language file tr_TR was updated. Thanks to Volkan Gezer.
+
+ -- Steven Shiau <steven@clonezilla.org>  Tue, 17 Oct 2023 08:38:19 +0800
+
 drbl (5.2.23-drbl1) unstable; urgency=medium
 
   * Add option "-edio" in the TUI wizard.
