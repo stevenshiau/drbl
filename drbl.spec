@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	5.2.24
+Version:	5.2.25
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -46,6 +46,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Sat Oct 21 2023 Steven Shiau <steven _at_ clonezilla org> 5.2.25-drbl1
+  * Language file ja_JP was updated. Thanks to Akira Yoshiyama.
+
 * Tue Oct 17 2023 Steven Shiau <steven _at_ clonezilla org> 5.2.24-drbl1
   * Language file es_ES was updated. Thanks to Juan Ramón Martínez.
   * Language file fr_FR was updated. Thanks to Jean-Francois Nifenecker.
