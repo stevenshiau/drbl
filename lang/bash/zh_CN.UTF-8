@@ -1131,76 +1131,76 @@ msg_ocs_onthefly_param_ps="任务完成时播放声音来提示"
 msg_ocs_param_z9='使用zstd压缩(速度很快，压缩文件大小跟gzip差不多)'
 msg_ocs_param_z9p='使用pzstd压缩(速度很快，压缩文件大小跟gzip差不多，适用于多核/CPU机器)'
 # Tag on 2020/08/09
-msg_locale_ko_KR='Korean'
+msg_locale_ko_KR='韩文'
 # Tag on 2020/09/10
-msg_ocs_onthefly_param_rvd='Remove NTFS volume dirty flag in source NTFS file system before cloning it'
+msg_ocs_onthefly_param_rvd='复制文件系统前，移除来源NTFS文件系统的卷标'
 # Tag on 2020/10/02
-msg_ocs_onthefly_param_t='Skip cloning the MBR (Master Boot Record)'
-msg_ocs_onthefly_param_t1='Clone the prebuilt bootloader from syslinux (For Windows only)'
-msg_ocs_onthefly_param_t2='Skip cloning the EBR (Extended Boot Record)'
-msg_choose_net_pipe_program='Choose the network pipe program when cloning over network'
-msg_ocs_onthefly_param_netcat='Use netcat when cloning over network'
-msg_ocs_onthefly_param_nuttcp='Use nuttcp when cloning over network'
+msg_ocs_onthefly_param_t='用户端电脑忽略复制MBR (Master Boot Record)'
+msg_ocs_onthefly_param_t1='用户端电脑使用syslinux提供的bootloader(仅适用于Windows)'
+msg_ocs_onthefly_param_t2='用户端电脑忽略复制EBR (Extended Boot Record)'
+msg_choose_net_pipe_program='选择在通过网络对拷时，要使用的网络传输程序'
+msg_ocs_onthefly_param_netcat='网络对传时，使用netcat'
+msg_ocs_onthefly_param_nuttcp='网络对传时，使用nuttcp'
 # Tag on 2020/12/31
-msg_ocs_use_smbv3_11='SMB protocol 3.11 or 3.1.1'
-msg_ocs_use_smb_auto='Auto negotiate SMB protocol'
+msg_ocs_use_smbv3_11='SMB协议3.11或者3.1.1'
+msg_ocs_use_smb_auto='自动协商SMB协议'
 # Tag on 2021/01/18
-msg_choose_if_fsck_the_repo_part='Choose if you want to check and repair the file system before mounting the image repository. This option is only for certain file systems which are well supported by fsck on GNU/Linux, like ext2/3/4, reiserfs, xfs, jfs, vfat. Not for NTFS, HFS+...'
-msg_skip_check_repo_fs='Skip checking/repairing the file system before mounting'
-msg_ocs_param_fsck_repo_part='Interactively check and repair the file system before mounting'
-msg_ocs_param_fsck_repo_part_yes='Auto (Caution!) check and repair file system before mounting'
-msg_not_this_is_for_mount_repository='//NOTE// This is for mounting local storage device as an image repository!'
+msg_choose_if_fsck_the_repo_part='挂载镜像库之前，选择是否要检查并修复文件系统。这选项只适用那些GNU/Linux系统上fsck程序支持比较好的文件系统，例如ext2/3/4，reiserfs，xfs，jfs，vfat。对于NTFS或者HFS+并不支持。'
+msg_skip_check_repo_fs='挂载前，跳过检查与修复文件系统'
+msg_ocs_param_fsck_repo_part='挂载前，交互式检查与修复文件系统'
+msg_ocs_param_fsck_repo_part_yes='挂载前，自动（小心！）检查与修复文件系统'
+msg_not_this_is_for_mount_repository='//注意// 这将挂载本地存储设备作为镜像库！'
 # Tag on 2021/03/06
-msg_ocs_param_ssnf='Skip setting 1st boot device as network in uEFI netboot client NVRAM'
-msg_ocs_param_scpt='Skip checking the partition table of the source disk is MBR or GPT format'
+msg_ocs_param_ssnf='跳过在网络开机用户端的NVRAM设定开机第一优先设备为网络设备'
+msg_ocs_param_scpt='不检查来源磁盘的分区表是MBR或者GPT格式'
 # Tag on 2021/03/09
-msg_B2SUMS_check_failed='BLAKE2 checksums did NOT match!'
-msg_ocs_param_gb='Generate image BLAKE2 checksums'
-msg_ocs_param_cb='Check image by BLAKE2 checksums'
+msg_B2SUMS_check_failed='BLAKE2校验码不匹配'
+msg_ocs_param_gb='生成镜像BLAKE2校验码'
+msg_ocs_param_cb='使用BLAKE2校验码检查镜像'
 # Tag on 2021/03/15
-msg_list_local_device_mode='Which mode do you want to list the block devices on this machine? If you have no idea, choose "disk_or_part". Do _NOT_ choose "both_type_dev" unless you know what you are doing. Basically "both_type_dev" is for you to force choosing the block device which is not listed as it is. For example, you want to save the block device /dev/sda but it is not shown in "saveparts" mode since it is a disk device name, not a partition device name.'
-msg_list_disk_or_part_mode='Separate disk(s) and partition(s)'
-msg_list_both_type_device_mode='List both types of block devices together, i.e., show disk(s) and partition(s) simultaneously'
+msg_list_local_device_mode='你要使用哪种模式列出这台设备上的存储设备？如果你不清楚这个问题，选择"disk_or_part"。除非您知道您在做什么，否则不要选择"both_type_dev"。基本上"both_type_dev"用来强制选择没有列出的块设备。例如，你想要保存块设备/dev/sda，但它没有以"saveparts"模式列出，因为它是磁盘设备名称，不是分区设备名称。'
+msg_list_disk_or_part_mode='将硬盘和分区以不同类别列出'
+msg_list_both_type_device_mode='将硬盘和分区一起列出，也就是同时显示磁盘和分区'
 # Tag on 2021/07/22
 msg_press_space_to_mark_selection='如果有复选的选项让您选择，请使用空格键来标示你的选择，被标示选到的部分会出现星号(*)'
 # Tag on 2021/08/28
-msg_reserved_img_names="Some reserved image names have special meanings, including \"ask_user\", \"autoname\", \"autoname-*\" \"autohostname\", and \"autoproductname\". Please check Clonezilla website for more details."
+msg_reserved_img_names="以下的镜像保留字有特殊意义，包含\"ask_user\"，\"autoname\"，\"autoname-*\" \"autohostname\"，以及\"autoproductname\"。欲知详情，请浏览再生龙网页。"
 # Tag on 2021/10/25
-msg_choose_wired_or_wireless="Both wired and wireless network devices were detected. Which type do you want to use?"
-msg_use_wired="Use wired network device"
-msg_use_wireless="Use wireless network device"
-msg_nic_status_on_sytem="Network device and status detected on this system:"
+msg_choose_wired_or_wireless="检测到有线和无线网卡，请问要使用哪种网卡？"
+msg_use_wired="使用有线网卡设备"
+msg_use_wireless="使用无线网卡设备"
+msg_nic_status_on_sytem="此系统上检测到的网卡设备及状态："
 # Tag on 2021/12/04
 msg_set_image_volume_size='将一个分区的映像分割成多卷存档，每个分割档的大小 (MB)。输入的数字请大于10。如果你不要分割的话，请输入一个大的数字，例如"1000000"，请不要再使用"0"。因为如果你的/sbin/init是来自于新版的upstart，这个"0"会让/sbin/init搞混。//注意// 如果你的镜像仓库是在FAT32文件系统上，这个数字不可以超过4096。'
 # Tag on 2022/02/03
-msg_found_luks_dev='Found LUKS device'
-msg_prompt_for_open_luks_dev='We have to open LUKS device now. You will be prompted to enter passphrase for each one of them.'
-msg_luks_mapped_name_not_found_in_this_file='The LUKS mapped device name was not found in this file'
-msg_name_it_arbitrarily_restered_os_boot_might_fail='Will name it arbitrarily. However, if the restored OS depends on that specified name, it might fail to boot.'
-msg_now_open_luks_dev='Now open the LUKS device'
-msg_luks_header_file_found='LUKS header file found'
-msg_luks_header_file_not_found='LUKS header file not found'
-msg_luks_crypttab_file_found='LUKS crypttab file found'
-msg_luks_crypttab_file_not_found='LUKS crypttab file not found'
-msg_this_partition_table_file_found='The partition table file for this disk was found'
+msg_found_luks_dev='找到LUKS设备'
+msg_prompt_for_open_luks_dev='我们现在需要开启LUKS加密设备。你会被逐一提示输入密码来开启。'
+msg_luks_mapped_name_not_found_in_this_file='LUKS加密设备的对应名称在这个文件里没有找到'
+msg_name_it_arbitrarily_restered_os_boot_might_fail='我们将随意改名，不过，如果还原的系统需要特定的对应名称，可能无法开机。'
+msg_now_open_luks_dev='现在开启LUKS加密设备'
+msg_luks_header_file_found='找到LUKS头文件'
+msg_luks_header_file_not_found='未找到LUKS头文件'
+msg_luks_crypttab_file_found='找到LUKS crypttab文件'
+msg_luks_crypttab_file_not_found='未找到LUKS crypttab文件'
+msg_this_partition_table_file_found='找到该磁盘的分区表'
 # Tag on 2022/05/02
-msg_found_luks_do_you_want_open_it='Found LUKS device. Do you want to open it?'
-msg_if_yes_open_luks='If yes, you will be prompted to enter passphrase to open the LUKS device later.'
-msg_if_no_dd_mode_will_be_used='If no, the LUKS device will not be opened, and sector-by-sector (dd) mode of Clonezilla will be used.'
+msg_found_luks_do_you_want_open_it='找到LUKS加密设备，你要解开它吗？'
+msg_if_yes_open_luks='若回答yes，稍后会提示您输入解开密码。'
+msg_if_no_dd_mode_will_be_used='若回答no，LUKS加密设备不会被解开，再生龙会使用每个分区复制（sector by sector, dd）的模式。'
 # Tag on 2022/05/09
-msg_open_luks_dev='Open the LUKS device'
-msg_do_not_open_luks_dev='Do not open the LUKS device'
+msg_open_luks_dev='解开LUKS加密设备'
+msg_do_not_open_luks_dev='不要解开LUKS加密设备'
 # Tag on 2022/07/04
-msg_ocs_param_sfs='Skip partition file system saving'
+msg_ocs_param_sfs='跳过文件系统分区的保存'
 # Tag on 2022/09/10
-msg_choose_default_param_if_no_idea='If you have no idea, keep the default values and do NOT change anything. Just press Enter.'
-msg_hint_for_fdisk_beginner='Choose the mode to create the partition table on the target disk: ***ATTENTION***(1) TO CREATE A NEW PARTITION TABLE ON THE TARGET DISK. ALL THE DATA ON THE TARGET DEVICE WILL BE ERASED!!! (2) Clonezilla will not restore an image from a large disk (partition) to a smaller disk (partition). However, it can restore an image from a small disk (partition) to a larger disk (partition).'
+msg_choose_default_param_if_no_idea='如果你不确定，建议保留默认值，不修改任何选项，直接按Enter。'
+msg_hint_for_fdisk_beginner='选择一个模式在目标盘上创建分区表：***注意***(1) 在目标盘上产生一个新的分区表，原本在目标盘上的资料将会全部消失!!! (2) 再生龙无法将大的磁盘（分区）产生的镜像还原到小的磁盘（分区）中，但是可以将小的磁盘（分区）产生的镜像还原到大的磁盘（分区）中。'
 # Tag on 2022/09/27
-msg_hint_for_onthefly_fdisk_beginner='Choose the mode to create the partition table on the target disk: ***ATTENTION***(1) TO CREATE A NEW PARTITION TABLE ON THE TARGET DISK. ALL THE DATA ON THE TARGET DEVICE WILL BE ERASED!!! (2) Clonezilla will not clone a large disk (partition) to a smaller disk (partition). However, it can clone a small disk (partition) to a larger disk (partition).'
+msg_hint_for_onthefly_fdisk_beginner='选择一个模式在目标盘上创建分区表：***注意***(1) 在目标盘上产生一个新的分区表，原本在目标盘上的资料将会全部消失!!! (2) 再生龙无法将大的磁盘（分区）产生的镜像复制到小的磁盘（分区）中，但是可以将小的磁盘（分区）产生的镜像复制到大的磁盘（分区）中。'
 # Tag on 2023/01/24
-msg_failed_to_open_this_luks_dev='Failed to open this LUKS device:'
-msg_do_you_want_to_try_to_open_it_again='Do you want to try to open it again?'
-msg_if_yes_open_luks_again='If yes, you will be prompted to enter passphrase to open the LUKS device again.'
+msg_failed_to_open_this_luks_dev='无法开启这个LUKS设备：'
+msg_do_you_want_to_try_to_open_it_again='你要尝试再开启看看吗？'
+msg_if_yes_open_luks_again='如果是，将会再次提示你输入密码来开启LUKS设备。'
 # Tag on 2023/10/05
-msg_ocs_param_edio='Enable the direct IO mode of Partclone for NVMe SSD'
-msg_ocs_onthefly_param_edio='Enable the direct IO mode of Partclone for NVMe SSD'
+msg_ocs_param_edio='对NVMe SSD设备开启Partclone的直接输入/输出模式（direct I/O）'
+msg_ocs_onthefly_param_edio='对NVMe SSD设备开启Partclone的直接输入/输出模式（direct I/O）'
