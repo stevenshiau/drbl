@@ -106,7 +106,7 @@ msg_analyzing_rpm_info="Analitzant la informació dels paquets rpm ... Això por
 msg_failed_to_install_pkgs="Error en instal·lar els paquets necessaris, NO es pot continuar!"
 msg_check_network_and_url="Per favor, comprovi la connexió de xarxa entre el seu equip i"
 msg_not_determine_OS="NO es pot determinar la versió del S.O. que està fent servir!!!"
-msg_enter_OS_ver="Per favor introdueixi la versió (RH8.0, RH9, FC1, MDK9.2, MDK10.0...)"
+msg_enter_OS_ver="Per favor, introdueixi la versió (RH8.0, RH9, FC1, MDK9.2, MDK10.0...)"
 msg_clean_apt_cache_RH="Netejant la memòria cau de l'apt per fer que funcioni RPM::Architecture ..."
 msg_install_DRBL_necesary_files="2n, instal·lant els arxius necessaris per a DRBL..."
 msg_select_url_path="La URL i el path que ha triat"
@@ -150,12 +150,12 @@ msg_make_client_serial_console="Creant la consola sèrie de sortida de clients e
 #
 msg_kernel_being_used="Atenció! El kernel que està utilitzant ara és: "
 msg_warning_not_to_remove="Atenció! No s'hauria d'eliminar!!!"
-msg_not_remove="Per favor introdueixi 'N' per a la següent opció d'eliminació!"
+msg_not_remove="Per favor, introdueixi 'N' per a la següent opció d'eliminació!"
 #
 msg_which_ayo_repository="Quin repositori 'ayo' desitja utilitzar?"
 msg_which_os_ayo_repository="Quin repositori 'ayo' desitja utilitzar per als paquets del S.O.?"
 msg_which_drbl_ayo_repository="Quin repositori 'ayo' desitja utilitzar per als paquets DRBL?"
-msg_enter_FQDN_IP_yum_repository="Per favor introdueixi el hostname (FQDN) o l'adreça IP del repositori yum mitjançant prefix http:// o ftp://"
+msg_enter_FQDN_IP_yum_repository="Per favor, introdueixi el hostname (FQDN) o l'adreça IP del repositori yum mitjançant prefix http:// o ftp://"
 msg_enter_the_path_for_dir_ver_updates="En el repositori yum d'adalt, quina és la ruta de directoris pels paquets?"
 # RH/FC os
 msg_os_ayo_repository_0="0 -> free.nchc.org.tw (defecte)"
@@ -254,9 +254,9 @@ msg_hide_pxe_menus="Ocultar alguns menús d'inici del/s client/s"
 msg_reveal_pxe_menus="Mostrar alguns menús ocults d'inici del/s client/s"
 msg_setdefault_pxe_menu="Configurar el menú d'inici per al/s client/s"
 msg_title_hide="Amagar algunes imatges disponibles per al/s client/s DRBL?"
-msg_hide_list_des="Triï les etiquetes de la imatge a Amagar per a el/s client/s DRBL quan arranquin (selecció múltiple disponible)"
+msg_hide_list_des="Triï les etiquetes de la imatge a Amagar per al/s client/s DRBL quan arranquin (selecció múltiple disponible)"
 msg_reveal_title="Quines imatges s'han de mostrar per al client DRBL?"
-msg_reveal_list_des="Triï les etiquetes de la imatge que s'han de mostrar per a el/s client/s DRBL quan arranquin (selecció múltiple disponible)"
+msg_reveal_list_des="Triï les etiquetes de la imatge que s'han de mostrar per al/s client/s DRBL quan arranquin (selecció múltiple disponible)"
 msg_setdefault_title="Triï l'etiqueta de la imatge per defecte per als clients DRBL"
 msg_setdefault_list_des="Triï el menú per defecte per als clients DRBL a l'arrencada"
 msg_choose_netinstall_imag="Triï la distribució Linux a instal·lar per xarxa"
@@ -291,9 +291,9 @@ msg_ocs_param_y="El servidor sempre proporciona el mode de clonació - inici loc
 msg_ocs_param_y0="El servidor sempre proporciona el mode de clonació - inici local per defecte"
 msg_ocs_param_y1="El servidor sempre proporciona el mode de clonació - Clonezilla per defecte"
 msg_ocs_param_y2="El servidor sempre proporciona el mode de clonació - Clonezilla per defecte - DRBL per defecte"
-msg_ocs_param_z0="Sense compressió (La més ràpida però amb el tamany més gran)"
+msg_ocs_param_z0="Sense compressió (La més ràpida, però amb el tamany més gran)"
 msg_ocs_param_z1="Compressió gzip  (ràpida i amb un tamany reduït)"
-msg_ocs_param_z2="Compressió bzip2 (lenta però amb la més petita imatge)"
+msg_ocs_param_z2="Compressió bzip2 (lenta, però amb la més petita imatge)"
 msg_ocs_param_z3="Compressió lzoon (més ràpida amb un tamany de la imatge semblant al del gzip)"
 msg_ocs_param_g_auto="Reinstal·lar grub en el MBR del disk del client (tan sols si existeix la configuració del grub)"
 msg_ocs_param_p_true="No fer res quan la clonació acabi"
@@ -308,7 +308,7 @@ msg_ocs_param_o1="Executar el script en $OCS_PRERUN_DIR després de la clonació
 msg_ocs_param_hn0="Canviar el nom del PC amb MS Win (basat en la direcció IP) després de clonar"
 msg_ocs_param_hn1="Canviar el nom del PC amb MS Win (basat en la direcció MAC) després de clonar"
 msg_ocs_param_q="Prioritat: ntfsclone > partimage > dd"
-msg_ocs_param_q1="Prioritat: tan sols dd (suporta tots els sistemes de fitxers però és ineficient)"
+msg_ocs_param_q1="Prioritat: tan sols dd (suporta tots els sistemes de fitxers, però és ineficient)"
 msg_ocs_param_q2="Prioritat: partclone > partimage > dd"
 msg_ocs_param_none_ie_partimage="Prioritat: partimage > dd (no ntfsclone)"
 msg_ocs_param_a="NO forçar l'activación del DMA en el HD"
@@ -352,7 +352,7 @@ msg_max_time_to_wait_sec="Màxim temps d'espera (segons) (El temps comença quan
 msg_you_must_input_filename="Ha d'introduir un nom"
 msg_you_must_input_legal_filename="Ha d'introduir un nom d'imatge vàlid (només lletres de l'alfabet anglès, digits, _, - i )."
 msg_you_must_input_partition="Ha d'introduir una partició"
-msg_please_do_it_again="Per favor faci-ho de nou"
+msg_please_do_it_again="Per favor,faci-ho de nou"
 msg_choose_the="Triï el"
 msg_to_save="per desar (només es llisten les particions muntades)"
 msg_the_image="La imatge"
@@ -385,7 +385,7 @@ msg_timed_login="Login per temps"
 msg_turn_on_client_to_make_template="Ara configuri les màquines client per iniciar amb PXE o Etherboot (visiti http://drbl.org per més detalls). Després, iniciï el client per fer la imatge. Nota: Si el sistema d'arxius de la partició on desar és NTFS, es recomana desfragmentar-la primer."
 msg_turn_on_client_to_clone="Ara configuri les màquines client per iniciar amb PXE o Etherboot (visiti http://drbl.org per més detalls). Després, iniciï aquests clients perquè la imatge pugui ser restaurada en ells."
 msg_turn_on_client_to_select_clone_type="Ara configuri les màquines client per iniciar amb PXE o Etherboot (visiti http://drbl.org per amés detalls). Després iniciï aquests clients per escollir desar o restaurar una imatge!"
-msg_client_job_are_logged_in="Els treballs dels clientes es desen en aquest fitxer"
+msg_client_job_are_logged_in="Els treballs dels clients es desen en aquest fitxer"
 msg_client_sfdisk_log_are_in="El log del sfdisk, de quan Clonezilla està executant-se, està en el client"
 msg_set_the_clients_root_passwd="Estableixi la contrasenya root dels clients."
 msg_new_passwd_prompt="Nova contrasenya: (Es mostrarà amb asteriscos *)"
@@ -552,7 +552,7 @@ msg_run_sudo_su_to_become_root="Executi 'sudo su -' per passar a root."
 msg_prepare_writable_dev_and_mount_it_as="Ha de preparar un altre dispositiu d'escriptura o espai, i muntar-ho com"
 msg_ex_mount_ocsroot_in_ocs_live="Ex. Si desitja usar Clonezilla per desar /dev/hda, i posar la imatge en /dev/hdb1. Ha de muntar /dev/hdb1 com $ocsroot amb:"
 msg_if_src_part_is_ntfs="Si aquesta partició és NTFS, per fer que s'hi pugui escriure, ha de muntar-la com:"
-msg_sshfs_smbfs_are_supported="Sshfs i smbfs són suportats, també. Per exemple, fent servir sshfs, pot muntar el seu servidor ssh remot o samba"
+msg_sshfs_smbfs_are_supported="Sshfs i smbfs són suportats, també. Per exemple, fent servir sshfs, pot muntar el seu servidor SSH remot o samba"
 msg_use_zh_TW_bterm="Si desitja usar un terminal amb suport de Xinès Tradicional, executi"
 msg_start_ocs_sr_interactive="Llavors executi això per usar Clonezilla"
 msg_remember_poweroff_reboot_when_ocs_sr_is_done="Quan tot estigui fet, recordi usar 'poweroff'(apagar), 'reboot'(reiniciar) o fer que el menú faci un procediment d'apagat/reinici normal. Sinó, si el dispositiu d'arrencada que usa és un dispositiu d'escriptura (com un dispositiu USB flaix), i està muntat, un apagat/reinici anormal pot fer que l'inici FALLI la propera vegada!"
@@ -585,10 +585,10 @@ msg_ip_address_or_FQDN_of_server="L'adreça IP o FQDN del servidor, Ex. 192.168.
 msg_smb_domain_in_server="Domini en el servidor samba"
 msg_if_no_smb_domain_skip_this="Pot cancel·lar això si no hi ha domini en el servidor Samba"
 msg_account_in_server="compte en el servidor, el compte de la qual té permís d'escriptura (per gravar la imatge) o lectura"
-msg_sshfs_dir_path="El directori on la imatge de Clonezilla es guardarà o des d'on es llegirà. ///NOTA/// usi un path absolut en el servidor ssh"
+msg_sshfs_dir_path="El directori on la imatge de Clonezilla es guardarà o des d'on es llegirà. ///NOTA/// usi un path absolut en el servidor SSH"
 msg_ftpfs_dir_path="El directori on la imatge de Clonezilla es guardarà o des d'on es llegirà"
 msg_now_you_have_to_enter_passwd="Ara ha d'introduir la contrasenya per"
-msg_confirm_ssh_server_might_be_necessary="Si és la primera vegada que accedeix a aquest servidor ssh després d'iniciar Clonezilla live, per a major seguretat, se li demanarà confirmació"
+msg_confirm_ssh_server_might_be_necessary="Si és la primera vegada que accedeix a aquest servidor SSH després d'iniciar Clonezilla live, per a major seguretat, se li demanarà confirmació"
 msg_ocs_img_dir_path="El directori on la imatge de Clonezilla es guardarà o des d'on es llegirà"
 msg_enter_another_shell_hint_with_netcfg_prompt="Ara entri dins un altre shell. Si necessita configurar la xarxa, pot usar l'ordre \"ocs-live-netcfg\". Quan tot estigui fet, executi \"exit\" per tornar al programa original."
 msg_existing_setting_is="La configuració existent és"
@@ -634,10 +634,10 @@ msg_not_secure="No segur"
 msg_no_nic_is_found="No s'han trobat targetes de xarxa suportades."
 msg_choose_nic="Quin dispositiu de xarxa desitja configurar"
 msg_send_dhcp_request_from="Enviant transmissió DHCP del dispositiu"
-msg_enter_IP_add_for_this_nic="Per favor introdueixi l'Adreça IP per a "
-msg_enter_netmask_for_this_nic="Per favor introdueixi la Màscara de XARXA per a "
-msg_enter_default_gateway="Per favor introdueixi Gateway Per Defecte"
-msg_enter_dns_server="Per favor introdueix Nameserver/s"
+msg_enter_IP_add_for_this_nic="Per favor, introdueixi l'Adreça IP per a "
+msg_enter_netmask_for_this_nic="Per favor, introdueixi la Màscara de XARXA per a "
+msg_enter_default_gateway="Per favor, introdueixi Gateway Per Defecte"
+msg_enter_dns_server="Per favor, introdueix Nameserver/s"
 msg_put_dnsserver_to_resolv_conf="Configurant Nameserver en /etc/resolv.conf a"
 msg_append_dnsserver_to_resolv_conf="Afegint Nameserver a /etc/resolv.conf:"
 msg_Network_config="Configuració de Xarxa"
@@ -654,7 +654,7 @@ msg_do_not_assign_default_gw_for_DRBL_NIC="///Nota/// Posseeix més d'una target
 msg_continue_to_conf_another_NIC="Alguna/es targeta/es de xarxa no està/an configurada/es, continuar configurant una altra targeta de xarxa?"
 msg_no_ip_address_is_configured="L'adreça IP no està configurada!"
 msg_only_one_IP_so_create_alias_IP="Només una targeta de xarxa amb una adreça IP. Creant una adreça IP àlies per ser usada pels clients DRBL..."
-msg_more_than_1_IP_some_for_DRBL_clients="Hi ha mes d'una adreça IP. Les que no estan connectades a la WAN s'usaran per als clients DRBL."
+msg_more_than_1_IP_some_for_DRBL_clients="Hi ha més d'una adreça IP. Les que no estan connectades a la WAN s'usaran per als clients DRBL."
 msg_now_continue_to_run_drblpush="Ara es contínua executant drblpush per fer que els canvis funcionin en l'entorn DRBL."
 msg_partimage_not_support_block_per_group_non_32768="Ho sentim, Partimage, usat per Clonezilla per gravar particions ext2/ext3, NO suporta particions no-32768 ext2/ext3."
 msg_for_more_info_check="Per a més informació, consulti"
@@ -663,7 +663,7 @@ msg_parted_detect_as_wrong="No està suportat per parted. Parted s'usa en Clonez
 msg_error_messages_from_parted_are="Els missatges d'error de parted són"
 msg_continue_with_weird_partition_table="Si contínua, alguna cosa estranya pot ocórrer (Ex. s'usa dd, però no partclone, partimage o ntfsclone, per salvar el sistema d'arxius suportat), i la imatge que potser heu desat no es completa!"
 msg_does_this_part_table_file_fit_disk="S'ajusta la taula de particions a aquest disc"
-msg_is_this_disk_too_small="És aquest disc és massa petit?"
+msg_is_this_disk_too_small="Aquest disc és massa petit?"
 msg_the_following_step_is_to_save_the_disk_part_as_img="El següent pas és guardar el/les disc/partició(ons) en aquesta màquina com a imatge."
 msg_the_following_step_is_to_restore_img_to_disk_part="El següent pas és restaurar la imatge al/les disc/partició(ns) en aquesta màquina."
 msg_this_image_dir_is_not_complete="Aquest directori de la imatge de Clonezilla no està complet"
@@ -672,7 +672,7 @@ msg_later_input_in_client="Després introdueixi el nom de la imatge i del dispos
 msg_drbl_related_services_not_added_started="///NOTA/// Ha triat no afegir i iniciar els serveis DRBL-relacionats en el servidor DRBL. Recordi executar 'drbl-all-service start' si desitja iniciar els serveis DRBL-relacionats."
 msg_one_NIC_one_IP_limitation_prompt="///NOTA/// Només hi ha una targeta de xarxa i una adreça IP en aquest servidor. fent servir un àlies d'una adreça IP, pot proporcionar-se el servei DRBL amb només una targeta de xarxa. No obstant això, posi atenció a la situació d'aquells clients connectats amb eth0 (La primera targeta de xarxa en aquesta màquina). Donat que el servei DHCP s'executarà en aquest servidor, és millor no assignar adreces IP a CAP client. És millor assignar les adreces IP a només clients PXE/Etherboot connectats a eth0, no a QUALSEVOL client (pot haver-hi altres clients MS Windows o altres GNU/Linux). No obstant això, si es posa aquesta limitació, i usa un servidor Clonezilla DRBL, el S.O. restaurat per Clonezilla no serà capaç d'assignar l'adreça IP d'aquest servidor DRBL."
 msg_if_lease_IP_add_to_pxe_etherboot_only="Desitja assignar l'adreça IP a clients PXE/Etherboot únicament? ///NOTA/// Si respon no, a qualsevol màquina connectada amb eth0 se li pot assignar una adreça IP des d'aquest servidor DRBL. AIXÒ ÉS MOLT MOLEST si posseeix altres màquines que no vol que estiguin en l'entorn DRBL! Se'ls assignarà adreça IP des d'aquest servidor DRBL! Per tant, NOMÉS quan estigui SEGUR que totes les màquines connectades amb eth0 s'usaran com a clients DRBL/Clonezilla, pot respondre 'no' aquí."
-msg_drbl_env_is_not_ready_now_config="L'entorn DRBL no està llest. Cal introduir alguna informació, incloent (1) configuració de xarxa i (2) directori home d'imatge Clonezilla, per configurar un entorn d'aquest tipus."
+msg_drbl_env_is_not_ready_now_config="L'entorn DRBL no està llest. Cal introduir alguna informació, incloent-hi (1) configuració de xarxa i (2) directori home d'imatge Clonezilla, per configurar un entorn d'aquest tipus."
 msg_drbl_env_is_ready="L'entorn DRBL està llest, es pot iniciar el servidor Clonezilla ara."
 msg_ntfs_in_this_part_is_corrupt="El NTFS en aquesta partició està corrupte "
 msg_two_options_for_you_now="Dues opcions per a vostè ara"
@@ -683,7 +683,7 @@ msg_run_cmd_exit="Executi l'ordre 'exit'(sortir) o 'logout'(tancar sessió)"
 msg_this_is_for_drbl_server_not_for_clonezilla_server_edition="Això és per al servidor DRBL, si desitja usar l'edició servidor de Clonezilla, és millor prémer a la icona 'Clonezilla Server Edition' de l'escriptori, en cas contrari haurà de muntar el repositori imatge de Clonezilla (/home/partimag) vostè mateix. Ara el repositori imatge està fent servir la memòria d'aquesta màquina."
 msg_no_network_card_is_configured_do_it_again="No hi ha targeta de xarxa configurada! Desitja configurar-la una altra vegada"
 msg_link_detected="Enllaç detectat"
-msg_option_k_is_not_chosen_part_table_will_be_recreated="L'opció '-k' en els paràmetres extra avançats no ha estat triada, la taula de particions serà regenerada en el disc destí!!! ///NOTA/// Totes les dades d'aquest disc seran eliminats!!! Per favor prengui nota! Encara que està restaurant una/es partició/ons, com no ha triat '-k', la taula de particions del disc destí serà regenerada!!! Totes les dades d'aquest disc seran eliminats!!!"
+msg_option_k_is_not_chosen_part_table_will_be_recreated="L'opció '-k' en els paràmetres extra avançats no ha estat triada, la taula de particions serà regenerada en el disc destí!!! ///NOTA/// Totes les dades d'aquest disc seran eliminats!!! Per favor, prengui nota! Encara que està restaurant una/es partició/ons, com no ha triat '-k', la taula de particions del disc destí serà regenerada!!! Totes les dades d'aquest disc seran eliminats!!!"
 msg_failed_to_find_this_partition="Error al cercar aquesta partició en aquest sistema"
 msg_the_partition_table_does_not_exist="Pot ser que la taula de particions no existeixi? Va marcar l'opció '-k' quan executava Clonezilla? Si és així, NO marqui '-k' perquè Clonezilla pugui crear una taula de particions per vostè."
 msg_linux_disk_naming="El nom del disc és el nom del dispositiu en GNU/Linux. El primer disc en el sistema és 'hda' o 'sda', el 2º disc és 'hdb' o 'sdb'..."
@@ -705,9 +705,9 @@ msg_clonezilla_restore_local_disk="Restaurar imatge a disc local"
 msg_clonezilla_save_local_parts="Guardar particions locals com a imatge"
 msg_clonezilla_restore_local_parts="Restaurar imatge a particions locals"
 msg_iscsi_port_on_server="Port per connectar-se amb el host iSCSI remot (el nombre normal del port és el 3260)"
-msg_enter_another_shell_for_fdisk="Entri en un altre shell per crear la taula de particions en el disc desti. Ha d'usar fdisk, cfdisk, sfdisk o parted per fer-ho. Quan estigui fet, executi 'exit'(sortir) per tornar al programa original."
+msg_enter_another_shell_for_fdisk="Entri en un altre shell per crear la taula de particions en el disc destí. Ha d'usar fdisk, cfdisk, sfdisk o Parted per fer-ho. Quan estigui fet, executi 'exit'(sortir) per tornar al programa original."
 msg_use_the_part_table_from_sourcedisk="Usar la taula de particions del disc origen"
-msg_start_to_clone_data_to_target_machine="Comença el clonat de dades a la màquina desti..."
+msg_start_to_clone_data_to_target_machine="Comença el clonat de dades a la màquina destí..."
 msg_ocs_sr_again_command_saved_filename="Aquesta ordre es guarda amb aquest nom d'arxiu per a un ús posterior si fos necessari"
 msg_restored_OS_change_fstab_grub_conf="///NOTA/// Si el S.O. restaurat és GNU/Linux, ha de modificar els arxius de configuració /etc/fstab i la configuració del grub en el GNU/Linux restaurat perquè aquests canvis facin que iniciï correctament!"
 msg_only_same_disk_name_work_try_cnvt_ocs_dev_instead="Només el mateix nom de disc funcionarà! No es crearà una imatge temporal aquí! D'altra banda, pot provar l'ordre cnvt-ocs-dev per convertir la imatge."
@@ -727,7 +727,7 @@ msg_create_recovery_clonezilla_live_iso_and_zip="Crear tots dos arxius iso i zip
 msg_choose_the_language_in_recovery_iso_zip="Triar l'idioma que s'utilitzarà en la recuperació de Clonezilla live"
 msg_you_must_input_keymap_file="Ha de posar un arxiu keymap (mapa de teclat) !"
 msg_the_output_file_is_in_dir="L'arxiu de sortida iso/zip ha d'estar en aquest directori"
-msg_enter_digits_only="Per favor introdueixi només dígits"
+msg_enter_digits_only="Per favor, introdueixi només dígits"
 msg_broadcast_restore="restauració de la transmissió"
 msg_choose_the_parts_to_dump="Triar la partició origen per bolcar al servidor"
 msg_ocs_param_j1="Escriure MBR (512 B) una altra vegada després de restaurar la imatge. No anirà bé per a taules de particions diferents de la taula de la imatge."
@@ -745,7 +745,7 @@ msg_run_dcs_to_show_netboot_menu="///NOTA/// Si vol mostrar el netinstall en els
 msg_ocs_param_b="Executar clonat en mode batch (PERILLÓS!)"
 # Tag on 2008/Dec/24
 msg_ocs_param_e1_auto="Ajustar automàticament la geometria del sistema d'arxius a la partició NTFS si existeix"
-msg_you_have_to_enter_yes_or_no="Ha de posar 'y', 'yes'(si), 'n' o 'no'. Per favor introdueixi-ho una altra vegada!"
+msg_you_have_to_enter_yes_or_no="Ha de posar 'y', 'yes'(si), 'n' o 'no'. Per favor, introdueixi-ho una altra vegada!"
 msg_ocs_onthefly_param_e1="Ajustar automàticament la geometria del sistema d'arxius a la partició NTFS d'arrencada si existeix"
 msg_ocs_param_j2="Clonar les dades ocultes entre el MBR i la primera partició"
 msg_ocs_onthefly_param_j2="Clonar les dades ocultes entre el MBR i la primera partició"
@@ -760,7 +760,7 @@ msg_expert_mode="Mode Expert: Vostè selecciona les seves pròpies opcions"
 msg_ocs_param_ntfs_ok="Ometre la comprovació d'integritat NTFS, fins i tot sectors erronis (solament ntfsclone)"
 msg_ocs_param_nogui="Usar únicament el mode text, no TUI/GUI"
 msg_ocs_onthefly_param_nogui="Usar únicament el mode text, no TUI/GUI"
-msg_ocs_param_z4="Compressió lzma (més lenta però imatge més petita, descompressió més ràpida que bzip2)"
+msg_ocs_param_z4="Compressió lzma (més lenta, però imatge més petita, descompressió més ràpida que bzip2)"
 msg_warning_mount_hfsplus_writable="Advertiment! Muntar una partició HFS+ en mode escriptura en GNU/Linux comporta riscs! El driver HFS+ de linux no suporta journaling. Es recomana _NO_ realitzar això amb discs importants."
 msg_do_u_want_to_do_it_again="Vol fer-ho una altra vegada?"
 msg_you_must_choose_a_dev="Ha de seleccionar un dispositiu!"
@@ -787,9 +787,9 @@ msg_ocs_live_mount_nfs_ser_ver="Quina versió de servei NFS desitja muntar?"
 msg_ocs_param_icrc="Ignorar la revisió CRC de partclone"
 msg_change_cpu_level_to_i686="Per a la distribució que està fent servir, només estan disponibles arquitectures i686, per la qual cosa l'optimització de nivell s'ha canviat a i686!!!"
 # Tag on 2010/02/15
-msg_ocs_param_z5="Compressió xz (més lenta però també imatge més petita i descompressió més ràpida que bzip2)"
+msg_ocs_param_z5="Compressió xz (més lenta, però també imatge més petita i descompressió més ràpida que bzip2)"
 msg_ocs_param_z5p="Usar compressió xz paral·lela, per CPUs multi-nucli"
-msg_ocs_param_z6="Compressió lzip (més lenta però també imatge més petita i descompressió més ràpida que bzip2)"
+msg_ocs_param_z6="Compressió lzip (més lenta, però també imatge més petita i descompressió més ràpida que bzip2)"
 msg_ocs_param_z6p="Usar compressió lzip paral·lela, per CPUs multi-nucli"
 msg_image_saved_from_dd="La imatge s'ha gravat des de dd. Usi dd per restaurar la imatge en lloc de programes més intel·ligents com partclone, partimage o ntfsclone"
 msg_fs_not_supported_by_partimage_ntfsclone="Aquest sistema d'arxius no està suportat per programes intel·ligents com partclone, partimage o ntfsclone. Vostè força a usar dd per salvar el sistema d'arxius."
@@ -802,7 +802,7 @@ msg_ocs_param_t1="El client restaura el carregador d'arrencada [bootloader] prec
 msg_keyboard_configuration="Configuració de teclat"
 msg_change_keyboard_layout="Canviar distribució de lletres del teclat"
 msg_keep_the_default_US_keymap="Mantenir el teclat per defecte - teclat US"
-msg_ocs_onthefly_param_q1="Forçar l'ús de còpia sector-a-sector (suporta tots els sistemes de fitxers però és ineficient)"
+msg_ocs_onthefly_param_q1="Forçar l'ús de còpia sector-a-sector (suporta tots els sistemes de fitxers, però és ineficient)"
 # Tag on 2011/02/15
 msg_the_image_to_be_cheked="La imatge a comprovar"
 msg_the_part_image_to_be_cheked="La partició a comprovar"
@@ -862,7 +862,7 @@ msg_destination_disk_too_small="El disc destinació és massa petit!"
 msg_destination_disk_size="Grandària del disc destinació"
 msg_src_disk_size_from_image="Grandària del disc origen a la imatge"
 # Tag on 2011/11/29
-msg_ocs_param_z7="compressió lrzip (Lent però també una imatge menor)"
+msg_ocs_param_z7="compressió lrzip (Lent, però també una imatge menor)"
 msg_mismatched_GPT_MBR_partition="El disc conté particions GPT i MBR desajustades"
 msg_confuse_clonezilla_and_saved_image_useless="Confondrà a Clonezilla i podria desar imatges inútils o fallar en clonar el disc."
 msg_description_to_fix_mismatched_GPT_and_MBR_partition="Pot usar gdisk o sgdisk per resoldre el problema. P.ex.: Si està segur de voler únicament la taula de particions MBR, pot executar aquesta ordre per destruir la taula de particions GPT i mantenir la taula MBR"
@@ -880,7 +880,7 @@ msg_ocs_onthefly_param_fsck_src_part_yes="Auto (Precaució!) comprovar i reparar
 msg_run_clonezilla_live_again="Començar de nou (el repositori de la imatge $ocsroot, si està muntada, serà desmuntada)"
 msg_run_clonezilla_live_again_but_keep_mounted_repository="Començar de nou (deixar la imatge del repositori $ocsroot muntada)"
 # Tag on 2012/04/09
-msg_autonhostame_is_reserved_for_save_mode="\"autohostname\" és un nom de imatge reservat, ¡per favor usi un altre nom!"
+msg_autonhostame_is_reserved_for_save_mode="\"autohostname\" és un nom de imatge reservat, ¡per favor, usi un altre nom!"
 msg_no_partition_table_need_to_create="No s'ha trobat cap partició en aquesta màquina. Per restaurar imatges de particions, han d'existir particions en el disc destinació."
 # Tag on 2012/08/20
 msg_client_job_are_logged_in="Els treballs dels clients seran desats en aquest fitxer"
@@ -977,7 +977,7 @@ msg_restoring_encrypted_img_not_supported_in_clonezilla_se="Clonezilla server Ed
 msg_mount_webdav_server="Utilitzi el servidor WebDAV"
 msg_url_of_davfs_server="URL per al servidor WebDAV. P.ex. http://192.168.1.254/webdav, http://10.1.2.3:8080/share, o https://mywebdavsever.domainname.org"
 # Tag on 2015/03/09
-msg_ocs_param_irvd="No retiri el volum NTFS marcat com a defectuós després de que sigui restaurat"
+msg_ocs_param_irvd="No retiri el volum NTFS marcat com a defectuós després que sigui restaurat"
 # Tag on 2015/03/29
 msg_img_repository_not_writable="El directori del repositori de la imatge és únicament de lectura, no s'hi pot escriure"
 # Tag on 2015/04/18
@@ -986,16 +986,16 @@ msg_mount_swift_server="Utilitzi el servidor ràpid OpenStack"
 # Tag on 2015/05/06
 msg_locale_hu_HU="Hongarès"
 # Tag on 2015/11/18
-msg_choose_if_checking_image_restorable_before_restoring_on_this_server="Abans de restaurar la imatge, vol comprovar si la imatge és restaurable en aquest servidor? ///NOTA/// Aquesta acció només comprovarà si la imatge es restaurable o no, i no escriurà cap dada al disc dur."
-msg_choose_if_checking_image_restorable_before_restoring="Abans de restaurar la imatge, vol comprovar si la imatge es restaurable o no? ///NOTA/// Aquesta acció només comprovarà si la imatge es restaurable o no, i no escriurà cap dada al disc dur."
+msg_choose_if_checking_image_restorable_before_restoring_on_this_server="Abans de restaurar la imatge, vol comprovar si la imatge és restaurable en aquest servidor? ///NOTA/// Aquesta acció només comprovarà si la imatge és restaurable o no, i no escriurà cap dada al disc dur."
+msg_choose_if_checking_image_restorable_before_restoring="Abans de restaurar la imatge, vol comprovar si la imatge és restaurable o no? ///NOTA/// Aquesta acció només comprovarà si la imatge és restaurable o no, i no escriurà cap dada al disc dur."
 msg_ocs_param_check_img_restorable_before_restoring="Sí, comprovi la imatge abans de restaurar."
 msg_ocs_param_skip_checking_img_restorable_before_restoring="No, salti la comprovació"
 # Tag on 2016/02/14
 msg_ocs_param_gmf="Generar checksum dels fitxers en el dispositiu després de guardar."
-msg_fail_to_mount_maybe_linux_not_support="Fallada al muntar aquest dispositiu. Potser no està suportat per el kernel de Linux"
+msg_fail_to_mount_maybe_linux_not_support="Fallada en muntar aquest dispositiu. Potser no està suportat per al kernel de Linux"
 msg_unsble_to_create_checksum_file="No és possible crear el fitxer de checksum."
 msg_this_might_take_some_time="Això pot trigar un poc de temps..."
-msg_ocs_param_cmf="Inspeccionar el checksum dels fitxer desprès de restaurar"
+msg_ocs_param_cmf="Inspeccionar el checksum dels fitxers desprès de restaurar"
 msg_chksum_for_files_not_match="Atenció! El checksum de qualcuns fitxers no correspon"
 msg_chksum_inspection_for_files_passed="La inspecció del checksum dels fitxers d'aquest dispositiu passada."
 msg_unsble_to_inspect_checksum="No es pot inspeccionar el checksum dels fitxers."
@@ -1005,7 +1005,7 @@ msg_this_dev_is_busy_you_have_to_unmount="Aquest dispositiu està ocupat, abans 
 msg_chksum_results_saved_in_this_file="Els resultats de la inspecció es guarden en aquest fitxer"
 # Tag on 2016/03/05
 msg_local_source_disk_for_checksum_inspect="Seleccioni el disc local para inspeccionar el checksum."
-msg_choose_the_image_to_be_checked_for_checksum="Seleccioni la imatge per inspeccionar el checksum en la imatge i els fitxers en la partició o disc (només se mostren imatges amb checksum). //NOTA// cualques inspeccions del checksum dels fitxers podrien fallar, per.ex. si seleccionar permetre a Clonezilla reinstal·lar el carregador d'arrencada grub, el /boot/grub/core.img serà diferent"
+msg_choose_the_image_to_be_checked_for_checksum="Seleccioni la imatge per inspeccionar el checksum en la imatge i els fitxers en la partició o disc (només se mostren imatges amb checksum). //NOTA// cualques inspeccions del checksum dels fitxers podrien fallar, per ex. si seleccionar permetre a Clonezilla reinstal·lar el carregador d'arrencada grub, el /boot/grub/core.img serà diferent"
 # Tag on 2016/06/14
 msg_failed_to_clone_the_boot_loader_on_EBR="La clonació del carregador d'arrencada a la partició estesa ha fallat"
 msg_ocs_param_t2="El client ha saltat la restauració del EBR (Extended Boot Record o Registre estès d'arrencada)"
@@ -1015,47 +1015,47 @@ msg_dir_browser_for_img="Explorar del directori de la imatge del repositori de C
 msg_which_dir_as_clonezilla_img_home="Quin directori és per a la imatge Clonezilla (A més, si hi ha un espai en el nom del directori, _NO_ es mostrarà)?"
 msg_path_on_the_resource="Camí en el recurs"
 msg_current_selected_dir_name="Actual nom del directori seleccionat"
-msg_when_current_selected_dir_name_is_ok="Quan el 'Actual nom del directori seleccionat' sigui el que vol, utilitzi la tecla 'Tab' per seleccionar 'fet'"
-msg_not_chosing_CZ_IMG_dir="//NOTA// No hauria de seleccionar el directori etiquetat amb CZ_IMG. Tan sols està per que vostè sàpiga la llista d'imatges en el actual directori."
+msg_when_current_selected_dir_name_is_ok="Quan l'actual nom del directori seleccionat' sigui el que vol, utilitzi la tecla 'Tab' per seleccionar 'fet'"
+msg_not_chosing_CZ_IMG_dir="//NOTA// No hauria de seleccionar el directori etiquetat amb CZ_IMG. Tan sols està per què vostè sàpiga la llista d'imatges en l'actual directori."
 msg_no_any_image_found="No s'ha trobat cap imatge en aquest directori."
 msg_this_directory_is_not_mountpoint="Aquest directori no és un punt de muntatge."
 msg_there_is_no_way_to_mount_subdirectory="No hi ha forma de muntar el subdirectori."
 msg_the_dir_you_choose_is_clonezilla_img_dir="Aquest directori que ha seleccionat és un directori de imatge de Clonezilla"
-msg_remount_subdir="Remonti el subdirectori dins el actual repositori"
+msg_remount_subdir="Remonti el subdirectori dins l'actual repositori"
 msg_run_clonezilla_live_again_but_remounted_subdir="Recomençar de nou (Remuntar el subdirectori dis el repositori actual)"
-msg_exit_browsing="Sortida de la exploració del directori"
+msg_exit_browsing="Sortida de l'exploració del directori"
 msg_this_img_repo_can_only_be_used_for_saving="Aquesta imatge de repositori muntada només es pot utilitzar per desar la imatge mentrestant"
 # Tag on 2016/09/09
-msg_choose_post_mode_after_clone_1="La acció per fer quan tot s'hagi acabat"
+msg_choose_post_mode_after_clone_1="L'acció per fer quan tot s'hagi acabat"
 msg_ocs_param_p_poweroff_1="Apagar"
 msg_ocs_param_p_reboot_1="Reiniciar"
 msg_ocs_param_p_choose_1="Seleccioni reiniciar/apagar/etc quan tot estigui acabat"
 msg_remove_source_or_destination_disk_after_cloning="///NOTA/// Recordi quitar el disc font o el disc destinació abans de reiniciar aquesta màquina."
-msg_2_identical_systems_will_confuse_restored_os="En cas contrari, quan dos sistemes idèntics coexistien en la mateixa màquina, el sistema operatiu restaurat se confondrà i l'arrencada fallarà."
+msg_2_identical_systems_will_confuse_restored_os="En cas contrari, quan dos sistemes idèntics coexistien en la mateixa màquina, el sistema operatiu restaurat es confondrà i l'arrencada fallarà."
 # Tag on 2016/11/01
 msg_warning_selinux_is_enabled='Atenció! En aquest sistema, SELinux està habilitat! Si no sap com configurar-ho pel servidor DRBL, abans de continuar, per favor (1) Desactivi-ho seleccionant "SELINUX=disabled" en el fitxer /etc/selinux/config, (2) Reinici el sistema i (3) Executi de nou el program drblsrv.'
 # Tag on 2016/12/06
 msg_bittorent_restore="restauració bittorrent"
 # Tag on 2017/01/03
-msg_ocs_param_noabo="Imatge no tan sols accessible per el propietari"
+msg_ocs_param_noabo="Imatge no tan sols accessible per al propietari"
 # Tag on 2017/01/24
 msg_found_dhcp_service_on_nic="Trobat un servei DHCP en aquest interfase de xarxa"
 msg_do_you_want_to_lease_ip_addr_from_existing_dhcp_srv="Vol obtenir direcció IP del servei DHCP existent? La direcció del servidor DHCP és"
-msg_will_use_available_ip_addr_from_dhcp_srv="En tal cas, utilitzarem la direcció IP obtinguda del servidor DHCP. En cas contrari, posarem en marxa un servei DHCP en aquesta màquina, que podria tenir conflictes amb el existent. Per tant, es recomana triar yes."
-msg_note_you_have_to_make_sure_enough_no_of_ip_addr="//NOTA// Si tria 'yes', ha de assegurar-se de que el seu servei DHCP proveeix un nombre suficient d'adresses IP per a tots els clients. A més a més, aquest mecanisme és arriscat perquè tots els clients de xarxa PXE i uEFI entraran en mode DRBL o Clonezilla. Per favor, asseguris que això és el que desitja."
+msg_will_use_available_ip_addr_from_dhcp_srv="En tal cas, utilitzarem la direcció IP obtinguda del servidor DHCP. En cas contrari, posarem en marxa un servei DHCP en aquesta màquina, que podria tenir conflictes amb l'existent. Per tant, es recomana triar yes."
+msg_note_you_have_to_make_sure_enough_no_of_ip_addr="//NOTA// Si tria 'yes', ha de assegurar-se que el seu servei DHCP proveeix un nombre suficient de direccions IP per a tots els clients. A més a més, aquest mecanisme és arriscat perquè tots els clients de xarxa PXE i uEFI entraran en mode DRBL o Clonezilla. Per favor, asseguris que això és el que desitja."
 msg_failed_to_find_any_dhcp_srv="Fallada a l'hora de trobar qualsevol servei DHCP en aquesta xarxa"
 # Tag on 2017/03/02
 msg_say_no_to_manually_config_it="Si selecciona no, tindrà una altra oportunitat de configurar-ho manualment més endavant."
-msg_do_you_want_to_manually_configure_it="Vol configurar manualment la configuració de xarxa per a el dispositiu de xarxa virtual drbl0?"
-msg_what_is_the_ip_add_for_virtual_nic_drbl0="Quina es la direcció IP i el prefix per a interface drbl0 de xarxa virtual? El format és com: 192.168.167.101/24"
+msg_do_you_want_to_manually_configure_it="Vol configurar manualment la configuració de xarxa per a''l dispositiu de xarxa virtual drbl0?"
+msg_what_is_the_ip_add_for_virtual_nic_drbl0="Quina és la direcció IP i el prefix per a interface drbl0 de xarxa virtual? El format és com: 192.168.167.101/24"
 msg_your_input_config_is="La configuració que ha introduït és"
 msg_is_that_correct="És la correcta?"
 # Tag on 2017/04/09
-msg_failed_to_get_file_from_this_URL="Ha fallat al recuperar el arxiu d'aquesta URL"
-msg_boot_client_with_same_version_clonezilla_live="Ara arranca els clients amb la mateixa versió de Clonezilla live, llavors executa 'sudo ocs-live-get-img', segueixi el assistent per configurar la seva xarxa, i assigni el servei com"
-msg_append_parameter_for_unattended_mode="Si vol arrencar Clonezilla live en mode desatés, pot assinar les opcions als paràmetres d'arrancada"
+msg_failed_to_get_file_from_this_URL="Ha fallat en recuperar l'arxiu d'aquesta URL"
+msg_boot_client_with_same_version_clonezilla_live="Ara arranca els clients amb la mateixa versió de Clonezilla live, llavors executa 'sudo ocs-live-get-img', segueixi l'assistent per configurar la seva xarxa, i assigni el servei com"
+msg_append_parameter_for_unattended_mode="Si vol arrencar Clonezilla live en mode desatès, pot assinar les opcions als paràmetres d'arrancada"
 msg_client_program_is_run_on_lite_server="Pareix com si estigués executant el programa client de restauració en el petit servidor de Clonezilla live."
-msg_connect_to_upstream_network="Aquesta màquina conectarà amb la xarxa de descarrega"
+msg_connect_to_upstream_network="Aquesta màquina connectarà amb la xarxa de descarregament"
 msg_in_isolated_environment="Aquesta maquina estarà en un entorn de xarxa aïllada"
 msg_clonezilla_live_lite_server="Entri el petit servidor de Clonezilla live"
 msg_clonezilla_live_lite_client="Entri el petit client de Clonezilla live"
@@ -1063,16 +1063,16 @@ msg_start_clonezilla_live_lite_server="Començar el petit servidor de Clonezilla
 msg_stop_clonezilla_live_lite_server="Parar el petit servidor de Clonezilla live"
 msg_convert_encrypted_img_not_supported="La conversió de la imatge xifrada a fitxers fragmentats de bittorrent no està suportada."
 msg_if_boot_from_locaL_media="Si vol arrencar les màquines clients amb CD o dispositiu USB flash"
-msg_remote_clone_source="Entri el mode de origen de la clonació de dispositiu remot"
+msg_remote_clone_source="Entri el mode d'origen de la clonació de dispositiu remot"
 msg_remote_clone_destination="Entri el mode de clonació del dispositiu remot"
 msg_now_wait_for_client_to_connect="Esperant que es connecting els clients..."
-msg_now_run_this_cmd_in_target_machine="Ara pot arrencar la màquina destinació via Clonezilla live, llavors entri en el mode clonezilla, i seleccioni 'remote-dest' i segueixi el assistent, o vostè pot posar en marxa els segent(s) comandament(s) en la màquina destinació per començar el clonatge remot"
-msg_insert_storage_dev_now="Pot inserir el dispositiu d'emmagatzematge en aquesta màquina ara si vol utilitzar i a continuació esperar a que ho detecti."
+msg_now_run_this_cmd_in_target_machine="Ara pot arrencar la màquina destinació via Clonezilla live, llavors entri en el mode clonezilla, i seleccioni 'remote-dest' i segueixi l'assistent, o vostè pot posar en marxa els següent(s) comandament(s) en la màquina destinació per començar el clonatge remot"
+msg_insert_storage_dev_now="Pot inserir el dispositiu d'emmagatzematge en aquesta màquina ara si vol utilitzar i a continuació esperar que ho detecti."
 msg_which_mode_for_client_boot="Com vol arrencar les màquines client?"
 msg_boot_client_with_network="Arrencar el client amb arrencada de xarxa, p.ex., PXE o arrancada de xarxa uEFI"
 msg_boot_with_local_media="Els clients arranquen de dispositius locals com USB o CD"
-msg_boot_client_with_network_and_local_media="Els clientes arranquen des de la xarxa i dispositius locals"
-msg_how_to_run_dhcpd="Com executar el servei DHCP? Per al mode 'auto-dhcpd', Clonezilla detectarà si ja existeix un servei DHCP a la LAN. Per al mode 'use-existing-dhcpd', s'utilitzarà el servei existent de DHCP de la LAN. Per tant, asseguris de que el servei DHCP existent estigui bé configurat i proporcioni suficients direccions IP per als clients. Per al mode 'start-new-dhcpd', un nou servei DHCP s'iniciarà per al mecanisme d'arrencada de la xarxa a la LAN. Si selecciona el mode 'start-new-dhcpd', asseguris de que no hi ha cap servei DHCP existent a la LAN o en cas contrari els serveis DHCP entraran en conflicte entre ells."
+msg_boot_client_with_network_and_local_media="Els clients arranquen des de la xarxa i dispositius locals"
+msg_how_to_run_dhcpd="Com executar el servei DHCP? Per al mode 'auto-dhcpd', Clonezilla detectarà si ja existeix un servei DHCP a la LAN. Per al mode 'use-existing-dhcpd', s'utilitzarà el servei existent de DHCP de la LAN. Per tant, asseguris que el servei DHCP existent estigui bé configurat i proporcioni suficients direccions IP per als clients. Per al mode 'start-new-dhcpd', un nou servei DHCP s'iniciarà per al mecanisme d'arrencada de la xarxa a la LAN. Si selecciona el mode 'start-new-dhcpd', asseguris que no hi ha cap servei DHCP existent a la LAN o en cas contrari els serveis DHCP entraran en conflicte entre ells."
 msg_auto_detect_dhcpd="Detectar el servei DHCP automàticament"
 msg_use_existing_dhcpd="Utilitza un servei DHCP existent a la LAN"
 msg_start_new_dhcpd="Posar en marxa un nou servei DHCP a la LAN"
@@ -1084,32 +1084,32 @@ msg_ocs_use_smbv2_1="SMB protocol 2.1"
 msg_ocs_use_smbv3_0="SMB protocol 3.0"
 msg_you_must_select_a_ver="Ha de seleccionar una versió!"
 # Tag on 2017/09/24
-msg_lite_server_and_client_are_provided="a més, el mode de client i de servidor Clonezilla lite també estan diponibles. Els pot utilitzar per a desplegaments massius."
+msg_lite_server_and_client_are_provided="a més, el mode de client i de servidor Clonezilla lite també estan disponibles. Els pot utilitzar per a desplegaments massius."
 # Tag on 2017/12/02
-msg_ocs_param_z8="compressió lz4 (ràpida peró imatge de més grandària)"
+msg_ocs_param_z8="compressió lz4 (ràpida, però imatge de més grandària)"
 # Tag on 2017/12/27
-msg_ocs_param_z8p="compressió lz4mt (ràpida peró imatge de més grandària)"
+msg_ocs_param_z8p="compressió lz4mt (ràpida, però imatge de més grandària)"
 # Tag on 2018/01/09
-msg_use_channel_bonding="Usar la unió de intrefícies de xarxa [channel bonding]"
-msg_select_nics_for_channel_bonding="Seleccini les targetes de xarxa per a la unió de interfícies de xarxa [channel bonding]. Hauria de seleccionar dos o mes targetes."
+msg_use_channel_bonding="Usar la unió d'interfícies de xarxa [channel bonding]"
+msg_select_nics_for_channel_bonding="Seleccinoi les targetes de xarxa per a la unió d'interfícies de xarxa [channel bonding]. Hauria de seleccionar dos o més targetes."
 # Tag on 2018/03/06
 msg_it_might_stop_required_restoring_service="Això hauria de terminar els serveis requerits per a la restauració."
-msg_do_all_clients_finish_jobs="Han acabat tot els clients els traballs de restauració? //NOTA// NO RESPONGUI 'y' SI NO HAN ACABAT TOTS ELS CLIENTS ELS SEUS TREBALLS."
+msg_do_all_clients_finish_jobs="Han acabat tot els clients els treballs de restauració? //NOTA// NO RESPONGUI 'y' SI NO HAN ACABAT TOTS ELS CLIENTS ELS SEUS TREBALLS."
 # Tag on 2018/09/25
-msg_clonezilla_massive_deployment="Deslplegament massiu per multicast, broadcast o bittorrent"
-msg_netboot_interactive_client="Clients de xarxa y entrar en mode interactiu de Clonezilla Live"
-msg_secure_boot_for_clients_is_enabled="uEFI Secure boot per a clients està habilitat. El servicio DHCP se engegarà en esta màquina per al servidor Clonezilla lite. Per favor, aseguris de que no existeixi altre servei DHCP en la LAN."
+msg_clonezilla_massive_deployment="Desplegament massiu per multicast, broadcast o bittorrent"
+msg_netboot_interactive_client="Clients de xarxa i entrar en mode interactiu de Clonezilla Live"
+msg_secure_boot_for_clients_is_enabled="uEFI Secure boot per a clients està habilitat. El servici DHCP s''engegarà en aquesta màquina per al servidor Clonezilla lite. Per favor, asegúris que no existeixi altre servei DHCP en la LAN."
 # Tag on 2019/01/08
 msg_ocs_live_lite_server_des="El servidor Clonezilla live lite és un mode de servei Clonezilla, que executa multicast/broadcast per a màquines client. Per tant, és més fàcil d'usar a l'entorn de xarxa existent, ja que ell només pot ajustar-se a l'entorn de xarxa sense canviar cap configuració de xarxa existent en la LAN. Si utilitza això en un entorn de xarxa aïllat sense cap comunicació amb el servidor de pujada, aquest servidor lite executarà el seu propi servei DHCP i PXE. Vostè pot arrencar les màquines client amb la mateixa versió de Clonezilla live, ja sigui utilitzant CD/unitat flaix USB o PXE per a restaurar la imatge proporcionada per aquest servidor lite."
 msg_img_massive_deploy="Desplegament massiu des d'una imatge."
 msg_dev_massive_deploy="Desplegament massiu directament des de partició(ns) o disc(s) (només BT)"
 msg_disk_to_mdisk_by_BT="Disc(s) a discos de múltiples màquines usant el protocol BT"
-msg_part_to_mpart_by_BT="Partició(ns) a partiticiones de múltiples màquines usant el protocol BT"
+msg_part_to_mpart_by_BT="Partició(ns) a particiones de múltiples màquines usant el protocol BT"
 msg_save_temp_img_for_BT="Abans de realitzar una implementació massiva directament des d'un dispositiu d'origen, encara hem de guardar el dispositiu d'origen com una imatge temporal."
 # Tag on 2019/01/12
 msg_mount_ramdisk="Usar memòria (OK per a BT des de dispositiu raw)"
 msg_img_repo_is_using_tmpfs="La imatge del repositori està usant tmpfs (RAM com a disc)."
-msg_failed_to_use_ramdisk_as_repo="Fallada en usar la RAM (tmpfs) com mimagen del repositori."
+msg_failed_to_use_ramdisk_as_repo="Fallada en usar la RAM (tmpfs) com imatge del repositori."
 # Tag on 2019/01/16
 msg_choose_param_to_set_before_sending_data="Triï el programa per a comprimir les dades abans d'enviar-les al client. Això s'utilitza per a no saturar l'amplada de banda de la xarxa. Si hi ha diverses CPU disponibles, s'utilitzaran per a tenir un millor rendiment en comprimir les dades"
 msg_ocs_onthefly_param_gz='Usar algorisme gzip'
@@ -1119,13 +1119,13 @@ msg_ocs_onthefly_param_lzop='Usar algorisme lzo'
 msg_ocs_onthefly_param_zstd='Usar algorisme zstd'
 msg_ocs_onthefly_param_cat='No comprimir'
 # Tag on 2019/07/18
-msg_ocs_param_iui='No actualizar el/s fitxer/s initramfs en el GNU/Linux restaurat.'
+msg_ocs_param_iui='No actualitzar el/s fitxer/s initramfs en el GNU/Linux restaurat.'
 msg_ocs_onthefly_param_iui='No actualitzar el/s fitxer/s initramfs en el GNU/Linux restaurat.'
 # Tag on 2019/07/25
-msg_disk_is_full_or_permission_issue='No hi ha espai al dispositiu o hi ha problemes de permisos. Per aixó, les dades no poden ser escrites en aquest disc:'
+msg_disk_is_full_or_permission_issue='No hi ha espai al dispositiu o hi ha problemes de permisos. Per això, les dades no poden ser escrites en aquest disc:'
 # Tag on 2019/08/13
 msg_no_device_selected='No hi ha un dispositiu seleccionat.'
-msg_input_img_dir_not_exist="El directori d'image introduit no existeix:"
+msg_input_img_dir_not_exist="El directori d'imatge introduït no existeix:"
 # Tag on 2019/09/02
 msg_clean_MBR_partition_keep_GPT_one='Per altra banda, si està segur que vol tan sols una taula de partició GPT, pot emprar aquesta línea de comandament per destruir el MBR de la taula de particions i al mateix temps guardar la taula de particions GPT'
 # Tag on 2019/10/04
@@ -1137,7 +1137,7 @@ msg_ocs_param_z9p="compressió zstdmt"
 # Tag on 2020/08/09
 msg_locale_ko_KR='Coreà'
 # Tag on 2020/09/10
-msg_ocs_onthefly_param_rvd='Elimini el indicador de volumen NTFS sucio del sistema de archivos NTFS origen antes de clonar-ho.'
+msg_ocs_onthefly_param_rvd="Elimini l'indicador de volumen NTFS brut del sistema d''archius NTFS origen abans de clonar-ho."
 # Tag on 2020/10/02
 msg_ocs_onthefly_param_t='Ometre clonat del MBR (Master Boot Record)'
 msg_ocs_onthefly_param_t1='Clonar el bootloader predisenyat de syslinux (Únicament per a Windows)'
@@ -1152,7 +1152,7 @@ msg_ocs_use_smb_auto='Auto negociar protocol SMB'
 msg_choose_if_fsck_the_repo_part="Trïi si vol chequear i reparar el sistema d'arxius abans de muntar la imatge repositori. Aquesta opció és només per a uns certs sistemes d'arxius ben suportats per fsck en GNU/Linux, com ext2/3/4, reiserfs, xfs, jfs, vfat. No per a NTFS, HFS+..."
 msg_skip_check_repo_fs="Ometre revisió/reparació del sistema d'arxius abans de muntar"
 msg_ocs_param_fsck_repo_part="Interactuar en la revisió i reparació del sistema d'arxius abans de muntar"
-msg_ocs_param_fsck_repo_part_yes="Auto-revisió (Caution!) i reparació del sistema d'arxius abans de muntar and repair file system before mounting"
+msg_ocs_param_fsck_repo_part_yes="Autorevisió (Precaució!) i reparació del sistema d'arxius abans de muntar and repair file system before mounting"
 msg_not_this_is_for_mount_repository="//NOTA// Això és per a muntar un dispositiu d'emmagatzematge local com un repositori d'imatges!"
 # Tag on 2021/03/06
 msg_ocs_param_ssnf="Ometre la configuració del primer dispositiu d'arrencada com a xarxa del NVRAM del client de uEFI netboot"
@@ -1162,25 +1162,25 @@ msg_B2SUMS_check_failed="Els checksums de BLAKE2 NO coincideixen!"
 msg_ocs_param_gb="Generar checksums d'imatge BLAKE2"
 msg_ocs_param_cb="Verificar imatge amb checksums de BLAKE2"
 # Tag on 2021/03/15
-msg_list_local_device_mode="En quina manera desitja enumerar els dispositius de bloc en aquesta màquina? Si no té idea, triï 'disk_or_part'. _NO_ triï 'both_type_dev' tret que sàpiga el que està fent. Bàsicament, 'both_type_dev' és perquè forci l'elecció del dispositiu de bloc que no apareix com a tal. Per exemple, desitja guardar el dispositiu de bloc /dev/sda però no es mostra en la manera 'saveparts' ja que és un nom de dispositiu de disc i no un nom de dispositiu de partició."
+msg_list_local_device_mode="En quina manera desitja enumerar els dispositius de bloc en aquesta màquina? Si no té idea, triï 'disk_or_part'. _NO_ triï 'both_type_dev' tret que sàpiga el que està fent. Bàsicament, 'both_type_dev' és perquè forci l'elecció del dispositiu de bloc que no apareix com a tal. Per exemple, desitja guardar el dispositiu de bloc /dev/sda, però no es mostra en la manera 'saveparts' ja que és un nom de dispositiu de disc i no un nom de dispositiu de partició."
 msg_list_disk_or_part_mode="Disc(s) i partició(ns) separats"
 msg_list_both_type_device_mode="Llistar tots dos tipus de dispositius de bloc junts, és a dir, mostrar el(els) disc(s) i la(les) partició(ons) simultàniament"
 # Tag on 2021/07/22
 msg_press_space_to_mark_selection="Prem la barra espaiadora per seleccionar. Un asterisc(*) apareixerà quan la selecció es realitzi"
 # Tag on 2021/08/28
-msg_reserved_img_names="Alguns noms d'imatges reservats tenen significats especials, incloent \"ask_user\", \"autoname\", \"autoname-\" \"autohostname\", i \"autoproductname\". Consulti el lloc web de Clonezilla per a obtenir més detalls."
+msg_reserved_img_names="Alguns noms d'imatges reservats tenen significats especials, incloent-hi \"ask_user\", \"autoname\", \"autoname-\" \"autohostname\", i \"autoproductname\". Consulti el lloc web de Clonezilla per a obtenir més detalls."
 # Tag on 2021/10/25
-msg_choose_wired_or_wireless="Es detectaren dispositius de xarxa tant cablejats com sense fils. Quin tipus vol usar?"
+msg_choose_wired_or_wireless="Es detectaren dispositius de xarxa tan cablejats com sense fils. Quin tipus vol usar?"
 msg_use_wired="Usar dispositiu de xarxa amb cable"
 msg_use_wireless="Usar dispositiu de xarxa sense fil"
 msg_nic_status_on_sytem="Dispositiu de xarxa i estat detectat en aquest sistema:"
 # Tag on 2021/12/04
-msg_set_image_volume_size="Grandària en MB per dividir la partició de l'arxiu imatge en diversos volums d'arxius. Per favor introdueixi un nombre major de 10. Si no desitja fragmentar l'arxiu imatge, introdueixi un nombre molt gran ex. \"1000000\". Per favor no usi mai més \"0\" perquè si la seva distribució de GNU/Linux usa el nou /sbin/init en l'inici, es confondrà amb aquest \"0\". //NOTA// Per al repositori imatge del FAT32, El nombre no ha de ser major que 4096."
+msg_set_image_volume_size="Grandària en MB per dividir la partició de l'arxiu imatge en diversos volums d'arxius. Per favor, introdueixi un nombre major de 10. Si no desitja fragmentar l'arxiu imatge, introdueixi un nombre molt gran ex. \"1000000\". Per favor, no usi mai més \"0\" perquè si la seva distribució de GNU/Linux usa el nou /sbin/init en l'inici, es confondrà amb aquest \"0\". //NOTA// Per al repositori imatge del FAT32, El nombre no ha de ser major que 4096."
 # Tag on 2022/02/03
 msg_found_luks_dev="Trobat dispositiu LUKS"
 msg_prompt_for_open_luks_dev="Hem d'obrir el dispositiu LUKS ara. Se us demanarà la clau per cadascun d'ells."
 msg_luks_mapped_name_not_found_in_this_file="El nom del dispositiu assignat de LUKS no ha estat trobat en aquest fitxer"
-msg_name_it_arbitrarily_restered_os_boot_might_fail="serà reanomenat a l'atzar. De totes maneres, si el S.O. restaurat depèn d'aquest nom especificat, podria fallar a l'iniciar-se."
+msg_name_it_arbitrarily_restered_os_boot_might_fail="serà reanomenat a l'atzar. De totes maneres, si el S.O. restaurat depèn d'aquest nom especificat, podria fallar en l'iniciar-se."
 msg_now_open_luks_dev="Ara obre el dispositiu LUKS"
 msg_luks_header_file_found="Arxiu d'encapçalament de LUKS trobat"
 msg_luks_header_file_not_found="Arxiu d'encapçalament de LUKS no trobat"
@@ -1193,18 +1193,18 @@ msg_if_yes_open_luks="En cas afirmatiu, se us demanarà ingressar la contrasenya
 msg_if_no_dd_mode_will_be_used="En cas contrari, el dispositiu LUKS no serà obert i el mode sector-a-sector (dd) del Clonezilla serà usat."
 # Tag on 2022/05/09
 msg_open_luks_dev="Abrir el dispositiu LUKS"
-msg_do_not_open_luks_dev="No obir el dispositiu LUKS"
+msg_do_not_open_luks_dev="No obrir el dispositiu LUKS"
 # Tag on 2022/07/04
 msg_ocs_param_sfs="Saltar desar el sistema de fitxers de la partició"
 # Tag on 2022/09/10
 msg_choose_default_param_if_no_idea="Si no està segur, deixi el valor per defecte i NO canviï res. Tan sols polsi Enter."
-msg_hint_for_fdisk_beginner="Seleccioni el mode per a crear la taula de particions en el disc objectiu: ***ATENCIÓ***(1) ANEM A CREAR UNA TAULA DE PARTICIONS NOVA EN EL DISC DESTÍ. TOTA LA INFORMACIÓ EN EL DISPOSITIU DESTÍ SERÀ ESBORRADA!!! (2) Clonezilla no restaurarà la imatge d'un disc dur gran (partició) en un disc dur menor (partició). Però, pot restaurar una imatge des d'un disc petit (partició) en un disc major (partició)."
+msg_hint_for_fdisk_beginner="Seleccioni el mode per a crear la taula de particions en el disc objectiu: ***ATENCIÓ***(1) CREAREM UNA TAULA DE PARTICIONS NOVA EN EL DISC DESTÍ. TOTA LA INFORMACIÓ EN EL DISPOSITIU DESTÍ SERÀ ESBORRADA!!! (2) Clonezilla no restaurarà la imatge d'un disc dur gran (partició) en un disc dur menor (partició). Però, pot restaurar una imatge des d'un disc petit (partició) en un disc major (partició)."
 # Tag on 2022/09/27
-msg_hint_for_onthefly_fdisk_beginner="Seleccioni el mode per a crear una taula de particions en el disc destí: ***ATENCIÓ***(1) ANEM A CREAR UNA NOVA TAULA DE PARTICIONS EN EL DISC DESTÍ. TOTA LA INFORMACIÓ EN EL DISPOSITIU SERÀ ESBORRADA!!! (2) Clonezilla no restaurarà la imatge d'un disc dur gran (partició) en un disc dur menor (partició). Però, pot restaurar una imatge des d'un disc petit (partició) en un disc major (partició)."
+msg_hint_for_onthefly_fdisk_beginner="Seleccioni el mode per a crear una taula de particions en el disc destí: ***ATENCIÓ***(1) CREAREM UNA NOVA TAULA DE PARTICIONS EN EL DISC DESTÍ. TOTA LA INFORMACIÓ EN EL DISPOSITIU SERÀ ESBORRADA!!! (2) Clonezilla no restaurarà la imatge d'un disc dur gran (partició) en un disc dur menor (partició). Però, pot restaurar una imatge des d'un disc petit (partició) en un disc major (partició)."
 # Tag on 2023/01/24
-msg_failed_to_open_this_luks_dev='Failed to open this LUKS device:'
-msg_do_you_want_to_try_to_open_it_again='Do you want to try to open it again?'
-msg_if_yes_open_luks_again='If yes, you will be prompted to enter passphrase to open the LUKS device again.'
+msg_failed_to_open_this_luks_dev='Ha fallat en obrir el dispositiu aquest LUKS:'
+msg_do_you_want_to_try_to_open_it_again='Desitja tornar a intentar obrir-ho?'
+msg_if_yes_open_luks_again='En cas afirmatiu, se li demanarà la clau per obrir de nou el dispositiu LUKS.'
 # Tag on 2023/10/05
-msg_ocs_param_edio='Enable the direct IO mode of Partclone for NVMe SSD'
-msg_ocs_onthefly_param_edio='Enable the direct IO mode of Partclone for NVMe SSD'
+msg_ocs_param_edio='Permet el mode directe IO de Partclone per a NVMe SSD'
+msg_ocs_onthefly_param_edio='Permet el mode directe IO de Partclone per a NVMe SSD'
