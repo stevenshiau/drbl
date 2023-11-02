@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (5.2.26-drbl1) unstable; urgency=medium
+
+  * Language file ca_ES was updated. Thanks to René Mérou.
+
+ -- Steven Shiau <steven@clonezilla.org>  Thu, 02 Nov 2023 09:33:34 +0800
+
 drbl (5.2.25-drbl1) unstable; urgency=medium
 
   * Language file ja_JP was updated. Thanks to Akira Yoshiyama.
