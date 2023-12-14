@@ -1,3 +1,9 @@
+drbl (5.2.28-drbl1) unstable; urgency=medium
+
+  * A better mechanism learned from newer Debian to load unifont in Debian.
+
+ -- Steven Shiau <steven@clonezilla.org>  Thu, 14 Dec 2023 15:18:15 +0800
+
 drbl (5.2.27-drbl1) unstable; urgency=medium
 
   * drbl.conf: removed dmraid from required packages list of Clonezilla live.

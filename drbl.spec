@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	5.2.27
+Version:	5.2.28
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -46,6 +46,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Thu Dec 14 2023 Steven Shiau <steven _at_ clonezilla org> 5.2.28-drbl1
+  * A better mechanism learned from newer Debian to load unifont in Debian.
+
 * Mon Dec 04 2023 Steven Shiau <steven _at_ clonezilla org> 5.2.27-drbl1
   * drbl.conf: removed dmraid from required packages list of Clonezilla live.
     It does not exist in Debian Sid anymore.
