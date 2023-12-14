@@ -285,7 +285,7 @@ if [ "\$run_load_netboot" != "no" ]; then
   load_netboot
 fi
 
-# Somehow the grub2 from CentOS 7 will look for unicode.pf2.pf2 if using "loadfont unicode.pf2". While in Debian/Ubuntu it's OK to use "loadfont unicode.pf2".
+# Somehow the grub2 from CentOS 7 will look for unicode.pf2.pf2 if using "loadfont unicode.pf2". While in older Debian/Ubuntu it's OK to use "loadfont unicode.pf2".
 if [ x"\${graphic_bg}" = xyes ]; then
   if loadfont unicode; then
     load_gfxterm
