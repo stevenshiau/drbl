@@ -1203,3 +1203,5 @@ msg_if_yes_open_luks_again='Εάν ναι, θα σας ζητηθεί να ει�
 # Tag on 2023/10/05
 msg_ocs_param_edio='Ενεργοποίηση της απευθείας λειτουργειας IO (Εισόδου/Εξόδου) του Partclone για NVMe SSD'
 msg_ocs_onthefly_param_edio='Ενεργοποίηση της απευθείας λειτουργειας IO (Εισόδου/Εξόδου) του Partclone για NVMe SSD'
+# Tag on 2024/01/13
+msg_prompt_remove_gnome_initial_setup='YP is used in DRBL clients, so gnome-initial-setup is annoying and not required. It is recommended to remove it.'

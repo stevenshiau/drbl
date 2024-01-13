@@ -1204,3 +1204,5 @@ msg_if_yes_open_luks_again='如果是，将会再次提示你输入密码来开�
 # Tag on 2023/10/05
 msg_ocs_param_edio='对NVMe SSD设备开启Partclone的直接输入/输出模式（direct I/O）'
 msg_ocs_onthefly_param_edio='对NVMe SSD设备开启Partclone的直接输入/输出模式（direct I/O）'
+# Tag on 2024/01/13
+msg_prompt_remove_gnome_initial_setup='YP is used in DRBL clients, so gnome-initial-setup is annoying and not required. It is recommended to remove it.'

@@ -3268,6 +3268,22 @@ for i in $obsolete_pkgs; do
     dpkg --purge $i
   fi
 done
+annoying_gnome_pkg="gnome-initial-setup"
+# We use YP for DRBL clients, so gnome-initial-setup is annoying and not required.
+for i in $annoying_gnome_pkg; do
+  if [ -n "$(dpkg -s $i 2>/dev/null | grep -Ei "^Status: install ok installed")" ]; then
+    if [ "$i" = "gnome-initial-setup" ]; then
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+      echo "$msg_prompt_remove_gnome_initial_setup"
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+      echo -n "$msg_press_enter_to_continue"
+      read
+    fi
+    echo "Trying to remove package $i..."
+    apt-get purge $i
+    echo "Done."
+  fi
+done
 
 # Shall We try to upgrade system first.?
 # Since there are many debian based distributions, it's might not be a good
