@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (5.2.30-drbl1) unstable; urgency=medium
+
+  * drblsrv: Add an option to remove gnome-initial-setup for Debian.
+    The corresponding language files were updated, too.
+
+ -- Steven Shiau <steven@clonezilla.org>  Sat, 13 Jan 2024 16:02:36 +0800
+
 drbl (5.2.29-drbl1) unstable; urgency=medium
 
   * Language file hu_HU was updated. Thanks to Greg.
