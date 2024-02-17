@@ -1117,6 +1117,9 @@ load_lang_set() {
      2|zh_TW.UTF-8|zh_TW.utf8|tw.UTF-8|tw.utf8)
         lang="zh_TW.UTF-8"
         ;;
+     C)
+        lang="en_US.UTF-8"
+        ;;
      *)
         if [ -n "$lang_answer" -a -e "$DRBL_SCRIPT_PATH/lang/bash/$lang_answer" ] ; then
           lang="$lang_answer"
@@ -1128,8 +1131,10 @@ load_lang_set() {
   # get the l10n message
   if [ -n "$lang" -a -e "$DRBL_SCRIPT_PATH/lang/bash/$lang" ] ; then
     . $DRBL_SCRIPT_PATH/lang/bash/$lang
+  elif [ -n "$lang" -a -e "$DRBL_SCRIPT_PATH/lang/bash/${lang%.UTF-8}" ] ; then
+    . $DRBL_SCRIPT_PATH/lang/bash/${lang%.UTF-8}
   else
-    echo "Not such language option!!!"
+    echo "No such language option '$lang'!!!"
     exit 1
   fi
 } # end of load_lang_set
