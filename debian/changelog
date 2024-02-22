@@ -1,3 +1,9 @@
+drbl (5.2.31-drbl1) unstable; urgency=medium
+
+  * Remove package dmraid from the list of gparted live in drbl.conf.
+
+ -- Steven Shiau <steven@clonezilla.org>  Thu, 22 Feb 2024 11:50:58 +0800
+
 drbl (5.2.30-drbl1) unstable; urgency=medium
 
   * drblsrv: Add an option to remove gnome-initial-setup for Debian.

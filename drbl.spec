@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	5.2.30
+Version:	5.2.31
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -46,6 +46,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Thu Feb 22 2024 Steven Shiau <steven _at_ clonezilla org> 5.2.31-drbl1
+  * Remove package dmraid from the list of gparted live in drbl.conf.
+
 * Sat Jan 13 2024 Steven Shiau <steven _at_ clonezilla org> 5.2.30-drbl1
   * drblsrv: Add an option to remove gnome-initial-setup for Debian.
     The corresponding language files were updated, too.
