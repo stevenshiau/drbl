@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	5.2.31
+Version:	5.2.32
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -46,6 +46,10 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Tue Mar 12 2024 Steven Shiau <steven _at_ clonezilla org> 5.2.32-drbl1
+  * Allow mmdebstrap to replace debootstrap in function
+    create_live_required_debian_based_prompt of drbl-functions.
+
 * Thu Feb 22 2024 Steven Shiau <steven _at_ clonezilla org> 5.2.31-drbl1
   * Remove package dmraid from the list of gparted live in drbl.conf.
 
