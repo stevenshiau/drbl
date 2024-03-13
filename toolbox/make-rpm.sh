@@ -35,3 +35,4 @@ cp -v $RPMBUILD/SRPMS/$PKG-$VER-$RELEASE.src.rpm $RPMBUILD/RPMS/$PKG-$VER-$RELEA
 cp -af $TARBALL RPMS.drbl-test
 #mv -f $TARBALL old
 cp -fv doc/{GPL,ChangeLog.txt,RELEASE-NOTES,Known_issues*.txt} RPMS.drbl-test
+exit 0
