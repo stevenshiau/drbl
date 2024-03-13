@@ -3718,7 +3718,8 @@ create_live_required_debian_based_prompt() {
     # Try to find the old package name.
     lh_ver="$(LC_ALL=C dpkg-query -W -f='${Version}\n' live-helper)"
   fi
-  debootstrap_ver="$(LC_ALL=C debootstrap --version | grep -iEw "^(debootstrap|mmdebstrap)" | awk -F" " '{print $2}')"
+  debootstrap_ver="$(LC_ALL=C debootstrap --version | grep -iEw "^debootstrap" | awk -F" " '{print $2}')"
+  mmdebstrap_ver="$(LC_ALL=C mmdebstrap --version | grep -iEw "^mmdebstrap" | awk -F" " '{print $2}')"
   if dpkg --compare-versions "$lh_ver" "<<" "$lh_ver_required"; then
     [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
     echo "Required live helper or live build version: $lh_ver_required"
@@ -3729,13 +3730,17 @@ create_live_required_debian_based_prompt() {
     exit 1
   fi
   if dpkg --compare-versions "$debootstrap_ver" "<<" "$debootstrap_ver_required"; then
-    [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
-    echo "Required debootstrap version: $debootstrap_ver_required"
-    echo "Installed debootstrap version: $debootstrap_ver"
-    echo "You have to install debootstrap (version $debootstrap_ver_required or later)."
-    [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
-    echo "Program terminated!"
-    exit 1
+    if dpkg --compare-versions "$mmdebstrap_ver" "<<" "$mmdebstrap_ver_required"; then
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+      echo "Required debootstrap version: $debootstrap_ver_required"
+      echo "Installed debootstrap version: $debootstrap_ver"
+      echo "Required mmdebstrap version: $mmdebstrap_ver_required"
+      echo "Installed mmdebstrap version: $mmdebstrap_ver"
+      echo "You have to install debootstrap (version $debootstrap_ver_required or later) or mmdebstrap (verion $mmdebstrap_ver_required or later)."
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+      echo "Program terminated!"
+      exit 1
+    fi
   fi
   if [ "$batch_mode" = "no" ]; then
     echo -n "Press enter to continue... "
