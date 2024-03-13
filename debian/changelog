@@ -1,3 +1,11 @@
+drbl (5.2.33-drbl1) unstable; urgency=medium
+
+  * drbl-functions: add support mmdebstrap checking.
+  * make-rpm.sh & make-deb.sh: give exit code if script
+    finishes in the end.
+
+ -- Steven Shiau <steven@clonezilla.org>  Wed, 13 Mar 2024 12:21:48 +0800
+
 drbl (5.2.32-drbl1) unstable; urgency=medium
 
   * Allow mmdebstrap to replace debootstrap in function
