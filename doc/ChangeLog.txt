@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (5.2.34-drbl1) unstable; urgency=medium
+
+  * Add powermgmt-base in packages list of ocs live.
+  * drbl.conf: Use lz4 instead of liblz4-tool in packages list.
+
+ -- Steven Shiau <steven@clonezilla.org>  Sun, 07 Apr 2024 17:33:12 +0800
+
 drbl (5.2.33-drbl1) unstable; urgency=medium
 
   * drbl-functions: add support mmdebstrap checking.

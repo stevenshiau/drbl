@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	5.2.33
+Version:	5.2.34
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -46,6 +46,10 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Sun Apr 07 2024 Steven Shiau <steven _at_ clonezilla org> 5.2.34-drbl1
+  * Add powermgmt-base in packages list of ocs live.
+  * drbl.conf: Use lz4 instead of liblz4-tool in packages list.
+
 * Wed Mar 13 2024 Steven Shiau <steven _at_ clonezilla org> 5.2.33-drbl1
   * drbl-functions: add support mmdebstrap checking.
   * make-rpm.sh & make-deb.sh: give exit code if script finishes in the end.
