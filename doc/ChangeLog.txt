@@ -5,6 +5,14 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (5.2.35-drbl1) unstable; urgency=medium
+
+  * Added yq in the live packages list.
+  * fix: improved get-nic-devs excludes device name, so that the device wlo1,
+    for example, should be kept.
+
+ -- Steven Shiau <steven@clonezilla.org>  Tue, 16 Apr 2024 19:53:34 +0800
+
 drbl (5.2.34-drbl1) unstable; urgency=medium
 
   * Add powermgmt-base in packages list of ocs live.
