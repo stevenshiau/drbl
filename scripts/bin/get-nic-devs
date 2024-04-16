@@ -11,10 +11,10 @@ exluding_dev="(lo|sit[0-9]+|lxc.*)"
 export LC_ALL=C
 if [ -d /sys/class/net/ ]; then
   # kernel support sysfs, so get the NIC devices from /sys
-  NETDEVICES="$(unalias ls &>/dev/null; ls /sys/class/net/ | grep -v -E "$exluding_dev")"
+  NETDEVICES="$(unalias ls &>/dev/null; ls /sys/class/net/ | grep -v -E "^$exluding_dev")"
 elif [ -f /proc/net/dev ]; then
   # kernel do not support sysfs, so get the NIC devices from /proc
-  NETDEVICES="$(cat /proc/net/dev | grep "^.*:" | cut -d: -f1 | grep -v -E "$exluding_dev")"
+  NETDEVICES="$(cat /proc/net/dev | grep "^.*:" | cut -d: -f1 | grep -v -E "^$exluding_dev")"
 else
   exit 1
 fi
