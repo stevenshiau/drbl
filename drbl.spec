@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	5.2.35
+Version:	5.2.36
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -46,6 +46,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Thu Apr 18 2024 Steven Shiau <steven _at_ clonezilla org> 5.2.36-drbl1
+  * Remove package deborphan in live packages list.
+
 * Tue Apr 16 2024 Steven Shiau <steven _at_ clonezilla org> 5.2.35-drbl1
   * Added yq in the live packages list.
   * fix: improved get-nic-devs excludes device name, so that the device wlo1,

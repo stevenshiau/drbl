@@ -1,3 +1,9 @@
+drbl (5.2.36-drbl1) unstable; urgency=medium
+
+  * Remove package deborphan in live packages list.
+
+ -- Steven Shiau <steven@clonezilla.org>  Thu, 18 Apr 2024 22:15:25 +0800
+
 drbl (5.2.35-drbl1) unstable; urgency=medium
 
   * Added yq in the live packages list.
