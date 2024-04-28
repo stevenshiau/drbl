@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (5.2.37-drbl1) unstable; urgency=medium
+
+  * Removed thin-provisioning-tools from packages list of clonezilla live
+    due to it breaks the dependences.
+
+ -- Steven Shiau <steven@clonezilla.org>  Mon, 29 Apr 2024 01:14:23 +0800
+
 drbl (5.2.36-drbl1) unstable; urgency=medium
 
   * Remove package deborphan in live packages list.
