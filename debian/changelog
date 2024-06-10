@@ -1,3 +1,14 @@
+drbl (5.2.38-drbl1) unstable; urgency=medium
+
+  * drbl.conf: add cryptsetup in PKG_TO_QUERY.
+  * Merge pull request #31 from iamzhaohongxin/patch-1. Update zh_CN.UTF-8
+  * Language file ca_ES was updated. Thanks to René Mérou.
+  * Language file de_DE was updated. Thanks to Savi G and Michael Vinzenz.
+  * Removed duplicated variables msg_ocs_param_ps & msg_ocs_onthefly_param_ps
+    in language file en_US. Thanks to Станислав Большаков.
+
+ -- Steven Shiau <steven@clonezilla.org>  Mon, 10 Jun 2024 18:53:59 +0800
+
 drbl (5.2.37-drbl1) unstable; urgency=medium
 
   * Removed thin-provisioning-tools from packages list of clonezilla live
