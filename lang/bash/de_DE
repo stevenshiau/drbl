@@ -846,7 +846,7 @@ msg_locale_zh_TW='Traditionelles Chinesisch'
 msg_if_you_want_to_run_in_unattended_mode='Wenn Sie im unbeaufsichtigten Mode arbeiten wollen:'
 msg_source_disks_more_than_1='Das Image wurde von mehr als einer Platte gesichert. Dieses Programm kann nur Images verarbeiten, die von einer Platte erstellt wurden.'
 msg_restore_1_image_to_multiple_local_disks='Stelle Image auf mehrere lokale Platten wieder her'
-msg_prompt_for_insert_USB_dev_as_destination_disks='Wenn Sie USB-Speichermedien als Zielplatten verwenden wollen, verbinden Sie das USB-Speichermedium mit diesem Gerät *jetzt*. Warten Sie ca. 5 Sekunden und drücken dann die Eingabetaste, damit das Betriebssystem die USB-Geräte erkennen kann.'
+msg_prompt_for_insert_USB_dev_as_destination_disks='Wenn Sie USB-Speichermedien als Zielplatten verwenden wollen, verbinden Sie das USB-Speichermedium *jetzt* mit diesem Computer. Warten Sie ca. 5 Sekunden und drücken Sie dann die Eingabetaste, damit das Betriebssystem die USB-Geräte erkennen kann.'
 msg_prompt_to_use_ask_user_for_later_choose='Wenn Sie die Zielplatte später beim Wiederherstellen wählen wollen, geben Sie "ask_user" ein.'
 # Tag on 2011/10/31
 msg_choose_if_fsck_the_source_part='Wählen Sie, ob das Dateisystem vor der Sicherung geprüft und evtl. repariert werden soll. Dies ist nur bei bestimmten Dateisystemen möglich, die von fsck unter GNU/Linux unterstützt werden, wie z.B. ext2/3/4, reiserfs, xfs, jfs, vfat. Dazu gehören nicht NTFS, HFS+...'
