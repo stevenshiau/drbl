@@ -415,7 +415,7 @@ do_clonezilla_restore_dev() {
     esac
 
     # Enable bittorrent restoring when opentracker is available
-    if type opentracker &>/dev/null; then
+    if type opentracker && type ezio &>/dev/null; then
       bt_restore_msg_1="bittorrent"
       bt_restore_msg_2="$(rep_whspc_w_udrsc "$msg_bittorent_restore")"
     fi
