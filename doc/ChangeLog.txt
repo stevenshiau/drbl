@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (5.3.1-drbl1) unstable; urgency=medium
+
+  * dcs: enabled only when opentracker & ezio exist on the system.
+
+ -- Steven Shiau <steven@clonezilla.org>  Wed, 12 Jun 2024 15:01:15 +0800
+
 drbl (5.2.38-drbl1) unstable; urgency=medium
 
   * drbl.conf: add cryptsetup in PKG_TO_QUERY.

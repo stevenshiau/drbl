@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	5.2.38
+Version:	5.3.1
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -46,6 +46,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Wed Jun 12 2024 Steven Shiau <steven _at_ clonezilla org> 5.3.1-drbl1
+  * dcs: enabled only when opentracker & ezio exist on the system.
+
 * Mon Jun 10 2024 Steven Shiau <steven _at_ clonezilla org> 5.2.38-drbl1
   * drbl.conf: add cryptsetup in PKG_TO_QUERY.
   * Merge pull request #31 from iamzhaohongxin/patch-1. Update zh_CN.UTF-8
