@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (5.3.2-drbl1) unstable; urgency=medium
+
+  * Removed package cpufrequtils from lists of live system.
+    It's not in the Debian repo anymore.
+
+ -- Steven Shiau <steven@clonezilla.org>  Mon, 24 Jun 2024 10:28:18 +0800
+
 drbl (5.3.1-drbl1) unstable; urgency=medium
 
   * dcs: enabled only when opentracker & ezio exist on the system.
