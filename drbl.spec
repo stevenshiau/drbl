@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	5.3.2
+Version:	5.3.3
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -46,6 +46,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Tue Aug 06 2024 Steven Shiau <steven _at_ clonezilla org> 5.3.3-drbl1
+  * Updated language files by adding "%" in msg_you_must_input_legal_filename.
+
 * Mon Jun 24 2024 Steven Shiau <steven _at_ clonezilla org> 5.3.2-drbl1
   * Removed package cpufrequtils from lists of live system.
     It's not in the Debian repo anymore.

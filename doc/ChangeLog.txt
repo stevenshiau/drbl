@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (5.3.3-drbl1) unstable; urgency=medium
+
+  * Updated language files by adding "%" in msg_you_must_input_legal_filename.
+
+ -- Steven Shiau <steven@clonezilla.org>  Tue, 06 Aug 2024 20:17:26 +0800
+
 drbl (5.3.2-drbl1) unstable; urgency=medium
 
   * Removed package cpufrequtils from lists of live system.
