@@ -349,7 +349,7 @@ msg_input_name_to_save_the_img='輸入一個名稱來存這個印象檔'
 msg_time_to_wait_sec='最少等待的時間(秒) (從第一台電腦來報到後開始算)'
 msg_max_time_to_wait_sec="最長等待的時間(秒) (從第一台電腦來報到後開始算)，也就是超過這個指定的時間，只要至少有一台電腦來連接，即使指定的電腦數目不夠，也強迫開始複製(建議>=$SLEEP_TIME_AFTER_PART_CLONED)"
 msg_you_must_input_filename='你必須輸入一個名稱'
-msg_you_must_input_legal_filename='你必須輸入一個合法的名稱(只包含字母，數字，_，-與.)'
+msg_you_must_input_legal_filename='你必須輸入一個合法的名稱(只包含字母，數字，_，-，%與.)'
 msg_you_must_input_partition='你必須輸入一個分割區'
 msg_please_do_it_again='請再做一次'
 msg_choose_the='選擇這個'

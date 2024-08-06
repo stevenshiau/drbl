@@ -346,7 +346,7 @@ msg_input_name_to_save_the_img='Digitare il nome con cui salvare l'\''immagine'
 msg_time_to_wait_sec='Minimo tempo di attesa (in sec)(Il conteggio inizia quando si connette il primo client)'
 msg_max_time_to_wait_sec="Tempo massimo di attesa (sec)(Il conteggio inizia quando si connette il primo client). Vale a dire quando i client collegati non sono abbastanza (ma ce n'\''è almeno uno), si avvia comunque dopo che sono trascorsi i secondi assegnati dalla connessione del primo client. ( Meglio >= $SLEEP_TIME_AFTER_PART_CLONED)" 
 msg_you_must_input_filename='Dovete digitare un nome'
-msg_you_must_input_legal_filename="Dovete digitare un nome di immagine lecito (contenente cioè solo caratteri alfabetici, cifre, _, - e .)"
+msg_you_must_input_legal_filename="Dovete digitare un nome di immagine lecito (contenente cioè solo caratteri alfabetici, cifre, _, -, % e .)"
 msg_you_must_input_partition='Dovete digitare una partizione'
 msg_please_do_it_again='Si prega di farlo di nuovo'
 msg_choose_the='Scegliete il'

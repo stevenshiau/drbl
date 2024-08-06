@@ -345,7 +345,7 @@ msg_input_name_to_save_the_img='저장될 이미지의 이름 입력 (되도록 
 msg_time_to_wait_sec='최소 대기 시간 (초) (첫 번째 클라이언트가 연결될 때 카운트가 시작됨)'
 msg_max_time_to_wait_sec="최대 대기 시간(초)(첫 번째 클라이언트가 연결될 때 카운트가 시작됨). 클라이언트가 충분히 접속되지 않은 경우 (적어도 1대 이상), 첫 번째 클라이언트가 연결되고 [할당된 초] 이후에 프로세스를 시작합니다. (Better >= $SLEEP_TIME_AFTER_PART_CLONED)"
 msg_you_must_input_filename='이미지 이름을 입력하십시오. (되도록 영문으로 작성 요망.)'
-msg_you_must_input_legal_filename="적절한 이미지 이름을 입력해야 합니다. (알파벳, 숫자, _, - 및. 만 포함)"
+msg_you_must_input_legal_filename="적절한 이미지 이름을 입력해야 합니다. (알파벳, 숫자, _, -, % 및. 만 포함)"
 msg_you_must_input_partition='파티션을 입력하십시오.'
 msg_please_do_it_again='다시 입력하십시오.'
 msg_choose_the='선택 :'

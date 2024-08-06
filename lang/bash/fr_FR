@@ -348,7 +348,7 @@ msg_input_name_to_save_the_img='Saisissez un nom pour l'\''image'
 msg_time_to_wait_sec='Délai minimum d'\''attente (sec.) (Le décompte commence lorsque le premier client se connecte)'
 msg_max_time_to_wait_sec="Délai maximum d'\''attente (sec.) (Le décompte commence lorsque le premier client se connecte), ex : lorsqu'\''un nombre insuffisant de clients se sont connectés (au moins un), le clonage démarre quand même après [le nombre de secondes choisi] à partir de la connexion du premier client. (Au moins >= $SLEEP_TIME_AFTER_PART_CLONED)"
 msg_you_must_input_filename='Vous devez entrer un nom'
-msg_you_must_input_legal_filename="Vous devez entrer un nom d'\''image correct (lettres, chiffres, _, - et .)"
+msg_you_must_input_legal_filename="Vous devez entrer un nom d'\''image correct (lettres, chiffres, _, -, % et .)"
 msg_you_must_input_partition='Vous devez entrer un nom de partition'
 msg_please_do_it_again='Veuillez recommencer'
 msg_choose_the='Sélectionner le'

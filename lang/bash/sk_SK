@@ -347,7 +347,7 @@ msg_input_name_to_save_the_img='Zadajte názov pre ukladaný obraz'
 msg_time_to_wait_sec='Minimálny čas čakania (v sekundách) (Počítanie sa spustí, keď sa prvý klient pripojí)'
 msg_max_time_to_wait_sec="Maximálny čas čakania (v sekundách) (Počítanie sa spustí, keď sa prvý klient pripojí). Keď nieje pripojených dostatok klientov (ale minimálne jeden) spusť proces aj napriek tomu po [týchto priradených sekundách] odkedy sa pripojí prvý klient. (Better >= $SLEEP_TIME_AFTER_PART_CLONED)"
 msg_you_must_input_filename='Musíte zadať názov'
-msg_you_must_input_legal_filename="Musíte zadať správny názov obrazu (obsahujúci len písmená, čísla, _, - a .)"
+msg_you_must_input_legal_filename="Musíte zadať správny názov obrazu (obsahujúci len písmená, čísla, _, -, % a .)"
 msg_you_must_input_partition='Musíte zadať partíciu'
 msg_please_do_it_again='Prosím urobte to znovu'
 msg_choose_the='Vyberte'

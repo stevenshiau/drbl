@@ -347,7 +347,7 @@ msg_input_name_to_save_the_img='Welches gespeicherte Image soll dafür verwendet
 msg_time_to_wait_sec='Minimale Wartezeit (Sek.) (Die Zeit läuft, wenn der erste Client die Verbindung aufnimmt)'
 msg_max_time_to_wait_sec="Maximale Wartezeit (Sek.) (Die Zeit läuft, wenn der erste Client die Verbindung aufnimmt). Wenn nicht genügend Clients verbunden sind (aber mindestens einer), wird die Wiederherstellung nach der angegebenen Zeit dennoch gestartet. (Bessere Einstellung >= $SLEEP_TIME_AFTER_PART_CLONED)"
 msg_you_must_input_filename='Sie müssen einen Namen angeben'
-msg_you_must_input_legal_filename='Sie müssen einen gültigen Imagenamen angeben (darf nur Buchstaben, Ziffern, "_", "-" und "." enthalten).'
+msg_you_must_input_legal_filename='Sie müssen einen gültigen Imagenamen angeben (darf nur Buchstaben, Ziffern, "_", "-", "%" und "." enthalten).'
 msg_you_must_input_partition='Sie müssen eine Partition angeben'
 msg_please_do_it_again='Bitte nochmal'
 msg_choose_the='Wählen Sie die'
