@@ -1,3 +1,9 @@
+drbl (5.3.4-drbl1) unstable; urgency=medium
+
+  * drbl.conf: reiser4progs was removed from the packages list.
+
+ -- Steven Shiau <steven@clonezilla.org>  Thu, 05 Sep 2024 20:29:07 +0800
+
 drbl (5.3.3-drbl1) unstable; urgency=medium
 
   * Updated language files by adding "%" in msg_you_must_input_legal_filename.
