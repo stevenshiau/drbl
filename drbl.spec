@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	5.3.4
+Version:	5.3.5
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -46,6 +46,11 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Sat Sep 14 2024 Steven Shiau <steven _at_ clonezilla org> 5.3.5-drbl1
+  * drblpush: service enabled by systemd does not need to be enabled by
+    update-rc.d.
+  * Add support for DBN 12.5-12.7 and Ubuntu 22.04/24.04.
+
 * Thu Sep 05 2024 Steven Shiau <steven _at_ clonezilla org> 5.3.4-drbl1
   * drbl.conf: reiser4progs was removed from the packages list.
 

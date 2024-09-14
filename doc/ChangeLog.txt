@@ -5,6 +5,14 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (5.3.5-drbl1) unstable; urgency=medium
+
+  * drblpush: service enabled by systemd does not need to be enabled by
+    update-rc.d.
+  * Add support for DBN 12.5-12.7 and Ubuntu 22.04/24.04.
+
+ -- Steven Shiau <steven@clonezilla.org>  Sat, 14 Sep 2024 14:59:12 +0800
+
 drbl (5.3.4-drbl1) unstable; urgency=medium
 
   * drbl.conf: reiser4progs was removed from the packages list.
