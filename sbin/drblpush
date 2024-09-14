@@ -2871,7 +2871,7 @@ else
 fi
 for i in $client_services; do
   if is_systemd_init; then
-    # FC17~,CO7~,..: systemd like
+    # Systemd system
     echo "Enabling service $i..."
     case "$i" in
       ypbind)
@@ -2900,23 +2900,24 @@ for i in $client_services; do
         echo "Skip ...";
       fi
     fi
-    if [ -e "$drbl_common_root/etc/init.d/$i" ]; then
-      if [ -x "$drbl_common_root/sbin/chkconfig" ]; then
-        echo "Running: chroot $drbl_common_root/ /sbin/chkconfig --add $i"
-        chroot $drbl_common_root/ /sbin/chkconfig --add $i
-      elif [ -x "$drbl_common_root/usr/sbin/update-rc.d" ]; then
-        echo "Running: chroot $drbl_common_root /usr/sbin/update-rc.d $i defaults"
-        chroot $drbl_common_root /usr/sbin/update-rc.d $i defaults
-        echo "Running: chroot $drbl_common_root /usr/sbin/update-rc.d $i enable"
-        chroot $drbl_common_root /usr/sbin/update-rc.d $i enable
-      elif [ -x "$drbl_common_root/sbin/insserv" ]; then
-        # Use insserv for debian/ubuntu
-	# Ubuntu >= 16.10, there is no insserv at all.
-	# Add '-f' to fix adding nis service error in Xenial, by Ceasar
-        echo "Running: chroot $drbl_common_root/ insserv -f $i &> /dev/null"
-        chroot $drbl_common_root/ insserv -f $i &> /dev/null
-      fi
-    fi
+    # 2024/9/14 Comment this backup plan, since systemd service is enabled.
+    # if [ -e "$drbl_common_root/etc/init.d/$i" ]; then
+    #   if [ -x "$drbl_common_root/sbin/chkconfig" ]; then
+    #     echo "Running: chroot $drbl_common_root/ /sbin/chkconfig --add $i"
+    #     chroot $drbl_common_root/ /sbin/chkconfig --add $i
+    #   elif [ -x "$drbl_common_root/usr/sbin/update-rc.d" ]; then
+    #     echo "Running: chroot $drbl_common_root /usr/sbin/update-rc.d $i defaults"
+    #     chroot $drbl_common_root /usr/sbin/update-rc.d $i defaults
+    #     echo "Running: chroot $drbl_common_root /usr/sbin/update-rc.d $i enable"
+    #     chroot $drbl_common_root /usr/sbin/update-rc.d $i enable
+    #   elif [ -x "$drbl_common_root/sbin/insserv" ]; then
+    #     # Use insserv for debian/ubuntu
+    #     # Ubuntu >= 16.10, there is no insserv at all.
+    #     # Add '-f' to fix adding nis service error in Xenial, by Ceasar
+    #     echo "Running: chroot $drbl_common_root/ insserv -f $i &> /dev/null"
+    #     chroot $drbl_common_root/ insserv -f $i &> /dev/null
+    #   fi
+    # fi
   elif [ -e /etc/debian_version ]; then
     if [ "$dbn_ubn_serv_control_prog" = "use-insserv" ]; then
       # Use insserv
