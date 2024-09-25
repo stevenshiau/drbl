@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	5.3.5
+Version:	5.3.6
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -46,6 +46,13 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Wed Sep 25 2024 Steven Shiau <steven _at_ clonezilla org> 5.3.6-drbl1
+  * Removed wireless-tools from packages list for live system
+    in drbl.conf.
+    Package iw should have same function, which is already included
+    in live system.
+    Ref: https://bugs.launchpad.net/ubuntu/+source/wireless-tools/+bug/2075850
+
 * Sat Sep 14 2024 Steven Shiau <steven _at_ clonezilla org> 5.3.5-drbl1
   * drblpush: service enabled by systemd does not need to be enabled by
     update-rc.d.
