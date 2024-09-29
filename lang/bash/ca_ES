@@ -1107,7 +1107,6 @@ msg_disk_to_mdisk_by_BT="Disc(s) a discos de múltiples màquines usant el proto
 msg_part_to_mpart_by_BT="Partició(ns) a particiones de múltiples màquines usant el protocol BT"
 msg_save_temp_img_for_BT="Abans de realitzar una implementació massiva directament des d'un dispositiu d'origen, encara hem de guardar el dispositiu d'origen com una imatge temporal."
 # Tag on 2019/01/12
-msg_mount_ramdisk="Usar memòria (OK per a BT des de dispositiu raw)"
 msg_img_repo_is_using_tmpfs="La imatge del repositori està usant tmpfs (RAM com a disc)."
 msg_failed_to_use_ramdisk_as_repo="Fallada en usar la RAM (tmpfs) com imatge del repositori."
 # Tag on 2019/01/16
@@ -1210,3 +1209,5 @@ msg_ocs_param_edio='Permet el mode directe IO de Partclone per a NVMe SSD'
 msg_ocs_onthefly_param_edio='Permet el mode directe IO de Partclone per a NVMe SSD'
 # Tag on 2024/01/13
 msg_prompt_remove_gnome_initial_setup='YP is used in DRBL clients, so gnome-initial-setup is annoying and not required. It is recommended to remove it.'
+# Tag on 2024/09/28
+msg_mount_ramdisk="Usar memòria (OK per a BT des de dispositiu raw)"

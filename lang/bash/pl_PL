@@ -1101,7 +1101,6 @@ msg_disk_to_mdisk_by_BT='Z dysku(ów) na dyski na wielu komputerach przy użyciu
 msg_part_to_mpart_by_BT='Z partycji na partycje na wielu komputerach przy użyciu protokołu BT'
 msg_save_temp_img_for_BT='Przed przeprowadzeniem tzw. "Masowego Wdrażania" bezpośrednio z urządzenia źródłowego, nadal musimy zapisać urządzenie źródłowe jako tymczasowy obraz'
 # Tag on 2019/01/12
-msg_mount_ramdisk='Użyj pamięci (OK dla BT z urządzenia w trybie RAW).'
 msg_img_repo_is_using_tmpfs='Repozytorium obrazów używa tmpfs (RAM jako dysk).'
 msg_failed_to_use_ramdisk_as_repo='Nie można użyć dysku RAM (tmpfs) jako repozytorium obrazów.'
 # Tag on 2019/01/16
@@ -1204,3 +1203,5 @@ msg_ocs_param_edio='Włącz tryb: direct IO mode / Partclone dla NVMe SSD'
 msg_ocs_onthefly_param_edio='Włącz tryb: direct IO mode / Partclone dla NVMe SSD'
 # Tag on 2024/01/13
 msg_prompt_remove_gnome_initial_setup='YP is used in DRBL clients, so gnome-initial-setup is annoying and not required. It is recommended to remove it.'
+# Tag on 2024/09/28
+msg_mount_ramdisk='Użyj pamięci (OK dla BT z urządzenia w trybie RAW).'

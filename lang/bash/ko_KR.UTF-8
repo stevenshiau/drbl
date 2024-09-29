@@ -1098,7 +1098,6 @@ msg_disk_to_mdisk_by_BT='BT protocol을 사용하여, 여러 시스템의 디스
 msg_part_to_mpart_by_BT='BT 프로토콜을 사용하여 여러 컴퓨터의 파티션을 분할'
 msg_save_temp_img_for_BT='소스 디바이스에서 직접 대규모 배포를 수행하기 전에, 소스 디바이스를 임시 이미지로 저장해야합니다.'
 # Tag on 2019/01/12
-msg_mount_ramdisk='메모리 사용 (로우 디바이스에서 BT 확인)'
 msg_img_repo_is_using_tmpfs='이미지 저장소가 tmpfs를 사용하고 있습니다. (디스크로서의 램)'
 msg_failed_to_use_ramdisk_as_repo='RAM 디스크 (tmpfs)를 이미지 저장소로 사용하지 못했습니다.'
 # Tag on 2019/01/16
@@ -1202,3 +1201,5 @@ msg_ocs_param_edio='Enable the direct IO mode of Partclone for NVMe SSD'
 msg_ocs_onthefly_param_edio='Enable the direct IO mode of Partclone for NVMe SSD'
 # Tag on 2024/01/13
 msg_prompt_remove_gnome_initial_setup='YP is used in DRBL clients, so gnome-initial-setup is annoying and not required. It is recommended to remove it.'
+# Tag on 2024/09/28
+msg_mount_ramdisk='메모리 사용 (로우 디바이스에서 BT 확인)'

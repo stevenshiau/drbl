@@ -1105,7 +1105,6 @@ msg_disk_to_mdisk_by_BT='Disk(s) to disks of multiple machines using BT protocol
 msg_part_to_mpart_by_BT='Part(s) to partitions of multiple machines using BT protocol'
 msg_save_temp_img_for_BT='Before conducting massive deployment directly from a source device, we still need to save the source device as a temporary image.'
 # Tag on 2019/01/12
-msg_mount_ramdisk='Use memory (OK for BT from raw device)'
 msg_img_repo_is_using_tmpfs='The image repository is using tmpfs (RAM as disk).'
 msg_failed_to_use_ramdisk_as_repo='Failed to use RAM disk (tmpfs) as image repository.'
 # Tag on 2019/01/16
@@ -1208,3 +1207,5 @@ msg_ocs_param_edio='Enable the direct IO mode of Partclone for NVMe SSD'
 msg_ocs_onthefly_param_edio='Enable the direct IO mode of Partclone for NVMe SSD'
 # Tag on 2024/01/13
 msg_prompt_remove_gnome_initial_setup='YP is used in DRBL clients, so gnome-initial-setup is annoying and not required. It is recommended to remove it.'
+# Tag on 2024/09/28
+msg_mount_ramdisk='Use memory (OK for BT from raw device)'
