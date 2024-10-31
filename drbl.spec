@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	5.3.7
+Version:	5.3.8
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -46,6 +46,10 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Tue Oct 31 2024 Steven Shiau <steven _at_ clonezilla org> 5.3.8-drbl1
+  * drbl.conf: do not put kexec-tools in live system for general purpose. It
+    does not exist for riscv64.
+
 * Sat Sep 29 2024 Steven Shiau <steven _at_ clonezilla org> 5.3.7-drbl1
   * Update the language files about msg_mount_ramdisk.
 
