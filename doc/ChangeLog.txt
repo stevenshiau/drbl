@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (5.3.9-drbl1) unstable; urgency=medium
+
+  * drbl.conf: do not put packages bicon and jfbterm in live system for
+    general purpose. It does not exist for riscv64.
+
+ -- Steven Shiau <steven@clonezilla.org>  Thu, 31 Oct 2024 17:18:30 +0800
+
 drbl (5.3.8-drbl1) unstable; urgency=medium
 
   * drbl.conf: do not put kexec-tools in live system for general purpose. It
