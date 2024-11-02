@@ -1,6 +1,6 @@
 Summary:        DRBL (Diskless Remote Boot in Linux) package.
 Name:           drbl
-Version:	5.3.9
+Version:	5.3.10
 Release:	drbl1
 License:	GPL
 Group:		Development/DRBL
@@ -46,6 +46,9 @@ make install DESTDIR=$RPM_BUILD_ROOT/
 /usr/share/gdm/themes/drbl-gdm/*
 
 %changelog
+* Sat Nov 02 2024 Steven Shiau <steven _at_ clonezilla org> 5.3.10-drbl1
+  * drbl.conf: Update live packages list for amd64/arm64/riscv64.
+
 * Thu Oct 31 2024 Steven Shiau <steven _at_ clonezilla org> 5.3.9-drbl1
   * drbl.conf: do not put packages bicon and jfbterm in live system for
     general purpose. It does not exist for riscv64.

@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (5.3.10-drbl1) unstable; urgency=medium
+
+  * drbl.conf: Update live packages list for amd64/arm64/riscv64.
+
+ -- Steven Shiau <steven@clonezilla.org>  Sat, 02 Nov 2024 22:01:49 +0800
+
 drbl (5.3.9-drbl1) unstable; urgency=medium
 
   * drbl.conf: do not put packages bicon and jfbterm in live system for
