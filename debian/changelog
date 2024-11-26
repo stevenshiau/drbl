@@ -1,3 +1,9 @@
+drbl (5.3.11-drbl1) unstable; urgency=medium
+
+  * Replaced network-manager with ppp in packages list of Clonezilla live.
+
+ -- Steven Shiau <steven@clonezilla.org>  Tue, 26 Nov 2024 20:19:43 +0800
+
 drbl (5.3.10-drbl1) unstable; urgency=medium
 
   * drbl.conf: Update live packages list for amd64/arm64/riscv64.
