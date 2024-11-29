@@ -1641,7 +1641,7 @@ set_drbl_ocs_extra_param() {
       "-t"       "$msg_ocs_param_t" $skip_clean_mbr_opt \
       "-t1"      "$msg_ocs_param_t1" off \
       "-t2"      "$msg_ocs_param_t2" off \
-      "-r"       "$msg_ocs_param_r" on \
+      "-r"       "$msg_ocs_param_r" off \
       "-ns"      "$msg_ocs_param_ns" off \
       "-e"       "$msg_ocs_param_e" off \
       "-icrc"    "$msg_ocs_param_icrc" off \
@@ -2028,7 +2028,7 @@ if [ "$mode" = "restore" ]; then
     "-t"       "$msg_ocs_param_t" $skip_clean_mbr_opt \
     "-t1"      "$msg_ocs_param_t1" off \
     "-t2"      "$msg_ocs_param_t2" off \
-    "-r"       "$msg_ocs_param_r" on \
+    "-r"       "$msg_ocs_param_r" off \
     "-rescue " "$msg_ocs_param_rescue" off \
     "-e"       "$msg_ocs_param_e" off \
     "-icrc"    "$msg_ocs_param_icrc" off \
