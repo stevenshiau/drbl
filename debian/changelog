@@ -1,3 +1,10 @@
+drbl (5.3.12-drbl1) unstable; urgency=medium
+
+  * The option "-r" as restoring/cloning is off by default. When "-k1" is
+    used, option "-r" will be used, too.
+
+ -- Steven Shiau <steven@clonezilla.org>  Fri, 29 Nov 2024 15:58:30 +0800
+
 drbl (5.3.11-drbl1) unstable; urgency=medium
 
   * Replaced network-manager with ppp in packages list of Clonezilla live.
