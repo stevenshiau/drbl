@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (5.3.13-drbl1) unstable; urgency=medium
+
+  * Restored package network-manager in Clonezilla live packages list
+    since ppp does not include it.
+
+ -- Steven Shiau <steven@clonezilla.org>  Sun, 01 Dec 2024 10:38:22 +0800
+
 drbl (5.3.12-drbl1) unstable; urgency=medium
 
   * The option "-r" as restoring/cloning is off by default. When "-k1" is
