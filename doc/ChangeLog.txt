@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (5.3.16-drbl1) unstable; urgency=medium
+
+  * Bug fixed: wrong format for packages list for live system.
+
+ -- Steven Shiau <steven@clonezilla.org>  Fri, 13 Dec 2024 11:49:28 +0800
+
 drbl (5.3.15-drbl1) unstable; urgency=medium
 
   * Bug fixed: wrong format for packages list for live system.
