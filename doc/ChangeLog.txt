@@ -5,6 +5,14 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (5.3.17-drbl1) unstable; urgency=medium
+
+  * Add package jc in the live system packages list.
+    Thanks to don Rumata for suggesting this.
+    Ref: https://github.com/stevenshiau/clonezilla/issues/130
+
+ -- Steven Shiau <steven@clonezilla.org>  Sun, 22 Dec 2024 20:43:59 +0800
+
 drbl (5.3.16-drbl1) unstable; urgency=medium
 
   * Bug fixed: wrong format for packages list for live system.
