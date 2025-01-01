@@ -12,7 +12,7 @@ SHAREDIR = /usr/share/drbl/
 
 SCRIPTS = bin/* sbin/* $(SHAREDIR)/sbin/* $(SHAREDIR)/bin/*
 
-all: drbl-sbin-link languages
+all: drbl-sbin-link languages pkg-misc
 
 build:
 	@echo "Nothing to build."
@@ -24,6 +24,10 @@ drbl-sbin-link:
 languages:
 	@echo "Files linking..."
 	$(MAKE) -C lang all
+
+pkg-misc:
+	@echo "Files in pkg-misc..."
+	$(MAKE) -C pkg/misc all
 
 install:
 	# install exec files
