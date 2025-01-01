@@ -5,6 +5,14 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (5.4.0-drbl1) unstable; urgency=medium
+
+  * Restored fail-mbr.bin from previous version. Now we have plain
+    text file "fail-mbr.txt", and it will be converted to "fail-mbr.bin"
+    during packaging.
+
+ -- Steven Shiau <steven@clonezilla.org>  Wed, 01 Jan 2025 14:43:18 +0800
+
 drbl (5.3.17-drbl1) unstable; urgency=medium
 
   * Add package jc in the live system packages list.
