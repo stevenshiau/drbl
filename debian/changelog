@@ -1,3 +1,12 @@
+drbl (5.4.1-drbl1) unstable; urgency=medium
+
+  * Update language files for copy Clonezilla-related log files to
+    Clonezilla live USB drive.
+  * An option "-plu" was added in the TUI expert menu.
+  * Add pmount in the packages list for live system.
+
+ -- Steven Shiau <steven@clonezilla.org>  Tue, 14 Jan 2025 20:22:38 +0800
+
 drbl (5.4.0-drbl1) unstable; urgency=medium
 
   * Restored fail-mbr.bin from previous version. Now we have plain
