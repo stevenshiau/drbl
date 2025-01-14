@@ -92,7 +92,7 @@ CMD=$1
 #
 ask_and_load_lang_set $specified_lang
 
-# The reasone we do not to use $HOME is that sudo will not change
+# The reason we do not to use $HOME is that sudo will not change
 # environmental variable $HOME, but it will change the $USER
 # we need to know who is really running this after applying sudo.
 # say, sudo echo "$HOME", it will show user's home, instead of root's home,
