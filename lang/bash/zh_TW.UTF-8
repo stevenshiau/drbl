@@ -1204,3 +1204,6 @@ msg_ocs_onthefly_param_edio='對NVMe SSD裝置開啟Partclone的直接輸入/輸
 msg_prompt_remove_gnome_initial_setup='DRBL用戶端的帳號使用YP機制，因為gnome-initial-setup將造成困擾，實際上並不需要此軟體。建議移除它。'
 # Tag on 2024/09/28
 msg_mount_ramdisk='使用記憶體(可用於BT或群播機制來源直接從硬碟或分割區的模式)'
+# Tag on 2025/01/11
+msg_ocs_param_plu="複製再生龍相關的日誌檔到再生龍USB隨身碟中"
+msg_ocs_onthefly_param_plu="複製再生龍相關的日誌檔到再生龍USB隨身碟中"

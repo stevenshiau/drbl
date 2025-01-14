@@ -1205,3 +1205,6 @@ msg_ocs_onthefly_param_edio='Enable the direct IO mode of Partclone for NVMe SSD
 msg_prompt_remove_gnome_initial_setup='YP is used in DRBL clients, so gnome-initial-setup is annoying and not required. It is recommended to remove it.'
 # Tag on 2024/09/28
 msg_mount_ramdisk='Usar memória (OK para BT de dispositivo não tratado)'
+# Tag on 2025/01/11
+msg_ocs_param_plu="Copy log files to live USB drive"
+msg_ocs_onthefly_param_plu="Copy log files to live USB drive"
