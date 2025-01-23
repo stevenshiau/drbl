@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (5.4.2-drbl1) unstable; urgency=medium
+
+  * Add package util-linux-extra to the packages list of
+    clonezilla/gparted live.
+
+ -- Steven Shiau <steven@clonezilla.org>  Fri, 24 Jan 2025 07:46:55 +0800
+
 drbl (5.4.1-drbl1) unstable; urgency=medium
 
   * Update language files for copy Clonezilla-related log files to
