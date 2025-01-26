@@ -1,3 +1,9 @@
+drbl (5.4.3-drbl1) unstable; urgency=medium
+
+  * Add the option "-plu" in savedisk/parts dialog menu.
+
+ -- Steven Shiau <steven@clonezilla.org>  Sun, 26 Jan 2025 21:14:26 +0800
+
 drbl (5.4.2-drbl1) unstable; urgency=medium
 
   * Add package util-linux-extra to the packages list of
