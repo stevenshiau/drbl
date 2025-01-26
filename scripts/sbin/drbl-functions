@@ -2180,6 +2180,7 @@ else
     "-gb "      "$msg_ocs_param_gb" off \
     "-gmf "     "$msg_ocs_param_gmf" off \
     "-noabo "   "$msg_ocs_param_noabo" off \
+    "-plu "     "$msg_ocs_param_plu" off \
     "-ps "      "$msg_ocs_param_ps" off \
     "-scpt "    "$msg_ocs_param_scpt" off \
     "-sfs "     "$msg_ocs_param_sfs" off \
