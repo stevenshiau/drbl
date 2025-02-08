@@ -5,6 +5,14 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (5.4.4-drbl1) unstable; urgency=medium
+
+  * Move -plu option question to a standalone one so that it can be asked in
+    the beginner mode, too.
+  * Update language files about "-plu" option.
+
+ -- Steven Shiau <steven@clonezilla.org>  Sat, 08 Feb 2025 20:28:39 +0800
+
 drbl (5.4.3-drbl1) unstable; urgency=medium
 
   * Add the option "-plu" in savedisk/parts dialog menu.
