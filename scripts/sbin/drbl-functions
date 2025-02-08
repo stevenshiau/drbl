@@ -1771,7 +1771,7 @@ set_drbl_ocs_extra_param() {
       fi
     fi
   else
-    # save
+    # Save mode.
     # about -q, -q1, -q2
     if [ "$ocs_user_mode" = "expert" ]; then
       $DIA --backtitle "$msg_nchc_free_software_labs" --title  \
@@ -1879,7 +1879,7 @@ set_drbl_ocs_extra_param() {
   fi
   
   if [ "$mode" = "save" ]; then
-    # save
+    # Save mode.
     show_z4_or_above_menu_or_not
     # We can not detect # of the CPU cores in the clients from server, hence let user choose.
     if [ "$ocs_user_mode" = "expert" ]; then
@@ -1907,12 +1907,12 @@ set_drbl_ocs_extra_param() {
       # We need to append a space after this parameter so it won't be connected to next parameter.
       echo -n " " >> $OCS_PARAM_TMP
     else
-      # Question about -z1p and -z9p.
+      # Beginner mode. Question about -z1p and -z9p.
       # We can not detect # of the CPU cores in the clients from server, hence let user choose.
       # Here to make it simple, just use z*p since it works for both single and multiple cores.
       if [ -n "$ocs_z9p_option_1" -a -n "$ocs_z9p_option_2" ]; then
         $DIA --backtitle "$msg_nchc_free_software_labs" --title  \
-        "$msg_clonezilla_advanced_extra_param | $msg_mode: $ocs_mode_prompt" --menu "$msg_choose_one_compression_param_to_save" \
+        "$msg_nchc_clonezilla | $msg_mode: $ocs_mode_prompt" --menu "$msg_choose_one_compression_param_to_save" \
 	--default-item "$ocs_z9p_option_1" \
         0 0 0 $DIA_ESC \
         "-z1p"              "$msg_ocs_param_z1p" \
@@ -1929,7 +1929,7 @@ set_drbl_ocs_extra_param() {
       trap "[ -f "$vol_size_tmp" ] && rm -f $vol_size_tmp" HUP INT QUIT TERM EXIT
       while [ "$ASK_VOL_SIZE" -ne 0 ]; do
         $DIA --backtitle "$msg_nchc_free_software_labs" --title  \
-        "$msg_clonezilla_advanced_extra_param | $msg_mode: $ocs_mode_prompt" --inputbox "$msg_set_image_volume_size" \
+        "$msg_nchc_clonezilla | $msg_mode: $ocs_mode_prompt" --inputbox "$msg_set_image_volume_size" \
         0 0 $VOL_LIMIT_DEFAULT \
         2> $vol_size_tmp
         if [ -n "$(cat $vol_size_tmp | grep -iE "[^[:digit:]]")" ]; then
@@ -2108,7 +2108,7 @@ if [ "$mode" = "restore" ]; then
         2>> $OCS_PARAM_TMP
       else
         $DIA --backtitle "$msg_nchc_free_software_labs" --title  \
-        "$msg_mode: $ocs_mode_prompt" --menu "$msg_hint_for_fdisk_beginner \n$msg_choose_default_param_if_no_idea" \
+        "$msg_nchc_clonezilla | $msg_mode: $ocs_mode_prompt" --menu "$msg_hint_for_fdisk_beginner \n$msg_choose_default_param_if_no_idea" \
         0 0 0 $DIA_ESC \
         "-k0 "     "$msg_use_the_part_table_from_image"  \
         "-k1 "     "$msg_ocs_param_k1"  \
@@ -2148,7 +2148,7 @@ if [ "$mode" = "restore" ]; then
     fi
   fi
 else
-  # save
+  # Save mode.
   # about -q, -q1, -q2
   if [ "$ocs_user_mode" = "expert" ]; then
     $DIA --backtitle "$msg_nchc_free_software_labs" --title  \
@@ -2259,10 +2259,11 @@ if [ "$mode" = "save" ]; then
       # We need to append a space after this parameter so it won't be connected to next parameter.
       echo -n " " >> $OCS_PARAM_TMP
     else
+      # Beginner mode.
       # Question about -z1p and -z9p.
       if [ -n "$ocs_z9p_option_1" -a -n "$ocs_z9p_option_2" ]; then
         $DIA --backtitle "$msg_nchc_free_software_labs" --title  \
-        "$msg_clonezilla_advanced_extra_param | $msg_mode: $ocs_mode_prompt" --menu "$msg_choose_one_compression_param_to_save" \
+        "$msg_nchc_clonezilla | $msg_mode: $ocs_mode_prompt" --menu "$msg_choose_one_compression_param_to_save" \
 	--default-item "$ocs_z9p_option_1" \
         0 0 0 $DIA_ESC \
         "-z1p"              "$msg_ocs_param_z1p" \
@@ -2294,10 +2295,11 @@ if [ "$mode" = "save" ]; then
       # We need to append a space after this parameter so it won't be connected to next parameter.
       echo -n " " >> $OCS_PARAM_TMP
     else
+      # Beginner mode.
       # Question about -z1 and -z9.
       if [ -n "$ocs_z9_option_1" -a -n "$ocs_z9_option_2" ]; then
         $DIA --backtitle "$msg_nchc_free_software_labs" --title  \
-        "$msg_clonezilla_advanced_extra_param | $msg_mode: $ocs_mode_prompt" --menu "$msg_choose_one_compression_param_to_save" \
+        "$msg_nchc_clonezilla | $msg_mode: $ocs_mode_prompt" --menu "$msg_choose_one_compression_param_to_save" \
 	--default-item "$ocs_z9_option_1" \
         0 0 0 $DIA_ESC \
         "-z1"              "$msg_ocs_param_z1" \
@@ -2334,7 +2336,7 @@ if [ "$mode" = "save" ]; then
   # Question about fsck the source partition. By default, no matter it's beginner or advanced mode, we will ask.
   if [ -z "$fsck_src_part_intr" -a -z "$fsck_src_part_auto" ]; then
     $DIA --backtitle "$msg_nchc_free_software_labs" --title  \
-    "$msg_clonezilla_advanced_extra_param | $msg_mode: $ocs_mode_prompt" --menu "$msg_choose_if_fsck_the_source_part" \
+    "$msg_nchc_clonezilla | $msg_mode: $ocs_mode_prompt" --menu "$msg_choose_if_fsck_the_source_part" \
     0 0 0 $DIA_ESC \
     "-sfsck "  "$msg_skip_check_source_fs" \
     "-fsck "   "$msg_ocs_param_fsck_src_part" \
@@ -2355,7 +2357,7 @@ if [ "$mode" = "save" ]; then
   # we will ask.
   if [ -z "$chk_img_restoreable_mod_save" ]; then
     $DIA --backtitle "$msg_nchc_free_software_labs" --title  \
-    "$msg_clonezilla_advanced_extra_param | $msg_mode: $ocs_mode_prompt" --menu "$msg_choose_if_checking_image_restorable" \
+    "$msg_nchc_clonezilla | $msg_mode: $ocs_mode_prompt" --menu "$msg_choose_if_checking_image_restorable" \
     0 0 0 $DIA_ESC \
     " "     "$msg_ocs_param_check_img_restorable" \
     "-scs " "$msg_ocs_param_skip_checking_img_restorable" \
@@ -2372,7 +2374,7 @@ if [ "$mode" = "save" ]; then
   # encrypt_ocs_img is from /etc/ocs/ocs-live.conf
   if [ -z "$encrypt_ocs_img" ]; then
     $DIA --backtitle "$msg_nchc_free_software_labs" --title  \
-    "$msg_clonezilla_advanced_extra_param | $msg_mode: $ocs_mode_prompt" --menu "$msg_encrypt_image\n$msg_ecryptfs_is_used_for_clonezilla\n$msg_remember_passphrase_of_ecryptfs" \
+    "$msg_nchc_clonezilla | $msg_mode: $ocs_mode_prompt" --menu "$msg_encrypt_image\n$msg_ecryptfs_is_used_for_clonezilla\n$msg_remember_passphrase_of_ecryptfs" \
     0 0 0 $DIA_ESC \
     "-senc "    "$msg_not_to_encrypt_img" \
     "-enc "     "$msg_yes_to_encrypt_img" \
