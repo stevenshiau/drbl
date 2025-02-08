@@ -2048,7 +2048,6 @@ if [ "$mode" = "restore" ]; then
     "-o0"      "$msg_ocs_param_o0" off \
     "-o1"      "$msg_ocs_param_o1" off \
     "-srel"    "$msg_ocs_param_srel" off \
-    "-plu"     "$msg_ocs_param_plu" off \
     "-ps"      "$msg_ocs_param_ps" off \
     "-edio"    "$msg_ocs_param_edio" off \
     2>> $OCS_PARAM_TMP
@@ -2180,7 +2179,6 @@ else
     "-gb "      "$msg_ocs_param_gb" off \
     "-gmf "     "$msg_ocs_param_gmf" off \
     "-noabo "   "$msg_ocs_param_noabo" off \
-    "-plu "     "$msg_ocs_param_plu" off \
     "-ps "      "$msg_ocs_param_ps" off \
     "-scpt "    "$msg_ocs_param_scpt" off \
     "-sfs "     "$msg_ocs_param_sfs" off \
@@ -2385,6 +2383,21 @@ if [ "$mode" = "save" ]; then
        no) echo "-senc " >> $OCS_PARAM_TMP;;
     esac
   fi
+fi
+
+# Question about copy the log files to Clonezilla live USB drive. By default, no matter it's beginner or advanced mode, 
+if [ -z "$put_log_usb" ]; then
+  $DIA --backtitle "$msg_nchc_free_software_labs" --title  \
+  "$msg_nchc_clonezilla | $msg_mode: $ocs_mode_prompt" --menu "$msg_put_log_usb_or_not \n$msg_choose_default_param_if_no_idea" \
+  0 0 0 $DIA_ESC \
+  "-plu "    "$msg_put_log_to_OCS_USB_drive" \
+  " "        "$msg_not_put_log_to_OCS_USB_drive" \
+  2>> $OCS_PARAM_TMP
+else
+  case "$put_log_usb" in
+    yes) echo "-plu " >> $OCS_PARAM_TMP;;
+     no) echo " " >> $OCS_PARAM_TMP;;
+  esac
 fi
 
 # For both beginner and expert modes, if user has specified postaction, then we do not have to set it. Otherwise, ask it.
