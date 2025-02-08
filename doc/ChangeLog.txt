@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (5.4.5-drbl1) unstable; urgency=medium
+
+  * Update Linux netinstall versions in drbl-ocs.conf.
+
+ -- Steven Shiau <steven@clonezilla.org>  Sat, 08 Feb 2025 20:39:59 +0800
+
 drbl (5.4.4-drbl1) unstable; urgency=medium
 
   * Move -plu option question to a standalone one so that it can be asked in
