@@ -710,8 +710,6 @@ msg_use_the_part_table_from_image='イメージのパーティションテーブ
 msg_ocs_param_k1='適切にパーティションテーブルを作成'
 msg_ocs_param_k2='コマンドラインに移行し、その後手動でパーティションを作成'
 msg_hint_for_fdisk='コピー先ディスクのパーティションテーブル作成モードを選択: 【注意】(1)コピー先ディスクにパーティションテーブルを新規作成する為、コピー先デバイス上の全データは消去されます!!! (2)Clonezilla は大きなディスク(パーティション)イメージを小さなディスク(パーティション)にリストアできません。しかし、その逆は可能です。(3)Clonezilla にパーティションテーブルを作成してほしくない場合、-k をチェックして下さい'
-msg_choose_param_to_set_multiple_choices='拡張パラメータを設定して下さい(複数選択できます)。特に何もなければ、デフォルト値を保持して下さい。つまり、何も変更せず、ただ[Enter]を押して下さい。'
-msg_choose_param_to_set_single_choice='拡張パラメータを設定して下さい。特に何もなければ、既定値を保持して下さい。つまり、何も変えず、ただ[Enter]を押して下さい。'
 msg_overwrite_data_on_disk_when_restoring='このソフトウェアはリストア時に HDD 上の全データを上書きします! リストア前にコピー先 HDD 上の重要ファイルをバックアップする事をお勧めいたします!'
 msg_overwrite_data_on_disk_when_cloning='このソフトウェアは複製時に HDD 上の全データを上書きします! リストア前にコピー先 HDD 上の重要ファイルをバックアップする事をお勧めします!'
 msg_clonezilla_save_local_disk='ローカルディスクをイメージに保存'
@@ -1225,6 +1223,9 @@ msg_ocs_onthefly_param_edio='Partclone の NVMe SSD 用ダイレクト I/O モ�
 msg_prompt_remove_gnome_initial_setup='YP is used in DRBL clients, so gnome-initial-setup is annoying and not required. It is recommended to remove it.'
 # Tag on 2024/09/28
 msg_mount_ramdisk='メモリ使用 (Raw デバイスからの BT 使用で可)'
-# Tag on 2025/01/11
-msg_ocs_param_plu="Copy log files to live USB drive"
-msg_ocs_onthefly_param_plu="Copy log files to live USB drive"
+# Tag on 2025/02/08
+msg_choose_param_to_set_multiple_choices='拡張パラメータを設定して下さい(複数選択できます)。特に何もなければ、デフォルト値を保持して下さい。つまり、何も変更せず、ただ[Enter]を押して下さい。'
+msg_choose_param_to_set_single_choice='拡張パラメータを設定して下さい。特に何もなければ、既定値を保持して下さい。つまり、何も変えず、ただ[Enter]を押して下さい。'
+msg_put_log_usb_or_not='Do you want to copy the log files to Clonezilla live USB drive if it exists in this machine?'
+msg_put_log_to_OCS_USB_drive='Yes, copy log files to Clonezilla live USB drive if it exists'
+msg_not_put_log_to_OCS_USB_drive='No, do not copy log files to Clonezilla live USB drive even if it exists'

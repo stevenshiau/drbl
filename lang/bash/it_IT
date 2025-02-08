@@ -691,8 +691,6 @@ msg_use_the_part_table_from_image='Usa la tabella delle partizioni dall'\''immag
 msg_ocs_param_k1='Crea la tabella delle partizioni proporzionalmente'
 msg_ocs_param_k2='Aprite il prompt a riga di comando per creare manualmente la partizione più tardi'
 msg_hint_for_fdisk='Scegliete il modo per creare la tabella delle partizioni sul disco di destinazione: ***ATTENZIONE*** (1) CREARE UNA NUOVA TABELLA DELLE PARTIZIONI NEL DISCO DI DESTINAZIONE. TUTTI I DATI SUL DISPOSITIVO DI DESTINAZIONE VERRANNO CANCELLATI! (2) Clonezilla non ripristinerà un'\''immagine di un disco (partizione) di grandi dimensioni su uno più piccolo. Tuttavia, è possibile ripristinare un'\''immagine di un disco (partizione) più piccolo su uno più grande. (3) Se NON volete che clonezilla crei la tabella delle partizioni, selezionate -k'
-msg_choose_param_to_set_multiple_choices='Impostate i parametri avanzati (sono disponibii più scelte). Se non avete idea, mantenete i valori di default, cioè non cambiate niente. Basta che premiate Invio.'
-msg_choose_param_to_set_single_choice='Impostate i parametri avanzati. Se non avete idea, mantenete i valori di default, cioè non cambiate niente. Basta che premiate Invio.'
 msg_overwrite_data_on_disk_when_restoring='Questo software ricoprirà i dati sul vostro hard disk quando effettuerà il ripristino! Vi raccomandiamo il backup dei file importanti prima di effettuare il ripristino!***'
 msg_overwrite_data_on_disk_when_cloning='Questo software ricoprirà i dati sul vostro hard disk quando effettua la clonazione! Vi raccomandiamo il backup dei file importanti che avete sul disco di destinazione prima della clonazione!***'
 msg_clonezilla_save_local_disk='Salva_il_disco_creando_la_sua_immagine'
@@ -1204,6 +1202,9 @@ msg_ocs_onthefly_param_edio='Enable the direct IO mode of Partclone for NVMe SSD
 msg_prompt_remove_gnome_initial_setup='YP is used in DRBL clients, so gnome-initial-setup is annoying and not required. It is recommended to remove it.'
 # Tag on 2024/09/28
 msg_mount_ramdisk='Usa la memoria (OK per BT dal dispositivo raw)'
-# Tag on 2025/01/11
-msg_ocs_param_plu="Copy log files to live USB drive"
-msg_ocs_onthefly_param_plu="Copy log files to live USB drive"
+# Tag on 2025/02/08
+msg_choose_param_to_set_multiple_choices='Impostate i parametri avanzati (sono disponibii più scelte). Se non avete idea, mantenete i valori di default, cioè non cambiate niente. Basta che premiate Invio.'
+msg_choose_param_to_set_single_choice='Impostate i parametri avanzati. Se non avete idea, mantenete i valori di default, cioè non cambiate niente. Basta che premiate Invio.'
+msg_put_log_usb_or_not='Do you want to copy the log files to Clonezilla live USB drive if it exists in this machine?'
+msg_put_log_to_OCS_USB_drive='Yes, copy log files to Clonezilla live USB drive if it exists'
+msg_not_put_log_to_OCS_USB_drive='No, do not copy log files to Clonezilla live USB drive even if it exists'

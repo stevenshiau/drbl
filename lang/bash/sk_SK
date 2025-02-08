@@ -692,8 +692,6 @@ msg_use_the_part_table_from_image='Použiť tabuľku partícii z obrazu'
 msg_ocs_param_k1='Vytvoriť tabuľku partícii proporcionálne'
 msg_ocs_param_k2='Vojsť do príkazového riadka neskôr pre vytvorenie partícii manuálne'
 msg_hint_for_fdisk='Výber módu pre vytvorenie tabuľky partícií na cieľovom disku: ***POZOR***(1) VYTVORENÍM TABUĽKY PARTÍCIÍ SA VYMAŽÚ VŠETKY DÁTA NA CIEĽOVOM DISKU!!! (2) Clonezilla neobnoví obraz z večšieho disku(partície) na menší disk (partíciu). Opačne ale áno. (3) Ak NECHCETE aby Clonezilla nevytvárala tabuľku partícií, vyberte voľbu -k'
-msg_choose_param_to_set_multiple_choices='Nastavenie rozšírených parametrov. Ak neviete o čo sa jedná, ponechajte prednastavené hodnoty a len stlačte Enter.'
-msg_choose_param_to_set_single_choice='Nastavenie rozšírených parametrov. Ak neviete o čo sa jedná, ponechajte prednastavené hodnoty a len stlačte Enter.'
 msg_overwrite_data_on_disk_when_restoring='Tento softvér prepíše dáta na disku pri obnove! Je odporúčané zálohovať dôležité dáta pred obnovou!***'
 msg_overwrite_data_on_disk_when_cloning='Tento softvér prepíše data na vašom disku pri klonovaní! Je odporúčané odzálohovať dôležité dáta z cieľového disku pred klonovaním!***'
 msg_clonezilla_save_local_disk='Vytvoriť obraz lokálneho disku'
@@ -1205,6 +1203,9 @@ msg_ocs_onthefly_param_edio='Povoliť Partclone direct IO mód pre NVMe SSD'
 msg_prompt_remove_gnome_initial_setup='YP is used in DRBL clients, so gnome-initial-setup is annoying and not required. It is recommended to remove it.'
 # Tag on 2024/09/28
 msg_mount_ramdisk='Použiť pamäť (OK pre BT from raw device)'
-# Tag on 2025/01/11
-msg_ocs_param_plu="Copy log files to live USB drive"
-msg_ocs_onthefly_param_plu="Copy log files to live USB drive"
+# Tag on 2025/02/08
+msg_choose_param_to_set_multiple_choices='Nastavenie rozšírených parametrov. Ak neviete o čo sa jedná, ponechajte prednastavené hodnoty a len stlačte Enter.'
+msg_choose_param_to_set_single_choice='Nastavenie rozšírených parametrov. Ak neviete o čo sa jedná, ponechajte prednastavené hodnoty a len stlačte Enter.'
+msg_put_log_usb_or_not='Do you want to copy the log files to Clonezilla live USB drive if it exists in this machine?'
+msg_put_log_to_OCS_USB_drive='Yes, copy log files to Clonezilla live USB drive if it exists'
+msg_not_put_log_to_OCS_USB_drive='No, do not copy log files to Clonezilla live USB drive even if it exists'

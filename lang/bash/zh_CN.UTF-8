@@ -693,8 +693,6 @@ msg_use_the_part_table_from_image='使用镜像文件中的硬盘分割表'
 msg_ocs_param_k1='照比例放大产生硬盘分割表'
 msg_ocs_param_k2='待会进入命令行来手动产生硬盘分割表'
 msg_hint_for_fdisk='现在选用您要的方式在目的碟上产生硬盘分割表。***注意***(1)在目的碟产生一个新的分割表，原本在目的碟中的资料将会全部消失!!!(2)再生龙无法将大的硬盘(分区)产生的镜像文件还原到小的硬盘(分区)中。但是可以将小的的硬盘(分区)产生的镜像文件还原到大的硬盘(分区)中。(3)如果您不要再生龙帮您重新产生硬盘分割表的话，一定要勾选-k'
-msg_choose_param_to_set_multiple_choices='设定高级参数(可复选)。如果您不知道选用哪些的话，建议您就保留默认值，不要修改任何选项，直接按Enter。'
-msg_choose_param_to_set_single_choice='设定高级参数。如果您不确认，建议就保留默认值，不修改任何选项，直接按Enter。'
 msg_overwrite_data_on_disk_when_restoring='本软件在还原时会覆盖硬盘中原本的资料，建议还原前另外备份硬盘中重要的文件。'
 msg_overwrite_data_on_disk_when_cloning='本软件在复制时会覆盖目的碟中原来的资料，建议复制前另外备份目的碟中重要的文件。'
 msg_clonezilla_save_local_disk='储存本机硬盘为镜像文件'
@@ -1207,6 +1205,9 @@ msg_ocs_onthefly_param_edio='对NVMe SSD设备开启Partclone的直接输入/输
 msg_prompt_remove_gnome_initial_setup='YP is used in DRBL clients, so gnome-initial-setup is annoying and not required. It is recommended to remove it.'
 # Tag on 2024/09/28
 msg_mount_ramdisk='使用内存(适用于使用BT机制来源直接从硬盘或分区的模式)'
-# Tag on 2025/01/11
-msg_ocs_param_plu="Copy log files to live USB drive"
-msg_ocs_onthefly_param_plu="Copy log files to live USB drive"
+# Tag on 2025/02/08
+msg_choose_param_to_set_multiple_choices='设定高级参数(可复选)。如果您不知道选用哪些的话，建议您就保留默认值，不要修改任何选项，直接按Enter。'
+msg_choose_param_to_set_single_choice='设定高级参数。如果您不确认，建议就保留默认值，不修改任何选项，直接按Enter。'
+msg_put_log_usb_or_not='Do you want to copy the log files to Clonezilla live USB drive if it exists in this machine?'
+msg_put_log_to_OCS_USB_drive='Yes, copy log files to Clonezilla live USB drive if it exists'
+msg_not_put_log_to_OCS_USB_drive='No, do not copy log files to Clonezilla live USB drive even if it exists'

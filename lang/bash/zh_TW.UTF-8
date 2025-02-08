@@ -694,8 +694,6 @@ msg_use_the_part_table_from_image='使用印象檔中的硬碟分割表'
 msg_ocs_param_k1='照比例放大產生硬碟分割表'
 msg_ocs_param_k2='待會進入命令列來手動產生硬碟分割表'
 msg_hint_for_fdisk='現在選用你要的方式來目的碟上產生硬碟分割表。***注意***(1)在目的碟產生一個新的分割表，原本在目的碟中的資料將會全部消失!!!(2)再生龍無法將大的硬碟(分割區)產生的印象檔還原到小的硬碟(分割區)中。但是可以將小的的硬碟(分割區)產生的印象檔還原到大的硬碟(分割區)中。(3)如果你不要再生龍幫你重新產生硬碟分割表的話，一定要勾選-k'
-msg_choose_param_to_set_multiple_choices='設定進階參數(可複選)。如果你不知道選用哪些的話，建議你就保留預設值，不要修改任何選項，直接按Enter。'
-msg_choose_param_to_set_single_choice='設定進階參數。如果你不確認，建議就保留預設值，不修改任何選項，直接按Enter。'
 msg_overwrite_data_on_disk_when_restoring='本軟體在還原時會覆蓋硬碟中原本的資料，建議還原前另外備份硬碟中重要的檔案。'
 msg_overwrite_data_on_disk_when_cloning='本軟體在複製時會覆蓋目的碟中原本的資料，建議複製前另外備份目的碟中重要的檔案。'
 msg_clonezilla_save_local_disk='儲存本機硬碟為印象檔'
@@ -1204,6 +1202,9 @@ msg_ocs_onthefly_param_edio='對NVMe SSD裝置開啟Partclone的直接輸入/輸
 msg_prompt_remove_gnome_initial_setup='DRBL用戶端的帳號使用YP機制，因為gnome-initial-setup將造成困擾，實際上並不需要此軟體。建議移除它。'
 # Tag on 2024/09/28
 msg_mount_ramdisk='使用記憶體(可用於BT或群播機制來源直接從硬碟或分割區的模式)'
-# Tag on 2025/01/11
-msg_ocs_param_plu="複製再生龍相關的日誌檔到再生龍USB隨身碟中"
-msg_ocs_onthefly_param_plu="複製再生龍相關的日誌檔到再生龍USB隨身碟中"
+# Tag on 2025/02/08
+msg_choose_param_to_set_multiple_choices='設定參數(可複選)。如果你不知道選用哪些的話，建議你就保留預設值，不要修改任何選項，直接按Enter。'
+msg_choose_param_to_set_single_choice='設定參數。如果你不確認，建議就保留預設值，不修改任何選項，直接按Enter。'
+msg_put_log_usb_or_not='你是否要將過程中產生的記錄檔複製到再生龍隨身碟(若存在的話)中?'
+msg_put_log_to_OCS_USB_drive='是，將記錄檔複製到再生龍隨身碟(若存在的話)中'
+msg_not_put_log_to_OCS_USB_drive='否，不要紀錄檔複製到再生龍隨身碟(若存在的話)中'

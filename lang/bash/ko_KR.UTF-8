@@ -690,8 +690,6 @@ msg_use_the_part_table_from_image='이미지에서 파티션 테이블을 사용
 msg_ocs_param_k1='적절히 비례하여 파티션 테이블 생성'
 msg_ocs_param_k2='나중에 수동으로 파티션을 만들려면, 커맨드 라인을 입력하십시오.'
 msg_hint_for_fdisk='대상 디스크에 파티션 테이블을 작성할 모드를 선택하십시오 : ***주의 *** (1) 대상 디스크에 새 파티션 테이블을 만듭니다. 대상 디바이스의 모든 데이터가 지워집니다. (2) Clonezilla는 큰 용량의 디스크(파티션)에서, 작은 용량의 디스크(파티션)로 이미지를 복원할 수 없습니다. 그러나 작은 디스크(파티션)에서 큰 디스크(파티션)는 이미지를 복원할 수 있습니다. (3) Clonezilla가 파티션 테이블을 생성하지 못하게 하려면 "-k"를 확인하십시오.'
-msg_choose_param_to_set_multiple_choices='고급 매개변수를 설정합니다(복수 항목 선택 가능). 잘 모를 경우, 기본값을 유지하고 아무것도 변경하지 않습니다. Enter 키를 눌러 다음을 진행합니다.'
-msg_choose_param_to_set_single_choice='고급 매개변수를 설정합니다. 잘 모를 경우, 기본값을 유지하고 아무것도 변경하지 않습니다. Enter 키를 눌러 다음을 진행합니다.'
 msg_overwrite_data_on_disk_when_restoring='이 소프트웨어는 복원 시 하드 드라이브의 데이터를 덮어씁니다. 복원하기 전에, 대상 디스크의 중요한 파일을 백업하는 것이 좋습니다.'
 msg_overwrite_data_on_disk_when_cloning='이 소프트웨어는 복제 시 하드 드라이브의 데이터를 덮어씁니다. 복제하기 전에, 대상 디스크의 중요한 파일을 백업하는 것이 좋습니다.'
 msg_clonezilla_save_local_disk='로컬 디스크를 이미지로 저장'
@@ -1203,6 +1201,9 @@ msg_ocs_onthefly_param_edio='Enable the direct IO mode of Partclone for NVMe SSD
 msg_prompt_remove_gnome_initial_setup='YP is used in DRBL clients, so gnome-initial-setup is annoying and not required. It is recommended to remove it.'
 # Tag on 2024/09/28
 msg_mount_ramdisk='메모리 사용 (로우 디바이스에서 BT 확인)'
-# Tag on 2025/01/11
-msg_ocs_param_plu="Copy log files to live USB drive"
-msg_ocs_onthefly_param_plu="Copy log files to live USB drive"
+# Tag on 2025/02/08
+msg_choose_param_to_set_multiple_choices='고급 매개변수를 설정합니다(복수 항목 선택 가능). 잘 모를 경우, 기본값을 유지하고 아무것도 변경하지 않습니다. Enter 키를 눌러 다음을 진행합니다.'
+msg_choose_param_to_set_single_choice='고급 매개변수를 설정합니다. 잘 모를 경우, 기본값을 유지하고 아무것도 변경하지 않습니다. Enter 키를 눌러 다음을 진행합니다.'
+msg_put_log_usb_or_not='Do you want to copy the log files to Clonezilla live USB drive if it exists in this machine?'
+msg_put_log_to_OCS_USB_drive='Yes, copy log files to Clonezilla live USB drive if it exists'
+msg_not_put_log_to_OCS_USB_drive='No, do not copy log files to Clonezilla live USB drive even if it exists'

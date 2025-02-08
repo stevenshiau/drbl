@@ -694,8 +694,6 @@ msg_use_the_part_table_from_image='Usar la tabla de particiones de la imagen'
 msg_ocs_param_k1='Crear tabla de particiones proporcionalmente'
 msg_ocs_param_k2='Introducir prompt de linea de comandos para crear la partición manualmente después'
 msg_hint_for_fdisk='Elija el modo para crear la tabla de particiones  en el disco destino: ***ATENCIÓN***(1) CREAR UNA NUEVA TABLA DE PARTICIONES EN EL DISCO DESTINO. ¡TODOS LOS DATOS DEL DISPOSITIVO DESTINO SE ELIMINARÁN! (2) Clonezilla no restaurará una imagen de un disco grande (partición) a una disco pequeño (partición). Sin embargo, puede restaurar una imagen de un disco pequeño (partición) a un disco grande (partición). (3) Si NO quiere que Clonezilla cree la tabla de particiones, marque -k'
-msg_choose_param_to_set_multiple_choices='Configurar parámetros avanzados (opciones múltiples disponibles). Si no tiene idea, deje el valor por defecto, por ej. NO cambie nada. Sólo pulse Intro.'
-msg_choose_param_to_set_single_choice='Configurar parámetros avanzados. Si no tiene idea, deje el valor por defecto, por ej. NO cambie nada. Sólo pulse Intro.'
 msg_overwrite_data_on_disk_when_restoring='¡Este software escribirá los datos en su disco duro cuando restaure! ¡Es recomendable hacer una copia de seguridad de los archivos importantes antes de restaurar!***'
 msg_overwrite_data_on_disk_when_cloning='¡Este software escribirá los datos en su disco duro cuando clone! ¡Es recomendable hacer una copia de seguridad de los archivos importantes antes de clonar!***'
 msg_clonezilla_save_local_disk='Guardar_disco_local_como_imagen'
@@ -1219,6 +1217,9 @@ msg_ocs_onthefly_param_edio='Habilite el modo IO directo de Partclone para NVMe 
 msg_prompt_remove_gnome_initial_setup='YP is used in DRBL clients, so gnome-initial-setup is annoying and not required. It is recommended to remove it.'
 # Tag on 2024/09/28
 msg_mount_ramdisk='Usar memoria (OK para BT desde dispositivo raw)'
-# Tag on 2025/01/11
-msg_ocs_param_plu="Copy log files to live USB drive"
-msg_ocs_onthefly_param_plu="Copy log files to live USB drive"
+# Tag on 2025/02/08
+msg_choose_param_to_set_multiple_choices='Configurar parámetros avanzados (opciones múltiples disponibles). Si no tiene idea, deje el valor por defecto, por ej. NO cambie nada. Sólo pulse Intro.'
+msg_choose_param_to_set_single_choice='Configurar parámetros avanzados. Si no tiene idea, deje el valor por defecto, por ej. NO cambie nada. Sólo pulse Intro.'
+msg_put_log_usb_or_not='Do you want to copy the log files to Clonezilla live USB drive if it exists in this machine?'
+msg_put_log_to_OCS_USB_drive='Yes, copy log files to Clonezilla live USB drive if it exists'
+msg_not_put_log_to_OCS_USB_drive='No, do not copy log files to Clonezilla live USB drive even if it exists'

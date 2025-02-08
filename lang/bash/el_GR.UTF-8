@@ -690,8 +690,6 @@ msg_use_the_part_table_from_image='Χρησιμοποιήστε τον πίνα�
 msg_ocs_param_k1='Δημιουργία πίνακα κατατμήσεων ανάλογα'
 msg_ocs_param_k2='Ξεκινήστε τη γραμμή εντολών για τη μη αυτόματη δημιουργία κατατμήσεων αργότερα'
 msg_hint_for_fdisk='Επιλέξτε τη λειτουργία για τη δημιουργία του πίνακα κατατμήσεων στον δίσκο προορισμού: ***ΠΡΟΣΟΧΗ***(1) ΓΙΑ ΔΗΜΙΟΥΡΓΙΑ ΝΕΟΥ ΠΙΝΑΚΑ ΚΑΤΑΤΜΗΣΕΩΝ ΣΤΟ ΔΙΣΚΟ ΠΡΟΟΡΙΣΜΟΥ, ΟΛΑ ΤΑ ΔΕΔΟΜΕΝΑ ΣΤΗ ΣΥΣΚΕΥΗ ΠΡΟΟΡΙΣΜΟΥ ΘΑ ΣΒΗΣΤΟΥΝ!!! (2) Το Clonezilla δεν θα αποκαταστήσει ένα ομοίωμα από μεγάλο δίσκο (κατάτμηση) σε μικρότερο δίσκο (κατάτμηση). Ωστόσο, μπορεί να αποκαταστήσει ένα ομοίωμα από έναν μικρό δίσκο (κατάτμηση) σε έναν μεγαλύτερο δίσκο (κατάτμηση). (3) Εάν ΔΕΝ θέλετε το Clonezilla να δημιουργήσει έναν πίνακα κατατμήσεων, επιλέξτε -k'
-msg_choose_param_to_set_multiple_choices='Ορίστε σύνθετες παραμέτρους (διατίθενται πολλές επιλογές). Αν δεν έχετε ιδέα, κρατήστε τις προεπιλεγμένες τιμές και ΜΗΝ αλλάξετε τίποτα. Απλώς πατήστε Enter.'
-msg_choose_param_to_set_single_choice='Ορισμός σύνθετων παραμέτρων. Αν δεν έχετε ιδέα, κρατήστε τις προεπιλεγμένες τιμές και ΜΗΝ αλλάξετε τίποτα. Απλώς πατήστε Enter.'
 msg_overwrite_data_on_disk_when_restoring='Αυτό το λογισμικό θα αντικαταστήσει τα δεδομένα στον σκληρό σας δίσκο κατά την επαναφορά! Συνιστάται η δημιουργία αντιγράφων ασφαλείας σημαντικών αρχείων πριν από την επαναφορά!***'
 msg_overwrite_data_on_disk_when_cloning='Αυτό το λογισμικό θα αντικαταστήσει τα δεδομένα στον σκληρό σας δίσκο κατά την κλωνοποίηση! Συνιστάται η δημιουργία αντιγράφων ασφαλείας σημαντικών αρχείων στον δίσκο προορισμού πριν από την κλωνοποίηση!***'
 msg_clonezilla_save_local_disk='Αποθήκευση τοπικού δίσκου ως ομοίωμα'
@@ -1206,6 +1204,9 @@ msg_ocs_onthefly_param_edio='Ενεργοποίηση της απευθείας 
 msg_prompt_remove_gnome_initial_setup='YP is used in DRBL clients, so gnome-initial-setup is annoying and not required. It is recommended to remove it.'
 # Tag on 2024/09/28
 msg_mount_ramdisk='Αποθήκευση στη μνήμη (OK για BT από γυμνή συσκευή)'
-# Tag on 2025/01/11
-msg_ocs_param_plu="Copy log files to live USB drive"
-msg_ocs_onthefly_param_plu="Copy log files to live USB drive"
+# Tag on 2025/02/08
+msg_choose_param_to_set_multiple_choices='Ορίστε σύνθετες παραμέτρους (διατίθενται πολλές επιλογές). Αν δεν έχετε ιδέα, κρατήστε τις προεπιλεγμένες τιμές και ΜΗΝ αλλάξετε τίποτα. Απλώς πατήστε Enter.'
+msg_choose_param_to_set_single_choice='Ορισμός σύνθετων παραμέτρων. Αν δεν έχετε ιδέα, κρατήστε τις προεπιλεγμένες τιμές και ΜΗΝ αλλάξετε τίποτα. Απλώς πατήστε Enter.'
+msg_put_log_usb_or_not='Do you want to copy the log files to Clonezilla live USB drive if it exists in this machine?'
+msg_put_log_to_OCS_USB_drive='Yes, copy log files to Clonezilla live USB drive if it exists'
+msg_not_put_log_to_OCS_USB_drive='No, do not copy log files to Clonezilla live USB drive even if it exists'

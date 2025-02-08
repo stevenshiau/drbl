@@ -693,8 +693,6 @@ msg_use_the_part_table_from_image='Képben lévő partíciós tábla alkalmazás
 msg_ocs_param_k1='Arányos partíciós tábla létrehozása'
 msg_ocs_param_k2='Parancssorba lépés és a partíció későbbi, kézi létrehozása'
 msg_hint_for_fdisk='Válassza ki a céllemez partíciós táblájának létrehozási módját: ***FIGYELEM***(1) ÚJ PARTÍCIÓ LÉTREHOZÁSAKOR, A CÉLESZKÖZÖN TALÁLHATÓ ÖSSZES ADAT ELVÉSZ!!! (2) A Clonezilla nem képes nagyobb lemezről (partícióról) származó képet, kisebbre visszaállítani. Ámbár, kisebb lemezről (partícióról) mentett képet, visszaállít nagyobbra. (3) Ha nem szeretne a Clonezilla-val partíciós táblát létrehozni, válassza ezt: -k'
-msg_choose_param_to_set_multiple_choices='Haladó beállítások (egyszerre több is lehetséges). Ha bizonytalan, hagyjon mindent érintetlenül, NE módosítson semmit. Csak nyomjon Enter-t.'
-msg_choose_param_to_set_single_choice='Haladó beállítások. Ha bizonytalan, hagyjon mindent érintetlenül, NE módosítson semmit. Csak nyomjon Enter-t.'
 msg_overwrite_data_on_disk_when_restoring='A program a visszaállítás során felülírja a merevlemezen található adatokat! Ajánlott a fontos fájlok mentése a művelet megkezdése előtt!***'
 msg_overwrite_data_on_disk_when_cloning='A program a klónozás során felülírja a merevlemezen található adatokat! Ajánlott a célmeghajtón lévő fontos fájlok mentése a művelet megkezdése előtt!***'
 msg_clonezilla_save_local_disk='Helyi meghajtó lemezképbe mentése'
@@ -1205,6 +1203,9 @@ msg_ocs_onthefly_param_edio='Partclone közvetlen IO mód bekapcsolása NVMe SSD
 msg_prompt_remove_gnome_initial_setup='YP is used in DRBL clients, so gnome-initial-setup is annoying and not required. It is recommended to remove it.'
 # Tag on 2024/09/28
 msg_mount_ramdisk='Memória használata (jó nyers eszközről, BT-vel)'
-# Tag on 2025/01/11
-msg_ocs_param_plu="Copy log files to live USB drive"
-msg_ocs_onthefly_param_plu="Copy log files to live USB drive"
+# Tag on 2025/02/08
+msg_choose_param_to_set_multiple_choices='Haladó beállítások (egyszerre több is lehetséges). Ha bizonytalan, hagyjon mindent érintetlenül, NE módosítson semmit. Csak nyomjon Enter-t.'
+msg_choose_param_to_set_single_choice='Haladó beállítások. Ha bizonytalan, hagyjon mindent érintetlenül, NE módosítson semmit. Csak nyomjon Enter-t.'
+msg_put_log_usb_or_not='Do you want to copy the log files to Clonezilla live USB drive if it exists in this machine?'
+msg_put_log_to_OCS_USB_drive='Yes, copy log files to Clonezilla live USB drive if it exists'
+msg_not_put_log_to_OCS_USB_drive='No, do not copy log files to Clonezilla live USB drive even if it exists'

@@ -692,8 +692,6 @@ msg_use_the_part_table_from_image='Use the partition table from the image'
 msg_ocs_param_k1='Create partition table proportionally'
 msg_ocs_param_k2='Enter command line prompt to create partition manually later'
 msg_hint_for_fdisk='Choose the mode to create the partition table on the target disk: ***ATTENTION***(1) TO CREATE A NEW PARTITION TABLE ON THE TARGET DISK. ALL THE DATA ON THE TARGET DEVICE WILL BE ERASED!!! (2) Clonezilla will not restore an image from a large disk (partition) to a smaller disk (partition). However, it can restore an image from a small disk (partition) to a larger disk (partition). (3) If you do NOT want Clonezilla to create a partition table, check -k'
-msg_choose_param_to_set_multiple_choices='Set advanced parameters (multiple choices available). If you have no idea, keep the default values and do NOT change anything. Just press Enter.'
-msg_choose_param_to_set_single_choice='Set advanced parameters. If you have no idea, keep the default values and do NOT change anything. Just press Enter.'
 msg_overwrite_data_on_disk_when_restoring='This software will overwrite the data on your hard drive when restoring! It is recommended to backup important files before restoring!***'
 msg_overwrite_data_on_disk_when_cloning='This software will overwrite the data on your hard drive when cloning! It is recommended to backup important files on the target disk before you cloning!***'
 msg_clonezilla_save_local_disk='Save local disk as an image'
@@ -1204,6 +1202,9 @@ msg_ocs_onthefly_param_edio='Enable the direct IO mode of Partclone for NVMe SSD
 msg_prompt_remove_gnome_initial_setup='YP is used in DRBL clients, so gnome-initial-setup is annoying and not required. It is recommended to remove it.'
 # Tag on 2024/09/28
 msg_mount_ramdisk='Use memory (OK for BT or multicast from raw device)'
-# Tag on 2025/01/11
-msg_ocs_param_plu="Copy log files to live USB drive"
-msg_ocs_onthefly_param_plu="Copy log files to live USB drive"
+# Tag on 2025/02/08
+msg_choose_param_to_set_multiple_choices='Set parameters (multiple choices available). If you have no idea, keep the default values and do NOT change anything. Just press Enter.'
+msg_choose_param_to_set_single_choice='Set parameters. If you have no idea, keep the default values and do NOT change anything. Just press Enter.'
+msg_put_log_usb_or_not='Do you want to copy the log files to Clonezilla live USB drive if it exists in this machine?'
+msg_put_log_to_OCS_USB_drive='Yes, copy log files to Clonezilla live USB drive if it exists'
+msg_not_put_log_to_OCS_USB_drive='No, do not copy log files to Clonezilla live USB drive even if it exists'
