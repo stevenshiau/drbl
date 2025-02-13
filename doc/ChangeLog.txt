@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (5.4.6-drbl1) unstable; urgency=medium
+
+  * Drop lz4mt, just lz4 to judge if -z8/-z8p.
+
+ -- Steven Shiau <steven@clonezilla.org>  Thu, 13 Feb 2025 21:13:20 +0800
+
 drbl (5.4.5-drbl1) unstable; urgency=medium
 
   * Update Linux netinstall versions in drbl-ocs.conf.
