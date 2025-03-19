@@ -1,3 +1,9 @@
+drbl (5.4.8-drbl1) unstable; urgency=medium
+
+  * Add ibfsapfs-utils in clonezilla live pkgs list.
+
+ -- Steven Shiau <steven@clonezilla.org>  Wed, 19 Mar 2025 20:48:14 +0800
+
 drbl (5.4.7-drbl1) unstable; urgency=medium
 
   * Replaced package ntpdate with ntpsec-ntpdate in the packages list for
