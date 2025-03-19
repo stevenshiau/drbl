@@ -1,3 +1,9 @@
+drbl (5.4.9-drbl1) unstable; urgency=medium
+
+  * Package name typo. It should be libfsapfs-utils.
+
+ -- Steven Shiau <steven@clonezilla.org>  Wed, 19 Mar 2025 21:18:47 +0800
+
 drbl (5.4.8-drbl1) unstable; urgency=medium
 
   * Add ibfsapfs-utils in clonezilla live pkgs list.
