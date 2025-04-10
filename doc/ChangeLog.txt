@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (5.4.10-drbl1) unstable; urgency=medium
+
+  * Add usb-modeswitch in the Clonezilla live packages list.
+
+ -- Steven Shiau <steven@clonezilla.org>  Fri, 11 Apr 2025 02:18:20 +0800
+
 drbl (5.4.9-drbl1) unstable; urgency=medium
 
   * Package name typo. It should be libfsapfs-utils.
