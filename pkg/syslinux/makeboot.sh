@@ -272,11 +272,11 @@ if ! type mcopy &>/dev/null; then
 fi
 
 if [ -n "$target_part_label" -a -z "$target_part" ] ; then
-  target_part_via_label="$(LC_ALL=C blkid | grep -iE "^/dev/[hsu][bd][a-z]+[[:digit:]]+.+LABEL=\"$target_part_label\".*" | grep -oE -w '^/dev/[hsu][bd][a-z]+[[:digit:]]+'| head -n 1)"
+  target_part_via_label="$(LC_ALL=C blkid | grep -iE "^/dev/[hsuv][bd][a-z]+[[:digit:]]+.+LABEL=\"$target_part_label\".*" | grep -oE -w '^/dev/[hsuv][bd][a-z]+[[:digit:]]+'| head -n 1)"
 fi 
 
 if [ -n "$target_part_uuid" -a -z "$target_part" ] ; then 
-  target_part_via_uuid="$(LC_ALL=C blkid | grep -iE "^/dev/[hsu][bd][a-z]+[[:digit:]]+.+UUID=\"$target_part_uuid\".*" | grep -oE -w '^/dev/[hsu][bd][a-z]+[[:digit:]]+'| head -n 1)"
+  target_part_via_uuid="$(LC_ALL=C blkid | grep -iE "^/dev/[hsuv][bd][a-z]+[[:digit:]]+.+UUID=\"$target_part_uuid\".*" | grep -oE -w '^/dev/[hsuv][bd][a-z]+[[:digit:]]+'| head -n 1)"
 fi
 
 if [ -z "$target_part" ] ; then 
