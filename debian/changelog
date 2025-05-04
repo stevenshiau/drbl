@@ -1,3 +1,11 @@
+drbl (5.4.12-drbl1) unstable; urgency=medium
+
+  * makeboot.sh: add support for KVM/QEMU virtual disks
+    (e.g., /dev/vda, /dev/vdb)
+    Ref: https://github.com/stevenshiau/drbl/pull/32
+
+ -- Steven Shiau <steven@clonezilla.org>  Sun, 04 May 2025 11:24:28 +0800
+
 drbl (5.4.11-drbl1) unstable; urgency=medium
 
   * Add package fscrypt in the packages list of Clonezilla live system.
