@@ -1,3 +1,9 @@
+drbl (5.4.15-drbl1) unstable; urgency=medium
+
+  * Added linux-cpupower in Clonezilla live packages list.
+
+ -- Steven Shiau <steven@clonezilla.org>  Sun, 25 May 2025 10:23:25 +0800
+
 drbl (5.4.14-drbl1) unstable; urgency=medium
 
   * Added pax in the Clonezilla live packages list.
