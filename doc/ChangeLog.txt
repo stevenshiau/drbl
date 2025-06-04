@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (5.4.17-drbl1) unstable; urgency=medium
+
+  * Added krb5-user libsasl2-modules-gssapi-mit in live packages list.
+    Ref: https://sourceforge.net/p/clonezilla/discussion/Clonezilla_live/thread/4b496866b4
+
+ -- Steven Shiau <steven@clonezilla.org>  Tue, 03 Jun 2025 21:39:04 +0800
+
 drbl (5.4.16-drbl1) unstable; urgency=medium
 
   * Removed duplicated pax from Clonezilla live packages list.
