@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (5.4.18-drbl1) unstable; urgency=medium
+
+  * Added ldap-utils in Clonezilla live system packages list.
+
+ -- Steven Shiau <steven@clonezilla.org>  Thu, 05 Jun 2025 18:48:02 +0800
+
 drbl (5.4.17-drbl1) unstable; urgency=medium
 
   * Added krb5-user libsasl2-modules-gssapi-mit in live packages list.
