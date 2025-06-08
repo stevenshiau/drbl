@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (5.4.19-drbl1) unstable; urgency=medium
+
+  * Added dhcpcd-base in the Clonezilla live packages list.
+
+ -- Steven Shiau <steven@clonezilla.org>  Sun, 08 Jun 2025 18:05:07 +0800
+
 drbl (5.4.18-drbl1) unstable; urgency=medium
 
   * Added ldap-utils in Clonezilla live system packages list.
