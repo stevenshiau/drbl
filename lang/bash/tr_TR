@@ -347,7 +347,7 @@ msg_input_name_to_save_the_img='Kaydedilecek kalıpta kullanmak için bir isim g
 msg_time_to_wait_sec='Asgari bekleme zamanı (sn) (İlk istemci bağlandığında sayaç başlar)'
 msg_max_time_to_wait_sec="Azami bekleme zamanı (sn) (İlk istemci bağlandığında sayaç başlar). Yeterli sayıda istemci bağlanmadığında (en az bir tane bağlanmış olmalı) her ne olursa olsun ilk istemci bağlı olduğundan süreç başlar. (Daha iyi >= $SLEEP_TIME_AFTER_PART_CLONED)"
 msg_you_must_input_filename='Bir isim girmelisiniz'
-msg_you_must_input_legal_filename="Uygun kalıp adı girmek zorundasınız (sadece alfabetik, sayısal, _, -, % ve . içerebilir)"
+msg_you_must_input_legal_filename="Uygun kalıp adı girmek zorundasınız (sadece alfabetik, sayısal, _, -, (, ), % ve . içerebilir)"
 msg_you_must_input_partition='Bir bölüm girmelisiniz'
 msg_please_do_it_again='Lütfen tekrar yapın'
 msg_choose_the='Seçeceğiniz '

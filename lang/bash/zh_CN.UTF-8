@@ -348,7 +348,7 @@ msg_input_name_to_save_the_img='输入一个名称来存这个镜像文件'
 msg_time_to_wait_sec='最少等待的时间(秒) (从第一台电脑来报到后开始算)'
 msg_max_time_to_wait_sec="最长等待的时间(秒) (从第一台电脑来报到后开始算)，也就是超过这个指定的时间，只要至少有一台电脑来连接，即使指定的电脑数目不够，也强迫开始复制(建议>=$SLEEP_TIME_AFTER_PART_CLONED)"
 msg_you_must_input_filename='您必须输入一个名称'
-msg_you_must_input_legal_filename='您必须输入一个合法的名称(只包含字母，数字，_，-，%与.)'
+msg_you_must_input_legal_filename='您必须输入一个合法的名称(只包含字母，数字，_，-，(， )，%，与.)'
 msg_you_must_input_partition='您必须输入一个分区'
 msg_please_do_it_again='请再做一次'
 msg_choose_the='选择这个'

@@ -348,7 +348,7 @@ msg_input_name_to_save_the_img='Nevezze el a mentendő képet'
 msg_time_to_wait_sec='Minimális várakozási idő (Mp) (A számláló az első kliens csatlakozásakor indul)'
 msg_max_time_to_wait_sec="Maximális várakozási idő (Mp) (A számláló az első kliens csatlakozásakor indul). Ha elégtelen számú kliens csatlakozik (de legalább egy) a folyamat indítása ettől függetlenül [this assigned seconds] másodperccel azután, hogy az első kliens csatlakozott. (Jobb >= $SLEEP_TIME_AFTER_PART_CLONED)"
 msg_you_must_input_filename='Adjon meg egy nevet'
-msg_you_must_input_legal_filename="Meg kell adni egy helyes lemezkép nevet (amit tartalmazhat, kizárólag betű, szám, _, -, % és .)"
+msg_you_must_input_legal_filename="Meg kell adni egy helyes lemezkép nevet (amit tartalmazhat, kizárólag betű, szám, _, -, (, ), % és .)"
 msg_you_must_input_partition='Meg kell adni egy partíciót'
 msg_please_do_it_again='Ismételje meg'
 msg_choose_the='Válassza ki a'

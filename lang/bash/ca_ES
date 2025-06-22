@@ -350,7 +350,7 @@ msg_input_name_to_save_the_img="Introdueixi el nom de la imatge desada que desit
 msg_time_to_wait_sec="Mínim temps d'espera (segons) (El temps comença quan el primer client es connecti)"
 msg_max_time_to_wait_sec="Màxim temps d'espera (segons) (El temps comença quan el primer client es connecta.) Si no s'han connectat suficients clients (encara que almanco n'hi hagi un) començarà, tanmateix, el procés després d'aquests segons (a partir de la connexió del primer client). (millor >= $SLEEP_TIME_AFTER_PART_CLONED)"
 msg_you_must_input_filename="Ha d'introduir un nom"
-msg_you_must_input_legal_filename="Ha d'introduir un nom d'imatge vàlid (només lletres de l'alfabet anglès, dígits, _, -, % i )."
+msg_you_must_input_legal_filename="Ha d'introduir un nom d'imatge vàlid (només lletres de l'alfabet anglès, dígits, _, -, (, ), % i )."
 msg_you_must_input_partition="Ha d'introduir una partició"
 msg_please_do_it_again="Per favor, faci-ho de nou"
 msg_choose_the="Triï el"

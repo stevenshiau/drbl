@@ -349,7 +349,7 @@ msg_input_name_to_save_the_img='Introduzca el nombre de la imagen a grabar'
 msg_time_to_wait_sec='Tiempo mínimo de espera (Seg) (La cuenta comienza cuando el primer cliente conecta)'
 msg_max_time_to_wait_sec="Tiempo máximo de espera (Seg) (La cuenta comienza cuando el primer cliente conecta), por ej. Cuando no han conectado muchos clientes (pero por lo menos uno), se inicia de todas maneras después [de los segundos asignados] hasta que la primera conexión de un cliente ha pasado. (Mejor >= $SLEEP_TIME_AFTER_PART_CLONED)"
 msg_you_must_input_filename='Debe introducir un nombre'
-msg_you_must_input_legal_filename="Debe introducir un nombre de imagen válido (sólo letras del alfabeto, dígitos, _, -, % y .)"
+msg_you_must_input_legal_filename="Debe introducir un nombre de imagen válido (sólo letras del alfabeto, dígitos, _, -, (, ), % y .)"
 msg_you_must_input_partition='Debe introducir una partición'
 msg_please_do_it_again='Por favor hágalo de nuevo'
 msg_choose_the='Elija el'

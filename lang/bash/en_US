@@ -347,7 +347,7 @@ msg_input_name_to_save_the_img='Input a name for the saved image to use'
 msg_time_to_wait_sec='Minimum time to wait (Sec) (The count starts when the first client connects)'
 msg_max_time_to_wait_sec="Maximum time to wait (Sec) (The count starts when the first client connects). When not enough clients have connected (but at least one) start the process anyways after [this assigned seconds] since first client connects. (Better >= $SLEEP_TIME_AFTER_PART_CLONED)"
 msg_you_must_input_filename='You have to input a name'
-msg_you_must_input_legal_filename="You have to input a proper image name (containing only alphabet, digit, _, -, % and .)"
+msg_you_must_input_legal_filename="You have to input a proper image name (containing only alphabet, digit, _, -, (, ), % and .)"
 msg_you_must_input_partition='You have to input a partition'
 msg_please_do_it_again='Please do it again'
 msg_choose_the='Choose the'

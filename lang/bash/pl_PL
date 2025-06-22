@@ -347,7 +347,7 @@ msg_input_name_to_save_the_img='Wprowadź nazwę dla zapisywanego obrazu, któr�
 msg_time_to_wait_sec='Minimalny czas oczekiwania (Sec) (liczenie rozpoczyna się, gdy pierwszy klient połączy się)'
 msg_max_time_to_wait_sec="Maksymalny czas oczekiwania (Sec) (liczenie rozpoczyna się, gdy pierwszy klient połączy się). Jeśli nie ma wystarczającej liczby klientów połączonych (ale jest przynajmniej jeden), mimo wszystko proces rozpocznie się po [przydzielonych sekundach] od pierwszego połączenia klienta. (Lepiej >= $SLEEP_TIME_AFTER_PART_CLONED)"
 msg_you_must_input_filename='Musisz wpisać nazwę'
-msg_you_must_input_legal_filename="Musisz wprowadzić poprawną nazwę obrazu (zawierającą tylko alfabet, cyfrę, _, -, % i.)"
+msg_you_must_input_legal_filename="Musisz wprowadzić poprawną nazwę obrazu (zawierającą tylko alfabet, cyfrę, _, -, (, ), % i.)"
 msg_you_must_input_partition='Musisz wprowadzić partycję'
 msg_please_do_it_again='Proszę zrób to jeszcze raz'
 msg_choose_the='Wybierz'
