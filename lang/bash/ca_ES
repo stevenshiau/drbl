@@ -1156,8 +1156,11 @@ msg_ocs_param_ssnf="Ometre la configuració del primer dispositiu d'arrencada co
 msg_ocs_param_scpt="Ometre la comprovació que la taula de particions del disc d'origen té format MBR o GPT"
 # Tag on 2021/03/09
 msg_B2SUMS_check_failed="Els checksums de BLAKE2 NO coincideixen!"
-msg_ocs_param_gb="Generar checksums d'imatge BLAKE2"
-msg_ocs_param_cb="Verificar imatge amb checksums de BLAKE2"
+msg_B3SUMS_check_failed="Els checksums de BLAKE3 NO coincideixen!"
+msg_ocs_param_gb2="Generar checksums d'imatge BLAKE2"
+msg_ocs_param_cb2="Verificar imatge amb checksums de BLAKE2"
+msg_ocs_param_gb3="Generar checksums d'imatge BLAKE3"
+msg_ocs_param_cb3="Verificar imatge amb checksums de BLAKE3"
 # Tag on 2021/03/15
 msg_list_local_device_mode="En quina manera desitja enumerar els dispositius de bloc en aquesta màquina? Si no té idea, triï 'disk_or_part'. _NO_ triï 'both_type_dev' tret que sàpiga el que està fent. Bàsicament, 'both_type_dev' és perquè forci l'elecció del dispositiu de bloc que no apareix com a tal. Per exemple, desitja guardar el dispositiu de bloc /dev/sda, però no es mostra en la manera 'saveparts', ja que és un nom de dispositiu de disc i no un nom de dispositiu de partició."
 msg_list_disk_or_part_mode="Disc(s) i partició(ns) separats"

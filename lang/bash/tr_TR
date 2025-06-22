@@ -1151,8 +1151,11 @@ msg_ocs_param_ssnf='UEFI netboot istemcisi NVRAMde 1. önyükleme aygıtını a�
 msg_ocs_param_scpt='Kaynak diskin bölüm tablosunun MBR veya GPT formatı olup olmadığını kontrol etmeyi atla'
 # Tag on 2021/03/09
 msg_B2SUMS_check_failed='BLAKE2 sağlama toplamları eşleşmedi!'
-msg_ocs_param_gb='Kalıp için BLAKE2 sağlama toplamları oluştur'
-msg_ocs_param_cb='BLAKE2 sağlama toplamlarıyla kalıbı kontrol et'
+msg_B3SUMS_check_failed='BLAKE3 sağlama toplamları eşleşmedi!'
+msg_ocs_param_gb2='Kalıp için BLAKE2 sağlama toplamları oluştur'
+msg_ocs_param_cb2='BLAKE2 sağlama toplamlarıyla kalıbı kontrol et'
+msg_ocs_param_gb3='Kalıp için BLAKE3 sağlama toplamları oluştur'
+msg_ocs_param_cb3='BLAKE3 sağlama toplamlarıyla kalıbı kontrol et'
 # Tag on 2021/03/15
 msg_list_local_device_mode='Bu makinedeki blok cihazlarını hangi modda listelemek istiyorsunuz? Hiçbir fikriniz yoksa, "disk_or_part" öğesini seçin. Ne yaptığınızı bilmiyorsanız, "both_type_dev"i SEÇMEYİN. Temel olarak "both_type_dev", listelenmemiş olan blok cihazını olduğu gibi seçmeye zorlamanız içindir. Örneğin, /dev/sda blok cihazını kaydetmek istiyorsunuz, ancak bu bir disk cihazı olup, bir bölüm cihazı adı olmadığından "saveparts" modunda gösterilmiyor.'
 msg_list_disk_or_part_mode='Disk(ler)i ve bölümü/bölümleri ayır'

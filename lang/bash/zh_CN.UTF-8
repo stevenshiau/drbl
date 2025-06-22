@@ -1152,8 +1152,11 @@ msg_ocs_param_ssnf='跳过在网络开机用户端的NVRAM设定开机第一优�
 msg_ocs_param_scpt='不检查来源磁盘的分区表是MBR或者GPT格式'
 # Tag on 2021/03/09
 msg_B2SUMS_check_failed='BLAKE2校验码不匹配'
-msg_ocs_param_gb='生成镜像BLAKE2校验码'
-msg_ocs_param_cb='使用BLAKE2校验码检查镜像'
+msg_B3SUMS_check_failed='BLAKE3校验码不匹配'
+msg_ocs_param_gb2='生成镜像BLAKE2校验码'
+msg_ocs_param_cb2='使用BLAKE2校验码检查镜像'
+msg_ocs_param_gb3='生成镜像BLAKE3校验码'
+msg_ocs_param_cb3='使用BLAKE3校验码检查镜像'
 # Tag on 2021/03/15
 msg_list_local_device_mode='你要使用哪种模式列出这台设备上的存储设备？如果你不清楚这个问题，选择"disk_or_part"。除非您知道您在做什么，否则不要选择"both_type_dev"。基本上"both_type_dev"用来强制选择没有列出的块设备。例如，你想要保存块设备/dev/sda，但它没有以"saveparts"模式列出，因为它是磁盘设备名称，不是分区设备名称。'
 msg_list_disk_or_part_mode='将硬盘和分区以不同类别列出'

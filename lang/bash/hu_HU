@@ -1150,8 +1150,11 @@ msg_ocs_param_ssnf='Első booteszköz hálózatnak megadásának kihagyása uEFI
 msg_ocs_param_scpt='A forráslemez partíciós tábláján az MBR vagy GPT formátum azonosítás kihagyása'
 # Tag on 2021/03/09
 msg_B2SUMS_check_failed='A BLAKE2 érték NEM egyezik!'
-msg_ocs_param_gb='Kép BLAKE2 értékének generálása'
-msg_ocs_param_cb='Kép ellenőrzése BLAKE2 értékkel'
+msg_B3SUMS_check_failed='A BLAKE3 érték NEM egyezik!'
+msg_ocs_param_gb2='Kép BLAKE2 értékének generálása'
+msg_ocs_param_cb2='Kép ellenőrzése BLAKE2 értékkel'
+msg_ocs_param_gb3='Kép BLAKE3 értékének generálása'
+msg_ocs_param_cb3='Kép ellenőrzése BLAKE3 értékkel'
 # Tag on 2021/03/15
 msg_list_local_device_mode='Miként szeretné listázni a gép blokk eszközeit? Ha nem tudja, válassza a "disk_or_part" módot. NE válassza a "both_type_dev"-et, ha nem kimondottan ez a szándéka. Ez alapvetően egy amúgy nem listázott blokk eszköz választásának kikényszerítésére szolgál. Például, mentené a /dev/sda blokk eszközt, de az nem jelenik meg "saveparts" módban, mivel ez egy lemez eszköznév, nem partíció eszköz neve.'
 msg_list_disk_or_part_mode='Lemez(ek) és partíció(k) külön'

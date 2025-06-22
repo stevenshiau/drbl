@@ -1151,8 +1151,11 @@ msg_ocs_param_ssnf='Passer la définition du 1er périphérique d\''amorçage en
 msg_ocs_param_scpt='Ne pas vérifier que le format de la table de partitions du disque source est MBR ou GPT'
 # Tag on 2021/03/09
 msg_B2SUMS_check_failed='Les sommes de contrôle BLAKE2 ne correspondent pas !'
-msg_ocs_param_gb='Générer la somme de contrôle BLAKE2 de l\''image'
-msg_ocs_param_cb='Vérifier la somme de contrôle BLAKE2 de l\''image'
+msg_B3SUMS_check_failed='Les sommes de contrôle BLAKE3 ne correspondent pas !'
+msg_ocs_param_gb2='Générer la somme de contrôle BLAKE2 de l\''image'
+msg_ocs_param_cb2='Vérifier la somme de contrôle BLAKE2 de l\''image'
+msg_ocs_param_gb3='Générer la somme de contrôle BLAKE3 de l\''image'
+msg_ocs_param_cb3='Vérifier la somme de contrôle BLAKE3 de l\''image'
 # Tag on 2021/03/15
 msg_list_local_device_mode='Quel mode pour le listage des périphériques bloc sur cette machine ? Si vous ne savez pas, choisissez "disque_ou_partition". Ne choisissez _PAS_ "both_type_dev" sauf si vous savez ce que vous faites. Le mode "both_type_dev" vous permet de forcer le choix d\''un périphérique bloc qui n\''est pas listé correctement. Par exemple, si vous voulez sauvegarder le périphérique bloc /dev/sda alors qu\''il n\''appraît pas sous le mode "saveparts" puisque c\''est le nom d\''un disque et pas un nom de périphérique partition.'
 msg_list_disk_or_part_mode='Separer disque(s) et partition(s)'

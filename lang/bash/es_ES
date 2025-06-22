@@ -1164,8 +1164,11 @@ msg_ocs_param_ssnf='Omitir la configuración del primer dispositivo de arranque 
 msg_ocs_param_scpt='Omitir la comprobación de que la tabla de particiones del disco de origen tiene formato MBR o GPT'
 # Tag on 2021/03/09
 msg_B2SUMS_check_failed='Los checksums de BLAKE2 NO coinciden!'
-msg_ocs_param_gb='Generar checksums de imagen BLAKE2'
-msg_ocs_param_cb='Verificar imagen con checksums de BLAKE2'
+msg_B3SUMS_check_failed='Los checksums de BLAKE3 NO coinciden!'
+msg_ocs_param_gb2='Generar checksums de imagen BLAKE2'
+msg_ocs_param_cb2='Verificar imagen con checksums de BLAKE2'
+msg_ocs_param_gb3='Generar checksums de imagen BLAKE3'
+msg_ocs_param_cb3='Verificar imagen con checksums de BLAKE3'
 # Tag on 2021/03/15
 msg_list_local_device_mode='¿En qué modo desea enumerar los dispositivos de bloque en esta máquina? Si no tiene idea, elija "disk_or_part". _NO_ elija "both_type_dev" a menos que sepa lo que está haciendo. Básicamente, "both_type_dev" es para que fuerce la elección del dispositivo de bloque que no aparece como tal. Por ejemplo, desea guardar el dispositivo de bloque /dev/sda pero no se muestra en el modo "saveparts" ya que es un nombre de dispositivo de disco y no un nombre de dispositivo de partición.'
 msg_list_disk_or_part_mode='Disco (s) y partición (es) separados'

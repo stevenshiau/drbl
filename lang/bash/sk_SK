@@ -1150,8 +1150,11 @@ msg_ocs_param_ssnf='preskočiť nastavenie siete ako prvého bootovateľného za
 msg_ocs_param_scpt='Preskočiť kontrolu tabuľky partícií vo formáte MBR alebo GPT'
 # Tag on 2021/03/09
 msg_B2SUMS_check_failed='Kontrolné sumy BLAKE2 sa NEZHODUJÚ!'
-msg_ocs_param_gb='Generovať BLAKE2 kontrolné sumy obrazu'
-msg_ocs_param_cb='Skontrolovať obraz pomocou BLAKE2 kontrolných súm'
+msg_B3SUMS_check_failed='Kontrolné sumy BLAKE3 sa NEZHODUJÚ!'
+msg_ocs_param_gb2='Generovať BLAKE2 kontrolné sumy obrazu'
+msg_ocs_param_cb2='Skontrolovať obraz pomocou BLAKE2 kontrolných súm'
+msg_ocs_param_gb3='Generovať BLAKE3 kontrolné sumy obrazu'
+msg_ocs_param_cb3='Skontrolovať obraz pomocou BLAKE3 kontrolných súm'
 # Tag on 2021/03/15
 msg_list_local_device_mode='V akom móde chcete vylistovať blokové zariadenie na tomto zariadení? Ak netušíte, zvoľte "disk_or_part". NEVYBERAJTE "both_type_dev" pokiaľ neviete čo robíte. "Both_type_dev" je v podstate na to, aby ste si vynútili výber blokového zariadenia, ktoré nie je uvedené tak, ako je. Napríklad chcete uložiť blokové zariadenie /dev/sda, ale nezobrazuje sa v režime "saveparts", pretože ide o názov diskového zariadenia, nie názov zariadenia oddielu. '
 msg_list_disk_or_part_mode='Oddeliť disk(y) a partíciu(e)'

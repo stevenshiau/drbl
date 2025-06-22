@@ -1170,8 +1170,11 @@ msg_ocs_param_ssnf='uEFI ネットワーク起動クライアント NVRAM で、
 msg_ocs_param_scpt='コピー元ディスクのパーティションテーブルフォーマットが MBR あるいは GPT のチェックを省略'
 # Tag on 2021/03/09
 msg_B2SUMS_check_failed='BLAKE2 チェックサムが一致しませんでした!'
-msg_ocs_param_gb='イメージの BLAKE2 チェックサムを生成'
-msg_ocs_param_cb='BLAKE2 チェックサムでイメージをチェック'
+msg_B3SUMS_check_failed='BLAKE3 チェックサムが一致しませんでした!'
+msg_ocs_param_gb2='イメージの BLAKE2 チェックサムを生成'
+msg_ocs_param_cb2='BLAKE2 チェックサムでイメージをチェック'
+msg_ocs_param_gb3='イメージの BLAKE3 チェックサムを生成'
+msg_ocs_param_cb3='BLAKE3 チェックサムでイメージをチェック'
 # Tag on 2021/03/15
 msg_list_local_device_mode='どのモードでこのマシンのブロックデバイスを一覧表示しますか？よく分からない場合は「disk_or_part」を選択して下さい。内容を理解していない限り「both_type_dev」は選択しないで下さい。基本的に「both_type_dev」はそのままの形で一覧されないブロックデバイスをあえて選択する為のものです。例えば、ブロックデバイス /dev/sda を選択したいが「saveparts」モードの為に表示されない (/dev/sda はディスクデバイス名であり、パーティション名ではないので) 場合などです。'
 msg_list_disk_or_part_mode='ディスクとパーティションを分離して表示'

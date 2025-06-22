@@ -1149,8 +1149,11 @@ msg_ocs_param_ssnf='Setze nicht “Netzwerk” als erstes Boot-Device im NVRAM d
 msg_ocs_param_scpt='Überspringe die Prüfung, ob die Partitiontable der Quell-Disk MBR oder GPT Format hat'
 # Tag on 2021/03/09
 msg_B2SUMS_check_failed='BLAKE2 Prüfsummen sind NICHT korrekt!'
-msg_ocs_param_gb='Erzeuge BLAKE2 Image-Prüfsummen'
-msg_ocs_param_cb='Prüfe das Image mittels BLAKE2 Prüfsummen'
+msg_B3SUMS_check_failed='BLAKE3 Prüfsummen sind NICHT korrekt!'
+msg_ocs_param_gb2='Erzeuge BLAKE2 Image-Prüfsummen'
+msg_ocs_param_cb2='Prüfe das Image mittels BLAKE2 Prüfsummen'
+msg_ocs_param_gb3='Erzeuge BLAKE3 Image-Prüfsummen'
+msg_ocs_param_cb3='Prüfe das Image mittels BLAKE3 Prüfsummen'
 # Tag on 2021/03/15
 msg_list_local_device_mode='Auf welche Art sollen die Blockdevices dieses Systems angezeigt werden? Wenn Sie keine Idee haben, wählen Sie "disk_or_part". Wählen Sie _NICHT_ "both_type_dev" wenn Sie nicht sicher sind, was Sie tun. "both_type_dev" ist dafür gedacht, Blockdevices auszuwählen, die sonst nicht angezeigt werden, beispielsweise wenn Sie das block device /dev/sda sichern wollen, aber dies im “saveparts” mode nicht angezeigt wird weil es eine Disk ist und nicht der Name einer Partition.'
 msg_list_disk_or_part_mode='Trenne Disk(s) und Partition(en)'

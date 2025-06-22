@@ -1149,8 +1149,11 @@ msg_ocs_param_ssnf='略去在網路開機用戶端的NVRAM設定開機第一優�
 msg_ocs_param_scpt='不檢查來源硬碟的分割表是MBR或者GPT格式'
 # Tag on 2021/03/09
 msg_B2SUMS_check_failed='BLAKE2雜湊值檢查發現有問題!'
-msg_ocs_param_gb='產生印象檔的BLAKE2雜湊值'
-msg_ocs_param_cb='經由BLAKE2雜湊值檢查印象檔'
+msg_B3SUMS_check_failed='BLAKE3雜湊值檢查發現有問題!'
+msg_ocs_param_gb2='產生印象檔的BLAKE2雜湊值'
+msg_ocs_param_cb2='經由BLAKE2雜湊值檢查印象檔'
+msg_ocs_param_gb3='產生印象檔的BLAKE3雜湊值'
+msg_ocs_param_cb3='經由BLAKE3雜湊值檢查印象檔'
 # Tag on 2021/03/15
 msg_list_local_device_mode='您要使用哪個模式來列出這台機器上儲存的裝置檔名? 若你不清楚這個問題，就請選"disk_or_part"。除非您知道您在做什麼，要不然不要選"both_type_dev"。基本上"both_type_dev"是讓您來強迫選擇儲存裝置的檔案不是它本來的分類。例如，您想要儲存/dev/sda但是它在"saveparts"模式不會被列出，畢竟它是整個硬碟的裝置檔名, 不是分割區的裝置檔名。'
 msg_list_disk_or_part_mode='將硬碟與分割區的裝置檔以不同類別列出'

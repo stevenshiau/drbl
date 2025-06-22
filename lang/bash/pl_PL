@@ -1150,8 +1150,11 @@ msg_ocs_param_ssnf='Pomiń / nie ustawiaj „Sieci” jako pierwszego urządzeni
 msg_ocs_param_scpt='Pomiń sprawdzanie, czy tablica partycji dysku źródłowego jest w formacie MBR czy GPT'
 # Tag on 2021/03/09
 msg_B2SUMS_check_failed='Sumy kontrolne BLAKE2 NIE zgadzają się!'
-msg_ocs_param_gb='Generuj sumy kontrolne BLAKE2 z obrazu'
-msg_ocs_param_cb='Sprawdź obraz według sum kontrolnych BLAKE2'
+msg_B3SUMS_check_failed='Sumy kontrolne BLAKE3 NIE zgadzają się!'
+msg_ocs_param_gb2='Generuj sumy kontrolne BLAKE2 z obrazu'
+msg_ocs_param_cb2='Sprawdź obraz według sum kontrolnych BLAKE2'
+msg_ocs_param_gb3='Generuj sumy kontrolne BLAKE3 z obrazu'
+msg_ocs_param_cb3='Sprawdź obraz według sum kontrolnych BLAKE3'
 # Tag on 2021/03/15
 msg_list_local_device_mode='W którym trybie chcesz wyświetlić listę urządzeń blokowych na tym komputerze? Jeśli nie masz pojęcia, wybierz "disk_or_part". Nie _NOT_ wybieraj "both_type_dev" chyba że wiesz, co robisz. Zasadniczo "both_type_dev" służy do wymuszenia wyboru urządzenia blokowego, które nie jest wymienione na liście. Na przykład, chcesz zapisać urządzenie blokowe /dev/sda, ale nie jest ono pokazywane w trybie "saveparts", ponieważ jest to nazwa urządzenia dyskowego, a nie nazwa urządzenia partycji.'
 msg_list_disk_or_part_mode='Odzielny dysk(i) i partycja(je)'
