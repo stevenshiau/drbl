@@ -1653,7 +1653,8 @@ set_drbl_ocs_extra_param() {
       $j2_switch_msg_1 $j2_switch_msg_2 $j2_switch_msg_3 \
       "-cm"      "$msg_ocs_param_cm" off \
       "-cs"      "$msg_ocs_param_cs" off \
-      "-cb"      "$msg_ocs_param_cb" off \
+      "-cb2"     "$msg_ocs_param_cb2" off \
+      "-cb3"     "$msg_ocs_param_cb3" off \
       "-cmf"     "$msg_ocs_param_cmf" off \
       "-f"       "$msg_ocs_param_f" off \
       "-rescue " "$msg_ocs_param_rescue" off \
@@ -1800,7 +1801,8 @@ set_drbl_ocs_extra_param() {
       "-rescue "   "$msg_ocs_param_rescue" off \
       "-gm "       "$msg_ocs_param_gm" off \
       "-gs "       "$msg_ocs_param_gs" off \
-      "-gb "       "$msg_ocs_param_gb" off \
+      "-gb2 "      "$msg_ocs_param_gb2" off \
+      "-gb3 "      "$msg_ocs_param_gb3" off \
       "-gmf "      "$msg_ocs_param_gmf" off \
       "-noabo "    "$msg_ocs_param_noabo" off \
       "-o0 "       "$msg_ocs_param_o0" off \
@@ -2040,7 +2042,8 @@ if [ "$mode" = "restore" ]; then
     $j2_switch_msg_1 $j2_switch_msg_2 $j2_switch_msg_3 \
     "-cm"      "$msg_ocs_param_cm" off \
     "-cs"      "$msg_ocs_param_cs" off \
-    "-cb"      "$msg_ocs_param_cb" off \
+    "-cb2"      "$msg_ocs_param_cb2" off \
+    "-cb3"      "$msg_ocs_param_cb3" off \
     "-cmf"     "$msg_ocs_param_cmf" off \
     "-a"       "$msg_ocs_param_a" off \
     "-o0"      "$msg_ocs_param_o0" off \
@@ -2174,7 +2177,8 @@ else
     "-rescue "  "$msg_ocs_param_rescue" off \
     "-gm "      "$msg_ocs_param_gm" off \
     "-gs "      "$msg_ocs_param_gs" off \
-    "-gb "      "$msg_ocs_param_gb" off \
+    "-gb2 "     "$msg_ocs_param_gb2" off \
+    "-gb3 "     "$msg_ocs_param_gb3" off \
     "-gmf "     "$msg_ocs_param_gmf" off \
     "-noabo "   "$msg_ocs_param_noabo" off \
     "-ps "      "$msg_ocs_param_ps" off \
