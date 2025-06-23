@@ -1,3 +1,15 @@
+drbl (5.5.0-drbl1) unstable; urgency=medium
+
+  * Added options -gb3 & -cb3 for b3sum in the TUI menu.
+    Renamed -gb as -gb2, and -cb as -cb2.
+  * Added new (b3sum) checksum as creating live system.
+  * Updated language files about B2SUM and B3SUM.
+  * Add b3sum in the packages list of Clonezilla live.
+  * Updated the variable msg_you_must_input_legal_filename
+    in language files to include "(" and ")".
+
+ -- Steven Shiau <steven@clonezilla.org>  Mon, 23 Jun 2025 10:58:06 +0800
+
 drbl (5.4.19-drbl1) unstable; urgency=medium
 
   * Added dhcpcd-base in the Clonezilla live packages list.
