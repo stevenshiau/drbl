@@ -4328,7 +4328,7 @@ task_ecryptfs_mount_point() {
       #      https://bugs.launchpad.net/ecryptfs/+bug/277578/comments/25
       if `is_davfs_ocsroot`; then
         bindfs_mntpnt="$(mktemp -d /tmp/bindfs_mnt.XXXXXX)"
-	bindfs $ocsroot/${target_dir} $bindfs_mntpnt
+	bindfs "$ocsroot/${target_dir}" $bindfs_mntpnt
 	rc_bindfs="$?"
 	if [ "$rc_bindfs" -eq 0 ]; then
           webdav_bindfs_flag="yes"
@@ -4339,14 +4339,14 @@ task_ecryptfs_mount_point() {
         else
           [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
           echo "Failed to bindfs WebDAV image by:" | tee --append ${OCS_LOGFILE}
-	  echo "bindfs $ocsroot/${target_dir} $bindfs_mntpnt" | tee --append ${OCS_LOGFILE}
+	  echo "bindfs \"$ocsroot/${target_dir}\" $bindfs_mntpnt" | tee --append ${OCS_LOGFILE}
           [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
           echo "$msg_program_stop" | tee --append ${OCS_LOGFILE}
           [ "$save_restore_error_log" = "yes" ] && copy_error_log
           exit 1
         fi
       else
-        enc_cmd_="LC_ALL=C mount -t ecryptfs $ocsroot/${target_dir} $ecrypt_mntpnt -o $ocs_ecryptfs_opt,key=passphrase:passphrase_passwd_file=$ecryptfs_pf"
+        enc_cmd_="LC_ALL=C mount -t ecryptfs \"$ocsroot/${target_dir}\" \"$ecrypt_mntpnt\" -o $ocs_ecryptfs_opt,key=passphrase:passphrase_passwd_file=$ecryptfs_pf"
 	echo "Running: $enc_cmd_"
 	eval $enc_cmd_
         rc="$?"
@@ -4418,7 +4418,7 @@ task_ecryptfs_mount_point() {
   ocsroot="$(dirname ${ecrypt_mntpnt})"
   # Save the original image dir for later use
   target_dir_orig="${target_dir}"
-  target_dir="$(basename ${ecrypt_mntpnt})"
+  target_dir="$(basename "${ecrypt_mntpnt}")"
   #
   [ -f "$TMP" ] && rm -f $TMP
   return $grc
