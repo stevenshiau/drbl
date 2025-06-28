@@ -1,3 +1,10 @@
+drbl (5.5.1-drbl1) unstable; urgency=medium
+
+  * drbl-functions: protect the image dir name variable
+    so that special characters like () can be used.
+
+ -- Steven Shiau <steven@clonezilla.org>  Sat, 28 Jun 2025 10:52:23 +0800
+
 drbl (5.5.0-drbl1) unstable; urgency=medium
 
   * Added options -gb3 & -cb3 for b3sum in the TUI menu.
