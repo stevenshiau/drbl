@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (5.5.2-drbl1) unstable; urgency=medium
+
+  * Updated language files about time sync.
+
+ -- Steven Shiau <steven@clonezilla.org>  Thu, 10 Jul 2025 19:36:45 +0800
+
 drbl (5.5.1-drbl1) unstable; urgency=medium
 
   * drbl-functions: protect the image dir name variable
