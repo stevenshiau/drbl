@@ -1213,3 +1213,5 @@ msg_choose_param_to_set_single_choice='Ορισμός σύνθετων παρα�
 msg_put_log_usb_or_not='Do you want to copy the log files to Clonezilla live USB drive if it exists in this machine?'
 msg_put_log_to_OCS_USB_drive='Yes, copy log files to Clonezilla live USB drive if it exists'
 msg_not_put_log_to_OCS_USB_drive='No, do not copy log files to Clonezilla live USB drive even if it exists'
+# Tag on 2025/07/10
+msg_time_sync_via_internet='Do you want to sync the time of this computer via internet?'

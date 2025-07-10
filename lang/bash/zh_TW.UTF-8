@@ -1211,3 +1211,5 @@ msg_choose_param_to_set_single_choice='設定參數。如果你不確認，建�
 msg_put_log_usb_or_not='你是否要將過程中產生的記錄檔複製到再生龍隨身碟(若存在的話)中?'
 msg_put_log_to_OCS_USB_drive='是，將記錄檔複製到再生龍隨身碟(若存在的話)中'
 msg_not_put_log_to_OCS_USB_drive='否，不要紀錄檔複製到再生龍隨身碟(若存在的話)中'
+# Tag on 2025/07/10
+msg_time_sync_via_internet='你要透過網際網路進行本台電腦的校時嗎?'
