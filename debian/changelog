@@ -1,3 +1,10 @@
+drbl (5.5.3-drbl1) unstable; urgency=medium
+
+  * Missing package e2fsprogs was added in GParted live
+    packages list.
+
+ -- Steven Shiau <steven@clonezilla.org>  Sat, 12 Jul 2025 18:02:49 +0800
+
 drbl (5.5.2-drbl1) unstable; urgency=medium
 
   * Updated language files about time sync.
