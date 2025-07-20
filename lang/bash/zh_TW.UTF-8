@@ -1213,3 +1213,7 @@ msg_put_log_to_OCS_USB_drive='是，將記錄檔複製到再生龍隨身碟(若�
 msg_not_put_log_to_OCS_USB_drive='否，不要紀錄檔複製到再生龍隨身碟(若存在的話)中'
 # Tag on 2025/07/10
 msg_time_sync_via_internet='你要透過網際網路進行本台電腦的校時嗎?'
+# Tag on 2025/07/19
+msg_time_sync_via_bios='你是否要透過時區設定以及BIOS來設定此系統的時間？'
+msg_no_net_so_set_timezone_manually='無網際網路連線，故使用BIOS的時間來設定此系統的時間，需要時區相關資訊'
+msg_next_choose_timezon='請在下一步的對話頁面選擇你的時區資訊'
