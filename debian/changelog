@@ -1,3 +1,9 @@
+drbl (5.5.4-drbl1) unstable; urgency=medium
+
+  * Updated language files about time sync locally.
+
+ -- Steven Shiau <steven@clonezilla.org>  Sun, 20 Jul 2025 11:54:54 +0800
+
 drbl (5.5.3-drbl1) unstable; urgency=medium
 
   * Missing package e2fsprogs was added in GParted live
