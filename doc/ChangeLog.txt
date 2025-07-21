@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (5.5.6-drbl1) unstable; urgency=medium
+
+  * Updated language files about system time.
+
+ -- Steven Shiau <steven@clonezilla.org>  Mon, 21 Jul 2025 15:41:39 +0800
+
 drbl (5.5.5-drbl1) unstable; urgency=medium
 
   * Improved language file zh_TW.UTF-8 about time sync locally.
