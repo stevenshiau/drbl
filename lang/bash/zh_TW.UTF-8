@@ -1217,3 +1217,5 @@ msg_time_sync_via_internet='你要透過網際網路進行本台電腦的校時�
 msg_time_sync_via_bios='你是否要透過時區以及BIOS來設定此系統的時間？'
 msg_no_net_so_set_timezone_manually='無網際網路連線，故使用BIOS的時間來設定此系統的時間，需要時區相關資訊'
 msg_next_choose_timezon='請在下一步的對話頁面選擇你的時區資訊'
+# Tag on 2025/07/21
+msg_current_time_on_this_system='此系統現在時間:'
