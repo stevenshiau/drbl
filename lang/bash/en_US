@@ -1214,8 +1214,8 @@ msg_not_put_log_to_OCS_USB_drive='No, do not copy log files to Clonezilla live U
 # Tag on 2025/07/10
 msg_time_sync_via_internet='Do you want to sync the time of this computer via internet?'
 # Tag on 2025/07/19
-msg_time_sync_via_bios='Do you want to sync the time of this computer via BIOS and time zone?'
-msg_no_net_so_set_timezone_manually='No internet connection. Use the time from BIOS. Need time zone info.'
+msg_live_system_time_sync='Do you want to synchronize the time on this Clonezilla live system?'
+msg_no_net_so_set_timezone_manually='No internet connection. Use the time got from BIOS when booting. Need time zone info.'
 msg_next_choose_timezon='Please choose your time zone in the next dialog menu if you want.'
 # Tag on 2025/07/21
-msg_current_time_on_this_system='Current time on this computer system:'
+msg_current_time_on_this_system='Current time on this live system:'
