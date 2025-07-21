@@ -1,3 +1,9 @@
+drbl (5.5.7-drbl1) unstable; urgency=medium
+
+  * Updated language files about time sync.
+
+ -- Steven Shiau <steven@clonezilla.org>  Mon, 21 Jul 2025 20:14:34 +0800
+
 drbl (5.5.6-drbl1) unstable; urgency=medium
 
   * Updated language files about system time.
