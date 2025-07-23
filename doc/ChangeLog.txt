@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (5.5.8-drbl1) unstable; urgency=medium
+
+  * Added fbterm & fontconfig in the Clonezilla live packages list.
+
+ -- Steven Shiau <steven@clonezilla.org>  Wed, 23 Jul 2025 16:16:32 +0800
+
 drbl (5.5.7-drbl1) unstable; urgency=medium
 
   * Updated language files about time sync.
