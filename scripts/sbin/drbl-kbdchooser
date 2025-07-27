@@ -49,6 +49,21 @@ run_config_from_keyboard_configuration() {
     if [ "$rc" -eq 0 ]; then
       service keyboard-setup restart
       setupcon -k
+      # Read the settings. Its ccontents are like:
+      # XKBMODEL="pc105"
+      # XKBLAYOUT="us"
+      # XKBVARIANT=""
+      # XKBOPTIONS="ctrl:nocaps"
+      # BACKSPACE="bs"
+      . /etc/default/keyboard
+      # Put the keyboard layout setting so that later program can reuse
+      if [ -z "$(grep -E "^[[:space:]]*live_keyboard_layouts=" /etc/ocs/ocs-live.conf 2>/dev/null)" ]; then
+        # Append it
+        echo "live_keyboard_layouts=$XKBLAYOUT" >> /etc/ocs/ocs-live.conf
+      else
+        # Modify it
+        perl -pi -e "s|^[[:space:]]*live_keyboard_layouts=.*|live_keyboard_layouts=\"$XKBLAYOUT\"|g" /etc/ocs/ocs-live.conf
+      fi
     fi
   fi
 } # end of run_config_from_keyboard_configuration
