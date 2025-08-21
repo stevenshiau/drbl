@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (5.5.10-drbl1) unstable; urgency=medium
+
+  * Added packages at & cron in Clonezilla live packages list.
+
+ -- Steven Shiau <steven@clonezilla.org>  Thu, 21 Aug 2025 10:09:27 +0800
+
 drbl (5.5.9-drbl1) unstable; urgency=medium
 
   * drbl-kbdchooser: write live_keyboard_layouts to /etc/ocs/ocs-live.conf.
