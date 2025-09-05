@@ -1,0 +1,7 @@
+Tests: run-smoke-check
+Depends: @, shunit2, coreutils, locales
+Restrictions: allow-stderr, superficial
+
+Tests: run-basic-check
+Depends: @, shunit2, coreutils, locales
+Restrictions: allow-stderr, needs-root

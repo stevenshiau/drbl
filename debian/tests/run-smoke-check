@@ -1,0 +1,30 @@
+#!/bin/bash
+
+
+echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen
+locale-gen
+export LANG=en_US.UTF-8
+
+set -e
+
+test_drbl_common_functions(){
+  echo "drbl common functions"
+  source /usr/share/drbl/sbin/drbl-functions
+}
+
+test_bash_lang(){
+  echo "test drbl bash lang file"
+  pushd /usr/share/drbl/lang/bash
+  /usr/share/drbl/lang/bash/check-bash-lang
+  popd
+}
+
+test_perl_lang(){
+  echo "test drbl perl lang file"
+  pushd /usr/share/drbl/lang/perl
+  /usr/share/drbl/lang/perl/check-perl-lang
+  popd
+}
+
+. shunit2
+
