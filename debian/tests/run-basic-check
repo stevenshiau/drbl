@@ -1,0 +1,34 @@
+#!/bin/bash
+
+
+echo "en_US.UTF-8 UTF-8" >> /etc/locale.gen
+locale-gen
+export LANG=en_US.UTF-8
+
+set -e
+
+test_uri_parse(){
+  echo "URI parse test"
+  /usr/bin/drbl-uriparse smb://jack:loverose@titanic.com:1911/to/new-york domain|grep titanic.com
+}
+
+test_grub_menu(){
+  echo "create client's grub menu test"
+  mkdir -p /tftpboot/nbi_img/grub/
+  /usr/sbin/gen-grub-efi-nb-menu
+  cat /tftpboot/nbi_img/grub/grub.cfg|grep menu
+}
+
+test_pxe_menu(){
+  echo "create client's pxe menu test"
+  mkdir -p /tftpboot/nbi_img/pxelinux.cfg/
+  /usr/sbin/generate-pxe-menu
+  cat /tftpboot/nbi_img/pxelinux.cfg/default|grep menu
+}
+
+test_drblsrv_offline_package_scan(){
+  echo "drblsrv-offline package scan test"
+  /sbin/drblsrv-offline -r
+}
+. shunit2
+
