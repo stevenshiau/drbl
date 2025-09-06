@@ -5,6 +5,20 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (5.5.12-drbl1) unstable; urgency=medium
+
+  * Removed b3sum from live system packages list.
+    The coreutils-from-uutils in Ubuntu Questing will have that.
+
+ -- Steven Shiau <steven@clonezilla.org>  Sat, 06 Sep 2025 10:32:55 +0800
+
+drbl (5.5.11-drbl1) unstable; urgency=medium
+
+  [ Thomas Tsai ]
+  * Added autopkgtest test scripts.
+
+ -- Steven Shiau <steven@clonezilla.org>  Fri, 05 Sep 2025 15:46:56 +0800
+
 drbl (5.5.10-drbl1) unstable; urgency=medium
 
   * Added packages at & cron in Clonezilla live packages list.
