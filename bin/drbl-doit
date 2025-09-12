@@ -149,17 +149,20 @@ case "$mode" in
         else
            ETH_WAKE=""
 	fi
+	wnl_cmd=""
         # use etherwake/ether-wake for the 1st priority, but it need to be root to run it
         if [ -n "$ETH_WAKE" ] && [ "$UID" = "0" ]; then
           # find the ether port, we can find it from the routing table
           # 1st, find the subnet: 192.168.1.x -> 192.168.1
           IP_grp_1_3="$(LC_ALL=C echo $ihost | sed -e "s/\.[[:digit:]]*$//g")"
           iport="$(LC_ALL=C route -n | grep -E "^$IP_grp_1_3\." | awk -F" " '{print $NF}')"
-          echo Running \"$ETH_WAKE -i $iport $ethernet_address\"
-          $ETH_WAKE -i $iport $ethernet_address
+	  wnl_cmd="$ETH_WAKE -i $iport $ethernet_address"
+	  echo "Running: $wnl_cmd"
+	  eval $wnl_cmd
         else
-          echo Running drbl-wakeonlan -i ${ihost} $ethernet_address\"
-          drbl-wakeonlan -i ${ihost} $ethernet_address
+	  wnl_cmd="drbl-wakeonlan -i ${ihost} $ethernet_address"
+	  echo "Running: $wnl_cmd"
+	  eval $wnl_cmd
         fi
       else
          [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
