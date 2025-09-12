@@ -5,6 +5,15 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (5.6.0-drbl1) unstable; urgency=medium
+
+  * Initial support for Debian 13.
+  * drbl.conf: removed initscripts from PKG_TO_QUERY, otherwise it will
+    break Debian 13 when running drblsrv -i.
+  * drbl-doit: rewrite codes about running wake-on-lan.
+
+ -- Steven Shiau <steven@clonezilla.org>  Fri, 12 Sep 2025 11:26:01 +0800
+
 drbl (5.5.12-drbl1) unstable; urgency=medium
 
   * Removed b3sum from live system packages list.
