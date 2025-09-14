@@ -54,8 +54,8 @@ usage() {
   echo "-t, --initfs-type [ext2|cramfs|initramfs]: Assign the filesystem type for initialized RAM disk or initialized RAM filesystem"
   echo "--no-modules: Force not to update the kernel modules from server to clients"
   echo "-w, --include-wireless-modules  Include the kernel wireless modules in created initrd."
-  echo "-if, --include-all-firmwares  Include all the firmwares from /lib/firmware/ to the created PXE initramfs."
-  echo "-nf, --no-all-firmwares  Not to include all the firmwares from /lib/firmware/ to the created PXE initramfs. This is default."
+  echo "-if, --include-all-firmwares  Include all the firmwares from /usr/lib/firmware/ to the created PXE initramfs."
+  echo "-nf, --no-all-firmwares  Not to include all the firmwares from /usr/lib/firmware/ to the created PXE initramfs. This is default."
   echo "-o, --link-detect-timeout #:  The timeout time (Unit: 0.1 secs) to wait for network card to be linked."
   echo "-v, --verbose    Prints out verbose information"
   echo 
@@ -211,7 +211,7 @@ case "$use_usb_keyboard_modules" in
 esac
 
 # create some directories if they do not exist
-[ ! -d $drbl_common_root/lib/modules ] && mkdir -p $drbl_common_root/lib/modules
+[ ! -d $drbl_common_root/usr/lib/modules ] && mkdir -p $drbl_common_root/usr/lib/modules
 [ ! -d $drbl_common_root/tmp/boot ] && mkdir -p $drbl_common_root/tmp/boot
 ( 
   cd $drbl_common_root
@@ -267,19 +267,19 @@ if [ -n "$net_dev" ]; then
 fi
 
 # If we do not specifie kernel, try to find in 
-# (1) /lib/modules (by rpm ...) - old way
-# (2) /tftpboot/lib/modules (by finding directory)
+# (1) /usr/lib/modules (by rpm ...) - old way
+# (2) /tftpboot/usr/lib/modules (by finding directory)
 if [ -z "$selected_kernel" ]; then
    echo "Searching the latest installed kernel for DRBL client... This might take several minutes..."
-   kernel_mod_list=$(find $drbl_common_root/lib/modules/ -maxdepth 1 -mindepth 1 -name "[0-9].[0-9]*" -type d -print | sort -g | tail -n 1)
+   kernel_mod_list=$(find $drbl_common_root/usr/lib/modules/ -maxdepth 1 -mindepth 1 -name "[0-9].[0-9]*" -type d -print | sort -g | tail -n 1)
    if [ -n "$kernel_mod_list" ]; then
       # the kernel in drbl_common_root is found, 
-      # use method (2) (/tftpboot/lib/modules)
+      # use method (2) (/tftpboot/usr/lib/modules)
       echo "Trying to find the kernel in $drbl_common_root "
       drbl_kernel="$(basename $kernel_mod_list)"
    else
       # the kernel in drbl_common_root is NOT found, 
-      # use method (1) (/lib/modules)
+      # use method (1) (/usr/lib/modules)
       latest_drbl_kernel="$(rpm -qa | grep -E "kernel${SMP_OPTION}[#-]2\.[0-9]+\.[0-9]+" | grep -v "test" | pkg-ver-latest)"
       [ -z "$latest_drbl_kernel" ] && echo "Unable to find kernel for client!!! Program terminated!!!" && exit 1
 
@@ -291,18 +291,18 @@ else
    # By checking the kernel modules, we will know that!
    # (Here we assume the kernel modules will be created, not all buildin)
    # the kernel will exist in 
-   # (1) /lib/modules - old way
-   # (2) /tftpboot/lib/modules
-   [ ! -d "$drbl_common_root/lib/modules/$selected_kernel" -a ! -d "/lib/modules/$selected_kernel" ] && echo "Can NOT find the kernel \"$selected_kernel\" you specified! Program terminated!" && exit 1
+   # (1) /usr/lib/modules - old way
+   # (2) /tftpboot/usr/lib/modules
+   [ ! -d "$drbl_common_root/usr/lib/modules/$selected_kernel" -a ! -d "/usr/lib/modules/$selected_kernel" ] && echo "Can NOT find the kernel \"$selected_kernel\" you specified! Program terminated!" && exit 1
    drbl_kernel="$selected_kernel"
    # if we can find the modules in the common_root, use it first.
    # the drbl_kernel_mod_path is the leading path.
-   if [ -d "$drbl_common_root/lib/modules/$selected_kernel" ]; then
+   if [ -d "$drbl_common_root/usr/lib/modules/$selected_kernel" ]; then
       drbl_kernel_mod_path="$drbl_common_root/"
    else
       drbl_kernel_mod_path=""
    fi
-   echo "Using the kernel modules from $drbl_kernel_mod_path/lib/modules..."
+   echo "Using the kernel modules from $drbl_kernel_mod_path/usr/lib/modules..."
 
 fi
 
@@ -351,7 +351,7 @@ KARCH_CLIENT="$(cat $pxecfg_pd/client_kernel_arch.txt 2>/dev/null)"
 KARCH_EXISTING_KERNEL="$(drbl-check-kernel-cpu-arch --drbl-client $drbl_kernel)"
 if [ -z "$KARCH_EXISTING_KERNEL" ]; then 
   [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
-  echo "The requested kernel \"$KARCH_CLIENT\" $drbl_kernel kernel files are NOT found in  $drbl_common_root/lib/modules/s and $drbl_common_root/boot in the server! The necessary modules in the network initrd can NOT be created!"
+  echo "The requested kernel \"$KARCH_CLIENT\" $drbl_kernel kernel files are NOT found in  $drbl_common_root/usr/lib/modules/s and $drbl_common_root/boot in the server! The necessary modules in the network initrd can NOT be created!"
   echo "Client will NOT remote boot correctly!"
   echo "Program terminated!"
   [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
@@ -381,7 +381,7 @@ if [ "$KARCH_CLIENT" = "best_optimization" -o "$KARCH_EXISTING_KERNEL" = "$KARCH
   fi
 else
   [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
-  echo "The requested kernel \"$KARCH_CLIENT\" $drbl_kernel kernel files are NOT found in  $drbl_common_root/lib/modules/s and $drbl_common_root/boot in the server! The necessary modules in the network initrd can NOT be created!"
+  echo "The requested kernel \"$KARCH_CLIENT\" $drbl_kernel kernel files are NOT found in  $drbl_common_root/usr/lib/modules/s and $drbl_common_root/boot in the server! The necessary modules in the network initrd can NOT be created!"
   echo "Client will NOT remote boot correctly!"
   echo "Program terminated!"
   [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL

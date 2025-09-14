@@ -3619,8 +3619,10 @@ fi
 # The kernel image name: linux-iamge (such as Etch) or kernel-image (such as Sarge)
 # Kernel package name before (<=) Debian Wheezy (7.0) is like: linux-image-3.2.0-4-amd64
 # While for >= Debian jessie (8.0) is like: linux-image-3.8-1-amd64
+# For Debian >= 13 (Trixie), it's like: 6.12.43+deb13-amd64
 for ikmg in linux-image kernel-image; do
-  latest_drbl_kernel_in_rep="$(apt-cache pkgnames $ikmg | grep -E "$ikmg-[0-9]+\.[0-9]+(\.[0-9]+|)-.*" | $cpu_filter | $smp_filter | $seldom_kernel_filter | pkg-ver-latest)"
+  latest_drbl_kernel_in_rep="$(apt-cache pkgnames $ikmg | grep -E "$ikmg-[0-9\.]+([-_+][0-9a-zA-Z]+)?" |\
+	                       $cpu_filter | $smp_filter | $seldom_kernel_filter | pkg-ver-latest)"
   if [ -n "$latest_drbl_kernel_in_rep" ]; then
      kernel_img_name="$ikmg"
      break
@@ -3730,19 +3732,6 @@ case "$use_kernel_from" in
       if [ -n "$(ls /var/cache/apt/archives/linux-restricted-modules-${drbl_kernel_ver}_*.deb 2>/dev/null)" ]; then
         latest_drbl_restricted_kernel_in_rep_deb="$(unalias ls 2>/dev/null; ls /var/cache/apt/archives/linux-restricted-modules-${drbl_kernel_ver}_*.deb 2>/dev/null | pkg-ver-latest)"
         drblsrv_offline_extra_opt="$drblsrv_offline_extra_opt -e $latest_drbl_restricted_kernel_in_rep_deb"
-      fi
-    fi
-    # Download the extra modules from Ubuntu, here we assume if server use that, then client should use that.
-    # Ex: /lib/modules/2.6.22-14-generic/ubuntu is from deb linux-ubuntu-modules-2.6.22-14-generic
-    if [ -n "$(unalias ls 2>/dev/null; ls /lib/modules/*/ubuntu 2>/dev/null)" ]; then
-      apt-get $inst_opt --reinstall --download-only install linux-ubuntu-modules-$drbl_kernel_ver
-      # find the ubuntu kernel
-      # The "_" is important, since the file names in the cache dir are like
-      # linux-ubuntu-modules-2.6.22-14-generic_2.6.22-14.38_i386.deb
-      # linux-ubuntu-modules-2.6.22-14-386_2.6.22-14.38_i386.deb
-      if [ -n "$(ls /var/cache/apt/archives/linux-ubuntu-modules-${drbl_kernel_ver}_*.deb 2>/dev/null)" ]; then
-        latest_drbl_ubuntu_kernel_in_rep_deb="$(unalias ls 2>/dev/null; ls /var/cache/apt/archives/linux-ubuntu-modules-${drbl_kernel_ver}_*.deb 2>/dev/null | pkg-ver-latest)"
-        drblsrv_offline_extra_opt="$drblsrv_offline_extra_opt -e $latest_drbl_ubuntu_kernel_in_rep_deb"
       fi
     fi
 

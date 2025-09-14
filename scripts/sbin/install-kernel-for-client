@@ -32,7 +32,7 @@ USAGE() {
    echo "OPTION"
    language_help_prompt_by_idx_no
    echo "-k, --client-kernel-pkg KERNEL_PKG: specify the KERNEL_PKG (rpm or deb) which you want DRBL client to use."
-   echo "-s, --client-kernel-ver-from-server KERNEL_VER: use the kernel version KERNEL_VER from server, i.e. from /boot/vmlinuz-KERNEL_VER and /lib/modules/KERNEL_VER..."
+   echo "-s, --client-kernel-ver-from-server KERNEL_VER: use the kernel version KERNEL_VER from server, i.e. from /boot/vmlinuz-KERNEL_VER and /usr/lib/modules/KERNEL_VER..."
    echo "-c, --just-cp-files: just install files for client, do not create kernel tag for client and do not run some script. Usually this option is useed to install linux-restricted-modules in ubuntu."
    echo "-v, --verbose:       prints verbose information"
 }
@@ -102,7 +102,7 @@ if [ -n "$client_kernel_pkg" ]; then
    fi
 elif [ -n "$client_kernel_ver_from_server" -a \
        -f /boot/vmlinuz-$client_kernel_ver_from_server -a \
-       -d /lib/modules/$client_kernel_ver_from_server ]; then
+       -d /usr/lib/modules/$client_kernel_ver_from_server ]; then
    mode="local"
    client_kernel_ver="$client_kernel_ver_from_server"
 else
@@ -117,8 +117,8 @@ case "$mode" in
     client_kernel_ver="$(rpm -qpl $client_kernel_pkg | grep -E "^/boot/vmlinuz-" | sed -e "s|/boot/vmlinuz-||g")"
     if [ -z "$client_kernel_ver" ]; then
       # For OpenSuSE 11.1, kernel-default or kernel-pae, there is no vmlinuz-* file, try another method, i.e. use the path:
-      # /lib/modules/2.6.27.7-9-default/...
-      client_kernel_ver="$(rpm -qpl $client_kernel_pkg | grep -E "/lib/modules/[[:print:]]+" | awk -F" " '{print $NF}' | awk -F"/" '/\/lib\/modules/ {print $4}' | sort | uniq)"
+      # /usr/lib/modules/2.6.27.7-9-default/...
+      client_kernel_ver="$(rpm -qpl $client_kernel_pkg | grep -E "/usr/lib/modules/[[:print:]]+" | awk -F" " '{print $NF}' | awk -F"/" '/\/usr\/lib\/modules/ {print $4}' | sort | uniq)"
     fi
     # we might need /tftpboot/node_root/var/lock/rpm/ for locking in some dist (like CentOS 4.4).
     mkdir -p $drbl_common_root/var/lock/rpm/
@@ -133,8 +133,8 @@ case "$mode" in
     client_kernel_ver="$(dpkg --contents $client_kernel_pkg | awk -F" " '{print $NF}' | grep -E "./boot/vmlinuz-" | sed -e "s|\./boot/vmlinuz-||g")"
     if [ -z "$client_kernel_ver" ]; then
       # For deb linux-ubuntu-modules-* or linux-restricted-modules-*, there is no vmlinuz-* file, try another method, i.e. use the path:
-      # ./lib/modules/2.6.22-14-386/...
-      client_kernel_ver="$(dpkg --contents $client_kernel_pkg | grep -E "/lib/modules/[[:print:]]+" | awk -F" " '{print $NF}' | awk -F"/" '/\.\/lib\/modules/ {print $4}' | sort | uniq)"
+      # ./usr/lib/modules/2.6.22-14-386/...
+      client_kernel_ver="$(dpkg --contents $client_kernel_pkg | grep -E "/usr/lib/modules/[[:print:]]+" | awk -F" " '{print $NF}' | awk -F"/" '/\.\/usr\/lib\/modules/ {print $4}' | sort | uniq)"
     fi
     echo "Installing $client_kernel_pkg for clients... "
     echo "$msg_install_kernel_might_take_several_minutes "
@@ -147,11 +147,11 @@ case "$mode" in
     echo "Installing kernel $client_kernel_ver for clients... "
     echo -n "$msg_install_kernel_might_take_several_minutes"
     echo -n "."
-    mkdir -p $drbl_common_root/boot/ $drbl_common_root/lib/modules/
+    mkdir -p $drbl_common_root/boot/ $drbl_common_root/usr/lib/modules/
     echo -n "."
     rsync -a /boot/*$client_kernel_ver $drbl_common_root/boot/
     echo -n "."
-    rsync -a /lib/modules/$client_kernel_ver $drbl_common_root/lib/modules/
+    rsync -a /usr/lib/modules/$client_kernel_ver $drbl_common_root/usr/lib/modules/
     echo "$msg_done!"
     rc=0
     ;;
@@ -238,22 +238,24 @@ if [ ! "$just_cp_files" = "yes" ]; then
 fi
 
 # create modules.dep...
-# we still neeed to rebuild $drbl_common_root/boot/System.map-$client_kernel_ver for client
-if [ -e "$drbl_common_root/boot/System.map-$client_kernel_ver" ]; then
-   echo -n "Generating modules.dep and map files for clients... "
-   depmod -ae -b $drbl_common_root/ -F $drbl_common_root/boot/System.map-$client_kernel_ver -r $client_kernel_ver 2> $depmod_stderr
-   echo "done!"
-else
-   echo "$drbl_common_root/boot/System.map-$client_kernel_ver NOT found! Assume it's in another kernel package."
+# we still neeed to build $drbl_common_root/boot/System.map-$client_kernel_ver for client if kernel is installed from package
+if [ "$mode" != "local" ]; then
+  if [ -e "$drbl_common_root/boot/System.map-$client_kernel_ver" ]; then
+     echo -n "Generating modules.dep and map files for clients... "
+     depmod -ae -b $drbl_common_root/ -F $drbl_common_root/boot/System.map-$client_kernel_ver $client_kernel_ver 2> $depmod_stderr
+     echo "done!"
+  else
+     echo "$drbl_common_root/boot/System.map-$client_kernel_ver NOT found! Assume it's in another kernel package."
+  fi
 fi
 
 # we stop here for kernel extra/module package 
 [ "$just_cp_files" = "yes" ] && exit 0
 
 # Firmwares. For Ubuntu, the firmwares come with kernel package, however, it's not true for other distributions. We can only try to use that from server
-if [ -d "/lib/firmware" ]; then
+if [ -d "/usr/lib/firmware" ]; then
   echo "Preparing the kernel firmware for clients..."
-  rsync -a /lib/firmware $drbl_common_root/lib/
+  rsync -a /usr/lib/firmware $drbl_common_root/usr/lib/
 fi
 
 exit 0

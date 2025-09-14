@@ -15,7 +15,7 @@ USAGE() {
    echo "-i, --pxe-serial-output OPT:  Set the PXE menu to work with serial console output."
    echo "-k, --client-kernel-pkg KERNEL_PKG:  Specify the KERNEL_PKG (rpm or deb) which you want DRBL client to use."
    echo "-e, --extra-client-kernel-pkg EXTRA_KERNEL_PKG:  Specify the extra KERNEL_PKG (rpm or deb) which you want DRBL client to use. Usually this is specially for Ubuntu linux-restricted-modules and SuSE kernel-default-nongpl. Must use this with option -k|--client-kernel-pkg."
-   echo "-s, --client-kernel-ver-from-server KERNEL_VER:  Use the kernel version KERNEL_VER from server, i.e. from /boot/vmlinuz-KERNEL_VER and /lib/modules/KERNEL_VER..."
+   echo "-s, --client-kernel-ver-from-server KERNEL_VER:  Use the kernel version KERNEL_VER from server, i.e. from /boot/vmlinuz-KERNEL_VER and /usr/lib/modules/KERNEL_VER..."
    echo "-c, --no-required-pkgs-check:  Force NOT to check the required packages, assume they are installed."
    echo "-a, --no-prompt-different-arch-pkgs:  Force NOT to show the messages about different architecture packages re-installation in the different CPU arch for server and client."
    echo "-p, --skip-client-kernel-install:  Force NOT to install the kernel for client. This option is used when a kernel for client already exists."
@@ -157,7 +157,16 @@ install_kernel_for_client_func() {
   # Create the necessary dirctories, UGLY...
   # the /tftpboot/node_root/tmp/boot is for link only, refer to the /tftpboot/node_root/etc/rc.d/rc.sysinit, the code "# For DRBL, create the directory /tmp/boot, so that the link /tmp/boot /boot...
   # /var/lib/rpm is necessary when try to install kernel for client with rpm --force ... in MDK. It need to create the lock file /tftpboot/node_root//var/lib/rpm/RPMLOCK
-  mkdir -p $drbl_common_root/tmp/boot/ $drbl_common_root/var/{lib,tmp} $drbl_common_root/var/lib/rpm $drbl_common_root/lib/modules/
+  mkdir -p $drbl_common_root/tmp/boot/ $drbl_common_root/var/{lib,tmp} $drbl_common_root/var/lib/rpm
+  # Process the linking dirs, based on the host machine
+  for id in lib lib64 bin sbin; do
+    if [ -L "/$id" ]; then
+      rm -f $drbl_common_root/$id
+      (cd $drbl_common_root; ln -fs usr/$id $id)
+    else
+      mkdir -p drbl_common_root/$id
+    fi
+  done
   (cd $drbl_common_root; ln -fs tmp/boot boot)
 
   echo "$msg_delimiter_star_line"
@@ -168,8 +177,8 @@ install_kernel_for_client_func() {
         install-kernel-for-client $verbose_opt -l $lang -k $client_kernel_pkg
         rc=$?
 	# We install the extra kernel package (linux-restricted-modules and linux-ubuntu-modules (from ubuntu 7.10) ) after the main kernel since if depmod is later, we will see some warning like:
-	# WARNING: /lib/modules/2.6.17-10-386/madwifi/ath_rate_sample.ko needs unknown symbol ath_hal_computetxtime
-	# Ubuntu restricted kernel is mounted in /lib/modules/$KVER/volatile/ when booting (/etc/init.d/linux-restricted-modules-common), and depmod will be run by /sbin/lrm-manager about the mounting.
+	# WARNING: /usr/lib/modules/2.6.17-10-386/madwifi/ath_rate_sample.ko needs unknown symbol ath_hal_computetxtime
+	# Ubuntu restricted kernel is mounted in /usr/lib/modules/$KVER/volatile/ when booting (/etc/init.d/linux-restricted-modules-common), and depmod will be run by /sbin/lrm-manager about the mounting.
 	# From ubuntu 7.10, another kernel module is linux-ubuntu-modules.
 	if [ -n "$extra_client_kernel_pkg" ]; then
           for i in $extra_client_kernel_pkg; do
@@ -213,7 +222,7 @@ check_input_kernel_param() {
      echo "Kernel package $client_kernel_pkg is used for client..."
   elif [ -n "$client_kernel_ver_from_server" -a \
          -f /boot/vmlinuz-$client_kernel_ver_from_server -a \
-         -d /lib/modules/$client_kernel_ver_from_server ]; then
+         -d /usr/lib/modules/$client_kernel_ver_from_server ]; then
      client_krn_mode="from_server"
      echo "Using kernel from this server for client..."
   else
@@ -428,22 +437,22 @@ case "$client_krn_mode" in
         client_kernel_ver="$(rpm -qpl $client_kernel_pkg | grep -E "^/boot/vmlinuz-" | sed -e "s|/boot/vmlinuz-||g")"
         if [ -z "$client_kernel_ver" ]; then
           # For OpenSuSE 11.1, kernel-default or kernel-pae, there is no vmlinuz-* file, try another method, i.e. use the path:
-          # /lib/modules/2.6.27.7-9-default/...
-          client_kernel_ver="$(rpm -qpl $client_kernel_pkg | awk -F" " '{print $NF}' | awk -F"/" '/\/lib\/modules/ {print $4}' | sort | uniq)"
+          # /usr/lib/modules/2.6.27.7-9-default/...
+          client_kernel_ver="$(rpm -qpl $client_kernel_pkg | awk -F" " '{print $NF}' | awk -F"/" '/\/usr\/lib\/modules/ {print $4}' | sort | uniq)"
         fi
       elif [ -n "$(file $client_kernel_pkg | grep -i "Debian binary package")" ]; then
 	client_kernel_ver="$(dpkg --contents $client_kernel_pkg | awk -F" " '{print $NF}' | grep -E "./boot/vmlinuz-" | sed -e "s|\./boot/vmlinuz-||g")"
         if [ -z "$client_kernel_ver" ]; then
           # For deb linux-ubuntu-modules-* or linux-restricted-modules-*, there is no vmlinuz-* file, try another method, i.e. use the path:
-          # ./lib/modules/2.6.22-14-386/...
-          client_kernel_ver="$(dpkg --contents $client_kernel_pkg | awk -F" " '{print $NF}' | awk -F"/" '/\.\/lib\/modules/ {print $4}' | sort | uniq)"
+          # ./usr/lib/modules/2.6.22-14-386/...
+          client_kernel_ver="$(dpkg --contents $client_kernel_pkg | awk -F" " '{print $NF}' | awk -F"/" '/\.\/usr\/lib\/modules/ {print $4}' | sort | uniq)"
         fi
       fi
       drbl-gen-pxe-nbi -l $lang -k $client_kernel_ver
       #
       if [ -x /etc/init.d/linux-restricted-modules-common ]; then
-	# Create mount point $drbl_common_root/lib/modules/$KERNEL_VER/volatile so that in Ubuntu with linux-restricted-modules, linux-restricted-modules-common service (which we will modify in drblpush so that it will use tmpfs otherwise it is Read-Only NFS filesystem) will need this.
-        mkdir -p $drbl_common_root/lib/modules/$client_kernel_ver/volatile
+	# Create mount point $drbl_common_root/usr/lib/modules/$KERNEL_VER/volatile so that in Ubuntu with linux-restricted-modules, linux-restricted-modules-common service (which we will modify in drblpush so that it will use tmpfs otherwise it is Read-Only NFS filesystem) will need this.
+        mkdir -p $drbl_common_root/usr/lib/modules/$client_kernel_ver/volatile
       fi
       ;;
    "from_server")

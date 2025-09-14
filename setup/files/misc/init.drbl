@@ -41,13 +41,13 @@ create_dev(){
    fi
 
    echo -n "Creating dev... "
-   # Note! We put dev.tgz as the first priority so that if necessary, such MDK 10, we can force to use dev.tgz instead of udev. (Since in MDK10, there is /sbin/udev, but no /sbin/udevstart or /sbin)
+   # Note! We put dev.tgz as the first priority so that if necessary, such MDK 10, we can force to use dev.tgz instead of udev. (Since in MDK10, there is /usr/sbin/udev, but no /usr/sbin/udevstart or /usr/sbin)
    if [ -f /etc/diskless-image/dev.tgz ]; then
      # the option "m" to make sure the time will NOT be extracted, it will use
      # the time now, so that we can avoid the wrong clock or timezone.
      echo -n "Using old-style dev instead of udev... " 
      tar -xzmf /etc/diskless-image/dev.tgz -C /dev
-   elif [ -n "$(ls /sbin/udev* /bin/udev* 2>/dev/null)" ]; then
+   elif [ -n "$(ls /usr/sbin/udev* /usr/bin/udev* 2>/dev/null)" ]; then
      echo -n "Mounting sysfs... "
      mount -n -t sysfs none /sys
      ln -snf /proc/self/fd /dev/fd
@@ -144,8 +144,8 @@ done
 ############
 # Don't do anything special if computer is already booted
 if [ $$ -ne 1 ]; then
-   exec /sbin/init.orig $*
-   echo "FATAL ERROR: exec /sbin/init.orig failed" >&2
+   exec /usr/sbin/init $*
+   echo "FATAL ERROR: exec /usr/sbin/init failed" >&2
    exit 1
 fi
 
@@ -153,8 +153,8 @@ fi
 if touch /test-rw 2> /dev/null; then
    rm /test-rw
    echo "WARNING: master system installed" >&2
-   exec /sbin/init.orig $*
-   echo "FATAL ERROR: exec /sbin/init.orig failed" >&2
+   exec /usr/sbin/init $*
+   echo "FATAL ERROR: exec /usr/sbin/init failed" >&2
    exit 1
 fi
 
@@ -396,7 +396,8 @@ pure_cmdline="$(sed -e "s/ocs_opt=\".*\"//g" /proc/cmdline)"
 
 maybe_break drbl_pre_run_init
 
-exec /sbin/init.orig $pure_cmdline $*
+# Since /usr is NFS mounted to DRBL server's /usr now. The /usr/sbin/init is the original one.
+exec /usr/sbin/init $pure_cmdline $*
 # Only should get here if something went wrong
-echo "FATAL ERROR: exec /sbin/init.orig failed" >&2
+echo "FATAL ERROR: exec /usr/sbin/init failed" >&2
 exit 1

@@ -2353,14 +2353,10 @@ mknod -m 666 $drbl_common_root/dev/null c 1 3
 echo -n "."
 # copy /sbin, /bin to node_root
 # For FC17, since /sbin is linked to /usr/sbin, we have to create /sbin, /bin first
-[ -L "/sbin" ] && (rm -rf $drbl_common_root/sbin ; mkdir $drbl_common_root/sbin)
-[ -L "/bin" ] && (rm -rf $drbl_common_root/bin ; mkdir $drbl_common_root/bin)
+mkdir -p $drbl_common_root/usr/{sbin,bin}
 
 # Note!!! For rsync, do NOT to append "/" in the /sbin, .i.e. NO /sbin/
-rsync -a $RSYNC_OPT_EXTRA /sbin/* $drbl_common_root/sbin/
-# put the real init into common root as init.orig, DRBL client will have
-# an "init" to run before this init.orig
-rsync -aL $RSYNC_OPT_EXTRA /sbin/init $drbl_common_root/sbin/init.orig
+rsync -a $RSYNC_OPT_EXTRA /usr/sbin/* $drbl_common_root/usr/sbin/
 # Because Ubuntu 15.04 hides insserv in /usr/lib/insserv/insserv due to switch
 # to systemd. However, it's important for us to enable sysvinit service (some
 # services are not systemdlized yet, e.g. nis in Ubuntu 15.04). Therefore force
@@ -2371,7 +2367,7 @@ export DESTDIR="$drbl_common_root"
 
 #
 echo -n "."
-rsync -a $RSYNC_OPT_EXTRA /bin/* $drbl_common_root/bin/
+rsync -a $RSYNC_OPT_EXTRA /usr/bin/* $drbl_common_root/usr/bin/
 # We need awk and cut in init.drbl.
 # For RH-like, awk and cut are in /bin, however, in Debian, they are in /usr/bin, which is not mounted when trying to get IP address of NFS server in running init.drbl. So we have to copy them.
 # Note!!! In Debian, we need the gawk, not awk, so we already installed gawk
@@ -2390,7 +2386,7 @@ for imust in $must_prog_for_init_drbl; do
   fi
 done
 # link gawk as awk for clients.
-(cd $drbl_common_root/bin/; ln -fs gawk awk)
+(cd $drbl_common_root/usr/bin/; ln -fs gawk awk)
 # For gawk_3.1.8+dfsg-0.1 on Debian sid (2011/07/30), it requires /usr/lib/*.so*# $ ldd /usr/bin/gawk
 # linux-gate.so.1 =>  (0xb76eb000)
 # libsigsegv.so.2 => /usr/lib/libsigsegv.so.2 (0xb76d7000)
@@ -2400,19 +2396,27 @@ done
 # /lib/ld-linux.so.2 (0xb76ec000)
 #
 export DESTDIR="$drbl_common_root"
-[ -e "$(LC_ALL=C command -v gawk)" ] && copy_exec_drbl "$(LC_ALL=C command -v gawk)" /bin/
+[ -e "$(LC_ALL=C command -v gawk)" ] && copy_exec_drbl "$(LC_ALL=C command -v gawk)" /usr/bin/
 
 echo -n "."
-# Creat a file $drbl_common_root/sbin/fsck.nfs to let rc.sysinit use
+# Creat a file $drbl_common_root/usr/sbin/fsck.nfs to let rc.sysinit use
 # "fsck.nfs" always successfully
 echo "#!/bin/bash
 # dummy fsck.nfs file that always returns success.
 # Created by drblpush to let rc.sysinit use fsck.nfs always successfully
-exit 0" > $drbl_common_root/sbin/fsck.nfs
-chmod 755 $drbl_common_root/sbin/fsck.nfs
+exit 0" > $drbl_common_root/usr/sbin/fsck.nfs
+chmod 755 $drbl_common_root/usr/sbin/fsck.nfs
 
 echo -n "."
 
+for id in lib lib32 libx32 lib64; do
+  if [ -L "/$id" ]; then
+    mkdir -p $drbl_common_root/usr/$id
+    if [ ! -L "$drbl_common_root/$id" ]; then
+      (cd $drbl_common_root; ln -fs usr/$id $id) 
+    fi
+  fi
+done
 # Steven todo, make sure it is right ?
 # $drbl_common_root/lib/security is important for PAM, if we remove/update it,
 # clients have to reboot, otherwise user can not login in the client.
@@ -2428,34 +2432,14 @@ lib_opts_common_to_common=""
 for iv in $lib_NOT_2_be_copied_2_common_root; do
   lib_opts_common_to_common="$lib_opts_common_to_common --exclude=$iv/ "
 done
-rsync -a $lib_opts_common_to_common /lib/ $drbl_common_root/lib/
+rsync -a $lib_opts_common_to_common /usr/lib/* $drbl_common_root/usr/lib/
 
 # For x86_64
 # For FC3 or later: /lib64 is a directory, not /lib32, only dir /lib
 # For Ubuntu breezy amd64: /lib64 is a symbolic to /lib, /lib32 is a directory
-for d in lib32 lib64; do
+for d in lib lib32 libx32 lib64; do
  if [ -L "/$d" ]; then
-   if [ -d "$drbl_common_root/$d" ]; then
-     # For FC17, /lib64 is a symbolic link, but $drbl_common_root/lib64 is a folder on current step, so we have to sync /lib64/* to $drbl_common_root/lib64/
-     rsync -a /$d/* $drbl_common_root/$d/
-   else
-     # First, we copy the symbolic file itself (not followed the dir)
-     echo -n "Copying symbolic link dir /$d to $drbl_common_root/..."
-     rsync -a /$d $drbl_common_root/
-     # 2nd, we copy the source file, e.g. "/emul" in the following.
-     # E.g. For amd64 Debian Lenny
-     # ls -alFh /lib32
-     # lrwxrwxrwx 1 root root 20 2008-11-11 22:49 /lib32 -> /emul/ia32-linux/lib/
-     # ls -alFh /lib64
-     # lrwxrwxrwx 1 root root 4 2008-10-31 19:58 /lib64 -> /lib/
-     dir_top="$(LANG=C file -hs /$d | sed -e "s/symbolic link to//g" -e "s/'//g" | sed -e "s/\`//g" | awk -F":" '{print $2}')"  # dir_top e.g. /emul/ia32-linux/lib/
-     dir_top="$(LANG=C echo $dir_top | awk -F"/" '{print $2}')"  # e.g. emul
-     echo -n "Copying the source dir of symbolic link dir source by: rsync -a /$dir_top $drbl_common_root/"
-     rsync -a /$dir_top $drbl_common_root/
-   fi
- elif [ -d "/$d" ]; then
-   echo -n "Copying normal dir /$d to $drbl_common_root/..."
-   rsync -a $RSYNC_OPT_EXTRA /$d $drbl_common_root/
+   rsync -a /$d/* $drbl_common_root/usr/$d/
  fi
 done
 
@@ -2523,7 +2507,7 @@ fi
 #-----------------------------------------------------------
 # if it is copied to client, client will have some problem to connect to server
 # such as yppasswd will complain the yppasswdd is NOT running on "rh9".
-HOSTNAME_SRV=`/bin/hostname`
+HOSTNAME_SRV=`/usr/bin/hostname`
 if [ -n "$(grep $HOSTNAME_SRV $drbl_common_root/etc/hosts |grep 127.0.0.1)" ]; then
  perl -p -i -e "s/127.0.0.1.*/127.0.0.1		localhost.localdomain localhost/g" $drbl_common_root/etc/hosts
 fi
@@ -3254,14 +3238,6 @@ for ise in /etc/selinux/config /etc/sysconfig/selinux; do
   fi
 done
 
-# switch the link in $drblcommont_root/sbin, some distributions,
-# like B2D, will link poweroff to init, for we have make it link to init.orig
-# lnkfiles="halt poweroff reboot telinit"
-lnkfiles="$(find $drbl_common_root/sbin/ -type l -lname "init" -print)"
-for ilnk in $lnkfiles; do
-  ( cd $drbl_common_root/sbin/; ln -fs init.orig $ilnk )
-done
-
 # remove the template's etc/sysconfig/hwconf which kudzu will log
 [ -f $drbl_common_root/etc/sysconfig/hwconf ] && rm -f $drbl_common_root/etc/sysconfig/hwconf
 
@@ -3277,10 +3253,6 @@ export DESTDIR="$drbl_common_root"
 
 # clean the rhn config, client should not do that.
 [ -d $drbl_common_root/etc/sysconfig/rhn ] && rm -rf $drbl_common_root/etc/sysconfig/rhn 2> /dev/null
-
-# create new init to mount separate client's fstab and ...
-# Ref. Debian's diskless_newimage, /var/lib/diskless/default/root/sbin/init
-# The original init has already renamed as init.orig
 
 # Before copying init.drbl as $drbl_common_root/sbin/init (copyied in the
 # revious rsync command), we'd better to remove $drbl_common_root/sbin/init
@@ -3303,9 +3275,9 @@ mkdir -p $drbl_common_root/etc/diskless-image
 
 # copy dev tarball to $drbl_common_root/etc/diskless-image
 # For older version of udev, we test udevd, for newer one, we test udevadm
-if [ -x "$drbl_common_root/sbin/udevadm" -o \
-     -x "$drbl_common_root/bin/udevadm" -o \
-     -x "$drbl_common_root/sbin/udevd" ]; then
+if [ -x "$drbl_common_root/usr/sbin/udevadm" -o \
+     -x "$drbl_common_root/usr/bin/udevadm" -o \
+     -x "$drbl_common_root/usr/sbin/udevd" ]; then
   echo -n "Using udev for clients... "
 elif [ -f "$drbl_pkgdir/dev.tgz" ]; then
   echo -n "Using old-style dev for clients... "
