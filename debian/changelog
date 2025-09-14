@@ -1,3 +1,12 @@
+drbl (5.6.1-drbl1) unstable; urgency=medium
+
+  * Switched to use /usr/{sbin,bin,lib,lib64} mainly instead of
+    {sbin,bin,lib,lib64}.
+    This will make it work better in Debian 13.
+  * Removed wakeonlan from dependence.
+
+ -- Steven Shiau <steven@clonezilla.org>  Sun, 14 Sep 2025 20:12:50 +0800
+
 drbl (5.6.0-drbl1) unstable; urgency=medium
 
   * Initial support for Debian 13.
