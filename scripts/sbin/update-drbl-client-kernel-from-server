@@ -111,7 +111,7 @@ if [ -n "$DRBL_KVER" ]; then
     fi
     #
     echo "Generating the $drbl_common_root/lib/modules/$DRBL_KVER/modules.dep"
-    depmod -ae -b $drbl_common_root/ -F $drbl_common_root/boot/System.map-$DRBL_KVER -r $DRBL_KVER 2> $depmod_stderr
+    depmod -ae -b $drbl_common_root/ -F $drbl_common_root/boot/System.map-$DRBL_KVER $DRBL_KVER 2> $depmod_stderr
   else
     [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
     echo "The kernel $DRBL_KVER installed in this DRBL server is for \"$KARCH_SERVER\", while the DRBL client wants kernel with \"$KARCH_CLIENT\"! Skip this!"
