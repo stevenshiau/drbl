@@ -2411,7 +2411,9 @@ echo -n "."
 
 for id in lib lib32 libx32 lib64; do
   if [ -L "/$id" ]; then
-    mkdir -p $drbl_common_root/usr/$id
+    if [ ! -d "$drbl_common_root/usr/$id" ]; then
+      mkdir -p $drbl_common_root/usr/$id
+    fi
     if [ ! -L "$drbl_common_root/$id" ]; then
       (cd $drbl_common_root; ln -fs usr/$id $id) 
     fi
