@@ -1,3 +1,10 @@
+drbl (5.6.3-drbl1) unstable; urgency=medium
+
+  * drblsrv-offline: Prepare dirs first in $drbl_common_root/usr/:
+    lib lib64 bin sbin 
+
+ -- Steven Shiau <steven@clonezilla.org>  Thu, 18 Sep 2025 20:45:03 +0800
+
 drbl (5.6.2-drbl1) unstable; urgency=medium
 
   * Only as a dir does not exist under $drbl_common_root it will be created.
