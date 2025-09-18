@@ -160,6 +160,7 @@ install_kernel_for_client_func() {
   mkdir -p $drbl_common_root/tmp/boot/ $drbl_common_root/var/{lib,tmp} $drbl_common_root/var/lib/rpm
   # Process the linking dirs, based on the host machine
   for id in lib lib64 bin sbin; do
+    mkdir -p $drbl_common_root/usr/$id
     if [ -L "/$id" ]; then
       rm -f $drbl_common_root/$id
       (cd $drbl_common_root; ln -fs usr/$id $id)

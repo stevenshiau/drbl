@@ -2409,11 +2409,9 @@ chmod 755 $drbl_common_root/usr/sbin/fsck.nfs
 
 echo -n "."
 
-for id in lib lib32 libx32 lib64; do
+for id in lib lib64 bin sbin; do
+  mkdir -p $drbl_common_root/usr/$id
   if [ -L "/$id" ]; then
-    if [ ! -d "$drbl_common_root/usr/$id" ]; then
-      mkdir -p $drbl_common_root/usr/$id
-    fi
     if [ ! -L "$drbl_common_root/$id" ]; then
       (cd $drbl_common_root; ln -fs usr/$id $id) 
     fi
