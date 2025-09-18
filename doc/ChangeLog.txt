@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (5.6.2-drbl1) unstable; urgency=medium
+
+  * Only as a dir does not exist under $drbl_common_root it will be created.
+  * Removed option "-r" from depmod command in update-drbl-client-kernel-from-server.
+
+ -- Steven Shiau <steven@clonezilla.org>  Thu, 18 Sep 2025 18:34:20 +0800
+
 drbl (5.6.1-drbl1) unstable; urgency=medium
 
   * Switched to use /usr/{sbin,bin,lib,lib64} mainly instead of
