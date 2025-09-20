@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (5.6.4-drbl1) unstable; urgency=medium
+
+  * drbl.conf: removed lib from diskless_root_dir_1 since lib is linked to
+    usr/lib for modern Debian.
+
+ -- Steven Shiau <steven@clonezilla.org>  Sat, 20 Sep 2025 11:52:12 +0800
+
 drbl (5.6.3-drbl1) unstable; urgency=medium
 
   * drblsrv-offline: Prepare dirs first in $drbl_common_root/usr/:
