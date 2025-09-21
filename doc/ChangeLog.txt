@@ -5,6 +5,16 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (5.6.5-drbl1) unstable; urgency=medium
+
+  * Make drblsrv work for extracting files from linux-image deb, which will
+    overwrite the linked file lib, i.e., "dpkg-deb --extract" command will
+    remove the linked file tftpbooot/node_root/lib file even when it already exists,
+    and create a dir tftpbooot/node_root/lib. This is backward compatible for
+    Debian bookworm.
+
+ -- Steven Shiau <steven@clonezilla.org>  Sun, 21 Sep 2025 09:42:18 +0800
+
 drbl (5.6.4-drbl1) unstable; urgency=medium
 
   * drbl.conf: removed lib from diskless_root_dir_1 since lib is linked to
