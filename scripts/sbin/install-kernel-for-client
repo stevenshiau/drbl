@@ -141,6 +141,32 @@ case "$mode" in
     # We do not care about those files put into $drbl_common_root/usr/
     dpkg-deb --extract $client_kernel_pkg $drbl_common_root
     rc=$?
+    # 2025/Sep/21
+    # "dpkg-deb --extract" command will overwrite the linked file $drbl_common_root/lib file even when it already exists.
+    # For Debian <= 12, linux-image will have files under /lib/modules/, e.g.:
+    # linux-image-6.1.0-39-amd64:
+    # /lib/modules/6.1.0-39-amd64/kernel/arch/x86/crypto/aegis128-aesni.ko
+    # /lib/modules/6.1.0-39-amd64/kernel/arch/x86/crypto/aesni-intel.ko
+    # /lib/modules/6.1.0-39-amd64/kernel/arch/x86/crypto/blowfish-x86_64.ko
+    # While for newer Debian/Ubuntu, they are like:
+    # linux-image-6.12.38+deb13-amd64:
+    # /usr/lib/modules/6.12.38+deb13-amd64/kernel/arch/x86/crypto/aegis128-aesni.ko.xz
+    # /usr/lib/modules/6.12.38+deb13-amd64/kernel/arch/x86/crypto/aesni-intel.ko.xz
+    # /usr/lib/modules/6.12.38+deb13-amd64/kernel/arch/x86/crypto/blowfish-x86_64.ko.xz
+    # Hence
+    # If $drbl_common_root/lib is a dir, not linked file, and if dir $drbl_common_root/lib/modules/ exists
+    # linux-image is still in the old path /lib/modules/*
+    # We move $drbl_common_root/lib/moduels to drbl_common_root/usr/lib/modules/, remove linked file $drbl_common_root/lib
+    # and create a link file $drbl_common_root/lib to drbl_common_root/usr/lib
+    if [ -d "$drbl_common_root/lib" ]; then
+      if [ -d "$drbl_common_root/lib/modules" ]; then
+        echo "Converting the old path of kernel modules $drbl_common_root/lib to $drbl_common_root/usr/lib"
+	mkdir -p $drbl_common_root/usr/lib/modules/  # in case modules dir does not exist.
+	mv $drbl_common_root/lib/modules/* $drbl_common_root/usr/lib/modules/
+      fi
+      rmdir $drbl_common_root/lib/modules/ $drbl_common_root/lib/
+      (cd $drbl_common_root; ln -fs usr/lib lib)
+    fi
     echo "$msg_done!"
     ;;
   "local")
