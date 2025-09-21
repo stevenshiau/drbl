@@ -1,4 +1,4 @@
-#  This file is part of systemd.
+#  This file is part of drbl/Cloneizlla-SE.
 #
 #  systemd is free software; you can redistribute it and/or modify it
 #  under the terms of the GNU General Public License as published by
@@ -12,12 +12,14 @@ After=remote-fs.target sshd.service
 #After=basic.target plymouth-start.service
 #Before=rescue.target
 AllowIsolate=true
+Conflicts=mkswapfile.service
 
 [Service]
 Environment=HOME=/root
 WorkingDirectory=/root
 Environment=TERM=linux
 ExecStartPre=-/bin/plymouth quit
+ExecStartPre=-/usr/sbin/systemctl stop mkswapfile.service
 ExecStart=/etc/init.d/ocs-run start
 Type=oneshot
 StandardInput=tty-force
