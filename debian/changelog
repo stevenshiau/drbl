@@ -1,3 +1,9 @@
+drbl (5.6.7-drbl1) unstable; urgency=medium
+
+  * Updated language files about device to that of multiple machines.
+
+ -- Steven Shiau <steven@clonezilla.org>  Mon, 22 Sep 2025 21:03:22 +0800
+
 drbl (5.6.6-drbl1) unstable; urgency=medium
 
   * ocsd-run.service in Debian should conflict with mkswapfile.service.
