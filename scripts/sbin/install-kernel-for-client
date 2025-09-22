@@ -160,7 +160,7 @@ case "$mode" in
     # and create a link file $drbl_common_root/lib to drbl_common_root/usr/lib
     if [ -d "$drbl_common_root/lib" ]; then
       if [ -d "$drbl_common_root/lib/modules" ]; then
-        echo "Converting the old path of kernel modules $drbl_common_root/lib to $drbl_common_root/usr/lib"
+        echo -n "Converting the old path of kernel modules $drbl_common_root/lib to $drbl_common_root/usr/lib "
 	mkdir -p $drbl_common_root/usr/lib/modules/  # in case modules dir does not exist.
 	mv $drbl_common_root/lib/modules/* $drbl_common_root/usr/lib/modules/
       fi

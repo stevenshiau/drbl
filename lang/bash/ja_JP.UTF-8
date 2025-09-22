@@ -1240,3 +1240,6 @@ msg_no_net_so_set_timezone_manually='No internet connection. Use the time got fr
 msg_next_choose_timezon='Please choose your time zone in the next dialog menu if you want.'
 # Tag on 2025/07/21
 msg_current_time_on_this_system='Current time on this live system:'
+# Tag on 2025/09/22
+msg_disk_to_mdisk='Directly clone source disk(s) to that of multiple machines'
+msg_part_to_mpart='Directly clone source partition(s) to that of multiple machines'
