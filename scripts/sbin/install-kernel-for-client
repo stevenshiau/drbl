@@ -138,7 +138,13 @@ case "$mode" in
     fi
     echo "Installing $client_kernel_pkg for clients... "
     echo "$msg_install_kernel_might_take_several_minutes "
-    # We do not care about those files put into $drbl_common_root/usr/
+
+    # Check if "^./lib/modules/" exists. If so, it's old format (Debian <= 12)
+    cvrt_flag="no"
+    if [ -n "$(dpkg -c $client_kernel_pkg | awk '{print $NF}' | grep -Ew "^\.\/lib\/modules\/")" ]; then
+      cvrt_flag="yes"
+    fi
+
     dpkg-deb --extract $client_kernel_pkg $drbl_common_root
     rc=$?
     # 2025/Sep/21
@@ -158,14 +164,16 @@ case "$mode" in
     # linux-image is still in the old path /lib/modules/*
     # We move $drbl_common_root/lib/moduels to drbl_common_root/usr/lib/modules/, remove linked file $drbl_common_root/lib
     # and create a link file $drbl_common_root/lib to drbl_common_root/usr/lib
-    if [ -d "$drbl_common_root/lib" ]; then
-      if [ -d "$drbl_common_root/lib/modules" ]; then
-        echo -n "Converting the old path of kernel modules $drbl_common_root/lib to $drbl_common_root/usr/lib "
-	mkdir -p $drbl_common_root/usr/lib/modules/  # in case modules dir does not exist.
-	mv $drbl_common_root/lib/modules/* $drbl_common_root/usr/lib/modules/
+    if [ "$cvrt_flag" = "yes" ]; then
+      if [ -d "$drbl_common_root/lib" ]; then
+        if [ -d "$drbl_common_root/lib/modules" ]; then
+          echo -n "Converting the old path of kernel modules $drbl_common_root/lib to $drbl_common_root/usr/lib "
+          mkdir -p $drbl_common_root/usr/lib/modules/  # in case modules dir does not exist.
+          mv $drbl_common_root/lib/modules/* $drbl_common_root/usr/lib/modules/
+        fi
+        rmdir $drbl_common_root/lib/modules/ $drbl_common_root/lib/
+        (cd $drbl_common_root; ln -fs usr/lib lib)
       fi
-      rmdir $drbl_common_root/lib/modules/ $drbl_common_root/lib/
-      (cd $drbl_common_root; ln -fs usr/lib lib)
     fi
     echo "$msg_done!"
     ;;
