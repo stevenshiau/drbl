@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (5.6.8-drbl1) unstable; urgency=medium
+
+  * install-kernel-for-client: only when "^./lib/modules/" exists,
+    the conversion of path "lib" under /tftpboot/node_root  will be done.
+
+ -- Steven Shiau <steven@clonezilla.org>  Wed, 24 Sep 2025 20:39:50 +0800
+
 drbl (5.6.7-drbl1) unstable; urgency=medium
 
   * Updated language files about device to that of multiple machines.
