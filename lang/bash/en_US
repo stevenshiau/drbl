@@ -1212,7 +1212,7 @@ msg_time_sync_via_internet=$'Do you want to sync this computer\'s time via the i
 # Tag on 2025/07/19
 msg_live_system_time_sync='Do you want to synchronize the time on this Clonezilla Live system?'
 msg_no_net_so_set_timezone_manually='No internet connection was found. The time from the BIOS will be used, but time zone information is required.'
-msg_next_choose_timezon='Please choose your time zone in the next menu.'
+msg_next_choose_timezone='Please choose your time zone in the next menu.'
 # Tag on 2025/07/21
 msg_current_time_on_this_system='The current time on this Live system is:'
 # Tag on 2025/09/22

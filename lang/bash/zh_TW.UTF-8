@@ -1216,7 +1216,7 @@ msg_time_sync_via_internet='你要透過網際網路進行本台電腦的校時�
 # Tag on 2025/07/19
 msg_live_system_time_sync='你是否校正這個Clonezilla live系統的時間？'
 msg_no_net_so_set_timezone_manually='無網際網路連線，故使用開機時從BIOS取得的時間來設定此系統的時間，需要時區相關資訊'
-msg_next_choose_timezon='請在下一步的對話頁面選擇你的時區資訊'
+msg_next_choose_timezone='請在下一步的對話頁面選擇你的時區資訊'
 # Tag on 2025/07/21
 msg_current_time_on_this_system='此live系統現在時間:'
 # Tag on 2025/09/22
