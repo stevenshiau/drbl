@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (5.6.9-drbl1) unstable; urgency=medium
+
+  * Refined the language file en_US.
+
+ -- Steven Shiau <steven@clonezilla.org>  Fri, 26 Sep 2025 08:04:12 +0800
+
 drbl (5.6.8-drbl1) unstable; urgency=medium
 
   * install-kernel-for-client: only when "^./lib/modules/" exists,
