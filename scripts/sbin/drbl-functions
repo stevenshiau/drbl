@@ -639,18 +639,6 @@ fixdevfs() {
     return 1
 }
 
-conv_devfspart_to_tradpart() {
-   # function to convert devfs partitions to traditional partitions
-   # fix the disk/partition, we do not want the devfs style for clonezilla
-   TARGET_FILE="$1"
-   [ -z "$TARGET_FILE" ] && echo "No output filename! Program stop!!!" && return 1
-   [ -f "$TARGET_FILE" ] && rm -f $TARGET_FILE
-   while read major minor block p x; do
-     p="$(fixdevfs "/dev/$p")"
-     echo "$major $minor $block $p" >> $TARGET_FILE
-   done < /proc/partitions
-}
-
 # get dhcpd interface
 get_dhcpd_interface() {
   local INTERFACES INTERFACESv4 INTERFACES_TMP
