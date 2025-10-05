@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (5.6.11-drbl1) unstable; urgency=medium
+
+  * Updated language files about MTD block & emmc boot devices.
+  * Added options "-rmtd" & "-rmmcb" in TUI.
+
+ -- Steven Shiau <steven@clonezilla.org>  Sun, 05 Oct 2025 19:52:06 +0800
+
 drbl (5.6.10-drbl1) unstable; urgency=medium
 
   * Updated variable msg_delimiter_star_line in en_US
