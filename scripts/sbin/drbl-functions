@@ -1654,6 +1654,8 @@ set_drbl_ocs_extra_param() {
       "-ssnf"    "$msg_ocs_param_ssnf" off \
       "-ps"      "$msg_ocs_param_ps" off \
       "-edio"    "$msg_ocs_param_edio" off \
+      "-rmtd"    "$msg_ocs_param_rmtd" off \
+      "-rmmcb"   "$msg_ocs_param_rmmcb" off \
     2>> $OCS_PARAM_TMP
     else
       # Beginner mode. Use default settings
@@ -2039,6 +2041,8 @@ if [ "$mode" = "restore" ]; then
     "-srel"    "$msg_ocs_param_srel" off \
     "-ps"      "$msg_ocs_param_ps" off \
     "-edio"    "$msg_ocs_param_edio" off \
+    "-rmtd"    "$msg_ocs_param_rmtd" off \
+    "-rmmcb"   "$msg_ocs_param_rmmcb" off \
     2>> $OCS_PARAM_TMP
   else
     if [ "$ocs_batch_mode" != "on" ]; then
