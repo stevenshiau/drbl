@@ -1222,3 +1222,6 @@ msg_current_time_on_this_system='此live系統現在時間:'
 # Tag on 2025/09/22
 msg_disk_to_mdisk='直接從整顆硬碟佈署到多台機器的整顆硬碟'
 msg_part_to_mpart='直接從硬碟分割區佈署到多台機器的硬碟分割區'
+# Tag on 2025/10/05
+msg_ocs_param_rmtd="還原MTD區塊裝置(/dev/mtdblock*)"
+msg_ocs_param_rmmcb="還原eMMC開機裝置(/dev/mmcblk*boot*)"

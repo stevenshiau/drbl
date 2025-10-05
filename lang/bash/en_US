@@ -1218,3 +1218,6 @@ msg_current_time_on_this_system='The current time on this Live system is:'
 # Tag on 2025/09/22
 msg_disk_to_mdisk='Directly clone source disk(s) to multiple machines'
 msg_part_to_mpart='Directly clone source partition(s) to multiple machines'
+# Tag on 2025/10/05
+msg_ocs_param_rmtd="Restore MTD block device (/dev/mtdblock*)"
+msg_ocs_param_rmmcb="Restore eMMC boot device (/dev/mmcblk*boot*)"
