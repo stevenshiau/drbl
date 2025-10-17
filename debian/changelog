@@ -1,3 +1,10 @@
+drbl (5.6.12-drbl1) unstable; urgency=medium
+
+  * Updated language files about saving the MTD block device and eMMC boot devices.
+  * Added 2 opts to TUI menu: -smtd & -smmcb
+
+ -- Steven Shiau <steven@clonezilla.org>  Fri, 17 Oct 2025 16:04:01 +0800
+
 drbl (5.6.11-drbl1) unstable; urgency=medium
 
   * Updated language files about MTD block & emmc boot devices.
