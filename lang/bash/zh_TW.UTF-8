@@ -1225,3 +1225,6 @@ msg_part_to_mpart='直接從硬碟分割區佈署到多台機器的硬碟分割�
 # Tag on 2025/10/05
 msg_ocs_param_rmtd="還原MTD區塊裝置(/dev/mtdblock*)"
 msg_ocs_param_rmmcb="還原eMMC開機裝置(/dev/mmcblk*boot*)"
+# Tag on 2025/10/17
+msg_ocs_param_smtd="儲存MTD區塊裝置(/dev/mtdblock*)"
+msg_ocs_param_smmcb="儲存eMMC開機裝置(/dev/mmcblk*boot*)"
