@@ -1170,7 +1170,7 @@ msg_use_wired="Utiliser le périphérique câblé"
 msg_use_wireless="Utiliser le périphérique sans fil"
 msg_nic_status_on_sytem="Périphérique réseau et statut détectés :"
 # Tag on 2021/12/04
-msg_set_image_volume_size='Taille en Mo pour la découpe du fichier image de la partition en fichiers volumes multiples. Entrez "0" pour ne pas découper le fichier image. //NOTE// Pour déposer une image sous FAT32, la taille doit être comprise entre 1 et 4096. N\''utilisez pas "0" car la taille d\''un fichier sous FAT32 est limitée à 4096 Mo'
+msg_set_image_volume_size='Taille en Mo pour la découpe du fichier image de la partition en fichiers volumes multiples. Entrez "0" pour ne pas découper le fichier image. //NOTE// Pour déposer une image sous FAT32, la taille doit être comprise entre 1 et 4000. N\''utilisez pas "0" car la taille d\''un fichier sous FAT32 est limitée à 4000 Mo'
 # Tag on 2022/02/03
 msg_found_luks_dev='Périphérique LUKS trouvé'
 msg_prompt_for_open_luks_dev='Nous allons ouvrir les périphériques LUKS. Vous devrez entrer la phrase secrète pour chacun d\''eux.'

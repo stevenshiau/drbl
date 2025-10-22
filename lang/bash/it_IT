@@ -1168,7 +1168,7 @@ msg_use_wired="Use wired network device"
 msg_use_wireless="Use wireless network device"
 msg_nic_status_on_sytem="Network device and status detected on this system:"
 # Tag on 2021/12/04
-msg_set_image_volume_size='Dimensione in MB dei file multivolume in cui dividere il file immagine della partizione. Per favore immettete un numero superiore a 10. Se non volete dividere il file immagine, immettete un numero alto, ad es. "1000000". Per favore non usate "0", poiché se la vostra distribuzione GNU/Linux usa un nuovo /sbin/init, verrà confuso con "0". //NOTA// Per i repository di immagini FAT32, il numero non deve essere maggiore di 4096.'
+msg_set_image_volume_size='Dimensione in MB dei file multivolume in cui dividere il file immagine della partizione. Per favore immettete un numero superiore a 10. Se non volete dividere il file immagine, immettete un numero alto, ad es. "1000000". Per favore non usate "0", poiché se la vostra distribuzione GNU/Linux usa un nuovo /sbin/init, verrà confuso con "0". //NOTA// Per i repository di immagini FAT32, il numero non deve essere maggiore di 4000.'
 # Tag on 2022/02/03
 msg_found_luks_dev='Found LUKS device'
 msg_prompt_for_open_luks_dev='We have to open LUKS device now. You will be prompted to enter passphrase for each one of them.'

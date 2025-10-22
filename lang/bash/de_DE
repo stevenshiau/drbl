@@ -1168,7 +1168,7 @@ msg_use_wired="Verwende LAN Netzwerk"
 msg_use_wireless="Verwende WLAN Netzwerk"
 msg_nic_status_on_sytem="Auf diesem System gefundene Netzwerk-Geräte:"
 # Tag on 2021/12/04
-msg_set_image_volume_size='Größe in MB, wenn das Partitionimage in mehrere Teile aufgeteilt wird. Verwenden Sie "0", um das Image nicht aufzuteilen. //HINWEIS// Wenn das Image-Repository auf einem FAT32-Volume liegt, sollte der Wert zwischen 1 und 4096 liegen. Verwenden Sie dann nicht "0", da eine Datei auf FAT32 nur 4096 MB groß sein darf.'
+msg_set_image_volume_size='Größe in MB, wenn das Partitionimage in mehrere Teile aufgeteilt wird. Verwenden Sie "0", um das Image nicht aufzuteilen. //HINWEIS// Wenn das Image-Repository auf einem FAT32-Volume liegt, sollte der Wert zwischen 1 und 4000 liegen. Verwenden Sie dann nicht "0", da eine Datei auf FAT32 nur 4000 MB groß sein darf.'
 # Tag on 2022/02/03
 msg_found_luks_dev='LUKS-Device gefunden'
 msg_prompt_for_open_luks_dev='Das LUKS-Device wird jetzt geöffnet. Bitte für jedes Gerät die Passphrase eingeben'

@@ -1183,7 +1183,7 @@ msg_use_wired="Usar dispositivo de red con cable"
 msg_use_wireless="Usar dispositivo de red inalámbrica"
 msg_nic_status_on_sytem="Dispositivo de red y estado detectado en este sistema:"
 # Tag on 2021/12/04
-msg_set_image_volume_size='El tamaño en MB para partir el archivo imagen partición en varios volúmenes de archivos. Use "0" si no desea partir el archivo de imagen. //NOTA// Para el repositorio de imagen FAT32, el número debe ser entre 1 y 4096. No use "0" porque el límite de tamaño de archivo es 4096 MB para FAT32.'
+msg_set_image_volume_size='El tamaño en MB para partir el archivo imagen partición en varios volúmenes de archivos. Use "0" si no desea partir el archivo de imagen. //NOTA// Para el repositorio de imagen FAT32, el número debe ser entre 1 y 4000. No use "0" porque el límite de tamaño de archivo es 4000 MB para FAT32.'
 # Tag on 2022/02/03
 msg_found_luks_dev='Dispositivo LUKS encontrado'
 msg_prompt_for_open_luks_dev='Tenemos que abrir el dispositivo LUKS ahora. Se le pedirá que ingrese la frase de contraseña para cada uno de ellos.'

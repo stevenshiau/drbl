@@ -1170,7 +1170,7 @@ msg_use_wired="Kablolu ağ cihazı kullanın"
 msg_use_wireless="Kablosuz ağ cihazı kullanın"
 msg_nic_status_on_sytem="Bu sistemde algılanan ağ cihazı ve durumu:"
 # Tag on 2021/12/04
-msg_set_image_volume_size='Bölüm kalıp dosyasını birden çok birime bölmek için MB cinsinden boyut. Lütfen 10dan büyük sayı girin. Kalıp dosyasını bölmek istemiyorsanız, büyük bir sayı girin, ör. "1000000". Lütfen artık "0" kullanmayın, çünkü GNU / Linux dağıtımınız upstart ile yeni /sbin/init kullanıyorsa, "0" ile karıştırılacaktır. //NOT// FAT32 kalıp deposu için sayı 4096dan büyük olmamalıdır.'
+msg_set_image_volume_size='Bölüm kalıp dosyasını birden çok birime bölmek için MB cinsinden boyut. Lütfen 10dan büyük sayı girin. Kalıp dosyasını bölmek istemiyorsanız, büyük bir sayı girin, ör. "1000000". Lütfen artık "0" kullanmayın, çünkü GNU / Linux dağıtımınız upstart ile yeni /sbin/init kullanıyorsa, "0" ile karıştırılacaktır. //NOT// FAT32 kalıp deposu için sayı 4000dan büyük olmamalıdır.'
 # Tag on 2022/02/03
 msg_found_luks_dev='Found LUKS device'
 msg_prompt_for_open_luks_dev='We have to open LUKS device now. You will be prompted to enter passphrase for each one of them.'

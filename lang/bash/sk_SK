@@ -1169,7 +1169,7 @@ msg_use_wired="Použiť káblovú sieťovú kartu"
 msg_use_wireless="Použiť bezdrôtovú sieťovú kartu"
 msg_nic_status_on_sytem="V tomto systéme bolo zistené sieťové zariadenie a stav:"
 # Tag on 2021/12/04
-msg_set_image_volume_size="Veľkosť v MB pre rozdelenie obrazu partície do viacerých súborov. Použite "0" ak nechcete rozdelit obraz. //Poznámka// Pre FAT32 adresár na uloženie obrazov, by číslo malo byť medzi 1 a 4096. Nezadávajte "0", lebo limit veľkosti súboru pre FAT32 je 4096 MB."
+msg_set_image_volume_size="Veľkosť v MB pre rozdelenie obrazu partície do viacerých súborov. Použite "0" ak nechcete rozdelit obraz. //Poznámka// Pre FAT32 adresár na uloženie obrazov, by číslo malo byť medzi 1 a 4000. Nezadávajte "0", lebo limit veľkosti súboru pre FAT32 je 4000 MB."
 # Tag on 2022/02/03
 msg_found_luks_dev='Nájdené LUKS zariadenie'
 msg_prompt_for_open_luks_dev='Teraz musíme otvoriť LUKS zariadenie. Budete vyzvaný na zadanie hesla pre každé z nich.'
