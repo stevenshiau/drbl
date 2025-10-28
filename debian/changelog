@@ -1,3 +1,12 @@
+drbl (5.7.1-drbl1) unstable; urgency=medium
+
+  * Add package b3sum to live packages list.
+  * Enabled "-edio" in TUI by default.
+  * Use 4000 instead of 4096 in the prompt for the FAT32 file size limit.
+    Ref: https://github.com/stevenshiau/clonezilla/issues/160
+
+ -- Steven Shiau <steven@clonezilla.org>  Tue, 28 Oct 2025 20:14:52 +0800
+
 drbl (5.6.12-drbl1) unstable; urgency=medium
 
   * Updated language files about saving the MTD block device and eMMC boot devices.
