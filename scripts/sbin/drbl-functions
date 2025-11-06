@@ -1662,13 +1662,13 @@ set_drbl_ocs_extra_param() {
       if [ "$inst_grub_opt" = "on" ]; then
         # restoredisk mode.
         # "$inst_grub_opt" = "on" (-g auto) means skip_clean_mbr_opt="off" (no -t)
-        echo "-g auto" "-e1 auto" "-e2" "-r" "-x" "-j2" >> $OCS_PARAM_TMP
+        echo "-g auto" "-e1 auto" "-e2" "-r" "-x" "-j2" "-edio" >> $OCS_PARAM_TMP
       else
         # restoreparts mode.
         # "$inst_grub_opt" = "off" (no "-g auto") means skip_clean_mbr_opt="on" (-t)
         # Do not enable -j2 by default since for restoreparts, it should not be done by default.
         # Ref: https://sourceforge.net/p/clonezilla/bugs/361/
-        echo "-e1 auto" "-e2" "-t" "-r" "-x" >> $OCS_PARAM_TMP
+        echo "-e1 auto" "-e2" "-t" "-r" "-x" "-edio" >> $OCS_PARAM_TMP
       fi
     fi
   
@@ -1800,12 +1800,12 @@ set_drbl_ocs_extra_param() {
       "-ps "       "$msg_ocs_param_ps" off \
       "-scpt "     "$msg_ocs_param_scpt" off \
       "-sfs "      "$msg_ocs_param_sfs" off \
-      "-edio"      "$msg_ocs_param_edio" on \
-      "-smtd"      "$msg_ocs_param_smtd" off \
-      "-smmcb"     "$msg_ocs_param_smmcb" off \
+      "-edio "     "$msg_ocs_param_edio" on \
+      "-smtd "     "$msg_ocs_param_smtd" off \
+      "-smmcb "    "$msg_ocs_param_smmcb" off \
       2>> $OCS_PARAM_TMP
     else
-      echo "-j2 " >> $OCS_PARAM_TMP
+      echo "-j2 " "-edio " >> $OCS_PARAM_TMP
     fi
     # Question about fsck the source partition. By default, no matter it's beginner or advanced mode, we will ask.
     if [ -z "$fsck_src_part_intr" -a -z "$fsck_src_part_auto" ]; then
@@ -2058,13 +2058,13 @@ if [ "$mode" = "restore" ]; then
     if [ "$inst_grub_opt" = "on" ]; then
       # restoredisk mode.
       # "$inst_grub_opt" = "on" (-g auto) means skip_clean_mbr_opt="off" (no -t)
-      echo "-g auto" "-e1 auto" "-e2" "-r" "-j2" "$opt_confirm_" >> $OCS_PARAM_TMP
+      echo "-g auto" "-e1 auto" "-e2" "-r" "-j2" "-edio" "$opt_confirm_" >> $OCS_PARAM_TMP
     else
       # restoreparts mode.
       # "$inst_grub_opt" = "off" (no "-g auto") means skip_clean_mbr_opt="on" (-t)
       # Do not enable -j2 by default since for restoreparts, it should not be done by default.
       # Ref: https://sourceforge.net/p/clonezilla/bugs/361/
-      echo "-e1 auto" "-e2" "-t" "-r" "$opt_confirm_" >> $OCS_PARAM_TMP
+      echo "-e1 auto" "-e2" "-t" "-r" "-edio" "$opt_confirm_" >> $OCS_PARAM_TMP
     fi
   fi
 
@@ -2178,12 +2178,12 @@ else
     "-ps "      "$msg_ocs_param_ps" off \
     "-scpt "    "$msg_ocs_param_scpt" off \
     "-sfs "     "$msg_ocs_param_sfs" off \
-    "-edio"     "$msg_ocs_param_edio" on \
-    "-smtd"     "$msg_ocs_param_smtd" off \
-    "-smmcb"    "$msg_ocs_param_smmcb" off \
+    "-edio "    "$msg_ocs_param_edio" on \
+    "-smtd "    "$msg_ocs_param_smtd" off \
+    "-smmcb "   "$msg_ocs_param_smmcb" off \
     2>> $OCS_PARAM_TMP
   else
-    echo "-c " "-j2 " >> $OCS_PARAM_TMP
+    echo "-c " "-j2 " "-edio " >> $OCS_PARAM_TMP
   fi
 fi
 
