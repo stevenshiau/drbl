@@ -1,3 +1,10 @@
+drbl (5.7.3-drbl1) unstable; urgency=medium
+
+  * Updated language files for BitLocker-related codes.
+  * Enabled "-edio" for beginner mode.
+
+ -- Steven Shiau <steven@clonezilla.org>  Sat, 08 Nov 2025 16:35:40 +0800
+
 drbl (5.7.2-drbl1) unstable; urgency=medium
 
   * Removed b3sum from the live packages list. Since Ubuntu >= 24.10 uses
