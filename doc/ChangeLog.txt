@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (5.7.4-drbl1) unstable; urgency=medium
+
+  * Updated language files for BitLocker functions.
+
+ -- Steven Shiau <steven@clonezilla.org>  Sun, 09 Nov 2025 10:04:49 +0800
+
 drbl (5.7.3-drbl1) unstable; urgency=medium
 
   * Updated language files for BitLocker-related codes.
