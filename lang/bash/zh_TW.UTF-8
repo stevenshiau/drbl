@@ -1246,3 +1246,5 @@ msg_bitlocker_use_user_password="現在嘗試使用BitLocker的密碼當作使�
 msg_bitlocker_password_not_work="輸入的密碼無效，請重新輸入。"
 msg_bitlocker_backup_decrypted_data="OK, 我們將備份解密的資料。"
 msg_bitlocker_backup_encrypted_data="OK, 我們將備份原本已加密的資料。"
+msg_decrypt_bitlocker_dev="在此機器上將BitLocker裝置解密"
+msg_do_not_decrypt_bitlocker_dev="不要將此機器上的BitLocker裝置解密"
