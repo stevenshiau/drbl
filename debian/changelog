@@ -1,3 +1,9 @@
+drbl (5.7.6-drbl1) unstable; urgency=medium
+
+  * More language files about BitLocker were updated by marcosdiez. 
+
+ -- Steven Shiau <steven@clonezilla.org>  Tue, 25 Nov 2025 07:13:41 +0800
+
 drbl (5.7.5-drbl1) unstable; urgency=medium
 
   * Function check_luks_dev_then_ask_if_open_it was moved to ocs-functions
