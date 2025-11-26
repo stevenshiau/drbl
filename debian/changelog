@@ -1,3 +1,9 @@
+drbl (5.7.7-drbl1) unstable; urgency=medium
+
+  * Updated language file zh_TW.UTF-8.
+
+ -- Steven Shiau <steven@clonezilla.org>  Wed, 26 Nov 2025 20:51:26 +0800
+
 drbl (5.7.6-drbl1) unstable; urgency=medium
 
   * More language files about BitLocker were updated by marcosdiez. 
