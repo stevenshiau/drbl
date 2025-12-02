@@ -30,7 +30,8 @@ put_memtest_bin_2_drbl_repo() {
   echo "Putting memtest86+ in DRBL package repository $memtest86_dir/... "
   memtest_f="$(shorten_memtest_filename `basename $memtest_bin_abs_path`)"
   cp -af $memtest_bin_abs_path $memtest86_dir/$memtest_f
-  memtest_v="$(LC_ALL=C strings $memtest_bin_abs_path  | grep -Ei 'Memtest86\+[[:space:]]+v' | sed -r -e "s/^[[:space:]]*//g")"
+  memtest_v="$(LC_ALL=C strings $memtest_bin_abs_path  | grep -Ei 'Memtest86\+[[:space:]]+v' |\
+	       sed -r -e "s/^[[:space:]]*//g" | sort | head -n 1)"
   echo "Memtest86+ version: $memtest_v"
   echo $memtest_v > $memtest86_dir/VERSION
   echo "done!"
@@ -81,13 +82,17 @@ shorten_memtest_filename() {
     memtest86+ia32.efi) echo mt86+x32.efi;;
     memtest86+x64.bin)  echo mt86+x64.mbr;;
     memtest86+x64.efi)  echo mt86+x64.efi;;
+    *)                  echo $inp_fn;;
   esac
 } # end of shorten_memtest_filename
 #
 put_distribution_memtest() {
   # Function to use the package from distribution.
   # Memtest86+ file name on different distributions:
-  # Debian/Ubuntu: "memtest86+.bin"
+  # Debian/Ubuntu
+  #  <= v7.2: /boot/memtest86+x64.bin, /boot/memtest86+x64.efi;
+  #  >= v8.0: /boot/mt86+ia32, /boot/mt86+x64 (Unified Binary, no longer separate .bin (Legacy) and .efi (UEFI) files
+  #  i.e., a single binary for both UEFI and legacy boot.)
   # SuSE: "memtest.bin"
   # Fedora 14: "/boot/memtest86+"
   # Centos 5.6: "/boot/memtest86+-1.65"
@@ -126,7 +131,9 @@ put_distribution_memtest() {
      memtest_x32_efi="$(LC_ALL=C $query_pkglist_cmd memtest86+ | grep -Ew "^/boot/memtest86\+ia32\.efi" | sort | head -n 1)"
      memtest_x64_bin="$(LC_ALL=C $query_pkglist_cmd memtest86+ | grep -Ew "^/boot/memtest86\+x64\.bin" | sort | head -n 1)"
      memtest_x64_efi="$(LC_ALL=C $query_pkglist_cmd memtest86+ | grep -Ew "^/boot/memtest86\+x64\.efi" | sort | head -n 1)"
-     for im in $memtest_bin $memtest_x32_bin $memtest_x32_efi $memtest_x64_bin $memtest_x64_efi; do
+     # For memtest >= v8.0
+     memtest_x64="$(LC_ALL=C $query_pkglist_cmd memtest86+ | grep -Ew "^/boot/mt86\+x64$" | sort | head -n 1)"
+     for im in $memtest_x64 $memtest_bin $memtest_x32_bin $memtest_x32_efi $memtest_x64_bin $memtest_x64_efi; do
        eval imfile="\$im"
        if [ -n "$imfile" ]; then
          echo "Found $imfile in this system, copying the memtest file to DRBL local repository..."
@@ -150,7 +157,13 @@ put_distribution_memtest() {
        (
         cd $tmp_wd
         LC_ALL=C dpkg --extract /var/cache/apt/archives/memtest86+*.deb .
-        put_memtest_bin_2_drbl_repo "$(pwd)"/boot/memtest86+.bin
+	if [ -e "$(pwd)/boot/mt86+x64" ]; then
+          put_memtest_bin_2_drbl_repo "$(pwd)"/boot/mt86+x64
+	elif [ -e "$(pwd)/boot/memtest86+64.bin" ]; then
+          put_memtest_bin_2_drbl_repo "$(pwd)"/boot/memtest86+x64.bin
+	elif [ -e "$(pwd)/boot/memtest86+64.efi" ]; then
+          put_memtest_bin_2_drbl_repo "$(pwd)"/boot/memtest86+x64.efi
+	fi
        )
      elif [ -e /etc/SuSE-release ]; then
        # SuSE
