@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (5.7.9-drbl1) unstable; urgency=medium
+
+  * Added lsb-release in the live packages list.
+
+ -- Steven Shiau <steven@clonezilla.org>  Thu, 18 Dec 2025 10:20:55 +0800
+
 drbl (5.7.8-drbl1) unstable; urgency=medium
 
   * drbl-prepare-memtest: support memtest86+ v8.0
