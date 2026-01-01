@@ -1,3 +1,11 @@
+drbl (5.7.10-drbl1) unstable; urgency=medium
+
+  * The file makeboot64.cmd was written by Tom Hoar, and
+    is downloaded from 
+    https://github.com/stevenshiau/clonezilla/issues/171
+
+ -- Steven Shiau <steven@clonezilla.org>  Thu, 01 Jan 2026 13:31:42 +0800
+
 drbl (5.7.9-drbl1) unstable; urgency=medium
 
   * Added lsb-release in the live packages list.
