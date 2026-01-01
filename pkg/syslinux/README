@@ -1,3 +1,8 @@
-This directory is for pxelinux. The files are extracted from syslinux.
+This directory is for making boottable for a USB device in legacy BIOS mode (MBR).
+The files are extracted from syslinux.
 Syslinux is released under GPLv2+.
 Homepage: http://syslinux.zytor.com/
+
+The file makeboot64.cmd was written by Tom Hoar, and
+is downloaded from 
+https://github.com/stevenshiau/clonezilla/issues/171
