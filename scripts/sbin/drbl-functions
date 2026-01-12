@@ -1656,6 +1656,7 @@ set_drbl_ocs_extra_param() {
       "-edio"    "$msg_ocs_param_edio" on \
       "-rmtd"    "$msg_ocs_param_rmtd" off \
       "-rmmcb"   "$msg_ocs_param_rmmcb" off \
+      "-reluks"  "$msg_ocs_param_reluks" off \
     2>> $OCS_PARAM_TMP
     else
       # Beginner mode. Use default settings
@@ -2045,6 +2046,7 @@ if [ "$mode" = "restore" ]; then
     "-edio"    "$msg_ocs_param_edio" on \
     "-rmtd"    "$msg_ocs_param_rmtd" off \
     "-rmmcb"   "$msg_ocs_param_rmmcb" off \
+    "-reluks"  "$msg_ocs_param_reluks" off \
     2>> $OCS_PARAM_TMP
   else
     if [ "$ocs_batch_mode" != "on" ]; then
