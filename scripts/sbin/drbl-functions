@@ -1801,8 +1801,8 @@ set_drbl_ocs_extra_param() {
       "-scpt "     "$msg_ocs_param_scpt" off \
       "-sfs "      "$msg_ocs_param_sfs" off \
       "-edio "     "$msg_ocs_param_edio" on \
-      "-smtd "     "$msg_ocs_param_smtd" off \
-      "-smmcb "    "$msg_ocs_param_smmcb" off \
+      "-smtd "     "$msg_ocs_param_smtd" on \
+      "-smmcb "    "$msg_ocs_param_smmcb" on \
       2>> $OCS_PARAM_TMP
     else
       echo "-j2 " "-edio " >> $OCS_PARAM_TMP
@@ -2179,8 +2179,8 @@ else
     "-scpt "    "$msg_ocs_param_scpt" off \
     "-sfs "     "$msg_ocs_param_sfs" off \
     "-edio "    "$msg_ocs_param_edio" on \
-    "-smtd "    "$msg_ocs_param_smtd" off \
-    "-smmcb "   "$msg_ocs_param_smmcb" off \
+    "-smtd "    "$msg_ocs_param_smtd" on \
+    "-smmcb "   "$msg_ocs_param_smmcb" on \
     2>> $OCS_PARAM_TMP
   else
     echo "-c " "-j2 " "-edio " >> $OCS_PARAM_TMP
