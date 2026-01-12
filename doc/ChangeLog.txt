@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (5.7.11-drbl1) unstable; urgency=medium
+
+  * Added the option "-reluks" in expert mode in TUI.
+  * Updated language files about "-reluks" option.
+
+ -- Steven Shiau <steven@clonezilla.org>  Mon, 12 Jan 2026 21:20:45 +0800
+
 drbl (5.7.10-drbl1) unstable; urgency=medium
 
   * The file makeboot64.cmd was written by Tom Hoar, and
