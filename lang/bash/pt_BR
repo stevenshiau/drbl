@@ -1,7 +1,7 @@
 #!/bin/bash
 # Written by Steven Shiau <steven _at_ clonezilla org> to use in DRBL and
 # Translated by Marcos Pereira da Silva Cruz <marcospcruz _at_ gmail com>
-# Translated by Rafael Fontenelle <rffontenelle@gmail.com>, 2019
+# Translated by Rafael Fontenelle <rffontenelle@gmail.com>, 2019-2025
 # License: GPL
 
 #-----------------------------------------
@@ -50,7 +50,7 @@ msg_ftp_proxy_server='Nome do servidor proxy (FQDN) ou endereço IP para o proto
 msg_ftp_proxy_port='Porta do servidor proxy para o protocolo ftp?'
 msg_http_proxy_you_set='O servidor proxy http configurado'
 msg_ftp_proxy_you_set='O servidor proxy ftp configurado'
-msg_drbl_test_option='Deseja usar os pacotes DRBL "testing" que são mais potentes, mas talvez com bugs (Caso tenha coragem!!!) (Se você abaixou o pacote rpm DRBL da pasta testing, insira "yes"(sim) aqui)?'
+msg_drbl_test_option='Deseja usar os pacotes DRBL "testing" que são mais potentes, mas talvez com bugs (Caso tenha coragem!!!) (Se você abaixou o pacote rpm DRBL da pasta testing, insira "yes" (sim) aqui)?'
 msg_drbl_unstable_option='Deseja usar os pacotes DRBL "unstable" que são mais potentes, mas talvez muito instáveis (Caso seja super corajoso!!!) (Se você abaixou o pacote rpm DRBL da pasta unstable, insira "yes"(sim) aqui)?'
 msg_drbl_extra_option='Deseja usar os pacotes extra providos pelo projeto DRBL? (Não é necessário, apenas uma opção)'
 msg_drbl_netinstall_option='Deseja instalar as imagens de inicialização (boot) de rede que permitem que o cliente instale alguma distribuição GNU/Linux (Debian, Ubuntu, RedHat Linux, Fedora Core, Mandriva, CentOS e OpenSuSE...) através da rede?  ///NOTA/// Esta escolha abaixará muitos arquivos (> 100 MB no total) da Internet, portanto levará alguns minutos. Se seu cliente possui disco rígido e é possível instalar o GNU/Linux nele, digite Y aqui. Se você colocar "no" aqui, pode executar drbl-netinstall para instalá-los depois.'
@@ -70,7 +70,7 @@ msg_wget_installed_successful='Pacote wget instalado com sucesso!'
 msg_no_apt_get_it='Sem APT? Tentando instalar APT...'
 msg_apt_already_installed='APT já está instalado. Maravilha! Você é demais!'
 msg_backup_apt_sources='Realizando cópia de segurança do APT sources.list ...'
-msg_setup_apt_sources_MDK='Configurando apt sources.list para Mandriva'
+msg_setup_apt_sources_MDK='Configurando sources.list do apt para Mandriva'
 msg_serial_console_parameter='O parâmetro de saída do console serial:'
 msg_enjoy_apt='Agora aproveite o APT!'
 msg_clean_apt_cache='Limpando o cache do APT para efetuar algumas configurações...'
@@ -105,7 +105,7 @@ msg_analyzing_rpm_info='Analisando a informações sobre os pacotes rpm... Isto 
 msg_failed_to_install_pkgs='Falha ao instalar os pacotes necessários, NÃO é possível continuar!'
 msg_check_network_and_url='Por favor verifique a conexão de rede entre sua máquina e'
 msg_not_determine_OS='NÃO foi possível determinar a versão do S.O. que você está usando!!!'
-msg_enter_OS_ver='Por favor insira a versão (RH8.0, RH9, FC1, MDK9.2, MDK10.0...)'
+msg_enter_OS_ver='Por favor, insira a versão (RH8.0, RH9, FC1, MDK9.2, MDK10.0...)'
 msg_clean_apt_cache_RH='Limpando o cache do APT para fazer RPM::Architecture funcionar...'
 msg_install_DRBL_necesary_files='2º, instalando os arquivos necessários para DRBL...'
 msg_select_url_path='A URL e caminhos selecionados'
@@ -181,8 +181,8 @@ msg_ayo_repository_enter_by_yourself='5 -> Digite o repositório ayo manualmente
 msg_drbl_ayo_repository_1_mdk='1 -> ftp.twaren.net '
 msg_drbl_ayo_repository_2_mdk='2 -> drbl.sourceforge.net '
 
-msg_apt_not_compatible='Atenção! É necessário remover apt e libapt-pkg0, depois instale um apt compatível com DRBL.'
-msg_do_u_want_to_remove='Deseja removê-lo?'
+msg_apt_not_compatible='Atenção! Para garantir compatibilidade com DBRL, remova e reinstale o APT e libapt-pkg0.'
+msg_do_u_want_to_remove='Deseja removê-los?'
 msg_warning_apt_not_compatible_and_fail='Se utilizar um apt não compatível com DRBL, algo pode não funcionar! A instalação pode falhar!'
 msg_rm_apt='Removendo os pacotes apt e libapt-pkg0...'
 msg_search_kernel_in_ayo='Pesquisando pelo kernel mais recente no repositório ayo...'
@@ -325,7 +325,7 @@ Parâmetros disponíveis:\n'
 msg_no_network_installation_img='Não foi possível encontrar uma imagem de instalação de rede!'
 msg_no_network_installation_img_des="Não foi possível encontrar uma imagem de instalação de rede em $PXELINUX_DIR/default! \nCertifique-se de ter instalado os pacotes de netinstall e ter executado generate-pxe-menu para gerar o arquivo de menu PXE ($PXELINUX_DIR/default)."
 msg_start_clonezilla_mode='Iniciar o modo Clonezilla'
-msg_choose_mode='Escolher modo'
+msg_choose_mode='Escolha o modo'
 msg_clonezilla_save_disk='Clonar disco(s) do computador e salvar como imagem (disco rígido inteiro)'
 msg_clonezilla_restore_disk='Restaurar uma imagem para o disco do computador (disco rígido inteiro)'
 msg_clonezilla_save_parts='Clonar partição(ões) de disco do computador e salvar como uma imagem'
@@ -521,9 +521,9 @@ msg_only_one_kernel_meets_requirement='Somente um kernel se ajusta a seus requis
 msg_drbl_server_is_NOT_NAT_server='Este servidor DRBL NÃO fornece serviço NAT, portanto seu cliente DRBL NÃO poderá acessar a Internet.'
 msg_ask_user_is_reserved_for_save_mode='"ask_user" é um nome de imagem reservado, por favor use outro nome!'
 msg_all_data_in_dev_will_be_overwritten='OS DADOS EXISTENTES NESTE(S) DISCO(S) RÍGIDO(S)/PARTIÇÃO(ÕES) SERÃO SOBRESCRITOS! TODOS OS DADOS SERÃO PERDIDOS'
-msg_authentication_pxe_linux_info="Se deseja utilizar um mecanismo de autentificação na inicialização do cliente PXE Linux, use drbl-pxelinux-passwd no servidor. Para mais informações, execute \"drbl-pxelinux-passwd -h\"."
+msg_authentication_pxe_linux_info="Se deseja utilizar um mecanismo de autentificação na inicialização do cliente PXE Linux, use drbl-pxelinux-passwd no servidor. Para mais informações, execute 'drbl-pxelinux-passwd -h'."
 msg_this_might_take_several_minutes='Isto pode demorar vários minutos...'
-msg_run_dcs_clonezilla_start_to_show_pxemenu="Você deve usar \"dcs\" -> Clonezilla-start para iniciar o serviço Clonezilla, assim aparecerá o menu de Clonezilla durante a inicialização do cliente"
+msg_run_dcs_clonezilla_start_to_show_pxemenu="Você deve usar 'dcs' -> Clonezilla-start para iniciar o serviço Clonezilla, assim aparecerá o menu de Clonezilla durante a inicialização do cliente"
 msg_if_always_provide_clonezilla_srv="Deseja SEMPRE fornecer o serviço Clonezilla ao cliente?\nNOTA: Se você escolher qualquer opção -y*, o cliente não iniciará o S.O. local depois de finalizar a clonagem do S.O. em seu disco rígido local! Se você não tiver certeza, NÃO escolha opções -y*!"
 msg_gen_template_files="Gerar novamente arquivo modelo de SSI/Clonezilla box"
 msg_ocs_iso_too_big_for_CD="O arquivo ISO destino é grande mais para caber num CD."
@@ -539,7 +539,7 @@ msg_format_as_FAT_16_32='Se precisar formatar, lembre-se de fazê-lo em FAT16 o 
 msg_this_is_disk_usage_status='Este é o estado de uso do disco'
 msg_boot_clonezilla_live_dev='Agora você pode usar este dispositivo live para iniciar outra máquina, e usar Clonezilla'
 msg_clone_finished_choose_to='Agora você pode escolher'
-msg_enter_cml='Entre na linha de comandos do prompt'
+msg_enter_cml='Entrar na linha de comandos do prompt'
 msg_clonezilla_is_free_and_no_warranty='*Clonezilla é um software livre (GPL) e vem sem NENHUMA GARANTIA*'
 msg_1_6_a_b_is_reserved='1, 2, 3, 4, 5, 6, a, b, ou -b são nomes reservados, você não pode usá-los como nomes de imagem Clonezilla.'
 msg_name_ntfs_dd_img_is_reserved='.ptcl.img ou .ntfs-img ou .dd-img são nomes reservados, você não pode usá-los como nomes de imagem Clonezilla'
@@ -589,7 +589,7 @@ msg_confirm_ssh_server_might_be_necessary='Se é a primeira vez que acessa este 
 msg_ocs_img_dir_path='O diretório onde a imagem Clonezilla será salva ou de onde será lida'
 msg_enter_another_shell_hint_with_netcfg_prompt='Abrir outro shell. Se você precisa configurar a rede, pode usar o comando "ocs-live-netcfg". Quando tudo estiver pronto, execute "exit" para voltar ao programa original.'
 msg_existing_setting_is='A configuração existente é'
-msg_start_clonezilla='Iniciar Clonezilla'
+msg_start_clonezilla='Iniciar o Clonezilla'
 msg_start_clonezilla_or_enter_shell='Iniciar Clonezilla ou entrar login shell (linha de comandos)?'
 msg_writable_dev_ex_usb_stick='Dispositivo de escrita (ex.: disco/unidade USB)'
 msg_writable_fs_ex_nfs_smbfs='Disco de rede de escrita (ex.: NFS/SMBFS)'
@@ -602,12 +602,12 @@ msg_df_report='O uso do espaço em disco do sistema de arquivos'
 msg_hint_assign_IP_group="Dica 1: Você pode criar um grupo de endereços IP adicionando arquivos $drbl_syscfg/IP-grp-*, listando os endereços IP no arquivo um por linha. Substitua o * do nome do arquivo por qualquer caractere, como um 1, DX."
 msg_hint_assign_MAC_group="Dica 2: Você pode criar um grupo de endereços MAC adicionando arquivos $drbl_syscfg/MAC-grp-*, listando os endereços MAC no arquivo um por linha. Substitua o * do nome do arquivo por qualquer caractere, como um 1, DX."
 msg_device_image_device_clone='Dois modos estão disponíveis, você pode: \n(1) clonar ou restaurar disco/partição usando uma imagem \n(2) clonar ou restaurar de disco a outro disco ou de partição a outra partição'
-msg_device_image_clone='trabalhar com disco/partição usando imagens'
-msg_device_device_clone='trabalhar diretamente de disco para disco ou partição para partição'
-msg_disk_to_local_disk='clonagem de disco local para disco local'
-msg_disk_to_remote_disk='clonagem de disco local para disco remoto'
-msg_part_to_local_part='clonagem de partição local para partição local'
-msg_part_to_remote_part='clonagem de partição local para partição remota'
+msg_device_image_clone='Trabalhar com disco/partição usando imagens'
+msg_device_device_clone='Trabalhar diretamente de disco para disco ou partição para partição'
+msg_disk_to_local_disk='Clonagem de disco local para disco local'
+msg_disk_to_remote_disk='Clonagem de disco local para disco remoto'
+msg_part_to_local_part='Clonagem de partição local para partição local'
+msg_part_to_remote_part='Clonagem de partição local para partição remota'
 msg_local_source_disk='Escolha disco local de origem.'
 msg_local_target_disk='Escolha disco local de destino (OS DADOS EXISTENTES NO DISCO DE DESTINO SERÃO SOBRESCRITOS!!)'
 msg_local_source_part='Escolha partição local de origem.'
@@ -624,7 +624,7 @@ msg_only_i686_kernel_available_in_centos_5='Por enquanto, somente o núcleo i686
 msg_do_you_want_to_clean_all_stale_mac_cfg="Alguns antigos arquivos de configuração estilo MAC pxelinux se encontram em $PXELINUX_DIR e, considerando que não há registro de endereços MAC no dhcpd.conf, não é possível limpar os arquivos antigos baseados em endereços IP. Deseja limpá-los para evitar problemas? \nNota! Se a resposta é sim, isto pode afetar a outros clientes. Se não se preocupa com outros clientes, é melhor dizer sim já que sempre poderá utilizar dcs para alterar o modo para os clientes. Se recomenda (1) Parar Clonezilla com dcs antes de usar este modo para escolher clientes específicos. (2) Usar endereços MAC em seu dhcpd.conf."
 msg_something_went_wrong_when_start_drbl_related_srv='Alguma coisa falhou ao iniciar os serviços relacionados ao DRBL!'
 msg_you_can_try_to_run_the_following_again='Pode tentar executar o seguinte outra vez:'
-msg_try_drblsrv_offline="Se tem certeza de que esta distribuição GNU/Linux é compatível com as distribuições às quais DRBL oferece suporte, pode tentar usar drblsrv-offline. Para mais detalhes, consulte o website DRBL ou execute \"drblsrv-offline -h\""
+msg_try_drblsrv_offline="Se tem certeza de que esta distribuição GNU/Linux é compatível com as distribuições às quais DRBL oferece suporte, pode tentar usar drblsrv-offline. Para mais detalhes, consulte o website DRBL ou execute 'drblsrv-offline -h'"
 msg_very_unstable='MUITO INSTÁVEL'
 msg_not_stable='NÃO ESTÁVEL'
 msg_not_secure='Não seguro'
@@ -897,7 +897,7 @@ msg_ocs_use_system_default='Usar padrão do sistema'
 msg_ocs_use_ntlm_mode='Usar hash de senha de NTLM (modo mais fraco e mais velho, para alguns NAS)'
 msg_you_must_input_the_ssh_port='Você deve inserir o número da porta do serviço SSH!'
 # Tag on 2013/08/31
-msg_prompt_for_insert_USB_dev_if_necessary="Se deseja usar um dispositivo USB como repositório de imagem Clonezilla, por favor\n * insira o dispositivo USB nesta máquina *AGORA*.\n * Espere uns 5 segundos e \n * pressione Enter \npara que o S.O. detecte o dispositivo USB e possa montá-lo como $ocsroot."
+msg_prompt_for_insert_USB_dev_if_necessary="Se deseja usar um dispositivo USB como repositório de imagem Clonezilla, por favor\n * insira o dispositivo USB nesta máquina *AGORA*.\n * espere uns 5 segundos e \n * pressione Enter \npara que o S.O. detecte o dispositivo USB e possa montá-lo como $ocsroot."
 msg_do_not_close_window_until_clone_finish='///NOTA/// \nNÃO FECHE ESTA JANELA ATÉ QUE OS CLIENTES TERMINEM DE CLONAR! \nEsta janela deve permanecer aberta para que os serviços gerados pelo Clonezilla possam funcionar e mostrar resultados.'
 # Tag on 2013/12/08
 msg_the_image_to_be_convert='A imagem a ser convertida'
@@ -1000,7 +1000,7 @@ msg_local_source_disk_for_checksum_inspect='Escolha o disco local para inspecion
 msg_choose_the_image_to_be_checked_for_checksum='Escolha a imagem para inspecionar a soma de verificação na imagem e os arquivos na partição ou disco (apenas imagens com soma de verificação são mostradas). //NOTA// Alguns arquivos de inspeção de soma de verificação podem falhar como, por exemplo, se você escolher deixar o Clonezilla reinstalar o "boot loader" grub, o arquivo /boot/grub/core.img será diferente.'
 # Tag on 2016/06/14
 msg_failed_to_clone_the_boot_loader_on_EBR='Falha ao clonar o "boot loader" para a partição estendida'
-msg_ocs_param_t2='Clienta pulou a restauração da EBR (registro de inicialização estendida)'
+msg_ocs_param_t2='Cliente pulou a restauração da EBR (registro de inicialização estendida)'
 # Tag on 2016/07/03
 msg_parent_directory='Diretório pai'
 msg_dir_browser_for_img='Explorador do diretório pai para repositório de imagem do Clonezilla'
@@ -1076,7 +1076,7 @@ msg_ocs_use_smbv2_1='Protocolo SMB 2.1'
 msg_ocs_use_smbv3_0='Protocolo SMB 3.0'
 msg_you_must_select_a_ver='Você deve selecionar uma versão!'
 # Tag on 2017/09/24
-msg_lite_server_and_client_are_provided='Além disso, Modos servidor e cliente do Clonezilla lite também estão disponíveis. Você pode usá-los para implantação massiva'
+msg_lite_server_and_client_are_provided='Além disso, os modos servidor e cliente do Clonezilla lite também estão disponíveis. Você pode usá-los para implantação massiva'
 # Tag on 2017/12/02
 msg_ocs_param_z8='compressão lz4 (Rápida, mas também imagem maior)'
 # Tag on 2017/12/27
@@ -1094,9 +1094,9 @@ msg_secure_boot_for_clients_is_enabled='Secure Boot UEFI para clientes está hab
 # Tag on 2019/01/08
 msg_ocs_live_lite_server_des='O servidor Clonezilla live lite é um modo de serviço do Clonezilla, que executa o serviço de multicast/broadcast para máquinas clientes. Portanto, é mais fácil usar no ambiente de rede existente, porque ele pode se ajustar ao ambiente de rede sem alterar as configurações de rede existentes na LAN. Se você usar isso em um ambiente de rede isolado sem comunicação com o upstream, esse servidor Lite executará seu próprio serviço DHCP e PXE. Você pode inicializar as máquinas clientes com a mesma versão do Clonezilla live, usando a unidade flash CD/USB ou o PXE para restaurar a imagem fornecida por este servidor lite.'
 msg_img_massive_deploy='Implantação massiva de uma imagem'
-msg_dev_massive_deploy='Implantação massiva diretamente de partição(ões) ou disco(s) (BT apenas)'
-msg_disk_to_mdisk_by_BT='Disco(s) para discos de várias máquinas usando protocolo BT'
-msg_part_to_mpart_by_BT='Parte(s) para partições de várias máquinas usando protocolo BT'
+msg_dev_massive_deploy='Implantação massiva diretamente de partição(ões) ou disco(s) (BitTorrent apenas)'
+msg_disk_to_mdisk_by_BT='Disco(s) para discos de várias máquinas usando protocolo BitTorrent'
+msg_part_to_mpart_by_BT='Parte(s) para partições de várias máquinas usando protocolo BitTorrent'
 msg_save_temp_img_for_BT='Antes de conduzir implantação massiva diretamente de um dispositivo de origem, ainda precisamos salvar o dispositivo de origem como uma imagem temporária.'
 # Tag on 2019/01/12
 msg_img_repo_is_using_tmpfs='O repositório de imagem está usando tmpfs (RAM como disco).'
@@ -1126,134 +1126,134 @@ msg_ocs_onthefly_param_ps="Reproduzir som quando a tarefa estiver concluída"
 msg_ocs_param_z9='compressão zstd'
 msg_ocs_param_z9p='compressão zstdmt'
 # Tag on 2020/08/09
-msg_locale_ko_KR='Korean'
+msg_locale_ko_KR='Coreano'
 # Tag on 2020/09/10
 msg_ocs_onthefly_param_rvd='Remove NTFS volume dirty flag in source NTFS file system before cloning it'
 # Tag on 2020/10/02
-msg_ocs_onthefly_param_t='Skip cloning the MBR (Master Boot Record)'
-msg_ocs_onthefly_param_t1='Clone the prebuilt bootloader from syslinux (For Windows only)'
-msg_ocs_onthefly_param_t2='Skip cloning the EBR (Extended Boot Record)'
-msg_choose_net_pipe_program='Choose the network pipe program when cloning over network'
-msg_ocs_onthefly_param_netcat='Use netcat when cloning over network'
-msg_ocs_onthefly_param_nuttcp='Use nuttcp when cloning over network'
+msg_ocs_onthefly_param_t='Ignorar a clonagem do MBR (Master Boot Record)'
+msg_ocs_onthefly_param_t1='Clonar o carregador de inicialização pré-compilado do syslinux (somente para Windows)'
+msg_ocs_onthefly_param_t2='Ignorar a clonagem do EBR (Extended Boot Record)'
+msg_choose_net_pipe_program='Escolha o programa de pipe de rede ao clonar pela rede'
+msg_ocs_onthefly_param_netcat='Usar o netcat ao clonar pela rede'
+msg_ocs_onthefly_param_nuttcp='Use o nuttcp ao clonar pela rede'
 # Tag on 2020/12/31
-msg_ocs_use_smbv3_11='SMB protocol 3.11 or 3.1.1'
-msg_ocs_use_smb_auto='Auto negotiate SMB protocol'
+msg_ocs_use_smbv3_11='Protocolo SMB 3.11 ou 3.1.1'
+msg_ocs_use_smb_auto='Negociação automática do protocolo SMB'
 # Tag on 2021/01/18
-msg_choose_if_fsck_the_repo_part='Choose if you want to check and repair the file system before mounting the image repository. This option is only for certain file systems which are well supported by fsck on GNU/Linux, like ext2/3/4, reiserfs, xfs, jfs, vfat. Not for NTFS, HFS+...'
-msg_skip_check_repo_fs='Skip checking/repairing the file system before mounting'
-msg_ocs_param_fsck_repo_part='Interactively check and repair the file system before mounting'
-msg_ocs_param_fsck_repo_part_yes='Auto (Caution!) check and repair file system before mounting'
-msg_not_this_is_for_mount_repository='//NOTE// This is for mounting local storage device as an image repository!'
+msg_choose_if_fsck_the_repo_part='Escolha se deseja verificar e reparar o sistema de arquivos antes de montar o repositório de imagens. Esta opção é válida apenas para determinados sistemas de arquivos bem suportados pelo fsck no GNU/Linux, como ext2/3/4, reiserfs, xfs, jfs e vfat. Não é compatível com NTFS, HFS+, etc.'
+msg_skip_check_repo_fs='Ignorar a verificação/reparo do sistema de arquivos antes da montagem'
+msg_ocs_param_fsck_repo_part='Verificar e reparar o sistema de arquivos interativamente antes de montar'
+msg_ocs_param_fsck_repo_part_yes='Verificar e reparar automaticamente (cuidado!) o sistema de arquivos antes da montagem.'
+msg_not_this_is_for_mount_repository='//NOTA// Isso serve para montar um dispositivo de armazenamento local como um repositório de imagens!'
 # Tag on 2021/03/06
-msg_ocs_param_ssnf='Skip setting 1st boot device as network in uEFI netboot client NVRAM'
-msg_ocs_param_scpt='Skip checking the partition table of the source disk is MBR or GPT format'
+msg_ocs_param_ssnf='Ignorar a configuração do primeiro dispositivo de inicialização como rede na NVRAM do cliente UEFI de inicialização de rede'
+msg_ocs_param_scpt='Ignorar a verificação de se a tabela de partições do disco de origem está no formato MBR ou GPT'
 # Tag on 2021/03/09
-msg_B2SUMS_check_failed='BLAKE2 checksums did NOT match!'
-msg_B3SUMS_check_failed='BLAKE3 checksums did NOT match!'
-msg_ocs_param_gb2='Generate image BLAKE2 checksums'
-msg_ocs_param_cb2='Check image by BLAKE2 checksums'
-msg_ocs_param_gb3='Generate image BLAKE3 checksums'
-msg_ocs_param_cb3='Check image by BLAKE3 checksums'
+msg_B2SUMS_check_failed='As somas de verificação BLAKE2 NÃO coincidiram!'
+msg_B3SUMS_check_failed='As somas de verificação BLAKE3 NÃO coincidiram!'
+msg_ocs_param_gb2='Gerar somas de verificação BLAKE2 da imagem'
+msg_ocs_param_cb2='Verificar imagem por meio de somas de verificação BLAKE2'
+msg_ocs_param_gb3='Gerar somas de verificação BLAKE3 da imagem'
+msg_ocs_param_cb3='Verificar imagem por meio de somas de verificação BLAKE3'
 # Tag on 2021/03/15
-msg_list_local_device_mode='Which mode do you want to list the block devices on this machine? If you have no idea, choose "disk_or_part". Do _NOT_ choose "both_type_dev" unless you know what you are doing. Basically "both_type_dev" is for you to force choosing the block device which is not listed as it is. For example, you want to save the block device /dev/sda but it is not shown in "saveparts" mode since it is a disk device name, not a partition device name.'
-msg_list_disk_or_part_mode='Separate disk(s) and partition(s)'
-msg_list_both_type_device_mode='List both types of block devices together, i.e., show disk(s) and partition(s) simultaneously'
+msg_list_local_device_mode='Em qual modo você deseja listar os dispositivos de bloco nesta máquina? Se não tiver certeza, escolha "disk_or_part". _NÃO_ escolha "both_type_dev" a menos que saiba o que está fazendo. Basicamente, "both_type_dev" serve para forçar a seleção do dispositivo de bloco que não está listado como está. Por exemplo, você deseja salvar o dispositivo de bloco /dev/sda, mas ele não é exibido no modo "saveparts" porque é um nome de dispositivo de disco, não um nome de dispositivo de partição.'
+msg_list_disk_or_part_mode='Separar disco(s) e partições(s)'
+msg_list_both_type_device_mode='Listar os dois tipos de dispositivos de bloco juntos, ou seja, mostrar o(s) disco(s) e a(s) partição(ões) simultaneamente.'
 # Tag on 2021/07/22
 msg_press_space_to_mark_selection='Pressione a barra de espaço para selecionar. Um asterisco(*) aparecerá quando a seleção for feita'
 # Tag on 2021/08/28
-msg_reserved_img_names="Some reserved image names have special meanings, including \"ask_user\", \"autoname\", \"autoname-*\" \"autohostname\", and \"autoproductname\". Please check Clonezilla website for more details."
+msg_reserved_img_names="Alguns nomes de imagens reservados têm significados especiais, incluindo 'ask_user', 'autoname', 'autoname-*', 'autohostname' e 'autoproductname'. Consulte o site do Clonezilla para obter mais detalhes."
 # Tag on 2021/10/25
-msg_choose_wired_or_wireless="Both wired and wireless network devices were detected. Which type do you want to use?"
-msg_use_wired="Use wired network device"
-msg_use_wireless="Use wireless network device"
-msg_nic_status_on_sytem="Network device and status detected on this system:"
+msg_choose_wired_or_wireless="Foram detectados dispositivos de rede cabeada e de rede sem fio. Qual tipo você deseja usar?"
+msg_use_wired="Usar dispositivo de rede cabeada"
+msg_use_wireless="Usar dispositivo de rede sem fio"
+msg_nic_status_on_sytem="Dispositivo de rede e estado detectados neste sistema:"
 # Tag on 2021/12/04
 msg_set_image_volume_size='O tamanho em MB para dividir o arquivo de imagem de partição em vários volumes de arquivos. Por favor, digite um número maior que 10. Se não deseja dividir o arquivo de imagem, digite um número muito grande como, por exemplo, "1000000". Por favor, jamais use "0", pois se sua distribuição de GNU/Linux usa o novo /sbin/init na inicialização, ela se confundirá com esse "0". //NOTA// Para o repositório de imagem FAT32, o número não deve ser maior que 4000.'
 # Tag on 2022/02/03
-msg_found_luks_dev='Found LUKS device'
-msg_prompt_for_open_luks_dev='We have to open LUKS device now. You will be prompted to enter passphrase for each one of them.'
-msg_luks_mapped_name_not_found_in_this_file='The LUKS mapped device name was not found in this file'
-msg_name_it_arbitrarily_restered_os_boot_might_fail='Will name it arbitrarily. However, if the restored OS depends on that specified name, it might fail to boot.'
-msg_now_open_luks_dev='Now open the LUKS device'
-msg_luks_header_file_found='LUKS header file found'
-msg_luks_header_file_not_found='LUKS header file not found'
-msg_luks_crypttab_file_found='LUKS crypttab file found'
-msg_luks_crypttab_file_not_found='LUKS crypttab file not found'
-msg_this_partition_table_file_found='The partition table file for this disk was found'
+msg_found_luks_dev='Encontrado dispositivo LUKS'
+msg_prompt_for_open_luks_dev='Agora precisamos abrir dispositivo LUKS. Você será solicitado a inserir a senha para cada um deles.'
+msg_luks_mapped_name_not_found_in_this_file='O nome do dispositivo mapeado LUKS não foi encontrado neste arquivo.'
+msg_name_it_arbitrarily_restered_os_boot_might_fail='Vou atribuir um nome aleatório. No entanto, se o sistema operacional restaurado depender desse nome especificado, ele pode falha em inicializar.'
+msg_now_open_luks_dev='Agora abrir o dispositivo LUKS...'
+msg_luks_header_file_found='Arquivo de cabeçalho LUKS encontrado'
+msg_luks_header_file_not_found='Arquivo de cabeçalho LUKS não encontrado'
+msg_luks_crypttab_file_found='Arquivo crypttab LUKS encontrado'
+msg_luks_crypttab_file_not_found='Arquivo crypttab LUKS não encontrado'
+msg_this_partition_table_file_found='O arquivo de tabela de partições para este disco foi encontrado'
 # Tag on 2022/05/02
-msg_found_luks_do_you_want_open_it='Found LUKS device. Do you want to open it?'
-msg_if_yes_open_luks='If yes, you will be prompted to enter passphrase to open the LUKS device later.'
-msg_if_no_dd_mode_will_be_used='If no, the LUKS device will not be opened, and sector-by-sector (dd) mode of Clonezilla will be used.'
+msg_found_luks_do_you_want_open_it='Encontrado dispositivo LUKS. Você deseja abri-lo?'
+msg_if_yes_open_luks='Caso afirmativo, você será solicitado a inserir uma senha para abrir o dispositivo LUKS posteriormente.'
+msg_if_no_dd_mode_will_be_used='Caso contrário, o dispositivo LUKS não será aberto e o modo setor por setor (dd) do Clonezilla será utilizado.'
 # Tag on 2022/05/09
-msg_open_luks_dev='Open the LUKS device'
-msg_do_not_open_luks_dev='Do not open the LUKS device'
+msg_open_luks_dev='Abrir o dispositivo LUKS'
+msg_do_not_open_luks_dev='Não abrir o dispositivo LUKS'
 # Tag on 2022/07/04
-msg_ocs_param_sfs='Skip partition file system saving'
+msg_ocs_param_sfs='Ignorar salvamento do sistema de arquivos de partição'
 # Tag on 2022/09/10
-msg_choose_default_param_if_no_idea='If you have no idea, keep the default values and do NOT change anything. Just press Enter.'
-msg_hint_for_fdisk_beginner='Choose the mode to create the partition table on the target disk: ***ATTENTION***(1) TO CREATE A NEW PARTITION TABLE ON THE TARGET DISK. ALL THE DATA ON THE TARGET DEVICE WILL BE ERASED!!! (2) Clonezilla will not restore an image from a large disk (partition) to a smaller disk (partition). However, it can restore an image from a small disk (partition) to a larger disk (partition).'
+msg_choose_default_param_if_no_idea='Se você não tiver ideia, mantenha os valores padrão e NÃO altere nada. Basta pressionar Enter.'
+msg_hint_for_fdisk_beginner='Escolha o modo para criar a tabela de partições no disco de destino: ***ATENÇÃO*** (1) PARA CRIAR UMA NOVA TABELA DE PARTIÇÕES NO DISCO DE DESTINO, TODOS OS DADOS NO DISPOSITIVO DE DESTINO SERÃO APAGADOS!!! (2) O Clonezilla não restaurará uma imagem de um disco (partição) grande para um disco (partição) menor. No entanto, ele pode restaurar uma imagem de um disco (partição) pequeno para um disco (partição) maior.'
 # Tag on 2022/09/27
-msg_hint_for_onthefly_fdisk_beginner='Choose the mode to create the partition table on the target disk: ***ATTENTION***(1) TO CREATE A NEW PARTITION TABLE ON THE TARGET DISK. ALL THE DATA ON THE TARGET DEVICE WILL BE ERASED!!! (2) Clonezilla will not clone a large disk (partition) to a smaller disk (partition). However, it can clone a small disk (partition) to a larger disk (partition).'
+msg_hint_for_onthefly_fdisk_beginner='Escolha o modo para criar a tabela de partições no disco de destino: ***ATENÇÃO*** (1) PARA CRIAR UMA NOVA TABELA DE PARTIÇÕES NO DISCO DE DESTINO, TODOS OS DADOS NO DISPOSITIVO DE DESTINO SERÃO APAGADOS!!! (2) O Clonezilla não clonará um disco (partição) grande para um disco (partição) menor. No entanto, ele pode clonar um disco (partição) pequeno para um disco (partição) maior.'
 # Tag on 2023/01/24
-msg_failed_to_open_this_luks_dev='Failed to open this LUKS device:'
-msg_do_you_want_to_try_to_open_it_again='Do you want to try to open it again?'
-msg_if_yes_open_luks_again='If yes, you will be prompted to enter passphrase to open the LUKS device again.'
+msg_failed_to_open_this_luks_dev='Falha ao abrir este dispositivo LUKS:'
+msg_do_you_want_to_try_to_open_it_again='Você deseja tentar abri-lo novamente?'
+msg_if_yes_open_luks_again='Se sim, você será solicitar a inserir a senha para abrir o dispositivo LUKS novamente.'
 # Tag on 2023/10/05
-msg_ocs_param_edio='Enable the direct IO mode of Partclone for NVMe SSD'
-msg_ocs_onthefly_param_edio='Enable the direct IO mode of Partclone for NVMe SSD'
+msg_ocs_param_edio='Habilitar o modo E/S direto do Partclone para o SSD NVMe'
+msg_ocs_onthefly_param_edio='Habilitar o modo E/S direto do Partclone para o SSD NVMe'
 # Tag on 2024/01/13
-msg_prompt_remove_gnome_initial_setup='YP is used in DRBL clients, so gnome-initial-setup is annoying and not required. It is recommended to remove it.'
+msg_prompt_remove_gnome_initial_setup='YP é usado em clientes DRBL, então "gnome-initial-setup" é só um incômodo e não obrigatório. É recomendável removê-lo.'
 # Tag on 2024/09/28
-msg_mount_ramdisk='Usar memória (OK para BT de dispositivo não tratado)'
+msg_mount_ramdisk='Usar memória (recomendado para BitTorrent ou multicast de um dispositivo bruto)'
 # Tag on 2025/02/08
 msg_choose_param_to_set_multiple_choices='Configurar parâmetros avançados (opções múltiplas disponíveis). Se não tem ideia, deixe o valor padrão e NÃO mude nada. Somente pressione Enter.'
 msg_choose_param_to_set_single_choice='Configurar parâmetros avançados. Se não tem ideia, deixe o valor padrão e NÃO mude nada. Somente pressione Enter.'
-msg_put_log_usb_or_not='Do you want to copy the log files to Clonezilla live USB drive if it exists in this machine?'
-msg_put_log_to_OCS_USB_drive='Yes, copy log files to Clonezilla live USB drive if it exists'
-msg_not_put_log_to_OCS_USB_drive='No, do not copy log files to Clonezilla live USB drive even if it exists'
+msg_put_log_usb_or_not='Você deseja copiar os arquivos de log para a unidade USB do Clonezilla, caso ela exista nesta máquina?'
+msg_put_log_to_OCS_USB_drive='Sim, copiar os arquivos de log para a unidade USB do Clonezilla se ela existir'
+msg_not_put_log_to_OCS_USB_drive='Não, não copiar os arquivos de log para a unidade USB do Clonezilla ainda que ela exista'
 # Tag on 2025/07/10
-msg_time_sync_via_internet='Do you want to sync the time of this computer via internet?'
+msg_time_sync_via_internet='Você tem certeza que deseja sincronizar o horário deste computador pela internet?'
 # Tag on 2025/07/19
-msg_live_system_time_sync='Do you want to synchronize the time on this Clonezilla live system?'
-msg_no_net_so_set_timezone_manually='No internet connection. Use the time got from BIOS when booting. Need time zone info.'
-msg_next_choose_timezone='Please choose your time zone in the next dialog menu if you want.'
+msg_live_system_time_sync='Você deseja sincronizar o horário deste sistema Clonezilla live?'
+msg_no_net_so_set_timezone_manually='Sem conexão com a internet. Usar o horário obtido da BIOS ao inicializar. Precisa de informações do fuso horário.'
+msg_next_choose_timezone='Escolha seu fuso horário no próximo menu de diálogo se assim desejar.'
 # Tag on 2025/07/21
-msg_current_time_on_this_system='Current time on this live system:'
+msg_current_time_on_this_system='Horário atual neste sistema live:'
 # Tag on 2025/09/22
-msg_disk_to_mdisk='Directly clone source disk(s) to that of multiple machines'
-msg_part_to_mpart='Directly clone source partition(s) to that of multiple machines'
+msg_disk_to_mdisk='Clonar diretamente o(s) disco(s) de origem para várias máquinas'
+msg_part_to_mpart='Clonar diretamente a(s) partição(ões) de origem para várias máquinas.'
 # Tag on 2025/10/05
-msg_ocs_param_rmtd="Restore MTD block device (/dev/mtdblock*)"
-msg_ocs_param_rmmcb="Restore eMMC boot device (/dev/mmcblk*boot*)"
+msg_ocs_param_rmtd="Restaurar o dispositivo de bloco MTD (/dev/mtdblock*)"
+msg_ocs_param_rmmcb="Restaurar o dispositivo de inicialização eMMC (/dev/mmcblk*boot*)"
 # Tag on 2025/10/17
-msg_ocs_param_smtd="Save MTD block device (/dev/mtdblock*)"
-msg_ocs_param_smmcb="Save eMMC boot device (/dev/mmcblk*boot*)"
+msg_ocs_param_smtd="Salvar o dispositivo de bloco MTD (/dev/mtdblock*)"
+msg_ocs_param_smmcb="Salvar o dispositivo de inicialização eMMC (/dev/mmcblk*boot*)"
 # Tag on 2025/11/06
-msg_using_bitlocker="This BitLocker partition has been successfully decrypted. Clonezilla will now save the **decrypted** data."
-msg_bitlocker_disclaimer_00="Found BitLocker-encrypted device:"
-msg_bitlocker_disclaimer_01="You have two options:"
-msg_bitlocker_disclaimer_02="(1) Back up the **encrypted** data (as-is). This is slower and compression will be ineffective."
-msg_bitlocker_disclaimer_03="(2) Back up the **decrypted** data. This requires the encryption key/password, but it is faster and compression will work normally."
-msg_bitlocker_disclaimer_04="If you back up the decrypted data, the restored device will **not** be encrypted. You must re-enable BitLocker in Windows on the target machine after restoring."
-msg_bitlocker_disclaimer_05="This process will **not** change the original device. It will remain encrypted on this machine, regardless of your choice."
-msg_bitlocker_disclaimer_06="This feature is intended **only for NTFS** devices. Do **not** use it with Resilient File System (ReFS), as it will not work."
-msg_bitlocker_disclaimer_07="This is **separate** from Clonezilla's own backup encryption. If you enabled Clonezilla's encryption, your final backup *file* will still be encrypted."
-msg_bitlocker_disclaimer_08="Do you want to back up the **decrypted** data from the BitLocker partition? (If unsure, choose No)"
-msg_bitlocker_request_password="Please enter your BitLocker password, recovery key, or clear key:"
-msg_bitlocker_use_recovery_password="Attempting to unlock using the provided key as a **recovery password**..."
-msg_bitlocker_use_user_password="Attempting to unlock using the provided key as a **user password**..."
-msg_bitlocker_password_not_work="The key/password did not work. Please try again."
-msg_bitlocker_backup_decrypted_data="OK, let's back up the **decrypted** data from the BitLocker partition."
-msg_bitlocker_backup_encrypted_data="OK, let's back up the **encrypted** data from the BitLocker partition."
-msg_decrypt_bitlocker_dev="Decrypt the BitLocker partition on this machine"
-msg_do_not_decrypt_bitlocker_dev="Do not decrypt the BitLocker partition on this machine"
-msg_bitlocker_ask_for_passwd_01="You now need to type the BitLocker password for"
-msg_bitlocker_ask_for_passwd_02="First, please choose: "
-msg_bitlocker_ask_for_passwd_03="1 - To type the password and NOT have it shown on the screen"
-msg_bitlocker_ask_for_passwd_04="2 - To type the password and have it shown on the screen"
-msg_bitlocker_ask_for_passwd_05="3 - To skip typing the password and doing the backup of the **encrypted** data (as-is)"
-msg_please_choose_1_2_3="Please choose 1, 2 or 3:"
-msg_bitlocker_not_decrypting_this_partition="OK, we not going to decrypt this BitLocker partition."
+msg_using_bitlocker="Esta partição BitLocker foi descriptografada com sucesso. O Clonezilla agora salvará os dados **descriptografados**."
+msg_bitlocker_disclaimer_00="Encontrado dispositivo criptografado com BitLocker:"
+msg_bitlocker_disclaimer_01="Você tem duas opções:"
+msg_bitlocker_disclaimer_02="(1) Fazer backup dos dados **criptografados** (como estão). Este método é mais lento e a compressão será ineficaz."
+msg_bitlocker_disclaimer_03="(2) Fazer backup dos dados **descriptografados**. Isso requer a chave/senha de criptografia, mas é mais rápido e a compressão funcionará normalmente."
+msg_bitlocker_disclaimer_04="Se você fizer backup dos dados descriptografados, o dispositivo restaurado **não** estará criptografado. Você deve re-habilitar o BitLocker no Windows na máquina de destino após restaurá-la."
+msg_bitlocker_disclaimer_05="Esse processo **não** vai alterar o dispositivo original. Ele permanecerá criptografado nesta máquina, independentemente da sua escolha."
+msg_bitlocker_disclaimer_06="Este recurso é destinado **somente para dispositivos NTFS**. **Não** use-o com Resilient File System (ReFS), pois isso não vai funcionar."
+msg_bitlocker_disclaimer_07="Isso está **separado** da criptografia de backup do próprio Clonezilla. Se você habilitou criptografia do Clonezilla, seu *arquivo* de backup final ainda será criptografado."
+msg_bitlocker_disclaimer_08="Se você deseja fazer backup dos dados **descriptografados** da partição BitLocker? (Na incerteza, escolha Não)"
+msg_bitlocker_request_password="Insira a senha BitLocker, chave de recuperação ou limpar chave:"
+msg_bitlocker_use_recovery_password="Tentando abrir usando a chave fornecida como uma **senha de recuperação**..."
+msg_bitlocker_use_user_password="Tentando abrir usando a chave fornecida como uma **senha de usuário**..."
+msg_bitlocker_password_not_work="A chave/senha não funcionou. Por favor, tente novamente."
+msg_bitlocker_backup_decrypted_data="OK, vamos fazer backup dos dados **descriptografados** da partição BitLocker."
+msg_bitlocker_backup_encrypted_data="OK, vamos fazer backup dos dados **criptografados** da partição BitLocker."
+msg_decrypt_bitlocker_dev="Descriptografar a partição BitLocker nesta máquina"
+msg_do_not_decrypt_bitlocker_dev="Não descriptografar a partição BitLocker nesta máquina"
+msg_bitlocker_ask_for_passwd_01="Vocẽ agora precisa digitar a senha BitLocker para"
+msg_bitlocker_ask_for_passwd_02="Primeiro, escolha: "
+msg_bitlocker_ask_for_passwd_03="1 - Digitar a senha e que ela NÃO seja mostrada na tela"
+msg_bitlocker_ask_for_passwd_04="2 - Digitar a senha e que ela seja mostrada na tela"
+msg_bitlocker_ask_for_passwd_05="3 - Pular etapa de digitar a senha e fazer o backup dos dados **criptografados** (como estão)"
+msg_please_choose_1_2_3="Escolha 1, 2 or 3:"
+msg_bitlocker_not_decrypting_this_partition="OK, não vamos descriptografar esta partição BitLocker."
 # 2026/01/11
-msg_ocs_param_reluks="Reencrypt LUKS encrypted volumes (change master key) in the destination device"
+msg_ocs_param_reluks="Recriptografar volumes LUKS criptografados (altera a chave mestra) no dispositivo de destino"
