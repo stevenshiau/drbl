@@ -1,3 +1,12 @@
+drbl (5.7.12-drbl1) unstable; urgency=medium
+
+  * Include makeboot64.cmd instead of makeboot64.bat in live system.
+  * Update Brazilian Portuguese translation.
+    Thanks to Rafael Fontenelle.
+    Ref: https://gitlab.com/stevenshiau/drbl/-/merge_requests/14#note_3049004839
+
+ -- Steven Shiau <steven@clonezilla.org>  Sun, 01 Feb 2026 15:57:06 +0800
+
 drbl (5.7.11-drbl1) unstable; urgency=medium
 
   * Added the option "-reluks" in expert mode in TUI.
