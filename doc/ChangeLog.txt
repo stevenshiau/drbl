@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (5.8.1-drbl1) unstable; urgency=medium
+
+  * Updated language files for bcdboot command prompt.
+  * Make sure it works for Debian 13.3.
+
+ -- Steven Shiau <steven@clonezilla.org>  Mon, 16 Feb 2026 15:48:30 +0800
+
 drbl (5.7.12-drbl1) unstable; urgency=medium
 
   * Include makeboot64.cmd instead of makeboot64.bat in live system.
