@@ -1256,4 +1256,6 @@ msg_bitlocker_ask_for_passwd_05="3 - To skip typing the password and doing the b
 msg_please_choose_1_2_3="Please choose 1, 2 or 3:"
 msg_bitlocker_not_decrypting_this_partition="OK, we not going to decrypt this BitLocker partition."
 # 2026/01/11
-msg_ocs_param_reluks="Reencrypt LUKS encrypted volumes (change master key) in the destination device"
+msg_ocs_param_reluks='Reencrypt LUKS encrypted volumes (change master key) in the destination device'
+# 2026/02/15
+msg_run_cmd_from_MS_rescue_mode='You may need to run the following command from **MS Windows Rescue Mode** after the system has been cloned or restored.'
