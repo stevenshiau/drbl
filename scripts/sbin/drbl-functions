@@ -1776,6 +1776,7 @@ set_drbl_ocs_extra_param() {
       echo "-q2 " >> $OCS_PARAM_TMP
     fi
   
+    get_smtd_smmcb_switch  # Obtain smtd_smmcb_switch
     if [ "$ocs_user_mode" = "expert" ]; then
       $DIA --separate-output --backtitle "$msg_nchc_free_software_labs" --title  \
       "$msg_clonezilla_advanced_extra_param | $msg_mode: $ocs_mode_prompt" --checklist "$msg_choose_param_to_set_multiple_choices ($msg_press_space_to_mark_selection):" \
@@ -1802,11 +1803,14 @@ set_drbl_ocs_extra_param() {
       "-scpt "     "$msg_ocs_param_scpt" off \
       "-sfs "      "$msg_ocs_param_sfs" off \
       "-edio "     "$msg_ocs_param_edio" on \
-      "-smtd "     "$msg_ocs_param_smtd" on \
-      "-smmcb "    "$msg_ocs_param_smmcb" on \
+      "-smtd "     "$msg_ocs_param_smtd" $smtd_smmcb_switch \
+      "-smmcb "    "$msg_ocs_param_smmcb" $smtd_smmcb_switch \
       2>> $OCS_PARAM_TMP
     else
-      echo "-j2 " "-edio " >> $OCS_PARAM_TMP
+      case "$smtd_smmcb_switch" in
+         on) echo "-j2 " "-edio " "-smtd " "-smmcb " >> $OCS_PARAM_TMP;;
+        off) echo "-j2 " "-edio " >> $OCS_PARAM_TMP;;
+      esac
     fi
     # Question about fsck the source partition. By default, no matter it's beginner or advanced mode, we will ask.
     if [ -z "$fsck_src_part_intr" -a -z "$fsck_src_part_auto" ]; then
@@ -2159,6 +2163,7 @@ else
     echo "-q2 " >> $OCS_PARAM_TMP
   fi
 
+  get_smtd_smmcb_switch  # Obtain smtd_smmcb_switch
   if [ "$ocs_user_mode" = "expert" ]; then
     $DIA --separate-output --backtitle "$msg_nchc_free_software_labs" --title  \
     "$msg_clonezilla_advanced_extra_param | $msg_mode: $ocs_mode_prompt" --checklist "$msg_choose_param_to_set_multiple_choices ($msg_press_space_to_mark_selection):" \
@@ -2181,11 +2186,14 @@ else
     "-scpt "    "$msg_ocs_param_scpt" off \
     "-sfs "     "$msg_ocs_param_sfs" off \
     "-edio "    "$msg_ocs_param_edio" on \
-    "-smtd "    "$msg_ocs_param_smtd" on \
-    "-smmcb "   "$msg_ocs_param_smmcb" on \
+    "-smtd "    "$msg_ocs_param_smtd" $smtd_smmcb_switch \
+    "-smmcb "   "$msg_ocs_param_smmcb" $smtd_smmcb_switch \
     2>> $OCS_PARAM_TMP
   else
-    echo "-c " "-j2 " "-edio " >> $OCS_PARAM_TMP
+      case "$smtd_smmcb_switch" in
+         on) echo "-c " "-j2 " "-edio " "-smtd " "-smmcb " >> $OCS_PARAM_TMP;;
+        off) echo "-c " "-j2 " "-edio " >> $OCS_PARAM_TMP;;
+      esac
   fi
 fi
 
@@ -5309,3 +5317,15 @@ function check_url(){
   fi
   return $rc
 } # end of check_url
+#
+get_smtd_smmcb_switch() {
+  # Function to assign the on/off switch for -smtd/-smmcb
+  # For x86-64: off, others: on
+  local running_cpu
+  # smtd_smmcb_switch is a global variable
+  running_cpu="$(uname -m)"
+  case "$running_cpu" in
+    x86_64) smtd_smmcb_switch="off";;
+         *) smtd_smmcb_switch="on";;
+  esac
+} # end of get_smtd_smmcb_switch
