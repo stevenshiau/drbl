@@ -1,3 +1,9 @@
+drbl (5.8.2-drbl1) unstable; urgency=medium
+
+  * Enable -smtd/-smmcb only as it's not x86-64 machine.
+
+ -- Steven Shiau <steven@clonezilla.org>  Wed, 18 Feb 2026 16:48:48 +0800
+
 drbl (5.8.1-drbl1) unstable; urgency=medium
 
   * Updated language files for bcdboot command prompt.
