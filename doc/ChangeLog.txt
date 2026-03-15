@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (5.8.3-drbl1) unstable; urgency=medium
+
+  * Added thin-provisioning-tools in Clonezilla live packages list.
+
+ -- Steven Shiau <steven@clonezilla.org>  Sun, 15 Mar 2026 16:38:22 +0800
+
 drbl (5.8.2-drbl1) unstable; urgency=medium
 
   * Enable -smtd/-smmcb only as it's not x86-64 machine.
