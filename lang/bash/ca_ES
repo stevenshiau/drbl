@@ -1265,3 +1265,8 @@ msg_bitlocker_not_decrypting_this_partition="OK, we not going to decrypt this Bi
 msg_ocs_param_reluks='Reencrypt LUKS encrypted volumes (change master key) in the destination device'
 # 2026/02/15
 msg_run_cmd_from_MS_rescue_mode='You may need to run the following command from **MS Windows Rescue Mode** after the system has been cloned or restored.'
+# 2026/03/29
+msg_yes_to_gocrypt_img='Encrypt the image via gocryptfs'
+msg_not_to_gocrypt_img='Do not encrypt the image'
+msg_gocryptfs_is_used_for_clonezilla='If you choose yes, the gocryptfs program will be used to encrypt the image. It uses file-based encryption that is implemented as a mountable FUSE filesystem. Each file in gocryptfs is stored one corresponding encrypted file on the hard disk.'
+msg_remember_passphrase_of_gocryptfs='//NOTE// You must remember the passphrase; otherwise, the image will _NOT_ be usable in the future.'
