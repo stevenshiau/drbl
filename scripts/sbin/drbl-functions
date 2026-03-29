@@ -2376,19 +2376,18 @@ if [ "$mode" = "save" ]; then
   fi
 
   # Question about encrypt the image. By default, no matter it's beginner or advanced mode, 
-  # we will ask. However, for some customized case, it it could be set via parameter encrypt_ocs_img.
-  # encrypt_ocs_img is from /etc/ocs/ocs-live.conf
-  if [ -z "$encrypt_ocs_img" ]; then
+  # we will ask. However, for some customized case, it it could be set via parameter gocrypt_ocs_img.
+  if [ -z "$gocrypt_ocs_img" ]; then
     $DIA --backtitle "$msg_nchc_free_software_labs" --title  \
-    "$msg_nchc_clonezilla | $msg_mode: $ocs_mode_prompt" --menu "$msg_encrypt_image\n$msg_ecryptfs_is_used_for_clonezilla\n$msg_remember_passphrase_of_ecryptfs" \
+    "$msg_nchc_clonezilla | $msg_mode: $ocs_mode_prompt" --menu "$msg_encrypt_image\n$msg_gocryptfs_is_used_for_clonezilla\n$msg_remember_passphrase_of_gocryptfs" \
     0 0 0 $DIA_ESC \
-    "-senc "    "$msg_not_to_encrypt_img" \
-    "-enc "     "$msg_yes_to_encrypt_img" \
+    "-sgoc "    "$msg_not_to_gocrypt_img" \
+    "-goc "     "$msg_yes_to_gocrypt_img" \
     2>> $OCS_PARAM_TMP
   else
-    case "$encrypt_ocs_img" in
-      yes) echo "-enc " >> $OCS_PARAM_TMP;;
-       no) echo "-senc " >> $OCS_PARAM_TMP;;
+    case "$gocrypt_ocs_img" in
+      yes) echo "-goc " >> $OCS_PARAM_TMP;;
+       no) echo "-sgoc " >> $OCS_PARAM_TMP;;
     esac
   fi
 fi
