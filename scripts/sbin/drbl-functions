@@ -4988,8 +4988,9 @@ confirm_continue_or_not_default_quit() {
   job_before_quit="$1"
   if [ -n "$job_des" ]; then
     echo "$job_des"
+  else
+    echo "$msg_are_u_sure_u_want_to_continue"
   fi
-  echo "$msg_are_u_sure_u_want_to_continue"
   echo -n "[y/N] "
   read ans_continue
   case "$ans_continue" in
@@ -5033,8 +5034,9 @@ confirm_continue_or_not_default_continue() {
   job_before_quit="$1"
   if [ -n "$job_des" ]; then
     echo "$job_des"
+  else
+    echo "$msg_are_u_sure_u_want_to_continue"
   fi
-  echo "$msg_are_u_sure_u_want_to_continue"
   echo -n "[Y/n] "
   read ans_continue
   case "$ans_continue" in
@@ -5081,7 +5083,7 @@ confirm_continue_no_default_answer() {
    if [ "$ocs_prompt_mode" = "tui" ]; then
      # Because dialog/whiptail "--yesno" must have a yes or no, we choose no here.
      $DIA --backtitle "$msg_nchc_free_software_labs" --title "$msg_nchc_clonezilla" \
-     --defaultno --yesno "${job_des}${msg_are_u_sure_u_want_to_continue}" 0 0 
+     --defaultno --yesno "${job_des:-$msg_are_u_sure_u_want_to_continue}" 0 0 
      ans_="$?"
      # Convert ans_ to ans_continue
      case "$ans_" in
@@ -5093,8 +5095,10 @@ confirm_continue_no_default_answer() {
    else
      if [ -n "$job_des" ]; then
        echo "$job_des"
+     else
+       echo -n "$msg_are_u_sure_u_want_to_continue"
      fi
-     echo -n "$msg_are_u_sure_u_want_to_continue (y/n) "
+     echo -n " [y/n] "
      read ans_continue
    fi
    case "$ans_continue" in
