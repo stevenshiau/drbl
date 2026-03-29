@@ -1,3 +1,22 @@
+drbl (5.8.7-drbl1) unstable; urgency=medium
+
+  * Better description in functions confirm_continue_or_not_*.
+  * Implemented the mechanism for gocryptfs encryption.
+  * Added gocryptfs and fido2-tools in live pkgs list.
+  * Swapped -enc/-senc with -goc/-sgoc in the TUI menu. By default now in the
+    TUI we only show gocryptfs way. eCryptfs way is only in the command line
+    option.
+  * Updated language files about gocryptfs.
+
+ -- Steven Shiau <steven@clonezilla.org>  Sun, 29 Mar 2026 22:15:21 +0800
+
+drbl (5.8.6-drbl1) unstable; urgency=medium
+
+  * Dropped vmfs-tools and reiserfsprogs in live packages list since they
+    are no more in Debian Sid repo.
+
+ -- Steven Shiau <steven@clonezilla.org>  Tue, 17 Mar 2026 05:28:29 +0800
+
 drbl (5.8.5-drbl1) unstable; urgency=medium
 
   * drbl.conf: updated netinstall - Debian/Ubuntu/Fedora.
