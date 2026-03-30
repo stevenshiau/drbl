@@ -7,8 +7,11 @@ drbl (5.8.7-drbl1) unstable; urgency=medium
     TUI we only show gocryptfs way. eCryptfs way is only in the command line
     option.
   * Updated language files about gocryptfs.
+  * Updated language files about ecryptfs will be deprecated soon.
+  * Added the option "-enc" back in TUI menu. Show the message about
+    deprecation soon.
 
- -- Steven Shiau <steven@clonezilla.org>  Sun, 29 Mar 2026 22:15:21 +0800
+ -- Steven Shiau <steven@clonezilla.org>  Mon, 30 Mar 2026 15:14:13 +0800
 
 drbl (5.8.6-drbl1) unstable; urgency=medium
 
