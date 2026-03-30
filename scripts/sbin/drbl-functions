@@ -2383,6 +2383,7 @@ if [ "$mode" = "save" ]; then
     0 0 0 $DIA_ESC \
     "-sgoc "    "$msg_not_to_gocrypt_img" \
     "-goc "     "$msg_yes_to_gocrypt_img" \
+    "-enc "     "$msg_yes_to_encrypt_img" \
     2>> $OCS_PARAM_TMP
   else
     case "$gocrypt_ocs_img" in
