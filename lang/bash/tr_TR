@@ -932,7 +932,6 @@ msg_2_or_more_parts_only_same_parts_on_dest='Kalıp dizininden iki veya daha faz
 msg_choose_the_parts_from_img_to_restore='Kalıptan hedef diske geri yüklenecek bölümü/bölümleri seçin (BÖLÜMDEKİ TÜM VERİLER KAYBEDİLECEK VE DEĞİŞTİRİLECEK!!)'
 # Tag on 2014/12/23
 msg_encrypt_image='Kalıbı şifrelemek istiyor musunuz?'
-msg_yes_to_encrypt_img='Kalıbı şifrele'
 msg_not_to_encrypt_img='Kalıbı şifreleme'
 msg_ecryptfs_is_used_for_clonezilla='Evet derseniz, kalıbın şifrelenmesi için eCryptfs programı kullanılacak. Endüstri standardı kriptografik şifrelere, anahtar üretime ve parolayı koruma mekanizmalarını kullanır. Üretici/Parolanız veya özel anahtarınız olmadan kimse verilerinizi geri getiremez.'
 msg_remember_passphrase_of_ecryptfs='//NOT// Parolanızı hatırlamalısınız. Aksi halde kalıp ileride kullanılabilir _OLMAYACAK_.'
@@ -1265,3 +1264,4 @@ msg_yes_to_gocrypt_img='Encrypt the image via gocryptfs'
 msg_not_to_gocrypt_img='Do not encrypt the image'
 msg_gocryptfs_is_used_for_clonezilla='If you choose yes, the gocryptfs program will be used to encrypt the image. It uses file-based encryption that is implemented as a mountable FUSE filesystem. Each file in gocryptfs is stored one corresponding encrypted file on the hard disk.'
 msg_remember_passphrase_of_gocryptfs='//NOTE// You must remember the passphrase; otherwise, the image will _NOT_ be usable in the future.'
+msg_yes_to_encrypt_img='Encrypt the image via ecryptfs (Deprecated soon)'

@@ -932,7 +932,6 @@ msg_2_or_more_parts_only_same_parts_on_dest='Dve alebo viacej partícií z adres
 msg_choose_the_parts_from_img_to_restore='Vyberte partíciu(ie) z obrazu na obnovenie na cieľový disk(VŠETKY DÁTA NA CIEĽOVEJ PARTÍCII BUDÚ PREPÍSANÉ!!)'
 # Tag on 2014/12/23
 msg_encrypt_image='Chcete zašifrovať obraz?'
-msg_yes_to_encrypt_img='Zašifrovať obraz'
 msg_not_to_encrypt_img='Nešifrovať obraz'
 msg_ecryptfs_is_used_for_clonezilla='AAk áno, tak na zašifrovanie bude použitý eCryptfs. Bez vášho hesla/frázy alebo privátneho kľúča, nebude nikto schopný získať vaše dáta.'
 msg_remember_passphrase_of_ecryptfs='//Poznámka// Musíte si zapamätať heslo/frázu, lebo bez neho nebude môcť použiť váš obraz.'
@@ -1264,3 +1263,4 @@ msg_yes_to_gocrypt_img='Encrypt the image via gocryptfs'
 msg_not_to_gocrypt_img='Do not encrypt the image'
 msg_gocryptfs_is_used_for_clonezilla='If you choose yes, the gocryptfs program will be used to encrypt the image. It uses file-based encryption that is implemented as a mountable FUSE filesystem. Each file in gocryptfs is stored one corresponding encrypted file on the hard disk.'
 msg_remember_passphrase_of_gocryptfs='//NOTE// You must remember the passphrase; otherwise, the image will _NOT_ be usable in the future.'
+msg_yes_to_encrypt_img='Encrypt the image via ecryptfs (Deprecated soon)'

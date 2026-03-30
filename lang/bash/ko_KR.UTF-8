@@ -928,7 +928,6 @@ msg_2_or_more_parts_only_same_parts_on_dest='이미지 디렉토리에서 파티
 msg_choose_the_parts_from_img_to_restore='이미지에서 파티션을 선택하여 대상 디스크로 복원하십시오. (파티션의 모든 데이터가 손실되고 교체됩니다.)'
 # Tag on 2014/12/23
 msg_encrypt_image='이미지를 암호화 하시겠습니까?'
-msg_yes_to_encrypt_img='이미지 암호화'
 msg_not_to_encrypt_img='이미지를 암호화하지 않음'
 msg_ecryptfs_is_used_for_clonezilla='암호화를 선택하면, eCryptfs 프로그램을 사용하여 이미지를 암호화합니다. 업계 표준 암호화 암호, 키 생성 및 암호 보호 메커니즘을 사용합니다. 무작위 문자열(salt)/암호 또는 개인 키 없이는 그 누구도 데이터를 검색할 수 없습니다.'
 msg_remember_passphrase_of_ecryptfs='[참고] 패스워드를 기억해야 합니다. 그렇지 않을 시 나중에 이미지를 사용할 수 없습니다.'
@@ -1262,3 +1261,4 @@ msg_yes_to_gocrypt_img='Encrypt the image via gocryptfs'
 msg_not_to_gocrypt_img='Do not encrypt the image'
 msg_gocryptfs_is_used_for_clonezilla='If you choose yes, the gocryptfs program will be used to encrypt the image. It uses file-based encryption that is implemented as a mountable FUSE filesystem. Each file in gocryptfs is stored one corresponding encrypted file on the hard disk.'
 msg_remember_passphrase_of_gocryptfs='//NOTE// You must remember the passphrase; otherwise, the image will _NOT_ be usable in the future.'
+msg_yes_to_encrypt_img='Encrypt the image via ecryptfs (Deprecated soon)'

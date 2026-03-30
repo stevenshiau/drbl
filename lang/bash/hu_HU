@@ -931,7 +931,6 @@ msg_2_or_more_parts_only_same_parts_on_dest='A képkönyvtárból kettő, vagy t
 msg_choose_the_parts_from_img_to_restore='Válasszon partíció(ka)t a képből, a céllemezre történő visszaállításhoz (A PARTÍCIÓN LÉVŐ ÖSSZES ADAT ELVÉSZ ÉS FELÜLÍRÓDIK!!)'
 # Tag on 2014/12/23
 msg_encrypt_image='Szeretné titkosítani a lemezképet?'
-msg_yes_to_encrypt_img='Kép titkosítása'
 msg_not_to_encrypt_img='Titkosítatlan kép'
 msg_ecryptfs_is_used_for_clonezilla='Amennyiben igen, az eCryptfs program kivitelezi a titkosítást. Ez szabványos titkosítást, kulcs generálást és jelmondatos védelmi eljárásokat használ, ezért a megfelelő salt/jelmondat, vagy privát kulcs híján, semmi sem lesz képes visszanyerni az adatokat.'
 msg_remember_passphrase_of_ecryptfs='//MEGJEGYZÉS// Sose feledje a jelmondatot, különben a lemezkép _HASZNÁLHATATLANNÁ_ válik.'
@@ -1264,3 +1263,4 @@ msg_yes_to_gocrypt_img='Encrypt the image via gocryptfs'
 msg_not_to_gocrypt_img='Do not encrypt the image'
 msg_gocryptfs_is_used_for_clonezilla='If you choose yes, the gocryptfs program will be used to encrypt the image. It uses file-based encryption that is implemented as a mountable FUSE filesystem. Each file in gocryptfs is stored one corresponding encrypted file on the hard disk.'
 msg_remember_passphrase_of_gocryptfs='//NOTE// You must remember the passphrase; otherwise, the image will _NOT_ be usable in the future.'
+msg_yes_to_encrypt_img='Encrypt the image via ecryptfs (Deprecated soon)'
