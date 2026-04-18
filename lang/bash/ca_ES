@@ -1208,65 +1208,65 @@ msg_if_yes_open_luks_again='En cas afirmatiu, se li demanarà la clau per obrir 
 msg_ocs_param_edio='Permet el mode directe IO de Partclone per a NVMe SSD'
 msg_ocs_onthefly_param_edio='Permet el mode directe IO de Partclone per a NVMe SSD'
 # Tag on 2024/01/13
-msg_prompt_remove_gnome_initial_setup='YP is used in DRBL clients, so gnome-initial-setup is annoying and not required. It is recommended to remove it.'
+msg_prompt_remove_gnome_initial_setup='Atès que els clients DRBL utilitzen YP, el paquet "gnome-initial-setup" no és necessari i pot causar problemes. Es recomana eliminar-lo.'
 # Tag on 2024/09/28
 msg_mount_ramdisk="Usar memòria (OK per a BT des de dispositiu raw)"
 # Tag on 2025/02/08
 msg_choose_param_to_set_multiple_choices="Configurar paràmetres avançats (opcions múltiples disponibles). Si no té idea, deixi el valor per defecte i NO canviï res. Només premi Intro."
 msg_choose_param_to_set_single_choice="Configurar paràmetres avançats. Si no té idea, deixi el valor per defecte i no canviï res. Només premi Intro."
-msg_put_log_usb_or_not='Do you want to copy the log files to Clonezilla live USB drive if it exists in this machine?'
-msg_put_log_to_OCS_USB_drive='Yes, copy log files to Clonezilla live USB drive if it exists'
-msg_not_put_log_to_OCS_USB_drive='No, do not copy log files to Clonezilla live USB drive even if it exists'
+msg_put_log_usb_or_not="Voleu copiar els fitxers de registre a una unitat USB de Clonezilla Live si n'hi ha una de present?"
+msg_put_log_to_OCS_USB_drive="Sí, copia els fitxers de registre a una unitat USB de Clonezilla Live si n'existeix una."
+msg_not_put_log_to_OCS_USB_drive='No, no copiïs els fitxers de registre a una unitat USB de Clonezilla Live.'
 # Tag on 2025/07/10
-msg_time_sync_via_internet='Do you want to sync the time of this computer via internet?'
+msg_time_sync_via_internet="Voleu sincronitzar l'hora d'aquest ordinador a través d'Internet?"
 # Tag on 2025/07/19
-msg_live_system_time_sync='Do you want to synchronize the time on this Clonezilla live system?'
-msg_no_net_so_set_timezone_manually='No internet connection. Use the time got from BIOS when booting. Need time zone info.'
-msg_next_choose_timezone='Please choose your time zone in the next dialog menu if you want.'
+msg_live_system_time_sync="Voleu sincronitzar l'hora en aquest sistema Clonezilla Live?"
+msg_no_net_so_set_timezone_manually="No s'ha trobat cap connexió a Internet. S'utilitzarà l'hora del BIOS, però cal la informació de la zona horària."
+msg_next_choose_timezone='Escolliu la vostra zona horària al següent menú.'
 # Tag on 2025/07/21
-msg_current_time_on_this_system='Current time on this live system:'
+msg_current_time_on_this_system="L'hora actual en aquest sistema Live és:"
 # Tag on 2025/09/22
-msg_disk_to_mdisk='Directly clone source disk(s) to that of multiple machines'
-msg_part_to_mpart='Directly clone source partition(s) to that of multiple machines'
+msg_disk_to_mdisk="Clona directament el(s) disc(s) d'origen a múltiples màquines"
+msg_part_to_mpart="Clona directament la(es) partició(ons) d'origen a múltiples màquines"
 # Tag on 2025/10/05
-msg_ocs_param_rmtd="Restore MTD block device (/dev/mtdblock*)"
-msg_ocs_param_rmmcb="Restore eMMC boot device (/dev/mmcblk*boot*)"
+msg_ocs_param_rmtd="Restaura el dispositiu de blocs MTD (/dev/mtdblock*)"
+msg_ocs_param_rmmcb="Restaura el dispositiu d'arrencada eMMC (/dev/mmcblk*boot*)"
 # Tag on 2025/10/17
-msg_ocs_param_smtd="Save MTD block device (/dev/mtdblock*)"
-msg_ocs_param_smmcb="Save eMMC boot device (/dev/mmcblk*boot*)"
+msg_ocs_param_smtd="Desa el dispositiu de blocs MTD (/dev/mtdblock*)"
+msg_ocs_param_smmcb="Desa el dispositiu d'arrencada eMMC (/dev/mmcblk*boot*)"
 # Tag on 2025/11/06
-msg_using_bitlocker="This BitLocker partition has been successfully decrypted. Clonezilla will now save the **decrypted** data."
-msg_bitlocker_disclaimer_00="Found BitLocker-encrypted device:"
-msg_bitlocker_disclaimer_01="You have two options:"
-msg_bitlocker_disclaimer_02="(1) Back up the **encrypted** data (as-is). This is slower and compression will be ineffective."
-msg_bitlocker_disclaimer_03="(2) Back up the **decrypted** data. This requires the encryption key/password, but it is faster and compression will work normally."
-msg_bitlocker_disclaimer_04="If you back up the decrypted data, the restored device will **not** be encrypted. You must re-enable BitLocker in Windows on the target machine after restoring."
-msg_bitlocker_disclaimer_05="This process will **not** change the original device. It will remain encrypted on this machine, regardless of your choice."
-msg_bitlocker_disclaimer_06="This feature is intended **only for NTFS** devices. Do **not** use it with Resilient File System (ReFS), as it will not work."
-msg_bitlocker_disclaimer_07="This is **separate** from Clonezilla's own backup encryption. If you enabled Clonezilla's encryption, your final backup *file* will still be encrypted."
-msg_bitlocker_disclaimer_08="Do you want to back up the **decrypted** data from the BitLocker partition? (If unsure, choose No)"
-msg_bitlocker_request_password="Please enter your BitLocker password, recovery key, or clear key:"
-msg_bitlocker_use_recovery_password="Attempting to unlock using the provided key as a **recovery password**..."
-msg_bitlocker_use_user_password="Attempting to unlock using the provided key as a **user password**..."
-msg_bitlocker_password_not_work="The key/password did not work. Please try again."
-msg_bitlocker_backup_decrypted_data="OK, let's back up the **decrypted** data from the BitLocker partition."
-msg_bitlocker_backup_encrypted_data="OK, let's back up the **encrypted** data from the BitLocker partition."
-msg_decrypt_bitlocker_dev="Decrypt the BitLocker partition on this machine"
-msg_do_not_decrypt_bitlocker_dev="Do not decrypt the BitLocker partition on this machine"
-msg_bitlocker_ask_for_passwd_01="You now need to type the BitLocker password for"
-msg_bitlocker_ask_for_passwd_02="First, please choose: "
-msg_bitlocker_ask_for_passwd_03="1 - To type the password and NOT have it shown on the screen"
-msg_bitlocker_ask_for_passwd_04="2 - To type the password and have it shown on the screen"
-msg_bitlocker_ask_for_passwd_05="3 - To skip typing the password and doing the backup of the **encrypted** data (as-is)"
-msg_please_choose_1_2_3="Please choose 1, 2 or 3:"
-msg_bitlocker_not_decrypting_this_partition="OK, we not going to decrypt this BitLocker partition."
+msg_using_bitlocker="Aquesta partició BitLocker s'ha desxifrat correctament. El Clonezilla ara desarà les dades **desxifrades**."
+msg_bitlocker_disclaimer_00="S'ha trobat un dispositiu xifrat amb BitLocker:"
+msg_bitlocker_disclaimer_01="Teniu dues opcions:"
+msg_bitlocker_disclaimer_02="(1) Feu una còpia de seguretat de les dades **xifrades** (tal com estan). Això és més lent i la compressió no serà efectiva."
+msg_bitlocker_disclaimer_03="(2) Feu una còpia de seguretat de les dades **desxifrades**. Això requereix la clau de xifratge/contrasenya, però és més ràpid i la compressió funcionarà normalment."
+msg_bitlocker_disclaimer_04="Si feu una còpia de seguretat de les dades desxifrades, el dispositiu restaurat **no** estarà xifrat. Heu de tornar a habilitar el BitLocker a Windows a la màquina de destí després de la restauració."
+msg_bitlocker_disclaimer_05="Aquest procés **no** canviarà el dispositiu original. Romandrà xifrat en aquesta màquina, independentment de la vostra elecció."
+msg_bitlocker_disclaimer_06="Aquesta funció està pensada **només per a dispositius NTFS**. **No** la utilitzeu amb el sistema de fitxers resilient (ReFS), ja que no funcionarà."
+msg_bitlocker_disclaimer_07="Això és **independent** del xifratge de còpia de seguretat propi de Clonezilla. Si heu habilitat el xifratge de Clonezilla, el vostre *fitxer* de còpia de seguretat final encara estarà xifrat."
+msg_bitlocker_disclaimer_08="Voleu fer una còpia de seguretat de les dades **desxifrades** de la partició BitLocker? (Si no esteu segurs, escolliu No)"
+msg_bitlocker_request_password="Introduïu la vostra contrasenya de BitLocker, clau de recuperació o clau clara:"
+msg_bitlocker_use_recovery_password="S'està intentant desbloquejar utilitzant la clau proporcionada com a **contrasenya de recuperació**..."
+msg_bitlocker_use_user_password="S'està intentant desbloquejar utilitzant la clau proporcionada com a **contrasenya d'usuari**..."
+msg_bitlocker_password_not_work="La clau/contrasenya no ha funcionat. Torneu-ho a provar."
+msg_bitlocker_backup_decrypted_data="D'acord, fem una còpia de seguretat de les dades **desxifrades** de la partició BitLocker."
+msg_bitlocker_backup_encrypted_data="D'acord, fem una còpia de seguretat de les dades **xifrades** de la partició BitLocker."
+msg_decrypt_bitlocker_dev="Desxifra la partició BitLocker en aquesta màquina"
+msg_do_not_decrypt_bitlocker_dev="No desxifris la partició BitLocker en aquesta màquina"
+msg_bitlocker_ask_for_passwd_01="Ara heu d'escriure la contrasenya de BitLocker per a"
+msg_bitlocker_ask_for_passwd_02="Primer, escolliu: "
+msg_bitlocker_ask_for_passwd_03="1 - Per escriure la contrasenya i que NO es mostri a la pantalla"
+msg_bitlocker_ask_for_passwd_04="2 - Per escriure la contrasenya i que es mostri a la pantalla"
+msg_bitlocker_ask_for_passwd_05="3 - Per ometre l'escriptura de la contrasenya i fer la còpia de seguretat de les dades **xifrades** (tal com estan)"
+msg_please_choose_1_2_3="Escolliu 1, 2 o 3:"
+msg_bitlocker_not_decrypting_this_partition="D'acord, no desxifrarem aquesta partició BitLocker."
 # 2026/01/11
-msg_ocs_param_reluks='Reencrypt LUKS encrypted volumes (change master key) in the destination device'
+msg_ocs_param_reluks='Torna a xifrar els volums xifrats amb LUKS (canvia la clau mestra) al dispositiu de destí'
 # 2026/02/15
-msg_run_cmd_from_MS_rescue_mode='You may need to run the following command from **MS Windows Rescue Mode** after the system has been cloned or restored.'
+msg_run_cmd_from_MS_rescue_mode="És possible que hagueu d'executar la següent ordre des del **mode de recuperació de MS Windows** després que el sistema s'hagi clonat o restaurat."
 # 2026/03/29
-msg_yes_to_gocrypt_img='Encrypt the image via gocryptfs'
-msg_not_to_gocrypt_img='Do not encrypt the image'
-msg_gocryptfs_is_used_for_clonezilla='If you choose yes, the gocryptfs program will be used to encrypt the image. It uses file-based encryption that is implemented as a mountable FUSE filesystem. Each file in gocryptfs is stored on corresponding encrypted file on the hard disk.'
-msg_remember_passphrase_of_gocryptfs='//NOTE// You must remember the passphrase; otherwise, the image will _NOT_ be usable in the future.'
-msg_yes_to_encrypt_img='Encrypt the image via ecryptfs (Deprecated soon)'
+msg_yes_to_gocrypt_img='Xifra la imatge mitjançant gocryptfs'
+msg_not_to_gocrypt_img='No xifris la imatge'
+msg_gocryptfs_is_used_for_clonezilla="Si escolliu que sí, s'utilitzarà el programa gocryptfs per xifrar la imatge. Utilitza xifratge basat en fitxers que s'implementa com un sistema de fitxers FUSE muntable. Cada fitxer a gocryptfs s'emmagatzema al fitxer xifrat corresponent al disc dur."
+msg_remember_passphrase_of_gocryptfs='//NOTE// Heu de recordar la frase de pas; si no, la imatge _NO_ es podrà utilitzar en el futur.'
+msg_yes_to_encrypt_img='Xifra la imatge mitjançant ecryptfs (Aviat en desús)'

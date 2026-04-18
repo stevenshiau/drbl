@@ -1127,7 +1127,7 @@ msg_ocs_param_z9p='compressão zstdmt'
 # Tag on 2020/08/09
 msg_locale_ko_KR='Coreano'
 # Tag on 2020/09/10
-msg_ocs_onthefly_param_rvd='Remove NTFS volume dirty flag in source NTFS file system before cloning it'
+msg_ocs_onthefly_param_rvd='Remover o sinalizador de volume sujo (dirty flag) no sistema de arquivos NTFS de origem antes de cloná-lo'
 # Tag on 2020/10/02
 msg_ocs_onthefly_param_t='Ignorar a clonagem do MBR (Master Boot Record)'
 msg_ocs_onthefly_param_t1='Clonar o carregador de inicialização pré-compilado do syslinux (somente para Windows)'
@@ -1247,12 +1247,12 @@ msg_bitlocker_backup_decrypted_data="OK, vamos fazer backup dos dados **descript
 msg_bitlocker_backup_encrypted_data="OK, vamos fazer backup dos dados **criptografados** da partição BitLocker."
 msg_decrypt_bitlocker_dev="Descriptografar a partição BitLocker nesta máquina"
 msg_do_not_decrypt_bitlocker_dev="Não descriptografar a partição BitLocker nesta máquina"
-msg_bitlocker_ask_for_passwd_01="Vocẽ agora precisa digitar a senha BitLocker para"
+msg_bitlocker_ask_for_passwd_01="Você agora precisa digitar a senha BitLocker para"
 msg_bitlocker_ask_for_passwd_02="Primeiro, escolha: "
 msg_bitlocker_ask_for_passwd_03="1 - Digitar a senha e que ela NÃO seja mostrada na tela"
 msg_bitlocker_ask_for_passwd_04="2 - Digitar a senha e que ela seja mostrada na tela"
 msg_bitlocker_ask_for_passwd_05="3 - Pular etapa de digitar a senha e fazer o backup dos dados **criptografados** (como estão)"
-msg_please_choose_1_2_3="Escolha 1, 2 or 3:"
+msg_please_choose_1_2_3="Escolha 1, 2 ou 3:"
 msg_bitlocker_not_decrypting_this_partition="OK, não vamos descriptografar esta partição BitLocker."
 # 2026/01/11
 msg_ocs_param_reluks='Recriptografar volumes LUKS criptografados (altera a chave mestra) no dispositivo de destino'
