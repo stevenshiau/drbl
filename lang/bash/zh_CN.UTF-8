@@ -1263,6 +1263,6 @@ msg_run_cmd_from_MS_rescue_mode='You may need to run the following command from 
 # 2026/03/29
 msg_yes_to_gocrypt_img='Encrypt the image via gocryptfs'
 msg_not_to_gocrypt_img='Do not encrypt the image'
-msg_gocryptfs_is_used_for_clonezilla='If you choose yes, the gocryptfs program will be used to encrypt the image. It uses file-based encryption that is implemented as a mountable FUSE filesystem. Each file in gocryptfs is stored one corresponding encrypted file on the hard disk.'
+msg_gocryptfs_is_used_for_clonezilla='If you choose yes, the gocryptfs program will be used to encrypt the image. It uses file-based encryption that is implemented as a mountable FUSE filesystem. Each file in gocryptfs is stored on corresponding encrypted file on the hard disk.'
 msg_remember_passphrase_of_gocryptfs='//NOTE// You must remember the passphrase; otherwise, the image will _NOT_ be usable in the future.'
 msg_yes_to_encrypt_img='Encrypt the image via ecryptfs (Deprecated soon)'
