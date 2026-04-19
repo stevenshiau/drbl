@@ -1,3 +1,11 @@
+drbl (5.9.1-drbl1) unstable; urgency=medium
+
+  * Added 6 more bash and perl script language files:
+    cs_CZ id_ID, nl_NL, th_TH, uk_UA, and vi_VN.
+  * Update Makefile of language file for the new added language files.
+
+ -- Steven Shiau <steven@clonezilla.org>  Sun, 19 Apr 2026 20:44:35 +0800
+
 drbl (5.8.8-drbl1) unstable; urgency=medium
 
   * fixed the typo in language files: "one corresponding"
