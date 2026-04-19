@@ -1,0 +1,263 @@
+#!/usr/bin/perl -T
+# Written by Steven Shiau <steven _at_ clonezilla org> for DRBL
+# Translated by Gemini
+# License: GPL
+#
+
+$lang_charset = 'UTF-8';
+
+%delimiter =
+   (
+   dash_line => '------------------------------------------------------',
+   star_line => '******************************************************',
+   exclamation_line => "!!!!!!!!!!!!!!!!!!!!!!!!!",
+   warning_line => "!!!!!!!!!!!!!!!!!!!!!! Warning !!!!!!!!!!!!!!!!!!!!!!!",
+   );
+
+%lang_text =
+   (  
+   Say        => 'Nói',
+   or         => 'hoặc',
+   seconds    => 'giây',
+   WARNING    => 'CẢNH BÁO',
+   Accept     => 'Chấp nhận',
+   as         => 'như',
+   login      => 'đăng nhập',
+   clear      => 'xóa',
+   of         => 'của',
+   logout     => 'đăng xuất',
+   page       => 'trang',
+   move       => 'di chuyển',
+   date       => 'ngày',
+   size       => 'kích thước',
+   type       => 'loại',
+   filename   => 'tên tệp',
+   encoding   => 'bảng mã',
+   download   => 'tải xuống',
+   cancel     => 'hủy',
+   continue   => 'tiếp tục',
+   for        => 'cho',
+   save       => 'lưu',
+   add        => 'thêm',
+   delete     => 'xóa',
+   uninstall  => 'gỡ cài đặt',
+   done       => 'xong',
+   finish     => 'hoàn thành',
+   space      => 'khoảng cách',
+   );
+
+%lang_word =
+   (
+   please_enter => "vui lòng nhập",
+   to_deploy_them => "để triển khai chúng",
+   root_passwd => "mật khẩu root",
+   initial_digit => "chữ số đầu tiên",
+   unable_to_find_the => "Không thể tìm thấy",
+   program_stop => "Dừng chương trình",
+   );
+
+%lang_deploy =
+   (
+   interactive_mode_prompt => 'Chế độ tương tác cho phép bạn cung cấp thông tin về môi trường DRBL của mình.',
+   domain_unset_prompt => 'DOMAIN chưa được đặt, vui lòng nhập DOMAIN ngay bây giờ:',
+   domain_prompt => 'Vui lòng nhập tên miền DNS (ví dụ: drbl.sf.net):',
+   nisdomain_unset_prompt => 'NISDOMAIN chưa được đặt, vui lòng nhập NISDOMAIN ngay bây giờ:',
+   nisdomain_prompt => 'Vui lòng nhập tên miền NIS/YP:',
+   not_allowed_domainname => 'không được phép làm DOMAINNAME, hãy nhập lại!',
+   not_allowed_nisdomainname => 'không được phép làm NISDOMAINNAME, hãy nhập lại!',
+   set_domain_as => 'Đặt DOMAIN là',
+   enter_client_hostname_prefix => "Vui lòng nhập tiền tố tên máy khách:\nTiền tố này được sử dụng để tự động tạo tên máy cho máy khách. Nếu bạn muốn ghi đè một số hoặc tất cả các tên máy được tạo tự động, hãy nhấn Ctrl-C để thoát chương trình này ngay bây giờ, chỉnh sửa /etc/drbl/client-ip-hostname, sau đó chạy lại chương trình này.",
+   not_allowed_hostname => 'không được phép làm tiền tố tên máy khách, hãy nhập lại!',
+   set_client_hostname_prefix => 'Đặt tiền tố tên máy khách là',
+   no_NIC_setup => 'Bạn đã KHÔNG thiết lập bất kỳ cài đặt mạng Internet nào cho các card mạng cho máy khách (chẳng hạn như địa chỉ IP của eth1, eth2...), hoặc có gì đó sai!',
+   configured_nic => 'Các card mạng ethernet đã định cấu hình được tìm thấy trong hệ thống của bạn:',
+   we_can_NOT_continue => 'Chúng tôi KHÔNG thể tiếp tục...',
+   but_not_private_IP_or_configured => 'nhưng đó không phải là IP riêng, không được định cấu hình tốt hoặc hiện không hoạt động!!!',
+   enter_public_IP_for_the_client => "Nhập IP công cộng cho máy khách này",
+   its_IP_in_DRBL_is => "IP của nó trong DRBL là",
+   wrong_entered_IP => "Địa chỉ IP bạn nhập sai, vui lòng nhập lại!",
+   enter_gateway_for_client => "Nhập gateway cho máy khách này",
+   enter_netmask_for_client => "Nhập netmask cho máy khách này",
+   wrong_entered_netmask => "NETMASK bạn nhập sai, vui lòng nhập lại!",
+   set_client_public_IP_as => "Chúng tôi sẽ thiết lập các tham số mạng địa chỉ IP công cộng của máy khách là:",
+   we_will_skip => 'Chúng tôi sẽ bỏ qua',
+   for_internet_access_prompt => 'Cổng ethernet nào trong máy chủ này dùng để truy cập Internet công cộng, không phải để kết nối DRBL?',
+   drbl_website_prompt => 'Xem http://drbl.nchc.org.tw/redhat hoặc http://drbl.sf.net/redhat để biết chi tiết.',
+   ethernet_port_for_internet => 'Cổng ethernet để truy cập Internet là:',
+   ethernet_port_for_DRBL => 'Cổng ethernet cho môi trường DRBL: ',
+   only_1_IP_for_eth0 => 'Chỉ có 1 địa chỉ IP cho eth0, chúng tôi sẽ không sử dụng eth0 cho môi trường DRBL!',
+   no_DRBL_port => 'Không có cổng ethernet nào khả dụng cho môi trường DRBL!',
+   saved_mac_address_files_in_etc => "Các tệp này được lưu trong thư mục $drbl_syscfg.",
+   collect_MAC_prompt => 
+          "Bây giờ chúng ta có thể thu thập địa chỉ MAC của máy khách!\n".
+          "Nếu bạn muốn dịch vụ DHCP trong máy chủ DRBL cung cấp cùng một địa chỉ IP cho máy khách mỗi khi máy khách khởi động và bạn chưa bao giờ thực hiện quy trình này, bạn nên thực hiện ngay bây giờ!\n".
+          "Nếu bạn đã có những địa chỉ MAC đó của máy khách, bạn có thể đưa chúng vào các tệp nhóm khác nhau (Số lượng tệp này bằng số lượng card mạng cho dịch vụ DRBL). Trong trường hợp này, bạn có thể bỏ qua bước này.\n".
+          "Bước này giúp bạn ghi lại địa chỉ MAC của máy khách, sau đó chia chúng thành các nhóm khác nhau. Nó sẽ tiết kiệm thời gian của bạn và giảm lỗi đánh máy.\n".
+	  "Các địa chỉ MAC sẽ được ghi lại lần lượt theo thứ tự khởi động của máy khách,\n".
+	  "và chúng sẽ được đưa vào các tệp khác nhau tùy theo card mạng trong máy chủ, tên tệp sẽ giống như macadr-eth1.txt, macadr-eth2.txt... Bạn có thể tìm thấy chúng trong thư mục $drbl_syscfg.\n".
+	  "Vui lòng khởi động các máy khách theo thứ tự, đảm bảo chúng khởi động từ etherboot hoặc PXE!\n". 
+          "Bạn có muốn thu thập chúng không?",
+   ok_let_do_it => 'OK! Hãy thực hiện nó!',
+   you_are_not_root => 'Bạn không phải là root',
+   ok_let_continue => 'OK! Hãy tiếp tục...',
+   fix_eth_IP_prompt => "Bạn có muốn để dịch vụ DHCP trong máy chủ DRBL cung cấp cùng một địa chỉ IP cho máy khách mỗi khi máy khách khởi động không (Nếu bạn muốn chức năng này, bạn phải thu thập địa chỉ MAC của máy khách và lưu chúng vào (các) tệp (như trong quy trình trước đó)). Điều này dành cho các máy khách được kết nối với giao diện mạng ethernet của máy chủ DRBL",
+   MAC_file_prompt => "OK! Vui lòng cho tôi biết tên tệp chứa địa chỉ MAC của máy khách theo từng dòng cho",
+   range_prompt => "OK! Hãy tiếp tục, chúng tôi sẽ thiết lập địa chỉ IP của máy khách theo kiểu \"khởi động trước nhận IP trước\" thay vì địa chỉ cố định!",
+   client_number_connected_to_eth => "Có bao nhiêu máy khách DRBL (máy tính cho sinh viên) được kết nối với giao diện mạng ethernet của máy chủ DRBL",
+   enter_the_no => "Vui lòng nhập số",
+   the_value_you_set => "Số cuối cùng trong bộ số cuối cùng trong địa chỉ IP của máy khách là",
+   set_the_IP_connected_to_eth => "Chúng tôi sẽ thiết lập địa chỉ IP cho các máy khách được kết nối với giao diện mạng ethernet của máy chủ DRBL",
+   do_you_want_to_continue => "Bạn có muốn tiếp tục không?",
+   reenter_or_accept => "để nhập lại, hoặc bất kỳ phím nào khác để chấp nhận giá trị này và tiếp tục!",
+   filename_you_set => "Tên tệp bạn đã đặt là",
+   by_MAC_file => "Bằng tệp địa chỉ MAC bạn đã đặt, địa chỉ IP cho các máy khách được kết nối với giao diện mạng ethernet của máy chủ DRBL",
+   let_restart_it_again => "OK, hãy khởi động lại nó lần nữa!",
+   layout_for_DRBL => "Bố cục cho môi trường DRBL của bạn:",
+   swap_prompt =>
+              "Nếu có một ổ cứng cục bộ với phân vùng swap hoặc hệ thống tệp có thể ghi trong máy khách của bạn,\n".
+              "bạn có muốn sử dụng phân vùng swap đó hoặc tạo một tệp swap trong hệ thống tệp có thể ghi để máy khách có nhiều bộ nhớ hơn để sử dụng không? (Bước này sẽ KHÔNG phá hủy bất kỳ dữ liệu nào trong ổ cứng đó)",
+   try_to_create_swap =>
+                "OK! Chúng tôi sẽ cố gắng tạo một không gian swap cho máy khách của bạn nếu nó có ổ cứng cục bộ!",
+   max_swap_size =>
+                "Kích thước tối đa (Megabyte) cho không gian swap là bao nhiêu?\n".
+                "Chúng tôi sẽ cố gắng phân bổ không gian swap cho bạn, nếu không đủ, 60% không gian trống sẽ được sử dụng.",
+   mode_for_client_init =>
+              "Chế độ nào bạn muốn máy khách sử dụng sau khi chúng khởi động?\n".
+              "\"1\": Chế độ đồ họa (hệ thống X window) (mặc định),\n".
+              "\"2\": Chế độ văn bản.",
+   client_text_mode => "Các máy khách sẽ sử dụng chế độ văn bản khi chúng khởi động.",
+   client_graphic_mode => "Các máy khách sẽ vào chế độ đồ họa sau khi khởi động.",
+   login_mode_for_client =>
+                  "Chế độ nào bạn muốn khi máy khách khởi động ở chế độ đồ họa?\n".
+                  "0: đăng nhập bình thường, 1: tự động đăng nhập, 2: đăng nhập theo thời gian",
+   auto_login => "Các máy khách sẽ tự động đăng nhập khi chúng khởi động.",
+   created_account_for_auto_login =>
+                      "các tài khoản sẽ được tạo cho các máy khách để tự động đăng nhập.\n".
+		      "ID đăng nhập tự động giống như tên máy của máy khách.\n".
+                      "Thông tin tài khoản và mật khẩu sẽ được liệt kê trong tệp",
+   time_for_countdown => "Bao nhiêu giây để đếm ngược?",
+   timed_login_prompt => "Các máy khách sẽ tự động đăng nhập nếu hết thời gian sau",
+   normal_login_prompt => "Các máy khách sẽ đợi người dùng đăng nhập khi chúng khởi động.",
+   keep_client_setting_question => "Bạn có muốn giữ cài đặt cũ của các máy khách DRBL hiện có nếu chúng tồn tại không?",
+   remove_client_setting => "Chúng tôi sẽ xóa tất cả cài đặt của các máy khách DRBL nếu chúng đã tồn tại.",
+   keep_client_setting => "Chúng tôi sẽ cố gắng giữ cài đặt của các máy khách DRBL nếu chúng đã tồn tại.",
+   set_client_root_passwd => "Bạn có muốn đặt mật khẩu root cho máy khách thay vì sử dụng cùng một mật khẩu root được sao chép từ máy chủ không? (Để bảo mật tốt hơn)",
+   whats_client_root_passwd => "Mật khẩu root mới cho máy khách (nó sẽ không được hiển thị trên màn hình)?",
+   set_client_pxelinux_passwd => "Bạn có muốn đặt mật khẩu pxelinux cho máy khách để khi máy khách khởi động, phải nhập mật khẩu để khởi động không (Để bảo mật tốt hơn)",
+   whats_client_pxelinux_passwd => "Mật khẩu pxelinux mới cho máy khách (nó sẽ không được hiển thị trên màn hình)?",
+   retype_root_passwd => "Nhập lại mật khẩu mới (nó sẽ không được hiển thị trên màn hình).",
+   sorry_passwd_not_match => "Xin lỗi, mật khẩu không khớp",
+   sorry_passwd_can_not_empty => "Xin lỗi, mật khẩu không thể để trống",
+   set_client_alias_IP =>
+      "Bằng cách sử dụng giao diện bí danh, mỗi máy khách có thể có 2 IP,\n".
+      "một trong số đó là IP riêng cho các máy khách được kết nối với máy chủ DRBL và IP kia là IP công cộng cho các máy khách được kết nối trực tiếp với WAN từ switch!\n".
+      "Bạn có muốn thiết lập IP công cộng cho máy khách không?",
+   searching_installed_drbl_packages => "Đang tìm kiếm các gói đã cài đặt cho máy chủ DRBL... Việc này có thể mất vài phút...",
+   no_drbl_server_package_found =>
+	      "Không có gói máy chủ DRBL nào được cài đặt!!!\n". 
+	      "Bạn nên chạy một tập lệnh khác (drblsrv -i) để thiết lập máy chủ DRBL trước!!! Nếu không hệ thống sẽ KHÔNG hoạt động!!!\n".
+	      "Bạn có chắc chắn muốn tiếp tục không? Nói \"yes\" hoặc \"y\" để tiếp tục, hoặc bất kỳ phím nào khác để thoát!",
+   but_you_will_see_errors => "Nhưng bạn sẽ thấy rất nhiều thông báo lỗi...!!!",
+   smart_decision => "OK, quyết định sáng suốt, tôi sẽ thoát bây giờ!",
+   finished_searching_installed_drbl_packages => "Đã hoàn tất tìm kiếm các gói đã cài đặt cho máy chủ DRBL.",
+   note_for_keep_client_setting => "Lưu ý! Bạn đang cố gắng giữ cài đặt của các máy khách DRBL nếu chúng tồn tại, đôi khi các máy khách DRBL sẽ gặp trục trặc khi bạn kết thúc tập lệnh này! Nếu vậy, khởi động lại các máy khách DRBL đó sẽ làm cho chúng hoạt động!",
+   press_enter_to_continue => "Nhấn Enter để tiếp tục... ",
+   no_deploy_prompt =>
+	      "Tất cả các tệp cấu hình được tạo trong thư mục làm việc này,\n".
+	      "nhưng chúng KHÔNG được triển khai vào hệ thống! \n".
+	      "Nếu bạn muốn triển khai chúng vào hệ thống, đừng sử dụng tùy chọn \"-n\" hoặc \"--no_deploy\"",
+   ready_to_deploy =>
+	      "Bây giờ chúng tôi đã sẵn sàng để triển khai các tệp vào hệ thống! \n".
+	      "Bạn có muốn tiếp tục không?",
+   overwrite_firewall_rule => "Cảnh báo! Nếu bạn tiếp tục, các quy tắc tường lửa của bạn sẽ bị ghi đè trong quá trình thiết lập!",
+   backup_firewall_rule => "Các quy tắc ban đầu sẽ được sao lưu thành iptables.drblsave trong thư mục cấu hình hệ thống (/etc/sysconfig hoặc /etc/default).",
+   oh_quit_now => "Ồ, tôi sẽ thoát bây giờ!",
+   accept_or_enter => "Nói \"Y\" để chấp nhận hoặc phím khác để nhập từng cái một...",
+   failed_to_open_file => "Không thể mở tệp",
+   #
+   analyzing_rpm_info => "Đang phân tích thông tin các gói rpm... Việc này có thể mất vài phút...",
+   no_drbl_server_package => "Không có gói máy chủ DRBL nào được cài đặt!!!",
+   apt_pkg_not_installed =>  "Gói \"apt\" KHÔNG được cài đặt!!!", 
+   we_are_now_ready_to => "Bây giờ chúng tôi đã sẵn sàng để",
+   the_files_for_DRBL_server => "các tệp cho máy chủ DRBL!",
+   say_yes_to_continue_other_to_quit => "Nói \"yes\" hoặc \"y\" để tiếp tục, hoặc bất kỳ phím nào khác để thoát!",
+   say_no_to_quit_other_to_continue => "Nói \"no\" hoặc \"n\" để thoát, hoặc bất kỳ phím nào khác để tiếp tục!",
+   syncing_flush => "Đang đồng bộ hóa - xóa bộ đệm hệ thống tệp...", 
+   install_and_upgrade => "cài đặt và nâng cấp",
+   IP_start_prompt => "Số ban đầu bạn muốn sử dụng trong bộ số cuối cùng trong IP (nghĩa là giá trị ban đầu của d trong địa chỉ IP a.b.c.d) cho các máy khách DRBL được kết nối với cổng ethernet này là bao nhiêu",
+   client_no_in_MAC_file => "Số lượng máy khách trong tệp này là",
+   not_initial_value => "Số bạn nhập KHÔNG hợp lệ cho giá trị ban đầu! Vui lòng nhập lại!!!",
+   can_not_be_the_last_IP => "KHÔNG THỂ là bộ số cuối cùng trong IP!!!",
+   can_not_be_the_first_IP => "KHÔNG THỂ là bộ số đầu tiên trong IP!!!",
+   set_client_system_select => "Bạn có muốn đặt lời nhắc khởi động cho máy khách không?",
+   use_graphic_pxelinux_menu => "Bạn có muốn sử dụng hình nền đồ họa cho menu PXE khi máy khách khởi động không?",
+   note_for_use_graphic_pxelinux_menu => "Lưu ý! Nếu bạn sử dụng menu đồ họa PXELinux, nhưng máy khách khởi động thất bại, bạn có thể chuyển sang chế độ văn bản bằng cách chạy \"switch-pxe-bg-mode -m text\".",
+   whats_client_system_boot_timeout => "Thời gian chờ lời nhắc khởi động cho máy khách là bao nhiêu (đơn vị 1/10 giây)?",
+   sorry_timeout_must_be_number => "Thời gian chờ phải là một số (ví dụ: 70)!!!",
+   unable_to_get_ethx_IP => "Không thể lấy địa chỉ IP!!! Bạn phải đặt địa chỉ IP riêng tĩnh lớp C (chẳng hạn như 192.168.1.1) và nó KHÔNG THỂ là địa chỉ IP động (như máy khách DHCP)! Lỗi này xảy ra trên card mạng:",
+   program_stop => "Dừng chương trình!!!",
+   open_thin_client_option => 
+        "Bạn có muốn để máy khách DRBL có tùy chọn chạy chế độ terminal không? tức là bạn muốn để máy khách đó chạy hiển thị từ xa (chủ yếu sử dụng tài nguyên của máy chủ), hãy nói \"Y\" ở đây.\n".
+        "Lưu ý!\n".
+	"0. Nếu bạn nói có cho tùy chọn này, đây sẽ là một môi trường rất hạn chế cho máy khách, tức là KHÔNG có quyền truy cập cục bộ cho USB, CD, âm thanh, máy in, v.v. trong máy khách.\n".
+	"1. Nếu máy chủ của bạn không mạnh, hãy nói \"no\" ở đây.\n".
+	"2. Bằng cách nói \"yes\" ở đây, chúng tôi sẽ bật xdmcp,\n".
+	"Không bao giờ là một điều an toàn khi bật cái đó. Thiết lập /etc/hosts.allow và /etc/hosts.deny để chỉ cho phép truy cập cục bộ là một lựa chọn khác nhưng không phải là an toàn nhất.\n".
+	"Chặn cổng 177 bằng tường lửa là an toàn nhất nếu bạn muốn bật xdmcp.\n".
+	"Đọc hướng dẫn để biết thêm ghi chú về tính bảo mật của XDMCP.\n".
+	"Vui lòng tự thiết lập!\n".
+	"3. Nếu bạn nói \"yes\" ở đây, bạn có thể phải khởi động lại trình quản lý môi trường máy tính để bàn của mình (gdm/kdm) sau đó, hãy nhớ lưu dữ liệu của bạn trước khi đóng ứng dụng!\n".
+	"Bạn có muốn để máy khách có tùy chọn chạy chế độ terminal không?",
+   server_kernel_nfsd_support => "Kernel đang chạy trong máy chủ hỗ trợ",
+   change_kernel_notes => "Lưu ý! Nếu bạn thay đổi kernel đang chạy trong máy chủ và không chắc kernel có hỗ trợ NFS qua udp hoặc tcp hay không, bạn nên chạy lại \"drblpush -i\" lần nữa để tránh việc máy khách khởi động thất bại!",
+   hint_for_answer => "Gợi ý! Khi có tùy chọn yes/no, giá trị mặc định được viết hoa, ví dụ: (y/N), mặc định là \"N\", khi bạn nhấn \"Enter\", nó sẽ sử dụng \"N\". Nếu bạn không chắc chắn nên chọn cái nào, bạn chỉ cần nhấn phím \"Enter\".",
+   hint_for_detect_MAC => "Nếu bạn muốn sử dụng địa chỉ IP tĩnh cho các máy khách DRBL, bạn phải chạy \"drblpush\" ở chế độ tương tác (với tùy chọn -i) và thu thập địa chỉ MAC của máy khách!",
+   illegal_char_in_MAC => "Các tệp địa chỉ MAC chứa ký tự không hợp lệ",
+   fix_wrong_MAC_file => "Vui lòng kiểm tra và sửa đổi tệp địa chỉ MAC bạn đã nhập.",
+   unable_to_find_public_IP => "Địa chỉ IP công cộng của máy chủ này KHÔNG tìm thấy.",
+   available_eth_ports => "Các cổng ethernet khả dụng trong máy chủ này",
+   is_not_in_the_lists => "không có trong danh sách",
+   enter_it_again => "Vui lòng nhập lại",
+   the_eth_port_you_choose_for_wan => "Cổng ethernet bạn chọn cho kết nối WAN",
+   set_DBN_client_audio_plugdev_etc_open_to_all => "Bạn có muốn cho phép âm thanh, cdrom, floppy, video và plugdev (như thiết bị USB) mở cho tất cả người dùng trong máy khách DRBL không? Nếu có, chúng tôi sẽ thêm tất cả người dùng vào các nhóm thiết bị đó trong máy chủ và máy khách.",
+   use_random_password => "Bạn có muốn sử dụng mật khẩu *NGẪU NHIÊN* cho các tài khoản tự động đăng nhập không?",
+   enter_password_for_autologin_accounts => "Nhập mật khẩu cho các tài khoản tự động đăng nhập.",
+   whats_client_autologin_passwd => "Mật khẩu của tài khoản tự động đăng nhập cho máy khách là gì (nó sẽ không được hiển thị trên màn hình)?",
+   retype_autologin_passwd => "Nhập lại mật khẩu (nó sẽ không được hiển thị trên màn hình).",
+   clonezilla_box_mode_for_client => "Bạn có muốn chỉ sử dụng chế độ Clonezilla box không? Nếu vậy, một số chức năng về DRBL sẽ bị triệt tiêu và bạn sẽ có một chế độ thanh lịch để thực hiện clonezilla. Lưu ý! Ở chế độ này, cài đặt và tệp cấu hình của máy khách sẽ không được lưu vào máy chủ DRBL! Chúng chỉ sử dụng một lần và sẽ biến mất sau khi máy tắt!",
+   clonezilla_box_mode_is_set => "Chế độ Clonezilla box đã được đặt, một chế độ thanh lịch cho clonezilla đang được triển khai!",
+   full_clonezilla_mode_is_set => "Chế độ Full clonezilla đã được đặt!",
+   clonezilla_box_mode_not_set => "Chế độ Clonezilla box KHÔNG được đặt, bạn sẽ có đầy đủ các chức năng của DRBL box!",
+   no_clonezilla_in_system => "Không có Clonezilla trong hệ thống!",
+   class_c_IP_for_multicast_clonezilla => "Nếu bạn muốn sử dụng multicast clonezilla, bạn phải sử dụng lớp C riêng (192.168.*.*)! Nếu không, hiệu suất của multicast clone sẽ cực kỳ tệ!",
+   drbl_ssi_mode_for_client => "Bạn có muốn sử dụng chế độ DRBL SSI (Single system image) không? Nếu có, tải và không gian đĩa cần thiết của máy chủ sẽ nhẹ hơn. LƯU Ý! Ở chế độ này, (1) bộ nhớ máy khách ít nhất là 256 MB. (2) Các cài đặt và tệp cấu hình của máy khách sẽ không được lưu vào máy chủ DRBL! Chúng chỉ được sử dụng một lần và sẽ biến mất sau khi máy tắt! Ngoài ra, nếu bạn sửa đổi bất kỳ tệp nào trong máy khách mẫu (nằm trong $drblroot), bạn phải chạy drbl-gen-ssi-files để tạo tarball mẫu trong $drbl_common_root/drbl_ssi/. (3) Nếu bạn muốn cung cấp một số tệp để ghi đè cài đặt trong tarball mẫu khi máy khách khởi động, hãy xem $drbl_common_root/drbl_ssi/clients/00_README để biết thêm chi tiết.",
+   which_drbl_mode_for_client => "Trong hệ thống, có 3 chế độ cho các dịch vụ linux không đĩa:\n[0] Chế độ Full DRBL, mỗi máy khách có /etc và /var dựa trên NFS riêng.\n[1] Chế độ DRBL SSI (Single system image), mỗi máy khách sử dụng /etc và /var dựa trên tmpfs. Ở chế độ này, tải và không gian đĩa cần thiết của máy chủ sẽ nhẹ hơn. LƯU Ý! (a) Bộ nhớ máy khách được khuyến nghị ít nhất là 256 MB. (b) Các cài đặt và tệp cấu hình của máy khách sẽ không được lưu vào máy chủ DRBL! Chúng chỉ được sử dụng một lần và sẽ biến mất sau khi máy tắt! Ngoài ra, nếu bạn sửa đổi bất kỳ tệp nào trong máy khách mẫu (nằm trong $drblroot), bạn phải chạy drbl-gen-ssi-files để tạo tarball mẫu trong $drbl_common_root/drbl_ssi/. (c) Nếu bạn muốn cung cấp một số tệp để ghi đè cài đặt trong tarball mẫu khi máy khách khởi động, hãy xem $drbl_common_root/drbl_ssi/clients/00_README để biết thêm chi tiết.\n[2] Tôi KHÔNG muốn cung cấp dịch vụ Linux không đĩa cho máy khách.\nBạn thích chế độ nào hơn?",
+   drbl_ssi_mode_is_set => "Chế độ DRBL SSI đã được đặt, một chế độ thanh lịch cho DRBL đang được triển khai!",
+   full_drbl_mode_is_set => "Chế độ Full DRBL đã được chọn!",
+   no_drbl_mode_in_system => "Không có Linux không đĩa cho máy khách trong hệ thống.",
+   where_is_ocs_img_repo_dir => "Khi sử dụng clonezilla, thư mục nào trong máy chủ này bạn muốn lưu trữ hình ảnh đã lưu (Vui lòng sử dụng đường dẫn tuyệt đối và KHÔNG gán nó dưới /mnt/, /media/ hoặc /tmp/)?",
+   not_allowed_ocs_img_repo_dir => "không phải là thư mục được phép để lưu hình ảnh clonezilla, vui lòng nhập lại.",
+   drbl_server_as_NAT_server => "Bạn có muốn để máy chủ DRBL làm máy chủ NAT không? Nếu không, máy khách DRBL của bạn sẽ KHÔNG thể truy cập Internet.",
+   drbl_server_is_NOT_NAT_server => "Máy chủ DRBL này KHÔNG cung cấp dịch vụ NAT, vì vậy máy khách DRBL của bạn sẽ KHÔNG thể truy cập Internet.",
+   both_drbl_clonezilla_are_none => "Cả hai chế độ drbl và clonezilla đều được chỉ định là không khả dụng, chỉ có các chức năng rất hạn chế (chẳng hạn như netinstall, nếu bạn cài đặt các tệp cần thiết đó và drbl-sl) là khả dụng trong hệ thống này!",
+   are_you_sure_you_want_to_continue => "Bạn có chắc chắn muốn tiếp tục không?",
+   # Tag on 2010/12/13
+   which_clonezilla_mode_for_client => "Trong hệ thống, có 4 chế độ khả dụng cho clonezilla:\n[0] Chế độ Full Clonezilla, mỗi máy khách có /etc và /var dựa trên NFS riêng.\n[1] Chế độ Clonezilla box, mỗi máy khách sử dụng /etc và /var dựa trên tmpfs. Ở chế độ này, tải và không gian đĩa cần thiết của máy chủ sẽ nhẹ hơn so với ở chế độ Full Clonezilla. Lưu ý! Ở chế độ Clonezilla box, các cài đặt và tệp cấu hình của máy khách sẽ không được lưu vào máy chủ DRBL! Chúng chỉ sử dụng một lần và sẽ biến mất sau khi máy tắt!\n[2] Tôi KHÔNG muốn clonezilla.\n[3] Sử dụng Clonezilla live làm hệ điều hành của máy khách.\nBạn thích chế độ nào hơn?",
+   clonezilla_live_mode_is_set => "Sử dụng Clonezilla live làm hệ điều hành của máy khách khi chạy tác vụ Clonezilla.",
+   which_clonezilla_live_branch => "Nhánh phát hành Clonezilla live cho máy khách là gì?\n[0]: stable (dựa trên Debian)\n[1]: testing (dựa trên Debian)\n[2]: alternative stable (dựa trên Ubuntu)\n[3]: alternative testing (dựa trên Ubuntu)\nNếu không chắc chắn, hãy chọn [2]: alternative stable.",
+   which_live_client_cpu_mode => "Kiến trúc CPU cho máy khách khi chạy tác vụ Clonezilla với Clonezilla live là gì?\n[0]: i686\n[1]: i686-pae\n[2]: amd64\nNếu không chắc chắn, hãy chọn amd64.",
+   which_live_client_cpu_mode_for_ubuntu => "Kiến trúc CPU cho máy khách khi chạy tác vụ Clonezilla với Clonezilla live là gì?\n[0]: i386\n[1]: amd64\nNếu không chắc chắn, hãy chọn i386.",
+   live_client_branch_set=> "Nhánh Clonezilla live được chọn là",
+   live_client_cpu_arch_is_set => "Kiến trúc CPU cho máy khách khi chạy tác vụ Clonezilla",
+   # Tag on 2017/01/26
+   only_one_network_card_in_system => "///CẢNH BÁO/// Chỉ tìm thấy một card mạng được định cấu hình trong hệ thống này.",
+   found_dhcp_service_on_nic => "Tìm thấy dịch vụ DHCP trên giao diện mạng",
+   do_you_want_to_lease_ip_addr_from_existing_dhcp_srv => "Bạn có muốn thuê địa chỉ IP từ dịch vụ DHCP hiện có không? Địa chỉ IP của máy chủ DHCP là",
+   will_use_available_ip_addr_from_dhcp_srv => "Nếu vậy, chúng tôi sẽ sử dụng địa chỉ IP khả dụng được thuê từ máy chủ DHCP. Nếu không, chúng tôi sẽ chạy dịch vụ DHCP trong máy này, dịch vụ này có thể xung đột với dịch vụ hiện có. Do đó, nên chọn yes.",
+   note_you_have_to_make_sure_enough_no_of_ip_addr => "//LƯU Ý// Nếu bạn chọn 'yes', bạn phải đảm bảo máy chủ DHCP của mình cung cấp đủ số lượng địa chỉ IP cho tất cả các máy khách. Ngoài ra, cơ chế này rất rủi ro vì tất cả các máy khách khởi động qua mạng PXE hoặc uEFI sẽ vào chế độ DRBL hoặc Clonezilla. Hãy đảm bảo đây là những gì bạn muốn.",
+   failed_to_detect_dhcp_service => "Không tìm thấy bất kỳ dịch vụ DHCP nào trên card mạng này",
+   do_you_want_to_try_it_again => "Bạn có muốn thử lại không?",
+   # Tag on 2021/02/14
+   from_ubuntu_1910_only_amd64_is_available => "Từ Ubuntu 19.10, chỉ có bản phát hành amd64 (x86-64) của Clonezilla live là có sẵn.",
+   mark_the_end_of_lang =>"."
+   );
