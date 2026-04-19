@@ -829,18 +829,29 @@ msg_failed_to_save_partition_table_for_disk='Fehler beim Speichern der Partition
 msg_only_kernel_same_with_srv_available='Für die Clientsysteme ist nur derselbe Kerneltyp wie auf dem Server verfügbar.'
 msg_ocs_param_irhr='Entfernen Sie nach dem Wiederherstellen den Linux udev-Hardwareeintrag nicht.'
 msg_remove_yum_repo_question='Wollen Sie die Einstellungen für das yum-Repository entfernen?'
+msg_locale_ca_ES='Katalanisch'
+msg_locale_cs_CZ='Tschechisch'
 msg_locale_de_DE='Deutsch'
+msg_locale_el_GR='Griechisch'
 msg_locale_en_US='Englisch'
 msg_locale_es_ES='Spanisch'
 msg_locale_fr_FR='Französisch'
+msg_locale_hu_HU='Ungarisch'
+msg_locale_id_ID='Indonesisch'
 msg_locale_it_IT='Italienisch'
 msg_locale_ja_JP='Japanisch'
+msg_locale_ko_KR='Koreanisch'
+msg_locale_nl_NL='Niederländisch'
+msg_locale_pl_PL='Polnisch'
 msg_locale_pt_BR='Brasilianisches Portugiesisch'
 msg_locale_ru_RU='Russisch'
 msg_locale_sk_SK='Slowakisch'
+msg_locale_th_TH='Thailändisch'
 msg_locale_tr_TR='Türkisch'
+msg_locale_uk_UA='Ukrainisch'
+msg_locale_vi_VN='Vietnamesisch'
 msg_locale_zh_CN='Vereinfachtes Chinesisch'
-msg_locale_zh_TW='Traditionelles Chinesisch'
+msg_locale_zh_TW='Traditionelles Chinesisch - Taiwan'
 msg_if_you_want_to_run_in_unattended_mode='Wenn Sie im unbeaufsichtigten Mode arbeiten wollen:'
 msg_source_disks_more_than_1='Das Image wurde von mehr als einer Platte gesichert. Dieses Programm kann nur Images verarbeiten, die von einer Platte erstellt wurden.'
 msg_restore_1_image_to_multiple_local_disks='Stelle Image auf mehrere lokale Platten wieder her'
@@ -880,7 +891,6 @@ msg_no_partition_table_need_to_create='Auf diesem System sind keine Partitionen 
 msg_client_job_are_logged_in='Die Client-Aufträge werden in dieser Datei aufgezeichnet'
 msg_autoproductname_is_a_reserved='"autoproductname" ist ein reservierter Name, bitte geben Sie einen anderen Namen an!'
 # Tag on 2012/11/30
-msg_locale_ca_ES='Katalanisch'
 keymap_file_prompt_and_example='Geben Sie die Tastaturbelegung (Layout) an, die von "Clonezilla live" beim Restore verwendet wird. Wenn Sie "NONE" angeben, wird als Layout US verwendet. Sie können die Layout-Bezeichnungen in /usr/share/X11/xkb/rules/base.lst finden, z.B. "fr" für das französische Layout. Für weitere Informationen sehen Sie im Online-Manual auf der Debian-Live Website nach.'
 # Tag on 2013/02/17
 msg_ocs_param_srel='Das Restore-Fehlerprotokoll wird im Imageverzeichnis gesichert'
@@ -974,7 +984,6 @@ msg_img_repository_not_writable='Das Imageverzeichnis ist schreibgeschützt, Sch
 msg_mount_S3_server='AWS S3 Server verwenden'
 msg_mount_swift_server='OpenStack Swift Server verwenden'
 # Tag on 2015/05/06
-msg_locale_hu_HU='Ungarisch'
 # Tag on 2015/11/18
 msg_choose_if_checking_image_restorable_before_restoring_on_this_server='Wollen Sie vor der Wiederherstellung prüfen, ob das Image auf dem Server wiederhergestellt werden kann? ///HINWEIS/// Dies prüft lediglich, ob das Image wiederhergestellt werden kann, es werden keine Daten auf der Festplatte geändert.'
 msg_choose_if_checking_image_restorable_before_restoring='Wollen Sie vor der Wiederherstellung prüfen, ob das Image wiederhergestellt werden kann? ///HINWEIS/// Dies prüft lediglich, ob das Image wiederhergestellt werden kann, es werden keine Daten auf der Festplatte geändert..'
@@ -1124,7 +1133,6 @@ msg_ocs_onthefly_param_ps="Sound abspielen, wenn der Job erledigt ist"
 msg_ocs_param_z9='zstd Komprimierung'
 msg_ocs_param_z9p='zstdmt Komprimierung'
 # Tag on 2020/08/09
-msg_locale_ko_KR='Koreanisch'
 # Tag on 2020/09/10
 msg_ocs_onthefly_param_rvd='Lösche vor dem Klonen das NTFS Flag ‘Datenträger in Benutzung’ im NTFS Quell-Dateisystemvolume'
 # Tag on 2020/10/02

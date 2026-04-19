@@ -830,19 +830,30 @@ msg_failed_to_save_partition_table_for_disk='Bu diske bölüm tablosu kaydetme i
 msg_only_kernel_same_with_srv_available='Depodaki istemci makineleri için sunucu olarak sadece, çekirdeğin aynı tipi uygundur.'
 msg_ocs_param_irhr='Geri yükleme işleminden sonra Linux udev donanım kaydını kaldırma.'
 msg_remove_yum_repo_question='DRBL yum deposu ayarlarını kaldırmak ister misiniz?'
+msg_locale_ca_ES='Katalanca'
+msg_locale_cs_CZ='Çekçe'
 msg_locale_de_DE='Almanca'
+msg_locale_el_GR='Yunanca'
 msg_locale_en_US='İngilizce'
 msg_locale_es_ES='İspanyolca'
 msg_locale_fr_FR='Fransızca'
-msg_locale_it_IT='Italyanca'
-msg_locale_ja_JP='Çince'
-msg_locale_pt_BR='Brazilya Portekizcesi'
+msg_locale_hu_HU='Macarca'
+msg_locale_id_ID='Endonezyaca'
+msg_locale_it_IT='İtalyanca'
+msg_locale_ja_JP='Japonca'
+msg_locale_ko_KR='Korece'
+msg_locale_nl_NL='Felemenkçe'
+msg_locale_pl_PL='Lehçe'
+msg_locale_pt_BR='Brezilya Portekizcesi'
 msg_locale_ru_RU='Rusça'
-msg_locale_sk_SK='Slovak'
-#Below one line is added by Ömer YILDIZ
+msg_locale_sk_SK='Slovakça'
+msg_locale_th_TH='Tayca'
 msg_locale_tr_TR='Türkçe'
+msg_locale_uk_UA='Ukraynaca'
+msg_locale_vi_VN='Vietnamca'
 msg_locale_zh_CN='Basitleştirilmiş Çince'
-msg_locale_zh_TW='Geleneksel Çince'
+msg_locale_zh_TW='Geleneksel Çince - Tayvan'
+#Below one line is added by Ömer YILDIZ
 msg_if_you_want_to_run_in_unattended_mode='Bilgisayarı gözetimsiz modda çalıştırmak isterseniz:'
 msg_source_disks_more_than_1='Kalıp birden fazla diskten kaydedildi. Bu program sadece bir diskten alınan kalıpla başa çıkabilir.'
 msg_restore_1_image_to_multiple_local_disks='Bir kalıbı çoklu yerel disklere geri yükle'
@@ -882,7 +893,6 @@ msg_no_partition_table_need_to_create='Bu makinede bölüm yok. Kalıbın bölü
 msg_client_job_are_logged_in='İstemci işleri bu dosyaya kaydedilir'
 msg_autoproductname_is_a_reserved='"autoproductname" kalıp adı olarak ayrılmıştır, lütfen başka bir isim kullanın!'
 # Tag on 2012/11/30
-msg_locale_ca_ES='Katalan'
 keymap_file_prompt_and_example='Clonezilla live üzerinde kullanılacak klavye yerleşimini girin. Eğer girdi "NONE" ise, keymap ABD klavyesine göre olacak. Klavye yerleşimlerinin listesini /usr/share/X11/xkb/rules/base.lst içinde bulabilirsiniz. Örneğin "fr", Fransız klavye yerleşimi içindir. Daha fazla bilgi için, Debian web sitesinden kılavuza bakın.'
 # Tag on 2013/02/17
 msg_ocs_param_srel='Geri yükleme hata günlüğünü kalıp dizinine kaydet'
@@ -976,7 +986,6 @@ msg_img_repository_not_writable='Kalıp depo dizini salt okunur, yazılamaz'
 msg_mount_S3_server='AWS S3 sunucusu kullan'
 msg_mount_swift_server='OpenStack swift sunucusu kullan'
 # Tag on 2015/05/06
-msg_locale_hu_HU='Macarca'
 # Tag on 2015/11/18
 msg_choose_if_checking_image_restorable_before_restoring_on_this_server='Kalıbı geri yüklemeden önce, kalıbın bu sunucuda geri yüklenebilir olup olmadığını kontrol etmek istiyor musunuz? ///NOT/// Bu eylem yalnızca kalıbın geri yüklenebilir olup olmadığını kontrol eder ve sabit sürücüye herhangi bir veri yazmaz.'
 msg_choose_if_checking_image_restorable_before_restoring='Kalıbı geri yüklemeden önce, kalıbın yenilenebilir olup olmadığını kontrol etmek istiyor musunuz? ///NOT/// Bu eylem yalnızca kalıbın yenilenebilir olup olmadığını kontrol eder ve sabit diske herhangi bir veri yazmaz.'
@@ -1126,7 +1135,6 @@ msg_ocs_onthefly_param_ps="İşlem bitince ses çal"
 msg_ocs_param_z9='zstd sıkıştırması'
 msg_ocs_param_z9p='zstdmt sıkıştırması'
 # Tag on 2020/08/09
-msg_locale_ko_KR='Korece'
 # Tag on 2020/09/10
 msg_ocs_onthefly_param_rvd='Klonlamadan önce kaynak NTFS dosya sisteminde NTFS birimi dirty bayrağını kaldır'
 # Tag on 2020/10/02

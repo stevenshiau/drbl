@@ -833,18 +833,29 @@ msg_failed_to_save_partition_table_for_disk="Errada en desar la taula de partici
 msg_only_kernel_same_with_srv_available="Solament el mateix tipus de kernel com a servidor està disponible per a les màquines client en el repositori."
 msg_ocs_param_irhr="No eliminar el registre de maquinari udev de Linux després de restaurar."
 msg_remove_yum_repo_question="Desitja eliminar la configuració del repositori yum?"
-msg_locale_de_DE="Alemany"
-msg_locale_en_US="Anglès"
-msg_locale_es_ES="Castellà"
-msg_locale_fr_FR="Francès"
-msg_locale_it_IT="Italià"
-msg_locale_ja_JP="Japonès"
-msg_locale_pt_BR="Portuguès (Brasil)"
+msg_locale_ca_ES='Català'
+msg_locale_cs_CZ='Txec'
+msg_locale_de_DE='Alemany'
+msg_locale_el_GR='Grec'
+msg_locale_en_US='Anglès'
+msg_locale_es_ES='Castellà'
+msg_locale_fr_FR='Francès'
+msg_locale_hu_HU='Hongarès'
+msg_locale_id_ID='Indonesi'
+msg_locale_it_IT='Italià'
+msg_locale_ja_JP='Japonès'
+msg_locale_ko_KR='Coreà'
+msg_locale_nl_NL='Neerlandès'
+msg_locale_pl_PL='Polonès'
+msg_locale_pt_BR='Portuguès brasiler'
+msg_locale_ru_RU='Rus'
 msg_locale_sk_SK='Eslovac'
-msg_locale_ru_RU="Rus"
-msg_locale_zh_CN="Xinès simplificat"
-msg_locale_zh_TW="Xinès tradicional"
+msg_locale_th_TH='Tai'
 msg_locale_tr_TR='Turc'
+msg_locale_uk_UA='Ucraïnès'
+msg_locale_vi_VN='Vietnamita'
+msg_locale_zh_CN='Xinès simplificat'
+msg_locale_zh_TW='Xinès tradicional - Taiwan'
 msg_if_you_want_to_run_in_unattended_mode="Si vols executar-ho en mode desatès:"
 msg_source_disks_more_than_1="La imatge va ser gravada des de més d'un disc. Aquest programa solament pot tractar amb imatges obtingudes d'un disc."
 msg_restore_1_image_to_multiple_local_disks="Restaurar una imatge a múltiples discs locals."
@@ -884,7 +895,6 @@ msg_no_partition_table_need_to_create="No s'ha trobat cap partició en aquesta m
 msg_client_job_are_logged_in="Els treballs dels clients seran desats en aquest fitxer"
 msg_autoproductname_is_a_reserved="\"autoproductname\" és un nom d'imatge reservat, per favor utilitzeu un altre nom!"
 # Tag on 2012/11/30
-msg_locale_ca_ES="Català"
 keymap_file_prompt_and_example="Introdueixi la distribució del teclat que hem d'utilitzar en la restauració amb el Clonezilla live. Si introdueix \"NONE\", El teclat serà el US. Pot trobar la distribució del teclat en /usr/share/X11/xkb/rules/base.lst. p.ej. \"fr\" per a la distribució del teclat francesa. Si vol més informació, per favor, doni una ullada al manual en el lloc de Debian Live."
 # Tag on 2013/02/17
 msg_ocs_param_srel="Desar el registre d'error de la restauració en el directory imatge"
@@ -981,7 +991,6 @@ msg_img_repository_not_writable="El directori del repositori de la imatge és ú
 msg_mount_S3_server="Utilitzi el servidor AWS S3"
 msg_mount_swift_server="Utilitzi el servidor ràpid OpenStack"
 # Tag on 2015/05/06
-msg_locale_hu_HU="Hongarès"
 # Tag on 2015/11/18
 msg_choose_if_checking_image_restorable_before_restoring_on_this_server="Abans de restaurar la imatge, vol comprovar si la imatge és restaurable en aquest servidor? ///NOTA/// Aquesta acció només comprovarà si la imatge és restaurable o no, i no escriurà cap dada al disc dur."
 msg_choose_if_checking_image_restorable_before_restoring="Abans de restaurar la imatge, vol comprovar si la imatge és restaurable o no? ///NOTA/// Aquesta acció només comprovarà si la imatge és restaurable o no, i no escriurà cap dada al disc dur."
@@ -1131,7 +1140,6 @@ msg_ocs_onthefly_param_ps="Fes un senyal sonor quan el treball estigui acabat."
 msg_ocs_param_z9="compressió zstd"
 msg_ocs_param_z9p="compressió zstdmt"
 # Tag on 2020/08/09
-msg_locale_ko_KR='Coreà'
 # Tag on 2020/09/10
 msg_ocs_onthefly_param_rvd="Elimini l'indicador de volum NTFS brut del sistema d''archius NTFS origen abans de clonar-ho."
 # Tag on 2020/10/02

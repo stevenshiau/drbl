@@ -830,18 +830,29 @@ msg_failed_to_save_partition_table_for_disk='Falha ao salvar tabela de particion
 msg_only_kernel_same_with_srv_available='Está disponível apenas o mesmo tipo de kernel que o servidor para os clientes no repositório.'
 msg_ocs_param_irhr='Não remover a gravação de hardware udev do Linux após a restauração.'
 msg_remove_yum_repo_question='Deseja remover a configuração do repositório yum?'
+msg_locale_ca_ES='Catalão'
+msg_locale_cs_CZ='Tcheco'
 msg_locale_de_DE='Alemão'
+msg_locale_el_GR='Grego'
 msg_locale_en_US='Inglês'
 msg_locale_es_ES='Espanhol'
 msg_locale_fr_FR='Francês'
+msg_locale_hu_HU='Húngaro'
+msg_locale_id_ID='Indonésio'
 msg_locale_it_IT='Italiano'
 msg_locale_ja_JP='Japonês'
-msg_locale_pt_BR='Português do Brasil'
+msg_locale_ko_KR='Coreano'
+msg_locale_nl_NL='Holandês'
+msg_locale_pl_PL='Polonês'
+msg_locale_pt_BR='Português brasileiro'
 msg_locale_ru_RU='Russo'
 msg_locale_sk_SK='Eslovaco'
+msg_locale_th_TH='Tailandês'
 msg_locale_tr_TR='Turco'
-msg_locale_zh_CN='Chinês Simplificado'
-msg_locale_zh_TW='Chinês Tradicional'
+msg_locale_uk_UA='Ucraniano'
+msg_locale_vi_VN='Vietnamita'
+msg_locale_zh_CN='Chinês simplificado'
+msg_locale_zh_TW='Chinês tradicional - Taiwan'
 msg_if_you_want_to_run_in_unattended_mode='Se você deseja executar o modo automático:'
 msg_source_disks_more_than_1='A imagem foi salva a partir de mais de um disco. Este programa consegue lidar apenas com imagens retiradas de apenas um disco.'
 msg_restore_1_image_to_multiple_local_disks='Restaurar uma imagem para múltiplos discos locais.'
@@ -881,7 +892,6 @@ msg_no_partition_table_need_to_create='Nenhuma partição foi encontrada nesta m
 msg_client_job_are_logged_in='Tarefas de clientes são registradas neste arquivo'
 msg_autoproductname_is_a_reserved='"autoproductname" é um nome de imagem reservado, por favor use outro nome!'
 # Tag on 2012/11/30
-msg_locale_ca_ES='Catalão'
 keymap_file_prompt_and_example='Digite um layout de teclado a ser usado no Clonezilla live de recuperação. Se você inseri-lo como "NONE" (nenhum), o mapa de teclas será de teclado US (americano). Você pode encontrar o layout de teclado em /usr/share/X11/xkb/rules/base.lst. Por exemplo, "fr" para layout de teclado francês. Para mais informações, por favor verifique o manual no website do Debian Live.'
 # Tag on 2013/02/17
 msg_ocs_param_srel='Salvar o log de erro de restauração no diretório de imagem'
@@ -975,7 +985,6 @@ msg_img_repository_not_writable='O diretório de repositório está como somente
 msg_mount_S3_server='Usar servidor AWS S3'
 msg_mount_swift_server='Usar servidor OpenStack Swift'
 # Tag on 2015/05/06
-msg_locale_hu_HU='Húngaro'
 # Tag on 2015/11/18
 msg_choose_if_checking_image_restorable_before_restoring_on_this_server='Antes de restaurar a imagem, você deseja verificar se ela está restaurável neste servidor? ///NOTA/// Essa ação vai verificar apenas se a imagem é restaurável ou não, e ela não vai escrever qualquer dado no disco rígido.'
 msg_choose_if_checking_image_restorable_before_restoring='Antes de restaurar a imagem, deseja verificar se a imagem é restaurável ou não? ///NOTA/// Essa ação vai verificar apenas se a imagem é restaurável ou não, e ela não vai escrever qualquer dado no disco rígido.'
@@ -1125,7 +1134,6 @@ msg_ocs_onthefly_param_ps="Reproduzir som quando a tarefa estiver concluída"
 msg_ocs_param_z9='compressão zstd'
 msg_ocs_param_z9p='compressão zstdmt'
 # Tag on 2020/08/09
-msg_locale_ko_KR='Coreano'
 # Tag on 2020/09/10
 msg_ocs_onthefly_param_rvd='Remover o sinalizador de volume sujo (dirty flag) no sistema de arquivos NTFS de origem antes de cloná-lo'
 # Tag on 2020/10/02

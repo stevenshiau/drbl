@@ -830,18 +830,29 @@ msg_failed_to_save_partition_table_for_disk='Nem sikerült menteni a lemez part�
 msg_only_kernel_same_with_srv_available='Csak a szerverével azonos típusú kernel érhető el kliensek számra is a tárhelyen.'
 msg_ocs_param_irhr='Linux udev hardver bejegyzés meghagyása a visszaállítás után'
 msg_remove_yum_repo_question='Kívánja eltávolítani a DRBL yum tárhely beállításait?'
+msg_locale_ca_ES='Katalán'
+msg_locale_cs_CZ='Cseh'
 msg_locale_de_DE='Német'
+msg_locale_el_GR='Görög'
 msg_locale_en_US='Angol'
 msg_locale_es_ES='Spanyol'
 msg_locale_fr_FR='Francia'
+msg_locale_hu_HU='Magyar'
+msg_locale_id_ID='Indonéz'
 msg_locale_it_IT='Olasz'
 msg_locale_ja_JP='Japán'
-msg_locale_pt_BR='Portugál'
+msg_locale_ko_KR='Koreai'
+msg_locale_nl_NL='Holland'
+msg_locale_pl_PL='Lengyel'
+msg_locale_pt_BR='Brazil portugál'
 msg_locale_ru_RU='Orosz'
 msg_locale_sk_SK='Szlovák'
+msg_locale_th_TH='Thai'
 msg_locale_tr_TR='Török'
-msg_locale_zh_CN='Egyszerűsített Kínai'
-msg_locale_zh_TW='Tradícionális Kínai'
+msg_locale_uk_UA='Ukrán'
+msg_locale_vi_VN='Vietnami'
+msg_locale_zh_CN='Egyszerűsített kínai'
+msg_locale_zh_TW='Hagyományos kínai - Tajvan'
 msg_if_you_want_to_run_in_unattended_mode='Amennyiben felügyelet nélküli módban futtatná:'
 msg_source_disks_more_than_1='A kép egynél több lemezről készült. Ez a program csak olyan képet kezel, ami egyetlen lemezt foglal magába.'
 msg_restore_1_image_to_multiple_local_disks='Lemezkép visszaállítása több helyi lemezre'
@@ -881,7 +892,6 @@ msg_no_partition_table_need_to_create='Nincs partíció ezen a számítógépen.
 msg_client_job_are_logged_in='A kliensfeladatok bejegyzéseinek fájlja'
 msg_autoproductname_is_a_reserved='Az "autoproductname" fenntartott képnév, válasszon másikat!'
 # Tag on 2012/11/30
-msg_locale_ca_ES='Katalán'
 keymap_file_prompt_and_example='Adja meg a billentyűkiosztást a visszaállító Clonezilla live számára. Amennyiben "NONE"-t ír, US billentyűzet kerül beállításra. A kiosztások listáját megtalálhatja itt: /usr/share/X11/xkb/rules/base.lst. A Magyar billentyűzet pl. "hu". Bővebb információért, olvassa el a live kézikönyvet a Debian Live honlapon.'
 # Tag on 2013/02/17
 msg_ocs_param_srel='Visszaállítási hibák naplójának mentése a kép könyvtárába'
@@ -975,7 +985,6 @@ msg_img_repository_not_writable='A képtárhely könyvtára írásvédett, csak 
 msg_mount_S3_server='AWS S3 szerver használata'
 msg_mount_swift_server='OpenStack swift szerver használata'
 # Tag on 2015/05/06
-msg_locale_hu_HU='Magyar'
 # Tag on 2015/11/18
 msg_choose_if_checking_image_restorable_before_restoring_on_this_server='Végrehajtás előtt szeretné ellenőrizni, hogy a lemezkép visszaállítható-e erre a szerverre? ///MEGJEGYZÉS/// Ez a művelet csupán a visszaállíthatóságot vizsgálja és semmilyen adatot nem ír a merevlemezre.'
 msg_choose_if_checking_image_restorable_before_restoring='Végrehajtás előtt szeretné ellenőrizni a lemezkép visszaállíthatóságát? ///MEGJEGYZÉS/// Ez a művelet csupán a visszaállíthatóságot vizsgálja és semmilyen adatot nem ír a merevlemezre.'
@@ -1125,7 +1134,6 @@ msg_ocs_onthefly_param_ps="Hangjelzés a feladat végeztével"
 msg_ocs_param_z9='zstd tömörítés'
 msg_ocs_param_z9p='zstdmt tömörítés'
 # Tag on 2020/08/09
-msg_locale_ko_KR='Koreai'
 # Tag on 2020/09/10
 msg_ocs_onthefly_param_rvd='NTFS kötet dirty jelölésének törlése a forrás fájlrendszerről klónozás előtt'
 # Tag on 2020/10/02

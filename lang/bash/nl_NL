@@ -825,18 +825,29 @@ msg_failed_to_save_partition_table_for_disk='Mislukt om de partitietabel voor de
 msg_only_kernel_same_with_srv_available='Alleen kernels van hetzelfde type als de server zijn beschikbaar voor client-machines in de repository.'
 msg_ocs_param_irhr='Linux udev-hardwaregegevens niet verwijderen na herstel.'
 msg_remove_yum_repo_question='Wilt u de DRBL yum-repositoryinstellingen verwijderen?'
+msg_locale_ca_ES='Catalaans'
+msg_locale_cs_CZ='Tsjechisch'
 msg_locale_de_DE='Duits'
+msg_locale_el_GR='Grieks'
 msg_locale_en_US='Engels'
 msg_locale_es_ES='Spaans'
 msg_locale_fr_FR='Frans'
+msg_locale_hu_HU='Hongaars'
+msg_locale_id_ID='Indonesisch'
 msg_locale_it_IT='Italiaans'
 msg_locale_ja_JP='Japans'
-msg_locale_pt_BR='Braziliaans Portugees'
+msg_locale_ko_KR='Koreaans'
+msg_locale_nl_NL='Nederlands'
+msg_locale_pl_PL='Pools'
+msg_locale_pt_BR='Braziliaans-Portugees'
 msg_locale_ru_RU='Russisch'
 msg_locale_sk_SK='Slowaaks'
+msg_locale_th_TH='Thais'
 msg_locale_tr_TR='Turks'
+msg_locale_uk_UA='Oekraïens'
+msg_locale_vi_VN='Vietnamees'
 msg_locale_zh_CN='Vereenvoudigd Chinees'
-msg_locale_zh_TW='Traditioneel Chinees'
+msg_locale_zh_TW='Traditioneel Chinees - Taiwan'
 msg_if_you_want_to_run_in_unattended_mode='Als u in onbeheerde (unattended) modus wilt draaien:'
 msg_source_disks_more_than_1='De image is opgeslagen van meer dan één schijf. Dit programma kan alleen images verwerken die van één schijf zijn gemaakt.'
 msg_restore_1_image_to_multiple_local_disks='Een image herstellen naar meerdere lokale schijven'
@@ -876,7 +887,6 @@ msg_no_partition_table_need_to_create='Er zijn geen partities gevonden op deze m
 msg_client_job_are_logged_in='Client-taken worden vastgelegd in dit bestand:'
 msg_autoproductname_is_a_reserved='"autoproductname" is een gereserveerde image-naam. Gebruik a.u.b. een andere naam.'
 # Tag on 2012/11/30
-msg_locale_ca_ES='Catalaans'
 keymap_file_prompt_and_example='Voer de toetsenbordindeling in voor de herstel-Clonezilla live-omgeving. Voer "NONE" in voor het standaard US toetsenbord. Een lijst met beschikbare indelingen is te vinden in /usr/share/X11/xkb/rules/base.lst (bijv. "fr" voor Frans). Raadpleeg voor meer informatie de Debian Live handleiding.'
 # Tag on 2013/02/17
 msg_ocs_param_srel='Herstelfout-logboek opslaan in de image-directory'
@@ -970,7 +980,6 @@ msg_img_repository_not_writable='De image-repository-directory is alleen-lezen e
 msg_mount_S3_server='AWS S3-server gebruiken'
 msg_mount_swift_server='OpenStack Swift-server gebruiken'
 # Tag on 2015/05/06
-msg_locale_hu_HU='Hongaars'
 # Tag on 2015/11/18
 msg_choose_if_checking_image_restorable_before_restoring_on_this_server='Wilt u voor het herstellen van de image controleren of deze herstelbaar is op deze server? ///OPMERKING/// Deze actie controleert alleen of de image herstelbaar is; er worden geen gegevens naar de harde schijf geschreven.'
 msg_choose_if_checking_image_restorable_before_restoring='Wilt u voor het herstellen van de image controleren of deze herstelbaar is? ///OPMERKING/// Deze actie controleert alleen of de image herstelbaar is; er worden geen gegevens naar de harde schijf geschreven.'
@@ -1120,7 +1129,6 @@ msg_ocs_onthefly_param_ps="Geluid afspelen wanneer de taak klaar is"
 msg_ocs_param_z9='zstd-compressie (erg snel en kleine image zoals gzip)'
 msg_ocs_param_z9p='zstdmt-compressie (erg snel en kleine image zoals gzip, voor multi-core/CPU)'
 # Tag on 2020/08/09
-msg_locale_ko_KR='Koreaans'
 # Tag on 2020/09/10
 msg_ocs_onthefly_param_rvd='NTFS-volume "dirty flag" in bron-NTFS-bestandssysteem verwijderen voor het klonen'
 # Tag on 2020/10/02

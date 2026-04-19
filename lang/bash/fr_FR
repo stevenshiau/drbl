@@ -830,18 +830,29 @@ msg_failed_to_save_partition_table_for_disk='Échec lors de la sauvegarde de la 
 msg_only_kernel_same_with_srv_available='Le dépôt propose uniquement le même type de noyau pour les clients que pour le serveur.'
 msg_ocs_param_irhr="Ne supprimez pas l'enregistrement du matériel udev Linux après la restauration."
 msg_remove_yum_repo_question='Voulez-vous supprimer le paramétrage du dépôt yum ?'
+msg_locale_ca_ES='Catalan'
+msg_locale_cs_CZ='Tchèque'
 msg_locale_de_DE='Allemand'
+msg_locale_el_GR='Grec'
 msg_locale_en_US='Anglais'
 msg_locale_es_ES='Espagnol'
 msg_locale_fr_FR='Français'
+msg_locale_hu_HU='Hongrois'
+msg_locale_id_ID='Indonésien'
 msg_locale_it_IT='Italien'
 msg_locale_ja_JP='Japonais'
+msg_locale_ko_KR='Coréen'
+msg_locale_nl_NL='Néerlandais'
+msg_locale_pl_PL='Polonais'
 msg_locale_pt_BR='Portugais brésilien'
 msg_locale_ru_RU='Russe'
 msg_locale_sk_SK='Slovaque'
+msg_locale_th_TH='Thaï'
 msg_locale_tr_TR='Turc'
+msg_locale_uk_UA='Ukrainien'
+msg_locale_vi_VN='Vietnamien'
 msg_locale_zh_CN='Chinois simplifié'
-msg_locale_zh_TW='Chinois traditionnel'
+msg_locale_zh_TW='Chinois traditionnel - Taïwan'
 msg_if_you_want_to_run_in_unattended_mode='Pour exécuter en mode non assisté :'
 msg_source_disks_more_than_1="L'image a été créée à partir de plus d'un disque. Ce programme ne peut gérer que les images venant d'un seul disque."
 msg_restore_1_image_to_multiple_local_disks='Restaurer une image vers plusieurs disques locaux'
@@ -881,7 +892,6 @@ msg_no_partition_table_need_to_create='Aucune partition trouvée sur cette machi
 msg_client_job_are_logged_in='Les tâches du client sont enregistrées dans ce fichier'
 msg_autoproductname_is_a_reserved="\"autoproductname\" est un nom d'image réservé. Veuillez choisir un autre nom !"
 # Tag on 2012/11/30
-msg_locale_ca_ES='Catalan'
 keymap_file_prompt_and_example="Saisissez la configuration clavier à utiliser pendant la restauration. La valeur \"NONE\" implique un clavier américain. Les configurations disponibles se trouvent dans /usr/share/X11/xkb/rules/base.lst. Par ex. \"fr\" pour un clavier français. Pour plus d'informations, reportez-vous au manuel en ligne sur le site web de Debian Live."
 # Tag on 2013/02/17
 msg_ocs_param_srel="Sauvegarder en enregistrant le journal dans le répertoire de l'image"
@@ -975,7 +985,6 @@ msg_img_repository_not_writable="Le répertoire dépôt de l'image est en lectur
 msg_mount_S3_server='Utiliser le serveur AWS S3'
 msg_mount_swift_server='Utiliser le serveur OpenStack swift'
 # Tag on 2015/05/06
-msg_locale_hu_HU='Hongrois'
 # Tag on 2015/11/18
 msg_choose_if_checking_image_restorable_before_restoring_on_this_server="Avant de restaurer l'image, voulez-vous vérifier qu'elle est restaurable sur ce serveur ? ///NOTE/// Ce choix vérifie uniquement que l'image est restaurable. Rien n'est écrit sur le disque dur."
 msg_choose_if_checking_image_restorable_before_restoring="Avant de restaurer l'image, voulez-vous vérifier qu'elle est restaurable ? ///NOTE/// Ce choix vérifie uniquement que l'image est restaurable. Rien n'est écrit sur le disque dur."
@@ -1125,7 +1134,6 @@ msg_ocs_onthefly_param_ps="Jouer un son lorsque la tâche est terminée"
 msg_ocs_param_z9='compression zstd'
 msg_ocs_param_z9p='compression zstdmt'
 # Tag on 2020/08/09
-msg_locale_ko_KR='Coréen'
 # Tag on 2020/09/10
 msg_ocs_onthefly_param_rvd="Supprimer le bit d'intégrité NTFS du système source avant clonage"
 # Tag on 2020/10/02
