@@ -825,18 +825,29 @@ msg_failed_to_save_partition_table_for_disk='Failed to save the partition table 
 msg_only_kernel_same_with_srv_available='Only kernels with the same type as the server are available for client machines in the repository.'
 msg_ocs_param_irhr='Do not remove Linux udev hardware records after restoring.'
 msg_remove_yum_repo_question='Do you want to remove the DRBL yum repository settings?'
+msg_locale_ca_ES='Catalan'
+msg_locale_cs_CZ='Czech'
 msg_locale_de_DE='German'
+msg_locale_el_GR='Greek'
 msg_locale_en_US='English'
 msg_locale_es_ES='Spanish'
 msg_locale_fr_FR='French'
+msg_locale_hu_HU='Hungarian'
+msg_locale_id_ID='Indonesian'
 msg_locale_it_IT='Italian'
 msg_locale_ja_JP='Japanese'
+msg_locale_ko_KR='Korean'
+msg_locale_nl_NL='Dutch' 
+msg_locale_pl_PL='Polish'
 msg_locale_pt_BR='Brazilian Portuguese'
 msg_locale_ru_RU='Russian'
 msg_locale_sk_SK='Slovak'
+msg_locale_th_TH='Thai'
 msg_locale_tr_TR='Turkish'
+msg_locale_uk_UA='Ukrainian' 
+msg_locale_vi_VN='Vietnamese'
 msg_locale_zh_CN='Simplified Chinese'
-msg_locale_zh_TW='Traditional Chinese'
+msg_locale_zh_TW='Traditional Chinese - Taiwan'
 msg_if_you_want_to_run_in_unattended_mode='If you want to run in unattended mode:'
 msg_source_disks_more_than_1='The image was saved from more than one disk. This program can only handle images taken from a single disk.'
 msg_restore_1_image_to_multiple_local_disks='Restore an image to multiple local disks'
@@ -876,7 +887,6 @@ msg_no_partition_table_need_to_create='No partitions were found on this machine.
 msg_client_job_are_logged_in='Client jobs are recorded in this file:'
 msg_autoproductname_is_a_reserved='"autoproductname" is a reserved image name. Please use another name.'
 # Tag on 2012/11/30
-msg_locale_ca_ES='Catalan'
 keymap_file_prompt_and_example='Enter the keyboard layout for the recovery Clonezilla live environment. Enter "NONE" for the default US keyboard. A list of available layouts can be found in /usr/share/X11/xkb/rules/base.lst (e.g., "fr" for French). For more information, please see the Debian Live manual.'
 # Tag on 2013/02/17
 msg_ocs_param_srel='Save restore error log in the image directory'
@@ -969,8 +979,6 @@ msg_img_repository_not_writable='The image repository directory is read-only and
 # Tag on 2015/04/18
 msg_mount_S3_server='Use AWS S3 server'
 msg_mount_swift_server='Use OpenStack swift server'
-# Tag on 2015/05/06
-msg_locale_hu_HU='Hungarian'
 # Tag on 2015/11/18
 msg_choose_if_checking_image_restorable_before_restoring_on_this_server='Before restoring the image, do you want to check if it is restorable on this server? ///NOTE/// This action will only check if the image is restorable; it will not write any data to the hard drive.'
 msg_choose_if_checking_image_restorable_before_restoring='Before restoring the image, do you want to check if it is restorable? ///NOTE/// This action only checks if the image is restorable; it will not write any data to the hard drive.'
@@ -1119,8 +1127,6 @@ msg_ocs_onthefly_param_ps="Play sound when the job is done"
 # Tag on 2019/12/03
 msg_ocs_param_z9='zstd compression (Very fast and small image like gzip)'
 msg_ocs_param_z9p='zstdmt compression (Very fast and small image like gzip, for multicore/CPU)'
-# Tag on 2020/08/09
-msg_locale_ko_KR='Korean'
 # Tag on 2020/09/10
 msg_ocs_onthefly_param_rvd='Remove NTFS volume dirty flag in source NTFS file system before cloning it'
 # Tag on 2020/10/02
