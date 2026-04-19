@@ -1,0 +1,263 @@
+#!/usr/bin/perl -T
+# Written by Steven Shiau <steven _at_ clonezilla org> for DRBL
+# Translated by Gemini
+# License: GPL
+#
+
+$lang_charset = 'UTF-8';
+
+%delimiter =
+   (
+   dash_line => '------------------------------------------------------',
+   star_line => '******************************************************',
+   exclamation_line => "!!!!!!!!!!!!!!!!!!!!!!!!!",
+   warning_line => "!!!!!!!!!!!!!!!!!!!!!! Warning !!!!!!!!!!!!!!!!!!!!!!!",
+   );
+
+%lang_text =
+   (  
+   Say        => 'Řekněte',
+   or         => 'nebo',
+   seconds    => 'sekund',
+   WARNING    => 'VAROVÁNÍ',
+   Accept     => 'Přijmout',
+   as         => 'jako',
+   login      => 'přihlášení',
+   clear      => 'vymazat',
+   of         => 'z',
+   logout     => 'odhlášení',
+   page       => 'strana',
+   move       => 'přesunout',
+   date       => 'datum',
+   size       => 'velikost',
+   type       => 'typ',
+   filename   => 'název souboru',
+   encoding   => 'kódování',
+   download   => 'stáhnout',
+   cancel     => 'zrušit',
+   continue   => 'pokračovat',
+   for        => 'pro',
+   save       => 'uložit',
+   add        => 'přidat',
+   delete     => 'smazat',
+   uninstall  => 'odinstalovat',
+   done       => 'hotovo',
+   finish     => 'dokončit',
+   space      => 'mezera',
+   );
+
+%lang_word =
+   (
+   please_enter => "prosím zadejte",
+   to_deploy_them => "pro jejich nasazení",
+   root_passwd => "heslo roota",
+   initial_digit => "počáteční číslice",
+   unable_to_find_the => "Nelze najít",
+   program_stop => "Zastavení programu",
+   );
+
+%lang_deploy =
+   (
+   interactive_mode_prompt => 'Interaktivní režim vám umožní zadat informace o vašem DRBL prostředí.',
+   domain_unset_prompt => 'DOMÉNA není nastavena, zadejte prosím DOMÉNU nyní:',
+   domain_prompt => 'Zadejte prosím DNS doménu (např. drbl.sf.net):',
+   nisdomain_unset_prompt => 'NISDOMÉNA není nastavena, zadejte prosím NISDOMÉNU nyní:',
+   nisdomain_prompt => 'Zadejte prosím název domény NIS/YP:',
+   not_allowed_domainname => 'není povoleno jako DOMAINNAME, zadejte jej znovu!',
+   not_allowed_nisdomainname => 'není povoleno jako NISDOMAINNAME, zadejte jej znovu!',
+   set_domain_as => 'Nastavit DOMÉNU jako',
+   enter_client_hostname_prefix => "Zadejte prosím předponu názvu hostitele klienta:\nTato předpona se používá k automatickému vytváření názvů hostitelů pro klienty. Pokud chcete přepsat některé nebo všechny automaticky vytvořené názvy hostitelů, stiskněte nyní Ctrl-C pro ukončení tohoto programu, upravte /etc/drbl/client-ip-hostname a poté tento program spusťte znovu.",
+   not_allowed_hostname => 'není povoleno jako předpona názvu hostitele klienta, zadejte ji znovu!',
+   set_client_hostname_prefix => 'Nastavit předponu názvu hostitele klienta jako',
+   no_NIC_setup => 'Nenastavili jste žádné nastavení sítě Internet pro síťové karty pro klienty (jako je IP adresa eth1, eth2...), nebo je něco špatně!',
+   configured_nic => 'Nakonfigurované ethernetové karty nalezené ve vašem systému:',
+   we_can_NOT_continue => 'Nemůžeme pokračovat...',
+   but_not_private_IP_or_configured => 'ale není to soukromá IP, není dobře nakonfigurovaná nebo není nyní aktivní!!!',
+   enter_public_IP_for_the_client => "Zadejte veřejnou IP pro tohoto klienta",
+   its_IP_in_DRBL_is => "Jeho IP v DRBL je",
+   wrong_entered_IP => "Zadaná IP adresa je chybná, zadejte ji prosím znovu!",
+   enter_gateway_for_client => "Zadejte bránu pro tohoto klienta",
+   enter_netmask_for_client => "Zadejte síťovou masku pro tohoto klienta",
+   wrong_entered_netmask => "Zadaná SÍŤOVÁ MASKA je chybná, zadejte ji prosím znovu!",
+   set_client_public_IP_as => "Nastavíme parametry sítě veřejných IP adres klientů jako:",
+   we_will_skip => 'Vynecháme',
+   for_internet_access_prompt => 'Který ethernetový port na tomto serveru slouží pro veřejný přístup k internetu, nikoli pro připojení DRBL?',
+   drbl_website_prompt => 'Podrobnosti naleznete na http://drbl.nchc.org.tw/redhat nebo http://drbl.sf.net/redhat.',
+   ethernet_port_for_internet => 'Ethernetový port pro přístup k internetu je:',
+   ethernet_port_for_DRBL => 'Ethernetové porty pro DRBL prostředí: ',
+   only_1_IP_for_eth0 => 'Pouze 1 IP adresa pro eth0, nebudeme používat eth0 pro prostředí DRBL!',
+   no_DRBL_port => 'Pro prostředí DRBL není k dispozici žádný ethernetový port!',
+   saved_mac_address_files_in_etc => "Tyto soubory jsou uloženy v adresáři $drbl_syscfg.",
+   collect_MAC_prompt => 
+          "Nyní můžeme sbírat MAC adresy klientů!\n".
+          "Pokud chcete, aby služba DHCP na serveru DRBL nabízela klientovi stejnou IP adresu pokaždé, když se klient spustí, a nikdy jste tento postup neprovedli, měli byste to udělat nyní!\n".
+          "Pokud již tyto MAC adresy klientů máte, můžete je vložit do různých skupinových souborů (počet těchto souborů je stejný jako počet síťových karet pro službu DRBL). V tomto případě můžete tento krok přeskočit.\n".
+          "Tento krok vám pomůže zaznamenat MAC adresy klientů a poté je rozdělit do různých skupin. Ušetří vám to čas a omezí překlepy.\n".
+	  "MAC adresy budou zaznamenávány jedna po druhé podle bootování klientů,\n".
+	  "a budou uloženy do různých souborů podle síťové karty v serveru, název souboru bude jako macadr-eth1.txt, macadr-eth2.txt... Najdete je v adresáři $drbl_syscfg.\n".
+	  "Spouštějte prosím klienty popořadě a ujistěte se, že bootují přes etherboot nebo PXE!\n". 
+          "Chcete je sbírat?",
+   ok_let_do_it => 'OK! Pojďme na to!',
+   you_are_not_root => 'Nejste root',
+   ok_let_continue => 'OK! Pokračujme...',
+   fix_eth_IP_prompt => "Chcete, aby služba DHCP na serveru DRBL nabízela klientovi stejnou IP adresu při každém spuštění klienta (pokud chcete tuto funkci, musíte posbírat MAC adresy klientů a uložit je do souboru (souborů) jako v předchozím postupu)). Toto je pro klienty připojené k ethernetovému síťovému rozhraní serveru DRBL",
+   MAC_file_prompt => "OK! Řekněte mi prosím název souboru, který obsahuje MAC adresy klientů řádek po řádku pro",
+   range_prompt => "OK! Pokračujme, IP adresy klientů nastavíme podle \"první boot dostane IP první\" místo fixních!",
+   client_number_connected_to_eth => "Kolik DRBL klientů (PC pro studenty) je připojeno k ethernetovému síťovému rozhraní serveru DRBL",
+   enter_the_no => "Zadejte prosím číslo",
+   the_value_you_set => "Konečné číslo v poslední sadě číslic IP adresy klienta je",
+   set_the_IP_connected_to_eth => "Nastavíme IP adresu pro klienty připojené k ethernetovému síťovému rozhraní serveru DRBL",
+   do_you_want_to_continue => "Chcete pokračovat?",
+   reenter_or_accept => "pro opětovné zadání, nebo jakékoli jiné písmeno pro přijetí této hodnoty a pokračování!",
+   filename_you_set => "Název souboru, který jste nastavili, je",
+   by_MAC_file => "Podle souboru MAC adres, který jste nastavili, IP adresy pro klienty připojené k ethernetovému síťovému rozhraní serveru DRBL",
+   let_restart_it_again => "OK, restartujme to znovu!",
+   layout_for_DRBL => "Rozvržení pro vaše DRBL prostředí:",
+   swap_prompt =>
+              "Pokud je ve vašem klientském stroji lokální pevný disk se swapovacím oddílem nebo zapisovatelným souborovým systémem,\n".
+              "chcete tento swapovací oddíl použít nebo vytvořit swapovací soubor v zapisovatelném souborovém systému, aby měl klient více paměti k použití? (Tento krok NEZNIČÍ žádná data na tomto pevném disku)",
+   try_to_create_swap =>
+                "OK! Pokusíme se vytvořit swapovací prostor pro vašeho klienta, pokud má lokální pevný disk!",
+   max_swap_size =>
+                "Jaká je maximální velikost (v megabajtech) pro swapovací prostor?\n".
+                "Pokusíme se pro vás alokovat swapovací prostor, pokud nebude stačit, použije se 60 % volného místa.",
+   mode_for_client_init =>
+              "Který režim mají klienti používat po spuštění?\n".
+              "\"1\": Grafický režim (X window systém) (výchozí),\n".
+              "\"2\": Textový režim.",
+   client_text_mode => "Klienti po spuštění použijí textový režim.",
+   client_graphic_mode => "Klienti po spuštění vstoupí do grafického režimu.",
+   login_mode_for_client =>
+                  "Který režim chcete, když se klient spustí v grafickém režimu?\n".
+                  "0: normální přihlášení, 1: automatické přihlášení, 2: časované přihlášení",
+   auto_login => "Klienti se po spuštění automaticky přihlásí.",
+   created_account_for_auto_login =>
+                      "budou vytvořeny účty pro klientské stroje pro automatické přihlášení.\n".
+		      "ID automatického přihlášení je stejné jako název hostitele klienta.\n".
+                      "Informace o účtech a heslech budou uvedeny v souboru",
+   time_for_countdown => "Kolik sekund pro odpočítávání?",
+   timed_login_prompt => "Klienti se automaticky přihlásí, pokud vyprší čas po",
+   normal_login_prompt => "Klienti budou po spuštění čekat na přihlášení uživatele.",
+   keep_client_setting_question => "Chcete zachovat staré nastavení stávajících DRBL klientů, pokud existují?",
+   remove_client_setting => "Odstraníme veškeré nastavení DRBL klientů, pokud již existují.",
+   keep_client_setting => "Pokusíme se zachovat nastavení DRBL klientů, pokud již existují.",
+   set_client_root_passwd => "Chcete nastavit heslo roota pro klienty namísto použití stejného hesla roota zkopírovaného ze serveru? (Pro lepší zabezpečení)",
+   whats_client_root_passwd => "Nové heslo roota pro klienty (nebude se zobrazovat na obrazovce)?",
+   set_client_pxelinux_passwd => "Chcete nastavit heslo pxelinux pro klienty, aby při startu klienta muselo být zadáno heslo (pro lepší zabezpečení)?",
+   whats_client_pxelinux_passwd => "Nové heslo pxelinux pro klienty (nebude se zobrazovat na obrazovce)?",
+   retype_root_passwd => "Zadejte znovu nové heslo (nebude se zobrazovat na obrazovce).",
+   sorry_passwd_not_match => "Omlouváme se, hesla se neshodují",
+   sorry_passwd_can_not_empty => "Omlouváme se, heslo nesmí být prázdné",
+   set_client_alias_IP =>
+      "Pomocí rozhraní aliasů může mít každý klient 2 IP adresy,\n".
+      "jedna z nich je soukromá IP pro klienty připojené k serveru DRBL a druhá je veřejná IP pro klienty přímo připojené k WAN z přepínače!\n".
+      "Chcete nastavit veřejnou IP pro klienty?",
+   searching_installed_drbl_packages => "Hledání nainstalovaných balíčků pro DRBL server... To může trvat několik minut...",
+   no_drbl_server_package_found =>
+	      "Není nainstalován žádný balíček DRBL serveru!!!\n". 
+	      "Měli byste nejprve spustit jiný skript (drblsrv -i) pro nastavení DRBL serveru!!! Jinak systém NEBUDE fungovat!!!\n".
+	      "Jste si jisti, že chcete pokračovat? Řekněte \"yes\" nebo \"y\" pro pokračování, nebo jakékoli jiné písmeno pro ukončení!",
+   but_you_will_see_errors => "Uvidíte však spoustu chybových zpráv...!!!",
+   smart_decision => "OK, chytré rozhodnutí, nyní skončím!",
+   finished_searching_installed_drbl_packages => "Dokončeno hledání nainstalovaných balíčků pro DRBL server.",
+   note_for_keep_client_setting => "Poznámka! Snažíte se zachovat nastavení DRBL klientů, pokud existují, někdy se DRBL klienti po dokončení tohoto skriptu pokazí! Pokud ano, restartování těchto DRBL klientů by je mělo zprovoznit!",
+   press_enter_to_continue => "Stiskněte Enter pro pokračování... ",
+   no_deploy_prompt =>
+	      "Všechny konfigurační soubory jsou vytvořeny v tomto pracovním adresáři,\n".
+	      "ale NEJSOU nasazeny do systému! \n".
+	      "Pokud je chcete nasadit do systému, nepoužívejte volbu \"-n\" nebo \"--no_deploy\"",
+   ready_to_deploy =>
+	      "Nyní jsme připraveni nasadit soubory do systému! \n".
+	      "Chcete pokračovat?",
+   overwrite_firewall_rule => "Varování! Pokud budete pokračovat, vaše pravidla firewallu budou během nastavení přepsána!",
+   backup_firewall_rule => "Původní pravidla budou zálohována jako iptables.drblsave v adresáři konfigurace systému (/etc/sysconfig nebo /etc/default).",
+   oh_quit_now => "Aha, teď skončím!",
+   accept_or_enter => "Řekněte \"Y\" pro přijetí nebo jiné písmeno pro zadávání každého z nich po jednom...",
+   failed_to_open_file => "Nepodařilo se otevřít soubor",
+   #
+   analyzing_rpm_info => "Analýza informací o rpm balíčcích... To může trvat několik minut...",
+   no_drbl_server_package => "Není nainstalován žádný balíček DRBL serveru!!!",
+   apt_pkg_not_installed =>  "Balíček \"apt\" NENÍ nainstalován!!!", 
+   we_are_now_ready_to => "Nyní jsme připraveni na",
+   the_files_for_DRBL_server => "soubory pro DRBL server!",
+   say_yes_to_continue_other_to_quit => "Řekněte \"yes\" nebo \"y\" pro pokračování, nebo jakékoli jiné písmeno pro ukončení!",
+   say_no_to_quit_other_to_continue => "Řekněte \"no\" nebo \"n\" pro ukončení, nebo jakékoli jiné písmeno pro pokračování!",
+   syncing_flush => "Nyní synchronizujeme - vyprázdnění vyrovnávacích pamětí souborového systému...", 
+   install_and_upgrade => "instalace a upgrade",
+   IP_start_prompt => "Jaké je počáteční číslo, které chcete použít v poslední sadě číslic IP adresy (tj. počáteční hodnota d v IP adrese a.b.c.d) pro DRBL klienty připojené k tomuto ethernetovému portu",
+   client_no_in_MAC_file => "Počet klientů v tomto souboru je",
+   not_initial_value => "Zadaná hodnota NENÍ platná pro počáteční hodnotu! Zadejte ji prosím znovu!!!",
+   can_not_be_the_last_IP => "NEMŮŽE být poslední sadou číslic v IP!!!",
+   can_not_be_the_first_IP => "NEMŮŽE být první sadou číslic v IP!!!",
+   set_client_system_select => "Chcete nastavit výzvu k bootování pro klienty?",
+   use_graphic_pxelinux_menu => "Chcete použít grafické pozadí pro menu PXE, když klient bootuje?",
+   note_for_use_graphic_pxelinux_menu => "Poznámka! Pokud používáte grafické menu PXELinux, ale klientovi se nepodaří nabootovat, můžete se přepnout do textového režimu spuštěním \"switch-pxe-bg-mode -m text\".",
+   whats_client_system_boot_timeout => "Kolik 1/10 sekundy je časový limit výzvy k bootování pro klienty?",
+   sorry_timeout_must_be_number => "Časový limit musí být číslo (např. 70)!!!",
+   unable_to_get_ethx_IP => "Nepodařilo se získat IP adresu!!! Musíte nastavit statickou soukromou IP adresu třídy C (např. 192.168.1.1) a NEMŮŽE to být plovoucí IP adresa (jako DHCP klient)! Tato chyba je na síťové kartě:",
+   program_stop => "Zastavení programu!!!",
+   open_thin_client_option => 
+        "Chcete nechat DRBL klienty mít možnost spustit terminálový režim? tj. chcete nechat tohoto klienta spustit vzdálené zobrazení (které bude většinou využívat zdroje serveru), řekněte zde \"Y\".\n".
+        "Poznámka!\n".
+	"0. Pokud řeknete ano k této možnosti, bude to pro klienta velmi omezené prostředí, tj. ŽÁDNÝ lokální přístup k USB, CD, audiu, tiskárně atd. v klientovi.\n".
+	"1. Pokud váš server není výkonný, řekněte zde \"no\".\n".
+	"2. Řeknutím \"yes\" zde zapneme xdmcp,\n".
+	"Zapnutí xdmcp není nikdy bezpečná věc. Nastavení /etc/hosts.allow a /etc/hosts.deny pro povolení pouze lokálního přístupu je další alternativou, ale ne nejbezpečnější.\n".
+	"Firewallování portu 177 je nejbezpečnější, pokud si přejete mít xdmcp zapnuté.\n".
+	"Přečtěte si příručku pro další poznámky o zabezpečení XDMCP.\n".
+	"Nastavte si to prosím sami!\n".
+	"3. Pokud zde řeknete \"yes\", možná budete muset později restartovat správce desktopového prostředí (gdm/kdm), nezapomeňte si uložit data před zavřením aplikací!\n".
+	"Chcete nechat klienta mít možnost spustit terminálový režim?",
+   server_kernel_nfsd_support => "Běžící jádro v serveru podporuje",
+   change_kernel_notes => "Poznámka! Pokud změníte běžící jádro v serveru a nejste si jisti, zda jádro podporuje NFS přes udp nebo tcp, raději znovu spusťte \"drblpush -i\", abyste se vyhnuli selhání bootování klienta!",
+   hint_for_answer => "Tip! Když je k dispozici volba ano/ne, výchozí hodnota je velkým písmem, např. (y/N), výchozí je \"N\", když stisknete \"Enter\", použije se \"N\". Pokud si nejste jisti, kterou zvolit, můžete jen stisknout klávesu \"Enter\".",
+   hint_for_detect_MAC => "Pokud chcete použít statickou IP adresu pro DRBL klienty, musíte spustit \"drblpush\" v interaktivním režimu (s volbou -i) a posbírat MAC adresy klientů!",
+   illegal_char_in_MAC => "Soubory MAC adres obsahují nepovolený znak",
+   fix_wrong_MAC_file => "Zkontrolujte a upravte zadaný soubor MAC adres.",
+   unable_to_find_public_IP => "Veřejná IP adresa tohoto serveru NEBYLA nalezena.",
+   available_eth_ports => "Dostupné ethernetové porty v tomto serveru",
+   is_not_in_the_lists => "není v seznamech",
+   enter_it_again => "Zadejte jej prosím znovu",
+   the_eth_port_you_choose_for_wan => "Ethernetový port, který jste vybrali pro připojení WAN",
+   set_DBN_client_audio_plugdev_etc_open_to_all => "Chcete nechat audio, cdrom, disketu, video a plugdev (jako USB zařízení) otevřené všem uživatelům v DRBL klientovi? Pokud ano, přidáme všechny uživatele do těchto skupin zařízení na serveru i klientovi.",
+   use_random_password => "Chcete použít *NÁHODNÉ* heslo pro účty s automatickým přihlášením?",
+   enter_password_for_autologin_accounts => "Zadejte heslo pro účty s automatickým přihlášením.",
+   whats_client_autologin_passwd => "Jaké je heslo účtu pro automatické přihlášení pro klienty (nebude se zobrazovat na obrazovce)?",
+   retype_autologin_passwd => "Zadejte znovu heslo (nebude se zobrazovat na obrazovce).",
+   clonezilla_box_mode_for_client => "Chcete používat pouze režim Clonezilla box? Pokud ano, některé funkce týkající se DRBL budou potlačeny a budete mít elegantní režim pro provádění clonezilly. Poznámka! V tomto režimu se nastavení a konfigurační soubory klienta nebudou ukládat na server DRBL! Použijí se pouze jednou a po vypnutí stroje zmizí!",
+   clonezilla_box_mode_is_set => "Režim Clonezilla box je nastaven, elegantní režim pro clonezillu je na cestě!",
+   full_clonezilla_mode_is_set => "Režim Full clonezilla je nastaven!",
+   clonezilla_box_mode_not_set => "Režim Clonezilla box NENÍ nastaven, budete mít plné funkce DRBL boxu!",
+   no_clonezilla_in_system => "V systému není žádná Clonezilla!",
+   class_c_IP_for_multicast_clonezilla => "Pokud chcete použít multicast clonezillu, musíte použít soukromou třídu C (192.168.*.*)! Jinak bude výkon multicast klonování mnohem horší!",
+   drbl_ssi_mode_for_client => "Chcete použít režim DRBL SSI (Single system image)? Pokud ano, zatížení a potřebný diskový prostor serveru budou menší. POZNÁMKA! V tomto režimu (1) musí mít klientský stroj alespoň 256 MB paměti. (2) Nastavení a konfigurační soubory klienta se nebudou ukládat na server DRBL! Jsou použity pouze jednou a po vypnutí stroje zmizí! Kromě toho, pokud upravíte jakýkoli soubor v šabloně klienta (umístěné v $drblroot), musíte spustit drbl-gen-ssi-files, abyste vytvořili tarball šablony v $drbl_common_root/drbl_ssi/. (3) Pokud chcete poskytnout nějaký soubor k přepsání nastavení v tarballu šablony při bootování klienta, podívejte se na $drbl_common_root/drbl_ssi/clients/00_README pro další podrobnosti.",
+   which_drbl_mode_for_client => "V systému jsou 3 režimy pro bezdiskové linuxové služby:\n[0] Režim Full DRBL, každý klient má vlastní /etc a /var založené na NFS.\n[1] Režim DRBL SSI (Single system image), každý klient používá /etc a /var založené na tmpfs. V tomto režimu bude zatížení a potřebný diskový prostor serveru menší. POZNÁMKA! (a) Paměť klientského stroje se doporučuje alespoň 256 MB. (b) Nastavení a konfigurační soubory klienta se nebudou ukládat na server DRBL! Jsou použity pouze jednou a po vypnutí stroje zmizí! Kromě toho, pokud upravíte jakýkoli soubor v šabloně klienta (umístěné v $drblroot), musíte spustit drbl-gen-ssi-files, abyste vytvořili tarball šablony v $drbl_common_root/drbl_ssi/. (c) Pokud chcete poskytnout nějaký soubor k přepsání nastavení v tarballu šablony při bootování klienta, podívejte se na $drbl_common_root/drbl_ssi/clients/00_README pro další podrobnosti.\n[2] NECHCI poskytovat bezdiskovou Linuxovou službu klientům.\nKterý režim preferujete?",
+   drbl_ssi_mode_is_set => "Režim DRBL SSI je nastaven, elegantní režim pro DRBL je na cestě!",
+   full_drbl_mode_is_set => "Režim Full DRBL byl zvolen!",
+   no_drbl_mode_in_system => "V systému není bezdiskový Linux pro klienty.",
+   where_is_ocs_img_repo_dir => "Při používání clonezilly, do kterého adresáře v tomto serveru chcete ukládat uložené obrazy (použijte prosím absolutní cestu a NEPŘIDĚLUJTE ji pod /mnt/, /media/ nebo /tmp/)?",
+   not_allowed_ocs_img_repo_dir => "není povolený adresář pro ukládání obrazů clonezilla, zadejte jej prosím znovu.",
+   drbl_server_as_NAT_server => "Chcete, aby server DRBL fungoval jako NAT server? Pokud ne, váš DRBL klient NEBUDE mít přístup k internetu.",
+   drbl_server_is_NOT_NAT_server => "Tento DRBL server neposkytuje službu NAT, takže váš DRBL klient NEBUDE mít přístup k internetu.",
+   both_drbl_clonezilla_are_none => "Režimy drbl i clonezilla jsou nastaveny jako nedostupné, v tomto systému jsou k dispozici pouze velmi omezené funkce (jako netinstall, pokud nainstalujete potřebné soubory, a drbl-sl)!",
+   are_you_sure_you_want_to_continue => "Jste si jisti, že chcete pokračovat?",
+   # Tag on 2010/12/13
+   which_clonezilla_mode_for_client => "V systému jsou pro clonezillu k dispozici 4 režimy:\n[0] Režim Full Clonezilla, každý klient má vlastní /etc a /var založené na NFS.\n[1] Režim Clonezilla box, každý klient používá /etc a /var založené na tmpfs. V tomto režimu bude zatížení a potřebný diskový prostor serveru menší než v režimu Full Clonezilla. Poznámka! V režimu Clonezilla box se nastavení a konfigurační soubory klienta nebudou ukládat na server DRBL! Použijí se pouze jednou a po vypnutí stroje zmizí!\n[2] NECHCI clonezillu.\n[3] Použít Clonezilla live jako OS (operační systém) klientů.\nKterý režim preferujete?",
+   clonezilla_live_mode_is_set => "Použít Clonezilla live jako OS (operační systém) klientů při spuštění úlohy Clonezilla.",
+   which_clonezilla_live_branch => "Jaká je větev vydání Clonezilla live pro klienty?\n[0]: stable (založená na Debianu)\n[1]: testing (založená na Debianu)\n[2]: alternative stable (založená na Ubuntu)\n[3]: alternative testing (založená na Ubuntu)\nPokud si nejste jisti, zvolte [2]: alternative stable.",
+   which_live_client_cpu_mode => "Jaká je architektura CPU pro klienty při spuštění úlohy Clonezilla s Clonezilla live?\n[0]: i686\n[1]: i686-pae\n[2]: amd64\nPokud si nejste jisti, zvolte amd64.",
+   which_live_client_cpu_mode_for_ubuntu => "Jaká je architektura CPU pro klienty při spuštění úlohy Clonezilla s Clonezilla live?\n[0]: i386\n[1]: amd64\nPokud si nejste jisti, zvolte i386.",
+   live_client_branch_set=> "Byla vybrána větev Clonezilla live",
+   live_client_cpu_arch_is_set => "Architektura CPU pro klienty při spuštění úlohy Clonezilla",
+   # Tag on 2017/01/26
+   only_one_network_card_in_system => "///VAROVÁNÍ/// V tomto systému byla nalezena pouze jedna nakonfigurovaná síťová karta.",
+   found_dhcp_service_on_nic => "Nalezena služba DHCP na síťovém rozhraní",
+   do_you_want_to_lease_ip_addr_from_existing_dhcp_srv => "Chcete si pronajmout IP adresu od stávající služby DHCP? IP adresa DHCP serveru je",
+   will_use_available_ip_addr_from_dhcp_srv => "Pokud ano, použijeme dostupnou IP adresu pronajatou od DHCP serveru. Pokud ne, spustíme na tomto stroji službu DHCP, která může být v konfliktu se stávající službou. Proto se doporučuje zvolit ano.",
+   note_you_have_to_make_sure_enough_no_of_ip_addr => "//POZNÁMKA// Pokud zvolíte 'yes', musíte se ujistit, že váš DHCP server poskytuje dostatečný počet IP adres pro všechny klienty. Kromě toho je tento mechanismus riskantní, protože všichni klienti bootující přes PXE nebo uEFI vstoupí do režimu DRBL nebo Clonezilla. Ujistěte se, že je to to, co chcete.",
+   failed_to_detect_dhcp_service => "Nepodařilo se najít žádnou službu DHCP na této síťové kartě",
+   do_you_want_to_try_it_again => "Chcete to zkusit znovu?",
+   # Tag on 2021/02/14
+   from_ubuntu_1910_only_amd64_is_available => "Od Ubuntu 19.10 je k dispozici pouze verze amd64 (x86-64) Clonezilla live.",
+   mark_the_end_of_lang =>"."
+   );

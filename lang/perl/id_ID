@@ -1,0 +1,263 @@
+#!/usr/bin/perl -T
+# Written by Steven Shiau <steven _at_ clonezilla org> for DRBL
+# Translated by Gemini
+# License: GPL
+#
+
+$lang_charset = 'UTF-8';
+
+%delimiter =
+   (
+   dash_line => '------------------------------------------------------',
+   star_line => '******************************************************',
+   exclamation_line => "!!!!!!!!!!!!!!!!!!!!!!!!!",
+   warning_line => "!!!!!!!!!!!!!!!!!!!!!! Warning !!!!!!!!!!!!!!!!!!!!!!!",
+   );
+
+%lang_text =
+   (  
+   Say        => 'Katakan',
+   or         => 'atau',
+   seconds    => 'detik',
+   WARNING    => 'PERINGATAN',
+   Accept     => 'Terima',
+   as         => 'sebagai',
+   login      => 'masuk',
+   clear      => 'bersihkan',
+   of         => 'dari',
+   logout     => 'keluar',
+   page       => 'halaman',
+   move       => 'pindah',
+   date       => 'tanggal',
+   size       => 'ukuran',
+   type       => 'tipe',
+   filename   => 'nama file',
+   encoding   => 'pengkodean',
+   download   => 'unduh',
+   cancel     => 'batal',
+   continue   => 'lanjutkan',
+   for        => 'untuk',
+   save       => 'simpan',
+   add        => 'tambah',
+   delete     => 'hapus',
+   uninstall  => 'uninstal',
+   done       => 'selesai',
+   finish     => 'selesai',
+   space      => 'spasi',
+   );
+
+%lang_word =
+   (
+   please_enter => "silakan masukkan",
+   to_deploy_them => "untuk menyebarkannya",
+   root_passwd => "kata sandi root",
+   initial_digit => "digit awal",
+   unable_to_find_the => "Tidak dapat menemukan",
+   program_stop => "Program berhenti",
+   );
+
+%lang_deploy =
+   (
+   interactive_mode_prompt => 'Mode interaktif memungkinkan Anda memberikan informasi tentang lingkungan DRBL Anda.',
+   domain_unset_prompt => 'DOMAIN belum disetel, silakan masukkan DOMAIN sekarang:',
+   domain_prompt => 'Silakan masukkan domain DNS (seperti drbl.sf.net):',
+   nisdomain_unset_prompt => 'NISDOMAIN belum disetel, silakan masukkan NISDOMAIN sekarang:',
+   nisdomain_prompt => 'Silakan masukkan nama domain NIS/YP:',
+   not_allowed_domainname => 'tidak diizinkan sebagai DOMAINNAME, masukkan lagi!',
+   not_allowed_nisdomainname => 'tidak diizinkan sebagai NISDOMAINNAME, masukkan lagi!',
+   set_domain_as => 'Setel DOMAIN sebagai',
+   enter_client_hostname_prefix => "Silakan masukkan awalan nama host klien:\nAwalan ini digunakan untuk membuat nama host secara otomatis untuk klien. Jika Anda ingin menimpa beberapa atau semua nama host yang dibuat secara otomatis, tekan Ctrl-C untuk keluar dari program ini sekarang, edit /etc/drbl/client-ip-hostname, lalu jalankan program ini lagi.",
+   not_allowed_hostname => 'tidak diizinkan sebagai awalan nama host klien, masukkan lagi!',
+   set_client_hostname_prefix => 'Setel awalan nama host klien sebagai',
+   no_NIC_setup => 'Anda TIDAK menyiapkan pengaturan jaringan Internet apa pun untuk kartu jaringan klien (seperti alamat IP eth1, eth2...), atau ada yang salah!',
+   configured_nic => 'Kartu ethernet yang dikonfigurasi ditemukan di sistem Anda:',
+   we_can_NOT_continue => 'Kami TIDAK dapat melanjutkan...',
+   but_not_private_IP_or_configured => 'tetapi itu bukan IP privat, tidak terkonfigurasi dengan baik, atau tidak aktif sekarang!!!',
+   enter_public_IP_for_the_client => "Masukkan IP publik untuk klien ini",
+   its_IP_in_DRBL_is => "Alamat IP-nya di DRBL adalah",
+   wrong_entered_IP => "Alamat IP yang Anda masukkan salah, silakan masukkan lagi!",
+   enter_gateway_for_client => "Masukkan gateway untuk klien ini",
+   enter_netmask_for_client => "Masukkan netmask untuk klien ini",
+   wrong_entered_netmask => "NETMASK yang Anda masukkan salah, silakan masukkan lagi!",
+   set_client_public_IP_as => "Kami akan menyetel parameter jaringan alamat IP publik klien sebagai:",
+   we_will_skip => 'Kami akan melewati',
+   for_internet_access_prompt => 'Port ethernet mana di server ini yang untuk akses Internet publik, bukan untuk koneksi DRBL?',
+   drbl_website_prompt => 'Lihat http://drbl.nchc.org.tw/redhat atau http://drbl.sf.net/redhat untuk detailnya.',
+   ethernet_port_for_internet => 'Port ethernet untuk akses Internet adalah:',
+   ethernet_port_for_DRBL => 'Port ethernet untuk lingkungan DRBL: ',
+   only_1_IP_for_eth0 => 'Hanya 1 alamat IP untuk eth0, kami tidak akan menggunakan eth0 untuk lingkungan DRBL!',
+   no_DRBL_port => 'Tidak ada port ethernet yang tersedia untuk lingkungan DRBL!',
+   saved_mac_address_files_in_etc => "File-file ini disimpan di direktori $drbl_syscfg.",
+   collect_MAC_prompt => 
+          "Sekarang kita bisa mengumpulkan alamat MAC klien!\n".
+          "Jika Anda ingin layanan DHCP di server DRBL menawarkan alamat IP yang sama ke klien setiap kali klien boot, dan Anda belum pernah melakukan prosedur ini, Anda harus melakukannya sekarang!\n".
+          "Jika Anda sudah memiliki alamat MAC klien tersebut, Anda dapat memasukkannya ke dalam file grup yang berbeda (Jumlah file ini sama dengan jumlah kartu jaringan untuk layanan DRBL). Dalam hal ini, Anda dapat melewati langkah ini.\n".
+          "Langkah ini membantu Anda mencatat alamat MAC klien, lalu membaginya ke dalam grup yang berbeda. Ini akan menghemat waktu Anda dan mengurangi kesalahan ketik.\n".
+	  "Alamat MAC akan dicatat secara bergiliran sesuai dengan boot klien,\n".
+	  "dan mereka akan dimasukkan ke dalam file yang berbeda sesuai dengan kartu jaringan di server, nama file akan seperti macadr-eth1.txt, macadr-eth2.txt... Anda dapat menemukannya di direktori $drbl_syscfg.\n".
+	  "Silakan boot klien secara berurutan, pastikan mereka boot dari etherboot atau PXE!\n". 
+          "Apakah Anda ingin mengumpulkannya?",
+   ok_let_do_it => 'OK! Mari kita lakukan!',
+   you_are_not_root => 'Anda bukan root',
+   ok_let_continue => 'OK! Mari lanjutkan...',
+   fix_eth_IP_prompt => "Apakah Anda ingin layanan DHCP di server DRBL menawarkan alamat IP yang sama kepada klien setiap kali klien boot (Jika Anda menginginkan fungsi ini, Anda harus mengumpulkan alamat MAC klien, dan menyimpannya dalam file (seperti pada prosedur sebelumnya)). Ini untuk klien yang terhubung ke antarmuka jaringan ethernet server DRBL",
+   MAC_file_prompt => "OK! Tolong beri tahu saya nama file yang berisi alamat MAC klien baris demi baris untuk",
+   range_prompt => "OK! Mari lanjutkan, kami akan menyetel alamat IP klien dengan \"boot pertama mendapatkan IP pertama\" alih-alih yang tetap!",
+   client_number_connected_to_eth => "Berapa banyak klien DRBL (PC untuk siswa) yang terhubung ke antarmuka jaringan ethernet server DRBL",
+   enter_the_no => "Silakan masukkan nomornya",
+   the_value_you_set => "Nomor akhir dalam set digit terakhir di alamat IP klien adalah",
+   set_the_IP_connected_to_eth => "Kami akan menyetel alamat IP untuk klien yang terhubung ke antarmuka jaringan ethernet server DRBL",
+   do_you_want_to_continue => "Apakah Anda ingin melanjutkan?",
+   reenter_or_accept => "untuk memasukkannya kembali, atau huruf lain untuk menerima nilai ini dan lanjut!",
+   filename_you_set => "Nama file yang Anda setel adalah",
+   by_MAC_file => "Berdasarkan file alamat MAC yang Anda setel, alamat IP untuk klien yang terhubung ke antarmuka jaringan ethernet server DRBL",
+   let_restart_it_again => "OK, mari kita mulai lagi!",
+   layout_for_DRBL => "Tata Letak untuk lingkungan DRBL Anda:",
+   swap_prompt =>
+              "Jika ada harddrive lokal dengan partisi swap atau sistem file yang dapat ditulis di mesin klien Anda,\n".
+              "apakah Anda ingin menggunakan partisi swap itu atau membuat file swap di sistem file yang dapat ditulis sehingga klien memiliki lebih banyak memori untuk digunakan? (Langkah ini TIDAK akan menghancurkan data apa pun di harddisk itu)",
+   try_to_create_swap =>
+                "OK! Kami akan mencoba membuat ruang swap untuk klien Anda jika ia memiliki hard drive lokal!",
+   max_swap_size =>
+                "Berapa ukuran maksimum (Megabyte) untuk ruang swap?\n".
+                "Kami akan mencoba mengalokasikan ruang swap untuk Anda, jika tidak cukup, 60% dari ruang kosong akan digunakan.",
+   mode_for_client_init =>
+              "Mode mana yang Anda inginkan digunakan klien setelah mereka boot?\n".
+              "\"1\": Mode grafis (sistem X window) (default),\n".
+              "\"2\": Mode teks.",
+   client_text_mode => "Klien akan menggunakan mode teks saat mereka boot.",
+   client_graphic_mode => "Klien akan masuk ke mode grafis setelah booting.",
+   login_mode_for_client =>
+                  "Mode mana yang Anda inginkan saat klien boot dalam mode grafis?\n".
+                  "0: login normal, 1: auto login, 2: login berwaktu",
+   auto_login => "Klien akan auto login saat mereka boot.",
+   created_account_for_auto_login =>
+                      "akun akan dibuat untuk mesin klien untuk auto login.\n".
+		      "ID auto login sama dengan nama host klien.\n".
+                      "Informasi akun dan kata sandi akan tercantum dalam file",
+   time_for_countdown => "Berapa detik untuk hitung mundur?",
+   timed_login_prompt => "Klien akan auto login jika waktu habis setelah",
+   normal_login_prompt => "Klien akan menunggu pengguna untuk login saat mereka boot.",
+   keep_client_setting_question => "Apakah Anda ingin mempertahankan pengaturan lama dari klien DRBL yang ada jika ada?",
+   remove_client_setting => "Kami akan menghapus semua pengaturan klien DRBL jika sudah ada.",
+   keep_client_setting => "Kami akan mencoba mempertahankan pengaturan klien DRBL jika sudah ada.",
+   set_client_root_passwd => "Apakah Anda ingin menyetel kata sandi root untuk klien daripada menggunakan kata sandi root yang sama yang disalin dari server? (Untuk keamanan yang lebih baik)",
+   whats_client_root_passwd => "Kata sandi root baru untuk klien (tidak akan ditampilkan di layar)?",
+   set_client_pxelinux_passwd => "Apakah Anda ingin menyetel kata sandi pxelinux untuk klien sehingga saat klien boot, kata sandi harus dimasukkan untuk memulai (Untuk keamanan yang lebih baik)",
+   whats_client_pxelinux_passwd => "Kata sandi pxelinux baru untuk klien (tidak akan ditampilkan di layar)?",
+   retype_root_passwd => "Ketik ulang kata sandi baru (tidak akan ditampilkan di layar).",
+   sorry_passwd_not_match => "Maaf, kata sandi tidak cocok",
+   sorry_passwd_can_not_empty => "Maaf, kata sandi tidak boleh kosong",
+   set_client_alias_IP =>
+      "Dengan menggunakan antarmuka alias, setiap klien dapat memiliki 2 IP,\n".
+      "salah satunya adalah IP privat untuk klien yang terhubung ke server DRBL, dan yang lainnya adalah IP publik untuk klien yang terhubung langsung ke WAN dari switch!\n".
+      "Apakah Anda ingin menyiapkan IP publik untuk klien?",
+   searching_installed_drbl_packages => "Mencari paket yang diinstal untuk server DRBL... Ini mungkin memakan waktu beberapa menit...",
+   no_drbl_server_package_found =>
+	      "Tidak ada paket server DRBL yang diinstal!!!\n". 
+	      "Anda harus menjalankan skrip lain (drblsrv -i) untuk menyiapkan server DRBL terlebih dahulu!!! Jika tidak, sistem TIDAK akan berfungsi!!!\n".
+	      "Apakah Anda yakin ingin melanjutkan? Katakan \"yes\" atau \"y\" untuk melanjutkan, atau huruf lain untuk keluar!",
+   but_you_will_see_errors => "Tetapi Anda akan melihat banyak pesan kesalahan...!!!",
+   smart_decision => "OK, keputusan cerdas, saya akan keluar sekarang!",
+   finished_searching_installed_drbl_packages => "Selesai mencari paket yang diinstal untuk server DRBL.",
+   note_for_keep_client_setting => "Catatan! Anda mencoba mempertahankan pengaturan klien DRBL jika ada, terkadang klien DRBL akan bermasalah saat Anda menyelesaikan skrip ini! Jika demikian, mem-boot ulang klien DRBL tersebut seharusnya membuatnya berfungsi!",
+   press_enter_to_continue => "Tekan Enter untuk melanjutkan... ",
+   no_deploy_prompt =>
+	      "Semua file konfigurasi dibuat di direktori kerja ini,\n".
+	      "tetapi mereka TIDAK disebarkan ke sistem! \n".
+	      "Jika Anda ingin menyebarkannya ke sistem, jangan gunakan opsi \"-n\" atau \"--no_deploy\"",
+   ready_to_deploy =>
+	      "Kami sekarang siap untuk menyebarkan file ke sistem! \n".
+	      "Apakah Anda ingin melanjutkan?",
+   overwrite_firewall_rule => "Peringatan! Jika Anda melanjutkan, aturan firewall Anda akan ditimpa selama penyiapan!",
+   backup_firewall_rule => "Aturan asli akan dicadangkan sebagai iptables.drblsave di direktori konfigurasi sistem (/etc/sysconfig atau /etc/default).",
+   oh_quit_now => "Oh, saya akan keluar sekarang!",
+   accept_or_enter => "Katakan \"Y\" untuk menerima atau huruf lain untuk memasukkan satu per satu...",
+   failed_to_open_file => "Gagal membuka file",
+   #
+   analyzing_rpm_info => "Menganalisis info paket rpm... Ini mungkin memakan waktu beberapa menit...",
+   no_drbl_server_package => "Tidak ada paket server DRBL yang diinstal!!!",
+   apt_pkg_not_installed =>  "Paket \"apt\" TIDAK diinstal!!!", 
+   we_are_now_ready_to => "Kami sekarang siap untuk",
+   the_files_for_DRBL_server => "file untuk server DRBL!",
+   say_yes_to_continue_other_to_quit => "Katakan \"yes\" atau \"y\" untuk melanjutkan, atau huruf lain untuk keluar!",
+   say_no_to_quit_other_to_continue => "Katakan \"no\" atau \"n\" untuk keluar, atau huruf lain untuk melanjutkan!",
+   syncing_flush => "Sekarang menyinkronkan - membersihkan buffer sistem file...", 
+   install_and_upgrade => "instal dan upgrade",
+   IP_start_prompt => "Berapa nomor awal yang ingin Anda gunakan dalam set digit terakhir di IP (yaitu nilai awal d dalam alamat IP a.b.c.d) untuk klien DRBL yang terhubung ke port ethernet ini",
+   client_no_in_MAC_file => "Jumlah klien dalam file ini adalah",
+   not_initial_value => "Nilai yang Anda masukkan TIDAK valid untuk nilai awal! Silakan masukkan lagi!!!",
+   can_not_be_the_last_IP => "TIDAK BISA menjadi set digit terakhir dalam IP!!!",
+   can_not_be_the_first_IP => "TIDAK BISA menjadi set digit pertama dalam IP!!!",
+   set_client_system_select => "Apakah Anda ingin menyetel prompt boot untuk klien?",
+   use_graphic_pxelinux_menu => "Apakah Anda ingin menggunakan latar belakang grafis untuk menu PXE saat klien boot?",
+   note_for_use_graphic_pxelinux_menu => "Catatan! Jika Anda menggunakan menu PXELinux grafis, namun klien gagal boot, Anda dapat beralih ke mode teks dengan menjalankan \"switch-pxe-bg-mode -m text\".",
+   whats_client_system_boot_timeout => "Berapa 1/10 detik batas waktu prompt boot untuk klien?",
+   sorry_timeout_must_be_number => "Batas waktu harus berupa angka (misalnya 70)!!!",
+   unable_to_get_ethx_IP => "Tidak dapat mendapatkan alamat IP!!! Anda harus menyetel alamat IP privat statis kelas C (seperti 192.168.1.1), dan itu TIDAK BISA berupa alamat IP mengambang (seperti klien DHCP)! Kesalahan ini ada pada kartu jaringan:",
+   program_stop => "Program berhenti!!!",
+   open_thin_client_option => 
+        "Apakah Anda ingin membiarkan klien DRBL memiliki opsi untuk menjalankan mode terminal? yaitu Anda ingin membiarkan klien itu menjalankan tampilan jarak jauh (yang sebagian besar akan menggunakan sumber daya server), katakan \"Y\" di sini.\n".
+        "Catatan!\n".
+	"0. Jika Anda mengatakan ya untuk opsi ini, ini akan menjadi lingkungan yang sangat terbatas untuk klien, yaitu TIDAK ada akses lokal untuk USB, CD, audio, printer, dll. di klien.\n".
+	"1. Jika server Anda tidak kuat, katakan \"no\" di sini.\n".
+	"2. Dengan mengatakan \"yes\" di sini, kami akan mengaktifkan xdmcp,\n".
+	"Tidak pernah aman untuk mengaktifkan itu. Menyiapkan /etc/hosts.allow dan /etc/hosts.deny untuk hanya mengizinkan akses lokal adalah alternatif lain tetapi bukan yang paling aman.\n".
+	"Memasang firewall pada port 177 adalah yang paling aman jika Anda ingin mengaktifkan xdmcp.\n".
+	"Baca manual untuk catatan lebih lanjut tentang keamanan XDMCP.\n".
+	"Silakan setel sendiri!\n".
+	"3. Jika Anda mengatakan \"yes\" di sini, Anda mungkin harus memulai ulang manajer lingkungan desktop Anda (gdm/kdm) nanti, ingatlah untuk menyimpan data Anda sebelum Anda menutup aplikasi!\n".
+	"Apakah Anda ingin membiarkan klien memiliki opsi untuk menjalankan mode terminal?",
+   server_kernel_nfsd_support => "Kernel yang berjalan di server mendukung",
+   change_kernel_notes => "Catatan! Jika Anda mengubah kernel yang berjalan di server, dan tidak yakin apakah kernel tersebut mendukung NFS melalui udp atau tcp, sebaiknya jalankan kembali \"drblpush -i\" lagi untuk menghindari boot klien gagal!",
+   hint_for_answer => "Petunjuk! Ketika opsi yes/no tersedia, nilai defaultnya adalah huruf besar, Contoh: (y/N), defaultnya adalah \"N\", saat Anda menekan \"Enter\", itu akan menggunakan \"N\". Jika Anda tidak yakin mana yang harus dipilih, Anda cukup menekan tombol \"Enter\".",
+   hint_for_detect_MAC => "Jika Anda ingin menggunakan alamat IP statis untuk klien DRBL, Anda harus menjalankan \"drblpush\" dalam mode interaktif (dengan opsi -i) dan mengumpulkan alamat MAC klien!",
+   illegal_char_in_MAC => "File alamat MAC mengandung karakter ilegal",
+   fix_wrong_MAC_file => "Silakan periksa dan modifikasi file alamat MAC yang Anda masukkan.",
+   unable_to_find_public_IP => "Alamat IP publik server ini TIDAK ditemukan.",
+   available_eth_ports => "Port ethernet yang tersedia di server ini",
+   is_not_in_the_lists => "tidak ada dalam daftar",
+   enter_it_again => "Silakan masukkan lagi",
+   the_eth_port_you_choose_for_wan => "Port ethernet yang Anda pilih untuk koneksi WAN",
+   set_DBN_client_audio_plugdev_etc_open_to_all => "Apakah Anda ingin membiarkan audio, cdrom, floppy, video, dan plugdev (seperti perangkat USB) terbuka untuk semua pengguna di klien DRBL? Jika ya, kami akan menambahkan semua pengguna ke grup perangkat tersebut di server dan klien.",
+   use_random_password => "Apakah Anda ingin menggunakan kata sandi *ACAK* untuk akun auto login?",
+   enter_password_for_autologin_accounts => "Masukkan kata sandi untuk akun auto login.",
+   whats_client_autologin_passwd => "Apa kata sandi akun auto login untuk klien (tidak akan ditampilkan di layar)?",
+   retype_autologin_passwd => "Ketik ulang kata sandi (tidak akan ditampilkan di layar).",
+   clonezilla_box_mode_for_client => "Apakah Anda ingin menggunakan mode Clonezilla box saja? Jika demikian, beberapa fungsi tentang DRBL akan ditekan, dan Anda akan memiliki mode elegan untuk melakukan clonezilla. Catatan! Dalam mode ini, pengaturan dan file konfigurasi klien tidak akan disimpan ke server DRBL! Mereka hanya digunakan sekali dan akan lenyap setelah mesin mati!",
+   clonezilla_box_mode_is_set => "Mode Clonezilla box disetel, mode elegan untuk clonezilla sedang dalam perjalanan!",
+   full_clonezilla_mode_is_set => "Mode full clonezilla disetel!",
+   clonezilla_box_mode_not_set => "Mode Clonezilla box TIDAK disetel, Anda akan memiliki fungsi penuh dari DRBL box!",
+   no_clonezilla_in_system => "Tidak ada Clonezilla di sistem!",
+   class_c_IP_for_multicast_clonezilla => "Jika Anda ingin menggunakan multicast clonezilla, Anda harus menggunakan kelas C privat (192.168.*.*)! Jika tidak, performa clone multicast akan sangat buruk!",
+   drbl_ssi_mode_for_client => "Apakah Anda ingin menggunakan mode DRBL SSI (Single system image)? Jika ya, pemuatan dan ruang disk yang diperlukan server akan lebih ringan. CATATAN! Dalam mode ini, (1) memori mesin klien setidaknya 256 MB. (2) Pengaturan dan file konfigurasi klien tidak akan disimpan ke server DRBL! Mereka hanya digunakan sekali dan akan lenyap setelah mesin mati! Selain itu, jika Anda memodifikasi file apa pun di template klien (terletak di $drblroot), Anda harus menjalankan drbl-gen-ssi-files untuk membuat tarball template di $drbl_common_root/drbl_ssi/. (3) Jika Anda ingin menyediakan beberapa file untuk menimpa pengaturan di tarball template saat klien boot, periksa $drbl_common_root/drbl_ssi/clients/00_README untuk detail lebih lanjut.",
+   which_drbl_mode_for_client => "Dalam sistem, ada 3 mode untuk layanan linux tanpa disk:\n[0] Mode Full DRBL, setiap klien memiliki /etc dan /var berbasis NFS sendiri.\n[1] Mode DRBL SSI (Single system image), setiap klien menggunakan /etc dan /var berbasis tmpfs. Dalam mode ini, pemuatan dan ruang disk yang diperlukan server akan lebih ringan. CATATAN! (a) Memori mesin klien direkomendasikan setidaknya 256 MB. (b) Pengaturan dan file konfigurasi klien tidak akan disimpan ke server DRBL! Mereka hanya digunakan sekali dan akan lenyap setelah mesin mati! Selain itu, jika Anda memodifikasi file apa pun di template klien (terletak di $drblroot), Anda harus menjalankan drbl-gen-ssi-files untuk membuat tarball template di $drbl_common_root/drbl_ssi/. (c) Jika Anda ingin menyediakan beberapa file untuk menimpa pengaturan di tarball template saat klien boot, periksa $drbl_common_root/drbl_ssi/clients/00_README untuk detail lebih lanjut.\n[2] Saya TIDAK ingin menyediakan layanan Linux tanpa disk ke klien.\nMode mana yang Anda sukai?",
+   drbl_ssi_mode_is_set => "Mode DRBL SSI disetel, mode elegan untuk DRBL sedang dalam perjalanan!",
+   full_drbl_mode_is_set => "Mode Full DRBL dipilih!",
+   no_drbl_mode_in_system => "Tidak ada Linux tanpa disk untuk klien di sistem.",
+   where_is_ocs_img_repo_dir => "Saat menggunakan clonezilla, direktori mana di server ini yang ingin Anda gunakan untuk menyimpan gambar yang disimpan (Silakan gunakan jalur absolut, dan JANGAN tetapkan di bawah /mnt/, /media/ atau /tmp/)?",
+   not_allowed_ocs_img_repo_dir => "bukan direktori yang diizinkan untuk menyimpan gambar clonezilla, silakan masukkan lagi.",
+   drbl_server_as_NAT_server => "Apakah Anda ingin membiarkan server DRBL sebagai server NAT? Jika tidak, klien DRBL Anda TIDAK akan dapat mengakses Internet.",
+   drbl_server_is_NOT_NAT_server => "Server DRBL ini TIDAK menyediakan layanan NAT, sehingga klien DRBL Anda TIDAK akan dapat mengakses Internet.",
+   both_drbl_clonezilla_are_none => "Mode drbl dan clonezilla keduanya ditetapkan sebagai tidak tersedia, hanya fungsi yang sangat terbatas (seperti netinstall, jika Anda menginstal file-file yang diperlukan tersebut, dan drbl-sl) yang tersedia di sistem ini!",
+   are_you_sure_you_want_to_continue => "Apakah Anda yakin ingin melanjutkan?",
+   # Tag on 2010/12/13
+   which_clonezilla_mode_for_client => "Dalam sistem, ada 4 mode yang tersedia untuk clonezilla:\n[0] Mode Full Clonezilla, setiap klien memiliki /etc dan /var berbasis NFS sendiri.\n[1] Mode Clonezilla box, setiap klien menggunakan /etc dan /var berbasis tmpfs. Dalam mode ini, pemuatan dan ruang disk yang diperlukan server akan lebih ringan daripada di mode Full Clonezilla. Catatan! Dalam mode Clonezilla box, pengaturan dan file konfigurasi klien tidak akan disimpan ke server DRBL! Mereka hanya digunakan sekali dan akan lenyap setelah mesin mati!\n[2] Saya TIDAK ingin clonezilla.\n[3] Gunakan Clonezilla live sebagai OS (Operating System) klien.\nMode mana yang Anda sukai?",
+   clonezilla_live_mode_is_set => "Gunakan Clonezilla live sebagai OS (Sistem Operasi) klien saat menjalankan tugas Clonezilla.",
+   which_clonezilla_live_branch => "Apa cabang rilis Clonezilla live untuk klien?\n[0]: stable (berbasis Debian)\n[1]: testing (berbasis Debian)\n[2]: alternative stable (berbasis Ubuntu)\n[3]: alternative testing (berbasis Ubuntu)\nJika tidak yakin, pilih [2]: alternative stable.",
+   which_live_client_cpu_mode => "Apa arsitektur CPU untuk klien saat menjalankan tugas Clonezilla dengan Clonezilla live?\n[0]: i686\n[1]: i686-pae\n[2]: amd64\nJika tidak yakin, pilih amd64.",
+   which_live_client_cpu_mode_for_ubuntu => "Apa arsitektur CPU untuk klien saat menjalankan tugas Clonezilla dengan Clonezilla live?\n[0]: i386\n[1]: amd64\nJika tidak yakin, pilih i386.",
+   live_client_branch_set=> "Cabang Clonezilla live dipilih sebagai",
+   live_client_cpu_arch_is_set => "Arsitektur CPU untuk klien saat menjalankan tugas Clonezilla",
+   # Tag on 2017/01/26
+   only_one_network_card_in_system => "///PERINGATAN/// Hanya satu kartu jaringan yang terkonfigurasi ditemukan di sistem ini.",
+   found_dhcp_service_on_nic => "Ditemukan layanan DHCP pada antarmuka jaringan",
+   do_you_want_to_lease_ip_addr_from_existing_dhcp_srv => "Apakah Anda ingin menyewa alamat IP dari layanan DHCP yang ada? Alamat IP server DHCP adalah",
+   will_use_available_ip_addr_from_dhcp_srv => "Jika demikian, kami akan menggunakan alamat IP yang tersedia yang disewa dari server DHCP. Jika tidak, kami akan menjalankan layanan DHCP di mesin ini, yang mungkin berkonflik dengan yang sudah ada. Oleh karena itu disarankan untuk memilih yes.",
+   note_you_have_to_make_sure_enough_no_of_ip_addr => "//CATATAN// Jika Anda memilih 'yes', Anda harus memastikan server DHCP Anda menyediakan jumlah alamat IP yang cukup untuk semua klien. Selain itu, mekanisme ini berisiko karena semua klien PXE atau uEFI network booting akan masuk ke mode DRBL atau Clonezilla. Pastikan ini adalah yang Anda inginkan.",
+   failed_to_detect_dhcp_service => "Gagal menemukan layanan DHCP apa pun pada kartu jaringan ini",
+   do_you_want_to_try_it_again => "Apakah Anda ingin mencobanya lagi?",
+   # Tag on 2021/02/14
+   from_ubuntu_1910_only_amd64_is_available => "Dari Ubuntu 19.10, hanya rilis amd64 (x86-64) dari Clonezilla live yang tersedia.",
+   mark_the_end_of_lang =>"."
+   );

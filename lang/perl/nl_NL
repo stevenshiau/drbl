@@ -1,0 +1,263 @@
+#!/usr/bin/perl -T
+# Written by Steven Shiau <steven _at_ clonezilla org> for DRBL
+# Translated by Gemini
+# License: GPL
+#
+
+$lang_charset = 'UTF-8';
+
+%delimiter =
+   (
+   dash_line => '------------------------------------------------------',
+   star_line => '******************************************************',
+   exclamation_line => "!!!!!!!!!!!!!!!!!!!!!!!!!",
+   warning_line => "!!!!!!!!!!!!!!!!!!!!!! Warning !!!!!!!!!!!!!!!!!!!!!!!",
+   );
+
+%lang_text =
+   (  
+   Say        => 'Zeg',
+   or         => 'of',
+   seconds    => 'seconden',
+   WARNING    => 'WAARSCHUWING',
+   Accept     => 'Accepteren',
+   as         => 'als',
+   login      => 'inloggen',
+   clear      => 'wissen',
+   of         => 'van',
+   logout     => 'uitloggen',
+   page       => 'pagina',
+   move       => 'verplaatsen',
+   date       => 'datum',
+   size       => 'grootte',
+   type       => 'type',
+   filename   => 'bestandsnaam',
+   encoding   => 'codering',
+   download   => 'downloaden',
+   cancel     => 'annuleren',
+   continue   => 'doorgaan',
+   for        => 'voor',
+   save       => 'opslaan',
+   add        => 'toevoegen',
+   delete     => 'verwijderen',
+   uninstall  => 'verwijderen',
+   done       => 'klaar',
+   finish     => 'beëindigen',
+   space      => 'spatie',
+   );
+
+%lang_word =
+   (
+   please_enter => "voer a.u.b. in",
+   to_deploy_them => "om ze te implementeren",
+   root_passwd => "wachtwoord van root",
+   initial_digit => "begincijfer",
+   unable_to_find_the => "Kan de volgende niet vinden",
+   program_stop => "Programma stop",
+   );
+
+%lang_deploy =
+   (
+   interactive_mode_prompt => 'In de interactieve modus kunt u de informatie van uw DRBL-omgeving opgeven.',
+   domain_unset_prompt => 'DOMAIN is niet ingesteld, voer nu DOMAIN in:',
+   domain_prompt => 'Voer de DNS-domeinnaam in (zoals drbl.sf.net):',
+   nisdomain_unset_prompt => 'NISDOMAIN is niet ingesteld, voer nu NISDOMAIN in:',
+   nisdomain_prompt => 'Voer de NIS/YP-domeinnaam in:',
+   not_allowed_domainname => 'is niet toegestaan als DOMAINNAME, voer deze opnieuw in!',
+   not_allowed_nisdomainname => 'is niet toegestaan als NISDOMAINNAME, voer deze opnieuw in!',
+   set_domain_as => 'Stel DOMAIN in als',
+   enter_client_hostname_prefix => "Voer de prefix van de client-hostnaam in:\nDeze prefix wordt gebruikt om automatisch hostnamen voor clients te maken. Als u sommige of alle automatisch gemaakte hostnamen wilt overschrijven, drukt u nu op Ctrl-C om dit programma te sluiten, bewerkt u /etc/drbl/client-ip-hostname en voert u dit programma opnieuw uit.",
+   not_allowed_hostname => 'is niet toegestaan als prefix voor een client-hostnaam, voer deze opnieuw in!',
+   set_client_hostname_prefix => 'Stel de prefix van de client-hostnaam in als',
+   no_NIC_setup => 'U heeft geen internetinstellingen ingesteld voor de netwerkkaarten voor clients (zoals het IP-adres van eth1, eth2...), of er is iets misgegaan!',
+   configured_nic => 'Geconfigureerde ethernetkaart(en) gevonden in uw systeem:',
+   we_can_NOT_continue => 'We kunnen NIET doorgaan...',
+   but_not_private_IP_or_configured => 'maar het is geen privé-IP, niet goed geconfigureerd, of momenteel niet actief!!!',
+   enter_public_IP_for_the_client => "Voer het publieke IP-adres in voor deze client",
+   its_IP_in_DRBL_is => "Het IP-adres in DRBL is",
+   wrong_entered_IP => "Het ingevoerde IP-adres is onjuist, voer het a.u.b. opnieuw in!",
+   enter_gateway_for_client => "Voer de gateway in voor deze client",
+   enter_netmask_for_client => "Voer het netmasker in voor deze client",
+   wrong_entered_netmask => "Het ingevoerde NETMASKER is onjuist, voer het a.u.b. opnieuw in!",
+   set_client_public_IP_as => "We zullen de netwerkparameters van de publieke IP-adressen van de clients instellen als:",
+   we_will_skip => 'We zullen overslaan',
+   for_internet_access_prompt => 'Welke ethernetpoort in deze server is voor publieke internettoegang, niet voor de DRBL-verbinding?',
+   drbl_website_prompt => 'Zie http://drbl.nchc.org.tw/redhat of http://drbl.sf.net/redhat voor details.',
+   ethernet_port_for_internet => 'De ethernetpoort voor internettoegang is:',
+   ethernet_port_for_DRBL => 'De ethernetpoort(en) voor de DRBL-omgeving: ',
+   only_1_IP_for_eth0 => 'Slechts 1 IP-adres voor eth0, we zullen eth0 niet gebruiken voor de DRBL-omgeving!',
+   no_DRBL_port => 'Er is geen ethernetpoort beschikbaar voor de DRBL-omgeving!',
+   saved_mac_address_files_in_etc => "Deze bestanden zijn opgeslagen in de map $drbl_syscfg.",
+   collect_MAC_prompt => 
+          "Nu kunnen we de MAC-adressen van clients verzamelen!\n".
+          "Als u wilt dat de DHCP-service op de DRBL-server telkens wanneer een client opstart hetzelfde IP-adres aan de client aanbiedt, en u heeft deze procedure nog nooit uitgevoerd, dan moet u dat nu doen!\n".
+          "Als u al over die MAC-adressen van clients beschikt, kunt u deze in verschillende groepsbestanden plaatsen (het aantal van deze bestanden is gelijk aan het aantal netwerkkaarten voor de DRBL-service). In dit geval kunt u deze stap overslaan.\n".
+          "Deze stap helpt u bij het registreren van de MAC-adressen van clients en deze vervolgens in verschillende groepen te verdelen. Dit bespaart u tijd en vermindert typefouten.\n".
+	  "De MAC-adressen worden achtereenvolgens geregistreerd naargelang de clients opstarten,\n".
+	  "en ze worden in verschillende bestanden geplaatst op basis van de netwerkkaart in de server. De bestandsnaam zal eruitzien als macadr-eth1.txt, macadr-eth2.txt... U kunt ze vinden in de map $drbl_syscfg.\n".
+	  "Start de clients a.u.b. op volgorde op en zorg ervoor dat ze opstarten via etherboot of PXE!\n". 
+          "Wilt u ze verzamelen?",
+   ok_let_do_it => 'OK! Laten we het doen!',
+   you_are_not_root => 'U bent geen root',
+   ok_let_continue => 'OK! Laten we doorgaan...',
+   fix_eth_IP_prompt => "Wilt u dat de DHCP-service op de DRBL-server telkens wanneer een client opstart hetzelfde IP-adres aan de client aanbiedt? (Als u deze functie wilt, moet u de MAC-adressen van de clients verzamelen en deze in bestand(en) opslaan (zoals in de vorige procedure)). Dit is voor de clients die zijn aangesloten op de ethernet-netwerkinterface van de DRBL-server",
+   MAC_file_prompt => "OK! Vertel me a.u.b. de bestandsnaam die de MAC-adressen van de clients regel voor regel bevat voor",
+   range_prompt => "OK! Laten we doorgaan, we zullen het IP-adres van clients instellen op basis van \"wie het eerst opstart, krijgt eerst een IP\" in plaats van een vast IP-adres!",
+   client_number_connected_to_eth => "Hoeveel DRBL-clients (pc's voor studenten) zijn aangesloten op de ethernet-netwerkinterface van de DRBL-server",
+   enter_the_no => "Voer a.u.b. het aantal in",
+   the_value_you_set => "Het laatste getal in de laatste groep cijfers in het IP-adres van de client is",
+   set_the_IP_connected_to_eth => "We zullen het IP-adres instellen voor de clients die zijn aangesloten op de ethernet-netwerkinterface van de DRBL-server",
+   do_you_want_to_continue => "Wilt u doorgaan?",
+   reenter_or_accept => "om het opnieuw in te voeren, of een andere letter om deze waarde te accepteren en door te gaan!",
+   filename_you_set => "De bestandsnaam die u heeft ingesteld is",
+   by_MAC_file => "Op basis van het MAC-adresbestand dat u heeft ingesteld, zijn de IP-adressen voor de clients die zijn aangesloten op de ethernet-netwerkinterface van de DRBL-server",
+   let_restart_it_again => "OK, laten we het opnieuw opstarten!",
+   layout_for_DRBL => "De lay-out voor uw DRBL-omgeving:",
+   swap_prompt =>
+              "Als er een lokale harde schijf met een swap-partitie of een beschrijfbaar bestandssysteem in uw clientmachine aanwezig is,\n".
+              "wilt u die swap-partitie dan gebruiken of een swap-bestand maken in het beschrijfbare bestandssysteem, zodat de client over meer geheugen beschikt? (Deze stap zal GEEN gegevens op die harde schijf vernietigen)",
+   try_to_create_swap =>
+                "OK! We zullen proberen een swap-ruimte voor uw client te maken als deze over een lokale harde schijf beschikt!",
+   max_swap_size =>
+                "Wat is de maximale grootte (MB) voor de swap-ruimte?\n".
+                "We zullen proberen de swap-ruimte voor u toe te wijzen. Als het niet genoeg is, wordt 60% van de vrije ruimte gebruikt.",
+   mode_for_client_init =>
+              "Welke modus wilt u dat de clients gebruiken nadat ze zijn opgestart?\n".
+              "\"1\": Grafische modus (X-windowsysteem) (standaard),\n".
+              "\"2\": Tekstmodus.",
+   client_text_mode => "De clients zullen de tekstmodus gebruiken wanneer ze opstarten.",
+   client_graphic_mode => "De clients zullen na het opstarten de grafische modus activeren.",
+   login_mode_for_client =>
+                  "Welke modus wilt u wanneer de client opstart in de grafische modus?\n".
+                  "0: normale inlog, 1: automatische inlog, 2: getimede inlog",
+   auto_login => "De clients zullen automatisch inloggen wanneer ze opstarten.",
+   created_account_for_auto_login =>
+                      "er zullen accounts worden gemaakt voor de clientmachines om automatisch in te loggen.\n".
+		      "De automatische inlog-ID is hetzelfde als de hostnaam van de client.\n".
+                      "De informatie over accounts en wachtwoorden wordt vermeld in het bestand",
+   time_for_countdown => "Hoeveel seconden voor het aftellen?",
+   timed_login_prompt => "De clients zullen automatisch inloggen als de tijd is verstreken na",
+   normal_login_prompt => "De clients zullen wachten tot de gebruiker inlogt wanneer ze opstarten.",
+   keep_client_setting_question => "Wilt u de oude instellingen van bestaande DRBL-clients behouden als ze bestaan?",
+   remove_client_setting => "We zullen alle instellingen van de DRBL-clients verwijderen als ze al bestaan.",
+   keep_client_setting => "We zullen proberen de instellingen van de DRBL-clients te behouden als ze al bestaan.",
+   set_client_root_passwd => "Wilt u het wachtwoord van root voor de clients instellen in plaats van hetzelfde root-wachtwoord te gebruiken dat van de server is gekopieerd? (Voor een betere beveiliging)",
+   whats_client_root_passwd => "Nieuw wachtwoord van root voor clients (het wordt niet op het scherm getoond)?",
+   set_client_pxelinux_passwd => "Wilt u het pxelinux-wachtwoord voor clients instellen, zodat er bij het opstarten van de client een wachtwoord moet worden ingevoerd om te starten? (Voor een betere beveiliging)",
+   whats_client_pxelinux_passwd => "Nieuw pxelinux-wachtwoord voor clients (het wordt niet op het scherm getoond)?",
+   retype_root_passwd => "Typ het nieuwe wachtwoord opnieuw (het wordt niet op het scherm getoond).",
+   sorry_passwd_not_match => "Sorry, de wachtwoorden komen niet overeen",
+   sorry_passwd_can_not_empty => "Sorry, het wachtwoord mag niet leeg zijn",
+   set_client_alias_IP =>
+      "Door een alias-interface te gebruiken, kan elke client 2 IP-adressen hebben,\n".
+      "één daarvan is een privé-IP voor clients die verbonden zijn met de DRBL-server, en de andere is een publiek IP voor clients die rechtstreeks via een switch verbonden zijn met het WAN!\n".
+      "Wilt u een publiek IP instellen voor clients?",
+   searching_installed_drbl_packages => "Zoeken naar de geïnstalleerde pakketten voor de DRBL-server... Dit kan enkele minuten duren...",
+   no_drbl_server_package_found =>
+	      "Er is geen DRBL-serverpakket geïnstalleerd!!!\n". 
+	      "U moet eerst een ander script (drblsrv -i) uitvoeren om de DRBL-server in te stellen!!! Anders zal het systeem NIET werken!!!\n".
+	      "Weet u zeker dat u wilt doorgaan? Typ \"yes\" of \"y\" om door te gaan, of een andere letter om af te sluiten!",
+   but_you_will_see_errors => "Maar u zult veel foutmeldingen zien...!!!",
+   smart_decision => "OK, slimme beslissing, ik sluit nu af!",
+   finished_searching_installed_drbl_packages => "Klaar met zoeken naar de geïnstalleerde pakketten voor de DRBL-server.",
+   note_for_keep_client_setting => "Let op! U probeert de instellingen van DRBL-clients te behouden als ze bestaan. Soms gaat er iets mis met de DRBL-clients wanneer u dit script beëindigt! Als dat zo is, zou het opnieuw opstarten van die DRBL-clients ze weer moeten laten werken!",
+   press_enter_to_continue => "Druk op Enter om door te gaan... ",
+   no_deploy_prompt =>
+	      "Alle configuratiebestanden zijn gemaakt in deze werkmap,\n".
+	      "maar ze zijn NIET geïmplementeerd in het systeem! \n".
+	      "Als u ze in het systeem wilt implementeren, gebruik dan niet de optie \"-n\" of \"--no_deploy\"",
+   ready_to_deploy =>
+	      "We zijn nu klaar om de bestanden in het systeem te implementeren! \n".
+	      "Wilt u doorgaan?",
+   overwrite_firewall_rule => "Waarschuwing! Als u doorgaat, worden uw firewallregels tijdens de installatie overschreven!",
+   backup_firewall_rule => "De oorspronkelijke regels worden opgeslagen als iptables.drblsave in de systeemconfiguratiemap (/etc/sysconfig of /etc/default).",
+   oh_quit_now => "Oh, ik sluit nu af!",
+   accept_or_enter => "Typ \"Y\" om te accepteren of een andere letter om ze stuk voor stuk in te voeren...",
+   failed_to_open_file => "Kan bestand niet openen",
+   #
+   analyzing_rpm_info => "Analyseren van de rpm-pakketinformatie... Dit kan enkele minuten duren...",
+   no_drbl_server_package => "Er is geen DRBL-serverpakket geïnstalleerd!!!",
+   apt_pkg_not_installed =>  "Het pakket \"apt\" is NIET geïnstalleerd!!!", 
+   we_are_now_ready_to => "We zijn nu klaar om",
+   the_files_for_DRBL_server => "de bestanden voor de DRBL-server!",
+   say_yes_to_continue_other_to_quit => "Typ \"yes\" of \"y\" om door te gaan, of een andere letter om af te sluiten!",
+   say_no_to_quit_other_to_continue => "Typ \"no\" of \"n\" om af te sluiten, of een andere letter om door te gaan!",
+   syncing_flush => "Bezig met synchroniseren - bestandssysteembuffers leegmaken...", 
+   install_and_upgrade => "installeren en upgraden",
+   IP_start_prompt => "Wat is het beginnummer dat u wilt gebruiken in de laatste groep cijfers in het IP-adres (d.w.z. de beginwaarde van d in het IP-adres a.b.c.d) voor DRBL-clients die op deze ethernetpoort zijn aangesloten",
+   client_no_in_MAC_file => "Het aantal clients in dit bestand is",
+   not_initial_value => "De waarde die u heeft ingevoerd is GEEN geldige beginwaarde! Voer deze a.u.b. opnieuw in!!!",
+   can_not_be_the_last_IP => "kan NIET de laatste groep cijfers in het IP-adres zijn!!!",
+   can_not_be_the_first_IP => "kan NIET de eerste groep cijfers in het IP-adres zijn!!!",
+   set_client_system_select => "Wilt u de opstartprompt voor clients instellen?",
+   use_graphic_pxelinux_menu => "Wilt u een grafische achtergrond gebruiken voor het PXE-menu wanneer de client opstart?",
+   note_for_use_graphic_pxelinux_menu => "Let op! Als u een grafisch PXELinux-menu gebruikt maar de client start niet op, kunt u overschakelen naar de tekstmodus door \"switch-pxe-bg-mode -m text\" uit te voeren.",
+   whats_client_system_boot_timeout => "Hoeveel 1/10 sec is de timeout van de opstartprompt voor clients?",
+   sorry_timeout_must_be_number => "De timeout moet een getal zijn (bijv. 70)!!!",
+   unable_to_get_ethx_IP => "Kan het IP-adres niet ophalen!!! U moet een statisch privé IP-adres van klasse C instellen (zoals 192.168.1.1), en het kan GEEN variabel IP-adres zijn (zoals een DHCP-client)! Deze fout treedt op bij de netwerkkaart:",
+   program_stop => "Programma stop!!!",
+   open_thin_client_option => 
+        "Wilt u DRBL-clients de mogelijkheid geven om in terminalmodus te draaien? d.w.z. u wilt die client een remote display laten draaien (waarbij voornamelijk bronnen van de server worden gebruikt), typ dan hier \"Y\".\n".
+        "Let op!\n".
+	"0. Als u ja antwoordt op deze optie, is dit een zeer beperkte omgeving voor de client, d.w.z. GEEN lokale toegang tot USB, cd, audio, printer, etc. op de client.\n".
+	"1. Als uw server niet krachtig is, typ dan hier \"no\".\n".
+	"2. Door hier \"yes\" te typen, schakelen we xdmcp in.\n".
+	"Het is nooit veilig om dat in te schakelen. Het instellen van /etc/hosts.allow en /etc/hosts.deny om alleen lokale toegang toe te staan is een alternatief, maar niet het veiligste.\n".
+	"Het beveiligen van poort 177 met een firewall is het veiligst als u xdmcp ingeschakeld wilt hebben.\n".
+	"Lees de handleiding voor meer opmerkingen over de beveiliging van XDMCP.\n".
+	"Stel dit a.u.b. zelf in!\n".
+	"3. Als u hier \"yes\" typt, moet u later mogelijk uw desktop-omgevingsmanager (gdm/kdm) opnieuw opstarten. Denk eraan uw gegevens op te slaan voordat u toepassingen sluit!\n".
+	"Wilt u de client de mogelijkheid geven om in terminalmodus te draaien?",
+   server_kernel_nfsd_support => "De draaiende kernel in de server ondersteunt",
+   change_kernel_notes => "Let op! Als u de draaiende kernel in de server wijzigt en niet zeker weet of de kernel NFS via udp of tcp ondersteunt, kunt u beter \"drblpush -i\" opnieuw uitvoeren om te voorkomen dat de client niet opstart!",
+   hint_for_answer => "Tip! Wanneer een ja/nee-optie beschikbaar is, is de standaardwaarde in hoofdletters, bijv. (y/N). De standaardwaarde is \"N\". Wanneer u op \"Enter\" drukt, wordt \"N\" gebruikt. Als u niet zeker weet welke u moet kiezen, kunt u gewoon op de \"Enter\"-toets drukken.",
+   hint_for_detect_MAC => "Als u een statisch IP-adres voor DRBL-clients wilt gebruiken, moet u \"drblpush\" in de interactieve modus uitvoeren (met de optie -i) en de MAC-adressen van de clients verzamelen!",
+   illegal_char_in_MAC => "De MAC-adresbestanden bevatten ongeldige tekens",
+   fix_wrong_MAC_file => "Controleer en wijzig het ingevoerde MAC-adresbestand a.u.b.",
+   unable_to_find_public_IP => "Het publieke IP-adres van deze server is NIET gevonden.",
+   available_eth_ports => "Beschikbare ethernetpoorten in deze server",
+   is_not_in_the_lists => "staat niet in de lijsten",
+   enter_it_again => "Voer het a.u.b. opnieuw in",
+   the_eth_port_you_choose_for_wan => "De ethernetpoort die u kiest voor de WAN-verbinding",
+   set_DBN_client_audio_plugdev_etc_open_to_all => "Wilt u audio, cd-rom, floppy, video en plugdev (zoals USB-apparaten) openstellen voor alle gebruikers op de DRBL-client? Zo ja, dan voegen we alle gebruikers toe aan die apparaatgroepen op de server en de client.",
+   use_random_password => "Wilt u een *WILLEKEURIG* wachtwoord gebruiken voor de accounts voor automatische inlog?",
+   enter_password_for_autologin_accounts => "Voer het wachtwoord in voor de accounts voor automatische inlog.",
+   whats_client_autologin_passwd => "Wat is het wachtwoord van het account voor automatische inlog voor clients (het wordt niet op het scherm getoond)?",
+   retype_autologin_passwd => "Typ het wachtwoord opnieuw (het wordt niet op het scherm getoond).",
+   clonezilla_box_mode_for_client => "Wilt u alleen de Clonezilla box-modus gebruiken? Zo ja, dan worden sommige functies van DRBL onderdrukt en heeft u een gestroomlijnde modus om Clonezilla uit te voeren. Let op! In deze modus worden de instellingen en configuratiebestanden van de client niet opgeslagen op de DRBL-server! Ze worden slechts eenmaal gebruikt en verdwijnen nadat de machine is uitgeschakeld!",
+   clonezilla_box_mode_is_set => "Clonezilla box-modus is ingesteld, een gestroomlijnde modus voor Clonezilla is in aantocht!",
+   full_clonezilla_mode_is_set => "Volledige Clonezilla-modus is ingesteld!",
+   clonezilla_box_mode_not_set => "Clonezilla box-modus is NIET ingesteld, u beschikt over de volledige functies van de DRBL-box!",
+   no_clonezilla_in_system => "Geen Clonezilla in het systeem!",
+   class_c_IP_for_multicast_clonezilla => "Als u multicast Clonezilla wilt gebruiken, moet u een privé klasse C IP-adres (192.168.*.*) gebruiken! Anders zullen de prestaties van de multicast clone aanzienlijk slechter zijn!",
+   drbl_ssi_mode_for_client => "Wilt u de DRBL SSI-modus (Single System Image) gebruiken? Zo ja, dan is de belasting en de benodigde schijfruimte van de server lichter. LET OP! In deze modus (1) moet het geheugen van de clientmachine ten minste 256 MB zijn. (2) De instellingen en configuratiebestanden van de client worden niet opgeslagen op de DRBL-server! Ze worden slechts eenmaal gebruikt en verdwijnen nadat de machine is uitgeschakeld! Bovendien, als u een bestand wijzigt in de template-client (bevindt zich in $drblroot), moet u drbl-gen-ssi-files uitvoeren om de template-tarball te maken in $drbl_common_root/drbl_ssi/. (3) Als u een bestand wilt aanbieden om de instellingen in de template-tarball te overschrijven wanneer de client opstart, raadpleeg dan $drbl_common_root/drbl_ssi/clients/00_README voor meer details.",
+   which_drbl_mode_for_client => "In het systeem zijn er 3 modi voor diskless Linux-services:\n[0] Volledige DRBL-modus, elke client heeft zijn eigen op NFS gebaseerde /etc en /var.\n[1] DRBL SSI-modus (Single System Image), elke client gebruikt op tmpfs gebaseerde /etc and /var. In deze modus is de belasting en de benodigde schijfruimte van de server lichter. LET OP! (a) Het geheugen van de clientmachine wordt aanbevolen op ten minste 256 MB. (b) De instellingen en configuratiebestanden van de client worden niet opgeslagen op de DRBL-server! Ze worden slechts eenmaal gebruikt en verdwijnen nadat de machine is uitgeschakeld! Bovendien, als u een bestand wijzigt in de template-client (bevindt zich in $drblroot), moet u drbl-gen-ssi-files uitvoeren om de template-tarball te maken in $drbl_common_root/drbl_ssi/. (c) Als u een bestand wilt aanbieden om de instellingen in de template-tarball te overschrijven wanneer de client opstart, raadpleeg dan $drbl_common_root/drbl_ssi/clients/00_README voor meer details.\n[2] Ik wil GEEN diskless Linux-service aan de client aanbieden.\nWelke modus verkiest u?",
+   drbl_ssi_mode_is_set => "DRBL SSI-modus is ingesteld, een gestroomlijnde modus voor DRBL is in aantocht!",
+   full_drbl_mode_is_set => "Volledige DRBL-modus is gekozen!",
+   no_drbl_mode_in_system => "Geen diskless Linux voor de client in het systeem.",
+   where_is_ocs_img_repo_dir => "Wanneer u Clonezilla gebruikt, in welke map op deze server wilt u het opgeslagen image opslaan (gebruik a.u.b. het absolute pad en wijs dit NIET toe onder /mnt/, /media/ of /tmp/)?",
+   not_allowed_ocs_img_repo_dir => "is geen toegestane map om Clonezilla-images op te slaan, voer deze a.u.b. opnieuw in.",
+   drbl_server_as_NAT_server => "Wilt u de DRBL-server als een NAT-server laten fungeren? Zo niet, dan heeft uw DRBL-client GEEN toegang tot internet.",
+   drbl_server_is_NOT_NAT_server => "Deze DRBL-server biedt GEEN NAT-service, dus uw DRBL-client heeft GEEN toegang tot internet.",
+   both_drbl_clonezilla_are_none => "Zowel de drbl- als de clonezilla-modus zijn ingesteld als niet beschikbaar. Alleen zeer beperkte functies (zoals netinstall, als u die benodigde bestanden installeert, en drbl-sl) zijn beschikbaar in dit systeem!",
+   are_you_sure_you_want_to_continue => "Weet u zeker dat u wilt doorgaan?",
+   # Tag on 2010/12/13
+   which_clonezilla_mode_for_client => "In het systeem zijn er 4 modi beschikbaar voor Clonezilla:\n[0] Volledige Clonezilla-modus, elke client heeft zijn eigen op NFS gebaseerde /etc en /var.\n[1] Clonezilla box-modus, elke client gebruikt op tmpfs gebaseerde /etc en /var. In deze modus is de belasting en de benodigde schijfruimte van de server lichter dan in de volledige Clonezilla-modus. Let op! In de Clonezilla box-modus worden de instellingen en configuratiebestanden van de client niet opgeslagen op de DRBL-server! Ze worden slechts eenmaal gebruikt en verdwijnen nadat de machine is uitgeschakeld!\n[2] Ik wil GEEN Clonezilla.\n[3] Gebruik Clonezilla live als het OS (besturingssysteem) van de clients.\nWelke modus verkiest u?",
+   clonezilla_live_mode_is_set => "Gebruik Clonezilla live als het OS (besturingssysteem) van de clients bij het uitvoeren van een Clonezilla-taak.",
+   which_clonezilla_live_branch => "Wat is de Clonezilla live-releasebranch voor de clients?\n[0]: stable (op Debian gebaseerd)\n[1]: testing (op Debian gebaseerd)\n[2]: alternative stable (op Ubuntu gebaseerd)\n[3]: alternative testing (op Ubuntu gebaseerd)\nBij twijfel kiest u [2]: alternative stable.",
+   which_live_client_cpu_mode => "Wat is de CPU-architectuur voor de clients bij het uitvoeren van een Clonezilla-taak met Clonezilla live?\n[0]: i686\n[1]: i686-pae\n[2]: amd64\nBij twijfel kiest u amd64.",
+   which_live_client_cpu_mode_for_ubuntu => "Wat is de CPU-architectuur for de clients bij het uitvoeren van een Clonezilla-taak met Clonezilla live?\n[0]: i386\n[1]: amd64\nBij twijfel kiest u i386.",
+   live_client_branch_set=> "De Clonezilla live-branch is gekozen als",
+   live_client_cpu_arch_is_set => "De CPU-architectuur voor clients bij het uitvoeren van een Clonezilla-taak",
+   # Tag on 2017/01/26
+   only_one_network_card_in_system => "///WAARSCHUWING/// Er is slechts één geconfigureerde netwerkkaart gevonden in dit systeem.",
+   found_dhcp_service_on_nic => "DHCP-service gevonden op de netwerkinterface",
+   do_you_want_to_lease_ip_addr_from_existing_dhcp_srv => "Wilt u een IP-adres leasen van de bestaande DHCP-service? Het IP-adres van de DHCP-server is",
+   will_use_available_ip_addr_from_dhcp_srv => "Zo ja, dan zullen we het beschikbare IP-adres gebruiken dat van de DHCP-server is geleased. Zo niet, dan draaien we een DHCP-service op deze machine, wat in conflict kan komen met de bestaande. Daarom wordt aanbevolen om ja te kiezen.",
+   note_you_have_to_make_sure_enough_no_of_ip_addr => "//LET OP// Als u 'ja' kiest, moet u ervoor zorgen dat uw DHCP-server voldoende IP-adressen biedt voor alle clients. Bovendien is dit mechanisme riskant omdat alle via PXE of uEFI opstartende clients de DRBL- of Clonezilla-modus zullen activeren. Zorg ervoor dat dit is wat u wilt.",
+   failed_to_detect_dhcp_service => "Kan geen DHCP-service vinden op deze netwerkkaart",
+   do_you_want_to_try_it_again => "Wilt u het opnieuw proberen?",
+   # Tag on 2021/02/14
+   from_ubuntu_1910_only_amd64_is_available => "Vanaf Ubuntu 19.10 is alleen de amd64 (x86-64) release van Clonezilla live beschikbaar.",
+   mark_the_end_of_lang =>"."
+   );
