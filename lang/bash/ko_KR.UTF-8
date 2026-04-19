@@ -376,7 +376,7 @@ msg_choose_action='동작:'
 msg_login_switch='클라이언트 그래픽 (X-Window) 로그인 모드 전환'
 msg_normal_login='일반 로그인 (사용자는 ID와 패스워드를 입력해야 합니다.)'
 msg_auto_login='자동 로그인'
-msg_timed_login='Timed login'
+msg_timed_login='지연 로그인'
 msg_turn_on_client_to_make_template='이제 PXE에서 부팅하도록 클라이언트 시스템을 설정하십시오. (자세한 내용은 http://drbl.org 참조) 그다음 클라이언트를 부팅하여 템플릿 이미지를 만드십시오. 참고: 백업(저장) 할 파티션이 NTFS 파일 시스템일 경우, 먼저 파티션을 조각 모음 하는 것이 좋습니다.'
 msg_turn_on_client_to_clone='이제 클라이언트 시스템을 PXE에서 부팅하도록 설정하십시오. (자세한 내용은 http://drbl.org 참조) 그다음 템플릿 이미지를 클라이언트에 복원할 수 있도록 해당 클라이언트를 부팅하십시오.'
 msg_turn_on_client_to_select_clone_type='이제 클라이언트 시스템을 PXE에서 부팅하도록 설정하십시오. (자세한 내용은 http://drbl.org 참조) 그다음 해당 클라이언트를 부팅하면 이미지를 저장하거나 복원하도록 선택할 수 있습니다.'
@@ -1125,73 +1125,73 @@ msg_ocs_onthefly_param_ps="작업이 완료되면 소리 재생"
 msg_ocs_param_z9='zstd 압축 (gzip과 같은 매우 빠르고 작은 용량 이미지)'
 msg_ocs_param_z9p='zstdmt 압축 (멀티 코어 CPU의 경우, gzip과 같은 매우 빠르고 작은 용량 이미지)'
 # Tag on 2020/09/10
-msg_ocs_onthefly_param_rvd='Remove NTFS volume dirty flag in source NTFS file system before cloning it'
+msg_ocs_onthefly_param_rvd='복제하기 전에 소스 NTFS 파일 시스템에서 NTFS 볼륨 더티 플래그 제거'
 # Tag on 2020/10/02
-msg_ocs_onthefly_param_t='Skip cloning the MBR (Master Boot Record)'
-msg_ocs_onthefly_param_t1='Clone the prebuilt bootloader from syslinux (For Windows only)'
-msg_ocs_onthefly_param_t2='Skip cloning the EBR (Extended Boot Record)'
-msg_choose_net_pipe_program='Choose the network pipe program when cloning over network'
-msg_ocs_onthefly_param_netcat='Use netcat when cloning over network'
-msg_ocs_onthefly_param_nuttcp='Use nuttcp when cloning over network'
+msg_ocs_onthefly_param_t='MBR (Master Boot Record) 복제 건너뛰기'
+msg_ocs_onthefly_param_t1='syslinux에서 미리 빌드된 부트로더 복제 (Windows 전용)'
+msg_ocs_onthefly_param_t2='EBR (Extended Boot Record) 복제 건너뛰기'
+msg_choose_net_pipe_program='네트워크를 통해 복제할 때 네트워크 파이프 프로그램 선택'
+msg_ocs_onthefly_param_netcat='네트워크를 통해 복제할 때 netcat 사용'
+msg_ocs_onthefly_param_nuttcp='네트워크를 통해 복제할 때 nuttcp 사용'
 # Tag on 2020/12/31
-msg_ocs_use_smbv3_11='SMB protocol 3.11 or 3.1.1'
-msg_ocs_use_smb_auto='Auto negotiate SMB protocol'
+msg_ocs_use_smbv3_11='SMB 프로토콜 3.11 또는 3.1.1'
+msg_ocs_use_smb_auto='SMB 프로토콜 자동 협상'
 # Tag on 2021/01/18
-msg_choose_if_fsck_the_repo_part='Choose if you want to check and repair the file system before mounting the image repository. This option is only for certain file systems which are well supported by fsck on GNU/Linux, like ext2/3/4, reiserfs, xfs, jfs, vfat. Not for NTFS, HFS+...'
-msg_skip_check_repo_fs='Skip checking/repairing the file system before mounting'
-msg_ocs_param_fsck_repo_part='Interactively check and repair the file system before mounting'
-msg_ocs_param_fsck_repo_part_yes='Auto (Caution!) check and repair file system before mounting'
-msg_not_this_is_for_mount_repository='//NOTE// This is for mounting local storage device as an image repository!'
+msg_choose_if_fsck_the_repo_part='이미지 저장소를 마운트하기 전에 파일 시스템을 검사하고 복구할지 선택하십시오. 이 옵션은 ext2/3/4, reiserfs, xfs, jfs, vfat와 같이 GNU/Linux의 fsck에서 잘 지원되는 특정 파일 시스템에만 해당합니다. NTFS, HFS+에는 사용할 수 없습니다...'
+msg_skip_check_repo_fs='마운트 전 파일 시스템 검사/복구 건너뛰기'
+msg_ocs_param_fsck_repo_part='마운트 전 대화형으로 파일 시스템 검사 및 복구'
+msg_ocs_param_fsck_repo_part_yes='마운트 전 자동으로 (주의!) 파일 시스템 검사 및 복구'
+msg_not_this_is_for_mount_repository='//참고// 이것은 로컬 저장 장치를 이미지 저장소로 마운트하기 위한 것입니다!'
 # Tag on 2021/03/06
-msg_ocs_param_ssnf='Skip setting 1st boot device as network in uEFI netboot client NVRAM'
-msg_ocs_param_scpt='Skip checking the partition table of the source disk is MBR or GPT format'
+msg_ocs_param_ssnf='uEFI 넷부트 클라이언트 NVRAM에서 첫 번째 부팅 장치를 네트워크로 설정하는 작업 건너뛰기'
+msg_ocs_param_scpt='원본 디스크의 파티션 테이블이 MBR 또는 GPT 형식인지 확인하는 작업 건너뛰기'
 # Tag on 2021/03/09
-msg_B2SUMS_check_failed='BLAKE2 checksums did NOT match!'
-msg_B3SUMS_check_failed='BLAKE3 checksums did NOT match!'
-msg_ocs_param_gb2='Generate image BLAKE2 checksums'
-msg_ocs_param_cb2='Check image by BLAKE2 checksums'
-msg_ocs_param_gb3='Generate image BLAKE3 checksums'
-msg_ocs_param_cb3='Check image by BLAKE3 checksums'
+msg_B2SUMS_check_failed='BLAKE2 체크섬이 일치하지 않습니다!'
+msg_B3SUMS_check_failed='BLAKE3 체크섬이 일치하지 않습니다!'
+msg_ocs_param_gb2='이미지 BLAKE2 체크섬 생성'
+msg_ocs_param_cb2='BLAKE2 체크섬으로 이미지 확인'
+msg_ocs_param_gb3='이미지 BLAKE3 체크섬 생성'
+msg_ocs_param_cb3='BLAKE3 체크섬으로 이미지 확인'
 # Tag on 2021/03/15
-msg_list_local_device_mode='Which mode do you want to list the block devices on this machine? If you have no idea, choose "disk_or_part". Do _NOT_ choose "both_type_dev" unless you know what you are doing. Basically "both_type_dev" is for you to force choosing the block device which is not listed as it is. For example, you want to save the block device /dev/sda but it is not shown in "saveparts" mode since it is a disk device name, not a partition device name.'
-msg_list_disk_or_part_mode='Separate disk(s) and partition(s)'
-msg_list_both_type_device_mode='List both types of block devices together, i.e., show disk(s) and partition(s) simultaneously'
+msg_list_local_device_mode='이 시스템의 블록 장치를 어떤 모드로 나열하시겠습니까? 잘 모르겠으면 "disk_or_part"를 선택하십시오. 무엇을 하고 있는지 알지 못하는 한 "both_type_dev"를 선택하지 마십시오. 기본적으로 "both_type_dev"는 표시되지 않은 블록 장치를 강제로 선택하기 위한 것입니다. 예를 들어 /dev/sda 블록 장치를 저장하고 싶지만, 파티션 장치 이름이 아닌 디스크 장치 이름이기 때문에 "saveparts" 모드에 표시되지 않는 경우가 이에 해당합니다.'
+msg_list_disk_or_part_mode='디스크와 파티션 분리'
+msg_list_both_type_device_mode='두 유형의 블록 장치를 함께 나열, 즉 디스크와 파티션을 동시에 표시'
 # Tag on 2021/07/22
 msg_press_space_to_mark_selection='스페이스 키를 눌러 선택 사항을 표시합니다. 선택이 완료되면 별표(*)가 표시됩니다.'
 # Tag on 2021/08/28
-msg_reserved_img_names="Some reserved image names have special meanings, including \"ask_user\", \"autoname\", \"autoname-*\" \"autohostname\", and \"autoproductname\". Please check Clonezilla website for more details."
+msg_reserved_img_names="\"ask_user\", \"autoname\", \"autoname-*\" \"autohostname\", \"autoproductname\"을 포함한 일부 예약된 이미지 이름은 특별한 의미를 갖습니다. 자세한 내용은 Clonezilla 웹사이트를 참조하십시오."
 # Tag on 2021/10/25
-msg_choose_wired_or_wireless="Both wired and wireless network devices were detected. Which type do you want to use?"
-msg_use_wired="Use wired network device"
-msg_use_wireless="Use wireless network device"
-msg_nic_status_on_sytem="Network device and status detected on this system:"
+msg_choose_wired_or_wireless="유선 및 무선 네트워크 장치가 모두 감지되었습니다. 어떤 유형을 사용하시겠습니까?"
+msg_use_wired="유선 네트워크 장치 사용"
+msg_use_wireless="무선 네트워크 장치 사용"
+msg_nic_status_on_sytem="이 시스템에서 감지된 네트워크 장치 및 상태:"
 # Tag on 2021/12/04
 msg_set_image_volume_size='파티션 이미지 파일을 여러 볼륨 파일로 분할하기 위한 크기 (MB)입니다. 10보다 큰 숫자를 입력하십시오. 이미지 파일을 분할하고 싶지 않다면, "1000000"과 같은 큰 수를 입력하십시오. GNU/Linux 배포판이 upstart에서 새로운 /sbin/init를 사용하면, "0"과 혼동되므로 더 이상 "0"을 입력하지 마십시오. [참고] FAT32 이미지 저장소의 경우, 숫자는 4000보다 크지 않아야 합니다.'
 # Tag on 2022/02/03
-msg_found_luks_dev='Found LUKS device'
-msg_prompt_for_open_luks_dev='We have to open LUKS device now. You will be prompted to enter passphrase for each one of them.'
-msg_luks_mapped_name_not_found_in_this_file='The LUKS mapped device name was not found in this file'
-msg_name_it_arbitrarily_restered_os_boot_might_fail='Will name it arbitrarily. However, if the restored OS depends on that specified name, it might fail to boot.'
-msg_now_open_luks_dev='Now open the LUKS device'
-msg_luks_header_file_found='LUKS header file found'
-msg_luks_header_file_not_found='LUKS header file not found'
-msg_luks_crypttab_file_found='LUKS crypttab file found'
-msg_luks_crypttab_file_not_found='LUKS crypttab file not found'
-msg_this_partition_table_file_found='The partition table file for this disk was found'
+msg_found_luks_dev='LUKS 장치 발견됨'
+msg_prompt_for_open_luks_dev='지금 LUKS 장치를 열어야 합니다. 각각에 대한 암호를 입력하라는 메시지가 표시됩니다.'
+msg_luks_mapped_name_not_found_in_this_file='이 파일에서 LUKS 매핑된 장치 이름을 찾을 수 없습니다'
+msg_name_it_arbitrarily_restered_os_boot_might_fail='임의로 이름을 지정합니다. 그러나 복원된 OS가 지정된 이름에 의존하는 경우 부팅에 실패할 수 있습니다.'
+msg_now_open_luks_dev='이제 LUKS 장치를 엽니다'
+msg_luks_header_file_found='LUKS 헤더 파일 발견됨'
+msg_luks_header_file_not_found='LUKS 헤더 파일을 찾을 수 없습니다'
+msg_luks_crypttab_file_found='LUKS crypttab 파일 발견됨'
+msg_luks_crypttab_file_not_found='LUKS crypttab 파일을 찾을 수 없습니다'
+msg_this_partition_table_file_found='이 디스크의 파티션 테이블 파일이 발견되었습니다'
 # Tag on 2022/05/02
-msg_found_luks_do_you_want_open_it='Found LUKS device. Do you want to open it?'
-msg_if_yes_open_luks='If yes, you will be prompted to enter passphrase to open the LUKS device later.'
-msg_if_no_dd_mode_will_be_used='If no, the LUKS device will not be opened, and sector-by-sector (dd) mode of Clonezilla will be used.'
+msg_found_luks_do_you_want_open_it='LUKS 장치를 찾았습니다. 여시겠습니까?'
+msg_if_yes_open_luks='예를 선택하면, 나중에 LUKS 장치를 열기 위한 암호를 입력하라는 메시지가 표시됩니다.'
+msg_if_no_dd_mode_will_be_used='아니요를 선택하면, LUKS 장치가 열리지 않으며 Clonezilla의 섹터별(dd) 복제 모드가 사용됩니다.'
 # Tag on 2022/05/09
-msg_open_luks_dev='Open the LUKS device'
-msg_do_not_open_luks_dev='Do not open the LUKS device'
+msg_open_luks_dev='LUKS 장치 열기'
+msg_do_not_open_luks_dev='LUKS 장치를 열지 않음'
 # Tag on 2022/07/04
-msg_ocs_param_sfs='Skip partition file system saving'
+msg_ocs_param_sfs='파티션 파일 시스템 저장 건너뛰기'
 # Tag on 2022/09/10
-msg_choose_default_param_if_no_idea='If you have no idea, keep the default values and do NOT change anything. Just press Enter.'
-msg_hint_for_fdisk_beginner='Choose the mode to create the partition table on the target disk: ***ATTENTION***(1) TO CREATE A NEW PARTITION TABLE ON THE TARGET DISK. ALL THE DATA ON THE TARGET DEVICE WILL BE ERASED!!! (2) Clonezilla will not restore an image from a large disk (partition) to a smaller disk (partition). However, it can restore an image from a small disk (partition) to a larger disk (partition).'
+msg_choose_default_param_if_no_idea='잘 모르겠다면 기본값을 유지하고 아무것도 변경하지 마십시오. 그냥 Enter 키를 누르십시오.'
+msg_hint_for_fdisk_beginner='대상 디스크에 파티션 테이블을 생성할 모드를 선택하십시오: ***주의*** (1) 대상 디스크에 새 파티션 테이블을 생성합니다. 대상 장치의 모든 데이터가 지워집니다!!! (2) Clonezilla는 큰 디스크(파티션)의 이미지를 작은 디스크(파티션)로 복원하지 않습니다. 그러나 작은 디스크(파티션)의 이미지를 큰 디스크(파티션)로 복원할 수는 있습니다.'
 # Tag on 2022/09/27
-msg_hint_for_onthefly_fdisk_beginner='Choose the mode to create the partition table on the target disk: ***ATTENTION***(1) TO CREATE A NEW PARTITION TABLE ON THE TARGET DISK. ALL THE DATA ON THE TARGET DEVICE WILL BE ERASED!!! (2) Clonezilla will not clone a large disk (partition) to a smaller disk (partition). However, it can clone a small disk (partition) to a larger disk (partition).'
+msg_hint_for_onthefly_fdisk_beginner='대상 디스크에 파티션 테이블을 생성할 모드를 선택하십시오: ***주의*** (1) 대상 디스크에 새 파티션 테이블을 생성합니다. 대상 장치의 모든 데이터가 지워집니다!!! (2) Clonezilla는 큰 디스크(파티션)를 작은 디스크(파티션)로 복제하지 않습니다. 그러나 작은 디스크(파티션)를 큰 디스크(파티션)로 복제할 수는 있습니다.'
 # Tag on 2023/01/24
 msg_failed_to_open_this_luks_dev='이 LUKS 장치를 열지 못했습니다:'
 msg_do_you_want_to_try_to_open_it_again='다시 열어 보시겠습니까?'
