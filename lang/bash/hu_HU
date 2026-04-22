@@ -1,8 +1,8 @@
 #!/bin/bash
 # Written by Steven Shiau <steven _at_ clonezilla org> to use in DRBL 
-# Hungarian translation by Greg <greg.hefty _at_ freemail hu>
+# Hungarian translation by Greg <sysadm _dot_ cds _at_ freemail _dot_ hu>
 # License: GPL
-# Last updated: 08 Jan 2024
+# Last updated: 22 Apr 2026
 
 #-----------------------------------------
 # some words
@@ -1210,65 +1210,65 @@ msg_if_yes_open_luks_again='Ha igen, a LUKS eszköz újbóli megnyitásához jel
 msg_ocs_param_edio='Partclone közvetlen IO mód bekapcsolása NVMe SSD számára'
 msg_ocs_onthefly_param_edio='Partclone közvetlen IO mód bekapcsolása NVMe SSD számára'
 # Tag on 2024/01/13
-msg_prompt_remove_gnome_initial_setup='YP is used in DRBL clients, so gnome-initial-setup is annoying and not required. It is recommended to remove it.'
+msg_prompt_remove_gnome_initial_setup='Mivel a DRBL kliensek YP-t használnak, a ''gnome-initial-setup'' csomag felesleges és gondokat okozhat. Javasolt eltávolítani.'
 # Tag on 2024/09/28
-msg_mount_ramdisk='Memória használata (jó nyers eszközről, BT-vel)'
+msg_mount_ramdisk='Memória használata (BitTorrent és multicast esetén ajánlott nyers eszközről)'
 # Tag on 2025/02/08
 msg_choose_param_to_set_multiple_choices='Haladó beállítások (egyszerre több is lehetséges). Ha bizonytalan, hagyjon mindent érintetlenül, NE módosítson semmit. Csak nyomjon Enter-t.'
 msg_choose_param_to_set_single_choice='Haladó beállítások. Ha bizonytalan, hagyjon mindent érintetlenül, NE módosítson semmit. Csak nyomjon Enter-t.'
-msg_put_log_usb_or_not='Szeretné a naplófájlokat egy Clonezilla Live USB-meghajtóra másolni, ha van ilyen a gépben?'
-msg_put_log_to_OCS_USB_drive='Igen, másolja a naplófájlokat a Clonezilla Live USB-meghajtóra, ha létezik.'
-msg_not_put_log_to_OCS_USB_drive='Nem, ne másolja a naplófájlokat a Clonezilla Live USB-meghajtóra.'
+msg_put_log_usb_or_not='Szeretné a naplófájlokat Clonezilla Live USB meghajtóra másolni, ha az rendelkezésre áll?'
+msg_put_log_to_OCS_USB_drive='Igen, másolja a naplófájlokat Clonezilla Live USB meghajtóra, ha van olyan.'
+msg_not_put_log_to_OCS_USB_drive='Ne másolja a naplófájlokat Clonezilla Live USB meghajtóra.'
 # Tag on 2025/07/10
-msg_time_sync_via_internet='Szeretné szinkronizálni a számítógép idejét az interneten keresztül?'
+msg_time_sync_via_internet='Kívánja a számítógép óráját internetes időhöz igazítani?'
 # Tag on 2025/07/19
 msg_live_system_time_sync='Szeretné szinkronizálni az időt ezen a Clonezilla Live rendszeren?'
-msg_no_net_so_set_timezone_manually='Nem található internetkapcsolat. A BIOS-ból származó időt fogjuk használni, de időzóna adatokra van szükség.'
-msg_next_choose_timezone='Kérjük, válassza ki az időzónáját a következő menüben.'
+msg_no_net_so_set_timezone_manually='Nincs internetelérés. A BIOS órája kerül alkalmazásra, időzóna megadása azonban szükséges.'
+msg_next_choose_timezone='Válasszon időzónát a következő menüben.'
 # Tag on 2025/07/21
-msg_current_time_on_this_system='A Live rendszer aktuális ideje:'
+msg_current_time_on_this_system='A Live rendszer jelenlegi ideje:'
 # Tag on 2025/09/22
 msg_disk_to_mdisk='Forráslemez(ek) közvetlen klónozása több gépre'
-msg_part_to_mpart='Forráslemez-partíció(k) közvetlen klónozása több gépre'
+msg_part_to_mpart='Forrás partíció(k) közvetlen klónozása több gépre'
 # Tag on 2025/10/05
-msg_ocs_param_rmtd="MTD blokkeszköz visszaállítása (/dev/mtdblock*)"
+msg_ocs_param_rmtd="MTD block eszköz visszaállítása (/dev/mtdblock*)"
 msg_ocs_param_rmmcb="eMMC boot eszköz visszaállítása (/dev/mmcblk*boot*)"
 # Tag on 2025/10/17
-msg_ocs_param_smtd="MTD blokkeszköz mentése (/dev/mtdblock*)"
+msg_ocs_param_smtd="MTD block eszköz mentése (/dev/mtdblock*)"
 msg_ocs_param_smmcb="eMMC boot eszköz mentése (/dev/mmcblk*boot*)"
 # Tag on 2025/11/06
-msg_using_bitlocker="Ez a BitLocker partíció sikeresen feloldásra került. A Clonezilla most elmenti a **feloldott** adatokat."
-msg_bitlocker_disclaimer_00="BitLockerrel titkosított eszköz található:"
-msg_bitlocker_disclaimer_01="Két lehetősége van:"
-msg_bitlocker_disclaimer_02="(1) A **titkosított** adatok mentése (ahogy vannak). Ez lassabb, és a tömörítés hatástalan lesz."
-msg_bitlocker_disclaimer_03="(2) A **feloldott** adatok mentése. Ehhez szükséges a titkosítási kulcs/jelszó, de gyorsabb, és a tömörítés normálisan fog működni."
-msg_bitlocker_disclaimer_04="Ha a feloldott adatokat menti, a visszaállított eszköz **nem** lesz titkosítva. A visszaállítás után újra engedélyeznie kell a BitLockert a Windowsban a célgépen."
-msg_bitlocker_disclaimer_05="Ez a folyamat **nem** változtatja meg az eredeti eszközt. Az ezen a gépen titkosított marad, függetlenül a választásától."
-msg_bitlocker_disclaimer_06="Ez a funkció **csak NTFS** eszközökhöz készült. **Ne** használja Resilient File System (ReFS) esetén, mert nem fog működni."
-msg_bitlocker_disclaimer_07="Ez **független** a Clonezilla saját mentési titkosításától. Ha engedélyezte a Clonezilla titkosítását, a végső mentési *fájl* továbbra is titkosítva lesz."
-msg_bitlocker_disclaimer_08="Szeretné menteni a **feloldott** adatokat a BitLocker partícióról? (Ha bizonytalan, válassza a Nem gombot)"
-msg_bitlocker_request_password="Kérjük, adja meg a BitLocker jelszót, helyreállítási kulcsot vagy törlőkulcsot:"
-msg_bitlocker_use_recovery_password="Kísérlet a feloldásra a megadott kulccsal mint **helyreállítási jelszóval**..."
-msg_bitlocker_use_user_password="Kísérlet a feloldásra a megadott kulccsal mint **felhasználói jelszóval**..."
-msg_bitlocker_password_not_work="A kulcs/jelszó nem működött. Kérjük, próbálja újra."
-msg_bitlocker_backup_decrypted_data="Rendben, mentsük a **feloldott** adatokat a BitLocker partícióról."
+msg_using_bitlocker="Ezt a BitLocker partíciót sikerült dekódolni. A Clonezilla most menti a **visszafejtett** adatokat."
+msg_bitlocker_disclaimer_00="Talált BitLocker-rel titkosított eszköz:"
+msg_bitlocker_disclaimer_01="Két lehetőség adott:"
+msg_bitlocker_disclaimer_02="(1) **Titkosított** adatok mentése (eredetiként). Ez lassabb és a tömörítés értelmetlen."
+msg_bitlocker_disclaimer_03="(2) **Visszafejtett** adatok mentése. Ehhez titkosítási kulcs/jelszó szükséges, de gyorsabb és a tömörítés megfelelően történik."
+msg_bitlocker_disclaimer_04="Amennyiben visszafejtett adatokat ment, a visszaállított eszköz **nem** lesz titkosítva. A művelet után ismét engedélyezni kell a BitLocker-t a célgép Windows-án."
+msg_bitlocker_disclaimer_05="Ez a folyamat **nem** változtat az eredeti eszközön. Az ezen a gépen a választástól függetlenül, titkosított marad."
+msg_bitlocker_disclaimer_06="Ez a funkció **kizárólag NTFS** eszközökhöz való. **Ne** használja Resilient File System (ReFS) esetén, ahhoz nem alkalmas."
+msg_bitlocker_disclaimer_07="Ez **független** a Clonezilla saját mentés-titkosításától. Ha engedélyezte a Clonezilla titkosítását, az eredmény *mentésfájl* továbbra is titkosított lesz."
+msg_bitlocker_disclaimer_08="Szeretne **visszafejtett** adatokat menteni a BitLocker partícióról? (Ha bizonytalan, válassza a Nem lehetőséget)"
+msg_bitlocker_request_password="Adja meg a BitLocker jelszót, helyreállítási-, vagy törlő kulcsot:"
+msg_bitlocker_use_recovery_password="Kísérlet a feloldásra, a **helyreállítási jelszóként** megadott kulccsal..."
+msg_bitlocker_use_user_password="Kísérlet a feloldásra, a **felhasználói jelszóként** megadott kulccsal..."
+msg_bitlocker_password_not_work="A kulcs/jelszó nem megfelelő. Próbálja újra."
+msg_bitlocker_backup_decrypted_data="Rendben, mentsük a **visszafejtett** adatokat a BitLocker partícióról."
 msg_bitlocker_backup_encrypted_data="Rendben, mentsük a **titkosított** adatokat a BitLocker partícióról."
-msg_decrypt_bitlocker_dev="A BitLocker partíció feloldása ezen a gépen"
+msg_decrypt_bitlocker_dev="BitLocker partíció visszafejtése ezen a gépen"
 msg_do_not_decrypt_bitlocker_dev="Ne oldja fel a BitLocker partíciót ezen a gépen"
-msg_bitlocker_ask_for_passwd_01="Most meg kell adnia a BitLocker jelszót ehhez:"
-msg_bitlocker_ask_for_passwd_02="Először válasszon: "
-msg_bitlocker_ask_for_passwd_03="1 - A jelszó beírása ÚGY, hogy NE jelenjen meg a képernyőn"
-msg_bitlocker_ask_for_passwd_04="2 - A jelszó beírása ÚGY, hogy megjelenjen a képernyőn"
-msg_bitlocker_ask_for_passwd_05="3 - A jelszó megadásának kihagyása és a **titkosított** adatok mentése (ahogy vannak)"
-msg_please_choose_1_2_3="Kérjük, válasszon az 1, 2 vagy 3 lehetőségek közül:"
-msg_bitlocker_not_decrypting_this_partition="Rendben, nem fogjuk feloldani ezt a BitLocker partíciót."
+msg_bitlocker_ask_for_passwd_01="Most adja meg a BitLocker jelszót a következőhöz:"
+msg_bitlocker_ask_for_passwd_02="Mindenekelőtt válasszon: "
+msg_bitlocker_ask_for_passwd_03="1 - A begépelt jelszó ELREJTÉSE a képernyőn"
+msg_bitlocker_ask_for_passwd_04="2 - A begépelt jelszó megjelenítése a képernyőn"
+msg_bitlocker_ask_for_passwd_05="3 - A jelszó megadásának kihagyása és **titkosított** adatok mentése (eredetiként)"
+msg_please_choose_1_2_3="Válasszon az 1, 2, vagy 3 közül:"
+msg_bitlocker_not_decrypting_this_partition="Rendben, ez a BitLocker partíció nem kerül visszafejtésre."
 # 2026/01/11
-msg_ocs_param_reluks='LUKS titkosított kötetek újratitkosítása (mesterkulcs módosítása) a céleszközön'
+msg_ocs_param_reluks='LUKS titkosított kötetek újratitkosítása (mesterkulcs cseréje) a céleszközön'
 # 2026/02/15
-msg_run_cmd_from_MS_rescue_mode='Előfordulhat, hogy a rendszer klónozása vagy visszaállítása után a következő parancsot kell futtatnia **MS Windows mentési módból**.'
+msg_run_cmd_from_MS_rescue_mode='Lehet, hogy a rendszer klónozása vagy visszaállítása után szükséges a következő parancsot futtatni **MS Windows Hibaelhárítás módban**.'
 # 2026/03/29
 msg_yes_to_gocrypt_img='Kép titkosítása gocryptfs-sel'
 msg_not_to_gocrypt_img='Ne titkosítsa a képet'
-msg_gocryptfs_is_used_for_clonezilla='Ha az igent választja, a gocryptfs program lesz használva a kép titkosításához. Fájlalapú titkosítást használ, amely csatolható FUSE fájlrendszerként van megvalósítva. A gocryptfs-ben minden fájl egy megfelelő titkosított fájlban tárolódik a merevlemezen.'
-msg_remember_passphrase_of_gocryptfs='//MEGJEGYZÉS// Emlékeznie kell a jelmondatra; különben a kép a jövőben NEM lesz használható.'
-msg_yes_to_encrypt_img='Kép titkosítása ecryptfs-sel (Hamarosan megszűnik)'
+msg_gocryptfs_is_used_for_clonezilla='Ha az igent választja, a gocryptfs program titkosítja a képet. Ez fájlalapú titkosítást használ, mely beolvasható FUSE fájlrendszerként ölt formát. gocryptfs-ben minden fájl egy annak megfelelő titkosított fájlban tárolódik a merevlemezen.'
+msg_remember_passphrase_of_gocryptfs='//MEGJEGYZÉS// Ne felejtse el a jelmondatot, különben a kép _HASZNÁLHATATLANNÁ_ válik.'
+msg_yes_to_encrypt_img='Kép titkosítása ecryptfs-sel (Hamarosan elavul)'

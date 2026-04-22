@@ -703,7 +703,7 @@ msg_enter_another_shell_for_fdisk='Öffnet eine neue Shell und ermöglicht Ihnen
 msg_use_the_part_table_from_sourcedisk='Verwende die Partition-Tabelle der Original-Platte'
 msg_start_to_clone_data_to_target_machine='Wir klonen die Daten jetzt auf das Zielsystem...'
 msg_ocs_sr_again_command_saved_filename='Dieser Befehl wird unter dem folgenden Dateinamen gespeichert und kann dann später verwendet werden'
-msg_restored_OS_change_fstab_grub_conf='///HINWEIS/// Wenn das wieder hergestellte Syste GNU/Linux ist, kann es sein, dass Sie die Dateien /etc/fstab und die grub-Konfigurationsdatei im wiederhergestellten GNU/Linux entsprechend den Änderungen bearbeiten müssen, damit das System anschließend bootet!'
+msg_restored_OS_change_fstab_grub_conf='///HINWEIS/// Wenn das wieder hergestellte System GNU/Linux ist, kann es sein, dass Sie die Dateien /etc/fstab und die grub-Konfigurationsdatei im wiederhergestellten GNU/Linux entsprechend den Änderungen bearbeiten müssen, damit das System anschließend bootet!'
 msg_only_same_disk_name_work_try_cnvt_ocs_dev_instead='Das klappt nur mit dem selben Festplatten-Namen! Wir erstellen jetzt kein temporäres Image! Andernfalls können Sie auch mit cnvt-ocs-dev den Plattennamen im Image anpassen.'
 msg_create_cvrt_img_for_different_not_supported_in_multicast_mode='Die Erstellung eines Image auf einen anderen Plattennamen ist im Multicast-Mode nicht möglich!'
 msg_create_cvrt_img_for_more_than_2_disks_not_supported='Das Image wurde von mehr als einer Platte erstellt. Die Wiederherstellung auf einen anderen Plattennamen wird für mehr als eine Platte nicht unterstützt!'
@@ -1211,7 +1211,7 @@ msg_ocs_onthefly_param_edio='Aktiviere den Direct-IO-Mode für NVMe SSD in Partc
 # Tag on 2024/01/13
 msg_prompt_remove_gnome_initial_setup='Da DRBL-Clients YP verwenden, ist das Paket "gnome-initial-setup" nicht erforderlich und kann Probleme verursachen. Es wird empfohlen, es zu entfernen.'
 # Tag on 2024/09/28
-msg_mount_ramdisk='Hauptspeicher verwenden (OK für BT von einem Raw-Device)'
+msg_mount_ramdisk='Hauptspeicher verwenden (OK für BitTorrent oder Multicast von einem Raw-Device)'
 # Tag on 2025/02/08
 msg_choose_param_to_set_multiple_choices='Experten-Einstellungen (Mehrfachauswahl möglich). Wenn Sie nicht sicher sind, übernehmen Sie einfach die Vorgabe und ändern NICHTS. Drücken Sie einfach Enter.'
 msg_choose_param_to_set_single_choice='Experten-Einstellungen. Wenn Sie nicht sicher sind, übernehmen Sie einfach die Vorgabe und ändern NICHTS. Drücken Sie einfach Enter.'
@@ -1227,14 +1227,14 @@ msg_next_choose_timezone='Bitte wählen Sie im nächsten Menü Ihre Zeitzone aus
 # Tag on 2025/07/21
 msg_current_time_on_this_system='Die aktuelle Zeit auf diesem Live-System ist:'
 # Tag on 2025/09/22
-msg_disk_to_mdisk='Quelldisk(s) direkt auf mehrere Maschinen klonen'
+msg_disk_to_mdisk='Quellplatte(n) direkt auf mehrere Maschinen klonen'
 msg_part_to_mpart='Quellpartition(en) direkt auf mehrere Maschinen klonen'
 # Tag on 2025/10/05
 msg_ocs_param_rmtd="MTD-Blockgerät wiederherstellen (/dev/mtdblock*)"
 msg_ocs_param_rmmcb="eMMC-Bootgerät wiederherstellen (/dev/mmcblk*boot*)"
 # Tag on 2025/10/17
-msg_ocs_param_smtd="MTD-Blockgerät speichern (/dev/mtdblock*)"
-msg_ocs_param_smmcb="eMMC-Bootgerät speichern (/dev/mmcblk*boot*)"
+msg_ocs_param_smtd="MTD-Blockgerät sichern (/dev/mtdblock*)"
+msg_ocs_param_smmcb="eMMC-Bootgerät sichern (/dev/mmcblk*boot*)"
 # Tag on 2025/11/06
 msg_using_bitlocker="Diese BitLocker-Partition wurde erfolgreich entschlüsselt. Clonezilla speichert nun die **entschlüsselten** Daten."
 msg_bitlocker_disclaimer_00="BitLocker-verschlüsseltes Gerät gefunden:"
@@ -1245,7 +1245,7 @@ msg_bitlocker_disclaimer_04="Wenn Sie die entschlüsselten Daten sichern, wird d
 msg_bitlocker_disclaimer_05="Dieser Vorgang wird das Originalgerät **nicht** verändern. Es bleibt auf dieser Maschine verschlüsselt, unabhängig von Ihrer Wahl."
 msg_bitlocker_disclaimer_06="Diese Funktion ist **nur für NTFS**-Geräte gedacht. Verwenden Sie sie **nicht** mit dem Resilient File System (ReFS), da sie dort nicht funktioniert."
 msg_bitlocker_disclaimer_07="Dies ist **unabhängig** von der Clonezilla-eigenen Backup-Verschlüsselung. Wenn Sie die Verschlüsselung von Clonezilla aktiviert haben, wird Ihre endgültige Backup-*Datei* weiterhin verschlüsselt sein."
-msg_bitlocker_disclaimer_08="Möchten Sie die **entschlüsselten** Daten von der BitLocker-Partition sichern? (Im Zweifelsfall wählen Sie Nein)"
+msg_bitlocker_disclaimer_08="Möchten Sie die **entschlüsselten** Daten der BitLocker-Partition sichern? (Im Zweifelsfall wählen Sie Nein)"
 msg_bitlocker_request_password="Bitte geben Sie Ihr BitLocker-Passwort, Ihren Wiederherstellungsschlüssel oder Ihren Clear Key ein:"
 msg_bitlocker_use_recovery_password="Versuch der Entsperrung mit dem angegebenen Schlüssel als **Wiederherstellungspasswort**..."
 msg_bitlocker_use_user_password="Versuch der Entsperrung mit dem angegebenen Schlüssel als **Benutzerpasswort**..."
@@ -1258,7 +1258,7 @@ msg_bitlocker_ask_for_passwd_01="Sie müssen nun das BitLocker-Passwort eingeben
 msg_bitlocker_ask_for_passwd_02="Bitte wählen Sie zuerst: "
 msg_bitlocker_ask_for_passwd_03="1 - Um das Passwort einzugeben, ohne dass es auf dem Bildschirm angezeigt wird"
 msg_bitlocker_ask_for_passwd_04="2 - Um das Passwort einzugeben und es auf dem Bildschirm anzeigen zu lassen"
-msg_bitlocker_ask_for_passwd_05="3 - Um die Passworteingabe zu überspringen und das Backup der **verschlüsselten** Daten (wie besehen) durchzuführen"
+msg_bitlocker_ask_for_passwd_05="3 - Um die Passworteingabe zu überspringen und das Backup der **verschlüsselten** Daten (ohne Änderung) durchzuführen"
 msg_please_choose_1_2_3="Bitte wählen Sie 1, 2 oder 3:"
 msg_bitlocker_not_decrypting_this_partition="OK, wir werden diese BitLocker-Partition nicht entschlüsseln."
 # 2026/01/11
@@ -1268,6 +1268,6 @@ msg_run_cmd_from_MS_rescue_mode='Sie müssen möglicherweise den folgenden Befeh
 # 2026/03/29
 msg_yes_to_gocrypt_img='Das Image über gocryptfs verschlüsseln'
 msg_not_to_gocrypt_img='Das Image nicht verschlüsseln'
-msg_gocryptfs_is_used_for_clonezilla='Wenn Sie ja wählen, wird das Programm gocryptfs zum Verschlüsseln des Images verwendet. Es verwendet eine dateibasierte Verschlüsselung, die als mountbares FUSE-Dateisystem implementiert ist. Jede Datei in gocryptfs wird in einer entsprechenden verschlüsselten Datei auf der Festplatte gespeichert.'
+msg_gocryptfs_is_used_for_clonezilla='Wenn Sie "ja" wählen, wird das Programm gocryptfs zum Verschlüsseln des Images verwendet. Es verwendet eine dateibasierte Verschlüsselung, die als mountbares FUSE-Dateisystem implementiert ist. Jede Datei in gocryptfs wird als eine entsprechende verschlüsselte Datei auf der Festplatte gespeichert.'
 msg_remember_passphrase_of_gocryptfs='//NOTE// Sie müssen sich die Passphrase merken, andernfalls wird das Image in Zukunft _NICHT_ verwendbar sein.'
 msg_yes_to_encrypt_img='Das Image über ecryptfs verschlüsseln (Bald veraltet)'
