@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (5.9.2-drbl1) unstable; urgency=medium
+
+  * Added support for ARM64 archi.
+
+ -- Steven Shiau <steven@clonezilla.org>  Fri, 01 May 2026 15:08:34 +0800
+
 drbl (5.9.1-drbl1) unstable; urgency=medium
 
   * Added 6 more bash and perl script language files:
