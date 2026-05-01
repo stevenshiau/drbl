@@ -94,6 +94,11 @@ link_pxelinux_bios_arch_files() {
 put_memtest86_img() {
   # memtest86+
   # make a version tag in $pxecfg_pd
+  # Only for x86
+  if [ "$(uname -m)" != "x86_64" ]; then
+    echo "Not x86-64 system. Skip putting memtest86."
+    return 3
+  fi
   echo "Copying memtest86+ to $pxecfg_pd..."
   if [ -n "$(ls -l $memtest86_dir/mt86+x* 2>/dev/null)" ]; then
      cp -af $memtest86_dir/mt86+x* $pxecfg_pd

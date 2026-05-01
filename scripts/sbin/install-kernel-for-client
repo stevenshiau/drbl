@@ -132,9 +132,8 @@ case "$mode" in
    deb)
     client_kernel_ver="$(dpkg --contents $client_kernel_pkg | awk -F" " '{print $NF}' | grep -E "./boot/vmlinuz-" | sed -e "s|\./boot/vmlinuz-||g")"
     if [ -z "$client_kernel_ver" ]; then
-      # For deb linux-ubuntu-modules-* or linux-restricted-modules-*, there is no vmlinuz-* file, try another method, i.e. use the path:
-      # ./usr/lib/modules/2.6.22-14-386/...
-      client_kernel_ver="$(dpkg --contents $client_kernel_pkg | grep -E "/usr/lib/modules/[[:print:]]+" | awk -F" " '{print $NF}' | awk -F"/" '/\.\/usr\/lib\/modules/ {print $4}' | sort | uniq)"
+      # For deb linux-modules-*, there is no vmlinuz-* file, try another method, i.e. from dpkg-deb -f:
+      client_kernel_ver="$(dpkg-deb -f $client_kernel_pkg Package | sed 's/^linux-modules-//')"
     fi
     echo "Installing $client_kernel_pkg for clients... "
     echo "$msg_install_kernel_might_take_several_minutes "
@@ -169,9 +168,10 @@ case "$mode" in
         if [ -d "$drbl_common_root/lib/modules" ]; then
           echo -n "Converting the old path of kernel modules $drbl_common_root/lib to $drbl_common_root/usr/lib "
           mkdir -p $drbl_common_root/usr/lib/modules/  # in case modules dir does not exist.
-          mv $drbl_common_root/lib/modules/* $drbl_common_root/usr/lib/modules/
+          rsync -a $drbl_common_root/lib/modules/* $drbl_common_root/usr/lib/modules/
         fi
-        rmdir $drbl_common_root/lib/modules/ $drbl_common_root/lib/
+	rm -rf $drbl_common_root/lib/*
+        rmdir $drbl_common_root/lib/
         (cd $drbl_common_root; ln -fs usr/lib lib)
       fi
     fi
@@ -271,7 +271,7 @@ if [ ! "$just_cp_files" = "yes" ]; then
   client_kernel_ver="$(echo $client_kernel_ver | sed -e "s/-1-1mdk//g")"
 fi
 
-# create modules.dep...
+# Create modules.dep...
 # we still neeed to build $drbl_common_root/boot/System.map-$client_kernel_ver for client if kernel is installed from package
 if [ "$mode" != "local" ]; then
   if [ -e "$drbl_common_root/boot/System.map-$client_kernel_ver" ]; then

@@ -3335,11 +3335,11 @@ echo "$msg_delimiter_star_line"
 
 # Check if lvm2 is available, if so, add it, we need this for clonezilla to
 # save or restore LVM2 PV/VG/LV.
-echo "Searching if $PKG_TO_QUERY available... "
+PKG_ARCH="$(LC_ALL=C dpkg --print-architecture)"
+echo "Searching if the following packages with arch $PKG_ARCH available in the repository: $PKG_TO_QUERY ..."
 for ipkg in $PKG_TO_QUERY; do
-  #if [ -n "$(LC_ALL=C apt-cache pkgnames $ipkg 2>/dev/null | grep -i "^${ipkg}$")" ]; then
-  if [ -n "$(LC_ALL=C apt-cache show $ipkg 2>/dev/null)" ]; then
-    echo "Package $ipkg exists in repository."
+  if [ -n "$(LC_ALL=C apt list "$ipkg" 2>/dev/null | grep -Ew "($PKG_ARCH|all)")" ]; then
+    echo "Found $ipkg."
     PKG_FROM_DBN="$PKG_FROM_DBN $ipkg"
   fi
 done

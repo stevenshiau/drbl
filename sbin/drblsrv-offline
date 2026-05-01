@@ -428,9 +428,8 @@ case "$client_krn_mode" in
       elif [ -n "$(file $client_kernel_pkg | grep -i "Debian binary package")" ]; then
 	client_kernel_ver="$(dpkg --contents $client_kernel_pkg | awk -F" " '{print $NF}' | grep -E "./boot/vmlinuz-" | sed -e "s|\./boot/vmlinuz-||g")"
         if [ -z "$client_kernel_ver" ]; then
-          # For deb linux-ubuntu-modules-* or linux-restricted-modules-*, there is no vmlinuz-* file, try another method, i.e. use the path:
-          # ./usr/lib/modules/2.6.22-14-386/...
-          client_kernel_ver="$(dpkg --contents $client_kernel_pkg | awk -F" " '{print $NF}' | awk -F"/" '/\.\/usr\/lib\/modules/ {print $4}' | sort | uniq)"
+          # For deb linux-modules-*, there is no vmlinuz-* file, try another method, i.e. from dpkg-deb -f:
+          client_kernel_ver="$(dpkg-deb -f $client_kernel_pkg Package | sed 's/^linux-modules-//')"
         fi
       fi
       drbl-gen-pxe-nbi -l $lang -k $client_kernel_ver
