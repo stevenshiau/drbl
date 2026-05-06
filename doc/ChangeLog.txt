@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (5.9.3-drbl1) unstable; urgency=medium
+
+  * Language file ja_JP.UTF-8 was updated. Thanks to Akira YOSHIYAMA.
+
+ -- Steven Shiau <steven@clonezilla.org>  Thu, 07 May 2026 07:18:11 +0800
+
 drbl (5.9.2-drbl1) unstable; urgency=medium
 
   * Added support for ARM64 archi.
