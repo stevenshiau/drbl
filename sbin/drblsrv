@@ -3556,46 +3556,41 @@ if [ "$client_archi_set" = "best_optimization" ]; then
   # linux-image-2.6-em64t-p4-smp_2.6.18+3_amd64.deb
   # linux-image-2.6-em64t-p4_2.6.18+3_amd64.deb
   case "$KARCH_LIST" in
-  i[0-9]86)
-     KARCH_LIST="i686"
-     # skip the leading "i"
-     client_archi=${KARCH_LIST:1}
-     ;;
-  x86_64)
-     KARCH_LIST="amd64"
-     client_archi=${KARCH_LIST}
-     ;;
-  *)
-     KARCH_LIST="i686"
-     # skip the leading "i"
-     client_archi=${KARCH_LIST:1}
-     ;;
+    arm64|aarch64)
+       KARCH_LIST="arm64"
+       client_archi=${KARCH_LIST}
+       ;;
+    *)
+       KARCH_LIST="amd64"
+       client_archi=${KARCH_LIST}
+       ;;
   esac
   # UGLY! Any better method ?
   # For Ubuntu 6.10 or later, there is no name tag for 686 or amd64-k8,
   # it's generic, for earlier version, it uses 386, 686 or amd64-k8
   # We will not use this for Debian etch.
   if [ "$DISTRIB_ID" = "Ubuntu" ]; then
-    if [ "$DISTRIB_RELEASE" != "5.10" -a "$DISTRIB_RELEASE" != "6.06" ]; then
-       echo "The kernel image in Ubuntu $DISTRIB_RELEASE \"uses generic\" for i686/amd64 CPU."
-       KARCH_LIST="generic"
-       client_archi="generic"
-    fi
+  case "$client_archi" in
+    arm64|aarch64)
+	 # E.g., linux-image-6.17.0-1018-nvidia or linux-image-6.17.0-1018-nvidia-64k
+         echo "The kernel image in Ubuntu $DISTRIB_RELEASE \"uses generic\" for ARM64 CPU."
+         KARCH_LIST="nvidia"
+         client_archi="nvidia"
+         ;;
+    amd64)
+         echo "The kernel image in Ubuntu $DISTRIB_RELEASE \"uses generic\" for amd64/x86-64 CPU."
+         KARCH_LIST="generic"
+         client_archi="generic"
+         ;;
+    esac
   fi
   # For Linux Mint, by Ceasar Sun
   if [ "$DISTRIB_ID" = "LinuxMint" -a -z "$(echo "$DISTRIB_DESCRIPTION" | grep -iE '^LMDE')" ]; then
     # LinuxMint follow Ubuntu policy exclude  LMDE
-    echo "The kernel image in Ubuntu $DISTRIB_RELEASE \"uses generic\" for i686/amd64 CPU."
+    echo "The kernel image in Ubuntu $DISTRIB_RELEASE \"uses generic\" for amd64 CPU."
     KARCH_LIST="generic"
     client_archi="generic"
   fi
-else
-  # For Debian, only i386 is available we decided. Maybe in the future, we
-  # will add K7 ?
-  # For Debian Etch/Ubuntu Dapper... the kernel is like linux-image-2.6.15-1-486, only 486
-  KARCH_LIST="i[345]86"
-  # skip the leading "i"
-  client_archi=${KARCH_LIST:1}
 fi
 cpu_filter="grep -iE $client_archi"
 
