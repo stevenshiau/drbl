@@ -1,3 +1,10 @@
+drbl (5.9.4-drbl1) unstable; urgency=medium
+
+  * drblsrv: support arm64 arch kernel (linux-image-*-nvidia)
+    for Ubuntu Linux.
+
+ -- Steven Shiau <steven@clonezilla.org>  Fri, 15 May 2026 20:55:51 +0800
+
 drbl (5.9.3-drbl1) unstable; urgency=medium
 
   * Language file ja_JP.UTF-8 was updated. Thanks to Akira YOSHIYAMA.
