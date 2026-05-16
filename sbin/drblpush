@@ -4703,9 +4703,11 @@ esac
 case "$use_graphic_pxelinux_menu" in
    y|Y|[yY][eE][sS])
      switch-pxe-bg-mode -m graphic
+     switch-efi-nb-bg-mode -m graphic
      ;;
    n|N|[nN][oO])
      switch-pxe-bg-mode -m text
+     switch-efi-nb-bg-mode -m text
      ;;
 esac
 

@@ -69,12 +69,12 @@ fi
 case "$mode" in
   text|TEXT)
     echo -n "Modifying $GRUB_NB_CONF to let DRBL client use text uEFI network boot boot menu... "
-    perl -pi -e 's/^set graphic_bg=.*/set graphic_bg=yes/g' $GRUB_NB_CONF
+    perl -pi -e 's/^set graphic_bg=.*/set graphic_bg=no/g' $GRUB_NB_CONF
     echo "done!"
     ;;
   graphic|GRAPHIC)
     echo -n "Modifying $GRUB_NB_CONF to let DRBL client use graphical uEFI network boot boot menu... "
-    perl -pi -e 's/^set graphic_bg=.*/set graphic_bg=no/g' $GRUB_NB_CONF
+    perl -pi -e 's/^set graphic_bg=.*/set graphic_bg=yes/g' $GRUB_NB_CONF
     echo "done!"
     ;;
 esac

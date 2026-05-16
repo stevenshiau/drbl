@@ -618,6 +618,7 @@ run-switch-pxe-bg-mode() {
     [ -z "$action" ] && echo "You must specify the mode! Program terminated!!!" && exit 1
   fi
   switch-pxe-bg-mode -m $action
+  switch-efi-nb-bg-mode -m $action
 } # end of run-switch-pxe-bg-mode
 #
 clean_stale_mac_cfg_for_pxelinux_or_not() {
