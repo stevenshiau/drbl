@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (5.9.5-drbl1) unstable; urgency=medium
+
+  * Bug fixed: uEFI netboot background mode switch was missing.
+
+ -- Steven Shiau <steven@clonezilla.org>  Sat, 16 May 2026 20:45:14 +0800
+
 drbl (5.9.4-drbl1) unstable; urgency=medium
 
   * drblsrv: support arm64 arch kernel (linux-image-*-nvidia)
