@@ -1,3 +1,12 @@
+drbl (5.9.6-drbl1) unstable; urgency=medium
+
+  * drbl-all-service: only enable it if it has [Install] section.
+    Otherwise systemctl will complain.
+  * drblsrv & drblpush: Update the commands to enable and disable
+    drbl-clients-nat.service.
+
+ -- Steven Shiau <steven@clonezilla.org>  Sun, 17 May 2026 09:42:58 +0800
+
 drbl (5.9.5-drbl1) unstable; urgency=medium
 
   * Bug fixed: uEFI netboot background mode switch was missing.
