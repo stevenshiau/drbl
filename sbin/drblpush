@@ -4597,7 +4597,7 @@ if [ -e /etc/debian_version ]; then
   if is_systemd_init; then
     cp -f $drbl_setup_path/files/misc/drbl-clients-nat /etc/init.d
     cp -f $drbl_setup_path/files/misc/systemd/drbl-clients-nat.service /lib/systemd/system/
-    systemctl enable /lib/systemd/system/drbl-clients-nat.service
+    systemctl enable drbl-clients-nat.service
   else
     cp -f $drbl_setup_path/files/misc/drbl-clients-nat /etc/init.d
     # before we do it, clean it to avoid the stalled files.
