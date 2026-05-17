@@ -261,18 +261,31 @@ case "$switch" in
         # Check if systemd service first.
         if is_systemd_init && [ -e "/lib/systemd/system/${serv}.service" ]; then
           # For systemd, systemctl can't en/disable if service name be a alias name, ex: nfslock, due to 'nfslock' -> 'nfs-lock'
-          _real_service_name=$(basename $(readlink -f /lib/systemd/system/${serv}.service) ".service")
+          _real_unit_file=$(readlink -f /lib/systemd/system/${serv}.service)
+          _real_service_name=$(basename "$_real_unit_file" ".service")
 	  if [ "$_real_service_name" = "null" ]; then
 	    continue
 	  fi
-          echo "Force to add $_real_service_name service by systemd command..."
-          if [ "$_real_service_name" = 'iptables' -a "$(systemctl is-enabled firewalld.service 2>/dev/null)" = 'enable' ]; then
-            # On FC18, firewalld could conflict with iptables, so disable firewalld from now on
-            echo "Stopping and disabling firewalld service by: 'systemctl stop/disable firewalld.service'..."
-            systemctl stop firewalld.service
-            systemctl disable firewalld.service
+          # Only enable it if it has [Install] section. Otherwise systemctl will complain.
+          # We check this to avoid the warning message:
+          # "The unit files have no installation config... This means they are not meant to be enabled or disabled using systemctl."
+          if grep -qE "^\[Install\]" "$_real_unit_file" 2>/dev/null; then
+            # If it's linked in /etc/systemd/system/, systemctl enable might fail with "Refusing to operate on linked unit file".
+            # We should remove it if it's a link to /lib/systemd/system/.
+            if [ -L "/etc/systemd/system/${_real_service_name}.service" ]; then
+              if [ "$(readlink -f "/etc/systemd/system/${_real_service_name}.service")" = "$_real_unit_file" ]; then
+                rm -f "/etc/systemd/system/${_real_service_name}.service"
+              fi
+            fi
+            echo "Force to add $_real_service_name service by systemd command..."
+            if [ "$_real_service_name" = 'iptables' -a "$(systemctl is-enabled firewalld.service 2>/dev/null)" = 'enable' ]; then
+              # On FC18, firewalld could conflict with iptables, so disable firewalld from now on
+              echo "Stopping and disabling firewalld service by: 'systemctl stop/disable firewalld.service'..."
+              systemctl stop firewalld.service
+              systemctl disable firewalld.service
+            fi
+            systemctl enable $_real_service_name.service
           fi
-          systemctl enable $_real_service_name.service
         elif [ -e /etc/debian_version ]; then
           # Debian-like
 	  echo "Force to add $serv service by SysV command (insserv)..."
@@ -303,11 +316,24 @@ case "$switch" in
           # SuSE
 	  echo "Force to delete $serv service by SysV command (insserv)..."
           insserv -f -r $serv &>/dev/null
-        elif [ -n "$(command -v systemctl 2>/dev/null)" -a -e "/lib/systemd/system/$serv.service" ]; then
+        elif is_systemd_init && [ -e "/lib/systemd/system/${serv}.service" ]; then
            # For systemd, systemctl can't en/disable if service name be a alias name, ex: nfslock, due to 'nfslock' -> 'nfs-lock'
-           _real_service_name=$(basename $(readlink -f  /usr/lib/systemd/system/$serv.service) ".service")
-           echo "Force to del $_real_service_name service by systemd command..."
-           systemctl disable $_real_service_name.service
+           _real_unit_file=$(readlink -f /lib/systemd/system/${serv}.service)
+           _real_service_name=$(basename "$_real_unit_file" ".service")
+	   if [ "$_real_service_name" = "null" ]; then
+	     continue
+	   fi
+           # Only disable it if it has [Install] section. Otherwise systemctl will complain.
+           if grep -qE "^\[Install\]" "$_real_unit_file" 2>/dev/null; then
+             echo "Force to del $_real_service_name service by systemd command..."
+             systemctl disable $_real_service_name.service
+             # If it's linked in /etc/systemd/system/, systemctl disable might not remove it if it was linked by path.
+             if [ -L "/etc/systemd/system/${_real_service_name}.service" ]; then
+               if [ "$(readlink -f "/etc/systemd/system/${_real_service_name}.service")" = "$_real_unit_file" ]; then
+                 rm -f "/etc/systemd/system/${_real_service_name}.service"
+               fi
+             fi
+           fi
         else
           # RH-like
 	  echo "Force to delete $serv service by SysV command (chkconfig)..."
