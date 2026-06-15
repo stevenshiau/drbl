@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (5.9.7-drbl1) unstable; urgency=medium
+
+  * Updated language files: reverse connection clone for ocs-onthefly.
+
+ -- Steven Shiau <steven@clonezilla.org>  Mon, 15 Jun 2026 19:19:48 +0800
+
 drbl (5.9.6-drbl1) unstable; urgency=medium
 
   * drbl-all-service: only enable it if it has [Install] section.
