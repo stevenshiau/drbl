@@ -1278,3 +1278,18 @@ msg_not_to_gocrypt_img='No xifris la imatge'
 msg_gocryptfs_is_used_for_clonezilla="Si escolliu que sí, s'utilitzarà el programa gocryptfs per xifrar la imatge. Utilitza xifratge basat en fitxers que s'implementa com un sistema de fitxers FUSE muntable. Cada fitxer a gocryptfs s'emmagatzema al fitxer xifrat corresponent al disc dur."
 msg_remember_passphrase_of_gocryptfs='//NOTE// Heu de recordar la frase de pas; si no, la imatge _NO_ es podrà utilitzar en el futur.'
 msg_yes_to_encrypt_img='Xifra la imatge mitjançant ecryptfs (Aviat en desús)'
+
+# 2026/06/15 (Reverse connection clone)
+msg_connection_mode='Mode de connexió'
+msg_choose_conn_mode_for_dest="Trieu com s'ha de connectar aquesta màquina de destinació a la màquina d'origen:"
+msg_choose_conn_mode_for_source="Trieu com s'ha de connectar aquesta màquina d'origen a la màquina de destinació:"
+msg_conn_mode_direct_dest="Aquesta màquina es connecta activament a la IP de la màquina d'origen (Estàndard)"
+msg_conn_mode_reverse_dest="Escolta en aquesta màquina (esperant que es connecti l'origen - omissió de NAT)"
+msg_conn_mode_direct_src='Escolta en aquesta màquina (esperant que es connecti la destinació - Estàndard)'
+msg_conn_mode_reverse_src="Aquesta màquina es connecta activament a la IP de la màquina de destinació (omissió de NAT)"
+msg_destination_IP='IP de destinació'
+msg_enter_dest_ip_or_FQDN="Introduïu l'adreça IP o FQDN de la màquina de destinació:"
+msg_must_input_dest_ip="Heu d'introduir una adreça IP de destinació!"
+msg_waiting_for_dest_to_listen='Esperant que la destinació escolti al port'
+msg_connecting_to_get_notify_status="S'està connectant a la màquina de destinació per obtenir l'estat de la notificació... "
+msg_waiting_for_source_query_notify="Esperant que la màquina d'origen consulti la notificació del treball... "

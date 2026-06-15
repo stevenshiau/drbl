@@ -1274,3 +1274,17 @@ msg_gocryptfs_is_used_for_clonezilla="Evet'i seçerseniz, görüntüyü şifrele
 msg_remember_passphrase_of_gocryptfs='//NOT// Parolayı hatırlamalısınız; aksi takdirde görüntü gelecekte kullanılabilir _OLMAYACAK_.'
 msg_yes_to_encrypt_img='Görüntüyü ecryptfs aracılığıyla şifrele (Yakında kullanımdan kaldırılacak)'
 
+# 2026/06/15 (Reverse connection clone)
+msg_connection_mode='Bağlantı Modu'
+msg_choose_conn_mode_for_dest='Bu hedef makinenin kaynak makineye nasıl bağlanacağını seçin:'
+msg_choose_conn_mode_for_source='Bu kaynak makinenin hedef makineye nasıl bağlanacağını seçin:'
+msg_conn_mode_direct_dest="Bu makine kaynak makinenin IP adresine aktif olarak bağlanır (Standart)"
+msg_conn_mode_reverse_dest='Bu makinede dinle (kaynağın bağlanması bekleniyor - NAT aşımı)'
+msg_conn_mode_direct_src='Bu makinede dinle (hedefin bağlanması bekleniyor - Standart)'
+msg_conn_mode_reverse_src="Bu makine hedef makinenin IP adresine aktif olarak bağlanır (NAT aşımı)"
+msg_destination_IP='Hedef IP'
+msg_enter_dest_ip_or_FQDN='Hedef makinenin IP adresini veya FQDN değerini girin:'
+msg_must_input_dest_ip='Bir hedef IP adresi girmelisiniz!'
+msg_waiting_for_dest_to_listen='Hedefin portu dinlemesi bekleniyor'
+msg_connecting_to_get_notify_status='Bildirim durumunu almak için hedef makineye bağlanılıyor... '
+msg_waiting_for_source_query_notify='Kaynak makinenin iş bildirimini sorgulaması bekleniyor... '

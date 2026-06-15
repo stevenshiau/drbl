@@ -1271,3 +1271,18 @@ msg_not_to_gocrypt_img='Nie szyfruj obrazu'
 msg_gocryptfs_is_used_for_clonezilla='Jeśli wybierzesz tak, program gocryptfs zostanie użyty do zaszyfrowania obrazu. Wykorzystuje on szyfrowanie oparte na plikach, które jest zaimplementowane jako montowalny system plików FUSE. Każdy plik w gocryptfs jest przechowywany w odpowiednim zaszyfrowanym pliku na dysku twardym.'
 msg_remember_passphrase_of_gocryptfs='//UWAGA// Musisz zapamiętać hasło; w przeciwnym razie obraz NIE będzie nadawał się do użytku w przyszłości.'
 msg_yes_to_encrypt_img='Zaszyfruj obraz przez ecryptfs (wkrótce wycofane)'
+
+# 2026/06/15 (Reverse connection clone)
+msg_connection_mode='Tryb połączenia'
+msg_choose_conn_mode_for_dest='Wybierz, jak ta maszyna docelowa ma się połączyć z maszyną źródłową:'
+msg_choose_conn_mode_for_source='Wybierz, jak ta maszyna źródłowa ma się połączyć z maszyną docelową:'
+msg_conn_mode_direct_dest="Ta maszyna aktywnie łączy się z adresem IP maszyny źródłowej (Standardowe)"
+msg_conn_mode_reverse_dest='Nasłuchuj na tej maszynie (oczekiwanie na połączenie ze źródła - omijanie NAT)'
+msg_conn_mode_direct_src='Nasłuchuj na tej maszynie (oczekiwanie na połączenie z celu - Standardowe)'
+msg_conn_mode_reverse_src="Ta maszyna aktywnie łączy się z adresem IP maszyny docelowej (omijanie NAT)"
+msg_destination_IP='Docelowy adres IP'
+msg_enter_dest_ip_or_FQDN='Wprowadź adres IP lub FQDN maszyny docelowej:'
+msg_must_input_dest_ip='Musisz wprowadzić docelowy adres IP!'
+msg_waiting_for_dest_to_listen='Oczekiwanie, aż maszyna docelowa zacznie nasłuchiwać na porcie'
+msg_connecting_to_get_notify_status='Łączenie z maszyną docelową w celu pobrania statusu powiadomienia... '
+msg_waiting_for_source_query_notify='Oczekiwanie, aż maszyna źródłowa odpyta o powiadomienie o zadaniu... '

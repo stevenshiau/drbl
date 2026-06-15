@@ -1265,3 +1265,18 @@ msg_not_to_gocrypt_img='Do not encrypt the image'
 msg_gocryptfs_is_used_for_clonezilla='If you choose yes, the gocryptfs program will be used to encrypt the image. It uses file-based encryption that is implemented as a mountable FUSE filesystem. Each file in gocryptfs is stored on corresponding encrypted file on the hard disk.'
 msg_remember_passphrase_of_gocryptfs='//NOTE// You must remember the passphrase; otherwise, the image will _NOT_ be usable in the future.'
 msg_yes_to_encrypt_img='Encrypt the image via ecryptfs (Deprecated soon)'
+
+# 2026/06/15 (Reverse connection clone)
+msg_connection_mode='Connection Mode'
+msg_choose_conn_mode_for_dest='Choose how this destination machine should connect to the source machine:'
+msg_choose_conn_mode_for_source='Choose how this source machine should connect to the destination machine:'
+msg_conn_mode_direct_dest="This machine actively connects to the source machine's IP address (Standard)"
+msg_conn_mode_reverse_dest='Listen on this machine (waiting for the source to connect - NAT bypass)'
+msg_conn_mode_direct_src='Listen on this machine (waiting for the destination to connect - Standard)'
+msg_conn_mode_reverse_src="This machine actively connects to the destination machine's IP address (NAT bypass)"
+msg_destination_IP='Destination IP'
+msg_enter_dest_ip_or_FQDN='Enter the IP address or FQDN of the destination machine:'
+msg_must_input_dest_ip='You must input a destination IP address!'
+msg_waiting_for_dest_to_listen='Waiting for destination to listen on port'
+msg_connecting_to_get_notify_status='Connecting to the target machine to get notify status... '
+msg_waiting_for_source_query_notify='Waiting for the source machine to query job notification... '

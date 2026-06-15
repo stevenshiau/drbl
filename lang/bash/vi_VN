@@ -1267,3 +1267,18 @@ msg_not_to_gocrypt_img='Không mã hóa hình ảnh'
 msg_gocryptfs_is_used_for_clonezilla='Nếu bạn chọn có, chương trình gocryptfs sẽ được sử dụng để mã hóa hình ảnh. Nó sử dụng mã hóa dựa trên tệp được triển khai dưới dạng một hệ thống tệp FUSE có thể gắn được. Mỗi tệp trong gocryptfs được lưu trữ trên tệp mã hóa tương ứng trên ổ cứng.'
 msg_remember_passphrase_of_gocryptfs='//LƯU Ý// Bạn phải nhớ cụm mật khẩu; nếu không, hình ảnh sẽ _KHÔNG_ thể sử dụng được trong tương lai.'
 msg_yes_to_encrypt_img='Mã hóa hình ảnh thông qua ecryptfs (Sẽ sớm bị khai tử)'
+
+# 2026/06/15 (Reverse connection clone)
+msg_connection_mode='Chế độ kết nối'
+msg_choose_conn_mode_for_dest='Chọn cách máy đích này sẽ kết nối với máy nguồn:'
+msg_choose_conn_mode_for_source='Chọn cách máy nguồn này sẽ kết nối với máy đích:'
+msg_conn_mode_direct_dest="Máy này chủ động kết nối với IP của máy nguồn (Tiêu chuẩn)"
+msg_conn_mode_reverse_dest='Lắng nghe trên máy này (chờ máy nguồn kết nối - vượt NAT)'
+msg_conn_mode_direct_src='Lắng nghe trên máy này (chờ máy đích kết nối - Tiêu chuẩn)'
+msg_conn_mode_reverse_src="Máy này chủ động kết nối với IP của máy đích (vượt NAT)"
+msg_destination_IP='IP của máy đích'
+msg_enter_dest_ip_or_FQDN='Nhập địa chỉ IP hoặc FQDN của máy đích:'
+msg_must_input_dest_ip='Bạn phải nhập địa chỉ IP của máy đích!'
+msg_waiting_for_dest_to_listen='Chờ máy đích lắng nghe trên cổng'
+msg_connecting_to_get_notify_status='Đang kết nối với máy đích để lấy trạng thái thông báo... '
+msg_waiting_for_source_query_notify='Đang chờ máy nguồn truy vấn thông báo công việc... '

@@ -1274,3 +1274,17 @@ msg_gocryptfs_is_used_for_clonezilla='Ak zvolíte áno, na zašifrovanie obrazu 
 msg_remember_passphrase_of_gocryptfs='//POZNÁMKA// Musíte si zapamätať heslo; inak nebude obraz v budúcnosti použiteľný.'
 msg_yes_to_encrypt_img='Zašifrovať obraz pomocou ecryptfs (čoskoro zastarané)'
 
+# 2026/06/15 (Reverse connection clone)
+msg_connection_mode='Režim pripojenia'
+msg_choose_conn_mode_for_dest='Vyberte, ako sa má tento cieľový počítač pripojiť k zdrojovému počítaču:'
+msg_choose_conn_mode_for_source='Vyberte, ako sa má tento zdrojový počítač pripojiť k cieľovému počítaču:'
+msg_conn_mode_direct_dest="Tento počítač sa aktívne pripája k IP adrese zdrojového počítača (Štandardný)"
+msg_conn_mode_reverse_dest='Počúvať na tomto počítači (čaká sa na pripojenie zdroja - obchádzanie NAT)'
+msg_conn_mode_direct_src='Počúvať na tomto počítači (čaká sa na pripojenie cieľa - Štandardný)'
+msg_conn_mode_reverse_src="Tento počítač sa aktívne pripája k IP adrese cieľového počítača (obchádzanie NAT)"
+msg_destination_IP='Cieľová IP adresa'
+msg_enter_dest_ip_or_FQDN='Zadajte IP adresu alebo FQDN cieľového počítača:'
+msg_must_input_dest_ip='Musíte zadať cieľovú IP adresu!'
+msg_waiting_for_dest_to_listen='Čaká sa na počúvanie cieľa na porte'
+msg_connecting_to_get_notify_status='Pripája sa k cieľovému počítaču pre získanie stavu oznámenia... '
+msg_waiting_for_source_query_notify='Čaká sa na zdrojový počítač na opýtanie sa na oznámenie o úlohe... '
