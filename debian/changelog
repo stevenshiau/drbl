@@ -1,3 +1,9 @@
+drbl (5.9.10-drbl1) unstable; urgency=medium
+
+  * Added package network-manager-tui in Clonezilla live packages list.
+
+ -- Steven Shiau <steven@clonezilla.org>  Sun, 28 Jun 2026 17:44:30 +0800
+
 drbl (5.9.9-drbl1) unstable; urgency=medium
 
   * Updated all language files about reverse connection clone
