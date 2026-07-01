@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (5.9.11-drbl1) unstable; urgency=medium
+
+  * Removed package network-manager-tui in live packages list since Resolute
+    does not have it.
+
+ -- Steven Shiau <steven@clonezilla.org>  Wed, 01 Jul 2026 09:13:32 +0800
+
 drbl (5.9.10-drbl1) unstable; urgency=medium
 
   * Added package network-manager-tui in Clonezilla live packages list.
