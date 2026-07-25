@@ -1,20 +1,20 @@
 Source: drbl
 Section: admin
-Priority: extra
-Maintainer: Steven Shiau <steven@nchc.org.tw>
+Priority: optional
+Maintainer: Steven Shiau <steven@clonezilla.org>
 Uploaders: Georges Khaznadar <georgesk@ofset.org>
-Build-Depends: debhelper (>= 9), quilt
-Standards-Version: 3.9.3
+Build-Depends: debhelper (>= 10), quilt
+Standards-Version: 4.7.2
 Homepage: http://drbl.org/
 
 Package: drbl
 Architecture: all
-Depends: ${misc:Depends}, perl, bash (>= 4.0.0), ipcalc,
+Depends: ${misc:Depends}, ${perl:Depends}, bash (>= 4.0.0), ipcalc,
  syslinux-common (>= 6.0), pxelinux (>= 6.0)
 Description: diskless remote boot, and a disk cloning utility
  DRBL (Diskless Remote Boot in Linux) provides a diskless or
  systemless environment for client machines. It works on Debian,
- Ubuntu, Mandriva, Red Hat, Fedora, CentOS and OpenSuSE. DRBL uses
+ Ubuntu, Mandriva, Red Hat, Fedora, CentOS and openSUSE. DRBL uses
  distributed hardware resources and makes it possible for clients to
  fully access local hardware. It also includes Clonezilla, a partition
  and disk cloning utility similar to Symantec Ghost(TM) or True
