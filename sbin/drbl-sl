@@ -76,8 +76,15 @@ USAGE() {
 #
 get_rootfs_location_opt() {
 rootfs_location_opt=""
+[ -f /etc/ocs/ocs-live.conf ] && . /etc/ocs/ocs-live.conf
 case "$rootfs_location" in
-  "fetch") rootfs_location_opt="fetch=tftp://$server_IP/$squashfs_file" ;;
+  "fetch")
+           if [ "$ocs_uefi_http_boot" = "yes" ]; then
+             rootfs_location_opt="fetch=http://$server_IP/$squashfs_file"
+           else
+             rootfs_location_opt="fetch=tftp://$server_IP/$squashfs_file"
+           fi
+           ;;
   "nfsroot")
            rootfs_location_opt="netboot=nfs nfsroot=$server_IP:$drbl_common_root/clonezilla-live/" ;;
 esac
