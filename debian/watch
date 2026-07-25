@@ -1,3 +1,3 @@
-version=3
-
-http://free.nchc.org.tw/drbl-core/src/stable/drbl-(.*)\.tar\.xz
+version=4
+opts=filenamemangle=s/drbl-(.+)\.tar\.xz/drbl-$1.tar.xz/ \
+  https://free.nchc.org.tw/drbl-core/src/stable/drbl-(.+)\.tar\.xz

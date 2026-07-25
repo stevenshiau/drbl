@@ -14,7 +14,7 @@ Documentation=man:sulogin(8)
 DefaultDependencies=no
 Conflicts=shutdown.target
 #After=sysinit.target plymouth-start.service
-#Before=shutdown.target
+Before=shutdown.target
 Requires=ocsd-run.service
 After=ocsd-run.service
 

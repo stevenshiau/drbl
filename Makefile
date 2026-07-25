@@ -42,6 +42,7 @@ install:
 	# erase an extra COPYING
 	rm -f $(DESTDIR)/$(SHAREDIR)/pkg/misc/COPYING
 	rm -f $(DESTDIR)/$(SHAREDIR)/pkg/misc/Makefile $(DESTDIR)/$(SHAREDIR)/lang/Makefile
+	rm -f $(DESTDIR)/$(SHAREDIR)/doc/GPL
 	# install config files
 	install -d $(DESTDIR)/etc/drbl/
 	cp -a conf/* $(DESTDIR)/etc/drbl/
