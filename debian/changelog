@@ -1,3 +1,9 @@
+drbl (5.9.13-drbl1) unstable; urgency=medium
+
+  * Support HTTP prefix in grub.cfg under UEFI HTTP Boot
+
+ -- Steven Shiau <steven@clonezilla.org>  Sun, 26 Jul 2026 11:18:16 +0800
+
 drbl (5.9.12-drbl1) unstable; urgency=medium
 
   * Added arch-install-scripts in the pkgs list of clonezilla live.
