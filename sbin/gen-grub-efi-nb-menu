@@ -341,17 +341,17 @@ cat <<-GRUB_END >> $GRUB_EFI_D/grub.cfg
 menuentry "$FULL_OS_Version $powerful_client_menu_label" --id drbl-client {
   echo "Enter DRBL..."
   echo "Loading Linux kernel vmlinuz-pxe..."
-  \$linux_cmd (\$tftpd_opt)\$tftp_path/vmlinuz-pxe devfs=nomount drblthincli=off selinux=0 drbl_bootp=\$net_default_next_server $quiet_opt $edd_opt $CONSOLE_OUTPUT $drbl_mode_opt $drbl_dist_append
+  \$linux_cmd vmlinuz-pxe devfs=nomount drblthincli=off selinux=0 drbl_bootp=\$net_default_next_server $quiet_opt $edd_opt $CONSOLE_OUTPUT $drbl_mode_opt $drbl_dist_append
   echo "Loading initial ramdisk initrd-pxe.img..."
-  \$initrd_cmd (\$tftpd_opt)\$tftp_path/initrd-pxe.img 
+  \$initrd_cmd initrd-pxe.img 
 }
 
 #menuentry "Clonezilla" --id clonezilla-se-client {
 #  echo "Enter Clonezilla..."
 #  echo 'Loading Linux kernel vmlinuz-pxe...'
-#  \$linux_cmd (\$tftpd_opt)\$tftp_path/vmlinuz-pxe devfs=nomount drblthincli=off selinux=0 $quiet_opt text 1 drbl_bootp=\$net_default_next_server $edd_opt $CONSOLE_OUTPUT $clonezilla_mode_opt $drbl_dist_append
+#  \$linux_cmd vmlinuz-pxe devfs=nomount drblthincli=off selinux=0 $quiet_opt text 1 drbl_bootp=\$net_default_next_server $edd_opt $CONSOLE_OUTPUT $clonezilla_mode_opt $drbl_dist_append
 #  echo 'Loading initial ramdisk initrd-pxe.img...'
-#  \$initrd_cmd (\$tftpd_opt)\$tftp_path/initrd-pxe.img
+#  \$initrd_cmd initrd-pxe.img
 #}
 
 menuentry "Local operating system (if available)" --id local-disk {
