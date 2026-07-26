@@ -852,9 +852,9 @@ menuentry "$SL_NAME $SL_VER (Ramdisk)" --id clonezilla-live-client {
   # Do _NOT_ edit unless you know what you are doing!
   echo "Enter $SL_FULL_NAME $SL_VER (Ramdisk)..."
   echo 'Loading $nbi_kernel...'
-  \$linux_cmd (\$tftpd_opt)\$tftp_path/$nbi_kernel $append_param_in_pxe_cfg
+  \$linux_cmd \$tftp_path/$nbi_kernel $append_param_in_pxe_cfg
   echo 'Loading initial ramdisk $nbi_initrd...'
-  \$initrd_cmd (\$tftpd_opt)\$tftp_path/$nbi_initrd
+  \$initrd_cmd \$tftp_path/$nbi_initrd
 }
 
 SL_PXE
