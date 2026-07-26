@@ -229,13 +229,15 @@ fi
 
 # Decide if it's something like (tftp,192.168.22.254) or (tftp) in grub config.
 if [ "$ocs_uefi_http_boot" = "yes" ]; then
+  grub_prefix_path="/tftpboot/nbi_img/grub"
   if [ -n "$tftp_server_ip" ]; then
-    tftp_srv_opt="http,$tftp_server_ip/tftpboot/nbi_img"
+    tftp_srv_opt="http,$tftp_server_ip"
   else
-    server_IP="$(LC_ALL=C get-all-nic-ip -b | awk -F" " '{print $1}')"
-    tftp_srv_opt="http,$server_IP/tftpboot/nbi_img"
+    server_IP="$(LC_ALL=C get-all-nic-ip -b | awk -F\" \" '{print $1}')"
+    tftp_srv_opt="http,$server_IP"
   fi
 else
+  grub_prefix_path="/grub"
   if [ -n "$tftp_server_ip" ]; then
     tftp_srv_opt="tftp,$tftp_server_ip"
   else
@@ -251,10 +253,11 @@ set hidden_timeout_quiet=false
 set graphic_bg=${g_bg_f}
 # tftpd_opt can be tftpd_opt=tftp or tftpd_opt="tftp,\$tftp_server_ip", e.g., tftpd_opt=tftp,192.168.66.254
 set tftpd_opt=${tftp_srv_opt}
+set grub_prefix_path=${grub_prefix_path}
 # "run_load_netboot" is the flag to avoid load_netboot to be run more than once.
 #
 function load_netboot {
-  set prefix=(\$tftpd_opt)/grub
+  set prefix=(\$tftpd_opt)\$grub_prefix_path
   echo "Grub CPU and platform: \$grub_cpu, \$grub_platform"
   echo 'Network status: '
   net_ls_cards
