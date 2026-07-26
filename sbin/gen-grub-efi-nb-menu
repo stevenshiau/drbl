@@ -227,24 +227,10 @@ fi
 
 [ -e /etc/ocs/ocs-live.conf ] && . /etc/ocs/ocs-live.conf
 
-# Decide if it's something like (tftp,192.168.22.254) or (tftp) in grub config.
-if [ "$ocs_uefi_http_boot" = "yes" ]; then
-  grub_prefix_path="/tftpboot/nbi_img/grub"
-  tftp_path_opt="/tftpboot/nbi_img"
-  if [ -n "$tftp_server_ip" ]; then
-    tftp_srv_opt="http,$tftp_server_ip"
-  else
-    server_IP="$(LC_ALL=C get-all-nic-ip -b | awk -F\" \" '{print $1}')"
-    tftp_srv_opt="http,$server_IP"
-  fi
+if [ -n "$tftp_server_ip" ]; then
+  server_IP="$tftp_server_ip"
 else
-  grub_prefix_path="/grub"
-  tftp_path_opt=""
-  if [ -n "$tftp_server_ip" ]; then
-    tftp_srv_opt="tftp,$tftp_server_ip"
-  else
-    tftp_srv_opt="tftp"
-  fi
+  server_IP="$(LC_ALL=C get-all-nic-ip -b | awk -F" " '{print $1}')"
 fi
 
 cat <<-GRUB_END >> $GRUB_EFI_D/grub.cfg
@@ -253,10 +239,27 @@ set timeout_style=menu
 set timeout=7
 set hidden_timeout_quiet=false
 set graphic_bg=${g_bg_f}
-# tftpd_opt can be tftpd_opt=tftp or tftpd_opt="tftp,\$tftp_server_ip", e.g., tftpd_opt=tftp,192.168.66.254
-set tftpd_opt=${tftp_srv_opt}
-set tftp_path=${tftp_path_opt}
-set grub_prefix_path=${grub_prefix_path}
+
+# Dynamically detect if we booted via HTTP or TFTP using built-in test command (no modules required)
+if [ "\$cmdpath" = "(http,${server_IP})/tftpboot/nbi_img" -o "\$cmdpath" = "(http,${server_IP})/tftpboot/nbi_img/" -o "\$root" = "http,${server_IP}" ]; then
+  set tftpd_opt="http,${server_IP}"
+  set tftp_path="/tftpboot/nbi_img"
+  set grub_prefix_path="/tftpboot/nbi_img/grub"
+else
+  if [ -n "${tftp_server_ip}" ]; then
+    set tftpd_opt="tftp,${tftp_server_ip}"
+  else
+    set tftpd_opt="tftp"
+  fi
+  set tftp_path=""
+  set grub_prefix_path="/grub"
+fi
+set root=\$tftpd_opt
+set prefix=(\$tftpd_opt)\$grub_prefix_path
+
+# Load required modules from our newly configured HTTP/TFTP prefix
+insmod png
+
 # "run_load_netboot" is the flag to avoid load_netboot to be run more than once.
 #
 function load_netboot {
@@ -310,7 +313,7 @@ if [ x"\${graphic_bg}" = xyes ]; then
     load_gfxterm
   fi
 fi
-if background_image (\$tftpd_opt)\$tftp_path/drblwp.png; then
+if background_image \$tftp_path/drblwp.png; then
   set color_normal=black/black
   set color_highlight=magenta/black
 else
@@ -341,17 +344,17 @@ cat <<-GRUB_END >> $GRUB_EFI_D/grub.cfg
 menuentry "$FULL_OS_Version $powerful_client_menu_label" --id drbl-client {
   echo "Enter DRBL..."
   echo "Loading Linux kernel vmlinuz-pxe..."
-  \$linux_cmd vmlinuz-pxe devfs=nomount drblthincli=off selinux=0 drbl_bootp=\$net_default_next_server $quiet_opt $edd_opt $CONSOLE_OUTPUT $drbl_mode_opt $drbl_dist_append
+  \$linux_cmd \$tftp_path/vmlinuz-pxe devfs=nomount drblthincli=off selinux=0 drbl_bootp=\$net_default_next_server $quiet_opt $edd_opt $CONSOLE_OUTPUT $drbl_mode_opt $drbl_dist_append
   echo "Loading initial ramdisk initrd-pxe.img..."
-  \$initrd_cmd initrd-pxe.img 
+  \$initrd_cmd \$tftp_path/initrd-pxe.img 
 }
 
 #menuentry "Clonezilla" --id clonezilla-se-client {
 #  echo "Enter Clonezilla..."
 #  echo 'Loading Linux kernel vmlinuz-pxe...'
-#  \$linux_cmd vmlinuz-pxe devfs=nomount drblthincli=off selinux=0 $quiet_opt text 1 drbl_bootp=\$net_default_next_server $edd_opt $CONSOLE_OUTPUT $clonezilla_mode_opt $drbl_dist_append
+#  \$linux_cmd \$tftp_path/vmlinuz-pxe devfs=nomount drblthincli=off selinux=0 $quiet_opt text 1 drbl_bootp=\$net_default_next_server $edd_opt $CONSOLE_OUTPUT $clonezilla_mode_opt $drbl_dist_append
 #  echo 'Loading initial ramdisk initrd-pxe.img...'
-#  \$initrd_cmd initrd-pxe.img
+#  \$initrd_cmd \$tftp_path/initrd-pxe.img
 #}
 
 menuentry "Local operating system (if available)" --id local-disk {
