@@ -225,11 +225,22 @@ terminal_output --append serial
 GRUB_END
 fi
 
+[ -e /etc/ocs/ocs-live.conf ] && . /etc/ocs/ocs-live.conf
+
 # Decide if it's something like (tftp,192.168.22.254) or (tftp) in grub config.
-if [ -n "$tftp_server_ip" ]; then
-  tftp_srv_opt="tftp,$tftp_server_ip"
+if [ "$ocs_uefi_http_boot" = "yes" ]; then
+  if [ -n "$tftp_server_ip" ]; then
+    tftp_srv_opt="http,$tftp_server_ip/tftpboot/nbi_img"
+  else
+    server_IP="$(LC_ALL=C get-all-nic-ip -b | awk -F" " '{print $1}')"
+    tftp_srv_opt="http,$server_IP/tftpboot/nbi_img"
+  fi
 else
-  tftp_srv_opt="tftp"
+  if [ -n "$tftp_server_ip" ]; then
+    tftp_srv_opt="tftp,$tftp_server_ip"
+  else
+    tftp_srv_opt="tftp"
+  fi
 fi
 
 cat <<-GRUB_END >> $GRUB_EFI_D/grub.cfg
