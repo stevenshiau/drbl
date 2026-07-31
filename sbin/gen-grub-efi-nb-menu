@@ -225,8 +225,6 @@ terminal_output --append serial
 GRUB_END
 fi
 
-[ -e /etc/ocs/ocs-live.conf ] && . /etc/ocs/ocs-live.conf
-
 if [ -n "$tftp_server_ip" ]; then
   server_IP="$tftp_server_ip"
 else
@@ -239,14 +237,17 @@ set timeout_style=menu
 set timeout=7
 set hidden_timeout_quiet=false
 set graphic_bg=${g_bg_f}
+# tftp_server_ip is assigned from Clonezilla, not from grub. It can be be nothing.
+set tftp_server_ip=${tftp_server_ip}
 
-# Dynamically detect if we booted via HTTP or TFTP using built-in test command (no modules required)
-if [ "\$cmdpath" = "(http,${server_IP})/tftpboot/nbi_img" -o "\$cmdpath" = "(http,${server_IP})/tftpboot/nbi_img/" -o "\$root" = "http,${server_IP}" ]; then
+# Dynamically detect if we booted via HTTP or TFTP using built-in test command.
+# The "http_url" only exists if netboot client is set as HTTPBoot. PXEBoot does not have that.
+if [ -n "\${http_url}" ]; then
   set tftpd_opt="http,${server_IP}"
   set tftp_path="/tftpboot/nbi_img"
   set grub_prefix_path="/tftpboot/nbi_img/grub"
 else
-  if [ -n "${tftp_server_ip}" ]; then
+  if [ -n "\${tftp_server_ip}" ]; then
     set tftpd_opt="tftp,${tftp_server_ip}"
   else
     set tftpd_opt="tftp"
@@ -263,7 +264,6 @@ insmod png
 # "run_load_netboot" is the flag to avoid load_netboot to be run more than once.
 #
 function load_netboot {
-  set prefix=(\$tftpd_opt)\$grub_prefix_path
   echo "Grub CPU and platform: \$grub_cpu, \$grub_platform"
   echo 'Network status: '
   net_ls_cards
@@ -313,7 +313,7 @@ if [ x"\${graphic_bg}" = xyes ]; then
     load_gfxterm
   fi
 fi
-if background_image \$tftp_path/drblwp.png; then
+if background_image drblwp.png; then
   set color_normal=black/black
   set color_highlight=magenta/black
 else
@@ -344,17 +344,17 @@ cat <<-GRUB_END >> $GRUB_EFI_D/grub.cfg
 menuentry "$FULL_OS_Version $powerful_client_menu_label" --id drbl-client {
   echo "Enter DRBL..."
   echo "Loading Linux kernel vmlinuz-pxe..."
-  \$linux_cmd \$tftp_path/vmlinuz-pxe devfs=nomount drblthincli=off selinux=0 drbl_bootp=\$net_default_next_server $quiet_opt $edd_opt $CONSOLE_OUTPUT $drbl_mode_opt $drbl_dist_append
+  \$linux_cmd vmlinuz-pxe devfs=nomount drblthincli=off selinux=0 drbl_bootp=\$net_default_next_server $quiet_opt $edd_opt $CONSOLE_OUTPUT $drbl_mode_opt $drbl_dist_append
   echo "Loading initial ramdisk initrd-pxe.img..."
-  \$initrd_cmd \$tftp_path/initrd-pxe.img 
+  \$initrd_cmd initrd-pxe.img 
 }
 
 #menuentry "Clonezilla" --id clonezilla-se-client {
 #  echo "Enter Clonezilla..."
 #  echo 'Loading Linux kernel vmlinuz-pxe...'
-#  \$linux_cmd \$tftp_path/vmlinuz-pxe devfs=nomount drblthincli=off selinux=0 $quiet_opt text 1 drbl_bootp=\$net_default_next_server $edd_opt $CONSOLE_OUTPUT $clonezilla_mode_opt $drbl_dist_append
+#  \$linux_cmd vmlinuz-pxe devfs=nomount drblthincli=off selinux=0 $quiet_opt text 1 drbl_bootp=\$net_default_next_server $edd_opt $CONSOLE_OUTPUT $clonezilla_mode_opt $drbl_dist_append
 #  echo 'Loading initial ramdisk initrd-pxe.img...'
-#  \$initrd_cmd \$tftp_path/initrd-pxe.img
+#  \$initrd_cmd initrd-pxe.img
 #}
 
 menuentry "Local operating system (if available)" --id local-disk {
