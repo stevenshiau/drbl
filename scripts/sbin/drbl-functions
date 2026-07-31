@@ -5034,6 +5034,39 @@ dhcp-boot=tag:efi-x86_64,bootx64.efi
 DNSMQSQ_END
      ;;
    esac
+
+   # The following is only working for Clonezilla lite server.
+   if ! is_drbl_clonezilla_live_env; then
+     return 0
+   fi
+   get_live_media_mnt_point
+   # For HTTPBoot, we only need to assign one NIC port's IP add.
+   all_eth_dev="$(LC_ALL=C get-all-nic-ip -d)"
+   ip=""
+   for inet in $all_eth_dev; do
+     ip="$(LC_ALL=C drbl-get-ipadd $inet)"
+     [ -n "$ip" ] && break
+   done
+   if [ -n "$ip" ]; then
+     cat <<-DNSMQSQ_END >> $dnsmasq_cfg
+
+# Proxy DHCP menu triggers and vendor mapping for HTTP Boot architectures
+dhcp-pxe-vendor=PXEClient,HTTPClient
+
+# HTTPBoot support
+dhcp-match=set:efi-http64,option:client-arch,16
+dhcp-option-force=tag:efi-http64,60,"HTTPClient"
+dhcp-boot=tag:efi-http64,"http://${ip}/tftpboot/nbi_img/bootx64.efi"
+
+dhcp-match=set:efi-http32,option:client-arch,15
+dhcp-option-force=tag:efi-http32,60,"HTTPClient"
+dhcp-boot=tag:efi-http32,"http://${ip}/tftpboot/nbi_img/bootia32.efi"
+
+dhcp-match=set:efi-httparm,option:client-arch,19
+dhcp-option-force=tag:efi-httparm,60,"HTTPClient"
+dhcp-boot=tag:efi-httparm,"http://${ip}/tftpboot/nbi_img/bootaa64.efi"
+DNSMQSQ_END
+   fi
 } # end of gen_dnsmasq_cfg
 #
 query_pkg_ver() {
