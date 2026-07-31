@@ -76,13 +76,16 @@ USAGE() {
 #
 get_rootfs_location_opt() {
 rootfs_location_opt=""
-[ -f /etc/ocs/ocs-live.conf ] && . /etc/ocs/ocs-live.conf
 case "$rootfs_location" in
   "fetch")
-           if [ "$ocs_uefi_http_boot" = "yes" ]; then
-             rootfs_location_opt="fetch=http://$server_IP/$squashfs_file"
-           else
-             rootfs_location_opt="fetch=tftp://$server_IP/$squashfs_file"
+	   if is_drbl_clonezilla_live_env; then
+             # Check if file exists in the http URL. If the return code is 200 then it exists.
+	     url_path="$server_IP/$squashfs_file"
+             if [ "$(curl -s -L -o /dev/null -w "%{http_code}" -I "http://$url_path")" -eq 200 ]; then
+               rootfs_location_opt="fetch=http://$url_path"
+             else
+               rootfs_location_opt="fetch=tftp://$url_path"
+             fi
            fi
            ;;
   "nfsroot")
@@ -852,9 +855,9 @@ menuentry "$SL_NAME $SL_VER (Ramdisk)" --id clonezilla-live-client {
   # Do _NOT_ edit unless you know what you are doing!
   echo "Enter $SL_FULL_NAME $SL_VER (Ramdisk)..."
   echo 'Loading $nbi_kernel...'
-  \$linux_cmd \$tftp_path/$nbi_kernel $append_param_in_pxe_cfg
+  \$linux_cmd $nbi_kernel $append_param_in_pxe_cfg
   echo 'Loading initial ramdisk $nbi_initrd...'
-  \$initrd_cmd \$tftp_path/$nbi_initrd
+  \$initrd_cmd $nbi_initrd
 }
 
 SL_PXE
