@@ -11,3 +11,6 @@
 
 %:
 	dh $@ 
+
+override_dh_compress:
+	dh_compress -XGPL

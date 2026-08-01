@@ -1,3 +1,9 @@
+drbl (5.10.1-drbl3) unstable; urgency=medium
+
+  * Keep doc/GPL in deb.
+
+ -- Steven Shiau <steven@clonezilla.org>  Sat, 01 Aug 2026 11:29:03 +0800
+
 drbl (5.10.1-drbl2) unstable; urgency=medium
 
   * Added files under doc/* to deb.
