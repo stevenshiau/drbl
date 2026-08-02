@@ -193,7 +193,7 @@ for i in $dest_bootloader; do
   [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
   if [ -e /usr/lib/shim/shim${SB_EFI_NAME}.efi.signed ]; then
     cp -fv /usr/lib/shim/shim${SB_EFI_NAME}.efi.signed $pxecfg_pd/shim${SB_EFI_NAME}.efi
-    echo "Copied from /usr/lib/shim/shim${SB_EFI_NAME}.efi.signed" > .$pxecfg_pd/shim${SB_EFI_NAME}.efi.info
+    echo "Copied from /usr/lib/shim/shim${SB_EFI_NAME}.efi.signed" > $pxecfg_pd/shim${SB_EFI_NAME}.efi.info
   else
     [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
     echo "Warngin! \"/usr/lib/shim/shim${SB_EFI_NAME}.efi.signed\" not found! It will not support ${EFI_ARCH} netboot client."
