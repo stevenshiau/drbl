@@ -225,10 +225,8 @@ terminal_output --append serial
 GRUB_END
 fi
 
-if [ -n "$tftp_server_ip" ]; then
-  server_IP="$tftp_server_ip"
-else
-  server_IP="$(LC_ALL=C get-all-nic-ip -b | awk -F" " '{print $1}')"
+if [ -z "$tftp_server_ip" ]; then
+  tftp_server_ip="$(LC_ALL=C get-all-nic-ip -b | awk -F" " '{print $1}')"
 fi
 
 cat <<-GRUB_END >> $GRUB_EFI_D/grub.cfg
@@ -237,16 +235,22 @@ set timeout_style=menu
 set timeout=7
 set hidden_timeout_quiet=false
 set graphic_bg=${g_bg_f}
-# tftp_server_ip is assigned from Clonezilla, not from grub. It can be be nothing.
+# tftp_server_ip is assigned or got from Clonezilla, not from grub. It can be be nothing.
 set tftp_server_ip=${tftp_server_ip}
 
 # Dynamically detect if we booted via HTTP or TFTP using built-in test command.
-# The "http_url" only exists if netboot client is set as HTTPBoot. PXEBoot does not have that.
+# The grub variable "http_url" only exists if netboot client is set as HTTPBoot. PXEBoot does not have that.
 if [ -n "\${http_url}" ]; then
-  set tftpd_opt="http,${server_IP}"
+  # HTTPBoot case
+  if [ -n "\${tftp_server_ip}" ]; then
+    set tftpd_opt="http,\${tftp_server_ip}"
+  else
+    set tftpd_opt="http"
+  fi
   set tftp_path="/tftpboot/nbi_img"
   set grub_prefix_path="/tftpboot/nbi_img/grub"
 else
+  # PXEBoot case
   if [ -n "\${tftp_server_ip}" ]; then
     set tftpd_opt="tftp,\${tftp_server_ip}"
   else
