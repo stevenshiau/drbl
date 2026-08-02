@@ -214,7 +214,7 @@ fi
 echo "Preparing syslinux.exe, syslinux, makeboot.bat and makeboot.sh... "
 put_syslinux_makeboot_for_usb_flash $target_d/ "$syslinux_ver_no"
 
-cp -af $DRBL_SCRIPT_PATH/doc/GPL $target_d/
+cp -af /usr/share/doc/drbl/GPL $target_d/
 
 (cd $target_d; zip -r $WD/$output_filename *)
 echo "The netinstall file $output_filename was created."
