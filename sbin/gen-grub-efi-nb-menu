@@ -248,7 +248,7 @@ if [ -n "\${http_url}" ]; then
   set grub_prefix_path="/tftpboot/nbi_img/grub"
 else
   if [ -n "\${tftp_server_ip}" ]; then
-    set tftpd_opt="tftp,${tftp_server_ip}"
+    set tftpd_opt="tftp,\${tftp_server_ip}"
   else
     set tftpd_opt="tftp"
   fi
