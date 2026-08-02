@@ -1,3 +1,15 @@
+drbl (5.10.2-drbl1) unstable; urgency=medium
+
+  * Separate the netboot files for PXEBoot/HTTPBoot, e.g.,:
+    PXEBoot: bootx64.efi
+    HTTPBoot: shimx64.efi
+    Drop the option "-s" of drbl-gen-grub-efi-nb, since we always prepare
+    bootx64.efi and shimx64.efi if shimx64.efi exists on the system.
+  * Bug fixed: use the variable name ${tftp_server_ip} in the generated
+    grub.cfg.
+
+ -- Steven Shiau <steven@clonezilla.org>  Sun, 02 Aug 2026 12:12:03 +0800
+
 drbl (5.10.1-drbl3) unstable; urgency=medium
 
   * Keep doc/GPL in deb.
