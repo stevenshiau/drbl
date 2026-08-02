@@ -5035,6 +5035,10 @@ DNSMQSQ_END
      ;;
    esac
 
+   # TODO: Check secure netboot file exists.
+   # AMD64: /usr/lib/shim/shimx64.efi.signed has been put in http root.
+   # ARM64: /usr/lib/shim/shimaa64.efi.signed has been put in http root.
+   
    # The following is only working for Clonezilla lite server.
    if ! is_drbl_clonezilla_live_env; then
      return 0
@@ -5056,7 +5060,7 @@ dhcp-pxe-vendor=PXEClient,HTTPClient
 # HTTPBoot support
 dhcp-match=set:efi-http64,option:client-arch,16
 dhcp-option-force=tag:efi-http64,60,"HTTPClient"
-dhcp-boot=tag:efi-http64,"http://${ip}/tftpboot/nbi_img/bootx64.efi"
+dhcp-boot=tag:efi-http64,"http://${ip}/tftpboot/nbi_img/shimx64.efi"
 
 dhcp-match=set:efi-http32,option:client-arch,15
 dhcp-option-force=tag:efi-http32,60,"HTTPClient"
@@ -5064,7 +5068,7 @@ dhcp-boot=tag:efi-http32,"http://${ip}/tftpboot/nbi_img/bootia32.efi"
 
 dhcp-match=set:efi-httparm,option:client-arch,19
 dhcp-option-force=tag:efi-httparm,60,"HTTPClient"
-dhcp-boot=tag:efi-httparm,"http://${ip}/tftpboot/nbi_img/bootaa64.efi"
+dhcp-boot=tag:efi-httparm,"http://${ip}/tftpboot/nbi_img/shimaa64.efi"
 DNSMQSQ_END
    fi
 } # end of gen_dnsmasq_cfg

@@ -17,8 +17,6 @@ efi_required_mod="normal tftp efinet chain echo net gzio xzio linux \
 linuxefi efi_gop efi_uga png gfxterm gfxterm_background gfxterm_menu \
 serial part_gpt part_msdos boot multiboot progress search \
 $GRUB_FS_MOD_drbl_ocs configfile test sleep tr reboot halt"
-# Default values
-# secure_boot_client is from drbl.conf.
 
 prog="$0"
 
@@ -52,7 +50,6 @@ while [ $# -gt 0 ]; do
             fi
 	    [ -z "$tftp_server_ip" ] && USAGE && exit 1
 	    ;;
-    -s|--secure-boot-client) secure_boot_client="yes"; shift;;
     -*)     echo "${0}: ${1}: invalid option" >&2
             USAGE >& 2
             exit 2 ;;
@@ -61,6 +58,7 @@ while [ $# -gt 0 ]; do
 done
 
 # Decide if it's something like (tftp,192.168.22.254) or (tftp) in grub config.
+# This will only be used in non-secure boot mechanism.
 if [ -n "$tftp_server_ip" ]; then
   tftp_srv_opt="tftp,$tftp_server_ip"
 else
@@ -190,46 +188,51 @@ for i in $dest_bootloader; do
   # For arm64 arch,
   # /usr/lib/shim/shimaa64.efi.signed -> /tftpboot/nbi_img/bootaa64.efi
   # /usr/lib/grub/arm64-efi-signed/grubnetaa64.efi.signed -> /tftpboot/nbi_img/grubaa64.efi
-  if [ "$secure_boot_client" = "yes" -a \
-       -e /usr/lib/shim/shim${SB_EFI_NAME}.efi.signed -a \
-       -e /usr/lib/grub/${EFI_ARCH}-efi-signed/grubnet${SB_EFI_NAME}.efi.signed ]; then
-    # Secure boot enabled. Use the one from upstream
-    [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
-    echo "UEFI Secure Boot support enabled for ${EFI_ARCH} clients."
-    [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
-    cp -fv /usr/lib/shim/shim${SB_EFI_NAME}.efi.signed $pxecfg_pd/boot${SB_EFI_NAME}.efi
-    cp -fv /usr/lib/grub/${EFI_ARCH}-efi-signed/grubnet${SB_EFI_NAME}.efi.signed $pxecfg_pd/grub${SB_EFI_NAME}.efi
-    echo "Copied from /usr/lib/shim/shim${SB_EFI_NAME}.efi.signed" > ${out_f}.info
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+  echo "Preparing files for UEFI Secure Boot netboot clients..."
+  [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+  if [ -e /usr/lib/shim/shim${SB_EFI_NAME}.efi.signed ]; then
+    cp -fv /usr/lib/shim/shim${SB_EFI_NAME}.efi.signed $pxecfg_pd/shim${SB_EFI_NAME}.efi
+    echo "Copied from /usr/lib/shim/shim${SB_EFI_NAME}.efi.signed" > .$pxecfg_pd/shim${SB_EFI_NAME}.efi.info
   else
     [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
-    echo "UEFI Secure Boot support disabled for ${EFI_ARCH} clients becasue there is no /usr/lib/shim/shim${SB_EFI_NAME}.efi.signed and /usr/lib/grub/${EFI_ARCH}-efi-signed/grubnet${SB_EFI_NAME}.efi.signed installed, or it is disabled in /etc/drbl/drbl.conf (\"secure_boot_client\")."
+    echo "Warngin! \"/usr/lib/shim/shim${SB_EFI_NAME}.efi.signed\" not found! It will not support ${EFI_ARCH} netboot client."
     [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
-    # Non-secure boot
-    # Checking the required modules
-    for im in $efi_required_mod; do
-      if [ ! -e "/usr/lib/grub/${EFI_ARCH}-efi/${im}.mod" ]; then
-        [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
-        echo "Missing grub2 module ${im}.mod... Exluding ${im}.mod..."
-        [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
-        efi_required_mod="$(echo $efi_required_mod | sed -r -e "s/$im //g")"
-      fi
-    done
-    echo "Creating the uEFI network booting bootable image $out_f..."
-    $GRUB_MKIMG $grub_mkimg_compress_opt -O ${EFI_ARCH}-efi -o $out_f --prefix="($tftp_srv_opt)/grub/" $efi_required_mod
-    rc=$?
-    if [ "$rc" -ne 0 ]; then
-      # When grub-mkimage fails, an empty output file will still be created. We'd better to clean it.
-      rm -f $out_f
-      [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
-      echo "Warning! Failed to create $out_f!"
-      echo "This server won't be able to serve uEFI network boot clients."
-      [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
-      sleep 5
+  fi
+  if [ -e /usr/lib/grub/${EFI_ARCH}-efi-signed/grubnet${SB_EFI_NAME}.efi.signed ]; then
+    cp -fv /usr/lib/grub/${EFI_ARCH}-efi-signed/grubnet${SB_EFI_NAME}.efi.signed $pxecfg_pd/grub${SB_EFI_NAME}.efi
+    echo "Copied from /usr/lib/grub/${EFI_ARCH}-efi-signed/grubnet${SB_EFI_NAME}.efi.signed" > $pxecfg_pd/grub${SB_EFI_NAME}.efi.info
     else
-      # Create a tag file
-      echo "Created by program \"$prog\" with command:" > ${out_f}.info
-      echo "$GRUB_MKIMG $grub_mkimg_compress_opt -O ${EFI_ARCH}-efi -o $out_f --prefix='(tftp)/grub/' $efi_required_mod" >> ${out_f}.info
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+    echo "Warngin! \"/usr/lib/grub/${EFI_ARCH}-efi-signed/grubnet${SB_EFI_NAME}.efi.signed\" not found! It will not support ${EFI_ARCH} netboot client."
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+  fi
+
+  # Create NB file for non-secure boot netboot clients
+  # Checking the required modules
+  for im in $efi_required_mod; do
+    if [ ! -e "/usr/lib/grub/${EFI_ARCH}-efi/${im}.mod" ]; then
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+      echo "Missing grub2 module ${im}.mod... Exluding ${im}.mod..."
+      [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+      efi_required_mod="$(echo $efi_required_mod | sed -r -e "s/$im //g")"
     fi
+  done
+  echo "Creating the uEFI network booting bootable image $out_f..."
+  $GRUB_MKIMG $grub_mkimg_compress_opt -O ${EFI_ARCH}-efi -o $out_f --prefix="($tftp_srv_opt)/grub/" $efi_required_mod
+  rc=$?
+  if [ "$rc" -ne 0 ]; then
+    # When grub-mkimage fails, an empty output file will still be created. We'd better to clean it.
+    rm -f $out_f
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_WARNING
+    echo "Warning! Failed to create $out_f!"
+    echo "This server won't be able to serve uEFI network boot clients."
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+    sleep 5
+  else
+    # Create a tag file
+    echo "Created by program \"$prog\" with command:" > ${out_f}.info
+    echo "$GRUB_MKIMG $grub_mkimg_compress_opt -O ${EFI_ARCH}-efi -o $out_f --prefix='(tftp)/grub/' $efi_required_mod" >> ${out_f}.info
   fi
 done
 
