@@ -1,3 +1,10 @@
+drbl (5.10.3-drbl1) unstable; urgency=medium
+
+  * Minor change: removed variable server_IP.
+    Just reuse the variable tftp_server_ip in gen-grub-efi-nb-menu.
+
+ -- Steven Shiau <steven@clonezilla.org>  Sun, 02 Aug 2026 15:56:31 +0800
+
 drbl (5.10.2-drbl1) unstable; urgency=medium
 
   * Separate the netboot files for PXEBoot/HTTPBoot, e.g.,:
