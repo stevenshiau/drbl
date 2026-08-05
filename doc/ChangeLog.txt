@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (5.10.4-drbl1) unstable; urgency=medium
+
+  * Added robust fallbacks for kernel CPU arch detection and fixed
+    several typos.
+
+ -- Steven Shiau <steven@clonezilla.org>  Wed, 05 Aug 2026 08:34:42 +0800
+
 drbl (5.10.3-drbl1) unstable; urgency=medium
 
   * Minor change: removed variable server_IP.
