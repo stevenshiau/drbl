@@ -37,7 +37,103 @@ if [ "$check_drbl_client_kernel" = "yes" ]; then
 else
   CONFIG_FILE=/boot/config-$KERNEL
 fi
-[ ! -f "$CONFIG_FILE" ] && exit 1
+
+if [ ! -f "$CONFIG_FILE" ]; then
+  # Determine alternative paths for fallbacks
+  if [ "$check_drbl_client_kernel" = "yes" ]; then
+    KERNEL_FILE=$drbl_common_root/boot/vmlinuz-$KERNEL
+    MODULES_DIR=$drbl_common_root/lib/modules/$KERNEL
+    [ ! -d "$MODULES_DIR" ] && MODULES_DIR=$drbl_common_root/usr/lib/modules/$KERNEL
+  else
+    KERNEL_FILE=/boot/vmlinuz-$KERNEL
+    MODULES_DIR=/lib/modules/$KERNEL
+    [ ! -d "$MODULES_DIR" ] && MODULES_DIR=/usr/lib/modules/$KERNEL
+  fi
+
+  # Fallback 1: If requested kernel is the running kernel, use uname -m
+  if [ "$KERNEL" = "$(uname -r)" ]; then
+    case "$(uname -m)" in
+      x86_64)
+        echo "x86_64"
+        exit 0
+        ;;
+      aarch64|arm64)
+        echo "arm64"
+        exit 0
+        ;;
+    esac
+  fi
+
+  # Fallback 2: Try to find file or directory to query package manager
+  target=""
+  if [ -f "$KERNEL_FILE" ]; then
+    target="$KERNEL_FILE"
+  elif [ -d "$MODULES_DIR" ]; then
+    target="$MODULES_DIR"
+  fi
+
+  if [ -n "$target" ]; then
+    if type dpkg &>/dev/null && type dpkg-query &>/dev/null; then
+      pkg_name="$(dpkg -S "$target" 2>/dev/null | cut -d: -f1)"
+      if [ -n "$pkg_name" ]; then
+        pkg_arch="$(dpkg-query -W -f='${Architecture}\n' "$pkg_name" 2>/dev/null)"
+        case "$pkg_arch" in
+          amd64)
+            echo "x86_64"
+            exit 0
+            ;;
+          arm64)
+            echo "arm64"
+            exit 0
+            ;;
+        esac
+      fi
+    elif type rpm &>/dev/null; then
+      pkg_arch="$(rpm -q --qf '%{ARCH}\n' -f "$target" 2>/dev/null)"
+      case "$pkg_arch" in
+        x86_64)
+          echo "x86_64"
+          exit 0
+          ;;
+        aarch64)
+          echo "arm64"
+          exit 0
+          ;;
+      esac
+    fi
+  fi
+
+  # Fallback 3: Use file utility on the kernel file if available
+  if [ -f "$KERNEL_FILE" ] && type file &>/dev/null; then
+    file_info="$(file -b "$KERNEL_FILE" 2>/dev/null)"
+    if echo "$file_info" | grep -qi -E "x86_64|x86-64|boot executable bzImage|Intel 80386"; then
+      echo "x86_64"
+      exit 0
+    elif echo "$file_info" | grep -qi -E "arm64|aarch64"; then
+      echo "arm64"
+      exit 0
+    fi
+  fi
+
+  # Fallback 4: Try checking the module file formats in the modules directory
+  if [ -d "$MODULES_DIR" ] && type file &>/dev/null; then
+    # find a kernel module .ko and check its file type
+    ko_file="$(find "$MODULES_DIR" -name "*.ko*" -type f -print -quit 2>/dev/null)"
+    if [ -n "$ko_file" ]; then
+      file_info="$(file -b "$ko_file" 2>/dev/null)"
+      if echo "$file_info" | grep -qi -E "x86-64|x86_64"; then
+        echo "x86_64"
+        exit 0
+      elif echo "$file_info" | grep -qi -E "aarch64|arm64"; then
+        echo "arm64"
+        exit 0
+      fi
+    fi
+  fi
+
+  # If all fallbacks failed, exit with failure
+  exit 1
+fi
 
 CPULIST="CONFIG_X86_64 CONFIG_ARM64"
 for icpu in $CPULIST; do

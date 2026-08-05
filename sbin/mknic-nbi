@@ -351,7 +351,7 @@ KARCH_CLIENT="$(cat $pxecfg_pd/client_kernel_arch.txt 2>/dev/null)"
 KARCH_EXISTING_KERNEL="$(drbl-check-kernel-cpu-arch --drbl-client $drbl_kernel)"
 if [ -z "$KARCH_EXISTING_KERNEL" ]; then 
   [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
-  echo "The requested kernel \"$KARCH_CLIENT\" $drbl_kernel kernel files are NOT found in  $drbl_common_root/usr/lib/modules/s and $drbl_common_root/boot in the server! The necessary modules in the network initrd can NOT be created!"
+  echo "The requested kernel \"$KARCH_CLIENT\" $drbl_kernel kernel files are NOT found in $drbl_common_root/usr/lib/modules/ and $drbl_common_root/boot in the server! The necessary modules in the network initrd can NOT be created!"
   echo "Client will NOT remote boot correctly!"
   echo "Program terminated!"
   [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
@@ -381,7 +381,7 @@ if [ "$KARCH_CLIENT" = "best_optimization" -o "$KARCH_EXISTING_KERNEL" = "$KARCH
   fi
 else
   [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
-  echo "The requested kernel \"$KARCH_CLIENT\" $drbl_kernel kernel files are NOT found in  $drbl_common_root/usr/lib/modules/s and $drbl_common_root/boot in the server! The necessary modules in the network initrd can NOT be created!"
+  echo "The requested kernel \"$KARCH_CLIENT\" $drbl_kernel kernel files are NOT found in $drbl_common_root/usr/lib/modules/ and $drbl_common_root/boot in the server! The necessary modules in the network initrd can NOT be created!"
   echo "Client will NOT remote boot correctly!"
   echo "Program terminated!"
   [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL

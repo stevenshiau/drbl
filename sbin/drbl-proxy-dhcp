@@ -61,7 +61,13 @@ enable_proxy_dhcp() {
 
   # Disable DHCP server name checking
   echo $msg_delimiter_star_line
-  mknic-nbi -c n
+  if ! mknic-nbi -c n; then
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+    echo "Failed to run mknic-nbi! Network boot images could not be configured."
+    echo "Program terminated!"
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+    exit 1
+  fi
   
   # Restart dnsmasq
   echo $msg_delimiter_star_line
@@ -70,7 +76,7 @@ enable_proxy_dhcp() {
 
   echo $msg_delimiter_star_line
   # Checking the services
-  pidof_dnsmasq="$(LC_LALL=C pidof dnsmasq)"
+  pidof_dnsmasq="$(LC_ALL=C pidof dnsmasq)"
   pidof_dhcpd="$(LC_ALL=C pidof dhcpd)"
   pidof_tftpd="$(LC_ALL=C pidof in.tftpd)"
   if [ -n "$pidof_dnsmasq" -a -z "$pidof_dhcpd" -a -z "$pidof_tftpd" ]; then
@@ -107,11 +113,17 @@ disable_proxy_dhcp() {
   echo $msg_delimiter_star_line
   # Enable DHCP server name checking
   echo $msg_delimiter_star_line
-  mknic-nbi -c y
+  if ! mknic-nbi -c y; then
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
+    echo "Failed to run mknic-nbi! Network boot images could not be configured."
+    echo "Program terminated!"
+    [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
+    exit 1
+  fi
 
   echo $msg_delimiter_star_line
   # Checking the services
-  pidof_dnsmasq="$(LC_LALL=C pidof dnsmasq)"
+  pidof_dnsmasq="$(LC_ALL=C pidof dnsmasq)"
   pidof_dhcpd="$(LC_ALL=C pidof dhcpd)"
   pidof_tftpd="$(LC_ALL=C pidof in.tftpd)"
   if [ -z "$pidof_dnsmasq" -a -n "$pidof_dhcpd" -a -n "$pidof_tftpd" ]; then
