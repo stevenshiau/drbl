@@ -1,3 +1,9 @@
+drbl (5.10.5-drbl1) unstable; urgency=medium
+
+  * Added package fonts-unifont in the packages list of Clonezilla live.
+
+ -- Steven Shiau <steven@clonezilla.org>  Sat, 08 Aug 2026 21:11:04 +0800
+
 drbl (5.10.4-drbl1) unstable; urgency=medium
 
   * Added robust fallbacks for kernel CPU arch detection and fixed
