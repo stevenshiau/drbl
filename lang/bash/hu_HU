@@ -1287,3 +1287,13 @@ msg_must_input_dest_ip='Meg kell adnia egy cél IP-címet vagy a gép nevét (FQ
 msg_waiting_for_dest_to_listen='Várakozás, amíg a célgép hallgat a porton'
 msg_connecting_to_get_notify_status='Kapcsolódás a céleszközhöz az értesítési állapot lekéréséhez... '
 msg_waiting_for_source_query_notify='Várakozás a forrásgépre a feladatértesítés lekérdezéséhez... '
+
+# Tag on 2026/08/09
+msg_rtc_is_local_time_by_boot_param='Az indítási paraméterek alapján a hardver óra (RTC) helyi időre van állítva.'
+msg_rtc_is_utc_by_boot_param='Az indítási paraméterek alapján a hardver óra (RTC) UTC-re van állítva.'
+msg_ask_bios_clock_utc_or_local='A BIOS/hardver órája UTC-re vagy helyi időre van állítva?'
+msg_bios_clock_utc_option='1) UTC (Alapértelmezett - csak Linux rendszerekhez ajánlott)'
+msg_bios_clock_local_option='2) Helyi idő (standard Windows duális rendszerekhez)'
+msg_please_select_one_or_two='Kérjük, válasszon [1/2]: '
+msg_setting_bios_clock_to_local='A rendszer konfigurálása a BIOS óra helyi időként való értelmezésére...'
+msg_setting_bios_clock_to_utc='A rendszer konfigurálása a BIOS óra UTC-ként való értelmezésére...'

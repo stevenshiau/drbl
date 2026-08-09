@@ -1282,3 +1282,13 @@ msg_must_input_dest_ip='Bạn phải nhập địa chỉ IP của máy đích ho
 msg_waiting_for_dest_to_listen='Chờ máy đích lắng nghe trên cổng'
 msg_connecting_to_get_notify_status='Đang kết nối với máy đích để lấy trạng thái thông báo... '
 msg_waiting_for_source_query_notify='Đang chờ máy nguồn truy vấn thông báo công việc... '
+
+# Tag on 2026/08/09
+msg_rtc_is_local_time_by_boot_param='Theo tham số khởi động, đồng hồ phần cứng (RTC) đang ở giờ địa phương.'
+msg_rtc_is_utc_by_boot_param='Theo tham số khởi động, đồng hồ phần cứng (RTC) đang ở giờ UTC.'
+msg_ask_bios_clock_utc_or_local='Đồng hồ BIOS/phần cứng của bạn được đặt thành UTC hay Giờ Địa Phương?'
+msg_bios_clock_utc_option='1) UTC (Mặc định - Khuyên dùng cho hệ thống chỉ có Linux)'
+msg_bios_clock_local_option='2) Giờ Địa Phương (Tiêu chuẩn cho hệ thống khởi động kép với Windows)'
+msg_please_select_one_or_two='Vui lòng chọn [1/2]: '
+msg_setting_bios_clock_to_local='Đang cấu hình hệ thống để hiểu đồng hồ BIOS là Giờ Địa Phương...'
+msg_setting_bios_clock_to_utc='Đang cấu hình hệ thống để hiểu đồng hồ BIOS là Giờ UTC...'

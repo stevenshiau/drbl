@@ -1291,3 +1291,13 @@ msg_must_input_dest_ip='Вы должны ввести целевой IP-адр�
 msg_waiting_for_dest_to_listen='Ожидание прослушивания целевым компьютером порта'
 msg_connecting_to_get_notify_status='Подключение к целевому компьютеру для получения статуса уведомления... '
 msg_waiting_for_source_query_notify='Ожидание запроса уведомления о задании от исходного компьютера... '
+
+# Tag on 2026/08/09
+msg_rtc_is_local_time_by_boot_param='Согласно параметрам загрузки, аппаратные часы (RTC) работают по местному времени.'
+msg_rtc_is_utc_by_boot_param='Согласно параметрам загрузки, аппаратные часы (RTC) работают по UTC.'
+msg_ask_bios_clock_utc_or_local='Ваши часы BIOS/аппаратные часы установлены на UTC или местное время?'
+msg_bios_clock_utc_option='1) UTC (По умолчанию - рекомендуется для систем только с Linux)'
+msg_bios_clock_local_option='2) Местное время (стандарт для систем с двойной загрузкой с Windows)'
+msg_please_select_one_or_two='Пожалуйста, выберите [1/2]: '
+msg_setting_bios_clock_to_local='Настройка системы для интерпретации часов BIOS как местного времени...'
+msg_setting_bios_clock_to_utc='Настройка системы для интерпретации часов BIOS как UTC...'

@@ -1286,3 +1286,13 @@ msg_must_input_dest_ip='Devi inserire un indirizzo IP di destinazione o il nome 
 msg_waiting_for_dest_to_listen='In attesa che la destinazione ascolti sulla porta'
 msg_connecting_to_get_notify_status='Connessione alla macchina di destinazione per ottenere lo stato di notifica... '
 msg_waiting_for_source_query_notify='In attesa che la macchina di origine richieda la notifica del lavoro... '
+
+# Tag on 2026/08/09
+msg_rtc_is_local_time_by_boot_param='Secondo i parametri di avvio, l'\''orologio hardware (RTC) è impostato sull'\''ora locale.'
+msg_rtc_is_utc_by_boot_param='Secondo i parametri di avvio, l'\''orologio hardware (RTC) è impostato su UTC.'
+msg_ask_bios_clock_utc_or_local='L'\''orologio del BIOS/hardware è impostato su UTC o sull'\''ora locale?'
+msg_bios_clock_utc_option='1) UTC (Predefinito - Consigliato per sistemi solo Linux)'
+msg_bios_clock_local_option='2) Ora locale (Standard per sistemi in dual-boot con Windows)'
+msg_please_select_one_or_two='Si prega di selezionare [1/2]: '
+msg_setting_bios_clock_to_local='Configurazione del sistema per interpretare l'\''orologio del BIOS come ora locale...'
+msg_setting_bios_clock_to_utc='Configurazione del sistema per interpretare l'\''orologio del BIOS come UTC...'

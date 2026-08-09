@@ -1287,3 +1287,13 @@ msg_must_input_dest_ip='您必須輸入目的端的機器名稱(FQDN)或者IP位
 msg_waiting_for_dest_to_listen='正在等待目的端在通訊埠監聽'
 msg_connecting_to_get_notify_status='正在連線到目的端機器以取得通知狀態... '
 msg_waiting_for_source_query_notify='正在等待來源端機器查詢工作通知... '
+
+# Tag on 2026/08/09
+msg_rtc_is_local_time_by_boot_param='根據開機參數，硬體時鐘 (RTC) 設為本地時間。'
+msg_rtc_is_utc_by_boot_param='根據開機參數，硬體時鐘 (RTC) 設為 UTC。'
+msg_ask_bios_clock_utc_or_local='您的 BIOS/硬體時鐘設為 UTC 還是本地時間？'
+msg_bios_clock_utc_option='1) UTC (預設值 - 僅使用 Linux 系統推薦)'
+msg_bios_clock_local_option='2) 本地時間 (Windows 雙系統之標準配置)'
+msg_please_select_one_or_two='請選擇 [1/2]: '
+msg_setting_bios_clock_to_local='正在設定系統將 BIOS 時鐘解讀為本地時間...'
+msg_setting_bios_clock_to_utc='正在設定系統將 BIOS 時鐘解讀為 UTC...'

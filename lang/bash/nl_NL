@@ -1282,3 +1282,13 @@ msg_must_input_dest_ip='U moet een doel IP-adres of de hostnaam (FQDN) invoeren!
 msg_waiting_for_dest_to_listen='Wachten tot de doelmachine luistert op poort'
 msg_connecting_to_get_notify_status='Verbinden met de doelmachine om de meldingsstatus op te halen... '
 msg_waiting_for_source_query_notify='Wachten tot de bronmachine de taakmelding opvraagt... '
+
+# Tag on 2026/08/09
+msg_rtc_is_local_time_by_boot_param='Volgens de opstartparameters staat de hardwareklok (RTC) op lokale tijd.'
+msg_rtc_is_utc_by_boot_param='Volgens de opstartparameters staat de hardwareklok (RTC) op UTC.'
+msg_ask_bios_clock_utc_or_local='Is uw BIOS-/hardwareklok ingesteld op UTC of lokale tijd?'
+msg_bios_clock_utc_option='1) UTC (Standaard - Aanbevolen voor systemen met alleen Linux)'
+msg_bios_clock_local_option='2) Lokale tijd (Standaard voor dual-boot-systemen met Windows)'
+msg_please_select_one_or_two='Selecteer a.u.b. [1/2]: '
+msg_setting_bios_clock_to_local='Systeem configureren om de BIOS-klok als lokale tijd te interpreteren...'
+msg_setting_bios_clock_to_utc='Systeem configureren om de BIOS-klok als UTC te interpreteren...'

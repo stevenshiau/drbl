@@ -1282,3 +1282,13 @@ msg_must_input_dest_ip='Anda harus memasukkan alamat IP tujuan atau nama mesinny
 msg_waiting_for_dest_to_listen='Menunggu tujuan untuk mendengarkan pada port'
 msg_connecting_to_get_notify_status='Menghubungkan ke mesin target untuk mendapatkan status pemberitahuan... '
 msg_waiting_for_source_query_notify='Menunggu mesin sumber untuk meminta pemberitahuan pekerjaan... '
+
+# Tag on 2026/08/09
+msg_rtc_is_local_time_by_boot_param='Berdasarkan parameter boot, jam perangkat keras (RTC) diatur ke waktu lokal.'
+msg_rtc_is_utc_by_boot_param='Berdasarkan parameter boot, jam perangkat keras (RTC) diatur ke UTC.'
+msg_ask_bios_clock_utc_or_local='Apakah jam BIOS/perangkat keras Anda diatur ke UTC atau Waktu Lokal?'
+msg_bios_clock_utc_option='1) UTC (Default - Direkomendasikan untuk sistem khusus Linux)'
+msg_bios_clock_local_option='2) Waktu Lokal (Standar untuk sistem dual-boot dengan Windows)'
+msg_please_select_one_or_two='Silakan pilih [1/2]: '
+msg_setting_bios_clock_to_local='Mengonfigurasi sistem untuk menafsirkan jam BIOS sebagai Waktu Lokal...'
+msg_setting_bios_clock_to_utc='Mengonfigurasi sistem untuk menafsirkan jam BIOS sebagai UTC...'

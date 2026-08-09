@@ -1282,3 +1282,13 @@ msg_must_input_dest_ip="Ви повинні ввести цільову IP-ад�
 msg_waiting_for_dest_to_listen="Очікування прослуховування цільовим комп'ютером порту"
 msg_connecting_to_get_notify_status="Підключення до цільового комп'ютера для отримання статусу сповіщення... "
 msg_waiting_for_source_query_notify="Очікування запиту сповіщення про роботу від вихідного комп'ютера... "
+
+# Tag on 2026/08/09
+msg_rtc_is_local_time_by_boot_param='Відповідно до параметрів завантаження, апаратний годинник (RTC) працює за місцевим часом.'
+msg_rtc_is_utc_by_boot_param='Відповідно до параметрів завантаження, апаратний годинник (RTC) працює за UTC.'
+msg_ask_bios_clock_utc_or_local='Ваш BIOS/апаратний годинник встановлено на UTC чи на місцевий час?'
+msg_bios_clock_utc_option='1) UTC (За замовчуванням - рекомендовано для систем тільки з Linux)'
+msg_bios_clock_local_option='2) Місцевий час (стандарт для систем з подвійним завантаженням з Windows)'
+msg_please_select_one_or_two='Будь ласка, виберіть [1/2]: '
+msg_setting_bios_clock_to_local='Налаштування системи для інтерпретації годинника BIOS як місцевого часу...'
+msg_setting_bios_clock_to_utc='Налаштування системи для інтерпретації годинника BIOS як UTC...'

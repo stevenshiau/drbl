@@ -1288,3 +1288,13 @@ msg_must_input_dest_ip='Bir hedef IP adresi veya makine adı (FQDN) girmelisiniz
 msg_waiting_for_dest_to_listen='Hedefin portu dinlemesi bekleniyor'
 msg_connecting_to_get_notify_status='Bildirim durumunu almak için hedef makineye bağlanılıyor... '
 msg_waiting_for_source_query_notify='Kaynak makinenin iş bildirimini sorgulaması bekleniyor... '
+
+# Tag on 2026/08/09
+msg_rtc_is_local_time_by_boot_param='Önyükleme parametrelerine göre donanım saati (RTC) yerel saatte.'
+msg_rtc_is_utc_by_boot_param='Önyükleme parametrelerine göre donanım saati (RTC) UTC'\''de.'
+msg_ask_bios_clock_utc_or_local='BIOS/donanım saatiniz UTC olarak mı yoksa Yerel Saat olarak mı ayarlı?'
+msg_bios_clock_utc_option='1) UTC (Varsayılan - Yalnızca Linux sistemleri için önerilir)'
+msg_bios_clock_local_option='2) Yerel Saat (Windows çift önyüklemeli sistemler için standart)'
+msg_please_select_one_or_two='Lütfen seçin [1/2]: '
+msg_setting_bios_clock_to_local='Sistem, BIOS saatini Yerel Saat olarak yorumlayacak şekilde yapılandırılıyor...'
+msg_setting_bios_clock_to_utc='Sistem, BIOS saatini UTC olarak yorumlayacak şekilde yapılandırılıyor...'

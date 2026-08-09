@@ -1286,3 +1286,13 @@ msg_must_input_dest_ip='대상 IP 주소 또는 컴퓨터 이름 (FQDN)을 입�
 msg_waiting_for_dest_to_listen='대상 컴퓨터가 포트에서 대기하기를 기다리는 중'
 msg_connecting_to_get_notify_status='알림 상태를 가져오기 위해 대상 컴퓨터에 연결하는 중... '
 msg_waiting_for_source_query_notify='소스 컴퓨터가 작업 알림을 쿼리하기를 기다리는 중... '
+
+# Tag on 2026/08/09
+msg_rtc_is_local_time_by_boot_param='부트 매개변수에 따르면 하드웨어 클록 (RTC)은 현지 시간으로 설정되어 있습니다.'
+msg_rtc_is_utc_by_boot_param='부트 매개변수에 따르면 하드웨어 클록 (RTC)은 UTC로 설정되어 있습니다.'
+msg_ask_bios_clock_utc_or_local='BIOS/하드웨어 클록이 UTC 또는 현지 시간 중 어느 것으로 설정되어 있습니까?'
+msg_bios_clock_utc_option='1) UTC (기본값 - Linux 전용 시스템에 권장)'
+msg_bios_clock_local_option='2) 현지 시간 (Windows 멀티부팅 시스템의 표준)'
+msg_please_select_one_or_two='[1/2] 중 선택하십시오: '
+msg_setting_bios_clock_to_local='BIOS 클록을 현지 시간으로 해석하도록 시스템 구성 중...'
+msg_setting_bios_clock_to_utc='BIOS 클록을 UTC로 해석하도록 시스템 구성 중...'

@@ -1293,3 +1293,13 @@ msg_must_input_dest_ip="Heu d'introduir una adreça IP de destinació o el seu n
 msg_waiting_for_dest_to_listen='Esperant que la destinació escolti al port'
 msg_connecting_to_get_notify_status="S'està connectant a la màquina de destinació per obtenir l'estat de la notificació... "
 msg_waiting_for_source_query_notify="Esperant que la màquina d'origen consulti la notificació del treball... "
+
+# Tag on 2026/08/09
+msg_rtc_is_local_time_by_boot_param='D'\''acord amb els paràmetres d'\''arrencada, el rellotge de maquinari (RTC) està en hora local.'
+msg_rtc_is_utc_by_boot_param='D'\''acord amb els paràmetres d'\''arrencada, el rellotge de maquinari (RTC) està en UTC.'
+msg_ask_bios_clock_utc_or_local='El vostre rellotge de maquinari/BIOS està configurat en UTC o en hora local?'
+msg_bios_clock_utc_option='1) UTC (Predeterminat - Recomanat per a sistemes només Linux)'
+msg_bios_clock_local_option='2) Hora local (Estàndard per a sistemes de doble arrencada amb Windows)'
+msg_please_select_one_or_two='Si us plau, seleccioneu [1/2]: '
+msg_setting_bios_clock_to_local='Configurant el sistema per interpretar el rellotge de la BIOS com a hora local...'
+msg_setting_bios_clock_to_utc='Configurant el sistema per interpretar el rellotge de la BIOS com a UTC...'

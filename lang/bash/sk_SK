@@ -1288,3 +1288,13 @@ msg_must_input_dest_ip='Musíte zadať cieľovú IP adresu alebo názov počíta
 msg_waiting_for_dest_to_listen='Čaká sa na počúvanie cieľa na porte'
 msg_connecting_to_get_notify_status='Pripája sa k cieľovému počítaču pre získanie stavu oznámenia... '
 msg_waiting_for_source_query_notify='Čaká sa na zdrojový počítač na opýtanie sa na oznámenie o úlohe... '
+
+# Tag on 2026/08/09
+msg_rtc_is_local_time_by_boot_param='Podľa parametrov spustenia je hardvérový čas (RTC) nastavený na lokálny čas.'
+msg_rtc_is_utc_by_boot_param='Podľa parametrov spustenia je hardvérový čas (RTC) nastavený na UTC.'
+msg_ask_bios_clock_utc_or_local='Je váš BIOS/hardvérový čas nastavený na UTC alebo na lokálny čas?'
+msg_bios_clock_utc_option='1) UTC (Predvolené - odporúčané pre systémy iba s Linuxom)'
+msg_bios_clock_local_option='2) Lokálny čas (štandard pre systémy s dual-bootom s Windowsom)'
+msg_please_select_one_or_two='Prosím zvoľte [1/2]: '
+msg_setting_bios_clock_to_local='Konfigurácia systému pre interpretáciu času BIOS ako lokálneho času...'
+msg_setting_bios_clock_to_utc='Konfigurácia systému pre interpretáciu času BIOS ako UTC...'

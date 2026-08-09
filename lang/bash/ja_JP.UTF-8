@@ -1307,3 +1307,13 @@ msg_must_input_dest_ip='復元先IPアドレスまたはマシン名 (FQDN) を�
 msg_waiting_for_dest_to_listen='復元先がポートで待機するのを待っています'
 msg_connecting_to_get_notify_status='ターゲットマシンに接続して通知ステータスを取得しています... '
 msg_waiting_for_source_query_notify='復元元マシンがジョブ通知を照会するのを待っています... '
+
+# Tag on 2026/08/09
+msg_rtc_is_local_time_by_boot_param='ブートパラメータによると、ハードウェアクロック (RTC) はローカルタイムに設定されています。'
+msg_rtc_is_utc_by_boot_param='ブートパラメータによると、ハードウェアクロック (RTC) は UTC に設定されています。'
+msg_ask_bios_clock_utc_or_local='BIOS/ハードウェアクロックは UTC またはローカルタイムのどちらに設定されていますか？'
+msg_bios_clock_utc_option='1) UTC (デフォルト - Linuxのみのシステムに推奨)'
+msg_bios_clock_local_option='2) ローカルタイム (Windowsとのデュาลブートシステムの標準)'
+msg_please_select_one_or_two='選択してください [1/2]: '
+msg_setting_bios_clock_to_local='BIOSクロックをローカルタイムとして解釈するようにシステムを構成しています...'
+msg_setting_bios_clock_to_utc='BIOSクロックをUTCとして解釈するようにシステムを構成しています...'

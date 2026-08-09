@@ -1287,3 +1287,13 @@ msg_must_input_dest_ip='Πρέπει να εισαγάγετε μια διεύθ
 msg_waiting_for_dest_to_listen='Αναμονή για το μηχάνημα προορισμού να ακούσει στη θύρα'
 msg_connecting_to_get_notify_status='Σύνδεση στο μηχάνημα προορισμού για λήψη της κατάστασης ειδοποίησης... '
 msg_waiting_for_source_query_notify='Αναμονή για το μηχάνημα πηγής να ερωτήσει την ειδοποίηση εργασίας... '
+
+# Tag on 2026/08/09
+msg_rtc_is_local_time_by_boot_param='Σύμφωνα με τις παραμέτρους εκκίνησης, το ρολόι υλικού (RTC) είναι σε τοπική ώρα.'
+msg_rtc_is_utc_by_boot_param='Σύμφωνα με τις παραμέτρους εκκίνησης, το ρολόι υλικού (RTC) είναι σε UTC.'
+msg_ask_bios_clock_utc_or_local='Το ρολόι του BIOS/υλικού σας είναι ρυθμισμένο σε UTC ή Τοπική Ώρα;'
+msg_bios_clock_utc_option='1) UTC (Προεπιλογή - Συνιστάται για συστήματα μόνο με Linux)'
+msg_bios_clock_local_option='2) Τοπική Ώρα (Τυπικό για συστήματα διπλής εκκίνησης με Windows)'
+msg_please_select_one_or_two='Παρακαλώ επιλέξτε [1/2]: '
+msg_setting_bios_clock_to_local='Διαμόρφωση συστήματος για ερμηνεία του ρολογιού BIOS ως Τοπική Ώρα...'
+msg_setting_bios_clock_to_utc='Διαμόρφωση συστήματος για ερμηνεία του ρολογιού BIOS ως UTC...'

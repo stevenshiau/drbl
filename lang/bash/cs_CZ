@@ -1282,3 +1282,13 @@ msg_must_input_dest_ip='Musíte zadat cílovou IP adresu nebo název stroje (FQD
 msg_waiting_for_dest_to_listen='Čekání na naslouchání cíle na portu'
 msg_connecting_to_get_notify_status='Připojování k cílovému stroji pro získání stavu oznámení... '
 msg_waiting_for_source_query_notify='Čekání na zdrojový stroj k dotázání na oznámení o úloze... '
+
+# Tag on 2026/08/09
+msg_rtc_is_local_time_by_boot_param='Podle parametrů spuštění je hardwarový čas (RTC) nastaven na lokální čas.'
+msg_rtc_is_utc_by_boot_param='Podle parametrů spuštění je hardwarový čas (RTC) nastaven na UTC.'
+msg_ask_bios_clock_utc_or_local='Je váš BIOS/hardwarový čas nastaven na UTC nebo na lokální čas?'
+msg_bios_clock_utc_option='1) UTC (Výchozí - doporučeno pro systémy pouze s Linuxem)'
+msg_bios_clock_local_option='2) Lokální čas (standard pro systémy s dual-bootem s Windows)'
+msg_please_select_one_or_two='Prosím zvolte [1/2]: '
+msg_setting_bios_clock_to_local='Konfigurace systému pro interpretaci času BIOS jako lokálního času...'
+msg_setting_bios_clock_to_utc='Konfigurace systému pro interpretaci času BIOS jako UTC...'

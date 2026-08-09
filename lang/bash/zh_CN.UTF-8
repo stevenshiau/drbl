@@ -1289,3 +1289,13 @@ msg_must_input_dest_ip='您必须输入目的端IP地址或是机器名称(FQDN)
 msg_waiting_for_dest_to_listen='正在等待目的端在端口监听'
 msg_connecting_to_get_notify_status='正在连接到目的端机器以获取通知状态... '
 msg_waiting_for_source_query_notify='正在等待来源端机器查询工作通知... '
+
+# Tag on 2026/08/09
+msg_rtc_is_local_time_by_boot_param='根据开机参数，硬件时钟 (RTC) 设为本地时间。'
+msg_rtc_is_utc_by_boot_param='根据开机参数，硬件时钟 (RTC) 设为 UTC。'
+msg_ask_bios_clock_utc_or_local='您的 BIOS/硬件时钟设为 UTC 还是本地时间？'
+msg_bios_clock_utc_option='1) UTC (默认值 - 仅使用 Linux 系统推荐)'
+msg_bios_clock_local_option='2) 本地时间 (Windows 双系统之标准配置)'
+msg_please_select_one_or_two='请选择 [1/2]: '
+msg_setting_bios_clock_to_local='正在设置系统将 BIOS 时钟解读为本地时间...'
+msg_setting_bios_clock_to_utc='正在设置系统将 BIOS 时钟解读为 UTC...'
