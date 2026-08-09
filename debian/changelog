@@ -1,3 +1,9 @@
+drbl (5.10.6-drbl1) unstable; urgency=medium
+
+  * Added translation strings for hardware clock UTC/Local Time prompts.
+
+ -- Steven Shiau <steven@clonezilla.org>  Sun, 09 Aug 2026 14:36:12 +0800
+
 drbl (5.10.5-drbl1) unstable; urgency=medium
 
   * Added package fonts-unifont in the packages list of Clonezilla live.
