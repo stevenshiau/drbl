@@ -1,3 +1,9 @@
+drbl (5.10.7-drbl2) unstable; urgency=medium
+
+  * Added package netpbm in the pkgs list of Clonezilla live system.
+
+ -- Steven Shiau <steven@clonezilla.org>  Sun, 09 Aug 2026 19:13:55 +0800
+
 drbl (5.10.6-drbl1) unstable; urgency=medium
 
   * Added translation strings for hardware clock UTC/Local Time prompts.
