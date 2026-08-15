@@ -138,6 +138,16 @@ chomp($drblpush_wd=`LC_ALL=C mktemp -d /tmp/drblpush_wd.tmp.XXXXXX`);
 system("cp -f macadr-*.txt $drblpush_wd > /dev/null 2>&1");
 chdir ($drblpush_wd) || die ("Could not change to new working directory!!!");
 
+sub netmask_to_cidr {
+  my $mask = shift;
+  my $cidr = 0;
+  foreach my $octet (split(/\./, $mask)) {
+    my $bin = sprintf("%08b", $octet);
+    $cidr += ($bin =~ tr/1/1/);
+  }
+  return $cidr;
+}
+
 sub set_client_public_ip {
   # $_[0]: file to input containing client IPs (input)
   # $_[1]: file to output containing client public IPs parameters (return)
@@ -1769,9 +1779,13 @@ sub drbl_server_parse {
   unlink ($hosts_list) if -f $hosts_list;
   unlink ($CLIENT_IP_HOSTNAME_LIST) if -f $CLIENT_IP_HOSTNAME_LIST;
   unlink ($public_ip_list) if -f $public_ip_list;
+  unlink ("kea-dhcp4.conf") if -f "kea-dhcp4.conf";
+
+  my @kea_subnets = ();
 
   # open the config files for DRBL server
   open(DHCPD_OUT,">dhcpd.conf") or die "Can NOT write file \"dhcpd.conf\" \n";
+  open(KEA_OUT,">kea-dhcp4.conf") or die "Can NOT write file \"kea-dhcp4.conf\" \n";
   open(NETGROUP_OUT,">netgroup") or die "Can NOT write file \"netgroup\"! \n";
   open(DISKLESS_OUT,">$main_sh") or die "Can NOT write file \"$main_sh\" \n";
   open(NFSSERVER_OUT,">nfsserver_all") or die "Can NOT write file \"nfsserver_all\" \n";
@@ -2204,6 +2218,13 @@ done
 # in the drblpush DRBL server.
 
 cp -f dhcpd.conf $DHCPDCONF_DIR/
+[ -d /etc/kea ] || mkdir -p /etc/kea
+cp -f kea-dhcp4.conf /etc/kea/
+if systemctl list-unit-files | grep -q kea-dhcp4-server; then
+  echo "Restarting Kea DHCPv4 Server..."
+  systemctl enable kea-dhcp4-server >/dev/null 2>&1
+  systemctl restart kea-dhcp4-server
+fi
 # Generate the dnsmasq config file
 if [ "$use_proxy_dhcp" = "yes" ]; then
   # Only create dnsmasq.conf when use_proxy_dhcp is set as yes.
@@ -4190,6 +4211,10 @@ echo "done!"
 
   foreach my $k1 ( sort(keys %$rHoH) ) {
     if( $k1=~/general/ ) { next; } # skip general block
+    my @kea_reservations = ();
+    my $kea_pool_start = "";
+    my $kea_pool_end = "";
+
     my $interface=$rHoH->{$k1}{"INTERFACE"};
     my $network=$rHoH->{$k1}{"NETWORK"};
     my $nfsserver=$rHoH->{$k1}{"NFSSERVER"};
@@ -4400,6 +4425,11 @@ EOF
 	# option host-name "$label";
     }
 EOF
+        push @kea_reservations, "                {\n" .
+                                "                    \"hw-address\": \"$macadd\",\n" .
+                                "                    \"ip-address\": \"$ip\",\n" .
+                                "                    \"hostname\": \"$label\"\n" .
+                                "                }";
       } elsif( length($range)!=0 ) {
 	# range list
 	# do nothing
@@ -4444,6 +4474,8 @@ EOF
 	# HERE
         chomp(my $ipstart=`LC_ALL=C head -n 1 $iplist_tmp`);
         chomp(my $ipend=`LC_ALL=C tail -n 1 $iplist_tmp`);
+        $kea_pool_start = $ipstart;
+        $kea_pool_end = $ipend;
         print DHCPD_OUT <<EOF;
     pool {
       # allow members of "DRBL-Client";
@@ -4473,6 +4505,34 @@ subnet $main_nic_subnet netmask $main_nic_netmask { }
 }
 EOF
     }
+
+    my $cidr = netmask_to_cidr($netmask_sys);
+    my $subnet_json = "        {\n" .
+                      "            \"id\": " . scalar(@kea_subnets + 1) . ",\n" .
+                      "            \"subnet\": \"$network/$cidr\",\n";
+
+    if ($kea_pool_start ne "" && $kea_pool_end ne "") {
+        $subnet_json .= "            \"pools\": [\n" .
+                        "                { \"pool\": \"$kea_pool_start - $kea_pool_end\" }\n" .
+                        "            ],\n";
+    }
+
+    $subnet_json .= "            \"option-data\": [\n" .
+                    "                {\n" .
+                    "                    \"name\": \"routers\",\n" .
+                    "                    \"data\": \"$gateway\"\n" .
+                    "                }\n" .
+                    "            ],\n" .
+                    "            \"next-server\": \"$bootserver\"";
+
+    if (@kea_reservations) {
+        $subnet_json .= ",\n            \"reservations\": [\n" .
+                        join(",\n", @kea_reservations) . "\n" .
+                        "            ]";
+    }
+
+    $subnet_json .= "\n        }";
+    push @kea_subnets, $subnet_json;
   }
 
 #
@@ -4836,6 +4896,96 @@ fi
   print NETGROUP_OUT "\n";
   print NETGROUP_OUT "# Added by DRBL, end\n";
   print CLIENT_HOST_IP_LIST_OUT "# Created by DRBL (drblpush), end\n";
+
+  my $nameservers_json = $nameserver;
+  $nameservers_json =~ s/\s+/,/g;
+
+  # Get list of DHCP interfaces
+  my @dhcp_interfaces = ();
+  foreach my $k2 ( sort(keys %$rHoH) ) {
+      if( $k2=~/general/ ) { next; }
+      my $interface=$rHoH->{$k2}{"INTERFACE"};
+      push @dhcp_interfaces, $interface;
+  }
+  my $interfaces_list_json = join(", ", map { "\"$_\"" } @dhcp_interfaces);
+
+  my $kea_config_head = <<EOF;
+{
+"Dhcp4": {
+    "interfaces-config": {
+        "interfaces": [ $interfaces_list_json ]
+    },
+    "control-socket": {
+        "socket-type": "unix",
+        "socket-name": "/run/kea/kea-dhcp4-ctrl.sock"
+    },
+    "lease-database": {
+        "type": "memfile",
+        "lfc-interval": 3600
+    },
+    "expired-leases-processing": {
+        "reclaim-timer-wait-time": 10,
+        "flush-reclaimed-timer-wait-time": 25,
+        "hold-reclaimed-time": 3600,
+        "max-reclaim-leases": 100,
+        "max-reclaim-time": 250,
+        "unwarned-reclaim-cycles": 5
+    },
+    "renew-timer": $DHCPD_DEFAULT_LEASE_TIME,
+    "valid-lifetime": $DHCPD_MAX_LEASE_TIME,
+    "option-data": [
+        {
+            "name": "domain-name-servers",
+            "data": "$nameservers_json"
+        },
+        {
+            "name": "domain-name",
+            "data": "$domain"
+        }
+    ],
+    "client-classes": [
+        {
+            "name": "PXE_lpxelinux",
+            "test": "option[93].hex == 0x0000",
+            "boot-file-name": "lpxelinux.0"
+        },
+        {
+            "name": "PXE_ia32",
+            "test": "option[93].hex == 0x0006",
+            "boot-file-name": "bootia32.efi"
+        },
+        {
+            "name": "PXE_x64_7",
+            "test": "option[93].hex == 0x0007",
+            "boot-file-name": "bootx64.efi"
+        },
+        {
+            "name": "PXE_x64_9",
+            "test": "option[93].hex == 0x0009",
+            "boot-file-name": "bootx64.efi"
+        },
+        {
+            "name": "PXE_arm32",
+            "test": "option[93].hex == 0x000a",
+            "boot-file-name": "bootarm.efi"
+        },
+        {
+            "name": "PXE_arm64_b",
+            "test": "option[93].hex == 0x000b",
+            "boot-file-name": "bootaa64.efi"
+        },
+        {
+            "name": "PXE_arm64_16",
+            "test": "option[93].hex == 0x0016",
+            "boot-file-name": "bootaa64.efi"
+        }
+    ],
+EOF
+
+  print KEA_OUT $kea_config_head;
+  print KEA_OUT "    \"subnet4\": [\n" . join(",\n", @kea_subnets) . "\n    ]\n";
+  print KEA_OUT "}\n}\n";
+  close(KEA_OUT);
 
   close(DHCPD_OUT);
   close(NETGROUP_OUT);

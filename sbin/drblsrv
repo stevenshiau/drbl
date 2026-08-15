@@ -3336,7 +3336,19 @@ echo "$msg_delimiter_star_line"
 # save or restore LVM2 PV/VG/LV.
 PKG_ARCH="$(LC_ALL=C dpkg --print-architecture)"
 echo "Searching if the following packages with arch $PKG_ARCH available in the repository: $PKG_TO_QUERY ..."
+kea_available="no"
+if [ -n "$(LC_ALL=C apt list "kea-dhcp4-server" 2>/dev/null | grep -Ew "($PKG_ARCH|all)")" ]; then
+  kea_available="yes"
+fi
+
 for ipkg in $PKG_TO_QUERY; do
+  if [ "$kea_available" = "yes" ]; then
+    if [ "$ipkg" = "isc-dhcp-server" ] || [ "$ipkg" = "dhcp3-server" ]; then
+      echo "Skipping legacy $ipkg since kea-dhcp4-server is preferred and available."
+      continue
+    fi
+  fi
+
   if [ -n "$(LC_ALL=C apt list "$ipkg" 2>/dev/null | grep -Ew "($PKG_ARCH|all)")" ]; then
     echo "Found $ipkg."
     PKG_FROM_DBN="$PKG_FROM_DBN $ipkg"
