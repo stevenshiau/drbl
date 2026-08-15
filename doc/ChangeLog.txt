@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (5.11.1-drbl1) unstable; urgency=medium
+
+  * Replace deprecated net-tools commands with iproute2 alternatives.
+
+ -- Steven Shiau <steven@clonezilla.org>  Sat, 15 Aug 2026 13:55:19 +0800
+
 drbl (5.10.7-drbl2) unstable; urgency=medium
 
   * Added package netpbm in the pkgs list of Clonezilla live system.
