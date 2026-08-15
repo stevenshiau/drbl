@@ -13,7 +13,6 @@ DRBL_SCRIPT_PATH="${DRBL_SCRIPT_PATH:-/usr/share/drbl}"
 USAGE() {
   echo "Usage: `basename $0` Options [command]"
   echo "Options:"
-   langue_help_prompt_by_idx_no
   echo "-b, --batch       Batch mode, same with -n/--no-ping"
   echo "-h, --hosts IP_LIST  Instead of all DRBL clients, assign the clients by IP address, like: -h \"192.168.0.1 192.168.0.2\" NOTE!!! You must put \" \" before and after the IP_LIST!"
   echo "-n, --no-ping     Do NOT ping machine to check if hosts are alive before running command"
