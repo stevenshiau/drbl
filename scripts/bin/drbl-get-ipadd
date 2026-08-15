@@ -33,12 +33,8 @@ Usage() {
 #       TX packets 1305  bytes 198243 (193.5 KiB)
 #       TX errors 0  dropped 0 overruns 0  carrier 0  collisions 0
 [ -z "$ethx" ] && Usage && exit 1
-if ! LC_ALL=C ifconfig -a 2>/dev/null | grep -i -q "\<$ethx\>"; then
+if ! LC_ALL=C ip link show dev $ethx >/dev/null 2>&1; then
    exit 1
 fi
-# //NOTE// Here we have to use grep "-w" to grep the IPv4 address, avoding getting IPv6 address. E.g.:
-# eth1: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
-#        inet 192.168.77.254  netmask 255.255.255.0  broadcast 192.168.77.255
-#        inet6 fe80::20c:29ff:fee9:f24e  prefixlen 64  scopeid 0x20<link>
-LC_ALL=C ifconfig $ethx | grep -w -A1 $ethx | grep -w -v $ethx | grep -w "inet" |sed -e 's/addr://'|  sed -e 's/^.*inet \([0-9\.]\+\).*$/\1/'
+LC_ALL=C ip addr show dev $ethx | awk '/inet / {print $2}' | cut -d/ -f1
 exit 0

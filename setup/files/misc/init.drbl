@@ -197,7 +197,7 @@ for DEVICE in $NETDEVICES; do
   # eth1: flags=4163<UP,BROADCAST,RUNNING,MULTICAST>  mtu 1500
   #        inet 192.168.77.254  netmask 255.255.255.0  broadcast 192.168.77.255
   #        inet6 fe80::20c:29ff:fee9:f24e  prefixlen 64  scopeid 0x20<link>
-  IP_tmp="$(LC_ALL=C ifconfig $DEVICE | grep -w -A1 $DEVICE | grep -w -v $DEVICE | grep -w "inet" | sed -e 's/addr://'| sed -e 's/^.*inet \([0-9\.]\+\).*$/\1/')"
+  IP_tmp="$(LC_ALL=C ip addr show dev $DEVICE | awk '/inet / {print $2}' | cut -d/ -f1 | head -n1)"
   if [ -n "$IP_tmp" ]; then
     # Got the IP address, stop to get from other port, so break
     IP=$IP_tmp
@@ -216,7 +216,7 @@ for i in $NFSSERVER_LIST; do
 done 
 if [ -z "$nfsserver" ]; then
   # No NFS server found. Use plan B. Try to use gateway as NFS server
-  gateway="$(LANG=C route -n | awk '/^0.0.0.0/ {print $2}')"
+  gateway="$(LC_ALL=C ip route show default 2>/dev/null | awk '/^default/ {for(i=1;i<=NF;i++) if($i=="via") print $(i+1)}')"
   if [ -n "$gateway" ]; then
     nfsserver=$gateway
   else
@@ -373,14 +373,19 @@ if [ -n "$IP" ]; then
     fi
     
     if [ -n "$PUBLIC_IP" ]; then
-      echo "Setting public IP $PUBLIC_IP $GW in $DEVICE:1 by:"
-      echo "ifconfig $DEVICE:1 $PUBLIC_IP"
-      ifconfig $DEVICE:1 $PUBLIC_IP
-      GW="$(route -n | grep -e "^0\.0\.0\.0" | awk '{ print $2; }')"
-      route del default gw $GW
+      # Convert "1.2.3.4 netmask 255.255.255.0" to "1.2.3.4/255.255.255.0"
+      _pub_ip="$(echo $PUBLIC_IP | awk '{print $1}')"
+      _pub_nm="$(echo $PUBLIC_IP | awk '{print $3}')"
+      echo "Setting public IP $_pub_ip/$_pub_nm in $DEVICE:1 by:"
+      echo "ip addr add $_pub_ip/$_pub_nm dev $DEVICE label $DEVICE:1"
+      LC_ALL=C ip addr add $_pub_ip/$_pub_nm dev $DEVICE label $DEVICE:1 && LC_ALL=C ip link set dev $DEVICE up
+      GW="$(LC_ALL=C ip route show default 2>/dev/null | awk '/^default/ {for(i=1;i<=NF;i++) if($i=="via") print $(i+1)}')"
+      if [ -n "$GW" ]; then
+        LC_ALL=C ip route del default via $GW
+      fi
       echo "Setting routing table by:"
-      echo "route add default gw $PUBLIC_GW dev $DEVICE"
-      route add default gw $PUBLIC_GW dev $DEVICE
+      echo "ip route add default via $PUBLIC_GW dev $DEVICE"
+      LC_ALL=C ip route add default via $PUBLIC_GW dev $DEVICE
     fi
   fi
 fi

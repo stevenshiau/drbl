@@ -14,7 +14,7 @@ drbl-live start
 
 # drbl net device and ip, and update hostname
 drbl_interface=$(cat /etc/drbl/drblpush.conf | grep interface | sed s/interface=//)
-drbl_ip=$(ifconfig $drbl_interface | grep 'inet addr' | awk '{print $2}' | sed s/addr://)
+drbl_ip=$(LC_ALL=C ip addr show dev $drbl_interface | awk '/inet / {print $2}' | cut -d/ -f1 | head -n1)
 nhostname=$(getent hosts $drbl_ip | awk '{print $2}')
 echo $nhostname > /etc/hostname
 hostname $nhostname

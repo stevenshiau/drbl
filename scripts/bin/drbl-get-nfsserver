@@ -50,7 +50,7 @@ case "$mode" in
     #      192.168.120.183:/tftpboot/node_root /
     # 2nd: Try to use gateway as NFS server
     nfsserver_cand="$(LC_ALL=C findmnt -nr -o source --target / | awk -F":" '{print $1}')"
-    gateway="$(LC_ALL=C route -n | awk '/^0.0.0.0/ {print $2}')"
+    gateway="$(LC_ALL=C ip route show default 2>/dev/null | awk '/^default/ {for(i=1;i<=NF;i++) if($i=="via") print $(i+1)}')"
     if `is_valid_IPv4_add "$nfsserver_cand"`; then
       nfsserver="$nfsserver_cand"
     elif [ -n "$gateway" ]; then

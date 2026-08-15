@@ -20,8 +20,14 @@ Usage() {
 }
 
 [ -z "$ethx" ] && Usage && exit 1
-if ! ifconfig -a 2>/dev/null | grep -i -q "\<$ethx\>"; then
+if ! LC_ALL=C ip link show dev $ethx >/dev/null 2>&1; then
    exit 1
 fi
-LC_ALL=C ifconfig $ethx | grep -oE "(Mask:.*|netmask .+)" | sed -e 's/^Mask://g' -e 's/netmask //g' | awk '{print $1}'
+_cidr="$(LC_ALL=C ip addr show dev $ethx 2>/dev/null | awk '/inet / {print $2}' | cut -d/ -f2 | head -n1)"
+if [ -n "$_cidr" ]; then
+  _val=$(( 0xffffffff ^ ((1 << (32 - _cidr)) - 1) ))
+  echo "$(( (_val >> 24) & 255 )).$(( (_val >> 16) & 255 )).$(( (_val >> 8) & 255 )).$(( _val & 255 ))"
+else
+  exit 1
+fi
 exit 0

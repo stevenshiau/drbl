@@ -155,7 +155,7 @@ case "$mode" in
           # find the ether port, we can find it from the routing table
           # 1st, find the subnet: 192.168.1.x -> 192.168.1
           IP_grp_1_3="$(LC_ALL=C echo $ihost | sed -e "s/\.[[:digit:]]*$//g")"
-          iport="$(LC_ALL=C route -n | grep -E "^$IP_grp_1_3\." | awk -F" " '{print $NF}')"
+          iport="$(LC_ALL=C ip route show | grep -E "^$IP_grp_1_3\." | awk '{for (i=1; i<=NF; i++) if ($i=="dev") print $(i+1)}')"
 	  wnl_cmd="$ETH_WAKE -i $iport $ethernet_address"
 	  echo "Running: $wnl_cmd"
 	  eval $wnl_cmd
@@ -232,7 +232,7 @@ for IP in $drbl_client_list; do
     [ -z "$(echo $IP_LIST | grep -E "\<$IP\>")" ] && continue
   fi
   # check if $IP is myself
-  me="$(LC_ALL=C ifconfig | grep "$IP" | cut -d: -f2 | cut -d' ' -f1)"
+  me="$(LC_ALL=C ip addr show | grep -w "$IP" | awk '{print $2}' | cut -d/ -f1 | head -n1)"
   if [ "$me" = "" -o "$me" != "$IP" ]; then
     echo "Sending command \"$@\" to $specified_user@$IP..."
     if [ "$ping" = "no" ]; then

@@ -29,7 +29,7 @@ usage() {
 }
 #
 get_uplink_and_client_eth_port() {
-  uplink_eth_port="$(LC_ALL=C route -n | awk '/^0.0.0.0/ {print $8}' | sort | head -n 1)"
+  uplink_eth_port="$(LC_ALL=C ip route show default 2>/dev/null | awk '/^default/ {for(i=1;i<=NF;i++) if($i=="dev") print $(i+1)}' | sort | head -n 1)"
   # //NOTE// what if ${NETDEV[@]:0} is "eth0 eth0:1", then 
   # cat "eth0 eth0:1" | sed -e "s/eth0//g" 
   # will give eth_ports_for_drbl_clients=":1". WRONG!
@@ -44,7 +44,7 @@ get_uplink_and_client_eth_port() {
     # If by the above method eth_ports_for_drbl_clients is nothing, then the server must be with only 1 NIC.
     eth_ports_for_drbl_clients="$uplink_eth_port"
   fi
-  gateway_IP_addr="$(LC_ALL=C route -n | awk '/^0.0.0.0/ {print $2}' | sort | head -n 1)"
+  gateway_IP_addr="$(LC_ALL=C ip route show default 2>/dev/null | awk '/^default/ {for(i=1;i<=NF;i++) if($i=="via") print $(i+1)}' | sort | head -n 1)"
 } # end of get_uplink_and_client_eth_port
 
 show_mode=""
@@ -96,7 +96,7 @@ done
 #        device interrupt 16  base 0x2080
 # Therefore we have to put [[:space:]]+ after ^[[:alnum:]]+[[:digit:]]+\:.
 
-NDVS="$(LC_ALL=C ifconfig -a | grep -iE '(HWaddr|encap:Point-to-Point Protocol)'| awk -F' ' '{print $1}')"
+NDVS="$(LC_ALL=C ip -o link show | awk -F': ' '{print $2}' | cut -d@ -f1 | grep -v "lo")"
 #NDVS="$NDVS $(LC_ALL=C ifconfig -a | grep -iE '(^[[:alnum:]]+[[:digit:]]+(:[[:digit:]]+|)\:[[:space:]]+)'| awk -F': ' '{print $1}')"
 NDVS="$NDVS $(LC_ALL=C get-nic-devs | xargs echo)"
 # Exclude some device if it's assigned in drbl.conf.

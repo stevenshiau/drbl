@@ -2767,7 +2767,7 @@ config_drbl_live_network(){
   eth_port_no="$(LC_ALL=C get-nic-devs | wc -l)"
   configured_ip_no="$(LC_ALL=C get-all-nic-ip -i | wc -w)"
   while [ "$configured_ip_no" -lt "$eth_port_no" ]; do
-    [ -n "$(LC_ALL=C route -n | grep -E "^0.0.0.0")" ] && config_gw_opt="--ignore-gw"
+    [ -n "$(LC_ALL=C ip route show default 2>/dev/null | grep -E "^default")" ] && config_gw_opt="--ignore-gw"
     [ -n "$(LC_ALL=C grep -E "^[[:space:]]*nameserver[[:space:]]+\b(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\b" /etc/resolv.conf 2>/dev/null)" ] && config_dns_opt="--ignore-dns"
     # find the configured ports, we will exclude them.
     eth_port="$(LC_ALL=C get-nic-devs)"
@@ -2943,7 +2943,7 @@ DHCP_END
       i="$drbl_live_private_IP_alias_eth_def"
       while [ "$alias_done" = "no" ]; do
         if ! ping -c 3 192.168.$i.254 &>/dev/null; then
-          ifconfig ${nic_dev_only}:1 192.168.$i.254 netmask 255.255.255.0
+          LC_ALL=C ip addr add 192.168.$i.254/255.255.255.0 dev $nic_dev_only label ${nic_dev_only}:1 && LC_ALL=C ip link set dev $nic_dev_only up
           alias_done="yes"
         else
           i=$((i+1))
@@ -2967,13 +2967,13 @@ NET_END
     [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
   fi
 
-  if [ -z "$(LC_ALL=C route -n | grep -E "^0.0.0.0")" ]; then
+  if [ -z "$(LC_ALL=C ip route show default 2>/dev/null | grep -E "^default")" ]; then
     [ "$BOOTUP" = "color" ] && $SETCOLOR_FAILURE
     echo "No default gateway was configured! Did you enter it or the input gateway is the correct one ?"
     [ "$BOOTUP" = "color" ] && $SETCOLOR_NORMAL
     echo "The routing table:"
     echo "---------------------------------------------------------"
-    LC_ALL=C route -n
+    LC_ALL=C ip route show
     echo "---------------------------------------------------------"
     echo "$msg_program_stop"
     exit 1
