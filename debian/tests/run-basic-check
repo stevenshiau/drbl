@@ -30,5 +30,50 @@ test_drblsrv_offline_package_scan(){
   echo "drblsrv-offline package scan test"
   /sbin/drblsrv-offline -r
 }
+
+test_httpboot_symlinks(){
+  echo "Testing HTTPBoot symlink generation"
+  # Create a mock web server root
+  local mock_root="/tmp/mock_var_www_html"
+  mkdir -p "$mock_root"
+  mkdir -p /tftpboot/nbi_img/grub
+
+  # Run the symlink creation block
+  for docroot in "$mock_root"; do
+    if [ -d "$docroot" ]; then
+       if [ ! -e "$docroot"/tftpboot ] && [ ! -L "$docroot"/tftpboot ]; then
+          ln -sf /tftpboot "$docroot"/tftpboot
+       fi
+       if [ ! -e "$docroot"/grub ] && [ ! -L "$docroot"/grub ]; then
+          ln -sf /tftpboot/nbi_img/grub "$docroot"/grub
+       fi
+    fi
+  done
+
+  # Verify the symlinks were created correctly
+  [ -L "$mock_root/tftpboot" ] || fail "tftpboot symlink was not created"
+  [ -L "$mock_root/grub" ] || fail "grub symlink was not created"
+
+  # Test skipping if destination already exists
+  # Create a dummy file at grub and try again
+  rm -f "$mock_root/grub"
+  touch "$mock_root/grub"
+  for docroot in "$mock_root"; do
+    if [ -d "$docroot" ]; then
+       if [ ! -e "$docroot"/tftpboot ] && [ ! -L "$docroot"/tftpboot ]; then
+          ln -sf /tftpboot "$docroot"/tftpboot
+       fi
+       if [ ! -e "$docroot"/grub ] && [ ! -L "$docroot"/grub ]; then
+          ln -sf /tftpboot/nbi_img/grub "$docroot"/grub
+       fi
+    fi
+  done
+
+  # grub should still be a normal file, not a symlink, since it was skipped
+  [ -f "$mock_root/grub" ] && [ ! -L "$mock_root/grub" ] || fail "grub symlink was incorrectly created over existing file"
+
+  # Clean up
+  rm -rf "$mock_root"
+}
 . shunit2
 

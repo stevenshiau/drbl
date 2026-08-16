@@ -3335,6 +3335,22 @@ echo "$msg_delimiter_star_line"
 # Check if lvm2 is available, if so, add it, we need this for clonezilla to
 # save or restore LVM2 PV/VG/LV.
 PKG_ARCH="$(LC_ALL=C dpkg --print-architecture)"
+
+# Check if any web server is already installed (Debian-based)
+web_server_installed="no"
+for ws in apache2 nginx lighttpd; do
+  if chk_deb_installed "$ws"; then
+    web_server_installed="yes"
+    echo "Found existing web server: $ws"
+    break
+  fi
+done
+
+if [ "$web_server_installed" = "no" ]; then
+  echo "No web server (apache2, nginx, lighttpd) found. Adding lighttpd to installation list."
+  PKG_TO_QUERY="$PKG_TO_QUERY lighttpd"
+fi
+
 echo "Searching if the following packages with arch $PKG_ARCH available in the repository: $PKG_TO_QUERY ..."
 kea_available="no"
 if [ -n "$(LC_ALL=C apt list "kea-dhcp4-server" 2>/dev/null | grep -Ew "($PKG_ARCH|all)")" ]; then

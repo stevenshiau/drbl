@@ -2226,6 +2226,28 @@ if systemctl list-unit-files | grep -q kea-dhcp4-server; then
   systemctl enable kea-dhcp4-server >/dev/null 2>&1
   systemctl restart kea-dhcp4-server
 fi
+
+# Create symbolic links for any existing web server document roots for HTTPBoot
+for docroot in /var/www/html /var/www /usr/share/nginx/html; do
+  if [ -d "$docroot" ]; then
+     echo "Configuring HTTPBoot symlinks in document root: $docroot"
+     if [ ! -e "$docroot"/tftpboot ] && [ ! -L "$docroot"/tftpboot ]; then
+        ln -sf /tftpboot "$docroot"/tftpboot
+     fi
+     if [ ! -e "$docroot"/grub ] && [ ! -L "$docroot"/grub ]; then
+        ln -sf /tftpboot/nbi_img/grub "$docroot"/grub
+     fi
+  fi
+done
+
+# Enable and restart the active web server service
+for ws in lighttpd apache2 httpd nginx; do
+  if systemctl list-unit-files "$ws.service" &>/dev/null; then
+     echo "Enabling and restarting $ws service..."
+     systemctl enable "$ws" >/dev/null 2>&1
+     systemctl restart "$ws" >/dev/null 2>&1
+  fi
+done
 # Generate the dnsmasq config file
 if [ "$use_proxy_dhcp" = "yes" ]; then
   # Only create dnsmasq.conf when use_proxy_dhcp is set as yes.
