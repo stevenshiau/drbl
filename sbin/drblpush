@@ -4917,6 +4917,7 @@ fi
   my $kea_config_head = <<EOF;
 {
 "Dhcp4": {
+    "server-hostname": "drbl",
     "interfaces-config": {
         "interfaces": [ $interfaces_list_json ]
     },
