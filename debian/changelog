@@ -1,3 +1,10 @@
+drbl (5.11.7-drbl1) unstable; urgency=medium
+
+  * Add dynamic web server support for HTTPBoot in drblsrv and drblpush.
+  * Configure Ubuntu netinstall boot menus to mount root filesystem via NFS. 
+
+ -- Steven Shiau <steven@clonezilla.org>  Sun, 16 Aug 2026 16:49:43 +0800
+
 drbl (5.11.6-drbl1) unstable; urgency=medium
 
   * About netinstall:
