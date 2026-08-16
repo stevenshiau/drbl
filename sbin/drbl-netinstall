@@ -169,40 +169,22 @@ get_fedora_netinstall() {
 } # end of get_fedora_netinstall
 
 #
-get_centos_netinstall() {
+get_rocky_netinstall() {
   # output file format in /tftpboot/nbi_img/:
   # vmlinuz-netinstall-${dist}-${ver}-${arch)
   # initrd-netinstall-${dist}-${ver}-${i386}.img
   #
   # url ex:
-  # http://free.nchc.org.tw/centos/4.5/os/i386/images/pxeboot
-  # http://free.nchc.org.tw/centos/5.0/os/x86_64/images/pxeboot
-  # From version 7, only x86-64, no i386.
-  for ver in $centos_netinstall_ver; do
-    for arch in $centos_netinstall_arch; do
-      case $ver in
-        [1-6])
-          url=$centos_url_site/$path_to_centos/$ver/os/$arch/images/pxeboot
-          get_and_put_linux_img $url CentOS $ver $arch $centos_netinstall_kernel $centos_netinstall_initrd
-          ;;
-        7)
-          # For 7 or later... only x86-64 exists.
-	  # Who knows about the future...
-	  [ "$arch" = "i386" ] && continue
-          url=$centos_url_site/$path_to_centos/$ver/os/$arch/images/pxeboot
-          get_and_put_linux_img $url CentOS $ver $arch $centos_netinstall_kernel $centos_netinstall_initrd
-          ;;
-        *)
-          # For 8 or later... only x86-64 exists.
-	  # Who knows about the future...
-	  [ "$arch" = "i386" ] && continue
-          url=$centos_url_site/$path_to_centos/$ver/BaseOS/$arch/os/images/pxeboot
-          get_and_put_linux_img $url CentOS $ver $arch $centos_netinstall_kernel $centos_netinstall_initrd
-          ;;
-      esac
+  # http://free.nchc.org.tw/rocky/9/BaseOS/x86_64/os/images/pxeboot
+  # From Rocky Linux 8, only x86-64 exists.
+  for ver in $rocky_netinstall_ver; do
+    for arch in $rocky_netinstall_arch; do
+      [ "$arch" = "i386" ] && continue
+      url=$rocky_url_site/$path_to_rocky/$ver/BaseOS/$arch/os/images/pxeboot
+      get_and_put_linux_img $url RockyLinux $ver $arch $rocky_netinstall_kernel $rocky_netinstall_initrd
     done
   done
-} # end of get_centos_netinstall
+} # end of get_rocky_netinstall
 
 #
 get_redhat_netinstall() {
