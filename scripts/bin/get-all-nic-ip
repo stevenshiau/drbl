@@ -99,6 +99,7 @@ done
 NDVS="$(LC_ALL=C ip -o link show | awk -F': ' '{print $2}' | cut -d@ -f1 | grep -v "lo")"
 #NDVS="$NDVS $(LC_ALL=C ifconfig -a | grep -iE '(^[[:alnum:]]+[[:digit:]]+(:[[:digit:]]+|)\:[[:space:]]+)'| awk -F': ' '{print $1}')"
 NDVS="$NDVS $(LC_ALL=C get-nic-devs | xargs echo)"
+NDVS="$(echo $NDVS | tr ' ' '\n' | awk '!x[$0]++' | xargs echo)"
 # Exclude some device if it's assigned in drbl.conf.
 if [ -n "$exclude_eth_nics" ]; then
   for exn in $exclude_eth_nics; do
