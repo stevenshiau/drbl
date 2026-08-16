@@ -118,26 +118,42 @@ get_ubuntu_netinstall() {
   for ver in $ubuntu_netinstall_ver; do
     for arch in $ubuntu_netinstall_arch; do
       case $ver in
-      noble*|oracular*|plucky*)
-        # Starting from Noble (24.04), Canonical hosts netboot files under ubuntu-releases/ instead of ubuntu/dists/
-        # URL e.g.: http://free.nchc.org.tw/ubuntu-releases/noble/netboot/amd64/
-        url=$ubuntu_url_site/ubuntu-releases/$ver/netboot/$arch
-        get_and_put_linux_img $url Ubuntu $ver $arch linux initrd
-        ;;
-      [f]*)
-        # For the version = focal
-	# URL e.g. 
-	# http://free.nchc.org.tw/ubuntu/dists/focal/main/installer-amd64/current/legacy-images/netboot/
-        url=$ubuntu_url_site/$path_to_ubuntu/$ver/main/installer-$arch/current/legacy-images/netboot/ubuntu-installer/$arch
+      dapper*|edgy*|feisty*|gutsy*|hardy*|intrepid*|jaunty*|karmic*|lucid*|maverick*|natty*|oneiric*|precise*|quantal*|raring*|saucy*|trusty*|utopic*|vivid*|wily*|xenial*|yakkety*|zesty*|artful*|bionic*|cosmic*|disco*|eoan*|focal*|groovy*|hirsute*|impish*|jammy*|kinetic*|lunar*|mantic*)
+        case $ver in
+        [f]*)
+          # For focal (and feisty) legacy installer paths
+          url=$ubuntu_url_site/$path_to_ubuntu/$ver/main/installer-$arch/current/legacy-images/netboot/ubuntu-installer/$arch
+          ;;
+        *)
+          url=$ubuntu_url_site/$path_to_ubuntu/$ver/main/installer-$arch/current/images/netboot/ubuntu-installer/$arch
+          ;;
+        esac
         get_and_put_linux_img $url Ubuntu $ver $arch $ubuntu_netinstall_kernel $ubuntu_netinstall_initrd
         ;;
       *)
-        # URL e.g:
-        # http://free.nchc.org.tw/ubuntu//dists/edgy/main/installer-i386/current/images/netboot/ubuntu-installer/i386/
-        # http://free.nchc.org.tw/ubuntu/dists/dapper/main/installer-i386/current/images/netboot/ubuntu-installer/i386/
-        # For the version earlier than jaunty, only text mode is available
-        url=$ubuntu_url_site/$path_to_ubuntu/$ver/main/installer-$arch/current/images/netboot/ubuntu-installer/$arch
-        get_and_put_linux_img $url Ubuntu $ver $arch $ubuntu_netinstall_kernel $ubuntu_netinstall_initrd
+        # Modern releases path (Noble 24.04 and later, including any future/custom releases like "stronking")
+        # Since Canonical hosts netboot files under releases, and mirrors might use "ubuntu-releases", "ubuntu-cd", or host them directly (e.g. releases.ubuntu.com), we dynamically probe them.
+        url=""
+        for rel_path in ubuntu-releases ubuntu-cd ""; do
+          if [ -n "$rel_path" ]; then
+            test_url="$ubuntu_url_site/$rel_path/$ver/netboot/$arch/linux"
+          else
+            test_url="$ubuntu_url_site/$ver/netboot/$arch/linux"
+          fi
+          if wget --spider --quiet "$test_url"; then
+            if [ -n "$rel_path" ]; then
+              url="$ubuntu_url_site/$rel_path/$ver/netboot/$arch"
+            else
+              url="$ubuntu_url_site/$ver/netboot/$arch"
+            fi
+            break
+          fi
+        done
+        if [ -z "$url" ]; then
+          # Fallback to NCHC default if detection failed or offline
+          url="$ubuntu_url_site/ubuntu-cd/$ver/netboot/$arch"
+        fi
+        get_and_put_linux_img $url Ubuntu $ver $arch linux initrd
         ;;
       esac
     done
