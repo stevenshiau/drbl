@@ -4917,7 +4917,7 @@ fi
     },
     "control-socket": {
         "socket-type": "unix",
-        "socket-name": "/run/kea/kea-dhcp4-ctrl.sock"
+        "socket-name": "/run/kea/kea4-ctrl-socket"
     },
     "lease-database": {
         "type": "memfile",
