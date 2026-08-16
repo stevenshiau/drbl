@@ -224,23 +224,6 @@ get_redhat_netinstall() {
 } # end of get_redhat_netinstall
 
 #
-get_mandriva_netinstall() {
-  # output file format in /tftpboot/nbi_img/:
-  # vmlinuz-netinstall-${dist}-${ver}-${arch)
-  # initrd-netinstall-${dist}-${ver}-${i386}.img
-  #
-  # url ex:
-  # http://free.nchc.org.tw/mandrake/official/2007.0/i586/isolinux/alt0/
-  # http://free.nchc.org.tw/mandrake/official/2007.1/i586/isolinux/alt0/
-  for ver in $mandriva_netinstall_ver; do
-    for arch in $mandriva_netinstall_arch; do
-      url=$mandriva_url_site/$path_to_mandriva/$ver/$arch/isolinux/alt0
-      get_and_put_linux_img $url Mandriva $ver $arch $mandriva_netinstall_kernel $mandriva_netinstall_initrd
-    done
-  done
-} # end of get_mandriva_netinstall
-
-#
 get_mageia_netinstall() {
   # output file format in /tftpboot/nbi_img/:
   # vmlinuz-netinstall-${dist}-${ver}-${arch)
@@ -262,32 +245,6 @@ get_mageia_netinstall() {
     done
   done
 } # end of get_mageia_netinstall
-
-#
-get_scientific_netinstall() {
-  # output file format in /tftpboot/nbi_img/:
-  # vmlinuz-netinstall-${dist}-${ver}-${arch)
-  # initrd-netinstall-${dist}-${ver}-${i386}.img
-  #
-  # url ex:
-  # http://free.nchc.org.tw/scientific/50/i386/images/pxeboot/
-  # http://free.nchc.org.tw/scientific/50/x86_64/images/pxeboot/
-  for ver in $scientific_netinstall_ver; do
-    for arch in $scientific_netinstall_arch; do
-      # For Scientific Linux, the path is used without dot (.): 5.0 -> 50
-      ver_path="$(echo $ver | sed -e "s/\.//g")"
-      case $ver in
-       [4-5]*)
-        url=$scientific_url_site/$path_to_scientific/$ver_path/$arch/images/pxeboot
-	;;
-       *)
-        url=$scientific_url_site/$path_to_scientific/$ver_path/$arch/os/images/pxeboot
-	;;
-      esac
-      get_and_put_linux_img $url Scientific $ver $arch $scientific_netinstall_kernel $scientific_netinstall_initrd
-    done
-  done
-} # end of get_scientific_netinstall
 
 #
 get_opensuse_netinstall() {
