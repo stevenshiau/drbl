@@ -3353,14 +3353,15 @@ PXE_END
       NETINSTALL_RAMDISK_SIZE=""
       extra_append="vga=normal --"
       menu_hint=""
-   elif [ -n "$(echo $inet | grep -iE "\-ubuntu-[j-z]" 2>/dev/null)" ]; then
-      # Ref: http://free.nchc.org.tw/ubuntu/dists/jaunty/main/installer-i386/current/images/netboot/gtk/ubuntu-installer/i386/boot-screens/text.cfg
-      # It's initramfs, so ramdisk_size is no more.
+   elif [ -n "$(echo $inet | grep -iE "\-ubuntu\-[j-z]" 2>/dev/null)" ]; then
+      # Modern Ubuntu (Jammy 22.04, Noble 24.04 and later)
+      ni_ver="$(echo $inet | cut -f 4 -d "-")"
+      ni_arch="$(echo $inet | cut -f 5 -d "-")"
       NETINSTALL_RAMDISK_SIZE=""
-      # Looks like gtk netinstall in not quite stable for jaunty, here we turn off framebuffer mode.
-      #extra_append="video=vesa:ywrap,mtrr vga=788 --"
-      extra_append="vga=normal --"
-      menu_hint="# Hint: To turn on gtk mode installation, append 'video=vesa:ywrap,mtrr vga=788' in the boot parameters"
+      drbl_server_ip="$(get-all-nic-ip -b | awk '{print $1}')"
+      [ -z "$drbl_server_ip" ] && drbl_server_ip="$(get-all-nic-ip -i | awk '{print $1}')"
+      extra_append="boot=casper netboot=nfs nfsroot=$drbl_server_ip:$drbl_common_root/ubuntu-iso/$ni_ver-$ni_arch ip=dhcp rw"
+      menu_hint="# Hint: Ensure the Ubuntu Live Server ISO is extracted to: $drbl_common_root/ubuntu-iso/$ni_ver-$ni_arch/ (making sure to copy the hidden .disk directory as well)"
    elif [ -n "$(echo $inet | grep -i "\-suse-" 2>/dev/null)" ]; then
       # For SuSE
       # For extra_append, refer to something like 
