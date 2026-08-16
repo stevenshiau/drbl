@@ -5,6 +5,14 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (5.11.6-drbl1) unstable; urgency=medium
+
+  * About netinstall:
+    * Configure Rocky Linux PXE/GRUB netinstall boot menu generation.
+    * Remove Mandriva and Scientific Linux from netinstall options.
+
+ -- Steven Shiau <steven@clonezilla.org>  Sun, 16 Aug 2026 13:19:17 +0800
+
 drbl (5.11.5-drbl1) unstable; urgency=medium
 
   * drbl-netinstall:
