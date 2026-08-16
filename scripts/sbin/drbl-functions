@@ -3331,38 +3331,14 @@ PXE_END
       fi
       # For Fedora, enable reiserfs when installing
       menu_hint=""
-   elif [ -n "$(echo $inet | grep -iE "\-centos-" 2>/dev/null)" ]; then
-      # CentOS vmlinuz name e.g. vmlinuz-netinstall-CentOS-7-x86_64
+   elif [ -n "$(echo $inet | grep -iE "\-rockylinux\-" 2>/dev/null)" ]; then
+      # Rocky Linux vmlinuz name e.g. vmlinuz-netinstall-RockyLinux-9-x86_64
       ni_ver="$(echo $inet | cut -f 4 -d "-")"
       ni_arch="$(echo $inet | cut -f 5 -d "-")"
-      # ramdisk_size only necessary for centos 1-4, from 5, it's initramfs, ramdisk_size is not used anymore 
-      if [ -n "$(echo $inet | grep -iE "\-centos-[1-4]-" 2>/dev/null)" ]; then
-        NETINSTALL_RAMDISK_SIZE="$NETINSTALL_RAMDISK_SIZE_DEF"
-      else
-        NETINSTALL_RAMDISK_SIZE=""
-      fi
-      if [ -n "$(echo $inet | grep -iE "\-centos-[5-6]-" 2>/dev/null)" ]; then
-        # For CentOS 5 to 6.
-        extra_append=""
-      elif [ -n "$(echo $inet | grep -iE "\-centos-7-" 2>/dev/null)" ]; then
-        # CentOS 7
-        # Ref: https://bugzilla.redhat.com/show_bug.cgi?id=810005
-        echo "Using CentOS installation repository \"$centos_url_site\" from drbl.conf"
-	# http://free.nchc.org.tw/centos/7/os/x86_64/
-        extra_append="inst.repo=$centos_url_site/centos/$ni_ver/os/$ni_arch"
-      else
-        # CentOS 8 or later
-        echo "Using CentOS installation repository \"$centos_url_site\" from drbl.conf"
-	# http://free.nchc.org.tw/centos/8/BaseOS/x86_64/
-        extra_append="inst.repo=$centos_url_site/centos/$ni_ver/BaseOS/$ni_arch/os/"
-      fi
-      # For CentOS, enable reiserfs when installing
-      menu_hint=""
-   elif [ -n "$(echo $inet | grep -iE "(\-mandrake-|\-mandriva-)" 2>/dev/null)" ]; then
-      # For Mandrake/Mandriva
-      # use larger ramdisk size for Mandrake, overwrite the default one.
-      NETINSTALL_RAMDISK_SIZE=128000
-      extra_append="acpi=ht vga=788 splash=silent label vgalo"
+      NETINSTALL_RAMDISK_SIZE=""
+      echo "Using Rocky Linux installation repository \"$rocky_url_site\" from drbl.conf"
+      # http://free.nchc.org.tw/rocky/9/BaseOS/x86_64/os/
+      extra_append="inst.repo=$rocky_url_site/$path_to_rocky/$ni_ver/BaseOS/$ni_arch/os/"
       menu_hint=""
    elif [ -n "$(echo $inet | grep -iE "\-ubuntu-[a-e]" 2>/dev/null)" ]; then
       # For other Ubuntu: 5.10, 6.06, 6.10
