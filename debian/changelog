@@ -1,3 +1,21 @@
+drbl (5.11.5-drbl1) unstable; urgency=medium
+
+  * drbl-netinstall:
+    Replace CentOS with Rocky Linux in drbl-netinstall.
+    Refactor Ubuntu netinstall downloads with robust dynamic mirror-probing.
+    Support Ubuntu Noble and later netboot downloads.
+    Streamline Ubuntu netinstall to focus solely on Jammy (22.04) and newer.
+
+ -- Steven Shiau <steven@clonezilla.org>  Sun, 16 Aug 2026 12:42:29 +0800
+
+drbl (5.11.4-drbl1) unstable; urgency=medium
+
+  * Configure server-hostname as drbl in Kea DHCP4.
+    Ensures the DHCPv4 header sname (server name) field is populated, allowing
+    PXE clients to pass the DHCP server name verification step during boot.
+
+ -- Steven Shiau <steven@clonezilla.org>  Sun, 16 Aug 2026 11:55:00 +0800
+
 drbl (5.11.3-drbl1) unstable; urgency=medium
 
   * Add HTTPBoot support to Kea DHCPv4 in drblpush.
