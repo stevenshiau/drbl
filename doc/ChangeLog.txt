@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (5.11.3-drbl1) unstable; urgency=medium
+
+  * Add HTTPBoot support to Kea DHCPv4 in drblpush.
+
+ -- Steven Shiau <steven@clonezilla.org>  Sun, 16 Aug 2026 11:11:20 +0800
+
 drbl (5.11.2-drbl1) unstable; urgency=medium
 
   * Prioritize kea-dhcp4-server over legacy DHCP servers on Debian/Ubuntu.
