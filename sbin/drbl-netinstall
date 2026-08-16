@@ -118,19 +118,28 @@ get_ubuntu_netinstall() {
   for ver in $ubuntu_netinstall_ver; do
     for arch in $ubuntu_netinstall_arch; do
       case $ver in
+      noble*|oracular*|plucky*)
+        # Starting from Noble (24.04), Canonical hosts netboot files under ubuntu-releases/ instead of ubuntu/dists/
+        # URL e.g.: http://free.nchc.org.tw/ubuntu-releases/noble/netboot/amd64/
+        url=$ubuntu_url_site/ubuntu-releases/$ver/netboot/$arch
+        get_and_put_linux_img $url Ubuntu $ver $arch linux initrd
+        ;;
       [f]*)
         # For the version = focal
 	# URL e.g. 
 	# http://free.nchc.org.tw/ubuntu/dists/focal/main/installer-amd64/current/legacy-images/netboot/
-        url=$ubuntu_url_site/$path_to_ubuntu/$ver/main/installer-$arch/current/legacy-images/netboot/ubuntu-installer/$arch ;;
+        url=$ubuntu_url_site/$path_to_ubuntu/$ver/main/installer-$arch/current/legacy-images/netboot/ubuntu-installer/$arch
+        get_and_put_linux_img $url Ubuntu $ver $arch $ubuntu_netinstall_kernel $ubuntu_netinstall_initrd
+        ;;
       *)
         # URL e.g:
         # http://free.nchc.org.tw/ubuntu//dists/edgy/main/installer-i386/current/images/netboot/ubuntu-installer/i386/
         # http://free.nchc.org.tw/ubuntu/dists/dapper/main/installer-i386/current/images/netboot/ubuntu-installer/i386/
         # For the version earlier than jaunty, only text mode is available
-        url=$ubuntu_url_site/$path_to_ubuntu/$ver/main/installer-$arch/current/images/netboot/ubuntu-installer/$arch ;;
+        url=$ubuntu_url_site/$path_to_ubuntu/$ver/main/installer-$arch/current/images/netboot/ubuntu-installer/$arch
+        get_and_put_linux_img $url Ubuntu $ver $arch $ubuntu_netinstall_kernel $ubuntu_netinstall_initrd
+        ;;
       esac
-      get_and_put_linux_img $url Ubuntu $ver $arch $ubuntu_netinstall_kernel $ubuntu_netinstall_initrd
     done
   done
 } # end of get_ubuntu_netinstall
