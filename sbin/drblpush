@@ -1782,6 +1782,7 @@ sub drbl_server_parse {
   unlink ("kea-dhcp4.conf") if -f "kea-dhcp4.conf";
 
   my @kea_subnets = ();
+  my $primary_bootserver;
 
   # open the config files for DRBL server
   open(DHCPD_OUT,">dhcpd.conf") or die "Can NOT write file \"dhcpd.conf\" \n";
@@ -4310,6 +4311,10 @@ echo "done!"
        exit;
     }
 
+    if (! defined $primary_bootserver) {
+       $primary_bootserver = $bootserver;
+    }
+
     # go
     @nfsserverIp=split(/\./,$nfsserver);
     @networkIp=split(/\./,$network);
@@ -4978,6 +4983,39 @@ fi
             "name": "PXE_arm64_16",
             "test": "option[93].hex == 0x0016",
             "boot-file-name": "bootaa64.efi"
+        },
+        {
+            "name": "HTTPBoot_x64",
+            "test": "option[93].hex == 0x0010",
+            "boot-file-name": "http://$primary_bootserver/tftpboot/nbi_img/shimx64.efi",
+            "option-data": [
+                {
+                    "name": "vendor-class-identifier",
+                    "data": "HTTPClient"
+                }
+            ]
+        },
+        {
+            "name": "HTTPBoot_ia32",
+            "test": "option[93].hex == 0x000f",
+            "boot-file-name": "http://$primary_bootserver/tftpboot/nbi_img/bootia32.efi",
+            "option-data": [
+                {
+                    "name": "vendor-class-identifier",
+                    "data": "HTTPClient"
+                }
+            ]
+        },
+        {
+            "name": "HTTPBoot_arm64",
+            "test": "option[93].hex == 0x0013",
+            "boot-file-name": "http://$primary_bootserver/tftpboot/nbi_img/shimaa64.efi",
+            "option-data": [
+                {
+                    "name": "vendor-class-identifier",
+                    "data": "HTTPClient"
+                }
+            ]
         }
     ],
 EOF
