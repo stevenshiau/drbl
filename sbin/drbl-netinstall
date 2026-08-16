@@ -117,45 +117,40 @@ get_ubuntu_netinstall() {
   #
   for ver in $ubuntu_netinstall_ver; do
     for arch in $ubuntu_netinstall_arch; do
-      case $ver in
-      dapper*|edgy*|feisty*|gutsy*|hardy*|intrepid*|jaunty*|karmic*|lucid*|maverick*|natty*|oneiric*|precise*|quantal*|raring*|saucy*|trusty*|utopic*|vivid*|wily*|xenial*|yakkety*|zesty*|artful*|bionic*|cosmic*|disco*|eoan*|focal*|groovy*|hirsute*|impish*|jammy*|kinetic*|lunar*|mantic*)
-        case $ver in
-        [f]*)
-          # For focal (and feisty) legacy installer paths
-          url=$ubuntu_url_site/$path_to_ubuntu/$ver/main/installer-$arch/current/legacy-images/netboot/ubuntu-installer/$arch
-          ;;
-        *)
-          url=$ubuntu_url_site/$path_to_ubuntu/$ver/main/installer-$arch/current/images/netboot/ubuntu-installer/$arch
-          ;;
-        esac
-        get_and_put_linux_img $url Ubuntu $ver $arch $ubuntu_netinstall_kernel $ubuntu_netinstall_initrd
-        ;;
-      *)
-        # Modern releases path (Noble 24.04 and later, including any future/custom releases like "stronking")
-        # Since Canonical hosts netboot files under releases, and mirrors might use "ubuntu-releases", "ubuntu-cd", or host them directly (e.g. releases.ubuntu.com), we dynamically probe them.
-        url=""
-        for rel_path in ubuntu-releases ubuntu-cd ""; do
+      # Starting from Jammy (22.04) and newer (e.g. Noble), netboot files are hosted under releases (ubuntu-cd or ubuntu-releases) rather than ubuntu/dists/.
+      # We dynamically probe the mirror to find the correct path (ubuntu-releases, ubuntu-cd, or direct).
+      url=""
+      for rel_path in ubuntu-releases ubuntu-cd ""; do
+        # We test both standard 'netboot/amd64/' (e.g., Noble) and 'netboot/ubuntu-installer/amd64/' (e.g., Jammy) layouts
+        for sub_path in "netboot/$arch" "netboot/ubuntu-installer/$arch"; do
           if [ -n "$rel_path" ]; then
-            test_url="$ubuntu_url_site/$rel_path/$ver/netboot/$arch/linux"
+            test_url="$ubuntu_url_site/$rel_path/$ver/$sub_path/linux"
           else
-            test_url="$ubuntu_url_site/$ver/netboot/$arch/linux"
+            test_url="$ubuntu_url_site/$ver/$sub_path/linux"
           fi
           if wget --spider --quiet "$test_url"; then
             if [ -n "$rel_path" ]; then
-              url="$ubuntu_url_site/$rel_path/$ver/netboot/$arch"
+              url="$ubuntu_url_site/$rel_path/$ver/$sub_path"
             else
-              url="$ubuntu_url_site/$ver/netboot/$arch"
+              url="$ubuntu_url_site/$ver/$sub_path"
             fi
-            break
+            break 2
           fi
         done
-        if [ -z "$url" ]; then
-          # Fallback to NCHC default if detection failed or offline
-          url="$ubuntu_url_site/ubuntu-cd/$ver/netboot/$arch"
-        fi
-        get_and_put_linux_img $url Ubuntu $ver $arch linux initrd
-        ;;
-      esac
+      done
+
+      if [ -z "$url" ]; then
+        # Default fallback to NCHC for modern (Noble) layout
+        url="$ubuntu_url_site/ubuntu-cd/$ver/netboot/$arch"
+      fi
+
+      # Probe for 'initrd' vs 'initrd.gz'
+      initrd_file="initrd"
+      if wget --spider --quiet "$url/initrd.gz"; then
+        initrd_file="initrd.gz"
+      fi
+
+      get_and_put_linux_img $url Ubuntu $ver $arch linux $initrd_file
     done
   done
 } # end of get_ubuntu_netinstall
