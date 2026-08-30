@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (5.11.8-drbl1) unstable; urgency=medium
+
+  * Remove reiserfsprogs from pkgs list of GParted live.
+
+ -- Steven Shiau <steven@clonezilla.org>  Sun, 30 Aug 2026 14:02:23 +0800
+
 drbl (5.11.7-drbl1) unstable; urgency=medium
 
   * Add dynamic web server support for HTTPBoot in drblsrv and drblpush.
