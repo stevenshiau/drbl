@@ -1301,3 +1301,5 @@ msg_bios_clock_local_option='2) Местное время (стандарт дл
 msg_please_select_one_or_two='Пожалуйста, выберите [1/2]: '
 msg_setting_bios_clock_to_local='Настройка системы для интерпретации часов BIOS как местного времени...'
 msg_setting_bios_clock_to_utc='Настройка системы для интерпретации часов BIOS как UTC...'
+
+msg_ocs_alias_block_dev_des="Choose if you want to use Clonezilla alias block device name (i.e., ocs-*d*). This alias name is based on the PCI bus order, and there are 3 types of alias name:\nNVMe device: ocs-nd01, ocs-nd02...\nSATA/SAS/SCSI/USB device: ocs-sd01, ocs-sd02... and USB one will be in low priority\nEMMC device: ocs-md01, ocs-md02..."

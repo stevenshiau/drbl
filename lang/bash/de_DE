@@ -1296,3 +1296,5 @@ msg_bios_clock_local_option='2) Lokale Zeit (Standard für Windows-Dual-Boot-Sys
 msg_please_select_one_or_two='Bitte wählen Sie [1/2]: '
 msg_setting_bios_clock_to_local='Das System wird so konfiguriert, dass die BIOS-Uhr als lokale Zeit interpretiert wird...'
 msg_setting_bios_clock_to_utc='Das System wird so konfiguriert, dass die BIOS-Uhr als UTC interpretiert wird...'
+
+msg_ocs_alias_block_dev_des="Wählen Sie aus, ob Sie den Clonezilla-Alias-Blockgerätenamen (d. h. ocs-*d*) verwenden möchten. Dieser Aliasname basiert auf der PCI-Bus-Reihenfolge, und es gibt 3 Arten von Aliasnamen:\nNVMe-Gerät: ocs-nd01, ocs-nd02...\nSATA/SAS/SCSI/USB-Gerät: ocs-sd01, ocs-sd02... und USB-Geräte haben eine niedrige Priorität\nEMMC-Gerät: ocs-md01, ocs-md02..."

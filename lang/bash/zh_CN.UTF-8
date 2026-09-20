@@ -1299,3 +1299,5 @@ msg_bios_clock_local_option='2) 本地时间 (Windows 双系统之标准配置)'
 msg_please_select_one_or_two='请选择 [1/2]: '
 msg_setting_bios_clock_to_local='正在设置系统将 BIOS 时钟解读为本地时间...'
 msg_setting_bios_clock_to_utc='正在设置系统将 BIOS 时钟解读为 UTC...'
+
+msg_ocs_alias_block_dev_des="选择您是否要使用 Clonezilla 别名块设备名称 (例如：ocs-*d*)。此别名是基于 PCI 总线顺序，共有 3 种别名类型：\nNVMe 设备：ocs-nd01, ocs-nd02...\nSATA/SAS/SCSI/USB 设备：ocs-sd01, ocs-sd02... 且 USB 的优先级较低\nEMMC 设备：ocs-md01, ocs-md02..."

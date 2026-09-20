@@ -1297,3 +1297,5 @@ msg_bios_clock_local_option='2) Heure locale (Standard pour les systèmes en dou
 msg_please_select_one_or_two='Veuillez choisir [1/2] : '
 msg_setting_bios_clock_to_local='Configuration du système pour interpréter l'\''horloge du BIOS à l'\''heure locale...'
 msg_setting_bios_clock_to_utc='Configuration du système pour interpréter l'\''horloge du BIOS en UTC...'
+
+msg_ocs_alias_block_dev_des="Choisissez si vous souhaitez utiliser le nom de périphérique bloc d'alias Clonezilla (c'est-à-dire ocs-*d*). Cet alias est basé sur l'ordre du bus PCI, et il existe 3 types d'alias :\nPériphérique NVMe : ocs-nd01, ocs-nd02...\nPériphérique SATA/SAS/SCSI/USB : ocs-sd01, ocs-sd02... et la clé USB sera de faible priorité\nPériphérique EMMC : ocs-md01, ocs-md02..."

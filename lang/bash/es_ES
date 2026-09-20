@@ -1311,3 +1311,5 @@ msg_bios_clock_local_option='2) Hora local (Estándar para sistemas de doble arr
 msg_please_select_one_or_two='Por favor seleccione [1/2]: '
 msg_setting_bios_clock_to_local='Configurando el sistema para interpretar el reloj del BIOS en hora local...'
 msg_setting_bios_clock_to_utc='Configurando el sistema para interpretar el reloj del BIOS en UTC...'
+
+msg_ocs_alias_block_dev_des="Elija si desea utilizar el nombre de dispositivo de bloque de alias de Clonezilla (es decir, ocs-*d*). Este alias se basa en el orden del bus PCI, y existen 3 tipos de alias:\nDispositivo NVMe: ocs-nd01, ocs-nd02...\nDispositivo SATA/SAS/SCSI/USB: ocs-sd01, ocs-sd02... y el USB tendrá una prioridad baja\nDispositivo EMMC: ocs-md01, ocs-md02..."
