@@ -1,3 +1,10 @@
+drbl (5.11.10-drbl1) unstable; urgency=medium
+
+  * Added the variable msg_ocs_alias_block_dev_des in language files.
+  * Restored the missing file fail-mbr.bin.
+
+ -- Steven Shiau <steven@clonezilla.org>  Sun, 20 Sep 2026 18:33:37 +0800
+
 drbl (5.11.9-drbl2) unstable; urgency=medium
 
   * drbl-gen-grub-efi-nb: Removed non-existing grub2 module
