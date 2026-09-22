@@ -1318,4 +1318,4 @@ msg_please_select_one_or_two='選択してください [1/2]: '
 msg_setting_bios_clock_to_local='BIOSクロックをローカルタイムとして解釈するようにシステムを構成しています...'
 msg_setting_bios_clock_to_utc='BIOSクロックをUTCとして解釈するようにシステムを構成しています...'
 
-msg_ocs_alias_block_dev_des="Clonezilla のエイリアスブロックデバイス名 (すなわち ocs-*d*) を使用するかどうかを選択します。このエイリアス名は PCI バスの順序に基づいており、エイリアス名には 3 つのタイプがあります：\nNVMe デバイス: ocs-nd01, ocs-nd02...\nSATA/SAS/SCSI/USB デバイス: ocs-sd01, ocs-sd02...（USB デバイスは優先度が低くなります）\nEMMC デバイス: ocs-md01, ocs-md02..."
+msg_ocs_alias_block_dev_des="Clonezilla のエイリアスブロックデバイス名 (すなわち ocs-*d*) を使用するかどうかを選択します。このエイリアス名は PCI バスの順序に基づいており、エイリアス名には 3 つのタイプがあります：\nNVMe デバイス: ocs-nd01, ocs-nd02...\nSATA/SAS/SCSI/USB デバイス: ocs-sd01, ocs-sd02...（USB デバイスは優先度が低く、最後にソートされます）\nEMMC デバイス: ocs-md01, ocs-md02..."
