@@ -1,3 +1,10 @@
+drbl (5.11.12-drbl1) unstable; urgency=medium
+
+  * Add numbering to device types in msg_ocs_alias_block_dev_des of the
+    language files.
+
+ -- Steven Shiau <steven@clonezilla.org>  Sun, 27 Sep 2026 17:23:50 +0800
+
 drbl (5.11.11-drbl1) unstable; urgency=medium
 
   * Update msg_ocs_alias_block_dev_des in language files
