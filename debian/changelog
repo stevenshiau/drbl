@@ -1,3 +1,10 @@
+drbl (5.11.13-drbl1) unstable; urgency=medium
+
+  * Removed encfs from Clonezilla live packages list since it's dormant and
+    does not exist in Ubuntu Stonking.
+
+ -- Steven Shiau <steven@clonezilla.org>  Mon, 28 Sep 2026 19:42:18 +0800
+
 drbl (5.11.12-drbl1) unstable; urgency=medium
 
   * Add numbering to device types in msg_ocs_alias_block_dev_des of the
