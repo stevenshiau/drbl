@@ -1036,7 +1036,7 @@ msg_2_identical_systems_will_confuse_restored_os='Aksi takdirde, aynı makinede 
 # Tag on 2016/11/01
 msg_warning_selinux_is_enabled='Uyarı! Bu sistemde SELinux etkin! DRBL sunucusu için nasıl yapılandırılacağına dair hiçbir fikriniz yoksa, lütfen (1) /etc/selinux/config içinde "SELINUX = disabled" olarak ayarlayarak devre dışı bırakın, (2) sistemi yeniden başlatın (3) drblsrv programını tekrar çalıştırın.'
 # Tag on 2016/12/06
-msg_bittorent_restore="bittorrent geri yüklemesi"
+msg_bittorent_restore="Bittorrent geri yüklemesi"
 # Tag on 2017/01/03
 msg_ocs_param_noabo='Kalıp sadece sahibi tarafından erişimde değil'
 # Tag on 2017/01/24

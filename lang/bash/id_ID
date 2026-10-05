@@ -1030,7 +1030,7 @@ msg_2_identical_systems_will_confuse_restored_os='Jika tidak, jika ada dua siste
 # Tag pada 2016/11/01
 msg_warning_selinux_is_enabled='Peringatan! SELinux diaktifkan di sistem ini. Jika Anda tidak tahu cara mengonfigurasinya untuk server DRBL, harap lakukan hal berikut sebelum melanjutkan: (1) Matikan dengan mengatur "SELINUX=disabled" di /etc/selinux/config, (2) Mulai ulang sistem, dan (3) Jalankan program drblsrv lagi.'
 # Tag pada 2016/12/06
-msg_bittorent_restore="pemulihan bittorrent"
+msg_bittorent_restore="Pemulihan bittorrent"
 # Tag pada 2017/01/03
 msg_ocs_param_noabo='Citra tidak hanya dapat diakses oleh pemilik'
 # Tag pada 2017/01/24

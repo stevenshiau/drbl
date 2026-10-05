@@ -1037,7 +1037,7 @@ msg_2_identical_systems_will_confuse_restored_os='否则当两个相同作业系
 # Tag on 2016/11/01
 msg_warning_selinux_is_enabled='警告！此系统上的SELinux已经开启！若你不知道如何配制它让DRBL服务器使用的话，在继续进行之前，请关闭SELinux。要关闭它，你可以(1)将文件/etc/selinux/config中的设置改成"SELINUX=disabled" (2)重启系统 (3)重新执行drblsrv程序。'
 # Tag on 2016/12/06
-msg_bittorent_restore="bittorrent还原"
+msg_bittorent_restore="Bittorrent还原"
 # Tag on 2017/01/03
 msg_ocs_param_noabo='不只是映像拥有者可以读取映像'
 # Tag on 2017/01/24

@@ -1034,7 +1034,7 @@ msg_2_identical_systems_will_confuse_restored_os='Altrimenti se sulla stessa mac
 # Tag on 2016/11/01
 msg_warning_selinux_is_enabled='Attenzione! Su questo sistema è abilitato SELinux! Se non avete idea di come configurarlo per il server DRBL, prima di procedere: (1) Disabilitatelo impostando "SELINUX=disabled" in /etc/selinux/config, (2) Riavviate il sistema (3) Eseguite di nuovo il programma drblsrv.'
 # Tag on 2016/12/06
-msg_bittorent_restore="bittorrent restore"
+msg_bittorent_restore="Bittorrent restore"
 # Tag on 2017/01/03
 msg_ocs_param_noabo='Immagine non accessibile dal solo proprietario'
 # Tag on 2017/01/24

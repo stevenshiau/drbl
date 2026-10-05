@@ -1041,7 +1041,7 @@ msg_2_identical_systems_will_confuse_restored_os="En cas contrari, quan dos sist
 # Tag on 2016/11/01
 msg_warning_selinux_is_enabled='Atenció! En aquest sistema, SELinux està habilitat! Si no sap com configurar-ho pel servidor DRBL, abans de continuar, per favor (1) Desactivi-ho seleccionant "SELINUX=disabled" en el fitxer /etc/selinux/config, (2) Reinici el sistema i (3) Executi de nou el program drblsrv.'
 # Tag on 2016/12/06
-msg_bittorent_restore="restauració bittorrent"
+msg_bittorent_restore="Restauració bittorrent"
 # Tag on 2017/01/03
 msg_ocs_param_noabo="Imatge no tan sols accessible per al propietari"
 # Tag on 2017/01/24

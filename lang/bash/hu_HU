@@ -1035,7 +1035,7 @@ msg_2_identical_systems_will_confuse_restored_os='Különben, ha két azonos ren
 # Tag on 2016/11/01
 msg_warning_selinux_is_enabled='Figyelem! Az SELinux ezen a rendszeren aktív! Ha nem tudja, miként állítsa be DRBL szerverhez, mindenekelőtt (1) Kapcsolja ki az "SELINUX=disabled" sorral a /etc/selinux/config fájlban, (2) Indítsa újra a rendszert (3) Futtassa ismét a drblsrv programot.'
 # Tag on 2016/12/06
-msg_bittorent_restore="bittorrent visszaállítás"
+msg_bittorent_restore="Bittorrent visszaállítás"
 # Tag on 2017/01/03
 msg_ocs_param_noabo='A kép nem csak a tulajdonosa által elérhető'
 # Tag on 2017/01/24

@@ -1037,7 +1037,7 @@ msg_2_identical_systems_will_confuse_restored_os='Por otra parte, cuando existen
 # Tag on 2016/11/01
 msg_warning_selinux_is_enabled='¡Advertencia! ¡SELinux está habilitado en este sistema! Si no tiene ni idea de cómo configurarlo para el servidor DRBL, antes de continuar, por favor (1) Deshabilítelo estableciendo "SELINUX=disabled" en /etc/selinux/config, (2) Reinicie el sistema (3) Lance el programa drblsrv de nuevo.'
 # Tag on 2016/12/06
-msg_bittorent_restore="restauración bittorrent "
+msg_bittorent_restore="Restauración bittorrent "
 # Tag on 2017/01/03
 msg_ocs_param_noabo='Imagen no solo accesible por el propietario'
 # Tag on 2017/01/24

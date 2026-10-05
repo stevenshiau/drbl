@@ -1032,7 +1032,7 @@ msg_2_identical_systems_will_confuse_restored_os='Διαφορετικά, ότα
 # Tag on 2016/11/01
 msg_warning_selinux_is_enabled='Προειδοποίηση! Το SELinux σε αυτό το σύστημα είναι ενεργοποιημένο! Εάν δεν έχετε ιδέα πώς να το διαμορφώσετε για διακομιστή DRBL, πριν συνεχίσετε, παρακαλούμε (1) Απενεργοποιήστε το ρυθμίζοντας το "SELINUX=disabled" στο /etc/selinux/config, (2) Επανεκκινήστε το σύστημα (3) Εκτελέστε το πρόγραμμα drblsrv πάλι.'
 # Tag on 2016/12/06
-msg_bittorent_restore='επαναφορά bittorrent'
+msg_bittorent_restore='Επαναφορά bittorrent'
 # Tag on 2017/01/03
 msg_ocs_param_noabo='Το ομοίωμα δεν είναι προσβάσιμο μόνο από τον ιδιοκτήτη'
 # Tag on 2017/01/24

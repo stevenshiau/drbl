@@ -1030,7 +1030,7 @@ msg_2_identical_systems_will_confuse_restored_os='Nếu không, nếu hai hệ t
 # Tag on 2016/11/01
 msg_warning_selinux_is_enabled='Cảnh báo! SELinux đang được bật trên hệ thống này. Nếu bạn không biết cách cấu hình nó cho máy chủ DRBL, vui lòng thực hiện các việc sau trước khi tiếp tục: (1) Tắt nó bằng cách thiết lập "SELINUX=disabled" trong /etc/selinux/config, (2) Khởi động lại hệ thống, và (3) Chạy lại chương trình drblsrv.'
 # Tag on 2016/12/06
-msg_bittorent_restore="phục hồi bittorrent"
+msg_bittorent_restore="Phục hồi bittorrent"
 # Tag on 2017/01/03
 msg_ocs_param_noabo='Hình ảnh không chỉ có chủ sở hữu mới có thể truy cập'
 # Tag on 2017/01/24
