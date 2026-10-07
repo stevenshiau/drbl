@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (5.11.15-drbl1) unstable; urgency=medium
+
+  * Removed uml-utilities from packages list of Clonezilla live system.
+
+ -- Steven Shiau <steven@clonezilla.org>  Wed, 07 Oct 2026 21:20:48 +0800
+
 drbl (5.11.14-drbl1) unstable; urgency=medium
 
   * Update msg_bittorent_restore in language files with initial uppercase.
