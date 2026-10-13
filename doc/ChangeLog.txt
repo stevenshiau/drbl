@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (5.11.17-drbl1) unstable; urgency=medium
+
+  * drbl.conf: typo fixed (need space after bolt)
+
+ -- Steven Shiau <steven@clonezilla.org>  Tue, 13 Oct 2026 21:12:09 +0800
+
 drbl (5.11.16-drbl1) unstable; urgency=medium
 
   * Added package bolt in the packages list of live system.
