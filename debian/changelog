@@ -1,3 +1,9 @@
+drbl (5.11.18-drbl1) unstable; urgency=medium
+
+  * Added packages zxc & kanzi in Clonezilla live system.
+
+ -- Steven Shiau <steven@clonezilla.org>  Mon, 19 Oct 2026 20:59:37 +0800
+
 drbl (5.11.17-drbl1) unstable; urgency=medium
 
   * drbl.conf: typo fixed (need space after bolt)
