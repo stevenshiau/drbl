@@ -5,6 +5,12 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (5.11.19-drbl1) unstable; urgency=medium
+
+  * Add zxc (-z10p) support in expert mode dialog menu.
+
+ -- Steven Shiau <steven@clonezilla.org>  Tue, 20 Oct 2026 07:11:12 +0800
+
 drbl (5.11.18-drbl1) unstable; urgency=medium
 
   * Added packages zxc & kanzi in Clonezilla live system.
