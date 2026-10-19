@@ -1545,6 +1545,11 @@ show_z4_or_above_menu_or_not() {
     ocs_z9p_option_1="-z9p"
     ocs_z9p_option_2="$(rep_whspc_w_udrsc "$msg_ocs_param_z9p")"
   fi
+  if type zxc &>/dev/null; then
+    # "-z10p"      "$msg_ocs_param_z10p" \
+    ocs_z10p_option_1="-z10p"
+    ocs_z10p_option_2="$(rep_whspc_w_udrsc "$msg_ocs_param_z10p")"
+  fi
 } # end show_z4_or_above_menu_or_not
 #
 set_drbl_ocs_extra_param() {
@@ -1899,6 +1904,7 @@ set_drbl_ocs_extra_param() {
       $ocs_z8p_option_1     $ocs_z8p_option_2 \
       $ocs_z9_option_1      $ocs_z9_option_2 \
       $ocs_z9p_option_1     $ocs_z9p_option_2 \
+      $ocs_z10p_option_1    $ocs_z10p_option_2 \
       "-z0"      "$msg_ocs_param_z0" \
       2>> $OCS_PARAM_TMP
       # We need to append a space after this parameter so it won't be connected to next parameter.
@@ -2260,6 +2266,7 @@ if [ "$mode" = "save" ]; then
       $ocs_z8p_option_1 $ocs_z8p_option_2 \
       $ocs_z9_option_1  $ocs_z9_option_2 \
       $ocs_z9p_option_1 $ocs_z9p_option_2 \
+      $ocs_z10p_option_1 $ocs_z10p_option_2 \
       "-z0"            "$msg_ocs_param_z0" \
       2>> $OCS_PARAM_TMP
       # We need to append a space after this parameter so it won't be connected to next parameter.

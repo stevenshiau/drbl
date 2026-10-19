@@ -1133,6 +1133,8 @@ msg_ocs_onthefly_param_ps="작업이 완료되면 소리 재생"
 # Tag on 2019/12/03
 msg_ocs_param_z9='zstd 압축 (gzip과 같은 매우 빠르고 작은 용량 이미지)'
 msg_ocs_param_z9p='zstdmt 압축 (멀티 코어 CPU의 경우, gzip과 같은 매우 빠르고 작은 용량 이미지)'
+# Tag on 2026/10/19
+msg_ocs_param_z10p='zxc 압축 (멀티 코어 CPU 용)'
 # Tag on 2020/09/10
 msg_ocs_onthefly_param_rvd='복제하기 전에 소스 NTFS 파일 시스템에서 NTFS 볼륨 더티 플래그 제거'
 # Tag on 2020/10/02
