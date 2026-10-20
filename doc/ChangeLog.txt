@@ -5,6 +5,13 @@ http://drbl.org
 http://drbl.sourceforge.net
 http://drbl.nchc.org.tw
 
+drbl (5.11.20-drbl1) unstable; urgency=medium
+
+  * drbl.conf: Added packages b3sum & network-manager-tui in pkgs list of
+    live system.
+
+ -- Steven Shiau <steven@clonezilla.org>  Tue, 20 Oct 2026 15:05:25 +0800
+
 drbl (5.11.19-drbl1) unstable; urgency=medium
 
   * Add zxc (-z10p) support in expert mode dialog menu.
