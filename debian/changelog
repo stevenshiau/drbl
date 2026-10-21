@@ -1,3 +1,9 @@
+drbl (5.11.21-drbl1) unstable; urgency=medium
+
+  * Add kanzi (-z11p) support in expert mode dialog menu.
+
+ -- Steven Shiau <steven@clonezilla.org>  Wed, 21 Oct 2026 11:41:10 +0800
+
 drbl (5.11.20-drbl1) unstable; urgency=medium
 
   * drbl.conf: Added packages b3sum & network-manager-tui in pkgs list of
