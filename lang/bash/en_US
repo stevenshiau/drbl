@@ -1129,6 +1129,8 @@ msg_ocs_param_z9='zstd compression (Very fast and small image like gzip)'
 msg_ocs_param_z9p='zstdmt compression (Very fast and small image like gzip, for multicore/CPU)'
 # Tag on 2026/10/19
 msg_ocs_param_z10p='zxc compression (for multi-core/multi-CPU systems)'
+# Tag on 2026/10/20
+msg_ocs_param_z11p='kanzi compression (for multi-core/multi-CPU systems)'
 # Tag on 2020/09/10
 msg_ocs_onthefly_param_rvd='Remove NTFS volume dirty flag in source NTFS file system before cloning it'
 # Tag on 2020/10/02
