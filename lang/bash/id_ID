@@ -1129,9 +1129,9 @@ msg_ocs_onthefly_param_ps="Mainkan suara saat tugas selesai"
 msg_ocs_param_z9='kompresi zstd (Sangat cepat dan citra kecil seperti gzip)'
 msg_ocs_param_z9p='kompresi zstdmt (Sangat cepat dan citra kecil seperti gzip, untuk multiinti/CPU)'
 # Tag on 2026/10/19
-msg_ocs_param_z10p='kompresi zxc (untuk sistem multi-inti/multi-CPU)'
+msg_ocs_param_z10p='kompresi zxc (Dekompresi sangat cepat dan citra kecil, untuk multiinti/CPU)'
 # Tag on 2026/10/20
-msg_ocs_param_z11p='kompresi kanzi (untuk sistem multi-inti/multi-CPU)'
+msg_ocs_param_z11p='kompresi kanzi (Rasio tinggi dan throughput cepat, untuk multiinti/CPU)'
 # Tag pada 2020/08/09
 # Tag pada 2020/09/10
 msg_ocs_onthefly_param_rvd='Hapus bendera kotor volume NTFS di sistem berkas NTFS sumber sebelum mengkloningnya'

@@ -1133,9 +1133,9 @@ msg_ocs_onthefly_param_ps="動作完成時播放聲音來提示"
 msg_ocs_param_z9='使用zstd壓縮(非常快速，印象檔大小類同gzip)'
 msg_ocs_param_z9p='使用zstdmt壓縮(非常快速，印象檔大小類同gzip，適用多核心/CPU機器)'
 # Tag on 2026/10/19
-msg_ocs_param_z10p='使用zxc壓縮(適用多核心/CPU機器)'
+msg_ocs_param_z10p='使用zxc壓縮(解壓縮極為快速且印象檔小，適用多核心/CPU機器)'
 # Tag on 2026/10/20
-msg_ocs_param_z11p='使用kanzi壓縮(適用多核心/CPU機器)'
+msg_ocs_param_z11p='使用kanzi壓縮(高壓縮率且輸出入吞吐快速，適用多核心/CPU機器)'
 # Tag on 2020/08/09
 # Tag on 2020/09/10
 msg_ocs_onthefly_param_rvd='複製檔案系統前，移除來源NTFS檔案系統的卷髒標記'

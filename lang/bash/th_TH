@@ -1129,9 +1129,9 @@ msg_ocs_onthefly_param_ps="เล่นเสียงเมื่องาน�
 msg_ocs_param_z9='การบีบอัด zstd (เร็วมากและอิมเมจมีขนาดเล็กเหมือน gzip)'
 msg_ocs_param_z9p='การบีบอัด zstdmt (เร็วมากและอิมเมจมีขนาดเล็กเหมือน gzip สำหรับหลายคอร์/CPU)'
 # Tag on 2026/10/19
-msg_ocs_param_z10p='การบีบอัด zxc (สำหรับหลายคอร์/CPU)'
+msg_ocs_param_z10p='การบีบอัด zxc (แตกไฟล์เร็วเป็นพิเศษและขนาดเล็ก สำหรับหลายคอร์/CPU)'
 # Tag on 2026/10/20
-msg_ocs_param_z11p='การบีบอัด kanzi (สำหรับหลายคอร์/CPU)'
+msg_ocs_param_z11p='การบีบอัด kanzi (อัตราการบีบอัดสูงและประมวลผลเร็ว สำหรับหลายคอร์/CPU)'
 # Tag on 2020/08/09
 # Tag on 2020/09/10
 msg_ocs_onthefly_param_rvd='ลบแฟล็ก dirty ของวอลุ่ม NTFS ในระบบไฟล์ NTFS ต้นทางก่อนคัดลอก'
