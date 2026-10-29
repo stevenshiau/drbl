@@ -1,3 +1,10 @@
+drbl (5.11.22-drbl1) unstable; urgency=medium
+
+  * Improve descriptions for -z10p (zxc) and -z11p (kanzi)
+    in language files.
+
+ -- Steven Shiau <steven@clonezilla.org>  Thu, 22 Oct 2026 10:01:38 +0800
+
 drbl (5.11.21-drbl1) unstable; urgency=medium
 
   * Add kanzi (-z11p) support in expert mode dialog menu.
