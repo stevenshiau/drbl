@@ -1,3 +1,10 @@
+drbl (5.11.23-drbl1) unstable; urgency=medium
+
+  * drbl.conf: added package bonnie++ in the pkgs list of live system.
+    Ref: https://sourceforge.net/p/clonezilla/discussion/Open_discussion/thread/f1a428e7ac/
+
+ -- Steven Shiau <steven@clonezilla.org>  Fri, 30 Oct 2026 05:22:16 +0800
+
 drbl (5.11.22-drbl1) unstable; urgency=medium
 
   * Improve descriptions for -z10p (zxc) and -z11p (kanzi)
